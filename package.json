@@ -1,1 +1,10 @@
-{"name":"emerald-web-engine","version":"0.1.0","type":"module","private":true,"scripts":{"dev":"python3 -m http.server 5173 --directory dist","test":"node --test tests/*.test.js"}}
+{
+  "name": "emerald-web-engine",
+  "version": "0.2.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 5173 --directory dist",
+    "test": "node --test tests/*.test.js"
+  }
+}

@@ -23,7 +23,7 @@ for name,title in zip(map_names,titles):
  w,h=lay['width'],lay['height'];data=u16(R/lay['blockdata_filepath']);beh=[]
  for val in data:
   mid=val&1023;side=0 if mid<512 else 1;beh.append(attrs[side][mid if side==0 else mid-512]&255)
- output[name]={'id':name,'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':m['warp_events'],'signs':m['bg_events'],'npcs':m['object_events'],'music':m['music']}
+ output[name]={'id':name,'indoor':'_' in name,'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':m['warp_events'],'signs':m['bg_events'],'npcs':m['object_events'],'music':m['music']}
 # Standard field objects, using the palettes declared by the engine.
 info=(R/'src/data/object_events/object_event_graphics_info.h').read_text(); gfx=(R/'src/data/object_events/object_event_graphics.h').read_text(); npcs={}
 for key in ['BrendanNormal','MayNormal','ProfBirch','Twin','FatMan','Boy1','Boy2','Youngster','Nurse','Gentleman','Girl1','Man3','Woman1','Scientist1','BirchsBag','Zigzagoon1','Mom','LittleBoy']:

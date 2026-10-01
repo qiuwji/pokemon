@@ -1,16 +1,163 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>口袋妖怪 · 绿宝石</title><meta name="description" content="从未白镇出发，选择你的搭档，探索丰缘、回合制对战并捕捉宝可梦。绿宝石网页版序章。"><meta name="theme-color" content="#101d1b"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"></head><body>
-<div class="app-shell">
-<header class="topbar"><div class="brand"><span class="brand-emblem" aria-hidden="true">◆</span><div><span class="brand-overline">POKÉMON</span><h1>绿宝石 <span>EMERALD</span></h1></div></div><div class="top-actions"><span class="edition">丰缘序章 <span>01</span></span><button id="sound" class="icon-button" title="开启音效" aria-label="开启音效">♪</button><button id="help" class="icon-button" title="操作帮助" aria-label="操作帮助">?</button><button id="menu" class="menu-button">☰ <span>菜单</span></button></div></header>
-<main>
-<section class="play-column" aria-label="游戏区域"><div class="location-bar"><div><span class="tiny-label">HOENN</span><span class="location-divider">/</span><span id="location">未白镇</span></div><span id="weather">晴朗 · 白天</span></div>
-<div class="screen-frame"><div class="screen" id="screen"><canvas id="game" width="320" height="224" tabindex="0" aria-label="宝可梦游戏。方向键或 WASD 移动，Z 或回车确认，X 返回。"></canvas><div class="scene-name" id="scene-name"></div><div id="battle-hud" hidden></div><div id="dialogue" class="dialogue" hidden></div><div class="loading" id="loading"><span>◆</span><p>正在前往丰缘…</p></div></div><div class="frame-bottom"><span><i></i> HOENN ADVENTURE</span><span id="save-status">尚未存档</span></div></div>
-<div class="control-strip"><div><kbd>W A S D</kbd><span>移动</span><kbd>Z / ↵</kbd><span>确认</span><kbd>X</kbd><span>返回</span><kbd>Shift</kbd><span>跑步</span></div><button id="save" class="text-button">◇ 保存进度</button></div>
-<div class="touch-controls" aria-label="触屏操作"><div class="dpad"><button data-dir="up" aria-label="向上">▲</button><button data-dir="left" aria-label="向左">◀</button><button data-dir="down" aria-label="向下">▼</button><button data-dir="right" aria-label="向右">▶</button></div><div class="action-pad"><button id="touch-b">B</button><button id="touch-a">A</button></div></div>
-<div class="field-note"><span>✦</span><p id="field-note">风吹过草丛，新的冒险就在小镇的北边。</p></div>
-</section>
-<aside><section class="party-panel"><div class="section-heading"><h2>同行伙伴</h2><button id="party-open" class="text-button" aria-label="打开队伍">查看队伍 <span id="party-count">0 / 6</span></button></div><div id="party-list"></div></section>
-<section class="journal-panel"><div class="section-heading"><h2>冒险手记</h2><span class="tiny-label">JOURNAL</span></div><div class="quest"><span id="quest-number" class="quest-number">01</span><div><h3 id="quest-title">草丛里的求救声</h3><p id="quest-description"></p></div></div><ol id="quest-progress" class="quest-progress"></ol></section>
-<section class="trainer-panel"><div class="section-heading"><h2>训练家</h2><span class="tiny-label">TRAINER</span></div><div class="trainer-row"><img src="assets/actor-BrendanNormal.png" class="trainer-sprite" alt="小悠"><div><strong>小悠</strong><span>丰缘地区 · 未白镇</span></div><span class="trainer-badge">新人</span></div><div class="trainer-stats"><div><span>零花钱</span><strong id="money">¥ 3,000</strong></div><div><span>已捕获</span><strong id="caught-count">00</strong></div><div><span>徽章</span><strong>0 / 8</strong></div></div></section>
-</aside>
-</main><footer><span>绿宝石 · 网页版序章</span><span>非官方同人演示 · 存档仅保存在当前浏览器</span></footer>
-</div><div id="modal-root"></div><div id="toast" role="status" aria-live="polite"></div><div class="sr-only" id="announcer" aria-live="polite"></div><script type="module" src="app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>口袋妖怪 · 绿宝石</title>
+    <meta
+      name="description"
+      content="从未白镇出发，选择你的搭档，探索丰缘、回合制对战并捕捉宝可梦。绿宝石网页版序章。"
+    />
+    <meta name="theme-color" content="#101d1b" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-emblem" aria-hidden="true">◆</span>
+          <div>
+            <span class="brand-overline">POKÉMON</span>
+            <h1>绿宝石 <span>EMERALD</span></h1>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span class="edition">丰缘序章 <span>01</span></span
+          ><button
+            id="sound"
+            class="icon-button"
+            title="开启音效"
+            aria-label="开启音效"
+          >
+            ♪</button
+          ><button
+            id="help"
+            class="icon-button"
+            title="操作帮助"
+            aria-label="操作帮助"
+          >
+            ?</button
+          ><button id="menu" class="menu-button">☰ <span>菜单</span></button>
+        </div>
+      </header>
+      <main>
+        <section class="play-column" aria-label="游戏区域">
+          <div class="location-bar">
+            <div>
+              <span class="tiny-label">HOENN</span
+              ><span class="location-divider">/</span
+              ><span id="location">未白镇</span>
+            </div>
+            <span id="weather">晴朗 · 白天</span>
+          </div>
+          <div class="screen-frame">
+            <div class="screen" id="screen">
+              <canvas
+                id="game"
+                width="320"
+                height="224"
+                tabindex="0"
+                aria-label="宝可梦游戏。方向键或 WASD 移动，Z 或回车确认，X 返回。"
+              ></canvas>
+              <div
+                id="transition"
+                class="scene-transition"
+                aria-hidden="true"
+                hidden
+              ></div>
+              <div id="modal-root"></div>
+              <div class="scene-name" id="scene-name"></div>
+              <div id="battle-hud" hidden></div>
+              <div id="dialogue" class="dialogue" hidden></div>
+              <div class="loading" id="loading">
+                <span>◆</span>
+                <p>正在前往丰缘…</p>
+              </div>
+            </div>
+            <div class="frame-bottom">
+              <span><i></i> HOENN ADVENTURE</span
+              ><span id="save-status">尚未存档</span>
+            </div>
+          </div>
+          <div class="control-strip">
+            <div>
+              <kbd>W A S D</kbd><span>移动</span><kbd>Z / ↵</kbd
+              ><span>确认</span><kbd>X</kbd><span>返回</span><kbd>Shift</kbd
+              ><span>跑步</span>
+            </div>
+            <button id="save" class="text-button">◇ 保存进度</button>
+          </div>
+          <div class="touch-controls" aria-label="触屏操作">
+            <div class="dpad">
+              <button data-dir="up" aria-label="向上">▲</button
+              ><button data-dir="left" aria-label="向左">◀</button
+              ><button data-dir="down" aria-label="向下">▼</button
+              ><button data-dir="right" aria-label="向右">▶</button>
+            </div>
+            <div class="action-pad">
+              <button id="touch-b">B</button><button id="touch-a">A</button>
+            </div>
+          </div>
+          <div class="field-note">
+            <span>✦</span>
+            <p id="field-note">风吹过草丛，新的冒险就在小镇的北边。</p>
+          </div>
+        </section>
+        <aside>
+          <section class="party-panel">
+            <div class="section-heading">
+              <h2>同行伙伴</h2>
+              <button id="party-open" class="text-button" aria-label="打开队伍">
+                查看队伍 <span id="party-count">0 / 6</span>
+              </button>
+            </div>
+            <div id="party-list"></div>
+          </section>
+          <section class="journal-panel">
+            <div class="section-heading">
+              <h2>冒险手记</h2>
+              <span class="tiny-label">JOURNAL</span>
+            </div>
+            <div class="quest">
+              <span id="quest-number" class="quest-number">01</span>
+              <div>
+                <h3 id="quest-title">草丛里的求救声</h3>
+                <p id="quest-description"></p>
+              </div>
+            </div>
+            <ol id="quest-progress" class="quest-progress"></ol>
+          </section>
+          <section class="trainer-panel">
+            <div class="section-heading">
+              <h2>训练家</h2>
+              <span class="tiny-label">TRAINER</span>
+            </div>
+            <div class="trainer-row">
+              <span class="trainer-sprite" role="img" aria-label="小悠"></span>
+              <div><strong>小悠</strong><span>丰缘地区 · 未白镇</span></div>
+              <span class="trainer-badge">新人</span>
+            </div>
+            <div class="trainer-stats">
+              <div><span>零花钱</span><strong id="money">¥ 3,000</strong></div>
+              <div>
+                <span>已捕获</span><strong id="caught-count">00</strong>
+              </div>
+              <div><span>徽章</span><strong>0 / 8</strong></div>
+            </div>
+          </section>
+        </aside>
+      </main>
+      <footer>
+        <span>绿宝石 · 网页版序章</span
+        ><span>非官方同人演示 · 存档仅保存在当前浏览器</span>
+      </footer>
+    </div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div class="sr-only" id="announcer" aria-live="polite"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

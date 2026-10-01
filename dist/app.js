@@ -1,163 +1,139 @@
-import {Random,createMonster,healMonster,experienceAt,calculateStats} from './engine/model.js';
-import {Battle} from './engine/battle.js';import {World,SaveStore} from './engine/world.js';import {Renderer,loadAssets} from './engine/renderer.js';
-import {NPCSystem} from './engine/npcs.js';
-import {registerGameTools} from './engine/webmcp.js';
-import {PACK,TYPE_NAMES,STATUS_NAMES,ABILITIES,NATURES,ITEMS,objectsFor,questFor,validateSave} from './game-pack.js';
-const $=id=>document.getElementById(id),root=$('modal-root');let db,state,rng,world,renderer,battle=null,battleView=null,dialog=null,modalBack=null,modalType=null,modalFocus=null,battleSub='main',battleBusy=false,selected=0,saveStore,npcs;
-let lastMove=0,lastSave=0,heldDir=null,run=false,toastTimer,sceneTimer,eventAdvance=null,soundOn=false,audio=null,lastEncounterSteps=0,capture=false;
-const canvas=$('game');const keys=new Set();
-const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function tone(freq=600,length=.07){if(!soundOn)return;try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type='square';o.frequency.value=freq;g.gain.setValueAtTime(.025,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+length);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+length);}catch{}}
-function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3000);}
-function announce(text){$('announcer').textContent=text;}
-function newState(){return {position:{...PACK.start},party:[],box:[],bag:{pokeball:0,potion:0},flags:{},money:3000,seen:[],caught:[],playSeconds:0,randomSeed:Date.now()>>>0};}
-function seen(id,caught=false){if(!state.seen.includes(id))state.seen.push(id);if(caught&&!state.caught.includes(id))state.caught.push(id);}
-function objectDefinitions(map){return objectsFor({...state,position:{...state.position,map}},db);}
-function bindWorld(){npcs=new NPCSystem(db.maps,objectDefinitions);world=new World(db.maps,state.position,{objects:()=>npcs.objects(state.position.map).map(n=>({...n,reserved:npcs.reserved(n)})),onStep:step,onMap:mapChanged,onBlocked:(kind)=>{if(kind==='unavailable')say('路旁的告示',['这片区域暂时未开放。当前可以探索未白镇、101 号道路、古辰镇和 103 号道路。']);}});rng=new Random(state.randomSeed);lastEncounterSteps=-5;renderer.motion.snap(state.position);mapChanged();}
-function mapChanged(){const name=world.map.title;$('location').textContent=name;$('weather').textContent=state.position.map.includes('_')?'室内':'晴朗 · 白天';$('scene-name').textContent=name;$('scene-name').classList.add('show');clearTimeout(sceneTimer);sceneTimer=setTimeout(()=>$('scene-name').classList.remove('show'),2400);tone(480);}
-function save(show=false){if(battle||dialog||modalType==='starter'){if(show)toast('请在对话或战斗结束后保存。');return;}try{state.randomSeed=rng.seed;lastSave=saveStore.save(state);$('save-status').textContent='已保存 · '+new Date(lastSave).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});if(show)toast('进度已保存在当前浏览器。');}catch{if(show)toast('浏览器无法保存。你可以从存档菜单导出进度。');}}
-function updateSide(){
- const q=questFor(state.flags);$('quest-title').textContent=q.title;$('quest-description').textContent=q.description;$('quest-number').textContent=q.number;
- const titles=['救助小田卷博士','与小遥对战','领取图鉴与精灵球'];const done=[state.flags.rescued,state.flags.rivalWon,state.flags.pokedex];const current=done.findIndex(x=>!x);$('quest-progress').innerHTML=titles.map((t,i)=>`<li class="${done[i]?'done':i===current?'current':''}">${t}</li>`).join('');
- $('party-count').textContent=state.party.length+' / 6';$('money').textContent='¥ '+state.money.toLocaleString('zh-CN');$('caught-count').textContent=String(state.caught.length).padStart(2,'0');
- $('party-list').innerHTML=state.party.length?state.party.slice(0,3).map((m,i)=>partyCard(m,i)).join('')+(state.party.length>3?`<div class="party-more">还有 ${state.party.length-3} 位伙伴</div>`:''):`<div class="party-empty"><div class="starter-preview">${PACK.starters.map(s=>`<img src="assets/${s}-front.png" alt="${db.species[s].name}">`).join('')}</div><p>还没有搭档<br>第一位伙伴正在等你。</p></div>`;
- $('party-list').querySelectorAll('[data-mon]').forEach(b=>b.onclick=()=>showMonster(+b.dataset.mon));
- $('field-note').textContent=state.flags.pokedex?'在草丛里寻找下一位伙伴，记得随时保存冒险。':state.flags.rivalWon?'博士正在研究所等你。沿原路回到未白镇吧。':state.flags.rescued?'北边的古辰镇有宝可梦中心。恢复体力，再去找小遥。':'风吹过草丛，新的冒险就在小镇的北边。';
-}
-function hpColor(m){const r=m.hp/m.stats.hp;return r>.5?'#81c989':r>.2?'#dcb652':'#cf6860';}
-function hpTrack(m){return `<div class="hp-track"><i style="width:${m.hp/m.stats.hp*100}%;background:${hpColor(m)}"></i></div>`;}
-function partyCard(m,i){const s=db.species[m.species];return `<button class="party-card" data-mon="${i}"><img src="assets/${m.species}-front.png" alt=""><div class="mon-main"><div class="mon-heading">${s.name}<span>Lv.${m.level}</span></div>${hpTrack(m)}<div class="hp-value"><span class="type-pill">${m.status?STATUS_NAMES[m.status]:s.types.map(t=>TYPE_NAMES[t]).join(' / ')}</span><span>${m.hp} / ${m.stats.hp}</span></div></div></button>`;}
-function say(name,lines,after=null){dialog={name,lines,index:0,after};renderDialogue();announce(lines[0]);keys.clear();heldDir=null;}
-function renderDialogue(){const d=$('dialogue');if(!dialog){d.hidden=true;return;}d.hidden=false;d.innerHTML=`<strong>${escapeHTML(dialog.name)}</strong>${escapeHTML(dialog.lines[dialog.index])}<span class="continue">▼ Z / 确认</span>`;}
-function nextDialogue(){if(!dialog)return;tone(660);if(++dialog.index>=dialog.lines.length){const cb=dialog.after;dialog=null;renderDialogue();cb?.();updateSide();save();}else{renderDialogue();announce(dialog.lines[dialog.index]);}}
-function modal(title,body,{back=null,type='generic',close=true}={}){if(!root.children.length)modalFocus=document.activeElement;modalBack=back;modalType=type;keys.clear();heldDir=null;root.innerHTML=`<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close?'<button id="modal-close" aria-label="关闭">×</button>':''}</div>${body}</section></div>`;if($('modal-close'))$('modal-close').onclick=()=>back?back():closeModal();requestAnimationFrame(()=>root.querySelector('button')?.focus());}
-function closeModal(){root.innerHTML='';modalType=null;modalBack=null;keys.clear();heldDir=null;modalFocus?.focus();modalFocus=null;canvas.focus({preventScroll:true});}
-function starterPicker(){modal('选择你的第一位伙伴',`<p>博士正被野生蛇纹熊追赶！背包里有三个精灵球，选择一只宝可梦去帮助他。</p><div class="starter-grid">${PACK.starters.map(id=>`<button class="starter-choice" data-starter="${id}"><img src="assets/${id}-front.png" alt="${db.species[id].name}"><strong>${db.species[id].name}</strong><span>${TYPE_NAMES[db.species[id].types[0]]}属性 · Lv.5</span></button>`).join('')}</div><div class="modal-footer">选择后，它将成为与你一起旅行的搭档。</div>`,{type:'starter'});
- root.querySelectorAll('[data-starter]').forEach(b=>b.onclick=()=>{const id=b.dataset.starter;modal(`就决定是 ${db.species[id].name} 吗？`,`<div class="detail-row"><img src="assets/${id}-front.png" alt=""><div><p>${TYPE_NAMES[db.species[id].types[0]]}属性 · Lv.5</p><p>与它一起踏上丰缘的冒险。</p></div></div><div class="choice-actions"><button id="choose-starter" class="primary-button">选择 ${db.species[id].name}</button><button id="rechoose" class="secondary-button">再看一看</button></div>`,{back:starterPicker,type:'starter'});$('rechoose').onclick=starterPicker;$('choose-starter').onclick=()=>{state.flags.starter=id;state.party=[createMonster(id,5,db,rng)];seen(id,true);closeModal();startBattle(createMonster('zigzagoon',2,db,rng),{script:'rescue'});};});}
-function interact(){if(battle){confirmBattle();return;}if(dialog){nextDialogue();return;}if(root.children.length)return;const o=world.interact();if(!o){tone(350);return;}tone();if(o.id)npcs.face(o.id,state.position.map,({up:'down',down:'up',left:'right',right:'left'})[state.position.dir]);handleObject(o);}
-function handleObject(o){
- switch(o.kind){
- case 'talk':say(o.name,[o.text]);break;
- case 'rescue':say(o.name,[o.text]);break;
- case 'starter':starterPicker();break;
- case 'wildObject':say('蛇纹熊',['蛇纹熊正追着博士跑！快去调查旁边的背包。']);break;
- case 'rival':if(!state.flags.rescued){say('小遥',['你的搭档呢？先去 101 号道路找我爸爸吧。']);break;}say('小遥',[o.text],()=>startBattle(createMonster(PACK.rival[state.flags.starter],5,db,rng,{trainer:true}),{trainer:true,script:'rival'}));break;
- case 'professor':
-  if(!state.flags.rescued)say('研究所留言',['博士去 101 号道路做野外调查了。']);
-  else if(!state.flags.rivalWon)say('小田卷博士',['小遥正在 103 号道路做调查。去见见她吧，你会学到很多东西！']);
-  else if(!state.flags.pokedex)say('小田卷博士',['小遥说你已经很会照顾宝可梦了！这本宝可梦图鉴，就交给你吧。','获得了宝可梦图鉴！小遥还送给你 5 个精灵球。','野生宝可梦藏在草丛里。先让它的体力减少，再投出精灵球。去寻找你的新伙伴吧！'],()=>{state.flags.pokedex=true;state.bag.pokeball+=5;toast('获得了图鉴和 5 个精灵球！');});
-  else say('小田卷博士',[`已经捕获了 ${state.caught.length} 种宝可梦！每个伙伴都值得好好培养。`]);break;
- case 'heal':case 'healMom':say(o.name,[o.text,'好了！宝可梦的体力和招式 PP 都恢复了。欢迎随时再来！'],()=>{state.party.forEach(m=>healMonster(m,db));tone(880,.2);});break;
- case 'giftPotion':if(!state.flags.potionGift)say(o.name,[o.text,'获得了 1 瓶伤药！'],()=>{state.bag.potion++;state.flags.potionGift=true;});else say(o.name,['需要道具的话，欢迎到蓝色屋顶的友好商店来。']);break;
- case 'shop':showShop();break;
- case 'sign':{
- let text='丰缘地区 · 与宝可梦一起旅行。';if(o.script.includes('TownSign'))text=world.map.title+'\n每一段旅程，都从一个小小的镇子开始。';if(o.script.includes('LabSign'))text='小田卷博士研究所 · 宝可梦野外研究';if(o.script.includes('HouseSign'))text=o.script.includes('May')?'小遥的家':'小悠的家';if(o.script.includes('Route'))text=world.map.title+' · 请小心草丛里的野生宝可梦。';say('路边的告示',[text]);break;}
- }
-}
-function step(cell){
- if(!state.flags.rescued&&state.position.map==='Route101'&&!state.flags.heardBirch){state.flags.heardBirch=true;say('远处传来的声音',['救命啊！那边的包里有精灵球，快选一只来帮我！']);return;}
- if(state.party.length&&state.flags.rescued&&[2,3].includes(cell?.behavior)&&world.map.encounters&&world.steps-lastEncounterSteps>3&&!dialog){
-  const chance=world.map.encounterRate*16/2880; // Gen III base rate. Ability/flute/repel modifiers are not enabled in this slice.
-  if(rng.next()<chance){lastEncounterSteps=world.steps;let pick=rng.int(100),e=world.map.encounters[0];for(const row of world.map.encounters){pick-=row.weight;if(pick<0){e=row;break;}}startBattle(createMonster(e.species,e.min+rng.int(e.max-e.min+1),db,rng));}
- }
- if(world.steps%20===0)save();
-}
-function startBattle(enemy,{trainer=false,script=null}={}){
- if(!state.party.some(m=>m.hp>0)){state.party.forEach(m=>healMonster(m,db));}
- seen(enemy.species);battle=new Battle({party:state.party,enemy,db,rng,bag:state.bag,trainer,script});battleView={player:structuredClone(battle.player),enemy:structuredClone(enemy)};battleSub='main';selected=0;capture=false;keys.clear();heldDir=null;dialog=null;renderDialogue();$('battle-hud').hidden=false;tone(240,.14);updateSide();drawBattleHUD();
-}
-function battleStatus(m,side){const s=db.species[m.species];let xp='';if(side==='player'){const base=experienceAt(m.level,s.growth),next=experienceAt(m.level+1,s.growth);xp=`<div class="exp-track"><i style="width:${Math.max(0,Math.min(100,(m.exp-base)/(next-base)*100))}%"></i></div>`;}return `<div class="battle-status ${side}"><div class="mon-heading">${s.name} <span>${m.gender} Lv.${m.level}</span></div>${hpTrack(m)}${side==='player'?`<div class="hp-value">${m.status?STATUS_NAMES[m.status]+' · ':''}${m.hp} / ${m.stats.hp}</div>${xp}`:''}</div>`;}
-function drawBattleHUD(message=null){
- if(!battle){$('battle-hud').hidden=true;return;}
- const p=battleView.player,e=battleView.enemy;let options='',prompt=message||`${db.species[p.species].name}<br>要做什么？`;
- if(battleBusy){options='';}
- else if(battle.player.hp<=0){options='<button data-baction="party">替换宝可梦</button>';prompt='请选择下一位伙伴。';}
- else if(battleSub==='moves'){
-  prompt='选择招式<br><small style="font-size:12px">X 返回</small>';options=battle.player.moves.map((slot,i)=>{const mv=db.moves[slot.id];return `<button data-move="${i}" ${slot.pp===0&&battle.player.moves.some(m=>m.pp>0)?'disabled':''}>${mv.name}<small>${TYPE_NAMES[mv.type]} · PP ${slot.pp} / ${mv.pp}</small></button>`;}).join('');
-  if(!battle.player.moves.some(m=>m.pp>0))options='<button data-struggle="true">挣扎<small>没有可用招式</small></button>';
- }else options='<button data-baction="fight">战斗</button><button data-baction="bag">背包</button><button data-baction="party">宝可梦</button><button data-baction="run">逃跑</button>';
- $('battle-hud').innerHTML=battleStatus(e,'enemy')+battleStatus(p,'player')+`<div class="battle-menu">${battleBusy?`<div class="battle-log-text">${escapeHTML(message||'…')}</div>`:`<div class="battle-message">${prompt}</div><div class="battle-options">${options}</div>`}</div>`;
- const btns=[...$('battle-hud').querySelectorAll('.battle-options button:not(:disabled)')];if(selected>=btns.length)selected=0;btns[selected]?.classList.add('selected');
- $('battle-hud').querySelectorAll('[data-baction]').forEach(b=>b.onclick=()=>{if(b.dataset.baction==='fight'){battleSub='moves';selected=0;drawBattleHUD();}if(b.dataset.baction==='bag')showBag(true);if(b.dataset.baction==='party')showParty(true);if(b.dataset.baction==='run')turn({kind:'run'});});
- $('battle-hud').querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>turn({kind:'move',index:+b.dataset.move}));$('battle-hud').querySelector('[data-struggle]')?.addEventListener('click',()=>turn({kind:'move',index:-1}));
-}
-function confirmBattle(){if(battleBusy){eventAdvance?.();return;}const bs=[...$('battle-hud').querySelectorAll('.battle-options button:not(:disabled)')];bs[selected]?.click();}
-async function turn(action){
- if(!battle||battleBusy)return;closeModal();battleBusy=true;const events=battle.act(action);const current=battle;
- for(const ev of events){if(battle!==current)break;battleView={player:ev.player,enemy:ev.enemy};if(ev.kind==='hurt')renderer.hurt(ev.side);if(ev.kind==='ball')capture=true;if(ev.kind==='capture'&&!ev.caught)capture=false;drawBattleHUD(ev.text);announce(ev.text);tone(ev.kind==='hurt'?160:600);await new Promise(resolve=>{let done=false;const finish=()=>{if(done)return;done=true;clearTimeout(timer);eventAdvance=null;resolve();};eventAdvance=finish;const timer=setTimeout(finish,ev.kind==='capture'?1200:ev.kind==='level'?1100:650);});}
- battleBusy=false;eventAdvance=null;
- if(battle?.ended){finishBattle();}else{battleView={player:structuredClone(battle.player),enemy:structuredClone(battle.enemy)};battleSub='main';selected=0;drawBattleHUD();updateSide();}
-}
-function finishBattle(){
- const b=battle,result=b.result;battle=null;battleView=null;capture=false;$('battle-hud').hidden=true;updateSide();
- if(result==='caught'){seen(b.enemy.species,true);const mon=structuredClone(b.enemy);if(state.party.length<6){state.party.push(mon);say('捕捉成功',[`${db.species[mon.species].name} 加入了你的队伍！`],checkGrowth);}else{state.box.push(mon);say('捕捉成功',['队伍已经有 6 位伙伴。新宝可梦已经传送到电脑盒子。'],checkGrowth);}}
- else if(result==='win'&&b.script==='rescue'){
-  state.flags.rescued=true;state.party.forEach(m=>healMonster(m,db));world.enter('LittlerootTown_ProfessorBirchsLab',6,5,'up');say('小田卷博士',['真是太感谢你了！这只宝可梦就送给你，成为你的搭档吧。','我的女儿小遥正在 103 号道路做野外调查。去找她吧！先沿 101 号道路向北，到古辰镇。'],checkGrowth);
- }else if(result==='win'&&b.script==='rival'){
-  state.flags.rivalWon=true;state.money+=300;say('小遥',['你和搭档配合得真不错！获得了 ¥300。','爸爸一定也很高兴。我们回未白镇的研究所吧，我还有礼物要送给你！'],checkGrowth);
- }else if(result==='loss'){
-  state.money=Math.max(0,state.money-Math.min(state.money,Math.max(...state.party.map(m=>m.level))*8));state.party.forEach(m=>healMonster(m,db));
-  if(b.script==='rescue'){state.flags.rescued=true;world.enter('LittlerootTown_ProfessorBirchsLab',6,5,'up');say('小田卷博士',['谢谢你勇敢地来救我！我已经照顾好你的宝可梦了。它就送给你吧。','沿 101 号道路向北，再穿过古辰镇，到 103 号道路找小遥。'],checkGrowth);}
-  else{world.enter('OldaleTown_PokemonCenter_1F',7,5,'up');say('乔伊小姐',['你被送到了宝可梦中心。伙伴们已经恢复体力，重新出发吧！'],checkGrowth);}
- }else checkGrowth();updateSide();save();
-}
-function checkGrowth(){
- if(dialog||battle)return;
- for(const mon of state.party){
-  if(mon.pendingMoves?.length){const id=mon.pendingMoves[0];modal('学习新的招式',`<p>${db.species[mon.species].name} 想学习 ${db.moves[id].name}，但是已经掌握了四个招式。选择要忘记的招式。</p><div class="move-list">${mon.moves.map((s,i)=>`<button class="move-summary" data-forget="${i}">${db.moves[s.id].name}<small>PP ${s.pp} / ${db.moves[s.id].pp}</small></button>`).join('')}</div><div class="inline-actions"><button id="skip-move" class="secondary-button">不学习这个招式</button></div>`,{type:'learning',close:false});const done=i=>{if(i!==null)mon.moves[i]={id,pp:db.moves[id].pp};mon.pendingMoves.shift();closeModal();updateSide();save();checkGrowth();};root.querySelectorAll('[data-forget]').forEach(b=>b.onclick=()=>done(+b.dataset.forget));$('skip-move').onclick=()=>done(null);return;}
-  const evolution=db.evolutions[mon.species];if(evolution&&mon.level>=evolution.level&&mon.evolutionSkipped!==mon.level){
-   modal('伙伴正在进化',`<div class="detail-row"><img src="assets/${mon.species}-front.png" alt=""><div><p>${db.species[mon.species].name} 身上出现了光芒！</p><p>它将进化成 ${db.species[evolution.to].name}。</p></div></div><div class="choice-actions"><button class="primary-button" id="evolve">继续进化</button><button class="secondary-button" id="cancel-evolve">停止进化</button></div>`,{type:'evolution',close:false});$('evolve').onclick=()=>{const before=mon.stats.hp;mon.species=evolution.to;mon.ability=db.species[mon.species].abilities[0];mon.stats=calculateStats(mon,db.species[mon.species]);mon.hp+=mon.stats.hp-before;seen(mon.species,true);for(const entry of db.species[mon.species].learnset.filter(e=>e.level===mon.level)){if(!mon.moves.some(m=>m.id===entry.move)){if(mon.moves.length<4)mon.moves.push({id:entry.move,pp:db.moves[entry.move].pp});else(mon.pendingMoves??=[]).push(entry.move);}}closeModal();toast(`进化成了 ${db.species[mon.species].name}！`);updateSide();save();checkGrowth();};$('cancel-evolve').onclick=()=>{mon.evolutionSkipped=mon.level;closeModal();save();checkGrowth();};return;
+import { PACK } from "./packs/emerald/pack.js";
+import { assertContent } from "./engine/content.js";
+import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
+import { BrowserInput } from "./adapters/browser-input.js";
+import { registerGameTools } from "./adapters/browser-tools.js";
+import { AudioAdapter } from "./adapters/audio.js";
+import { Timeline, TransitionController } from "./engine/timeline.js";
+import { BattleDirector } from "./presentation/battle-director.js";
+import { TransitionDOM } from "./presentation/transition-dom.js";
+import { EmeraldAdventure } from "./packs/emerald/adventure.js";
+import { createEmeraldInterface } from "./packs/emerald/interface.js";
+import { ANIMATION_PROFILES } from "./packs/emerald/story.js";
+
+// Composition root: chooses a content pack, adapters and services; no gameplay rules.
+const $ = (id) => document.getElementById(id);
+async function boot() {
+  try {
+    const response = await fetch("content.json");
+    if (!response.ok) throw new Error("内容未能载入");
+    const db = assertContent(await response.json()),
+      assets = await loadAssets(db);
+    const renderer = new Renderer($("game"), db, assets, {
+        playerActors: PACK.playerActors,
+      }),
+      timeline = new Timeline();
+    const reducedMotion = () =>
+      matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const transitions = new TransitionController(timeline, { reducedMotion });
+    const director = new BattleDirector(timeline, {
+      profiles: ANIMATION_PROFILES,
+      reducedMotion,
+    });
+    const overlay = new TransitionDOM($("transition")),
+      audio = new AudioAdapter();
+    let input, sceneTimer;
+    const game = new EmeraldAdventure({
+      db,
+      storage: localStorage,
+      motion: renderer.motion,
+      director,
+      transitions,
+      timeline,
+      clearInput: () => input?.clear(),
+      onSave: (time, loaded = false) =>
+        ($("save-status").textContent = time
+          ? loaded
+            ? "已读取存档"
+            : "已保存 · " +
+              new Date(time).toLocaleTimeString("zh-CN", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+          : "尚未存档"),
+      onMap: (title, id) => {
+        $("location").textContent = title;
+        $("weather").textContent = db.maps[id].indoor ? "室内" : "晴朗 · 白天";
+        $("scene-name").textContent = title;
+        $("scene-name").classList.add("show");
+        clearTimeout(sceneTimer);
+        sceneTimer = setTimeout(
+          () => $("scene-name").classList.remove("show"),
+          2200,
+        );
+      },
+    });
+    const ui = createEmeraldInterface(game, {
+      tone: (...args) => audio.tone(...args),
+    });
+    game.attachUI(ui);
+    input = new BrowserInput({ game, ui });
+    $("loading").hidden = true;
+    $("save").onclick = () => game.save(true);
+    $("menu").onclick = () => ui.showMenu();
+    $("help").onclick = () => {
+      if (!game.busy && !game.battle && !ui.dialog) ui.showHelp();
+    };
+    $("party-open").onclick = () => {
+      if (!game.busy && !game.battle && !ui.dialog) ui.showParty();
+    };
+    $("sound").onclick = () => {
+      audio.enabled = !audio.enabled;
+      $("sound").textContent = audio.enabled ? "♫" : "♪";
+      $("sound").ariaLabel = audio.enabled ? "关闭音效" : "开启音效";
+      audio.tone();
+      ui.toast(audio.enabled ? "音效已开启。" : "音效已关闭。");
+    };
+    $("touch-a").onclick = () => ui.confirm();
+    $("touch-b").onclick = () => ui.back();
+    $("dialogue").onclick = () => ui.nextDialogue();
+    $("game").onclick = () => {
+      $("game").focus({ preventScroll: true });
+      if (ui.dialog) ui.nextDialogue();
+    };
+    setInterval(() => {
+      if (!document.hidden) game.state.playSeconds++;
+    }, 1000);
+    await registerGameTools({
+      inspect: () => game.inspect(),
+      interact: () => game.interact(),
+      chooseStarter: (species) => ui.chooseStarter(species),
+      move: async (dir, steps) => {
+        for (let i = 0; i < steps; i++) {
+          if (game.battle || ui.blocked || game.storyBusy) break;
+          while (game.busy) await timeline.wait(16);
+          if (!game.move(dir)) break;
+          while (game.busy) await timeline.wait(16);
+        }
+      },
+      battleAction: async (action) => {
+        if (!game.battle || game.busy || ui.blocked)
+          throw new Error("Battle is not ready");
+        await game.turn(action);
+      },
+    });
+    function frame(now) {
+      if (!document.hidden) {
+        input.tick();
+        const point = renderer.motion.sample(game.state.position, now),
+          visible = renderer.graph.visible(game.state.position.map, {
+            x: point.x - 152,
+            y: point.y - 104,
+          });
+        game.tick(now, visible);
+        const battleFrame = director.sample(now);
+        if (battleFrame) {
+          renderer.battle(battleFrame);
+          ui.refreshBattle(battleFrame);
+        } else renderer.world(game.world, game.field.npcs, now);
+        overlay.render(transitions.sample(now));
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  } catch (error) {
+    $("loading").innerHTML = "<p>游戏未能载入，请刷新页面重试。</p>";
+    console.error(error);
   }
- }
- save();
-}
-function showParty(inBattle=false){
- modal(inBattle?'替换宝可梦':'我的队伍',state.party.length?state.party.map((m,i)=>partyCard(m,i)).join(''):`<p>还没有宝可梦。到 101 号道路调查博士的背包，选择你的搭档。</p>`,{back:inBattle?closeModal:showMenu,type:'party'});
- root.querySelectorAll('[data-mon]').forEach(b=>b.onclick=()=>inBattle?turn({kind:'switch',index:+b.dataset.mon}):showMonster(+b.dataset.mon));
-}
-function showMonster(index){const m=state.party[index];if(!m)return;const s=db.species[m.species];modal(s.name,`<div class="detail-row"><img src="assets/${m.species}-front.png" alt="${s.name}"><div><p>Lv.${m.level} · ${m.gender} · ${s.types.map(t=>TYPE_NAMES[t]).join(' / ')}</p><p>${NATURES[m.nature]}性格 · 特性：${ABILITIES[m.ability]||m.ability}</p><p>HP ${m.hp} / ${m.stats.hp} ${m.status?' · '+STATUS_NAMES[m.status]:''}</p><p>距离升级还需 ${Math.max(0,experienceAt(m.level+1,s.growth)-m.exp)} 点经验</p></div></div><div class="detail-stats">${Object.entries({hp:'体力',atk:'攻击',def:'防御',spa:'特攻',spd:'特防',spe:'速度'}).map(([k,v])=>`<div>${v}<strong>${m.stats[k]}</strong></div>`).join('')}</div><div class="move-list">${m.moves.map(slot=>{const v=db.moves[slot.id];return `<div class="move-summary">${v.name}<small>${TYPE_NAMES[v.type]} · 威力 ${v.power||'—'} · PP ${slot.pp} / ${v.pp}</small></div>`;}).join('')}</div><div class="inline-actions"><button class="secondary-button" id="lead" ${index===0?'disabled':''}>设为首发</button><button class="secondary-button" id="use-potion" ${!state.bag.potion||m.hp<=0||m.hp===m.stats.hp?'disabled':''}>使用伤药 (${state.bag.potion})</button></div>`,{back:()=>showParty(),type:'detail'});$('lead').onclick=()=>{[state.party[0],state.party[index]]=[state.party[index],state.party[0]];updateSide();save();showParty();};$('use-potion').onclick=()=>{state.bag.potion--;m.hp=Math.min(m.stats.hp,m.hp+20);updateSide();save();showMonster(index);tone(800);};}
-function showBag(inBattle=false){modal('背包',Object.entries(ITEMS).map(([id,item])=>`<div class="bag-item"><div class="bag-icon">${id==='pokeball'?'◉':'✚'}</div><div><strong>${item.name} × ${state.bag[id]}</strong><p>${item.description}</p></div><button class="secondary-button" data-item="${id}" ${!state.bag[id]||(!inBattle&&id==='pokeball')?'disabled':''}>使用</button></div>`).join('')+`<div class="modal-footer">${inBattle?'使用道具会占用这一回合。':'精灵球可以在野生宝可梦战斗中使用。'}</div>`,{back:inBattle?closeModal:showMenu,type:'bag'});root.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>{if(b.dataset.item==='pokeball')turn({kind:'ball'});else if(inBattle)chooseHealTarget();else{showParty();toast('选择需要回复体力的伙伴。');}});}
-function chooseHealTarget(){modal('伤药 · 选择伙伴',state.party.map((m,i)=>partyCard(m,i)).join(''),{back:()=>showBag(true),type:'heal-target'});root.querySelectorAll('[data-mon]').forEach(b=>b.onclick=()=>turn({kind:'potion',index:+b.dataset.mon}));}
-function showDex(){const list=Object.entries(db.species).sort((a,b)=>a[1].dex-b[1].dex);modal('宝可梦图鉴',`<p>已发现 ${state.seen.length} 种 · 已捕获 ${state.caught.length} 种</p><div class="dex-grid">${list.map(([id,s])=>{const found=state.seen.includes(id);return `<div class="dex-entry ${found?'':'unseen'}"><span>No.${String(s.dex).padStart(3,'0')}</span><img src="assets/${id}-front.png" alt="${found?s.name:'未知宝可梦'}"><strong>${found?s.name:'???'}</strong><span>${state.caught.includes(id)?'● 已捕获':found?'已发现':'尚未发现'}</span></div>`;}).join('')}</div><div class="modal-footer">当前图鉴收录序章及其部分进化形态，后续可继续补充。</div>`,{back:showMenu,type:'dex'});}
-function showShop(){modal('友好商店',`<p>欢迎光临！现有零花钱 ¥${state.money.toLocaleString('zh-CN')}</p>${Object.entries(ITEMS).map(([id,item])=>`<div class="bag-item"><div class="bag-icon">${id==='pokeball'?'◉':'✚'}</div><div><strong>${item.name} · ¥${item.price}</strong><p>${item.description}</p><p>持有 ${state.bag[id]} 个</p></div><button class="secondary-button" data-buy="${id}" ${state.money<item.price||id==='pokeball'&&!state.flags.pokedex?'disabled':''}>购买 1 个</button></div>`).join('')}${!state.flags.pokedex?'<p class="notice">领取图鉴后即可购买精灵球。</p>':''}`,{type:'shop'});root.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const id=b.dataset.buy;if(state.money<ITEMS[id].price)return;state.money-=ITEMS[id].price;state.bag[id]++;updateSide();save();showShop();tone(880);toast(`买到了 1 个${ITEMS[id].name}。`);});}
-function showBox(){modal('电脑 · 宝可梦盒子',`<p>队伍满员时捕获的宝可梦会送到这里。你可以交换盒子里的伙伴与当前队伍。</p>${state.box.length?`<div class="box-grid">${state.box.map((m,i)=>`<button class="box-mon" data-box="${i}"><img src="assets/${m.species}-front.png" alt=""><strong>${db.species[m.species].name}</strong><small>Lv.${m.level} · ${m.hp}/${m.stats.hp} HP</small></button>`).join('')}</div>`:'<p>盒子里还没有宝可梦。</p>'}`,{back:showMenu,type:'box'});root.querySelectorAll('[data-box]').forEach(b=>b.onclick=()=>{const i=+b.dataset.box;if(state.party.length<6){state.party.push(state.box.splice(i,1)[0]);updateSide();save();showBox();return;}modal('选择要交换的伙伴',state.party.map((m,j)=>partyCard(m,j)).join(''),{back:showBox,type:'box-swap'});root.querySelectorAll('[data-mon]').forEach(c=>c.onclick=()=>{const j=+c.dataset.mon;[state.box[i],state.party[j]]=[state.party[j],state.box[i]];updateSide();save();showBox();});});}
-function showMenu(){if(battle||dialog)return;modal('冒险菜单',`<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!state.flags.pokedex?'disabled':''}>宝可梦图鉴<small>${state.flags.pokedex?'已发现 '+state.seen.length+' 种':'博士的礼物'}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,{type:'menu'});const actions={party:showParty,bag:()=>showBag(),dex:showDex,save:showSave,box:showBox,help:showHelp};root.querySelectorAll('[data-page]').forEach(b=>b.onclick=actions[b.dataset.page]);}
-function showSave(){const saved=saveStore.load();modal('记录冒险',`<div class="save-box"><strong>${world.map.title} · ${state.party.length} 位伙伴</strong><p>已探索 ${state.seen.length} 种宝可梦 · 游玩 ${Math.floor(state.playSeconds/60)} 分钟</p><p>${saved?'上次保存：'+new Date(saved.savedAt).toLocaleString('zh-CN'):'尚未保存'}</p></div><div class="inline-actions"><button id="save-now" class="primary-button">保存进度</button><button id="continue-save" class="secondary-button" ${!saved?'disabled':''}>读取存档</button><button id="export-save" class="secondary-button">导出存档</button><button id="import-save" class="secondary-button">导入存档</button><input id="save-file" type="file" accept="application/json,.json" hidden></div><p class="notice">进度保存在当前浏览器。切换设备前，请先导出存档。</p><div class="modal-footer"><button id="new-game" class="text-button" style="color:#cbb18e">重新开始冒险</button></div>`,{back:showMenu,type:'save'});
- $('save-now').onclick=()=>{save(true);showSave();};$('continue-save').onclick=()=>{const d=saveStore.load();if(!d)return;state=d.state;bindWorld();closeModal();updateSide();toast('已读取存档。');};
- $('export-save').onclick=()=>{state.randomSeed=rng.seed;const blob=new Blob([JSON.stringify({version:PACK.version,pack:PACK.id,savedAt:Date.now(),state},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='emerald-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
- $('import-save').onclick=()=>$('save-file').click();$('save-file').onchange=async ev=>{const file=ev.target.files[0];if(!file)return;try{if(file.size>1024*1024)throw new Error();const d=JSON.parse(await file.text());if(d.version!==PACK.version||d.pack&&d.pack!==PACK.id||!validateSave(d.state,db))throw new Error();state=d.state;bindWorld();closeModal();updateSide();save(true);}catch{toast('这个存档无法读取，请选择有效的序章存档。');}};
- $('new-game').onclick=()=>{modal('重新开始冒险',`<p>当前浏览器里的进度将被新的冒险覆盖。你可以先返回菜单导出存档。</p><div class="choice-actions"><button class="secondary-button" id="keep-game">继续当前冒险</button><button class="primary-button" id="reset-game">重新开始</button></div>`,{back:showSave,type:'reset'});$('keep-game').onclick=showSave;$('reset-game').onclick=()=>{state=newState();bindWorld();closeModal();updateSide();save();};};
-}
-
-function showHelp(){modal('操作与范围',`<div class="help-table"><span><kbd>方向键 / WASD</kbd></span><span>移动。按住 Shift 跑步。</span><span><kbd>Z / 回车</kbd></span><span>调查、对话、确认。对话时点按游戏画面也可继续。</span><span><kbd>X / Esc</kbd></span><span>返回上一层菜单。</span><span><kbd>M</kbd></span><span>打开冒险菜单。</span></div><p>触屏设备可使用画面下方的方向键和 A / B 按钮。战斗菜单支持鼠标、方向键与确认键。</p><p>本次序章：未白镇、101 号道路、古辰镇、103 号道路西部，以及研究所、主角的家、宝可梦中心和友好商店。</p><p>已加入三选一初始精灵、博士救助、小遥对战、草丛遇敌、捕捉、经验、能力变化、部分异常状态、学习招式、部分进化、回复与本机存档。</p><p class="notice">开场搬家演出、完整剧情、全部地图、道馆、双打，以及未列出的招式和特性效果尚未实现。地图与像素素材源于原作，非官方同人演示。</p><div class="modal-footer">素材及机制参考：<a href="https://github.com/pret/pokeemerald" target="_blank" rel="noopener" style="color:#b7d398">pret/pokeemerald</a> · Pokémon © Nintendo / Creatures / GAME FREAK</div>`,{back:showMenu,type:'help'});}
-function back(){if(modalType==='learning'||modalType==='evolution')return;if(root.children.length){modalBack?modalBack():closeModal();return;}if(dialog){nextDialogue();return;}if(battle&&!battleBusy&&battleSub==='moves'){battleSub='main';selected=0;drawBattleHUD();}}
-function movement(dir){if(battle||dialog||root.children.length)return;const now=performance.now();if(renderer.moving(now))return;const from={...state.position};const moved=world.move(dir);if(moved)renderer.moved(from,state.position,moved?.jump,{running:run&&!state.position.map.includes('_')});}
-
-function keyboard(e){if(!state)return;const k=e.key.toLowerCase(),dir=({arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right'})[k];
- if(['arrowup','arrowdown','arrowleft','arrowright',' ','enter','tab'].includes(k)&&!e.target.closest('input')){if(k!=='tab')e.preventDefault();}
- if(k==='tab'&&root.children.length){const bs=[...root.querySelectorAll('button:not(:disabled),input')];const first=bs[0],last=bs.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}return;}
- if(e.repeat)return;
- if(k==='shift'){run=true;return;}
- if(dir){if(battle&&!root.children.length){if(!battleBusy){selected=(selected+(dir==='up'||dir==='left'?-1:1)+4)%4;drawBattleHUD();}}else if(!root.children.length){keys.add(k);heldDir=dir;movement(dir);}return;}
- if(['z','enter',' '].includes(k)){if(root.children.length){root.querySelector('button:focus')?.click();}else interact();}
- if(['x','escape'].includes(k)){e.preventDefault();back();}if(k==='m'){if(root.children.length)back();else showMenu();}
-}
-async function boot(){
- try{const response=await fetch('content.json');if(!response.ok)throw new Error('内容未能载入');db=await response.json();const assets=await loadAssets(db);renderer=new Renderer(canvas,db,assets);saveStore=new SaveStore(localStorage,PACK.id,s=>validateSave(s,db),PACK.version);const loaded=saveStore.load();state=loaded?.state||newState();lastSave=loaded?.savedAt||0;bindWorld();updateSide();if(lastSave)$('save-status').textContent='已读取存档';$('loading').hidden=true;
-  document.addEventListener('keydown',keyboard);document.addEventListener('keyup',e=>{keys.delete(e.key.toLowerCase());if(e.key==='Shift')run=false;heldDir=keys.size?({w:'up',arrowup:'up',s:'down',arrowdown:'down',a:'left',arrowleft:'left',d:'right',arrowright:'right'})[[...keys].at(-1)]:null;});
-  window.addEventListener('blur',()=>{keys.clear();heldDir=null;run=false;});document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear();heldDir=null;save();}});
-  $('save').onclick=()=>save(true);$('menu').onclick=showMenu;$('help').onclick=showHelp;$('party-open').onclick=()=>{if(!battle&&!dialog)showParty();};$('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'♫':'♪';$('sound').ariaLabel=soundOn?'关闭音效':'开启音效';$('sound').title=$('sound').ariaLabel;tone();toast(soundOn?'音效已开启。':'音效已关闭。');};
-  $('touch-a').onclick=interact;$('touch-b').onclick=back;$('dialogue').onclick=nextDialogue;canvas.onclick=()=>{canvas.focus({preventScroll:true});if(dialog)nextDialogue();else if(battleBusy)eventAdvance?.();};
-  document.querySelectorAll('[data-dir]').forEach(b=>{b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);const dir=b.dataset.dir;if(battle){if(!battleBusy){selected=(selected+(dir==='up'||dir==='left'?-1:1)+4)%4;drawBattleHUD();}}else{heldDir=dir;movement(dir);}};b.onpointerup=b.onpointercancel=()=>heldDir=null;});
-  setInterval(()=>{if(!document.hidden)state.playSeconds++;},1000);
-  await registerGameTools({
-   inspect:()=>({location:world.map.title,position:{...state.position},mode:battle?'battle':dialog?'dialogue':modalType||'exploration',quest:questFor(state.flags),flags:{...state.flags},dialogue:dialog?{name:dialog.name,text:dialog.lines[dialog.index]}:null,nearby:npcs.objects(state.position.map).filter(o=>Math.abs(o.x-state.position.x)<=8&&Math.abs(o.y-state.position.y)<=7).map(o=>({name:o.name,kind:o.kind,x:o.x,y:o.y})),tiles:Array.from({length:11},(_,row)=>Array.from({length:15},(_,col)=>{const x=state.position.x+col-7,y=state.position.y+row-5,c=world.cell(x,y);return c?{x,y,collision:c.collision,behavior:c.behavior,warp:world.map.warps.some(w=>w.x===x&&w.y===y)}:null})),party:state.party.map(m=>({name:db.species[m.species].name,species:m.species,level:m.level,hp:m.hp,maxHP:m.stats.hp,moves:m.moves.map(s=>({id:s.id,name:db.moves[s.id].name,pp:s.pp}))})),bag:{...state.bag},battle:battle?{busy:battleBusy,trainer:battle.trainer,enemy:{name:db.species[battle.enemy.species].name,hp:battle.enemy.hp,maxHP:battle.enemy.stats.hp},active:battle.active}:null}),
-   move:async(direction,steps)=>{for(let i=0;i<steps;i++){if(battle||dialog||root.children.length)break;while(renderer.moving())await new Promise(resolve=>setTimeout(resolve,16));const from={...state.position};const moved=world.move(direction);if(moved)renderer.moved(from,state.position,moved?.jump);await new Promise(resolve=>setTimeout(resolve,170));if(!moved)break;}},
-   interact,
-   chooseStarter:species=>{if(modalType!=='starter')throw new Error('Starter selection is not open');const choice=root.querySelector(`[data-starter="${species}"]`);if(!choice)throw new Error('Choose from the current selection');choice.click();$('choose-starter')?.click();},
-   battleAction:async action=>{if(!battle||battleBusy||dialog||root.children.length)throw new Error('Battle is not ready');await turn(action);}
-  });
-  function frame(now){if(!document.hidden){if(heldDir)movement(heldDir);const point=renderer.motion.sample(state.position,now);const camera={x:point.x-152,y:point.y-104};const visibleMaps=renderer.graph.visible(state.position.map,camera);const from=renderer.moving(now)?renderer.motion.sourcePosition:null;npcs.tick(now,state.position,{paused:!!(battle||dialog||root.children.length),maps:visibleMaps,playerFrom:from});if(battleView)renderer.battle(battleView.player,battleView.enemy,{capture});else renderer.world(world,npcs,now);}requestAnimationFrame(frame);}requestAnimationFrame(frame);
- }catch(error){$('loading').innerHTML='<p>游戏未能载入，请刷新页面重试。</p>';console.error(error);}
 }
 boot();
