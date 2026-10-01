@@ -30,7 +30,7 @@ import {
   validateCondition,
 } from "../../engine/conditions.js";
 import { isGrass } from "../../engine/terrain.js";
-import { TRAINERS, createTrainerTeam } from "./trainers.js";
+import { TRAINERS, createTrainerEncounter } from "./trainers.js";
 
 /** Composes the Emerald pack with reusable engine services. Browser ports are injected. */
 export class EmeraldAdventure {
@@ -96,10 +96,13 @@ export class EmeraldAdventure {
         battle: (c) => {
           if (c.trainerId) {
             const trainer = TRAINERS[c.trainerId];
-            return this.startBattle(createTrainerTeam(trainer, db, this.rng), {
-              trainer: true,
-              script: trainer.script,
+            const encounter = createTrainerEncounter(trainer, {
+              party: this.state.party,
+              bag: this.state.bag,
+              db,
+              rng: this.rng,
             });
+            return this.startBattle(encounter.enemyParty, encounter);
           }
           return this.startBattle(
             createMonster(c.species, c.level, db, this.rng, {
@@ -412,7 +415,14 @@ export class EmeraldAdventure {
     if (!this.state.party.some((m) => m.hp > 0))
       this.state.party.forEach((m) => healMonster(m, this.db));
     const enemies = Array.isArray(enemy) ? enemy : [enemy];
-    for (const mon of enemies) this.seen(mon.species);
+    const opponents = options.topology
+      ? options.topology.sides.flatMap((side) =>
+          side.controllers
+            .filter((c) => c.kind === "ai")
+            .flatMap((c) => c.party),
+        )
+      : enemies;
+    for (const mon of opponents) this.seen(mon.species);
     this.clearInput();
     this.ui.closeModal();
     return this.combat.start({
@@ -481,8 +491,8 @@ export class EmeraldAdventure {
   itemPlan(id, index, inBattle = !!this.battle) {
     return this.items.prepare({
       id,
-      bag: this.state.bag,
-      party: this.state.party,
+      bag: inBattle ? this.battle.bag : this.state.bag,
+      party: inBattle ? this.battle.party : this.state.party,
       index,
       context: inBattle ? "battle" : "field",
       enemy: this.battle?.enemy,
@@ -644,11 +654,16 @@ export class EmeraldAdventure {
         ? {
             busy: this.busy,
             trainer: this.battle.trainer,
-            enemy: {
-              name: this.db.species[this.battle.enemy.species].name,
-              hp: this.battle.enemy.hp,
-              maxHP: this.battle.enemy.stats.hp,
-            },
+            decision: this.battle.decisionView().decision,
+            combatants: this.battle.snapshot().combatants,
+            winner: this.battle.winner,
+            enemy: this.battle.enemy
+              ? {
+                  name: this.db.species[this.battle.enemy.species].name,
+                  hp: this.battle.enemy.hp,
+                  maxHP: this.battle.enemy.stats.hp,
+                }
+              : null,
             active: this.battle.active,
             enemyTeam: {
               remaining: this.battle.enemyParty.filter((m) => m.hp > 0).length,

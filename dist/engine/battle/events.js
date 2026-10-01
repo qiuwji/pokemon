@@ -14,7 +14,8 @@ export function monsterView(mon) {
 }
 /** Detached projections and stable seat/UID metadata; no full-party serialization. */
 export class BattleEvents {
-  constructor(roster) {
+  constructor(roster, extra = () => ({})) {
+    this.extra = extra;
     this.roster = roster;
     this.sequence = 0;
     this.events = [];
@@ -24,6 +25,7 @@ export class BattleEvents {
   }
   snapshot() {
     return {
+      ...this.extra(),
       combatants: [...this.roster.seats.values()].map((seat) => ({
         seatId: seat.id,
         sideId: seat.sideId,

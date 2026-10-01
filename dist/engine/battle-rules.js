@@ -7,8 +7,24 @@ import {
 import { BATTLE_POLICY } from "./rule-policy.js";
 export const BATTLE_RULES = {
   ...BATTLE_POLICY,
-  outcome: ({ homeAlive, awayAlive }) =>
-    !homeAlive ? "loss" : !awayAlive ? "win" : null,
+  outcome: ({
+    homeAlive,
+    awayAlive,
+    livingAlliances,
+    homeAlliance,
+    interactiveAlliances,
+  }) => {
+    if (!livingAlliances)
+      return !homeAlive ? "loss" : !awayAlive ? "win" : null;
+    if (livingAlliances.length <= 1)
+      return {
+        result: homeAlive ? "win" : "loss",
+        winner: livingAlliances[0] || null,
+      };
+    return !homeAlive && !interactiveAlliances.size
+      ? { result: "loss", winner: null }
+      : null;
+  },
   experienceAward: ({ species, level, trainer }) =>
     Math.floor((species.expYield * level * (trainer ? 1.5 : 1)) / 7),
   damage,

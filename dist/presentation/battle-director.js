@@ -1,4 +1,4 @@
-import { duelView } from "./duel-view.js";
+import { battleView, battleLayout } from "./battle-view.js";
 const clamp = (t) => Math.max(0, Math.min(1, t));
 const lerp = (a, b, t) => a + (b - a) * t;
 const DURATIONS = {
@@ -14,18 +14,20 @@ const DURATIONS = {
   invalid: 500,
   end: 650,
   learn: 700,
+  choice: 120,
+  vacancy: 180,
+  failed: 450,
 };
-
-/** Consumes event snapshots. Never calculates damage or uses game RNG. */
+/** Seat-based animation state. It consumes snapshots and never calculates battle rules. */
 export class BattleDirector {
   constructor(timeline, { profiles = {}, reducedMotion = () => false } = {}) {
     Object.assign(this, { timeline, profiles, reducedMotion });
     this.reset();
   }
   reset(view = null) {
-    this.view = duelView(view);
+    this.view = battleView(view);
     this.event = null;
-    this.hidden = [false, false];
+    this.hidden = new Set();
     this.ball = false;
     this.caught = false;
   }
@@ -33,47 +35,45 @@ export class BattleDirector {
     return this.event !== null;
   }
   stage(event) {
-    event = duelView(event);
     this.event = {
-      data: event,
+      data: battleView(event),
       previous: this.view,
       start: Infinity,
       duration: 1,
     };
   }
   duration(event) {
-    if (event.kind === "capture") return 700 + event.shakes * 420;
-    return DURATIONS[event.kind] ?? DURATIONS.text;
+    return event.kind === "capture"
+      ? 700 + event.shakes * 420
+      : (DURATIONS[event.kind] ?? DURATIONS.text);
   }
   async play(event, { message = () => {} } = {}) {
-    event = duelView(event);
+    event = battleView(event);
     const duration = this.reducedMotion()
-      ? Math.min(240, this.duration(event))
-      : this.duration(event);
-    const previous = this.view || { player: event.player, enemy: event.enemy };
-    this.view = {
-      player: event.player,
-      enemy: event.enemy,
-      sides: event.sides,
-      combatants: event.combatants,
-    };
+        ? Math.min(240, this.duration(event))
+        : this.duration(event),
+      previous = this.view || event;
+    this.view = event;
     await this.timeline.play(
       duration,
       (start) => {
         this.event = { data: event, previous, start, duration };
-        if (event.kind === "switch") this.hidden[event.side ?? 0] = false;
+        if (event.kind === "switch") this.hidden.delete(event.targetSeat);
         message(event.text || "");
       },
       () => {
-        if (event.kind === "faint") this.hidden[event.side] = true;
+        if (event.kind === "faint" || event.kind === "vacancy")
+          this.hidden.add(event.targetSeat);
         if (event.kind === "ball") {
           this.ball = true;
-          this.hidden[1] = true;
+          this.hidden.add(event.targetSeat || event.combatants[1]?.seatId);
         }
-        if (event.kind === "capture") this.caught = !!event.caught;
-        if (event.kind === "capture" && !event.caught) {
-          this.ball = false;
-          this.hidden[1] = false;
+        if (event.kind === "capture") {
+          this.caught = !!event.caught;
+          if (!event.caught) {
+            this.ball = false;
+            this.hidden.delete(event.targetSeat || event.combatants[1]?.seatId);
+          }
         }
         this.event = null;
       },
@@ -81,41 +81,54 @@ export class BattleDirector {
   }
   sample(now = this.timeline.now()) {
     if (!this.view) return null;
-    const view = {
-      player: { ...this.view.player },
-      enemy: { ...this.view.enemy },
-    };
-    const actors = [0, 1].map((side) => ({
+    const combatants = this.view.combatants.map((c) => ({
+      ...c,
+      monster: c.monster
+        ? { ...c.monster, stats: { ...c.monster.stats } }
+        : null,
+    }));
+    const current = battleView({ ...this.view, combatants }),
+      layout = battleLayout(current);
+    const actors = combatants.map((c) => ({
+      seatId: c.seatId,
       x: 0,
       y: 0,
       scale: 1,
-      opacity: this.hidden[side] ? 0 : 1,
+      opacity: !c.monster || this.hidden.has(c.seatId) ? 0 : 1,
       flash: false,
     }));
     const result = {
-      view,
+      view: current,
+      combatants,
       actors,
+      layout,
       effect: null,
+      effects: [],
       ball: this.ball ? { x: 252, y: 78, angle: 0, sealed: this.caught } : null,
     };
     if (!this.event) return result;
-    const { data: e, previous, start, duration } = this.event;
-    const t = clamp((now - start) / duration),
-      side = e.side ?? 0,
-      actor = actors[side];
-    if (e.kind === "hurt" || e.kind === "heal") {
-      for (const key of ["player", "enemy"])
-        view[key].hp = Math.round(
-          lerp(previous[key].hp, view[key].hp, clamp(t / 0.8)),
-        );
-    }
-    // Accessibility keeps temporal sequencing and HP interpolation, without flashes.
+    const { data: e, previous, start, duration } = this.event,
+      t = clamp((now - start) / duration),
+      subject = ["hurt", "heal", "faint", "switch"].includes(e.kind)
+        ? e.targetSeat
+        : e.actorSeat;
+    const actor = actors.find((a) => a.seatId === subject),
+      pose = layout.get(subject);
+    if (["hurt", "heal"].includes(e.kind))
+      for (const c of combatants) {
+        const old = previous.combatants.find(
+          (p) => p.seatId === c.seatId,
+        )?.monster;
+        if (c.monster && old && c.monster.uid === old.uid)
+          c.monster.hp = Math.round(lerp(old.hp, c.monster.hp, clamp(t / 0.8)));
+      }
     if (this.reducedMotion() || e.offscreen) return result;
-    if (e.kind === "entry") {
-      actors[0].x = -130 * (1 - t);
-      actors[1].x = 150 * (1 - t);
-      actors[0].opacity = actors[1].opacity = t;
-    } else if (e.kind === "move") {
+    if (e.kind === "entry")
+      for (const a of actors) {
+        a.x = (layout.get(a.seatId).back ? -130 : 150) * (1 - t);
+        a.opacity = t;
+      }
+    else if (e.kind === "move" && actor) {
       const profile =
         this.profiles[e.move?.id] ||
         (e.move?.power === 0
@@ -126,33 +139,55 @@ export class BattleDirector {
             ? "projectile"
             : "contact");
       if (profile === "contact") {
-        actor.x = Math.round(Math.sin(t * Math.PI) * (side ? -20 : 20));
+        actor.x = Math.round(Math.sin(t * Math.PI) * (pose.back ? 20 : -20));
         actor.y = -Math.round(Math.sin(t * Math.PI) * 6);
       }
-      result.effect = {
-        kind: profile,
-        type: e.move?.type || "normal",
-        successful: e.move?.successful !== false,
-        side,
-        t,
-      };
-    } else if (e.kind === "hurt") {
+      const targets = e.targetSeats || [e.targetSeat];
+      result.effects = targets
+        .filter((id) => layout.has(id))
+        .map((id) => ({
+          kind: profile,
+          type: e.move?.type || "normal",
+          successful: e.move?.successful !== false,
+          source: pose,
+          target: layout.get(id),
+          sourceSeat: e.actorSeat,
+          targetSeat: id,
+          side: pose.back ? 0 : 1,
+          t,
+        }));
+    } else if (e.kind === "hurt" && actor) {
       actor.x = Math.round(Math.sin(t * Math.PI * 10) * 5 * (1 - t));
       actor.flash = t < 0.65 && Math.floor(t * 12) % 2 === 0;
-    } else if (e.kind === "faint") {
+    } else if (e.kind === "faint" && actor) {
       actor.y = Math.round(t * 55);
       actor.opacity = 1 - t;
-    } else if (e.kind === "switch") {
-      const key = side ? "enemy" : "player";
+    } else if (e.kind === "switch" && actor) {
+      const entry = combatants.find((c) => c.seatId === subject),
+        old = previous.combatants.find((c) => c.seatId === subject)?.monster;
       if (t < 0.4) {
-        view[key] = previous[key];
-        actor.scale = previous[key].hp > 0 ? 1 - t / 0.4 : 0;
-      } else {
-        actor.scale = clamp((t - 0.5) / 0.5);
-      }
-      result.effect = { kind: "release", side, t };
-    } else if (e.kind === "heal" || e.kind === "level")
-      result.effect = { kind: "heal", side, t };
+        entry.monster = old;
+        actor.scale = old?.hp > 0 ? 1 - t / 0.4 : 0;
+      } else actor.scale = clamp((t - 0.5) / 0.5);
+      result.effects = [
+        {
+          kind: "release",
+          side: pose.back ? 0 : 1,
+          source: pose,
+          target: pose,
+          t,
+        },
+      ];
+    } else if (["heal", "level"].includes(e.kind) && pose)
+      result.effects = [
+        {
+          kind: "heal",
+          side: pose.back ? 0 : 1,
+          source: pose,
+          target: pose,
+          t,
+        },
+      ];
     else if (e.kind === "ball") {
       const flight = clamp(t / 0.7);
       result.ball = {
@@ -160,30 +195,33 @@ export class BattleDirector {
         y: lerp(124, 62, flight) - Math.sin(flight * Math.PI) * 72,
         angle: flight * Math.PI * 4,
       };
+      const target = actors.find((a) => a.seatId === e.targetSeat) || actors[1];
       if (t > 0.65) {
-        actors[1].scale = 1 - clamp((t - 0.65) / 0.25);
-        actors[1].opacity = actors[1].scale;
+        target.scale = 1 - clamp((t - 0.65) / 0.25);
+        target.opacity = target.scale;
       }
     } else if (e.kind === "capture") {
-      const elapsed = now - start,
-        shakeTime = Math.max(0, elapsed - 250),
-        shaking = shakeTime < e.shakes * 420;
-      const end = clamp((elapsed - 250 - e.shakes * 420) / 450);
+      const shakeTime = Math.max(0, now - start - 250),
+        shaking = shakeTime < e.shakes * 420,
+        end = clamp((now - start - 250 - e.shakes * 420) / 450);
       result.ball = {
         x: 252,
         y: 78,
         angle: shaking ? Math.sin((shakeTime / 420) * Math.PI * 2) * 0.28 : 0,
         sealed: !!e.caught && !shaking,
       };
+      const target = actors.find((a) => a.seatId === e.targetSeat) || actors[1];
       if (!e.caught && end > 0) {
         result.ball = null;
-        actors[1].opacity = end;
-        actors[1].scale = end;
-        result.effect = { kind: "release", side: 1, t: end };
+        target.opacity = end;
+        target.scale = end;
+        result.effects = [{ kind: "release", side: 1, t: end }];
       }
       if (e.caught && end > 0)
-        result.effect = { kind: "stars", side: 1, t: end };
+        result.effects = [{ kind: "stars", side: 1, t: end }];
     }
+    result.view = battleView({ ...current, combatants });
+    result.effect = result.effects[0] || null;
     return result;
   }
 }

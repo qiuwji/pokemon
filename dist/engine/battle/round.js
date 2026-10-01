@@ -1,59 +1,90 @@
 import { selectedMove } from "./moves.js";
-/** Round scheduling only. Invalid requests never select AI moves or advance the PRNG. */
+/** One scheduler for singles, doubles and local multiple alliances. No content or presentation dependencies. */
 export class RoundResolver {
   constructor(battle) {
     this.battle = battle;
   }
-  resolve(action) {
+  resolve(humanActions) {
     const b = this.battle;
-    if (
-      action.kind === "switch" &&
-      action.forced &&
-      b.rules.forcedReplacementFree
-    ) {
-      b.actions.switch(0, action.index);
-      return;
-    }
+    const actions = [
+      ...humanActions,
+      ...b.roster
+        .occupied()
+        .filter((s) => b.roster.owner(s.id).kind === "ai")
+        .map((s) => {
+          const action = b.actions.prepare(b.ai(b, s.id), s.id);
+          if (action.error)
+            throw new Error(`Invalid AI decision for ${s.id}: ${action.error}`);
+          return { ...action, actionId: `action:${++b.actionSequence}` };
+        }),
+    ];
     b.turn++;
     b.conditions.startRound();
-    if (action.kind === "move") this.moves(action);
-    else {
-      if (action.kind === "switch") b.actions.switch(0, action.index);
+    const order = this.order(actions);
+    for (const action of order) {
+      if (b.ended) break;
+      const mon = b.roster.occupant(action.seat);
+      if (!mon || mon.hp <= 0 || mon.uid !== action.actor) continue;
+      b.actionId = action.actionId;
+      b.phase = "action";
+      if (action.kind === "move") b.moves.execute(action);
+      if (action.kind === "switch") b.actions.switch(action.seat, action.index);
       if (action.kind === "item") b.actions.item(action);
-      if (action.kind === "run") b.actions.run();
-      if (!b.ended) {
-        b.executeMove(1, b.enemyMove());
-        b.outcomes.observe();
-      }
-    }
-    if (!b.ended) this.residuals();
-    b.outcomes.replaceOpponent();
-  }
-  moves(action) {
-    const b = this.battle,
-      enemyIndex = b.enemyMove();
-    const home = selectedMove(b, 0, action.index),
-      away = selectedMove(b, 1, enemyIndex);
-    const homeSpeed = b.speed(b.player, 0),
-      awaySpeed = b.speed(b.enemy, 1);
-    const homeFirst =
-      home.priority !== away.priority
-        ? home.priority > away.priority
-        : homeSpeed !== awaySpeed
-          ? homeSpeed > awaySpeed
-          : b.rng.next() < 0.5;
-    for (const side of homeFirst ? [0, 1] : [1, 0]) {
-      if (b.ended || b.player.hp <= 0 || b.enemy.hp <= 0) break;
-      b.executeMove(side, side === 0 ? action.index : enemyIndex);
+      if (action.kind === "run") b.actions.run(action);
       b.outcomes.observe();
     }
+    if (!b.ended) this.residuals();
+    b.actionId = null;
+    b.outcomes.vacancies();
+  }
+  order(actions) {
+    const b = this.battle;
+    const priority = (a) =>
+      a.kind === "switch"
+        ? 7
+        : a.kind === "move"
+          ? selectedMove(b, a.seat, a.index).priority
+          : 6;
+    // Stable sorting never calls RNG from a comparator. Consume it only for genuine speed/priority ties.
+    const scored = actions.map((action, index) => ({
+      action,
+      index,
+      priority: priority(action),
+      speed: b.speed(b.roster.occupant(action.seat), action.seat),
+      tie: 0,
+    }));
+    const groups = new Map();
+    for (const entry of scored) {
+      const key = `${entry.priority}:${entry.speed}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(entry);
+    }
+    for (const group of groups.values())
+      if (group.length > 1)
+        for (let i = group.length - 1; i > 0; i--) {
+          const j = b.rng.int(i + 1);
+          [group[i], group[j]] = [group[j], group[i]];
+        }
+    for (const group of groups.values())
+      group.forEach((entry, i) => (entry.tie = i));
+    return scored
+      .sort(
+        (a, c) =>
+          c.priority - a.priority ||
+          c.speed - a.speed ||
+          a.tie - c.tie ||
+          a.index - c.index,
+      )
+      .map((e) => e.action);
   }
   residuals() {
     const b = this.battle;
-    for (const side of [0, 1]) {
-      const mon = b.monster(side),
-        state = b.conditions.get(b.seatId(side));
-      if (mon.hp <= 0) continue;
+    for (const seat of b.roster.occupied()) {
+      const mon = b.roster.occupant(seat.id),
+        state = b.conditions.get(seat.id);
+      if (!(mon?.hp > 0)) continue;
+      b.phase = "round-end";
+      b.actionId = null;
       if (["poison", "burn"].includes(mon.status)) {
         mon.hp = Math.max(
           0,
@@ -63,7 +94,7 @@ export class RoundResolver {
         b.emit(
           `${b.name(mon)} 受到了${mon.status === "poison" ? "中毒" : "灼伤"}伤害！`,
           "hurt",
-          { side },
+          { targetSeat: seat.id },
         );
         b.outcomes.observe();
         if (b.ended) break;
@@ -74,7 +105,9 @@ export class RoundResolver {
           0,
           mon.hp - Math.max(1, Math.floor(mon.stats.hp / b.rules.trapDivisor)),
         );
-        b.emit(`${b.name(mon)} 受到了持续伤害！`, "hurt", { side });
+        b.emit(`${b.name(mon)} 受到了持续伤害！`, "hurt", {
+          targetSeat: seat.id,
+        });
         b.outcomes.observe();
         if (b.ended) break;
       }

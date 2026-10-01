@@ -32,10 +32,14 @@ export interface ItemDefinition {
   icon?: string;
   purchaseRequires?: Condition;
 }
-export type BattleAction = { actor?: string; target?: TargetRef } & (
+export type BattleAction = {
+  seat?: string;
+  actor?: string;
+  target?: TargetRef;
+} & (
   | { kind: "move" | "switch"; index: number }
   | { kind: "item"; item: string; index?: number }
-  | { kind: "run" }
+  | { kind: "run" | "cancel" }
   | { kind: "potion"; index?: number }
   | { kind: "ball" }
 );
@@ -115,6 +119,7 @@ export interface BattleEvent extends BattleSnapshot {
   sequence: number;
   round: number;
   actionId: string | null;
+  phase: string;
   actorSeat?: string;
   actorUid?: string | null;
   targetSeat?: string;

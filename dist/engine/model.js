@@ -157,7 +157,13 @@ export function damage(
   move,
   db,
   rng,
-  { aStages = {}, dStages = {}, critical = false, power = move.power } = {},
+  {
+    aStages = {},
+    dStages = {},
+    critical = false,
+    power = move.power,
+    spread = 1,
+  } = {},
 ) {
   const physical = PHYSICAL_TYPES.has(move.type),
     a = physical ? "atk" : "spa",
@@ -198,6 +204,7 @@ export function damage(
       ) / 50,
     ) + 2,
   );
+  v = Math.max(1, Math.floor(v * spread));
   if (critical) v *= 2;
   if (db.species[attacker.species].types.includes(move.type))
     v = Math.floor(v * 1.5);

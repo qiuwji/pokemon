@@ -30,6 +30,42 @@ const talkEvent = (id, kind, build, requires) => ({
 });
 export const STORY_EVENTS = [
   talkEvent(
+    "trainer.arena",
+    "arena",
+    (s, { object }) =>
+      s.party.filter((m) => m.hp > 0).length < 2
+        ? [
+            dialog(
+              object.name,
+              "需要两位还能战斗的伙伴。先捕捉伙伴并恢复体力，再来挑战吧！",
+            ),
+          ]
+        : [
+            dialog(object.name, object.text),
+            { type: "battle", trainerId: object.trainerId },
+          ],
+    flag("rescued"),
+  ),
+  {
+    id: "trainer.arena.result",
+    trigger: "battleResult",
+    match: ({ battle: b }) =>
+      b.script?.startsWith("arena:") && b.result === "win",
+    build: (s, { battle: b }) => {
+      const id = b.script.slice(6),
+        trainer = TRAINERS[id];
+      return [
+        { type: "reward", id: `arena.${id}.prize`, money: trainer.prize },
+        dialog(
+          trainer.name,
+          s.story.rewards.includes(`arena.${id}.prize`)
+            ? "配合得很好！这次练习就到这里。"
+            : `全队获胜！获得了 ¥${trainer.prize}。`,
+        ),
+      ];
+    },
+  },
+  talkEvent(
     "trainer.practice",
     "trainer",
     (s, { object }) => [

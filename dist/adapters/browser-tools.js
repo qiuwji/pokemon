@@ -83,9 +83,19 @@ export async function registerGameTools(adapter) {
         properties: {
           kind: {
             type: "string",
-            enum: ["move", "switch", "item", "potion", "ball", "run"],
+            enum: ["move", "switch", "item", "potion", "ball", "run", "cancel"],
           },
           index: { type: "integer", minimum: 0, maximum: 5 },
+          seat: { type: "string", minLength: 1, maxLength: 64 },
+          target: {
+            type: "object",
+            properties: {
+              kind: { enum: ["seat", "side", "self", "field"] },
+              id: { type: "string", maxLength: 64 },
+            },
+            required: ["kind"],
+            additionalProperties: false,
+          },
           item: { type: "string", minLength: 1, maxLength: 64 },
         },
         required: ["kind"],
@@ -93,9 +103,15 @@ export async function registerGameTools(adapter) {
       },
       execute: async (input) => {
         if (
-          !["move", "switch", "item", "potion", "ball", "run"].includes(
-            input.kind,
-          )
+          ![
+            "move",
+            "switch",
+            "item",
+            "potion",
+            "ball",
+            "run",
+            "cancel",
+          ].includes(input.kind)
         )
           throw new Error("Invalid battle action");
         await adapter.battleAction(input);

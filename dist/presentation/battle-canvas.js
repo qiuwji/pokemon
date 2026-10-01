@@ -20,14 +20,26 @@ export function drawBattle(ctx, assets, frame) {
   ctx.fillStyle = "#e8f9db";
   ctx.fillRect(0, 0, 320, 224);
   ctx.drawImage(assets["battle-bg"], 0, 0, 320, 170);
-  for (const side of [1, 0]) {
-    const mon = side ? view.enemy : view.player,
-      pose = actors[side];
-    const image = assets[mon.species + (side ? "-front" : "-back")];
+  const combatants = frame.combatants || [
+    { seatId: "home:0", monster: view.player },
+    { seatId: "away:0", monster: view.enemy },
+  ];
+  const layout =
+    frame.layout ||
+    new Map([
+      ["home:0", { x: 73, baseline: 182, size: 92, back: true }],
+      ["away:0", { x: 250, baseline: 97, size: 85, back: false }],
+    ]);
+  for (let i = combatants.length - 1; i >= 0; i--) {
+    const mon = combatants[i].monster,
+      pose = actors[i],
+      position = layout.get(combatants[i].seatId);
+    if (!mon || !position) continue;
+    const image = assets[mon.species + (position.back ? "-back" : "-front")];
     if (!image || pose.opacity <= 0 || pose.scale <= 0 || pose.flash) continue;
-    const size = (side ? 85 : 92) * pose.scale;
-    const x = (side ? 250.5 : 73) + pose.x - size / 2,
-      y = (side ? 97 : 182) + pose.y - size;
+    const size = position.size * pose.scale,
+      x = position.x + pose.x - size / 2,
+      y = position.baseline + pose.y - size;
     ctx.save();
     ctx.globalAlpha = pose.opacity;
     ctx.drawImage(
@@ -43,7 +55,8 @@ export function drawBattle(ctx, assets, frame) {
     );
     ctx.restore();
   }
-  if (effect) drawEffect(ctx, effect);
+  for (const visual of frame.effects || (effect ? [effect] : []))
+    drawEffect(ctx, visual);
   if (ball) drawBall(ctx, ball);
 }
 function pixel(ctx, x, y, color, size = 3) {
@@ -57,8 +70,8 @@ function star(ctx, x, y, color) {
   pixel(ctx, x - 1, y + 1, color, 3);
 }
 function drawEffect(ctx, e) {
-  const source = POSITIONS[e.side],
-    target = { ...POSITIONS[1 - e.side] },
+  const source = e.source || POSITIONS[e.side],
+    target = { ...(e.target || POSITIONS[1 - e.side]) },
     t = e.t,
     color = COLORS[e.type] || COLORS.normal;
   if (e.successful === false) target.y -= 45;
@@ -119,7 +132,7 @@ function drawEffect(ctx, e) {
       );
     }
   } else if (!["contact", "projectile"].includes(e.kind)) {
-    const p = POSITIONS[e.side];
+    const p = e.source || POSITIONS[e.side];
     for (let i = 0; i < 7; i++) {
       const a = i * 2.4,
         tick = (t + i / 7) % 1;

@@ -1162,3 +1162,52 @@ button {
   border: 2px solid #6a7b83;
   font-size: clamp(12px, 1.8vw, 16px);
 }
+.battle-status.multi {
+  width: 40%;
+  font-size: 2.75cqw;
+  padding: 0.7% 1%;
+  border-width: 2px;
+  box-shadow:
+    inset 0 0 0 1px #b8c8b0,
+    2px 2px #889878;
+}
+.battle-status.multi .mon-heading {
+  font-size: 2.75cqw;
+}
+.battle-status.multi .mon-heading span,
+.battle-status.multi .hp-value {
+  font-size: 2.1cqw;
+}
+.battle-status.multi .hp-track {
+  height: 1cqw;
+  margin: 1% 0 0;
+}
+.battle-status.multi .exp-track {
+  height: 0.5cqw;
+}
+.battle-plan {
+  position: absolute;
+  left: 2%;
+  bottom: 26%;
+  padding: 2px 4px;
+  font-size: 2.5cqw;
+  background: #f8f8dc;
+  border: 2px solid #6a7b83;
+}
+.battle-plan button {
+  font: inherit;
+  margin-left: 6px;
+  padding: 0 3px;
+}
+
+.battle-options.target-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.25cqw;
+}
+.battle-options.target-options button {
+  font-size: 2.4cqw;
+  padding: 0.4cqw;
+}
+.battle-options.target-options small {
+  font-size: 1.9cqw;
+}

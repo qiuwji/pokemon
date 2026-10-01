@@ -1,3 +1,4 @@
+import { createBattleInterface } from "./battle-interface.js";
 import { experienceAt } from "../../engine/model.js";
 import {
   PACK,
@@ -22,8 +23,6 @@ export function createEmeraldInterface(
     modalBack = null,
     modalType = null,
     modalFocus = null,
-    selected = 0,
-    battleSub = "main",
     toastTimer;
   const escapeHTML = (s) =>
     String(s).replace(
@@ -209,102 +208,17 @@ export function createEmeraldInterface(
     );
   }
 
-  function battleStatus(m, side) {
-    const s = db.species[m.species];
-    let xp = "";
-    if (side === "player") {
-      const base = experienceAt(m.level, s.growth),
-        next = experienceAt(m.level + 1, s.growth);
-      xp = `<div class="exp-track"><i style="width:${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%"></i></div>`;
-    }
-    return `<div class="battle-status ${side}" data-side="${side}" data-identity="${m.uid}:${m.level}"><div class="mon-heading">${s.name} <span>${m.gender} Lv.${m.level}</span></div>${hpTrack(m)}${side === "player" ? `<div class="hp-value">${m.status ? STATUS_NAMES[m.status] + " · " : ""}<span class="hp-number">${m.hp} / ${m.stats.hp}</span></div>${xp}` : ""}</div>`;
-  }
-
-  function drawBattleHUD(message = null) {
-    if (!game.battle) {
-      $("battle-hud").hidden = true;
-      return;
-    }
-    $("battle-hud").hidden = false;
-    const frame = game.director.sample();
-    const p = frame.view.player,
-      e = frame.view.enemy;
-    let options = "",
-      prompt = message || `${db.species[p.species].name}<br>要做什么？`;
-    if (game.busy) {
-      options = "";
-    } else if (game.battle.player.hp <= 0) {
-      options = '<button data-baction="party">替换宝可梦</button>';
-      prompt = "请选择下一位伙伴。";
-    } else if (battleSub === "moves") {
-      prompt = '选择招式<br><small style="font-size:12px">X 返回</small>';
-      options = game.battle.player.moves
-        .map((slot, i) => {
-          const mv = db.moves[slot.id];
-          return `<button data-move="${i}" ${(slot.pp === 0 && game.battle.player.moves.some((m) => m.pp > 0)) || !game.battle.moveEffects.supports(mv.effect) ? "disabled" : ""}>${mv.name}<small>${game.battle.moveEffects.supports(mv.effect) ? TYPE_NAMES[mv.type] + " · PP " + slot.pp + " / " + mv.pp : "效果尚未开放"}</small></button>`;
-        })
-        .join("");
-      if (!game.battle.player.moves.some((m) => m.pp > 0))
-        options =
-          '<button data-struggle="true">挣扎<small>没有可用招式</small></button>';
-    } else
-      options =
-        '<button data-baction="fight">战斗</button><button data-baction="bag">背包</button><button data-baction="party">宝可梦</button><button data-baction="run">逃跑</button>';
-    const enemySide = game.director.view.sides?.[1];
-    const team =
-      enemySide?.total > 1
-        ? `<div class="enemy-team" aria-label="对方队伍剩余 ${enemySide.remaining} / ${enemySide.total}">对方队伍 ${"●".repeat(enemySide.remaining)}${"○".repeat(enemySide.total - enemySide.remaining)}</div>`
-        : "";
-    $("battle-hud").innerHTML =
-      team +
-      battleStatus(e, "enemy") +
-      battleStatus(p, "player") +
-      `<div class="battle-menu">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options">${options}</div>`}</div>`;
-    const btns = [
-      ...$("battle-hud").querySelectorAll(
-        ".battle-options button:not(:disabled)",
-      ),
-    ];
-    if (selected >= btns.length) selected = 0;
-    btns[selected]?.classList.add("selected");
-    $("battle-hud")
-      .querySelectorAll("[data-baction]")
-      .forEach(
-        (b) =>
-          (b.onclick = () => {
-            if (b.dataset.baction === "fight") {
-              battleSub = "moves";
-              selected = 0;
-              drawBattleHUD();
-            }
-            if (b.dataset.baction === "bag") showBag(true);
-            if (b.dataset.baction === "party") showParty(true);
-            if (b.dataset.baction === "run") game.turn({ kind: "run" });
-          }),
-      );
-    $("battle-hud")
-      .querySelectorAll("[data-move]")
-      .forEach(
-        (b) =>
-          (b.onclick = () =>
-            game.turn({ kind: "move", index: +b.dataset.move })),
-      );
-    $("battle-hud")
-      .querySelector("[data-struggle]")
-      ?.addEventListener("click", () => game.turn({ kind: "move", index: -1 }));
-  }
-
-  function confirmBattle() {
-    if (game.busy) {
-      return;
-    }
-    const bs = [
-      ...$("battle-hud").querySelectorAll(
-        ".battle-options button:not(:disabled)",
-      ),
-    ];
-    bs[selected]?.click();
-  }
+  const battleUI = createBattleInterface(game, {
+    document: doc,
+    hpTrack,
+    hpColor,
+    escapeHTML,
+    showParty,
+    showBag,
+  });
+  const drawBattleHUD = (message) => battleUI.draw(message);
+  const refreshBattle = (frame) => battleUI.refresh(frame);
+  const confirmBattle = () => battleUI.confirm();
 
   function checkGrowth() {
     if (dialog || game.battle || game.busy) return;
@@ -364,7 +278,9 @@ export function createEmeraldInterface(
     modal(
       inBattle ? "替换宝可梦" : "我的队伍",
       game.state.party.length
-        ? game.state.party.map((m, i) => partyCard(m, i)).join("")
+        ? (inBattle ? game.battle.party : game.state.party)
+            .map((m, i) => partyCard(m, i))
+            .join("")
         : `<p>还没有宝可梦。到 101 号道路调查博士的背包，选择你的搭档。</p>`,
       { back: inBattle ? closeModal : showMenu, type: "party" },
     );
@@ -430,10 +346,10 @@ export function createEmeraldInterface(
             item.contexts.includes(inBattle ? "battle" : "field") &&
             (item.target === "enemy"
               ? game.itemPlan(id, undefined, inBattle).ok
-              : game.state.party.some(
+              : (inBattle ? game.battle.party : game.state.party).some(
                   (m, index) => game.itemPlan(id, index, inBattle).ok,
                 ));
-          return `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} × ${game.state.bag[id] || 0}</strong><p>${item.description}</p></div><button class="secondary-button" data-item="${id}" ${!usable ? "disabled" : ""}>使用</button></div>`;
+          return `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${item.description}</p></div><button class="secondary-button" data-item="${id}" ${!usable ? "disabled" : ""}>使用</button></div>`;
         })
         .join("") +
         `<div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
@@ -452,7 +368,9 @@ export function createEmeraldInterface(
   function chooseItemTarget(id, inBattle) {
     modal(
       `${ITEMS[id].name} · 选择伙伴`,
-      game.state.party.map((m, i) => partyCard(m, i)).join(""),
+      (inBattle ? game.battle.party : game.state.party)
+        .map((m, i) => partyCard(m, i))
+        .join(""),
       { back: () => showBag(inBattle), type: "item-target" },
     );
     root.querySelectorAll("[data-mon]").forEach((button) => {
@@ -658,39 +576,9 @@ export function createEmeraldInterface(
       nextDialogue();
       return;
     }
-    if (game.battle && !game.busy && battleSub === "moves") {
-      battleSub = "main";
-      selected = 0;
-      drawBattleHUD();
-    }
+    if (game.battle) battleUI.back();
   }
 
-  function refreshBattle(frame) {
-    if (!frame) return;
-    for (const side of ["player", "enemy"]) {
-      const el = $("battle-hud").querySelector(`[data-side="${side}"]`),
-        m = frame.view[side];
-      if (!el) continue;
-      const identity = `${m.uid}:${m.level}`;
-      if (el.dataset.identity !== identity) {
-        el.dataset.identity = identity;
-        el.querySelector(".mon-heading").innerHTML =
-          `${db.species[m.species].name} <span>${m.gender} Lv.${m.level}</span>`;
-      }
-      const xp = el.querySelector(".exp-track i");
-      if (xp) {
-        const growth = db.species[m.species].growth,
-          base = experienceAt(m.level, growth),
-          next = experienceAt(m.level + 1, growth);
-        xp.style.width = `${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%`;
-      }
-      const bar = el.querySelector(".hp-track i");
-      bar.style.width = `${(m.hp / m.stats.hp) * 100}%`;
-      bar.style.background = hpColor(m);
-      const number = el.querySelector(".hp-number");
-      if (number) number.textContent = `${m.hp} / ${m.stats.hp}`;
-    }
-  }
   return {
     toast,
     announce,
@@ -719,15 +607,8 @@ export function createEmeraldInterface(
     get blocked() {
       return !!dialog || !!root.children.length;
     },
-    resetBattleMenu() {
-      battleSub = "main";
-      selected = 0;
-    },
-    navigateBattle(dir) {
-      if (game.busy) return;
-      selected = (selected + (dir === "up" || dir === "left" ? -1 : 1) + 4) % 4;
-      drawBattleHUD();
-    },
+    resetBattleMenu: () => battleUI.reset(),
+    navigateBattle: (dir) => battleUI.navigate(dir),
     confirm() {
       if (root.children.length) {
         root.querySelector("button:focus")?.click();

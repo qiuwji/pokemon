@@ -1,3 +1,4 @@
+import { TARGET_MODES } from "./battle/targeting.js";
 import { EffectRegistry } from "./effects.js";
 const PRIMARY = (op, parameters = {}) => ({
   target: [
@@ -23,6 +24,7 @@ const stages = (target, changes) => ({
 /** One catalog; phases describe when effects run. No fallback string dispatch. */
 export const MOVE_EFFECTS = {
   hit: {},
+  earthquake: {},
   quick_attack: {},
   pursuit: {},
   sky_uppercut: {},
@@ -97,7 +99,6 @@ export const MOVE_EFFECTS = {
 for (const id of [
   "mirror_move",
   "endeavor",
-  "earthquake",
   "roar",
   "swagger",
   "taunt",
@@ -248,6 +249,9 @@ for (const key of ["drain", "recoil"])
     if (!(s.fraction > 0 && s.fraction <= 1))
       throw new Error(`${p}: invalid fraction`);
   };
+MOVE_OPERATIONS.streakPower.scope = "action";
+MOVE_OPERATIONS.drain.scope = "action";
+MOVE_OPERATIONS.recoil.scope = "action";
 export class MoveEffectRegistry {
   constructor({ definitions = {}, operations = {} } = {}) {
     this.definitions = { ...MOVE_EFFECTS, ...definitions };
@@ -331,6 +335,10 @@ export class MoveEffectRegistry {
   }
   validateMoves(moves) {
     for (const [id, move] of Object.entries(moves)) {
+      if (move.target !== undefined && !TARGET_MODES.has(move.target))
+        throw new Error(`moves.${id}.target: unknown target mode`);
+      if (move.contact !== undefined && typeof move.contact !== "boolean")
+        throw new Error(`moves.${id}.contact: expected boolean`);
       try {
         this.get(move.effect);
       } catch {
@@ -338,12 +346,17 @@ export class MoveEffectRegistry {
       }
     }
   }
-  run(phase, context) {
+  run(phase, context, { scope } = {}) {
     Object.assign(context, {
       target: context.mon,
       targetSide: context.side,
       registry: this.operations,
     });
-    this.operations.run(context.definition[phase] || [], context);
+    const steps = (context.definition[phase] || []).filter(
+      (step) =>
+        !scope ||
+        (this.operations.operations[step.op].scope || "target") === scope,
+    );
+    this.operations.run(steps, context);
   }
 }

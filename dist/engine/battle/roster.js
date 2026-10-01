@@ -127,6 +127,15 @@ export class BattleRoster {
     this.seat(id).index = index;
     return this.occupant(id);
   }
+  alliance(id) {
+    return this.sides.get(this.seat(id).sideId).allianceId;
+  }
+  isOpposing(a, b) {
+    return this.alliance(a) !== this.alliance(b);
+  }
+  occupied() {
+    return [...this.seats.values()].filter((s) => this.occupant(s.id)?.hp > 0);
+  }
   opposing(id) {
     const alliance = this.sides.get(this.seat(id).sideId).allianceId;
     return [...this.seats.values()].filter(
@@ -171,4 +180,23 @@ export function duelRoster(party, enemies, bag) {
       },
     ],
   };
+}
+
+export function teamRoster(party, enemies, bag, seats = 1) {
+  if (!Number.isInteger(seats) || seats < 1 || seats > 2)
+    throw new Error("Invalid standard battle format");
+  const definition = duelRoster(party, enemies, bag);
+  for (const side of definition.sides) {
+    const controller = side.controllers[0];
+    side.seats = Array.from(
+      {
+        length: Math.min(
+          seats,
+          controller.party.filter((m) => m.hp > 0).length,
+        ),
+      },
+      (_, i) => ({ id: `${side.id}:${i}`, controllerId: controller.id }),
+    );
+  }
+  return definition;
 }
