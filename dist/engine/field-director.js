@@ -212,7 +212,18 @@ export function storyResources(c) {
   if (c.type === "dialog") return ["dialog"];
   if (["scene", "teleport", "battle", "starter", "shop"].includes(c.type))
     return ["*"];
-  if (["flag", "heal", "grant"].includes(c.type)) return ["state"];
+  if (
+    [
+      "flag",
+      "heal",
+      "grant",
+      "reward",
+      "completeEvent",
+      "captureMonster",
+      "lossPenalty",
+    ].includes(c.type)
+  )
+    return ["state"];
   return [];
 }
 

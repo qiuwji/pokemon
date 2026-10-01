@@ -1,3 +1,4 @@
+import { CREATION_POLICY } from "./rule-policy.js";
 // Portable RPG domain layer: no browser, DOM, or game-specific story dependencies.
 export const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 export class Random {
@@ -48,25 +49,33 @@ export function calculateStats(mon, species) {
   }
   return result;
 }
-export function createMonster(id, level, db, rng, { trainer = false } = {}) {
+export function createMonster(
+  id,
+  level,
+  db,
+  rng,
+  { trainer = false, rules = {} } = {},
+) {
   const spec = db.species[id];
   if (!spec) throw new Error(`Unknown species ${id}`);
+  const policy = { ...CREATION_POLICY, ...rules };
+  const context = { trainer, rng, species: spec };
   const mon = {
     uid: `${rng.seed.toString(36)}-${rng.int(1e9)}`,
     species: id,
     level,
     exp: experienceAt(level, spec.growth),
-    nature: rng.int(25),
+    nature: policy.nature(context),
     gender: rng.next() < (spec.femaleRatio ?? 0.5) ? "♀" : "♂",
     iv: {},
     ev: {},
     status: null,
     sleep: 0,
     moves: [],
-    ability: spec.abilities[0],
+    ability: policy.ability(context),
   };
   for (const k of STAT_KEYS) {
-    mon.iv[k] = trainer ? 0 : rng.int(32);
+    mon.iv[k] = policy.individualValue({ ...context, stat: k });
     mon.ev[k] = 0;
   }
   const known = [

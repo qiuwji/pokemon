@@ -1,13 +1,18 @@
+import { createItemService, DEFAULT_ITEMS } from "./items.js";
 import { calculateStats } from "./model.js";
 
 /** Party commands are domain operations, usable without a browser. */
 export function usePotion(state, index, amount = 20) {
-  const mon = state.party[index];
-  if (!state.bag.potion || !mon || mon.hp <= 0 || mon.hp >= mon.stats.hp)
-    return false;
-  state.bag.potion--;
-  mon.hp = Math.min(mon.stats.hp, mon.hp + amount);
-  return true;
+  const items = createItemService({
+    potion: { ...DEFAULT_ITEMS.potion, effects: [{ op: "restoreHP", amount }] },
+  });
+  return items.use({
+    id: "potion",
+    bag: state.bag,
+    party: state.party,
+    index,
+    context: "field",
+  }).ok;
 }
 export function setLead(state, index) {
   if (!state.party[index]) return false;

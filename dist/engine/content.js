@@ -71,6 +71,30 @@ export function validateContent(db) {
     for (const row of species.learnset || [])
       check(!!db.moves[row.move], `species.${id}.learnset.${row.move}`);
   }
+  for (const [id, move] of Object.entries(db.moves)) {
+    const path = `moves.${id}`;
+    check(
+      typeof move.name === "string" && move.name.length > 0,
+      path + ".name",
+    );
+    check(
+      typeof move.effect === "string" && move.effect.length > 0,
+      path + ".effect",
+    );
+    check(Number.isInteger(move.power) && move.power >= 0, path + ".power");
+    check(
+      Number.isInteger(move.accuracy) &&
+        move.accuracy >= 0 &&
+        move.accuracy <= 100,
+      path + ".accuracy",
+    );
+    check(Number.isInteger(move.pp) && move.pp > 0, path + ".pp");
+    check(Number.isInteger(move.priority), path + ".priority");
+    check(
+      Number.isInteger(move.chance) && move.chance >= 0 && move.chance <= 100,
+      path + ".chance",
+    );
+  }
   for (const [id, evolution] of Object.entries(db.evolutions || {}))
     check(
       !!db.species[id] && !!db.species[evolution.to] && evolution.level > 0,

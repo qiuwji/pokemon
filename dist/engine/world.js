@@ -1,3 +1,9 @@
+import {
+  ledgeDirection,
+  blockedDirection,
+  isWater,
+  isCounter,
+} from "./terrain.js";
 export const DIRECTIONS = {
   down: [0, 1],
   up: [0, -1],
@@ -28,7 +34,7 @@ export class World {
     return Object.keys(this.maps).find(
       (k) =>
         k.replace(/_/g, "").toUpperCase() ===
-        id.replace(/^MAP_/, "").replace(/_/g, ""),
+        id.replace(/^MAP_/i, "").replace(/_/g, "").toUpperCase(),
     );
   }
   cell(x, y) {
@@ -97,9 +103,7 @@ export class World {
       this.onBlocked("boundary");
       return false;
     }
-    const jumpDir = { 56: "right", 57: "left", 58: "up", 59: "down" }[
-      cell.behavior
-    ];
+    const jumpDir = ledgeDirection(cell.behavior);
     let jump = false;
     if (jumpDir === dir) {
       x += dx;
@@ -123,14 +127,12 @@ export class World {
         (n.id !== allowVacatedBy &&
           n.reserved?.some((p) => p.x === x && p.y === y)),
     );
-    const oneWay = { 48: "right", 49: "left", 50: "up", 51: "down" }[
-      cell?.behavior
-    ];
+    const oneWay = blockedDirection(cell?.behavior);
     if (
       !cell ||
       obj ||
       (cell.collision !== 0 && !warp) ||
-      [16, 17, 18, 19, 20, 21].includes(cell.behavior) ||
+      isWater(cell.behavior) ||
       oneWay === dir
     ) {
       this.onBlocked(obj ? "object" : "wall", obj);
@@ -197,7 +199,7 @@ export class World {
       y = this.position.y + dy;
     let obj = this.objects().find((n) => n.x === x && n.y === y);
     // Counters keep attendants one extra tile away.
-    if (!obj && this.cell(x, y)?.behavior === 128)
+    if (!obj && isCounter(this.cell(x, y)?.behavior))
       obj = this.objects().find((n) => n.x === x + dx && n.y === y + dy);
     const sign = this.map.signs.find((n) => n.x === x && n.y === y);
     return obj || (sign && { ...sign, kind: "sign" }) || null;

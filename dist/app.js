@@ -1,5 +1,5 @@
 import { PACK } from "./packs/emerald/pack.js";
-import { assertContent } from "./engine/content.js";
+import { assertPackContent } from "./packs/emerald/content.js";
 import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
 import { BrowserInput } from "./adapters/browser-input.js";
 import { registerGameTools } from "./adapters/browser-tools.js";
@@ -18,7 +18,7 @@ async function boot() {
   try {
     const response = await fetch("content.json");
     if (!response.ok) throw new Error("内容未能载入");
-    const db = assertContent(await response.json()),
+    const db = assertPackContent(await response.json()),
       assets = await loadAssets(db);
     const timeline = new Timeline(),
       camera = new CameraRig(timeline),

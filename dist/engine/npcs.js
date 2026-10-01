@@ -1,3 +1,4 @@
+import { isWater, ledgeDirection } from "./terrain.js";
 import { DIRECTIONS } from "./world.js";
 // Ambient NPC simulation has its own random stream, so walking never changes battle RNG.
 export class NPCSystem {
@@ -33,6 +34,15 @@ export class NPCSystem {
     const objects = new Map(
       this.definitions(map).map((def) => [def.id, this.state(map, def)]),
     );
+    // Remove actors no longer present in conditional content, except current scene pins.
+    const live = new Set(objects.keys());
+    for (const key of this.states.keys())
+      if (
+        key.startsWith(map + ":") &&
+        !live.has(key.slice(map.length + 1)) &&
+        !this.scene?.pins.has(key)
+      )
+        this.states.delete(key);
     if (this.scene) {
       for (const [key, n] of this.scene.pins)
         if (key.startsWith(map + ":")) objects.set(n.id, n);
@@ -40,6 +50,12 @@ export class NPCSystem {
         if (this.scene.hidden.has(map + ":" + id)) objects.delete(id);
     }
     return [...objects.values()];
+  }
+  clear() {
+    this.states.clear();
+    this.scene = null;
+    this.activeMap = null;
+    this.now = 0;
   }
   beginScene() {
     if (this.scene) throw new Error("NPC scene scope is already active");
@@ -180,7 +196,8 @@ export class NPCSystem {
         const i = y * m.width + x;
         if (
           ((m.blocks[i] >> 10) & 3) !== 0 ||
-          [16, 17, 18, 19, 20, 21, 56, 57, 58, 59].includes(m.behavior[i]) ||
+          isWater(m.behavior[i]) ||
+          ledgeDirection(m.behavior[i]) ||
           m.warps.some((w) => w.x === x && w.y === y)
         )
           continue;

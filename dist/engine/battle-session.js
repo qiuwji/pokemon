@@ -32,8 +32,8 @@ export class BattleSession {
       await this.transitions.run("encounter", () => {
         this.battle = this.createBattle(options);
         const view = {
-          player: structuredClone(this.battle.player),
-          enemy: structuredClone(this.battle.enemy),
+          player: this.battle.view(this.battle.player),
+          enemy: this.battle.view(this.battle.enemy),
         };
         this.director.reset(view);
         entry = {

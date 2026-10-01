@@ -77,21 +77,26 @@ export async function registerGameTools(adapter) {
     {
       name: "battle_action",
       description:
-        "Take one normal battle turn: use a move, switch party member, use a potion, throw a Poké Ball or run. Index is zero-based. Waits for the resulting battle messages.",
+        "Take one normal battle turn: use a move, switch party member, use an item, throw a ball or run. Index is zero-based. Waits for the resulting battle messages.",
       inputSchema: {
         type: "object",
         properties: {
           kind: {
             type: "string",
-            enum: ["move", "switch", "potion", "ball", "run"],
+            enum: ["move", "switch", "item", "potion", "ball", "run"],
           },
           index: { type: "integer", minimum: 0, maximum: 5 },
+          item: { type: "string", minLength: 1, maxLength: 64 },
         },
         required: ["kind"],
         additionalProperties: false,
       },
       execute: async (input) => {
-        if (!["move", "switch", "potion", "ball", "run"].includes(input.kind))
+        if (
+          !["move", "switch", "item", "potion", "ball", "run"].includes(
+            input.kind,
+          )
+        )
           throw new Error("Invalid battle action");
         await adapter.battleAction(input);
         return output(adapter.inspect());

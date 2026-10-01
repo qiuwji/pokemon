@@ -2,7 +2,7 @@
 export const PACK = {
   id: "emerald-hoenn-01",
   playerActors: { walk: "BrendanNormal", run: "BrendanRun" },
-  version: 1,
+  version: 2,
   title: "绿宝石 · 丰缘序章",
   start: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   starters: ["treecko", "torchic", "mudkip"],
@@ -75,18 +75,9 @@ export const NATURES = [
   "慎重",
   "浮躁",
 ];
-export const ITEMS = {
-  pokeball: {
-    name: "精灵球",
-    price: 200,
-    description: "捕捉野生宝可梦。降低对方体力更容易成功。",
-  },
-  potion: {
-    name: "伤药",
-    price: 300,
-    description: "为一只宝可梦恢复 20 点 HP。",
-  },
-};
+export { ITEMS } from "./items.js";
+export { questFor } from "./quests.js";
+import { validStoryProgress } from "../../engine/story.js";
 function baseObjects(state, db) {
   const map = state.position.map,
     flag = state.flags;
@@ -258,33 +249,6 @@ function baseObjects(state, db) {
     ];
   return [];
 }
-export function questFor(flags) {
-  if (!flags.rescued)
-    return {
-      title: "草丛里的求救声",
-      description: "沿未白镇北边的小路前往 101 号道路，调查博士的背包。",
-      number: "01",
-    };
-  if (!flags.rivalWon)
-    return {
-      title: "与小遥初次交手",
-      description:
-        "穿过古辰镇，向北到 103 号道路找小遥。出发前可以去宝可梦中心恢复。",
-      number: "02",
-    };
-  if (!flags.pokedex)
-    return {
-      title: "属于你的宝可梦图鉴",
-      description: "返回未白镇研究所，向小田卷博士报告。他有一份礼物要给你。",
-      number: "03",
-    };
-  return {
-    title: "记录丰缘的伙伴",
-    description:
-      "在 101 和 103 号道路探索草丛，捕捉伙伴。图鉴会记录你见过和捕获的宝可梦。",
-    number: "04",
-  };
-}
 export function validateSave(s, db) {
   if (
     !s ||
@@ -340,6 +304,7 @@ export function validateSave(s, db) {
       return false;
   }
   if (s.flags.rescued && !s.party.length) return false;
+  if (s.story !== undefined && !validStoryProgress(s.story)) return false;
   return Object.values(s.bag).every((v) => Number.isInteger(v) && v >= 0);
 }
 

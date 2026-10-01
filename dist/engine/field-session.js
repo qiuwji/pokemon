@@ -31,6 +31,11 @@ export class FieldSession {
     this.pending = null;
     this.motion.snap(position);
   }
+  dispose() {
+    this.npcs.clear();
+    this.pending = this.pendingCell = null;
+    this.disposed = true;
+  }
   get busy() {
     return !!this.pending || this.transitions.busy;
   }
@@ -38,7 +43,8 @@ export class FieldSession {
     direction,
     { running = false, scripted = false, allowVacatedBy = null } = {},
   ) {
-    if (this.busy || this.motion.moving(this.now())) return false;
+    if (this.disposed || this.busy || this.motion.moving(this.now()))
+      return false;
     const from = { ...this.position };
     const result = this.world.move(direction, {
       ignoreWarps: scripted,
@@ -54,7 +60,7 @@ export class FieldSession {
     return true;
   }
   tick(now) {
-    if (!this.pending || this.motion.moving(now)) return;
+    if (this.disposed || !this.pending || this.motion.moving(now)) return;
     const result = this.pending;
     this.pending = null;
     const cell = this.pendingCell;

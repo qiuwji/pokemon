@@ -1,5 +1,4 @@
 import {
-  usePotion,
   setLead,
   learnPendingMove,
   evolveMonster,
@@ -17,7 +16,21 @@ import {
 } from "../../engine/field-director.js";
 import { PACK, ITEMS, objectsFor, questFor, validateSave } from "./pack.js";
 import { interaction, battleOutcome } from "./story.js";
-import { RESCUE_INTRO } from "./scenes.js";
+import { EMERALD_STORY } from "./story.js";
+import { createItemService } from "../../engine/items.js";
+import { MoveEffectRegistry } from "../../engine/move-effects.js";
+import {
+  emptyStoryProgress,
+  grantReward,
+  completeEvent,
+  validateReward,
+} from "../../engine/story.js";
+import {
+  matchesCondition,
+  validateCondition,
+} from "../../engine/conditions.js";
+import { isGrass } from "../../engine/terrain.js";
+import { SAVE_MIGRATIONS } from "./save-migrations.js";
 
 /** Composes the Emerald pack with reusable engine services. Browser ports are injected. */
 export class EmeraldAdventure {
@@ -46,11 +59,17 @@ export class EmeraldAdventure {
       onSave,
       clearInput,
     });
+    this.items = createItemService(ITEMS);
+    this.moveEffects = new MoveEffectRegistry();
+    this.moveEffects.validateMoves(db.moves);
+    for (const item of Object.values(ITEMS))
+      validateCondition(item.purchaseRequires);
     this.saveStore = new SaveStore(
       storage,
       PACK.id,
       (s) => validateSave(s, db),
       PACK.version,
+      { migrations: SAVE_MIGRATIONS },
     );
     const loaded = this.saveStore.load();
     this.state = loaded?.state || this.newState();
@@ -106,14 +125,65 @@ export class EmeraldAdventure {
           this.state.party.forEach((m) => healMonster(m, db));
           this.ui?.updateSide();
         },
-        grant: (c) => {
-          this.state.flags[c.flag] = true;
-          this.state.bag[c.item] = (this.state.bag[c.item] || 0) + c.amount;
+        grant: (c) =>
+          grantReward(
+            this.state,
+            {
+              id: "legacy." + c.flag,
+              flags: { [c.flag]: true },
+              items: { [c.item]: c.amount },
+            },
+            { items: ITEMS },
+          ),
+        reward: (c) => grantReward(this.state, c, { items: ITEMS }),
+        completeEvent: (c) => completeEvent(this.state, c.id),
+        captureMonster: (c) => {
+          if (
+            [...this.state.party, ...this.state.box].some(
+              (m) => m.uid === c.monster.uid,
+            )
+          )
+            return;
+          const mon = structuredClone(c.monster);
+          (this.state.party.length < 6
+            ? this.state.party
+            : this.state.box
+          ).push(mon);
+          this.seen(mon.species, true);
+        },
+        lossPenalty: () => {
+          this.state.money = Math.max(
+            0,
+            this.state.money -
+              Math.max(...this.state.party.map((m) => m.level)) * 8,
+          );
         },
       },
       {
         resources: storyResources,
-        validateCommand: (c) => validateFieldCommand(c, db.maps),
+        validateCommand: (c) => {
+          validateFieldCommand(c, db.maps);
+          if (c.type === "reward") validateReward(c, ITEMS);
+          if (c.type === "grant")
+            validateReward(
+              {
+                id: "legacy." + c.flag,
+                flags: { [c.flag]: true },
+                items: { [c.item]: c.amount },
+              },
+              ITEMS,
+            );
+          if (
+            c.type === "completeEvent" &&
+            !EMERALD_STORY.events.some((e) => e.id === c.id)
+          )
+            throw new Error(`Unknown event ${c.id}`);
+          if (
+            c.type === "captureMonster" &&
+            (!db.species[c.monster?.species] || !c.monster.uid)
+          )
+            throw new Error("Invalid captured monster");
+        },
       },
     );
     this.bindField();
@@ -137,7 +207,8 @@ export class EmeraldAdventure {
       position: { ...PACK.start },
       party: [],
       box: [],
-      bag: { pokeball: 0, potion: 0 },
+      bag: Object.fromEntries(Object.keys(ITEMS).map((id) => [id, 0])),
+      story: emptyStoryProgress(),
       flags: {},
       money: 3000,
       seen: [],
@@ -147,6 +218,7 @@ export class EmeraldAdventure {
     };
   }
   bindField() {
+    this.field?.dispose();
     this.rng = new Random(this.state.randomSeed);
     this.lastEncounterSteps = -5;
     this.field = new FieldSession({
@@ -278,18 +350,18 @@ export class EmeraldAdventure {
   step(cell) {
     if (this.storyBusy) return;
     const s = this.state;
-    if (
-      !s.flags.rescued &&
-      s.position.map === "Route101" &&
-      !s.flags.heardBirch
-    ) {
-      void this.playStory(RESCUE_INTRO);
+    const scene = EMERALD_STORY.resolve("step", s, {
+      map: s.position.map,
+      cell,
+    });
+    if (scene.length) {
+      void this.playStory(scene);
       return;
     }
     if (
       s.party.length &&
       s.flags.rescued &&
-      [2, 3].includes(cell?.behavior) &&
+      isGrass(cell?.behavior) &&
       this.world.map.encounters &&
       this.world.steps - this.lastEncounterSteps > 3 &&
       !this.ui.dialog
@@ -332,6 +404,8 @@ export class EmeraldAdventure {
       db: this.db,
       rng: this.rng,
       bag: this.state.bag,
+      items: this.items,
+      effects: this.moveEffects,
       ...options,
     });
   }
@@ -385,7 +459,39 @@ export class EmeraldAdventure {
     return this.canManageParty() && setLead(this.state, index);
   }
   usePotion(index) {
-    return this.canManageParty() && usePotion(this.state, index);
+    return this.useItem("potion", index).ok;
+  }
+  itemPlan(id, index, inBattle = !!this.battle) {
+    return this.items.prepare({
+      id,
+      bag: this.state.bag,
+      party: this.state.party,
+      index,
+      context: inBattle ? "battle" : "field",
+      enemy: this.battle?.enemy,
+      canCapture: this.battle
+        ? this.battle.rules.canCapture(this.battle)
+        : false,
+    });
+  }
+  useItem(id, index) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    return this.items.use({
+      id,
+      bag: this.state.bag,
+      party: this.state.party,
+      index,
+      context: "field",
+    });
+  }
+  canBuyItem(id) {
+    const item = ITEMS[id];
+    return (
+      !!item &&
+      this.state.money >= item.price &&
+      matchesCondition(item.purchaseRequires, this.state)
+    );
   }
   learnMove(mon, index) {
     return (
@@ -402,15 +508,9 @@ export class EmeraldAdventure {
   }
   buyItem(id) {
     const item = ITEMS[id];
-    if (
-      !this.canManageParty() ||
-      !item ||
-      this.state.money < item.price ||
-      (id === "pokeball" && !this.state.flags.pokedex)
-    )
-      return false;
+    if (!this.canManageParty() || !this.canBuyItem(id)) return false;
     this.state.money -= item.price;
-    this.state.bag[id]++;
+    this.state.bag[id] = (this.state.bag[id] || 0) + 1;
     return true;
   }
   withdrawBox(index) {
@@ -482,7 +582,7 @@ export class EmeraldAdventure {
             : this.storyBusy
               ? "cutscene"
               : this.ui.modalType || "exploration",
-      quest: questFor(this.state.flags),
+      quest: questFor(this.state),
       flags: { ...this.state.flags },
       dialogue: this.ui.dialog
         ? {

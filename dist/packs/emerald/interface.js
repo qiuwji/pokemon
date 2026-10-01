@@ -49,7 +49,7 @@ export function createEmeraldInterface(
   }
 
   function updateSide() {
-    const q = questFor(game.state.flags);
+    const q = questFor(game.state);
     $("quest-title").textContent = q.title;
     $("quest-description").textContent = q.description;
     $("quest-number").textContent = q.number;
@@ -240,7 +240,7 @@ export function createEmeraldInterface(
       options = game.battle.player.moves
         .map((slot, i) => {
           const mv = db.moves[slot.id];
-          return `<button data-move="${i}" ${slot.pp === 0 && game.battle.player.moves.some((m) => m.pp > 0) ? "disabled" : ""}>${mv.name}<small>${TYPE_NAMES[mv.type]} · PP ${slot.pp} / ${mv.pp}</small></button>`;
+          return `<button data-move="${i}" ${(slot.pp === 0 && game.battle.player.moves.some((m) => m.pp > 0)) || !game.battle.moveEffects.supports(mv.effect) ? "disabled" : ""}>${mv.name}<small>${game.battle.moveEffects.supports(mv.effect) ? TYPE_NAMES[mv.type] + " · PP " + slot.pp + " / " + mv.pp : "效果尚未开放"}</small></button>`;
         })
         .join("");
       if (!game.battle.player.moves.some((m) => m.pp > 0))
@@ -418,40 +418,56 @@ export function createEmeraldInterface(
     modal(
       "背包",
       Object.entries(ITEMS)
-        .map(
-          ([id, item]) =>
-            `<div class="bag-item"><div class="bag-icon">${id === "pokeball" ? "◉" : "✚"}</div><div><strong>${item.name} × ${game.state.bag[id]}</strong><p>${item.description}</p></div><button class="secondary-button" data-item="${id}" ${!game.state.bag[id] || (!inBattle && id === "pokeball") ? "disabled" : ""}>使用</button></div>`,
-        )
+        .map(([id, item]) => {
+          const usable =
+            item.contexts.includes(inBattle ? "battle" : "field") &&
+            (item.target === "enemy"
+              ? game.itemPlan(id, undefined, inBattle).ok
+              : game.state.party.some(
+                  (m, index) => game.itemPlan(id, index, inBattle).ok,
+                ));
+          return `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} × ${game.state.bag[id] || 0}</strong><p>${item.description}</p></div><button class="secondary-button" data-item="${id}" ${!usable ? "disabled" : ""}>使用</button></div>`;
+        })
         .join("") +
         `<div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
       { back: inBattle ? closeModal : showMenu, type: "bag" },
     );
     root.querySelectorAll("[data-item]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          if (b.dataset.item === "pokeball") game.turn({ kind: "ball" });
-          else if (inBattle) chooseHealTarget();
-          else {
-            showParty();
-            toast("选择需要回复体力的伙伴。");
-          }
+      (button) =>
+        (button.onclick = () => {
+          const id = button.dataset.item;
+          if (ITEMS[id].target === "enemy")
+            void game.turn({ kind: "item", item: id });
+          else chooseItemTarget(id, inBattle);
         }),
     );
   }
-
-  function chooseHealTarget() {
+  function chooseItemTarget(id, inBattle) {
     modal(
-      "伤药 · 选择伙伴",
+      `${ITEMS[id].name} · 选择伙伴`,
       game.state.party.map((m, i) => partyCard(m, i)).join(""),
-      { back: () => showBag(true), type: "heal-target" },
+      { back: () => showBag(inBattle), type: "item-target" },
     );
-    root
-      .querySelectorAll("[data-mon]")
-      .forEach(
-        (b) =>
-          (b.onclick = () =>
-            game.turn({ kind: "potion", index: +b.dataset.mon })),
-      );
+    root.querySelectorAll("[data-mon]").forEach((button) => {
+      const index = +button.dataset.mon;
+      button.disabled = !game.itemPlan(id, index, inBattle).ok;
+      button.onclick = () => {
+        if (inBattle) {
+          void game.turn({ kind: "item", item: id, index });
+          return;
+        }
+        const result = game.useItem(id, index);
+        if (!result.ok) {
+          toast(result.reason);
+          return;
+        }
+        updateSide();
+        game.save();
+        showBag(false);
+        tone(800);
+        toast(`使用了${ITEMS[id].name}。`);
+      };
+    });
   }
 
   function showDex() {
@@ -478,7 +494,7 @@ export function createEmeraldInterface(
       )
         .map(
           ([id, item]) =>
-            `<div class="bag-item"><div class="bag-icon">${id === "pokeball" ? "◉" : "✚"}</div><div><strong>${item.name} · ¥${item.price}</strong><p>${item.description}</p><p>持有 ${game.state.bag[id]} 个</p></div><button class="secondary-button" data-buy="${id}" ${game.state.money < item.price || (id === "pokeball" && !game.state.flags.pokedex) ? "disabled" : ""}>购买 1 个</button></div>`,
+            `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} · ¥${item.price}</strong><p>${item.description}</p><p>持有 ${game.state.bag[id] || 0} 个</p></div><button class="secondary-button" data-buy="${id}" ${!game.canBuyItem(id) ? "disabled" : ""}>购买 1 个</button></div>`,
         )
         .join(
           "",
