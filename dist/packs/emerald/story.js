@@ -1,4 +1,10 @@
 import { PACK } from "./pack.js";
+import {
+  OPEN_BAG,
+  RETURN_WITH_BIRCH,
+  RETURN_TO_CENTER,
+  healingScene,
+} from "./scenes.js";
 
 // Content emits commands; it never imports DOM, Canvas, timers or animation code.
 const dialog = (name, ...lines) => ({ type: "dialog", name, lines });
@@ -8,10 +14,6 @@ const battle = (species, level, options) => ({
   level,
   options,
 });
-const teleport = (map, x, y, dir = "up") => ({
-  type: "teleport",
-  position: { map, x, y, dir },
-});
 export function interaction(state, object, mapTitle) {
   const { flags } = state,
     o = object;
@@ -20,7 +22,7 @@ export function interaction(state, object, mapTitle) {
     case "rescue":
       return [dialog(o.name, o.text)];
     case "starter":
-      return [{ type: "starter" }];
+      return OPEN_BAG;
     case "wildObject":
       return [dialog("蛇纹熊", "蛇纹熊正追着博士跑！快去调查旁边的背包。")];
     case "rival":
@@ -48,6 +50,7 @@ export function interaction(state, object, mapTitle) {
             "获得了宝可梦图鉴！小遥还送给你 5 个精灵球。",
             "先降低野生宝可梦的体力，再投出精灵球。去寻找新伙伴吧！",
           ),
+          { type: "emote", actor: "player", kind: "exclamation", ms: 500 },
           { type: "grant", flag: "pokedex", item: "pokeball", amount: 5 },
         ];
       return [
@@ -58,16 +61,13 @@ export function interaction(state, object, mapTitle) {
       ];
     case "heal":
     case "healMom":
-      return [
-        dialog(o.name, o.text),
-        { type: "heal" },
-        dialog(o.name, "好了！宝可梦的体力和招式 PP 都恢复了。欢迎随时再来！"),
-      ];
+      return healingScene(o);
     case "giftPotion":
       return flags.potionGift
         ? [dialog(o.name, "需要道具的话，欢迎到蓝色屋顶的友好商店来。")]
         : [
             dialog(o.name, o.text, "获得了 1 瓶伤药！"),
+            { type: "emote", actor: "player", kind: "exclamation", ms: 450 },
             { type: "grant", flag: "potionGift", item: "potion", amount: 1 },
           ];
     case "shop":
@@ -106,16 +106,7 @@ export function battleOutcome(state, b, db) {
     ];
   }
   if (b.script === "rescue" && ["win", "loss"].includes(b.result)) {
-    state.flags.rescued = true;
-    return [
-      { type: "heal" },
-      teleport("LittlerootTown_ProfessorBirchsLab", 6, 5),
-      dialog(
-        "小田卷博士",
-        "真是太感谢你了！这只宝可梦就送给你，成为你的搭档吧。",
-        "小遥在 103 号道路做野外调查。沿 101 号道路向北，穿过古辰镇去找她吧！",
-      ),
-    ];
+    return RETURN_WITH_BIRCH;
   }
   if (b.result === "win" && b.script === "rival") {
     state.flags.rivalWon = true;
@@ -133,14 +124,7 @@ export function battleOutcome(state, b, db) {
       0,
       state.money - Math.max(...state.party.map((m) => m.level)) * 8,
     );
-    return [
-      { type: "heal" },
-      teleport("OldaleTown_PokemonCenter_1F", 7, 5),
-      dialog(
-        "乔伊小姐",
-        "你被送到了宝可梦中心。伙伴们已经恢复体力，重新出发吧！",
-      ),
-    ];
+    return RETURN_TO_CENTER;
   }
   return [];
 }

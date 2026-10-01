@@ -5,6 +5,7 @@ import { BrowserInput } from "./adapters/browser-input.js";
 import { registerGameTools } from "./adapters/browser-tools.js";
 import { AudioAdapter } from "./adapters/audio.js";
 import { Timeline, TransitionController } from "./engine/timeline.js";
+import { CameraRig } from "./engine/camera.js";
 import { BattleDirector } from "./presentation/battle-director.js";
 import { TransitionDOM } from "./presentation/transition-dom.js";
 import { EmeraldAdventure } from "./packs/emerald/adventure.js";
@@ -19,10 +20,12 @@ async function boot() {
     if (!response.ok) throw new Error("内容未能载入");
     const db = assertContent(await response.json()),
       assets = await loadAssets(db);
-    const renderer = new Renderer($("game"), db, assets, {
+    const timeline = new Timeline(),
+      camera = new CameraRig(timeline),
+      renderer = new Renderer($("game"), db, assets, {
         playerActors: PACK.playerActors,
-      }),
-      timeline = new Timeline();
+        cameraRig: camera,
+      });
     const reducedMotion = () =>
       matchMedia("(prefers-reduced-motion: reduce)").matches;
     const transitions = new TransitionController(timeline, { reducedMotion });
@@ -40,6 +43,8 @@ async function boot() {
       director,
       transitions,
       timeline,
+      camera,
+      reducedMotion,
       clearInput: () => input?.clear(),
       onSave: (time, loaded = false) =>
         ($("save-status").textContent = time
@@ -101,9 +106,9 @@ async function boot() {
       move: async (dir, steps) => {
         for (let i = 0; i < steps; i++) {
           if (game.battle || ui.blocked || game.storyBusy) break;
-          while (game.busy) await timeline.wait(16);
+          await game.waitForMovement();
           if (!game.move(dir)) break;
-          while (game.busy) await timeline.wait(16);
+          await game.waitForMovement();
         }
       },
       battleAction: async (action) => {
@@ -115,17 +120,19 @@ async function boot() {
     function frame(now) {
       if (!document.hidden) {
         input.tick();
-        const point = renderer.motion.sample(game.state.position, now),
-          visible = renderer.graph.visible(game.state.position.map, {
-            x: point.x - 152,
-            y: point.y - 104,
-          });
+        const visible = renderer.graph.visible(
+          game.state.position.map,
+          renderer.cameraAt(game.state.position, now),
+        );
         game.tick(now, visible);
         const battleFrame = director.sample(now);
         if (battleFrame) {
           renderer.battle(battleFrame);
           ui.refreshBattle(battleFrame);
-        } else renderer.world(game.world, game.field.npcs, now);
+        } else
+          renderer.world(game.world, game.field.npcs, now, {
+            emotes: [...game.fieldDirector.emotes.values()],
+          });
         overlay.render(transitions.sample(now));
       }
       requestAnimationFrame(frame);

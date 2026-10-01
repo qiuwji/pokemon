@@ -46,7 +46,7 @@ export class World {
     Object.assign(this.position, { map, x, y, dir });
     this.onMap(map);
   }
-  move(dir) {
+  move(dir, { ignoreWarps = false, allowVacatedBy = null } = {}) {
     const [dx, dy] = DIRECTIONS[dir];
     const p = this.position;
     p.dir = dir;
@@ -81,7 +81,12 @@ export class World {
           y < 0 ||
           x >= dest.width ||
           y >= dest.height ||
-          ((dest.blocks[i] >> 10) & 3) !== 0
+          ((dest.blocks[i] >> 10) & 3) !== 0 ||
+          this.objects(id).some(
+            (n) =>
+              (n.x === x && n.y === y) ||
+              n.reserved?.some((p) => p.x === x && p.y === y),
+          )
         )
           return false;
         this.steps++;
@@ -104,6 +109,7 @@ export class World {
     }
     const warp = m.warps.find((w) => w.x === x && w.y === y);
     if (
+      !ignoreWarps &&
       warp &&
       warp.dest_map !== "MAP_DYNAMIC" &&
       !this.resolve(warp.dest_map)
@@ -111,10 +117,11 @@ export class World {
       this.onBlocked("unavailable");
       return false;
     }
-    const obj = this.objects().find(
+    const obj = this.objects(p.map).find(
       (n) =>
         (n.x === x && n.y === y) ||
-        n.reserved?.some((p) => p.x === x && p.y === y),
+        (n.id !== allowVacatedBy &&
+          n.reserved?.some((p) => p.x === x && p.y === y)),
     );
     const oneWay = { 48: "right", 49: "left", 50: "up", 51: "down" }[
       cell?.behavior
@@ -132,7 +139,7 @@ export class World {
     p.x = x;
     p.y = y;
     this.steps++;
-    if (warp) {
+    if (warp && !ignoreWarps) {
       const id = this.resolve(warp.dest_map);
       if (id) {
         const destination = this.maps[id].warps[Number(warp.dest_warp_id)];

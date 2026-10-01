@@ -138,18 +138,25 @@ function baseObjects(state, db) {
       ),
       ...(!flag.rescued
         ? [
-            obj(
-              9,
-              13,
-              "ProfBirch",
-              "rescue",
-              "小田卷博士",
-              "救命啊！那边的包里有精灵球，快选一只来帮我！",
-            ),
-            obj(7, 14, "BirchsBag", "starter", "博士的背包"),
+            {
+              ...obj(
+                9,
+                13,
+                "ProfBirch",
+                "rescue",
+                "小田卷博士",
+                "救命啊！那边的包里有精灵球，快选一只来帮我！",
+              ),
+              id: "birch",
+            },
+            {
+              ...obj(7, 14, "BirchsBag", "starter", "博士的背包"),
+              id: "birchBag",
+            },
             {
               ...obj(10, 13, null, "wildObject", "蛇纹熊"),
               species: "zigzagoon",
+              id: "pursuer",
             },
           ]
         : []),
@@ -196,7 +203,7 @@ function baseObjects(state, db) {
       : [];
   if (map === "LittlerootTown_ProfessorBirchsLab")
     return [
-      obj(6, 4, "ProfBirch", "professor", "小田卷博士"),
+      { ...obj(6, 4, "ProfBirch", "professor", "小田卷博士"), id: "birch" },
       obj(
         9,
         8,
@@ -368,7 +375,7 @@ export function objectsFor(state, db) {
     if (n.kind === "rival") mode = "look";
     return {
       ...n,
-      id: `${n.kind}:${n.x},${n.y}`,
+      id: n.id || `${n.kind}:${n.x},${n.y}`,
       dir: n.kind === "wildObject" ? "left" : direction,
       movement: {
         mode,

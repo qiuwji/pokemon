@@ -1,4 +1,5 @@
 import { drawBattle } from "../presentation/battle-canvas.js";
+import { drawFieldEmote } from "../presentation/field-canvas.js";
 import { SceneGraph, GridMotion, actorFrame } from "../engine/motion.js";
 // Draw each 8x8 source tile into a 16x16 map grid. No pre-rendered scene images.
 export class Renderer {
@@ -6,9 +7,12 @@ export class Renderer {
     canvas,
     db,
     assets,
-    { playerActors = { walk: "Player", run: "PlayerRun" } } = {},
+    {
+      playerActors = { walk: "Player", run: "PlayerRun" },
+      cameraRig = null,
+    } = {},
   ) {
-    Object.assign(this, { canvas, db, assets, playerActors });
+    Object.assign(this, { canvas, db, assets, playerActors, cameraRig });
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.graph = new SceneGraph(db.maps);
@@ -127,15 +131,17 @@ export class Renderer {
           now,
         );
   }
-  world(world, npcs, now = performance.now()) {
+  cameraAt(position, now) {
+    const player = this.motion.sample(position, now);
+    const focus = this.cameraRig?.sample(player, now) || player;
+    return { x: Math.round(focus.x - 152), y: Math.round(focus.y - 104) };
+  }
+  world(world, npcs, now = performance.now(), { emotes = [] } = {}) {
     const p = world.position,
       m = world.map,
       player = this.motion.sample(p, now),
       c = this.ctx;
-    this.camera = {
-      x: Math.round(player.x - 152),
-      y: Math.round(player.y - 104),
-    };
+    this.camera = this.cameraAt(p, now);
     const ids = this.graph.visible(p.map, this.camera),
       pack = this.db.tilesets[m.tileset];
     // Borders use the same metatile grid, including animated source tiles.
@@ -160,9 +166,21 @@ export class Renderer {
       const o = this.graph.placements[id];
       return npcs
         .view(id, now)
-        .map((n) => ({ ...n, px: n.px + o.x * 16, py: n.py + o.y * 16 }));
+        .map((n) => ({
+          ...n,
+          map: id,
+          px: n.px + o.x * 16,
+          py: n.py + o.y * 16,
+        }));
     });
-    all.push({ ...player, player: true, px: player.x, py: player.y });
+    all.push({
+      ...player,
+      id: "player",
+      map: p.map,
+      player: true,
+      px: player.x,
+      py: player.y,
+    });
     all.sort((a, b) => a.py - b.py);
     for (const n of all) {
       const x = n.px - this.camera.x,
@@ -182,13 +200,23 @@ export class Renderer {
         const image = this.assets[n.species + "-front"];
         if (image) {
           const hop = n.movement?.mode === "jog" ? Math.sin(now / 80) * 1.3 : 0;
-          c.drawImage(image, 0, 0, 64, 64, x - 1, y - 6 - hop, 20, 20);
+          c.drawImage(
+            image,
+            0,
+            0,
+            64,
+            64,
+            x - 1,
+            y - 6 - hop - (n.lift || 0),
+            20,
+            20,
+          );
         }
       } else
         this.actor(
           n.actor,
           x,
-          y - ((this.db.actors[n.actor]?.h || 16) - 16),
+          y - ((this.db.actors[n.actor]?.h || 16) - 16) - (n.lift || 0),
           n.dir,
           n.progress,
           n.foot,
@@ -196,6 +224,18 @@ export class Renderer {
         );
     }
     for (const id of ids) this.drawMap(id, true, now);
+    for (const cue of emotes) {
+      const n = all.find((n) => n.id === cue.actor && n.map === cue.map);
+      if (!n) continue;
+      drawFieldEmote(c, {
+        kind: cue.kind,
+        x: n.px - this.camera.x + 8,
+        y:
+          n.py -
+          this.camera.y -
+          (n.player ? 16 : (this.db.actors[n.actor]?.h || 32) - 16),
+      });
+    }
   }
   battle(frame) {
     drawBattle(this.ctx, this.assets, frame);

@@ -6,6 +6,7 @@ export class NPCSystem {
     this.states = new Map();
     this.now = 0;
     this.activeMap = null;
+    this.scene = null;
   }
   state(map, def) {
     const key = map + ":" + def.id;
@@ -29,7 +30,64 @@ export class NPCSystem {
     return n;
   }
   objects(map) {
-    return this.definitions(map).map((def) => this.state(map, def));
+    const objects = new Map(
+      this.definitions(map).map((def) => [def.id, this.state(map, def)]),
+    );
+    if (this.scene) {
+      for (const [key, n] of this.scene.pins)
+        if (key.startsWith(map + ":")) objects.set(n.id, n);
+      for (const id of objects.keys())
+        if (this.scene.hidden.has(map + ":" + id)) objects.delete(id);
+    }
+    return [...objects.values()];
+  }
+  beginScene() {
+    if (this.scene) throw new Error("NPC scene scope is already active");
+    this.scene = { pins: new Map(), hidden: new Set() };
+  }
+  endScene() {
+    if (this.scene)
+      for (const n of this.scene.pins.values()) {
+        n.fromX = n.toX = n.x;
+        n.fromY = n.toY = n.y;
+        n.duration = 0;
+        n.next = this.now + 1600;
+      }
+    this.scene = null;
+  }
+  control(id, map) {
+    if (!this.scene) throw new Error("NPC control requires a scene scope");
+    const n = this.objects(map).find((n) => n.id === id);
+    if (!n) throw new Error(`Missing scene actor ${map}:${id}`);
+    this.scene.pins.set(map + ":" + id, n);
+    return n;
+  }
+  hide(id, map) {
+    this.control(id, map);
+    this.scene.hidden.add(map + ":" + id);
+  }
+  stage(map, def) {
+    if (!this.scene) throw new Error("Staging actors requires a scene scope");
+    const base = this.objects(map).find((n) => n.id === def.id);
+    const n = {
+      ...base,
+      ...def,
+      originX: def.x,
+      originY: def.y,
+      fromX: def.x,
+      fromY: def.y,
+      toX: def.x,
+      toY: def.y,
+      duration: 0,
+      start: 0,
+      foot: 0,
+      next: this.now + 1600,
+      movement: base?.movement || { mode: "still" },
+    };
+    this.states.set(map + ":" + def.id, n);
+    this.scene.pins.set(map + ":" + def.id, n);
+    this.scene.hidden.delete(map + ":" + def.id);
+    return n;
   }
   moving(n, now = this.now) {
     return now - n.start < n.duration;
@@ -54,6 +112,7 @@ export class NPCSystem {
         py: (n.fromY + (n.toY - n.fromY) * t) * 16,
         progress: inPlace ? (now % 160) / 160 : t,
         moving: this.moving(n, now) || inPlace,
+        lift: n.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0,
       };
     });
   }
@@ -79,6 +138,8 @@ export class NPCSystem {
       const npcs = this.objects(map),
         m = this.maps[map];
       for (const n of npcs) {
+        // Scripted tracks advance on the timeline while ambient simulation is paused.
+        if (this.scene?.pins.has(map + ":" + n.id)) continue;
         if (paused) {
           if (this.moving(n, now)) n.start += delta;
           n.next += delta;

@@ -18,9 +18,9 @@ export class FieldSession {
     this.npcs = new NPCSystem(maps, objects);
     this.world = new World(maps, position, {
       deferWarps: true,
-      objects: () =>
+      objects: (map = position.map) =>
         this.npcs
-          .objects(position.map)
+          .objects(map)
           .map((n) => ({ ...n, reserved: this.npcs.reserved(n) })),
       onMap,
       onBlocked,
@@ -34,16 +34,23 @@ export class FieldSession {
   get busy() {
     return !!this.pending || this.transitions.busy;
   }
-  move(direction, { running = false } = {}) {
+  move(
+    direction,
+    { running = false, scripted = false, allowVacatedBy = null } = {},
+  ) {
     if (this.busy || this.motion.moving(this.now())) return false;
     const from = { ...this.position };
-    const result = this.world.move(direction);
+    const result = this.world.move(direction, {
+      ignoreWarps: scripted,
+      allowVacatedBy,
+    });
     if (!result) return false;
     this.motion.begin(from, this.position, this.now(), {
       running,
       jump: result.jump,
     });
     this.pending = result;
+    this.scriptedStep = scripted;
     return true;
   }
   tick(now) {
@@ -52,6 +59,10 @@ export class FieldSession {
     this.pending = null;
     const cell = this.pendingCell;
     this.pendingCell = null;
+    if (this.scriptedStep) {
+      this.scriptedStep = false;
+      return;
+    }
     if (result.warp) {
       void this.transitions
         .run("door", () => {

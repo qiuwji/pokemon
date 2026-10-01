@@ -9,8 +9,15 @@ import { SaveStore } from "../../engine/save-store.js";
 import { FieldSession } from "../../engine/field-session.js";
 import { BattleSession } from "../../engine/battle-session.js";
 import { CommandRunner } from "../../engine/commands.js";
+import { CameraRig } from "../../engine/camera.js";
+import {
+  FieldDirector,
+  storyResources,
+  validateFieldCommand,
+} from "../../engine/field-director.js";
 import { PACK, ITEMS, objectsFor, questFor, validateSave } from "./pack.js";
 import { interaction, battleOutcome } from "./story.js";
+import { RESCUE_INTRO } from "./scenes.js";
 
 /** Composes the Emerald pack with reusable engine services. Browser ports are injected. */
 export class EmeraldAdventure {
@@ -21,6 +28,8 @@ export class EmeraldAdventure {
     director,
     transitions,
     timeline,
+    camera = new CameraRig(timeline),
+    reducedMotion = () => false,
     onMap = () => {},
     onSave = () => {},
     clearInput = () => {},
@@ -31,6 +40,8 @@ export class EmeraldAdventure {
       director,
       transitions,
       timeline,
+      camera,
+      reducedMotion,
       onMap,
       onSave,
       clearInput,
@@ -59,24 +70,52 @@ export class EmeraldAdventure {
       },
       onResult: (b) => this.resultPlan(b),
     });
-    this.commands = new CommandRunner({
-      dialog: (c) => this.ui.say(c.name, c.lines),
-      starter: () => this.ui.starterPicker(),
-      shop: () => this.ui.showShop(),
-      battle: (c) =>
-        this.startBattle(
-          createMonster(c.species, c.level, db, this.rng, {
-            trainer: c.options?.trainer,
+    this.commands = new CommandRunner(
+      {
+        dialog: (c) => this.ui.say(c.name, c.lines),
+        starter: () => this.ui.starterPicker(),
+        shop: () => this.ui.showShop(),
+        battle: (c) =>
+          this.startBattle(
+            createMonster(c.species, c.level, db, this.rng, {
+              trainer: c.options?.trainer,
+            }),
+            c.options,
+          ),
+        teleport: (c) => transitions.run("door", () => this.enter(c.position)),
+        scene: (c) =>
+          transitions.run(c.kind || "door", () => {
+            this.enter(c.position);
+            this.camera.reset();
+            this.fieldDirector.stage(c.actors);
           }),
-          c.options,
-        ),
-      teleport: (c) => transitions.run("door", () => this.enter(c.position)),
-      heal: () => this.state.party.forEach((m) => healMonster(m, db)),
-      grant: (c) => {
-        this.state.flags[c.flag] = true;
-        this.state.bag[c.item] += c.amount;
+        wait: (c) => this.timeline.wait(c.ms),
+        move: (c) => this.fieldDirector.move(c),
+        approach: (c) => this.fieldDirector.approach(c),
+        face: (c) => this.fieldDirector.face(c),
+        escort: (c) => this.fieldDirector.escort(c),
+        emote: (c) => this.fieldDirector.emote(c),
+        hide: (c) => this.fieldDirector.hide(c),
+        cameraTo: (c) => this.fieldDirector.cameraTo(c),
+        cameraFollow: (c) => this.fieldDirector.cameraFollow(c),
+        flag: (c) => {
+          this.state.flags[c.key] = c.value;
+          this.ui?.updateSide();
+        },
+        heal: () => {
+          this.state.party.forEach((m) => healMonster(m, db));
+          this.ui?.updateSide();
+        },
+        grant: (c) => {
+          this.state.flags[c.flag] = true;
+          this.state.bag[c.item] = (this.state.bag[c.item] || 0) + c.amount;
+        },
       },
-    });
+      {
+        resources: storyResources,
+        validateCommand: (c) => validateFieldCommand(c, db.maps),
+      },
+    );
     this.bindField();
   }
   attachUI(ui) {
@@ -91,7 +130,7 @@ export class EmeraldAdventure {
     return this.combat.battle;
   }
   get busy() {
-    return this.combat.busy || this.field.busy;
+    return this.storyBusy || this.combat.busy || this.field.busy;
   }
   newState() {
     return {
@@ -136,6 +175,12 @@ export class EmeraldAdventure {
           ]);
       },
     });
+    this.fieldDirector = new FieldDirector({
+      field: this.field,
+      timeline: this.timeline,
+      camera: this.camera,
+      reducedMotion: this.reducedMotion,
+    });
     this.onMap(this.world.map.title, this.state.position.map);
   }
   enter(position) {
@@ -166,13 +211,29 @@ export class EmeraldAdventure {
     if (this.storyBusy) return;
     this.storyBusy = true;
     this.clearInput();
+    let failed = true;
     try {
+      this.commands.validate(commands);
+      this.fieldDirector.begin();
       await this.commands.run(commands);
+      failed = false;
     } finally {
-      this.storyBusy = false;
-      this.ui.updateSide();
-      this.save();
+      try {
+        if (this.fieldDirector.active) await this.fieldDirector.end({ failed });
+      } finally {
+        this.storyBusy = false;
+        this.clearInput();
+        this.ui?.updateSide();
+        if (this.battle) this.ui?.drawBattleHUD();
+        if (!failed) this.save();
+      }
     }
+  }
+  playStory(commands) {
+    return this.runStory(commands).catch((error) => {
+      this.ui?.toast("剧情未能继续，请读取最近的存档。");
+      console.error(error);
+    });
   }
   move(dir, { running = false } = {}) {
     if (this.battle || this.storyBusy || this.ui?.blocked || this.busy)
@@ -180,6 +241,16 @@ export class EmeraldAdventure {
     return this.field.move(dir, {
       running: running && !this.world.map.indoor,
     });
+  }
+  async waitForMovement() {
+    // Automation returns at a story/UI boundary rather than waiting for player input.
+    while (
+      this.field.busy &&
+      !this.storyBusy &&
+      !this.battle &&
+      !this.ui?.blocked
+    )
+      await this.timeline.wait(16);
   }
   interact() {
     if (this.ui.dialog) {
@@ -202,23 +273,17 @@ export class EmeraldAdventure {
           this.state.position.dir
         ],
       );
-    void this.runStory(interaction(this.state, object, this.world.map.title));
+    void this.playStory(interaction(this.state, object, this.world.map.title));
   }
   step(cell) {
+    if (this.storyBusy) return;
     const s = this.state;
     if (
       !s.flags.rescued &&
       s.position.map === "Route101" &&
       !s.flags.heardBirch
     ) {
-      s.flags.heardBirch = true;
-      void this.runStory([
-        {
-          type: "dialog",
-          name: "远处传来的声音",
-          lines: ["救命啊！那边的包里有精灵球，快选一只来帮我！"],
-        },
-      ]);
+      void this.playStory(RESCUE_INTRO);
       return;
     }
     if (
@@ -277,20 +342,11 @@ export class EmeraldAdventure {
     return this.combat.act(action);
   }
   resultPlan(b) {
-    const commands = battleOutcome(this.state, b, this.db),
-      later = [];
+    const commands = battleOutcome(this.state, b, this.db);
     return {
-      commit: () => {
-        for (const c of commands) {
-          if (c.type === "teleport") this.enter(c.position);
-          else if (c.type === "heal")
-            this.state.party.forEach((m) => healMonster(m, this.db));
-          else later.push(c);
-        }
-      },
       after: () => {
         // Combat completes at the first dialogue/input boundary. Story continues independently.
-        void this.runStory(later)
+        void this.runStory(commands)
           .then(() => {
             this.ui.checkGrowth();
             this.ui.updateSide();
@@ -423,7 +479,9 @@ export class EmeraldAdventure {
           ? "battle"
           : this.ui.dialog
             ? "dialogue"
-            : this.ui.modalType || "exploration",
+            : this.storyBusy
+              ? "cutscene"
+              : this.ui.modalType || "exploration",
       quest: questFor(this.state.flags),
       flags: { ...this.state.flags },
       dialogue: this.ui.dialog
