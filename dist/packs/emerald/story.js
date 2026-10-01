@@ -1,3 +1,4 @@
+import { TRAINERS } from "./trainers.js";
 import { PACK } from "./pack.js";
 import {
   RESCUE_INTRO,
@@ -28,6 +29,42 @@ const talkEvent = (id, kind, build, requires) => ({
   build,
 });
 export const STORY_EVENTS = [
+  talkEvent(
+    "trainer.practice",
+    "trainer",
+    (s, { object }) => [
+      dialog(object.name, object.text),
+      { type: "battle", trainerId: "youngster" },
+    ],
+    flag("rescued"),
+  ),
+  {
+    id: "trainer.practice.prize",
+    trigger: "battleResult",
+    once: true,
+    requires: not("practiceWon"),
+    match: ({ battle: b }) => b.script === "practice" && b.result === "win",
+    build: () => [
+      {
+        type: "reward",
+        id: "trainer.practice.prize",
+        flags: { practiceWon: true },
+        money: TRAINERS.youngster.prize,
+      },
+      dialog(
+        "练习训练家",
+        `两位伙伴都败下阵来了！获得了 ¥${TRAINERS.youngster.prize}。`,
+        "以后也可以来练习对战。记得先恢复伙伴的体力！",
+      ),
+    ],
+  },
+  {
+    id: "trainer.practice.rematch",
+    trigger: "battleResult",
+    requires: flag("practiceWon"),
+    match: ({ battle: b }) => b.script === "practice" && b.result === "win",
+    build: () => [dialog("练习训练家", "这次配合得也很好！有空再来练习吧。")],
+  },
   {
     id: "rescue.intro",
     trigger: "step",

@@ -9,7 +9,11 @@ dist/
   app.js                       组合入口，只装配依赖和更新画面
   engine/                      可在 Node 中运行，不引用网页或绿宝石剧情
     model.js                   第三世代数值、随机数、精灵和经验
-    battle.js                  战斗规则，输出事件快照
+    battle.js                  装配战斗领域服务
+    battle/                    队伍、行动、回合、招式、临时状态、结算、事件
+    effects.js / move-effects.js  操作注册与招式阶段定义
+    items.js / conditions.js / story.js  道具试算提交、条件与剧情账本
+    contracts.d.ts             内容、目标、组织与视图类型合同
     party.js                   恢复、首发、学习招式、等级进化命令
     world.js                   格子碰撞、连接、入口意图、调查探测
     motion.js                  连续世界坐标、相机用的插值、四向帧表
@@ -24,6 +28,7 @@ dist/
     content.js                 内容尺寸、图块和数据库引用校验
     save-store.js              存储端口、版本检查与迁移链
   presentation/                把事件变成画面；不决定规则结果
+    duel-view.js               席位集合投影到单打画面
     battle-director.js         快照→血条、精灵姿态、粒子与球的状态
     battle-canvas.js           战斗画面绘制
     transition-dom.js          遮盖 Canvas、菜单和 HUD 的转场层
@@ -34,7 +39,9 @@ dist/
     audio.js                   合成提示音的宿主实现
     browser-tools.js           可选 WebMCP；不绕过游戏规则
   packs/emerald/               本作的上层建筑，允许了解具体角色和物品
-    pack.js                    素材标识、起点、NPC、任务、本作存档校验
+    pack.js                    素材标识、起点与 NPC 内容
+    trainers.js / items.js / quests.js  训练家、道具、任务定义
+    save-contract.js           当前开发存档校验，不配置旧档迁移
     story.js                   互动和战后故事→指令序列、招式动画配置
     scenes.js                  本作的求救、背包、回研究所和治疗演出数据
     adventure.js               会话装配、遭遇、本作商店/奖励和命令入口
@@ -60,7 +67,7 @@ flowchart TD
 
 - 持久进度由 `EmeraldAdventure.state` 持有；地图和战斗规则通过该会话提供的对象工作。
 - `interface.js` 读取状态、发送命令，不能直接修改持久状态。购买、回复、换队、学习、进化、导入都走会话命令；会话再次验证战斗/移动锁及资源条件。
-- `Battle` 执行一次行动，输出各阶段双方的深复制快照。规则对象可变，事件快照与演出姿态独立，血条动画不会修改真实 HP。
+- `Battle` 执行一次行动，输出带席位集合、UID、行动 ID 的精简独立快照。规则对象可变，事件快照与演出姿态独立，血条动画不会修改真实 HP。
 - `FieldSession` 在当前格移动结束后才触发草丛遭遇，避免脚还没落地就进入战斗。未白镇与道路在同一全局网格中，连接不需要转场。
 - 房屋入口先返回目标意图，人物走到门口，再由 `TransitionController` 完全遮盖画面、提交目标位置、揭开新场景。战斗退出先回到野外，后续剧情保持指令原始顺序；传送不会被提前提取执行。剧情的 `scene` 在完全遮盖时切换并布置入口人物，再播放进场走路。
 - `FieldDirector` 在剧情作用域内接管角色。剧情走路复用地图碰撞和移动插值，但不触发随机遇敌或自动门；NPC 的自主行动暂停，脚本轨道正常推进。镜头和像素表情属于临时状态，不写进存档。
@@ -86,29 +93,26 @@ flowchart TD
 
 ```js
 [
-  { type: 'dialog', name: '研究员', lines: ['找到它了！'] },
-  { type: 'grant', flag: 'sampleReceived', item: 'potion', amount: 1 },
-  { type: 'teleport', position: { map: 'SomeLab', x: 3, y: 5, dir: 'up' } },
-]
+  { type: "dialog", name: "研究员", lines: ["找到它了！"] },
+  {
+    type: "reward",
+    id: "research.sample",
+    flags: { sampleReceived: true },
+    items: { potion: 1 },
+  },
+  { type: "teleport", position: { map: "SomeLab", x: 3, y: 5, dir: "up" } },
+];
 ```
 
-内容包为 `CommandRunner` 注入指令处理器。对话确认完成才执行奖励，传送使用同一转场服务。未知指令明确抛错。新的指令种类在注册表增加处理器；既有引擎不需要理解角色名。
+StoryEngine 按 id/trigger/requires/after/once/build 注册事件，选择条件与依赖符合的事件，分别记录完成和奖励账本并校验依赖循环。内容包为 `CommandRunner` 注入指令处理器。对话确认完成才执行奖励，传送使用同一转场服务。未知指令明确抛错。新的指令种类在注册表增加处理器；既有引擎不需要理解角色名。
 
 现在还支持自动行走、靠近、跟随、朝向、等待、表情、镜头聚焦/回归、场景布置以及顺序/并行组合。具体的指令合同、角色 ID、控制释放、复用例子和边界见 [CUTSCENES.md](CUTSCENES.md)。NPC 跨房间用明确场景布置；当前不支持长剧情中途存档或把战斗作为可恢复的暂停指令。
 
 ### 新招式 / 动画
 
-招式数据在 `moves`，规则效果通过 `new Battle({effects: {custom_effect: handler}})` 注册。处理器返回 `true` 表示已处理，引擎仍做倒下与回合结束检查。
+招式效果通过唯一 MoveEffectRegistry 注册阶段描述符；道具通过上下文、目标和效果试算提交。具体说明见 [ENGINE_EVOLUTION.md](ENGINE_EVOLUTION.md)。
 
-`Battle` 构造器还接受 `rules`，可替换 `damage`、`captureCheck` 和 `grantExperience`。默认实现以第三世代为基础。行动优先级、能力等级及部分状态流程仍属于该规则集；若设计完全不同的战斗系统，应注入 `BattleSession.createBattle` 替换整个领域战斗对象，保持 `act`、`player`、`enemy`、`ended`、`result` 和事件快照接口。
-
-事件基本格式：
-
-```js
-{ kind: 'move', side: 0, text: '使用了水枪！',
-  move: { id: 'water_gun', type: 'water', power: 40, effect: 'hit' },
-  player: /* 此阶段的精灵快照 */, enemy: /* 此阶段的精灵快照 */ }
-```
+Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务，rules 注入计算与政策。事件使用 combatants[] 和 sides[]，携带来源/目标席位和 UID，领域层不输出固定 player/enemy。单打表现适配器才生成双角色视图。模型、示例和结算边界见 [BATTLE_ARCHITECTURE.md](BATTLE_ARCHITECTURE.md)。
 
 `ANIMATION_PROFILES[moveId]` 选择 contact/projectile/status。未逐个配置的招式按威力与属性得到通用演出；新视觉类型只扩展 director 和绘图适配器。动画中途不重新判定命中、暴击、伤害或捕获。
 
@@ -118,7 +122,7 @@ flowchart TD
 
 ### 存档版本
 
-`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本次未改变持久状态结构，继续支持 v1 和原存档键。
+`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本作开发存档版本为 3，按用户授权移除了旧档迁移表，拒绝旧版本。当前结构要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。
 
 ### 另一个同类游戏
 
@@ -131,6 +135,8 @@ flowchart TD
 - `npm test`：领域规则、完整序章可达性、资源合同、时序边界、迁移和依赖方向检查。
 - 内容导入工具保留在 `tools/`，来源与许可保留在 README 和 assets/licenses。
 - 代码已统一格式，模块职责、接口和时钟均可单独测试，不靠浏览器跑出一个“看起来没问题”的结果。
-- 当前没有编辑器、多人同步或完整任务 DSL。剧情指令表已留扩展入口，但复杂分支仍用内容包 JS 表达。
+- 当前没有编辑器、多人同步或正式插件宿主。已有条件 DSL、依赖图与奖励账本，剧情 build 仍使用内容包 JS 返回演出指令。
 - 当前 pack 的 DOM 菜单模板集中在 `interface.js`，可整体替换；以后菜单继续增长时可按队伍/背包/存档拆分。底层引擎不因这种拆分变化。
-- 没有把缺少的天气、特性、多精灵训练家、双打等功能算成已实现；新增功能要同时补充领域事件、表现映射和有意义的规则测试。
+- 没有把缺少的完整天气、特性、持有道具、双打等功能算成已实现；新增功能要同时补充领域事件、表现映射和有意义的规则测试。
+
+剩余目标见 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)。当前采用 JS、JSDoc/声明文件与运行时校验，尚未启用全项目 TypeScript 静态检查。可复用的是格子探索与队伍单打框架；正式插件能力尚待实现。

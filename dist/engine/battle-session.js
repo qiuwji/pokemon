@@ -20,6 +20,7 @@ export class BattleSession {
     });
     this.battle = null;
     this.locked = false;
+    this.pendingResult = null;
   }
   get busy() {
     return this.locked || this.transitions.busy || this.director.busy;
@@ -28,13 +29,11 @@ export class BattleSession {
     if (this.battle || this.busy) return false;
     this.locked = true;
     try {
+      const preparedBattle = this.createBattle(options);
       let entry;
       await this.transitions.run("encounter", () => {
-        this.battle = this.createBattle(options);
-        const view = {
-          player: this.battle.view(this.battle.player),
-          enemy: this.battle.view(this.battle.enemy),
-        };
+        this.battle = preparedBattle;
+        const view = this.battle.snapshot();
         this.director.reset(view);
         entry = {
           kind: "entry",
@@ -60,11 +59,12 @@ export class BattleSession {
       for (const event of events)
         await this.director.play(event, { message: this.onMessage });
       if (this.battle.ended) {
-        const result = this.onResult(this.battle);
+        const result = (this.pendingResult ??= this.onResult(this.battle));
         await this.transitions.run("battle-exit", () => {
+          result.commit?.();
           this.battle = null;
           this.director.reset();
-          result.commit?.();
+          this.pendingResult = null;
           this.onChange();
         });
         // Release combat lock before dialogue or another scripted battle.

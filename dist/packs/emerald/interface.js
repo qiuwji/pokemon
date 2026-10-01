@@ -217,7 +217,7 @@ export function createEmeraldInterface(
         next = experienceAt(m.level + 1, s.growth);
       xp = `<div class="exp-track"><i style="width:${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%"></i></div>`;
     }
-    return `<div class="battle-status ${side}" data-side="${side}"><div class="mon-heading">${s.name} <span>${m.gender} Lv.${m.level}</span></div>${hpTrack(m)}${side === "player" ? `<div class="hp-value">${m.status ? STATUS_NAMES[m.status] + " · " : ""}<span class="hp-number">${m.hp} / ${m.stats.hp}</span></div>${xp}` : ""}</div>`;
+    return `<div class="battle-status ${side}" data-side="${side}" data-identity="${m.uid}:${m.level}"><div class="mon-heading">${s.name} <span>${m.gender} Lv.${m.level}</span></div>${hpTrack(m)}${side === "player" ? `<div class="hp-value">${m.status ? STATUS_NAMES[m.status] + " · " : ""}<span class="hp-number">${m.hp} / ${m.stats.hp}</span></div>${xp}` : ""}</div>`;
   }
 
   function drawBattleHUD(message = null) {
@@ -226,8 +226,9 @@ export function createEmeraldInterface(
       return;
     }
     $("battle-hud").hidden = false;
-    const p = game.director.view.player,
-      e = game.director.view.enemy;
+    const frame = game.director.sample();
+    const p = frame.view.player,
+      e = frame.view.enemy;
     let options = "",
       prompt = message || `${db.species[p.species].name}<br>要做什么？`;
     if (game.busy) {
@@ -249,7 +250,13 @@ export function createEmeraldInterface(
     } else
       options =
         '<button data-baction="fight">战斗</button><button data-baction="bag">背包</button><button data-baction="party">宝可梦</button><button data-baction="run">逃跑</button>';
+    const enemySide = game.director.view.sides?.[1];
+    const team =
+      enemySide?.total > 1
+        ? `<div class="enemy-team" aria-label="对方队伍剩余 ${enemySide.remaining} / ${enemySide.total}">对方队伍 ${"●".repeat(enemySide.remaining)}${"○".repeat(enemySide.total - enemySide.remaining)}</div>`
+        : "";
     $("battle-hud").innerHTML =
+      team +
       battleStatus(e, "enemy") +
       battleStatus(p, "player") +
       `<div class="battle-menu">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options">${options}</div>`}</div>`;
@@ -664,6 +671,19 @@ export function createEmeraldInterface(
       const el = $("battle-hud").querySelector(`[data-side="${side}"]`),
         m = frame.view[side];
       if (!el) continue;
+      const identity = `${m.uid}:${m.level}`;
+      if (el.dataset.identity !== identity) {
+        el.dataset.identity = identity;
+        el.querySelector(".mon-heading").innerHTML =
+          `${db.species[m.species].name} <span>${m.gender} Lv.${m.level}</span>`;
+      }
+      const xp = el.querySelector(".exp-track i");
+      if (xp) {
+        const growth = db.species[m.species].growth,
+          base = experienceAt(m.level, growth),
+          next = experienceAt(m.level + 1, growth);
+        xp.style.width = `${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%`;
+      }
       const bar = el.querySelector(".hp-track i");
       bar.style.width = `${(m.hp / m.stats.hp) * 100}%`;
       bar.style.background = hpColor(m);

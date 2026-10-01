@@ -32,12 +32,13 @@ export interface ItemDefinition {
   icon?: string;
   purchaseRequires?: Condition;
 }
-export type BattleAction =
+export type BattleAction = { actor?: string; target?: TargetRef } & (
   | { kind: "move" | "switch"; index: number }
   | { kind: "item"; item: string; index?: number }
   | { kind: "run" }
   | { kind: "potion"; index?: number }
-  | { kind: "ball" };
+  | { kind: "ball" }
+);
 export interface EffectStep {
   op: string;
   [parameter: string]: unknown;
@@ -54,4 +55,68 @@ export interface MoveEffectDefinition {
   criticalStage?: number;
   alwaysHits?: boolean;
   minimumHP?: 1;
+}
+
+/** UID identifies a creature; seat ID identifies a place, surviving replacements. */
+export type TargetRef =
+  | { kind: "self" }
+  | { kind: "seat"; id: string }
+  | { kind: "side"; id: string }
+  | { kind: "field" };
+export interface BattleMonster {
+  uid: string;
+  species: string;
+  level: number;
+  gender: string;
+  hp: number;
+  stats: { hp: number; spe: number; [stat: string]: number };
+  status: Status | null;
+  exp: number;
+  moves: { id: string; pp: number }[];
+}
+export interface BattleController {
+  id: string;
+  kind: "human" | "ai";
+  party: BattleMonster[];
+  bag?: Record<string, number>;
+}
+export interface BattleSeat {
+  id: string;
+  controllerId: string;
+  /** -1 represents an empty seat; omitted selects the next eligible creature. */
+  index?: number;
+}
+export interface BattleSide {
+  id: string;
+  allianceId: string;
+  controllers: BattleController[];
+  seats: BattleSeat[];
+}
+export interface BattleTopology {
+  sides: BattleSide[];
+}
+export type MonsterView = Pick<
+  BattleMonster,
+  "uid" | "species" | "level" | "gender" | "hp" | "status" | "exp"
+> & { stats: { hp: number } };
+export interface CombatantView {
+  seatId: string;
+  sideId: string;
+  controllerId: string;
+  monster: MonsterView | null;
+}
+export interface BattleSnapshot {
+  combatants: CombatantView[];
+  sides: { id: string; allianceId: string; total: number; remaining: number }[];
+}
+export interface BattleEvent extends BattleSnapshot {
+  kind: string;
+  text: string;
+  sequence: number;
+  round: number;
+  actionId: string | null;
+  actorSeat?: string;
+  actorUid?: string | null;
+  targetSeat?: string;
+  targetUid?: string | null;
 }

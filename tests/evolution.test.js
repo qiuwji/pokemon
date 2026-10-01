@@ -20,7 +20,6 @@ import { SaveStore } from "../dist/engine/save-store.js";
 import { CommandRunner } from "../dist/engine/commands.js";
 import { NPCSystem } from "../dist/engine/npcs.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
-import { SAVE_MIGRATIONS } from "../dist/packs/emerald/save-migrations.js";
 import { validateSave } from "../dist/packs/emerald/pack.js";
 import {
   EMERALD_STORY,
@@ -181,31 +180,16 @@ test("A dialogue failure after reward can replay without duplicate money or item
   assert.equal(s.bag.potion, 1);
 });
 
-test("Legacy saves migrate flags to ledgers and expand inventory without modifying source", () => {
+test("Current development save contract rejects older versions without mutating their data", () => {
   const s = state();
-  delete s.story;
   s.party = [createMonster("mudkip", 5, db, new Random(1))];
-  s.flags = { rescued: true, rivalWon: true, pokedex: true, potionGift: true };
-  const old = { version: 1, savedAt: 1, state: s };
+  const old = { version: 2, savedAt: 1, state: s };
   const before = structuredClone(old);
-  const store = new SaveStore({}, "demo", (x) => validateSave(x, db), 2, {
-    migrations: SAVE_MIGRATIONS,
-  });
-  const migrated = store.decode(old);
-  assert.equal(migrated.version, 2);
-  assert.deepEqual(migrated.state.party, s.party);
-  assert.equal(migrated.state.bag.super_potion, 0);
-  assert(migrated.state.story.rewards.includes("professor.pokedex"));
-  assert(migrated.state.story.completed.includes("rival.victory"));
-  assert.equal(
-    interaction(migrated.state, { kind: "giftPotion", name: "shop" }, "town")[0]
-      .type,
-    "dialog",
-  );
+  const store = new SaveStore({}, "demo", (x) => validateSave(x, db), 3);
+  assert.equal(store.decode(old), null);
+  assert.deepEqual(store.decode({ ...old, version: 3 }).state, s);
+  assert.equal(store.decode({ ...old, version: 4 }), null);
   assert.deepEqual(old, before);
-  const corrupted = structuredClone(migrated);
-  corrupted.state.story.rewards.push("shop.gift");
-  assert.equal(store.decode(corrupted), null);
 });
 
 test("Field items use effects, reject dead/full/wrong targets, and stale/double commits do not consume", () => {
@@ -406,7 +390,7 @@ test("A custom move definition uses existing operations without changing battle 
   });
   const { battle, player } = setup({ db: local, effects: registry });
   player.moves = [{ id: "custom", pp: 10 }];
-  battle.protected[1] = true;
+  battle.conditions.get(battle.seatId(1)).protected = true;
   battle.executeMove(0, 0);
   assert.equal(battle.stages[0].atk, 2);
   assert.equal(battle.stages[0].spe, 1);
@@ -457,14 +441,15 @@ test("Fury Cutter power modifications survive phase execution and snapshots excl
     db.moves.fury_cutter.power * 2,
   ]);
   const event = battle.events[0];
-  const hp = event.enemy.hp;
+  const [home, away] = event.combatants.map((v) => v.monster);
+  const hp = away.hp;
   enemy.hp = 0;
   enemy.stats.hp = 999;
-  assert.equal(event.enemy.hp, hp);
-  assert.notEqual(event.enemy.stats.hp, 999);
-  assert.equal(event.player.iv, undefined);
-  assert.equal(event.player.moves, undefined);
-  assert.equal(event.player.stats.atk, undefined);
+  assert.equal(away.hp, hp);
+  assert.notEqual(away.stats.hp, 999);
+  assert.equal(home.iv, undefined);
+  assert.equal(home.moves, undefined);
+  assert.equal(home.stats.atk, undefined);
 });
 
 test("Monster creation policy is injectable and NPC caches belong to a disposable session", () => {

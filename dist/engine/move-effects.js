@@ -133,16 +133,16 @@ const MOVE_OPERATIONS = {
     );
   },
   focus: (c) => {
-    c.battle.focus[c.side] = true;
+    c.selfState.focus = true;
     c.emit("正在集中精神！");
   },
   protect: (c) => {
-    c.battle.protected[c.side] = true;
+    c.selfState.protected = true;
     c.emit("保护了自己！");
   },
   confuse: (c) => {
-    if (!c.battle.confused[c.other]) {
-      c.battle.confused[c.other] = 2 + c.battle.rng.int(4);
+    if (!c.targetState.confused) {
+      c.targetState.confused = 2 + c.battle.rng.int(4);
       c.emit("对方陷入了混乱！");
     }
   },
@@ -163,7 +163,7 @@ const MOVE_OPERATIONS = {
     c.emit("对方陷入了异常状态！");
   },
   flinch: (c) => {
-    c.battle.flinched[c.other] = true;
+    c.targetState.flinched = true;
   },
   rest: (c) => {
     c.mon.hp = c.mon.stats.hp;
@@ -176,7 +176,7 @@ const MOVE_OPERATIONS = {
     c.emit("对应属性招式的威力减弱了！");
   },
   identify: (c) => {
-    c.battle.stages[c.other].eva = 0;
+    c.targetState.stages.eva = 0;
     c.emit("看穿了对方！");
   },
   escape: (c) => {
@@ -187,12 +187,11 @@ const MOVE_OPERATIONS = {
     } else c.emit("没有效果。");
   },
   bide: (c) => {
-    c.battle.bide[c.side] = { turns: 2, damage: 0 };
+    c.selfState.bide = { turns: 2, damage: 0 };
     c.emit("开始忍耐！");
   },
   streakPower: (c) => {
-    c.battle.fury ??= [0, 0];
-    c.power *= 2 ** Math.min(4, c.battle.fury[c.side]++);
+    c.power *= 2 ** Math.min(4, c.selfState.fury++);
   },
   drain: (c, s) => {
     if (!c.dealt) return;
@@ -216,7 +215,7 @@ const MOVE_OPERATIONS = {
   },
   trap: (c) => {
     if (c.dealt && c.opponent.hp > 0) {
-      c.battle.traps[c.other] = 2 + c.battle.rng.int(4);
+      c.targetState.traps = 2 + c.battle.rng.int(4);
       c.emit("对方被困住了！");
     }
   },

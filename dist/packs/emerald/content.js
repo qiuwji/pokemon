@@ -1,3 +1,4 @@
+import { TRAINERS, validateTrainers } from "./trainers.js";
 import { assertContent } from "../../engine/content.js";
 import { MoveEffectRegistry } from "../../engine/move-effects.js";
 import { createItemService } from "../../engine/items.js";
@@ -8,6 +9,7 @@ import { EMERALD_STORY } from "./story.js";
 /** Pack composition validates names, references and capabilities before assets are loaded. */
 export function assertPackContent(db) {
   assertContent(db);
+  validateTrainers(TRAINERS, db);
   new MoveEffectRegistry().validateMoves(db.moves);
   createItemService(ITEMS);
   const ids = new Set(EMERALD_STORY.events.map((e) => e.id));

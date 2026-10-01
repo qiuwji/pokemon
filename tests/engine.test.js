@@ -24,6 +24,7 @@ const state = () => ({
   box: [],
   bag: { pokeball: 5, potion: 2 },
   flags: {},
+  story: { completed: [], rewards: [] },
   seen: [],
   caught: [],
   money: 3000,

@@ -1,3 +1,4 @@
+import { duelView } from "./duel-view.js";
 const clamp = (t) => Math.max(0, Math.min(1, t));
 const lerp = (a, b, t) => a + (b - a) * t;
 const DURATIONS = {
@@ -22,7 +23,7 @@ export class BattleDirector {
     this.reset();
   }
   reset(view = null) {
-    this.view = view;
+    this.view = duelView(view);
     this.event = null;
     this.hidden = [false, false];
     this.ball = false;
@@ -32,6 +33,7 @@ export class BattleDirector {
     return this.event !== null;
   }
   stage(event) {
+    event = duelView(event);
     this.event = {
       data: event,
       previous: this.view,
@@ -44,16 +46,22 @@ export class BattleDirector {
     return DURATIONS[event.kind] ?? DURATIONS.text;
   }
   async play(event, { message = () => {} } = {}) {
+    event = duelView(event);
     const duration = this.reducedMotion()
       ? Math.min(240, this.duration(event))
       : this.duration(event);
     const previous = this.view || { player: event.player, enemy: event.enemy };
-    this.view = { player: event.player, enemy: event.enemy };
+    this.view = {
+      player: event.player,
+      enemy: event.enemy,
+      sides: event.sides,
+      combatants: event.combatants,
+    };
     await this.timeline.play(
       duration,
       (start) => {
         this.event = { data: event, previous, start, duration };
-        if (event.kind === "switch") this.hidden[0] = false;
+        if (event.kind === "switch") this.hidden[event.side ?? 0] = false;
         message(event.text || "");
       },
       () => {
@@ -102,7 +110,7 @@ export class BattleDirector {
         );
     }
     // Accessibility keeps temporal sequencing and HP interpolation, without flashes.
-    if (this.reducedMotion()) return result;
+    if (this.reducedMotion() || e.offscreen) return result;
     if (e.kind === "entry") {
       actors[0].x = -130 * (1 - t);
       actors[1].x = 150 * (1 - t);
@@ -135,13 +143,14 @@ export class BattleDirector {
       actor.y = Math.round(t * 55);
       actor.opacity = 1 - t;
     } else if (e.kind === "switch") {
+      const key = side ? "enemy" : "player";
       if (t < 0.4) {
-        view.player = previous.player;
-        actor.scale = 1 - t / 0.4;
+        view[key] = previous[key];
+        actor.scale = previous[key].hp > 0 ? 1 - t / 0.4 : 0;
       } else {
         actor.scale = clamp((t - 0.5) / 0.5);
       }
-      result.effect = { kind: "release", side: 0, t };
+      result.effect = { kind: "release", side, t };
     } else if (e.kind === "heal" || e.kind === "level")
       result.effect = { kind: "heal", side, t };
     else if (e.kind === "ball") {

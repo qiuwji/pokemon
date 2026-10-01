@@ -7,6 +7,10 @@ import {
 import { BATTLE_POLICY } from "./rule-policy.js";
 export const BATTLE_RULES = {
   ...BATTLE_POLICY,
+  outcome: ({ homeAlive, awayAlive }) =>
+    !homeAlive ? "loss" : !awayAlive ? "win" : null,
+  experienceAward: ({ species, level, trainer }) =>
+    Math.floor((species.expYield * level * (trainer ? 1.5 : 1)) / 7),
   damage,
   captureCheck,
   grantExperience,

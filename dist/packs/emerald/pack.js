@@ -2,7 +2,7 @@
 export const PACK = {
   id: "emerald-hoenn-01",
   playerActors: { walk: "BrendanNormal", run: "BrendanRun" },
-  version: 2,
+  version: 3,
   title: "绿宝石 · 丰缘序章",
   start: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   starters: ["treecko", "torchic", "mudkip"],
@@ -77,7 +77,7 @@ export const NATURES = [
 ];
 export { ITEMS } from "./items.js";
 export { questFor } from "./quests.js";
-import { validStoryProgress } from "../../engine/story.js";
+export { validateSave } from "./save-contract.js";
 function baseObjects(state, db) {
   const map = state.position.map,
     flag = state.flags;
@@ -123,9 +123,11 @@ function baseObjects(state, db) {
         16,
         8,
         "Youngster",
-        "talk",
-        "少年",
-        "在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！",
+        flag.rescued ? "trainer" : "talk",
+        "练习训练家",
+        flag.rescued
+          ? "我有两位伙伴。来打一场练习赛吧！击败第一只之后，对战还会继续。"
+          : "在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！",
       ),
       ...(!flag.rescued
         ? [
@@ -249,65 +251,6 @@ function baseObjects(state, db) {
     ];
   return [];
 }
-export function validateSave(s, db) {
-  if (
-    !s ||
-    !db.maps[s.position?.map] ||
-    !Number.isInteger(s.position.x) ||
-    !Number.isInteger(s.position.y)
-  )
-    return false;
-  const map = db.maps[s.position.map];
-  if (
-    s.position.x < 0 ||
-    s.position.x >= map.width ||
-    s.position.y < 0 ||
-    s.position.y >= map.height ||
-    !["up", "down", "left", "right"].includes(s.position.dir)
-  )
-    return false;
-  if (
-    !Array.isArray(s.party) ||
-    s.party.length > 6 ||
-    !Array.isArray(s.box) ||
-    s.box.length > 200 ||
-    !s.flags ||
-    !s.bag ||
-    !Number.isInteger(s.money) ||
-    s.money < 0 ||
-    !Array.isArray(s.seen) ||
-    !Array.isArray(s.caught)
-  )
-    return false;
-  for (const m of [...s.party, ...s.box]) {
-    if (
-      !db.species[m.species] ||
-      !Number.isInteger(m.level) ||
-      m.level < 1 ||
-      m.level > 100 ||
-      !m.stats ||
-      !Number.isInteger(m.hp) ||
-      m.hp < 0 ||
-      m.hp > m.stats.hp ||
-      !m.iv ||
-      !m.ev ||
-      !Array.isArray(m.moves) ||
-      m.moves.length > 4 ||
-      m.moves.some(
-        (v) =>
-          !db.moves[v.id] ||
-          !Number.isInteger(v.pp) ||
-          v.pp < 0 ||
-          v.pp > db.moves[v.id].pp,
-      )
-    )
-      return false;
-  }
-  if (s.flags.rescued && !s.party.length) return false;
-  if (s.story !== undefined && !validStoryProgress(s.story)) return false;
-  return Object.values(s.bag).every((v) => Number.isInteger(v) && v >= 0);
-}
-
 // Ambient behavior is declared per actor from the original map's movement/range data.
 export function objectsFor(state, db) {
   return baseObjects(state, db).map((n) => {

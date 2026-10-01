@@ -3,11 +3,19 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 const base = new URL("../dist/", import.meta.url);
+function modules(directory) {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const file = path.join(directory, entry.name);
+    return entry.isDirectory()
+      ? modules(file)
+      : file.endsWith(".js")
+        ? [file]
+        : [];
+  });
+}
 test("Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports", () => {
-  for (const file of fs
-    .readdirSync(new URL("engine/", base))
-    .filter((x) => x.endsWith(".js"))) {
-    const source = fs.readFileSync(new URL("engine/" + file, base), "utf8");
+  for (const file of modules(new URL("engine/", base).pathname)) {
+    const source = fs.readFileSync(file, "utf8");
     assert(
       !/\b(document|window|localStorage|HTMLCanvasElement|Image)\b/.test(
         source.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, ""),

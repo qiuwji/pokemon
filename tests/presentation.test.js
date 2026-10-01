@@ -244,12 +244,15 @@ test("Battle events expose semantic animation metadata and immutable health snap
     bag: { potion: 1, pokeball: 1 },
   });
   const events = battle.act({ kind: "move", index: 0 }),
-    move = events.find((e) => e.kind === "move" && e.side === 0);
+    move = events.find((e) => e.kind === "move" && e.actorUid === party[0].uid);
   assert.equal(move.move.id, "tackle");
   assert.equal(move.move.type, "normal");
-  const snapshot = move.enemy.hp;
+  const away = move.combatants.find(
+    (c) => c.seatId === move.targetSeat,
+  ).monster;
+  const snapshot = away.hp;
   enemy.hp = 0;
-  assert.equal(move.enemy.hp, snapshot);
+  assert.equal(away.hp, snapshot);
 });
 test("Party commands reject invalid use and evolution never revives a fainted member", () => {
   const rng = new Random(1),

@@ -8,6 +8,7 @@ export const BATTLE_POLICY = {
   forcedReplacementFree: true, // Replacement after fainting is not a voluntary switch turn.
   thawChance: 0.2,
   paralysisChance: 0.25,
+  paralysisSpeedMultiplier: 0.25,
   confusionChance: 0.5,
   criticalChances: [1 / 16, 1 / 8, 1 / 4, 1 / 3, 1 / 2],
   residualDivisor: 8,

@@ -1,0 +1,69 @@
+import { validStoryProgress } from "../../engine/story.js";
+
+/** Current Emerald development save contract. Previous envelopes are rejected by SaveStore. */
+export function validateSave(s, db) {
+  if (
+    !s ||
+    !db.maps[s.position?.map] ||
+    !Number.isInteger(s.position.x) ||
+    !Number.isInteger(s.position.y)
+  )
+    return false;
+  const map = db.maps[s.position.map];
+  if (
+    s.position.x < 0 ||
+    s.position.x >= map.width ||
+    s.position.y < 0 ||
+    s.position.y >= map.height ||
+    !["up", "down", "left", "right"].includes(s.position.dir)
+  )
+    return false;
+  if (
+    !Array.isArray(s.party) ||
+    s.party.length > 6 ||
+    !Array.isArray(s.box) ||
+    s.box.length > 200 ||
+    !s.flags ||
+    !s.bag ||
+    !Number.isInteger(s.money) ||
+    s.money < 0 ||
+    !Array.isArray(s.seen) ||
+    !Array.isArray(s.caught)
+  )
+    return false;
+  const identities = new Set();
+  for (const m of [...s.party, ...s.box]) {
+    if (
+      !m ||
+      typeof m.uid !== "string" ||
+      !m.uid ||
+      identities.has(m.uid) ||
+      !db.species[m.species] ||
+      !Number.isInteger(m.level) ||
+      m.level < 1 ||
+      m.level > 100 ||
+      !m.stats ||
+      !Number.isInteger(m.stats.hp) ||
+      m.stats.hp <= 0 ||
+      !Number.isInteger(m.hp) ||
+      m.hp < 0 ||
+      m.hp > m.stats.hp ||
+      !m.iv ||
+      !m.ev ||
+      !Array.isArray(m.moves) ||
+      m.moves.length > 4 ||
+      m.moves.some(
+        (v) =>
+          !db.moves[v.id] ||
+          !Number.isInteger(v.pp) ||
+          v.pp < 0 ||
+          v.pp > db.moves[v.id].pp,
+      )
+    )
+      return false;
+    identities.add(m.uid);
+  }
+  if (s.flags.rescued && !s.party.length) return false;
+  if (!validStoryProgress(s.story)) return false;
+  return Object.values(s.bag).every((v) => Number.isInteger(v) && v >= 0);
+}

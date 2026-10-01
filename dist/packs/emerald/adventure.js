@@ -30,7 +30,7 @@ import {
   validateCondition,
 } from "../../engine/conditions.js";
 import { isGrass } from "../../engine/terrain.js";
-import { SAVE_MIGRATIONS } from "./save-migrations.js";
+import { TRAINERS, createTrainerTeam } from "./trainers.js";
 
 /** Composes the Emerald pack with reusable engine services. Browser ports are injected. */
 export class EmeraldAdventure {
@@ -69,7 +69,6 @@ export class EmeraldAdventure {
       PACK.id,
       (s) => validateSave(s, db),
       PACK.version,
-      { migrations: SAVE_MIGRATIONS },
     );
     const loaded = this.saveStore.load();
     this.state = loaded?.state || this.newState();
@@ -94,13 +93,21 @@ export class EmeraldAdventure {
         dialog: (c) => this.ui.say(c.name, c.lines),
         starter: () => this.ui.starterPicker(),
         shop: () => this.ui.showShop(),
-        battle: (c) =>
-          this.startBattle(
+        battle: (c) => {
+          if (c.trainerId) {
+            const trainer = TRAINERS[c.trainerId];
+            return this.startBattle(createTrainerTeam(trainer, db, this.rng), {
+              trainer: true,
+              script: trainer.script,
+            });
+          }
+          return this.startBattle(
             createMonster(c.species, c.level, db, this.rng, {
               trainer: c.options?.trainer,
             }),
             c.options,
-          ),
+          );
+        },
         teleport: (c) => transitions.run("door", () => this.enter(c.position)),
         scene: (c) =>
           transitions.run(c.kind || "door", () => {
@@ -163,6 +170,16 @@ export class EmeraldAdventure {
         resources: storyResources,
         validateCommand: (c) => {
           validateFieldCommand(c, db.maps);
+          if (
+            c.type === "battle" &&
+            !(c.trainerId
+              ? TRAINERS[c.trainerId]
+              : db.species[c.species] &&
+                Number.isInteger(c.level) &&
+                c.level >= 1 &&
+                c.level <= 100)
+          )
+            throw new Error("Invalid battle content reference");
           if (c.type === "reward") validateReward(c, ITEMS);
           if (c.type === "grant")
             validateReward(
@@ -394,13 +411,13 @@ export class EmeraldAdventure {
       return false;
     if (!this.state.party.some((m) => m.hp > 0))
       this.state.party.forEach((m) => healMonster(m, this.db));
-    if (!this.state.seen.includes(enemy.species))
-      this.state.seen.push(enemy.species);
+    const enemies = Array.isArray(enemy) ? enemy : [enemy];
+    for (const mon of enemies) this.seen(mon.species);
     this.clearInput();
     this.ui.closeModal();
     return this.combat.start({
       party: this.state.party,
-      enemy,
+      enemyParty: enemies,
       db: this.db,
       rng: this.rng,
       bag: this.state.bag,
@@ -633,6 +650,10 @@ export class EmeraldAdventure {
               maxHP: this.battle.enemy.stats.hp,
             },
             active: this.battle.active,
+            enemyTeam: {
+              remaining: this.battle.enemyParty.filter((m) => m.hp > 0).length,
+              total: this.battle.enemyParty.length,
+            },
           }
         : null,
     };
