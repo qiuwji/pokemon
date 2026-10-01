@@ -8,14 +8,14 @@ export class World {
  move(dir){
   const [dx,dy]=DIRECTIONS[dir];const p=this.position;p.dir=dir;let x=p.x+dx,y=p.y+dy,m=this.map;let cell=this.cell(x,y);
   if(!cell){const c=m.connections.find(c=>c.direction===dir);const id=c&&this.resolve(c.map);if(id){const dest=this.maps[id];if(dir==='up'){x=p.x-c.offset;y=dest.height-1;}if(dir==='down'){x=p.x-c.offset;y=0;}if(dir==='left'){x=dest.width-1;y=p.y-c.offset;}if(dir==='right'){x=0;y=p.y-c.offset;}
-    const i=y*dest.width+x;if(x<0||y<0||x>=dest.width||y>=dest.height||((dest.blocks[i]>>10)&3)!==0)return false;this.enter(id,x,y,dir);this.onStep(this.cell(x,y));return true;}
+    const i=y*dest.width+x;if(x<0||y<0||x>=dest.width||y>=dest.height||((dest.blocks[i]>>10)&3)!==0)return false;this.steps++;this.enter(id,x,y,dir);this.onStep(this.cell(x,y));return true;}
    this.onBlocked('boundary');return false;
   }
   const jumpDir=({56:'right',57:'left',58:'up',59:'down'})[cell.behavior];let jump=false;
   if(jumpDir===dir){x+=dx;y+=dy;cell=this.cell(x,y);jump=true;}
   const warp=m.warps.find(w=>w.x===x&&w.y===y);
   if(warp&&warp.dest_map!=='MAP_DYNAMIC'&&!this.resolve(warp.dest_map)){this.onBlocked('unavailable');return false;}
-  const obj=this.objects().find(n=>n.x===x&&n.y===y);
+  const obj=this.objects().find(n=>n.x===x&&n.y===y||n.reserved?.some(p=>p.x===x&&p.y===y));
   const oneWay=({48:'right',49:'left',50:'up',51:'down'})[cell?.behavior];
   if(!cell||obj||(cell.collision!==0&&!warp)||[16,17,18,19,20,21].includes(cell.behavior)||oneWay===dir){this.onBlocked(obj?'object':'wall',obj);return false;}
   p.x=x;p.y=y;this.steps++;

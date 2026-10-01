@@ -19,28 +19,10 @@ for name,title in zip(map_names,titles):
  dirs=[]
  for kind,key in [('primary','primary_tileset'),('secondary','secondary_tileset')]:
   snake=re.sub(r'(?<!^)(?=[A-Z])','_',lay[key].replace('gTileset_','')).lower(); dirs.append(R/f'data/tilesets/{kind}/{snake}')
- primary,secondary=dirs; pals=[pal((primary if i<6 else secondary)/f'palettes/{i:02d}.pal') for i in range(13)]
- tile_imgs=[Image.open(d/'tiles.png') for d in dirs]; meta=[u16(d/'metatiles.bin') for d in dirs]; attrs=[u16(d/'metatile_attributes.bin') for d in dirs]
- cache={}
- def tile(v):
-  if v in cache:return cache[v]
-  idx=v&1023; p=(v>>12)&15; d=0 if idx<512 else 1; idx=idx if d==0 else idx-512; im=tile_imgs[d]; x=(idx%(im.width//8))*8;y=(idx//(im.width//8))*8
-  cut=im.crop((x,y,x+8,y+8)); out=Image.new('RGBA',(8,8)); out.putdata([(*pals[p if p<13 else 0][z%16],255 if z%16 else 0) for z in cut.getdata()]);
-  if v&1024:out=out.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-  if v&2048:out=out.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
-  cache[v]=out;return out
- def mt(mid):
-  d=0 if mid<512 else 1; mid=mid if d==0 else mid-512; vals=meta[d][mid*8:mid*8+8]; attr=attrs[d][mid]; b=Image.new('RGBA',(16,16),(*pals[0][0],255)); f=Image.new('RGBA',(16,16))
-  for i,v in enumerate(vals):
-   t=tile(v);pos=((i%2)*8,((i%4)//2)*8);b.alpha_composite(t,pos)
-   if i>=4 and attr>>12!=1:f.alpha_composite(t,pos)
-  return b,f,attr&255
- w,h=lay['width'],lay['height'];data=u16(R/lay['blockdata_filepath']);base=Image.new('RGBA',(w*16,h*16));fore=Image.new('RGBA',base.size);beh=[]
- for i,val in enumerate(data):
-  b,f,a=mt(val&1023);pos=(i%w*16,i//w*16);base.alpha_composite(b,pos);fore.alpha_composite(f,pos);beh.append(a)
- base.save(A/f'{name}.png');fore.save(A/f'{name}-over.png');bd=u16(R/lay['border_filepath']);border=Image.new('RGBA',(32,32))
- for i,val in enumerate(bd[:4]):border.alpha_composite(mt(val&1023)[0],(i%2*16,i//2*16))
- border.save(A/f'{name}-border.png')
+ attrs=[u16(d/'metatile_attributes.bin') for d in dirs]
+ w,h=lay['width'],lay['height'];data=u16(R/lay['blockdata_filepath']);beh=[]
+ for val in data:
+  mid=val&1023;side=0 if mid<512 else 1;beh.append(attrs[side][mid if side==0 else mid-512]&255)
  output[name]={'id':name,'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':m['warp_events'],'signs':m['bg_events'],'npcs':m['object_events'],'music':m['music']}
 # Standard field objects, using the palettes declared by the engine.
 info=(R/'src/data/object_events/object_event_graphics_info.h').read_text(); gfx=(R/'src/data/object_events/object_event_graphics.h').read_text(); npcs={}
@@ -80,3 +62,7 @@ cnmoves={'pound':'拍击','leer':'瞪眼','absorb':'吸取','quick_attack':'电�
 for k,v in moves.items():v['name']=cnmoves.get(k,k.replace('_',' ').title())
 (O/'content.json').write_text(json.dumps({'maps':output,'actors':npcs,'species':species,'moves':moves,'typeChart':types},ensure_ascii=False,separators=(',',':')))
 print('Prepared',len(output),'maps,',len(species),'species,',len(moves),'moves; actors:',npcs)
+
+# Runtime resource format is a tile grid; atlas generation never creates a scene PNG.
+import subprocess,sys
+subprocess.run([sys.executable,str(Path(__file__).with_name('import-grid.py')),str(R)],check=True)

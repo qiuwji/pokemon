@@ -5,7 +5,7 @@ export const STATUS_NAMES={poison:'中毒',burn:'灼伤',paralysis:'麻痹',slee
 export const ABILITIES={overgrow:'茂盛',blaze:'猛火',torrent:'激流',run_away:'逃跑',pickup:'捡拾',shield_dust:'鳞粉',keen_eye:'锐利目光',intimidate:'威吓',guts:'毅力',rain_dish:'雨盘',chlorophyll:'叶绿素',synchronize:'同步'};
 export const NATURES=['勤奋','怕寂寞','勇敢','固执','顽皮','大胆','坦率','悠闲','淘气','乐天','胆小','急躁','认真','爽朗','天真','内敛','慢吞吞','冷静','害羞','马虎','温和','温顺','自大','慎重','浮躁'];
 export const ITEMS={pokeball:{name:'精灵球',price:200,description:'捕捉野生宝可梦。降低对方体力更容易成功。'},potion:{name:'伤药',price:300,description:'为一只宝可梦恢复 20 点 HP。'}};
-export function objectsFor(state,db){
+function baseObjects(state,db){
  const map=state.position.map,flag=state.flags;const obj=(x,y,actor,kind,name,text='')=>({x,y,actor,kind,name,text,dir:'down'});
  if(map==='LittlerootTown')return [obj(16,10,'Twin','talk','小女孩','北边就是 101 号道路。刚才好像传来了求救声！'),obj(12,13,'FatMan','talk','居民','小田卷博士经常到野外研究宝可梦。研究所就在西南边。'),obj(14,17,'Boy2','talk','男孩','草丛里有野生宝可梦。等你有了搭档，就能踏上冒险了。')];
  if(map==='Route101')return [obj(16,8,'Youngster','talk','少年','在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！'),...(!flag.rescued?[obj(9,13,'ProfBirch','rescue','小田卷博士','救命啊！那边的包里有精灵球，快选一只来帮我！'),obj(7,14,'BirchsBag','starter','博士的背包'),{...obj(10,13,null,'wildObject','蛇纹熊'),species:'zigzagoon'}]:[])];
@@ -29,4 +29,18 @@ export function validateSave(s,db){
  if(!Array.isArray(s.party)||s.party.length>6||!Array.isArray(s.box)||s.box.length>200||!s.flags||!s.bag||!Number.isInteger(s.money)||s.money<0||!Array.isArray(s.seen)||!Array.isArray(s.caught))return false;
  for(const m of [...s.party,...s.box]){if(!db.species[m.species]||!Number.isInteger(m.level)||m.level<1||m.level>100||!m.stats||!Number.isInteger(m.hp)||m.hp<0||m.hp>m.stats.hp||!m.iv||!m.ev||!Array.isArray(m.moves)||m.moves.length>4||m.moves.some(v=>!db.moves[v.id]||!Number.isInteger(v.pp)||v.pp<0||v.pp>db.moves[v.id].pp))return false;}
  if(s.flags.rescued&&!s.party.length)return false;return Object.values(s.bag).every(v=>Number.isInteger(v)&&v>=0);
+}
+
+// Ambient behavior is declared per actor from the original map's movement/range data.
+export function objectsFor(state,db){
+ return baseObjects(state,db).map(n=>{
+  const source=db.maps[state.position.map].npcs.find(o=>o.x===n.x&&o.y===n.y);
+  const type=source?.movement_type||'MOVEMENT_TYPE_FACE_DOWN';
+  const direction=type.includes('RIGHT')?'right':type.includes('LEFT')?'left':type.includes('UP')?'up':'down';
+  let mode=type.includes('WANDER')?'wander':type.includes('WALK_LEFT_AND_RIGHT')?'horizontal':type.includes('WALK_DOWN_AND_UP')?'vertical':type.includes('LOOK_AROUND')?'look':type.includes('JOG')?'jog':'still';
+  if(n.kind==='starter')mode='still';
+  if(n.kind==='wildObject'){mode='jog';}
+  if(n.kind==='rival')mode='look';
+  return {...n,id:`${n.kind}:${n.x},${n.y}`,dir:n.kind==='wildObject'?'left':direction,movement:{mode,dir:direction,rangeX:source?.movement_range_x??1,rangeY:source?.movement_range_y??1}};
+ });
 }
