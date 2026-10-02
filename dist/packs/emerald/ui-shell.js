@@ -41,6 +41,7 @@ export function createUIShell(
   }
 
   function updateSide() {
+    game.ui?.updateTime?.(game.timeView());
     game.ui?.extensions?.refreshHUD();
     const q = questFor(game.state);
     $("quest-title").textContent = q.title;

@@ -1,3 +1,5 @@
+import { emptyWorldClock } from "../../../engine/world-clock.js";
+import { emptyWorldSchedule } from "../../../engine/world-schedule.js";
 import { emptyWorldState } from "../../../engine/world-state.js";
 import { Random } from "../../../engine/model.js";
 import { SaveStore } from "../../../engine/save-store.js";
@@ -5,6 +7,7 @@ import { PACK, validateSave } from "../pack.js";
 import { emptyStoryProgress } from "../../../engine/story.js";
 import { bindApplicationPorts } from "./ports.js";
 export const SAVE_PORTS = Object.freeze([
+  "syncTime",
   "battle",
   "bindField",
   "busy",
@@ -72,6 +75,8 @@ export class SaveApplication {
       seen: [],
       caught: [],
       playSeconds: 0,
+      clock: emptyWorldClock(),
+      schedule: emptyWorldSchedule(),
       friendshipSteps: 0,
       movement: { mode: "walk", visited: [PACK.start.map] },
       growth: { hatchTick: 0 },
@@ -97,6 +102,7 @@ export class SaveApplication {
       return;
     }
     try {
+      this.syncTime();
       this.state.randomSeed = this.rng.seed;
       if (this.plugins)
         this.state.contentDependencies = this.plugins.catalog.dependencies(
@@ -142,6 +148,7 @@ export class SaveApplication {
         }
       }
     }
+    this.syncTime();
     const state = structuredClone(this.state);
     state.randomSeed = this.rng.seed;
     if (this.plugins)

@@ -360,6 +360,9 @@ test("UI facade, plugin action and network use one registry; stable UIDs survive
   );
   game.storyBusy = false;
   ui.advancePlayTime();
+  assert.equal(game.state.playSeconds, 0);
+  game.tickTime(0);
+  game.tickTime(1000);
   assert.equal(game.state.playSeconds, 1);
 });
 test("Core actions enforce UID/custody/selection constraints and UI evolution commands rebuild a valid domain plan", async () => {

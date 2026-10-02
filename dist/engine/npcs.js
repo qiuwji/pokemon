@@ -1,3 +1,4 @@
+import { callSync } from "./extensions/values.js";
 import { NPCBehaviorRegistry } from "./npc-behaviors.js";
 import { isWater, ledgeDirection } from "./terrain.js";
 import { DIRECTIONS } from "./world.js";
@@ -10,9 +11,17 @@ export class NPCSystem {
       random = Math.random,
       behaviors = new NPCBehaviorRegistry(),
       onError = () => {},
+      context = () => ({}),
     } = {},
   ) {
-    Object.assign(this, { maps, definitions, random, behaviors, onError });
+    Object.assign(this, {
+      maps,
+      definitions,
+      random,
+      behaviors,
+      onError,
+      context,
+    });
     this.states = new Map();
     this.now = 0;
     this.activeMap = null;
@@ -185,6 +194,7 @@ export class NPCSystem {
         let intent;
         try {
           intent = this.behaviors.decide(config.mode, {
+            ...callSync(this.context, [map]),
             config,
             dir: n.dir,
             now,

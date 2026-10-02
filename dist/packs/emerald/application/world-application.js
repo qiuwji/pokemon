@@ -17,6 +17,7 @@ import { EMERALD_TERRAIN_RULES } from "../terrain-rules.js";
 import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "advanceTravelClocks",
+  "timeView",
   "actionBusy",
   "growthBusy",
   "growthDirector",
@@ -141,6 +142,12 @@ export class WorldApplication {
         this.ui.showSurf();
       return;
     }
+    if (
+      object.script === "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
+    ) {
+      this.ui.showTime();
+      return;
+    }
     if (["cutTree", "breakableRock"].includes(object.kind)) {
       this.ui.showFieldAction(object.kind === "cutTree" ? "cut" : "rock-smash");
       return;
@@ -208,6 +215,10 @@ export class WorldApplication {
           this.ui?.toast("地形规则发生错误：" + event.reason);
       },
       npcBehaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors),
+      npcContext: (map) => ({
+        time: this.timeView(),
+        environment: this.worldState.maps[map].presentation || {},
+      }),
       now: this.timeline.now,
       objects: (map) =>
         this.worldState

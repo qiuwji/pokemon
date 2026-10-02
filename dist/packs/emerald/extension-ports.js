@@ -17,6 +17,8 @@ export function attachEmeraldExtensions(game, host) {
   const query = () => ({
     busy: !!game.busy || !!game.commandBus?.active,
     battle: game.battle ? game.battle.snapshot() : null,
+    time: game.timeView(),
+    schedule: game.schedule.view(),
     position: { ...game.state.position },
     movement: { ...game.state.movement },
     movementTechnique: game.movement.technique,

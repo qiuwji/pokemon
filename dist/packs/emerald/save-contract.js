@@ -1,3 +1,8 @@
+import { validateWorldClock } from "../../engine/world-clock.js";
+import {
+  WorldSchedule,
+  TimeTaskRegistry,
+} from "../../engine/world-schedule.js";
 import {
   CreatureFormRegistry,
   CreatureForms,
@@ -30,6 +35,15 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (s.clock !== undefined) {
+      validateWorldClock(s.clock);
+      if (s.playSeconds !== Math.floor(s.clock.playMs / 1000)) return false;
+    }
+    if (s.schedule !== undefined)
+      new WorldSchedule({
+        state: s.schedule,
+        registry: new TimeTaskRegistry(catalog.timeTasks),
+      });
     if (s.forms !== undefined)
       new CreatureForms({
         registry: new CreatureFormRegistry(

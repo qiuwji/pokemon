@@ -266,6 +266,8 @@ export interface AdventureState {
   caught: string[];
   randomSeed: number;
   playSeconds: number;
+  clock?: WorldClockState;
+  schedule?: WorldScheduleState;
   movement: { mode: string; visited: string[] };
   friendshipSteps: number;
   growth: { hatchTick: number };
@@ -366,6 +368,7 @@ export type ContentKind =
   | "heldItems"
   | "moveEffects"
   | "movement"
+  | "timeTasks"
   | "terrainRules"
   | "fieldActions"
   | "fieldLinks"
@@ -735,3 +738,21 @@ export type FieldActionCommand = {
   input?: Record<string, Json>;
   variable?: string;
 };
+
+export interface WorldClockState {
+  initialized: boolean;
+  localMs: number;
+  wallMs: number | null;
+  playMs: number;
+  processedMinute: number;
+  processedDay: number;
+}
+export interface TimeTaskDefinition {
+  schema?: DataSchema;
+  intervalMs?: number;
+  catchUp?: "all" | "aggregate" | "latest";
+}
+export interface WorldScheduleState {
+  sequence: number;
+  tasks: Record<string, { definition: string; dueMs: number; data: Json }>;
+}

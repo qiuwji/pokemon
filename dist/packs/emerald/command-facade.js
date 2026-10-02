@@ -84,9 +84,11 @@ export function createEmeraldCommandFacade(
       { document: JSON.stringify(document) },
     ],
     reset: () => ["save.reset", {}],
+    startClock: (hour, minute) => ["time.start", { hour, minute }],
     advancePlayTime: () => ["session.play-time", {}],
   };
   const objectFailures = new Set([
+    "startClock",
     "playPresentation",
     "useItem",
     "equipItem",

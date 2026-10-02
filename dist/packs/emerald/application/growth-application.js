@@ -253,7 +253,7 @@ export class GrowthApplication {
         this.catalog.growthConditions,
         (fn, ...args) => this.plugins.runtime.evaluate(fn, ...args),
       ),
-      hour: () => new Date().getHours(),
+      hour: () => Math.floor((this.state.clock?.localMs || 0) / 3600000) % 24,
     });
     this.friendship = this.growth.friendship;
     this.evolutions = this.growth.evolutions;

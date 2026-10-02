@@ -7,6 +7,19 @@ import {
 } from "./extensions/values.js";
 const id = { type: "string", minLength: 1, maxLength: 128 };
 export const CONDITION_QUERIES = {
+  worldHour: {
+    schema: objectSchema(),
+    read: (s) => Math.floor((s.clock?.localMs || 0) / 3600000) % 24,
+  },
+  worldMinute: {
+    schema: objectSchema(),
+    read: (s) => Math.floor((s.clock?.localMs || 0) / 60000) % 60,
+  },
+  worldDay: {
+    schema: objectSchema(),
+    read: (s) => Math.floor((s.clock?.localMs || 0) / 86400000),
+  },
+  clockSet: { schema: objectSchema(), read: (s) => !!s.clock?.initialized },
   money: { schema: objectSchema(), read: (s) => s.money },
   itemCount: {
     schema: objectSchema({ item: id }, ["item"]),
@@ -65,6 +78,7 @@ export class ConditionQueries {
           money: state.money,
           flags: state.flags,
           story: state.story,
+          ...(state.clock ? { clock: state.clock } : {}),
         })
       : state;
     const value = callSync(def.read, [view, readOnly(query.input || {})]);

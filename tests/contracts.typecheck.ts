@@ -128,3 +128,9 @@ const terrain: TerrainRuleDefinition = {
   },
 };
 void terrain;
+
+const timer: import("../dist/engine/contracts.js").TimeTaskDefinition = {
+  intervalMs: 60000,
+  catchUp: "aggregate",
+};
+void timer;

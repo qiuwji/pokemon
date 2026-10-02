@@ -27,6 +27,7 @@ export class EmeraldAdventure {
     reducedMotion = () => false,
     onMap = () => {},
     onSave = () => {},
+    wallNow = Date.now,
     clearInput = () => {},
     plugins = null,
     catalog = {
@@ -49,6 +50,7 @@ export class EmeraldAdventure {
       reducedMotion,
       onMap,
       onSave,
+      wallNow,
       clearInput,
       plugins,
       catalog,
@@ -124,7 +126,32 @@ export class EmeraldAdventure {
     this.applications.save.reseed();
     this.applications.forms.bind();
     this.applications.growth.bind();
+    this.applications.time.bind();
     this.applications.world.bind();
+  }
+  timeView(...args) {
+    return this.applications.time.timeView(...args);
+  }
+  startClock(...args) {
+    return this.applications.time.startClock(...args);
+  }
+  tickTime(...args) {
+    return this.applications.time.tick(...args);
+  }
+  pausePlayTime(...args) {
+    return this.applications.time.pausePlayTime(...args);
+  }
+  syncTime(...args) {
+    return this.applications.time.syncTime(...args);
+  }
+  scheduleTimeTask(...args) {
+    return this.applications.time.scheduleTimeTask(...args);
+  }
+  cancelTimeTask(...args) {
+    return this.applications.time.cancelTimeTask(...args);
+  }
+  advanceWorldTime(...args) {
+    return this.applications.time.advanceWorldTime(...args);
   }
   setLead(...args) {
     return this.applications.inventory.setLead(...args);

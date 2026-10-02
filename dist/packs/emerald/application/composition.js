@@ -1,3 +1,4 @@
+import { TimeApplication, TIME_PORTS } from "./time-application.js";
 import { liveApplicationPorts } from "./ports.js";
 import {
   InventoryApplication,
@@ -29,6 +30,9 @@ import {
 export function composeApplications(applications, read, { storage }) {
   applications.save = new SaveApplication(
     liveApplicationPorts(read, SAVE_PORTS, { storage }),
+  );
+  applications.time = new TimeApplication(
+    liveApplicationPorts(read, TIME_PORTS),
   );
   applications.inventory = new InventoryApplication(
     liveApplicationPorts(read, INVENTORY_PORTS, {}),

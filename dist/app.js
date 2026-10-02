@@ -45,6 +45,7 @@ async function boot() {
     const assets = await loadAssets(db);
     const reducedMotion = () =>
       matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let game = null;
     const timeline = new Timeline(),
       camera = new CameraRig(timeline),
       presentation = createEmeraldPresentation({
@@ -57,7 +58,7 @@ async function boot() {
         cameraRig: camera,
         environment: (map) => ({
           weather: map.presentation?.weather || null,
-          hour: new Date().getHours(),
+          hour: game?.timeView().initialized ? game.timeView().hour : 12,
         }),
         reducedMotion,
         presentation,
@@ -133,7 +134,10 @@ async function boot() {
         $("location").textContent = title;
         $("weather").textContent = db.maps[id].indoor
           ? "室内"
-          : `${{ rain: "雨天", sun: "晴朗", sand: "沙尘", hail: "冰雹" }[db.maps[id].presentation?.weather] || "晴朗"} · ${new Date().getHours() < 6 || new Date().getHours() >= 20 ? "夜晚" : new Date().getHours() >= 17 ? "傍晚" : "白天"}`;
+          : { rain: "雨天", sun: "晴朗", sand: "沙尘", hail: "冰雹" }[
+              db.maps[id].presentation?.weather
+            ] || "晴朗";
+        game?.ui?.updateTime(game.timeView());
         $("scene-name").textContent = title;
         $("scene-name").classList.add("show");
         clearTimeout(sceneTimer);
@@ -144,7 +148,7 @@ async function boot() {
       },
     });
     const { bus } = attachEmeraldExtensions(adventure, host);
-    const game = createEmeraldCommandFacade(adventure, bus);
+    game = createEmeraldCommandFacade(adventure, bus);
     const ui = createEmeraldInterface(game, {
       tone: (...args) => audio.tone(...args),
       extensionAssets: assets,
@@ -176,9 +180,7 @@ async function boot() {
       $("game").focus({ preventScroll: true });
       if (ui.dialog) ui.nextDialogue();
     };
-    setInterval(() => {
-      if (!document.hidden) game.advancePlayTime();
-    }, 1000);
+    document.addEventListener("visibilitychange", () => game.pausePlayTime());
     await registerGameTools({
       inspect: () => game.inspect(),
       interact: () => game.interact(),

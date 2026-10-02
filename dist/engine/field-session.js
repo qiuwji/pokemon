@@ -17,6 +17,7 @@ export class FieldSession {
     onBlocked = () => {},
     movement = null,
     npcBehaviors,
+    npcContext,
     terrain = null,
     canContinue = () => true,
     onTerrain = () => {},
@@ -44,7 +45,7 @@ export class FieldSession {
     this.force = null;
     this.forceCount = 0;
     this.forceVisited = new Set();
-    this.npcs = new NPCSystem(maps, objects, { behaviors: npcBehaviors });
+    this.npcs = new NPCSystem(maps, objects, { behaviors: npcBehaviors, context: npcContext });
     this.world = new World(maps, position, {
       deferWarps: true,
       objects: (map = position.map) =>

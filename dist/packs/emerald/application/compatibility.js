@@ -1,5 +1,7 @@
 /** Existing host/UI field aliases; state lives in the listed service, never in two copies. */
 export const COMPATIBILITY_FIELDS = Object.freeze({
+  clock: "time",
+  schedule: "time",
   items: "inventory",
   partyStorage: "inventory",
   equipment: "inventory",

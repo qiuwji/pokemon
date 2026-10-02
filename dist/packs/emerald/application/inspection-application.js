@@ -1,6 +1,7 @@
 import { questFor } from "../pack.js";
 import { bindApplicationPorts } from "./ports.js";
 export const INSPECTION_PORTS = Object.freeze([
+  "timeView",
   "battle",
   "busy",
   "db",
@@ -20,6 +21,7 @@ export class InspectionApplication {
   inspect() {
     const p = this.state.position;
     return {
+      time: this.timeView(),
       location: this.world.map.title,
       movement: {
         mode: this.state.movement.mode,

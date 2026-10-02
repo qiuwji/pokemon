@@ -8,6 +8,7 @@ export function registerEmeraldCommands(game, bus) {
   const partyIndex = (uid) => game.state.party.findIndex((m) => m.uid === uid);
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
   const domainPermissions = {
+    time: "time",
     field: "movement",
     world: "world",
     movement: "movement",
@@ -269,6 +270,46 @@ export function registerEmeraldCommands(game, bus) {
     },
     { network: false, plugin: false, maxInputBytes: 2097152 },
   );
+  register(
+    "time.start",
+    objectSchema(
+      {
+        hour: { type: "integer", minimum: 0, maximum: 23 },
+        minute: { type: "integer", minimum: 0, maximum: 59 },
+      },
+      ["hour", "minute"],
+    ),
+    ({ hour, minute }) => game.startClock(hour, minute),
+  );
+  register(
+    "time.schedule",
+    objectSchema(
+      {
+        definition: id,
+        delayMs: {
+          type: "integer",
+          minimum: 0,
+          maximum: Number.MAX_SAFE_INTEGER,
+        },
+        data: { type: "string", maxLength: 8192 },
+      },
+      ["definition", "delayMs"],
+    ),
+    ({ definition, delayMs, data }) =>
+      game.scheduleTimeTask(definition, delayMs, data ? JSON.parse(data) : {}),
+  );
+  register("time.cancel", objectSchema({ id }, ["id"]), ({ id }) =>
+    game.cancelTimeTask(id),
+  );
+  register(
+    "time.advance",
+    objectSchema(
+      { ms: { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER } },
+      ["ms"],
+    ),
+    ({ ms }) => game.advanceWorldTime(ms),
+    { permission: "timeControl" },
+  );
   register("save.reset", empty, () => game.reset(), {
     network: false,
     plugin: false,
@@ -277,7 +318,7 @@ export function registerEmeraldCommands(game, bus) {
     "session.play-time",
     empty,
     () => {
-      game.state.playSeconds++;
+      game.syncTime();
       return true;
     },
     { network: false, concurrent: true, ready: () => true },

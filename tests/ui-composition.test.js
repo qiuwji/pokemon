@@ -79,6 +79,14 @@ function fixture() {
     itemPlan: () => ({ ok: false }),
     evolutionPlan: () => null,
     daycareView: () => ({ slots: [], compatibility: 0, egg: false }),
+    timeView: () => ({
+      initialized: false,
+      day: 0,
+      hour: 0,
+      minute: 0,
+      playSeconds: 0,
+      tide: "high",
+    }),
     movementOptions: () => [],
     movementTechniqueOptions: () => [{ id: "normal", name: "普通" }],
     fieldActionOptions: () => [],
@@ -200,4 +208,35 @@ test("Focus trap covers visible text/select/link controls and excludes hidden co
   });
   assert.equal(doc.activeElement, last);
   assert.equal(prevented, 2);
+});
+
+test("Clock page submits setup through a command and renders live saved time", () => {
+  const { game, doc, ui, calls } = fixture();
+  game.startClock = (hour, minute) => {
+    calls.push([hour, minute]);
+    return { ok: true };
+  };
+  ui.showTime();
+  assert.equal(ui.modalType, "clock");
+  assert.match(doc.getElementById("modal-root").innerHTML, /开始计时/);
+  doc.getElementById("[data-clock-hour]").value = "23";
+  doc.getElementById("[data-clock-minute]").value = "59";
+  doc.getElementById("[data-start-clock]").onclick();
+  assert.deepEqual(calls[0], [23, 59]);
+  assert(calls.includes("save"));
+  assert.equal(ui.blocked, false);
+  ui.updateTime({
+    initialized: true,
+    day: 3,
+    hour: 9,
+    minute: 4,
+    playSeconds: 3661,
+    tide: "high",
+  });
+  assert.equal(
+    doc.getElementById("[data-clock-time]").textContent,
+    "第 4 天 · 09:04",
+  );
+  assert.equal(doc.getElementById("[data-play-time]").textContent, "1:01:01");
+  assert.match(doc.getElementById("weather").textContent, /09:04/);
 });

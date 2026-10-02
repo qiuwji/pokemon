@@ -1,3 +1,4 @@
+import { TimeTaskRegistry } from "../../engine/world-schedule.js";
 import { CreatureFormRegistry } from "../../engine/creatures/forms.js";
 import { GEN3_REFERENCE_MOVES } from "../../engine/rules/gen3/reference-metadata.js";
 import { validateTrainerSight } from "../../engine/field-triggers.js";
@@ -61,6 +62,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
   host.load(plugins);
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
+    new TimeTaskRegistry(c.timeTasks);
     new ConditionQueries(c.conditionQueries);
     const forms = new CreatureFormRegistry(
       c.forms,

@@ -163,3 +163,11 @@
 - PluginAPI.presentation.battle 与 PresentationRegistry.battle 注册事件描述，按 kind/标量 match/优先级/具体度选定，重复 selector/未知效果启动拒绝。BattleDirector 支持 replace/append，保留 HP 视图/隐藏生命周期、注入时钟和 reducedMotion；form 插件验收无需新增导演形态分支。
 - 新增 9 项动画用例。一次受影响 animation-timing/visual-registry/presentation/plugins/architecture/field-actions 73 项，72 首次通过；宿主 id/owner 被严格动画合同拒绝，在组装时剥离元数据后仅重跑失败项通过。追加全屏锚点及受影响逐目标取样 2 项通过；模式分发等价整理后重查 replace/append 2 项通过。公开类型检查通过，新增 Math.random 架构守卫单项通过。没有反复全量回归。
 - 规则现代化和 Actor 持久行为尚未因此完成；Canvas/DOM/SVG 生命周期与环境注册、默认阶段的后续迁移、逐原作视觉/浏览器对比仍在目标中。细节/边界/失效条件见 ANIMATION_CONTRACT.md。下一步继续 C3/C6/C5 与原 C/D/E，保留已验证模块证据。
+
+### C3 · 可保存世界时钟、游玩时长与定时任务（2026-10-03）
+
+- 世界时间与游玩时长分开，注入墙钟/帧时钟、离线推进、回拨高水位、前台锚点、初次家中设定。新增 TimeApplication；原每秒增加 playSeconds 的计时器改为实际毫秒累计。菜单和卧室原作时钟都有入口，昼夜/育成按各自政策读取保存时间。
+- timeTasks 内容注册/schema/依赖、任务身份/保存/取消/三种补偿、原子批收集、分钟/每日事实、只读查询/剧情条件和 time/timeControl 权限接线。时间继续经过，领域结算在对话/战斗/PokemonCenter 内推迟。NPC 可读取不可变时间/环境上下文；持续 Actor/C5 尚未实现。
+- 13 个时间场景和时钟页面点击/显示 1 项通过；初次 11 项中 9 通过，2 项测试误读事件信封，修正 payload 后仅重跑失败项。新增未设定时钟锚点检查/NPC 上下文/推迟结算均分别单次通过；推迟结算测试最初尝试修改冻结地图，被合同拒绝，改为切换至实际 PokemonCenter 后仅此项通过。
+- 受影响组合 98 项中 96 首次通过；交易失败回滚发现未设定时钟无谓写 wallMs，修正不读取墙钟后仅失败项通过。网络测试仍假设 play-time 命令制造秒数，改为断言帧累计后仅失败项通过。最新 NPC 上下文边界 npc-behaviors/cutscene 19 项一次通过；公开类型检查通过。没有重复全工程回归，浏览器与完整循环仍留到 E。
+- 来源、合同、调度事实的非持久事务边界和余项见 WORLD_TIME.md。下一步树果/每日业务与 C6/C5，D/E 未完成。
