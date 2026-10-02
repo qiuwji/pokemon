@@ -179,6 +179,11 @@ export function registerEmeraldCommands(game, bus) {
   );
   register("movement.equipment", empty, () => game.claimFieldEquipment());
   register(
+    "movement.technique",
+    objectSchema({ technique: id }, ["technique"]),
+    ({ technique }) => game.setMovementTechnique(technique),
+  );
+  register(
     "field.action",
     objectSchema({ id, input: { type: "string", maxLength: 4096 } }, ["id"]),
     ({ id, input }) =>

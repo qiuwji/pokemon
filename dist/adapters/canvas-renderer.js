@@ -234,7 +234,13 @@ export class Renderer {
           this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
         this.actor(
           this.playerActors[
-            travel ? "walk" : n.moving ? n.mode : movementMode
+            travel
+              ? "walk"
+              : n.moving
+                ? this.playerActors[n.pose]
+                  ? n.pose
+                  : n.mode
+                : movementMode
           ] || this.playerActors.walk,
           x,
           y -
@@ -247,7 +253,7 @@ export class Renderer {
           n.dir,
           n.progress,
           n.foot,
-          n.moving,
+          n.moving && !n.freezeAnimation,
         );
       } else if (n.species) {
         const image = this.assets[n.species + "-front"];

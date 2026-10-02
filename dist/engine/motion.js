@@ -121,6 +121,8 @@ export class GridMotion {
       jump = false,
       duration,
       mode = running ? "run" : "walk",
+      freezeAnimation = false,
+      pose = "normal",
     } = {},
   ) {
     const a = this.graph.point(from),
@@ -129,6 +131,8 @@ export class GridMotion {
     this.running = running;
     this.mode = mode;
     this.jump = jump;
+    this.freezeAnimation = freezeAnimation;
+    this.pose = pose;
     if (a.zone !== b.zone || Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 32) {
       this.snap(to);
       return false;
@@ -163,6 +167,8 @@ export class GridMotion {
       running: t < 1 && this.running,
       mode: this.mode || "walk",
       foot: this.foot,
+      freezeAnimation: t < 1 && !!this.freezeAnimation,
+      pose: t < 1 ? this.pose : "normal",
       lift: this.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0,
     };
   }

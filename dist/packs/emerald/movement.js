@@ -31,6 +31,11 @@ export const MOVEMENT_MODES = {
     name: "越野自行车",
     actor: "BrendanAcroBike",
     durations: [96],
+    techniques: {
+      wheelie: { name: "抬起前轮", pose: "wheelie" },
+      hop: { name: "连续跳跃", pose: "hop", jump: true },
+      "side-hop": { name: "侧向跳跃", pose: "side-hop", jump: true, keepFacing: true, oneStep: true },
+    },
     allowed: (c) =>
       field(c) && c.map.allowBike !== false && capability("bike", c),
     traverse: land,

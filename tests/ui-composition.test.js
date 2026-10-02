@@ -80,6 +80,7 @@ function fixture() {
     evolutionPlan: () => null,
     daycareView: () => ({ slots: [], compatibility: 0, egg: false }),
     movementOptions: () => [],
+    movementTechniqueOptions: () => [{ id: "normal", name: "普通" }],
     fieldActionOptions: () => [],
     reelFishing: (input = {}) =>
       calls.push(input.cancel ? "cancel fishing" : "reel fishing"),

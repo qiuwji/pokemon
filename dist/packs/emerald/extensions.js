@@ -16,6 +16,8 @@ import { PluginHost } from "../../engine/extensions/plugin-host.js";
 import { assertContent } from "../../engine/content.js";
 import { MovementRegistry } from "../../engine/movement.js";
 import { FieldActionRegistry } from "../../engine/field-actions.js";
+import { FieldTerrainRegistry } from "../../engine/field-terrain.js";
+import { EMERALD_TERRAIN_RULES } from "./terrain-rules.js";
 import { EMERALD_FIELD_ACTIONS, validateFieldLinks } from "./field-actions.js";
 import { FIELD_ACTION_EFFECTS } from "../../presentation/field-action-canvas.js";
 import { PIXEL_EFFECTS } from "../../presentation/pixel-effects.js";
@@ -51,6 +53,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       heldItems: GEN3_HELD_ITEMS,
       movement: MOVEMENT_MODES,
       fieldActions: EMERALD_FIELD_ACTIONS,
+      terrainRules: EMERALD_TERRAIN_RULES,
       destinations: TRAVEL_DESTINATIONS,
     },
     onError,
@@ -80,6 +83,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     createItemService(c.items);
     new MovementRegistry(c.movement);
     new FieldActionRegistry(c.fieldActions);
+    new FieldTerrainRegistry(c.terrainRules);
     for (const action of Object.values(c.fieldActions))
       if (
         !FIELD_ACTION_EFFECTS[action.cue] &&

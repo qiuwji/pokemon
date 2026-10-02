@@ -366,6 +366,7 @@ export type ContentKind =
   | "heldItems"
   | "moveEffects"
   | "movement"
+  | "terrainRules"
   | "fieldActions"
   | "fieldLinks"
   | "destinations"
@@ -548,11 +549,74 @@ export interface PluginManifest {
   migrate?: (record: Readonly<PluginRecord>, version: number) => PluginRecord;
   validateData?: (data: Readonly<Record<string, Json>>) => void;
 }
+export interface MovementTechnique {
+  name: string;
+  pose: string;
+  jump?: boolean;
+  keepFacing?: boolean;
+  freezeAnimation?: boolean;
+  oneStep?: boolean;
+}
+export interface TerrainContext {
+  readonly from: Readonly<{ map: string; x: number; y: number; dir: string }>;
+  readonly map: Readonly<{
+    id: string;
+    width: number;
+    height: number;
+    indoor: boolean;
+    underwater: boolean;
+    allowRunning: boolean;
+    allowBike: boolean;
+  }>;
+  readonly cell: Readonly<{
+    behavior: number;
+    collision: number;
+    elevation: number;
+    block: number;
+  }>;
+  readonly sourceCell: Readonly<{
+    behavior: number;
+    collision: number;
+    elevation: number;
+  }>;
+  readonly mode: string;
+  readonly technique: string;
+  readonly dir: "up" | "down" | "left" | "right";
+  readonly momentum: Readonly<{
+    mode?: string | null;
+    direction?: string | null;
+    steps?: number;
+  }>;
+}
+export interface TerrainVisual {
+  duration?: number;
+  jump?: boolean;
+  keepFacing?: boolean;
+  freezeAnimation?: boolean;
+  pose?: string;
+}
+export interface TerrainRuleDefinition {
+  priority?: number;
+  when(context: TerrainContext): boolean;
+  before?(
+    context: TerrainContext,
+  ): (TerrainVisual & { allowed?: boolean }) | null;
+  after?(
+    context: TerrainContext,
+  ):
+    | (TerrainVisual & {
+        direction: TerrainContext["dir"];
+        resetMomentum?: boolean;
+        mode?: string;
+      })
+    | null;
+}
 export interface MovementDefinition {
   name?: string;
   actor: string;
   surface?: "land" | "water" | "both";
   mapRequires?: Record<string, string | number | boolean>;
+  techniques?: Record<string, MovementTechnique>;
   durations: number[];
   allowed?: (context: Readonly<Json>) => boolean;
   traverse?: (context: Readonly<Json>) => boolean;

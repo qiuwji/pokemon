@@ -5,6 +5,7 @@ import type {
   MovementDefinition,
   Creature,
   FieldActionDefinition,
+  TerrainRuleDefinition,
 } from "../dist/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
@@ -98,3 +99,13 @@ function immutableInput(mon: Readonly<Creature>) {
   mon.uid = "replacement";
 }
 void [plugin, message, mode, fieldAction, badMessage, immutableInput];
+
+const terrain: TerrainRuleDefinition = {
+  when: (context) => context.cell.behavior === 64,
+  after(context) {
+    // @ts-expect-error Rules cannot mutate live terrain snapshots.
+    context.cell.behavior = 0;
+    return { direction: "right", pose: "slide" };
+  },
+};
+void terrain;

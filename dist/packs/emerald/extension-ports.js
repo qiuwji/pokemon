@@ -19,6 +19,7 @@ export function attachEmeraldExtensions(game, host) {
     battle: game.battle ? game.battle.snapshot() : null,
     position: { ...game.state.position },
     movement: { ...game.state.movement },
+    movementTechnique: game.movement.technique,
     fieldActions: game.fieldActionOptions(),
     party: game.state.party.map((m) => ({
       ...m,

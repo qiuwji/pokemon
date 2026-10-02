@@ -9,9 +9,19 @@ import { objectsFor } from "../pack.js";
 import { matchesCondition } from "../../../engine/conditions.js";
 import { DIRECTIONS } from "../../../engine/world.js";
 import { isWater } from "../../../engine/terrain.js";
+import {
+  FieldTerrainRegistry,
+  FieldTerrainService,
+} from "../../../engine/field-terrain.js";
+import { EMERALD_TERRAIN_RULES } from "../terrain-rules.js";
 import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "advanceTravelClocks",
+  "actionBusy",
+  "growthBusy",
+  "growthDirector",
+  "sceneDirector",
+  "travelDirector",
   "battle",
   "bindMovement",
   "bindFieldActions",
@@ -90,6 +100,7 @@ export class WorldApplication {
     return draft;
   }
   enter(position) {
+    this.field.cancelForced("travel");
     this.world.enter(position.map, position.x, position.y, position.dir);
     this.motion.snap(this.state.position);
   }
@@ -177,6 +188,25 @@ export class WorldApplication {
       motion: this.motion,
       transitions: this.transitions,
       movement: this.movement,
+      terrain: new FieldTerrainService(
+        new FieldTerrainRegistry(
+          this.catalog.terrainRules || EMERALD_TERRAIN_RULES,
+        ),
+      ),
+      canContinue: () =>
+        !this.battle &&
+        !this.storyBusy &&
+        !this.ui?.blocked &&
+        !this.actionBusy &&
+        !this.growthBusy &&
+        !this.growthDirector.busy &&
+        !this.sceneDirector?.busy &&
+        !this.travelDirector.busy,
+      onTerrain: (event) => {
+        this.plugins?.events.emit("core:terrain-motion", event);
+        if (event.kind === "fault")
+          this.ui?.toast("地形规则发生错误：" + event.reason);
+      },
       npcBehaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors),
       now: this.timeline.now,
       objects: (map) =>

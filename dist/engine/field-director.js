@@ -67,10 +67,7 @@ export class FieldDirector {
         ...(id === "player" && this.field.movement
           ? {
               passage: (c) =>
-                this.field.movement.traversal(
-                  mode || this.field.movement.state.mode,
-                  c,
-                ),
+                this.field.traversal(mode || this.field.movement.state.mode, c),
             }
           : {}),
       },

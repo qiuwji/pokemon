@@ -43,12 +43,49 @@ export class MovementRegistry {
       )
     )
       throw new Error("Invalid movement map constraint");
+    const techniques = readOnly(definition.techniques || {}, 8192);
+    if (
+      !techniques ||
+      Array.isArray(techniques) ||
+      typeof techniques !== "object" ||
+      Object.keys(techniques).length > 32
+    )
+      throw new Error("Invalid movement techniques");
+    for (const [key, value] of Object.entries(techniques)) {
+      if (
+        !/^[a-zA-Z0-9_.:-]{1,128}$/.test(key) ||
+        key === "normal" ||
+        !value ||
+        typeof value !== "object" ||
+        Array.isArray(value) ||
+        Object.keys(value).some(
+          (k) =>
+            ![
+              "name",
+              "pose",
+              "jump",
+              "keepFacing",
+              "freezeAnimation",
+              "oneStep",
+            ].includes(k),
+        ) ||
+        !value.name ||
+        typeof value.name !== "string" ||
+        typeof value.pose !== "string" ||
+        !/^[a-zA-Z0-9_.:-]{1,128}$/.test(value.pose) ||
+        ["jump", "keepFacing", "freezeAnimation", "oneStep"].some(
+          (k) => value[k] !== undefined && typeof value[k] !== "boolean",
+        )
+      )
+        throw new Error("Invalid movement technique definition");
+    }
     this.definitions.set(
       id,
       Object.freeze({
         ...definition,
         durations: Object.freeze([...definition.durations]),
         mapRequires,
+        techniques,
       }),
     );
   }
@@ -77,6 +114,7 @@ export class MovementService {
     });
     this.registry.get(state.mode);
     this.momentum = { mode: null, direction: null, steps: 0 };
+    this.technique = "normal";
   }
   available(mode, map, { scripted = false } = {}) {
     const definition = this.registry.get(mode);
@@ -89,12 +127,27 @@ export class MovementService {
     if (!this.available(mode, map, options))
       return { ok: false, reason: "Movement mode is unavailable here" };
     this.state.mode = mode;
+    this.technique = "normal";
     this.reset();
     this.onChange(mode);
     return { ok: true, mode };
   }
   reset() {
     this.momentum = { mode: null, direction: null, steps: 0 };
+  }
+  setTechnique(id, map) {
+    const definition = this.registry.get(this.state.mode);
+    if (
+      !this.available(this.state.mode, map) ||
+      (id !== "normal" && !definition.techniques[id])
+    )
+      return { ok: false, reason: "Movement technique is unavailable" };
+    this.technique = id;
+    this.onChange(this.state.mode);
+    return { ok: true, technique: id };
+  }
+  techniqueVisual() {
+    return this.registry.get(this.state.mode).techniques[this.technique] || {};
   }
   effective({ running = false, mode, scripted = false, map } = {}) {
     if (mode) return this.available(mode, map, { scripted }) ? mode : null;
@@ -135,9 +188,11 @@ export class MovementService {
     };
   }
   commit(plan) {
+    if (this.techniqueVisual().oneStep) this.technique = "normal";
     this.momentum = { ...plan.momentum };
     if (this.state.mode !== plan.afterMode) {
       this.state.mode = plan.afterMode;
+      this.technique = "normal";
       this.reset();
       this.onChange(this.state.mode);
     }
@@ -145,6 +200,7 @@ export class MovementService {
   normalize(map) {
     if (!this.available(this.state.mode, map)) {
       this.state.mode = this.baseMode;
+      this.technique = "normal";
       this.reset();
       this.onChange(this.state.mode);
     }

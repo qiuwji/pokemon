@@ -1,6 +1,6 @@
 import { findWatchingTrainer } from "../../../engine/field-triggers.js";
 import { isWater } from "../../../engine/terrain.js";
-import { isGrass } from "../../../engine/terrain.js";
+import { isGrass, hasEncounterTerrain } from "../../../engine/terrain.js";
 import { bindApplicationPorts } from "./ports.js";
 export const TRIGGERS_PORTS = Object.freeze([
   "encounterService",
@@ -66,7 +66,7 @@ export class TriggersApplication {
     if (
       s.party.some((m) => !m.egg) &&
       s.flags.rescued &&
-      (water || isGrass(cell?.behavior)) &&
+      ((water && hasEncounterTerrain(cell?.behavior)) || isGrass(cell?.behavior)) &&
       entries &&
       this.world.steps - this.lastEncounterSteps > 3 &&
       !this.ui.dialog

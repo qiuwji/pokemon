@@ -6,12 +6,14 @@ export function createMovementInterface(
   function showMovement() {
     const modes = game.movementOptions(),
       fieldActions = game.fieldActionOptions(),
+      techniques = game.movementTechniqueOptions(),
       flights = game.travel.list(),
       training = game.state.flags.fieldTraining;
     modal(
       "旅行与移动",
       `<p>当前：${escapeHTML(modes.find((v) => v.id === game.state.movement.mode)?.name || "冲浪")}</p>
       <div class="menu-grid">${modes.map((v) => `<button class="menu-tile" data-mode="${v.id}" ${v.allowed ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.allowed ? "切换移动方式" : "尚未获得或此处不能骑车"}</small></button>`).join("")}</div>
+      ${techniques.length > 1 ? `<h3>骑行技巧</h3><div class="menu-grid">${techniques.map((v) => `<button class="menu-tile" data-technique="${escapeHTML(v.id)}">${escapeHTML(v.name)}</button>`).join("")}</div>` : ""}
       <h3>野外行动</h3><div class="menu-grid">${fieldActions.map((v, index) => `<button class="menu-tile" data-field-action="${index}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "使用野外行动" : escapeHTML(v.reason)}</small></button>`).join("")}</div>
       <h3>飞往已到访的城镇</h3><div class="menu-grid">${flights.map((v) => `<button class="menu-tile" data-flight="${v.id}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "准备起飞" : escapeHTML(v.reason)}</small></button>`).join("")}</div>
       ${!training ? `<p>完成博士的图鉴委托后，可以借用两辆研究用自行车，并在本次野外研究中试用冲浪与飞行。</p><button class="primary-button" data-equipment ${game.state.flags.pokedex ? "" : "disabled"}>领取研究用移动装备</button>` : `<p>已借用研究装备。面对水面按 A 使用冲浪，靠岸后自动改为步行。</p>`}`,
@@ -28,6 +30,13 @@ export function createMovementInterface(
           }
         }),
     );
+    root.querySelectorAll("[data-technique]").forEach((button) => {
+      button.onclick = () => {
+        const result = game.setMovementTechnique(button.dataset.technique);
+        if (!result.ok) toast(result.reason);
+        else closeModal();
+      };
+    });
     root.querySelectorAll("[data-flight]").forEach(
       (button) =>
         (button.onclick = async () => {

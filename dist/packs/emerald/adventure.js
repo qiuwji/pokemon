@@ -243,6 +243,12 @@ export class EmeraldAdventure {
   setMovementMode(...args) {
     return this.applications.movement.setMovementMode(...args);
   }
+  movementTechniqueOptions(...args) {
+    return this.applications.movement.movementTechniqueOptions(...args);
+  }
+  setMovementTechnique(...args) {
+    return this.applications.movement.setMovementTechnique(...args);
+  }
   boardSurf(...args) {
     return this.applications.movement.boardSurf(...args);
   }

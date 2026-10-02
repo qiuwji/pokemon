@@ -106,6 +106,7 @@ export class World {
               elevation: dest.blocks[i] >> 12,
             },
             map: dest,
+            mapId: id,
             dir,
             from: { ...p },
             warp: null,
@@ -162,7 +163,14 @@ export class World {
     if (
       !cell ||
       obj ||
-      !this.passage({ cell, map: m, dir, from: { ...p }, warp }) ||
+      !this.passage({
+        cell,
+        map: m,
+        mapId: p.map,
+        dir,
+        from: { ...p },
+        warp,
+      }) ||
       oneWay === dir
     ) {
       this.onBlocked(obj ? "object" : "wall", obj);

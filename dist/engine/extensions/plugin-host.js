@@ -181,6 +181,26 @@ export class PluginHost {
                 ),
               };
             }
+            if (kind === "terrainRules") {
+              const original = value;
+              value = {
+                ...value,
+                ...Object.fromEntries(
+                  ["when", "before", "after"]
+                    .filter((key) => original[key])
+                    .map((key) => {
+                      if (typeof original[key] !== "function")
+                        throw new Error(
+                          "Terrain rules require synchronous callbacks",
+                        );
+                      return [
+                        key,
+                        (context) => evaluate(original[key], readOnly(context)),
+                      ];
+                    }),
+                ),
+              };
+            }
             return content.register(kind, id, value);
           },
         }),

@@ -90,6 +90,21 @@ export class MovementApplication {
     if (!result.ok) result.reason = "这里不能使用这辆自行车。";
     return result;
   }
+  movementTechniqueOptions() {
+    const definition = this.movement.registry.get(this.state.movement.mode);
+    return [
+      { id: "normal", name: "普通骑行" },
+      ...Object.entries(definition.techniques).map(([id, t]) => ({
+        id,
+        name: t.name,
+      })),
+    ];
+  }
+  setMovementTechnique(id) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前移动。" };
+    return this.movement.setTechnique(id, this.world.map);
+  }
   async boardSurf() {
     if (!this.canManageParty() || !this.fieldCapabilities().surf)
       return { ok: false, reason: "还不能使用冲浪。" };
