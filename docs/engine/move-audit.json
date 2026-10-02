@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 6,
+    "missing": 1,
     "disabled": 0,
-    "registered-unverified": 192
+    "registered-unverified": 197
   },
   "effects": [
     {
@@ -449,7 +449,7 @@
         "pay_day"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "light_screen",
@@ -575,7 +575,7 @@
         "hi_jump_kick"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "mist",
@@ -1649,7 +1649,7 @@
         "beat_up"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "semi_invulnerable",
@@ -1922,7 +1922,7 @@
         "magic_coat"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "recycle",
@@ -2035,7 +2035,7 @@
         "snatch"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "low_kick",

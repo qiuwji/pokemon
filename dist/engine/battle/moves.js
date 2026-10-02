@@ -1,4 +1,5 @@
-import { effectiveness } from "../model.js";
+import { BattleDamageCalculation } from "./damage-calculation.js";
+import { BattleMoveInterception } from "./interception.js";
 import { canAct } from "./readiness.js";
 export const STRUGGLE = Object.freeze({
   name: "挣扎",
@@ -20,6 +21,8 @@ export function selectedMove(b, seat, index) {
 export class MoveExecutor {
   constructor(battle) {
     this.battle = battle;
+    this.damage = new BattleDamageCalculation(battle);
+    this.interception = new BattleMoveInterception(battle);
   }
   context(actorSeat, targetSeat, move, definition) {
     const b = this.battle,
@@ -153,6 +156,12 @@ export class MoveExecutor {
       b.actionLifecycle.record(action, move.id, false);
       return false;
     }
+    const interception = this.interception.execute(initial, targets);
+    if (interception !== null) {
+      event.move.successful = interception;
+      b.actionLifecycle.record(action, move.id, interception);
+      return interception;
+    }
     if (lifecycle.charging) {
       b.moveEffects.run("onCharge", initial);
       initial.emit("正在蓄力！", "charge", {
@@ -181,7 +190,10 @@ export class MoveExecutor {
       b.phase = "hit-check";
       const visualResult = { seatId: target.id, successful: false };
       event.move.targetResults.push(visualResult);
-      if (!this.hits(c)) continue;
+      if (!this.hits(c)) {
+        b.moveEffects.run("onMiss", c);
+        continue;
+      }
       if (definition.primary) {
         b.traits?.run("primary", c);
         b.phase = "primary";
@@ -234,18 +246,23 @@ export class MoveExecutor {
       return true;
     const hitPermission = { ...c, allowed: true, guaranteed: false };
     this.battle.traits?.run("hit-check", hitPermission);
-    if (!hitPermission.allowed) return false;
+    if (!hitPermission.allowed) {
+      c.missReason = "hook";
+      return false;
+    }
     const hidden = this.battle.actionLifecycle.hidden(c.targetSeat);
     if (
       hidden &&
       !hitPermission.guaranteed &&
       !c.definition.hitsHidden?.includes(hidden)
     ) {
+      c.missReason = "hidden";
       c.emit("目标暂时无法被攻击！", "failed");
       return false;
     }
     if (hidden) c.power *= c.definition.hiddenMultiplier || 1;
     if (c.targetState.protected) {
+      c.missReason = "protected";
       c.emit("对方保护了自己！");
       return false;
     }
@@ -272,11 +289,13 @@ export class MoveExecutor {
       const permission = { ...c, allowed: true };
       this.battle.traits?.run("immunity", permission);
       if (!permission.allowed) {
+        c.missReason = "immunity";
         c.emit("没有效果。", "trait");
         return false;
       }
       return true;
     }
+    c.missReason = "accuracy";
     c.emit("攻击没有命中！");
     return false;
   }
@@ -284,6 +303,7 @@ export class MoveExecutor {
     const b = this.battle,
       options = c.definition.hits || [1],
       hits =
+        c.hitPlans?.length ||
         c.definition.hitPowers?.length ||
         (options.length === 1
           ? options[0]
@@ -291,62 +311,7 @@ export class MoveExecutor {
     for (let i = 0; i < hits && c.opponent.hp > 0; i++) {
       if (c.definition.hitPowers) c.power = c.definition.hitPowers[i];
       if (i > 0 && c.definition.accuracyEachHit && !this.hits(c)) break;
-      const criticalPermission = { ...c, allowed: true };
-      b.traits?.run("critical-check", criticalPermission);
-      const critical =
-        !c.definition.noCritical &&
-        c.fixedDamage === undefined &&
-        criticalPermission.allowed &&
-        b.rules.critical({
-          stage:
-            b.traits?.calculate(
-              "critical-stage",
-              (c.selfState.focus ? 2 : 0) + (c.definition.criticalStage || 0),
-              c,
-            ) ??
-            (c.selfState.focus ? 2 : 0) + (c.definition.criticalStage || 0),
-          rng: b.rng,
-          chances: b.rules.criticalChances,
-        });
-      const power = b.rules.environmentPower({
-        power: c.power,
-        type: c.move.type,
-        waterSport: b.waterSport,
-        mudSport: b.mudSport,
-      });
-      const spread =
-        c.targetMode === "opponents" && c.targetCount > 1 ? 0.5 : 1;
-      const result =
-        c.fixedDamage !== undefined
-          ? {
-              amount: c.fixedDamage,
-              type: effectiveness(
-                c.move.type,
-                b.traits.types(c.targetSeat),
-                b.db.typeChart,
-              ),
-              critical: false,
-            }
-          : b.rules.damage(
-              b.forms.effective(c.mon),
-              b.forms.effective(c.opponent),
-              c.move,
-              b.db,
-              b.rng,
-              {
-                aStages: c.selfState.stages,
-                dStages: c.targetState.stages,
-                critical,
-                power,
-                spread,
-                baseMultiplier: c.baseMultiplier || 1,
-                modifier: (phase, value, formula) =>
-                  b.traits?.calculate(phase, value, { ...c, ...formula }) ??
-                  value,
-                attackerTypes: b.traits?.types(c.actorSeat),
-                defenderTypes: b.traits?.types(c.targetSeat),
-              },
-            );
+      const result = this.damage.roll(c, c.hitPlans?.[i] || null);
       let amount = Math.min(
         Math.max(0, c.opponent.hp - (c.definition.minimumHP || 0)),
         result.type === 0 ? 0 : result.amount,
@@ -370,6 +335,7 @@ export class MoveExecutor {
           hit: i + 1,
           moveId: c.move.id,
           moveType: c.move.type,
+          ...(c.hitPlans?.[i] ? { memberUid: c.hitPlans[i].memberUid } : {}),
         },
       );
       b.traits?.run("after-hit", { ...c, amount, hit: i + 1 });

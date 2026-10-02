@@ -175,6 +175,15 @@ export class BattleApplication {
     return {
       commit: () => {
         if (committed) return;
+        const reward = b.spoils?.reward || 0;
+        const money = reward
+          ? b.rules.rewardCurrency({
+              current: this.state.money,
+              amount: reward,
+            })
+          : this.state.money;
+        if (!Number.isSafeInteger(money) || money < 0)
+          throw new Error("Invalid currency settlement");
         if (b.result !== "loss")
           this.encounterService().afterBattle(
             this.state.party,
@@ -187,6 +196,7 @@ export class BattleApplication {
                 ],
               }),
           );
+        this.state.money = money;
         committed = true;
       },
       after: () => {

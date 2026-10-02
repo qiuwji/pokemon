@@ -1,4 +1,5 @@
 import { BattleHeldItems } from "./battle/held-items.js";
+import { BattleSpoils } from "./battle/spoils.js";
 import { BattleMajorStatus } from "./battle/major-status.js";
 import { CreatureFormRegistry, CreatureForms } from "./creatures/forms.js";
 import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
@@ -60,6 +61,7 @@ export class Battle {
       throw new Error("Unknown battle format");
     Object.assign(this, { db, rng, trainer, trainerId, script, items, ai });
     this.environment = { terrain: environment.terrain || "grass" };
+    this.turnOrder = [];
     this.rules = { ...BATTLE_RULES, ...rules };
     this.moveEffects =
       effects instanceof MoveEffectRegistry
@@ -156,6 +158,7 @@ export class Battle {
     this.moves = new MoveExecutor(this);
     this.rounds = new RoundResolver(this);
     this.equipment = new BattleHeldItems(this);
+    this.spoils = new BattleSpoils(this);
     this.traits = new BattleTraits(this, traits);
     this.statuses = new BattleMajorStatus(this);
     this.entryView = this.snapshot();
@@ -447,6 +450,9 @@ export class Battle {
           winner,
         }) ?? 1;
       this.ended = true;
+      this.result = result;
+      this.winner = winner;
+      this.spoils.settle(result);
       for (const seat of this.roster.seats.values()) {
         const original = this.conditions.get(seat.id).originalAbility;
         if (original && this.roster.occupant(seat.id))
@@ -457,8 +463,6 @@ export class Battle {
       this.actionLifecycle.clearAll();
       for (const controller of this.roster.controllers.values())
         for (const mon of controller.party) this.forms.restore(mon, "end");
-      this.result = result;
-      this.winner = winner;
     }
   }
 }

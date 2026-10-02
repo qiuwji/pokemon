@@ -245,6 +245,17 @@ define("choice_band", [
 ]);
 define("focus_band", [
   {
+    phase: "damage-preview",
+    role: "target",
+    modify: (v, c) =>
+      !c.substitute &&
+      v >= c.owner.hp &&
+      c.owner.hp > 0 &&
+      c.battle.rng.next() * 100 < param(c)
+        ? c.owner.hp - 1
+        : v,
+  },
+  {
     phase: "damage",
     role: "target",
     when: (c) =>

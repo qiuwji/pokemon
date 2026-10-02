@@ -176,6 +176,14 @@ export class CreatureForms {
       },
     };
   }
+  baseStats(mon) {
+    const r = this.records[mon.uid],
+      d = this.registry.definitions[r?.id];
+    return {
+      ...this.registry.db.species[r?.overrides?.species || mon.species].stats,
+      ...d?.baseStats,
+    };
+  }
   effective(mon) {
     const r = this.records[mon.uid];
     if (!r) return mon;

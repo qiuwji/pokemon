@@ -21,6 +21,7 @@ export class BattleCheckpoint {
       knocked: clone(b.equipment.knocked),
       used: clone(b.equipment.used),
     };
+    this.spoils = { coins: b.spoils.coins, reward: b.spoils.reward };
     this.forms = { records: clone(b.forms.records), used: clone(b.forms.used) };
     this.conditions = clone(b.conditions.states);
     this.battleStates = clone(b.states.instances);
@@ -71,6 +72,7 @@ export class BattleCheckpoint {
     for (const { seat, index } of this.seats) seat.index = index;
     Object.assign(b.forms, clone(this.forms));
     Object.assign(b.equipment, clone(this.equipment));
+    Object.assign(b.spoils, this.spoils);
     b.conditions.states = clone(this.conditions);
     b.states.instances = clone(this.battleStates);
     b.states.sequence = this.stateSequence;

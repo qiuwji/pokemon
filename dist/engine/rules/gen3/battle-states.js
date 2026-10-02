@@ -28,6 +28,20 @@ const screen = (physical) => ({
 });
 /** Third-generation policies; timers and HP costs verified in battle_script_commands.c / battle_util.c. */
 export const GEN3_BATTLE_STATES = {
+  magic_coat: {
+    scope: "seat",
+    duration: 1,
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [],
+  },
+  snatch: {
+    scope: "seat",
+    duration: 1,
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [],
+  },
   ...GEN3_CONTROL_STATES,
   ...GEN3_SUPPORT_STATES,
   ...GEN3_CONTINUOUS_STATES,
@@ -59,6 +73,12 @@ export const GEN3_BATTLE_STATES = {
     clearOn: ["leave", "faint", "end"],
     schema: empty,
     hooks: [
+      {
+        phase: "damage-preview",
+        role: "target",
+        modify: (v, c) =>
+          c.substitute ? v : Math.min(v, Math.max(0, c.owner.hp - 1)),
+      },
       {
         phase: "damage",
         role: "target",

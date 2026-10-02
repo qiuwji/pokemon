@@ -6,6 +6,9 @@ import {
 } from "./model.js";
 import { BATTLE_POLICY } from "./rule-policy.js";
 export const BATTLE_RULES = {
+  payDayReward: ({ result, coins, multiplier }) =>
+    result === "win" ? coins * multiplier : 0,
+  rewardCurrency: ({ current, amount }) => Math.min(999999, current + amount),
   ...BATTLE_POLICY,
   outcome: ({
     homeAlive,

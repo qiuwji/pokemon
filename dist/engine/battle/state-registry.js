@@ -57,6 +57,7 @@ export class BattleStateRegistry {
         "afterDamage",
         "secondary",
         "onCharge",
+        "onMiss",
       ])
         for (const s of d[phase] || [])
           if (["applyBattleState", "removeBattleState"].includes(s.op))

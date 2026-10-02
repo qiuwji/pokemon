@@ -65,6 +65,11 @@ export const GEN3_EXTENDED_MOVE_EFFECTS = {
     afterDamage: [{ op: "uproar" }],
   },
   triple_kick: { hitPowers: [10, 20, 30], accuracyEachHit: true },
+  beat_up: { beforeDamage: [{ op: "beatUp" }] },
+  recoil_if_miss: { onMiss: [{ op: "crash" }] },
+  pay_day: { afterDamage: [{ op: "scatterCoins" }] },
+  magic_coat: primary("interceptionGuard", { id: "magic_coat" }, true),
+  snatch: primary("interceptionGuard", { id: "snatch" }, true),
   smellingsalt: {
     beforeDamage: [{ op: "paralysisPower" }],
     afterDamage: [{ op: "wakeTarget" }],

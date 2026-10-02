@@ -99,6 +99,7 @@ export interface MoveEffectDefinition {
     skipWeather?: string;
   };
   onCharge?: EffectStep[];
+  onMiss?: EffectStep[];
   hitsHidden?: ("air" | "underground" | "underwater")[];
   hiddenMultiplier?: number;
   bypassHitChecks?: boolean;
