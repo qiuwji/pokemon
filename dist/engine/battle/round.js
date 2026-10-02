@@ -158,6 +158,7 @@ export class RoundResolver {
         if (b.ended) break;
       }
     }
+    if (!b.ended) b.states.tick();
     if (b.weather?.turns && --b.weather.turns === 0) {
       b.weather = null;
       b.emit("天气恢复了平静。", "weather");

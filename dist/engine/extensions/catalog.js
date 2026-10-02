@@ -20,6 +20,7 @@ export const CONTENT_KINDS = Object.freeze([
   "encounters",
   "battleStrategies",
   "conditionQueries",
+  "battleStates",
 ]);
 /** Startup registration is staged; failed plugin setup cannot leak partial definitions. */
 export class ExtensionCatalog {
@@ -150,6 +151,8 @@ export function ruleContext(context) {
     "mode",
     "attachmentId",
     "attachmentKind",
+    "battleState",
+    "reason",
     "attachment",
     "sameLocation",
     "critical",

@@ -18,6 +18,8 @@ export class BattleCheckpoint {
       index: seat.index,
     }));
     this.conditions = clone(b.conditions.states);
+    this.battleStates = clone(b.states.instances);
+    this.stateSequence = b.states.sequence;
     this.defeated = clone(b.outcomes.defeated);
     this.encounters = clone(b.outcomes.encounters);
     this.pending = clone(b.decisions.pending);
@@ -55,6 +57,8 @@ export class BattleCheckpoint {
     }
     for (const { seat, index } of this.seats) seat.index = index;
     b.conditions.states = clone(this.conditions);
+    b.states.instances = clone(this.battleStates);
+    b.states.sequence = this.stateSequence;
     b.outcomes.defeated = clone(this.defeated);
     b.outcomes.encounters = clone(this.encounters);
     b.decisions.pending = clone(this.pending);

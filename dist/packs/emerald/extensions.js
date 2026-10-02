@@ -1,4 +1,6 @@
 import { validateTrainerSight } from "../../engine/field-triggers.js";
+import { BattleStateRegistry } from "../../engine/battle/state-registry.js";
+import { GEN3_BATTLE_STATES } from "../../engine/rules/gen3/battle-states.js";
 import { ConditionQueries } from "../../engine/condition-queries.js";
 import { TRAINERS } from "./trainers.js";
 import { validateTrainers } from "../../engine/trainer-encounters.js";
@@ -49,8 +51,13 @@ export function createEmeraldPlugins(db, plugins, onError) {
     validateTrainers(c.trainers, c, strategies);
     new EncounterTableRegistry(c.encounters, c);
     validateWorldExtensions(c, host.catalog.entries.values());
+    const battleStates = new BattleStateRegistry({
+      ...GEN3_BATTLE_STATES,
+      ...c.battleStates,
+    });
     const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
     effects.validateMoves(c.moves);
+    battleStates.validateEffects(effects);
     createItemService(c.items);
     new MovementRegistry(c.movement);
     const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors);
@@ -61,7 +68,11 @@ export function createEmeraldPlugins(db, plugins, onError) {
       conditions: extensionGrowthConditions(c.growthConditions),
     });
     new AttachedRules({
-      definitions: { ability: c.abilities, heldItem: c.heldItems },
+      definitions: {
+        ability: c.abilities,
+        heldItem: c.heldItems,
+        battleState: battleStates.definitions,
+      },
       operations: effects.operations,
       owners: () => [],
       context: (c) => c,

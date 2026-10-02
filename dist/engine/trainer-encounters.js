@@ -136,7 +136,7 @@ export function createTrainerEncounter(
     party.filter((m) => m.hp > 0 && !m.egg).length <
     (trainer.requiresPartners || seats)
   )
-    throw new Error("需要足够的可战斗伙伴才能参加这场挑战。");
+    throw new Error("需要两位还能战斗的伙伴才能参加这场挑战。");
   const seed = rng.snapshot();
   try {
     const enemyParty = createTrainerTeam(trainer, db, rng),

@@ -145,7 +145,7 @@ export class PluginHost {
                 throw new Error("Growth condition requires predicate");
               value = { ...value, schema: validateSchema(value.schema) };
             }
-            if (["abilities", "heldItems"].includes(kind))
+            if (["abilities", "heldItems", "battleStates"].includes(kind))
               value = safeTrait(value, evaluate);
             if (kind === "movement") {
               const original = value;

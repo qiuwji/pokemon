@@ -214,7 +214,7 @@ export function damage(
   const physical = PHYSICAL_TYPES.has(move.type),
     a = physical ? "atk" : "spa",
     d = physical ? "def" : "spd";
-  const context = { attacker, defender, move };
+  const context = { attacker, defender, move, critical };
   let atk = Math.max(
     1,
     Math.floor(modifier("attack", attacker.stats[a], { ...context, stat: a })),

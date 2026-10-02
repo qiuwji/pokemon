@@ -877,6 +877,7 @@ export class EmeraldAdventure {
       bag: this.state.bag,
       items: this.items,
       effects: this.moveEffects,
+      states: this.catalog.battleStates,
       environment: {
         terrain: this.world.map.indoor
           ? "indoor"

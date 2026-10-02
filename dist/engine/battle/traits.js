@@ -6,7 +6,11 @@ export class BattleTraits {
     this.abilities = abilities;
     this.heldItems = heldItems;
     this.runtime = new AttachedRules({
-      definitions: { ability: abilities, heldItem: heldItems },
+      definitions: {
+        ability: abilities,
+        heldItem: heldItems,
+        battleState: battle.states.registry.definitions,
+      },
       operations: battle.moveEffects.operations,
       hooks,
       owners: (...args) => this.owners(...args),
@@ -23,6 +27,7 @@ export class BattleTraits {
   }
   owners(kind, id, hook, c) {
     const b = this.battle;
+    if (kind === "battleState") return b.states.owners(id, hook, c);
     const candidates =
       hook.role === "actor"
         ? [c.actorSeat]
@@ -41,10 +46,14 @@ export class BattleTraits {
     );
   }
   context(c, ownerSeat, kind, id, phase) {
-    const b = this.battle,
-      owner = b.roster.occupant(ownerSeat);
+    const b = this.battle;
+    const stateContext =
+      kind === "battleState" ? b.states.context(ownerSeat, c) : null;
+    if (stateContext) ownerSeat = stateContext.seat;
+    const owner = b.roster.occupant(ownerSeat);
     const context = {
       ...c,
+      ...(stateContext ? { battleState: stateContext.state } : {}),
       battle: b,
       weather: phase === "weather" ? b.weather?.kind || null : this.weather(),
       fieldCombatants: b.roster.occupied().map((s) => b.roster.occupant(s.id)),
@@ -58,7 +67,10 @@ export class BattleTraits {
       owner,
       attachmentKind: kind,
       attachmentId: id,
-      attachment: this[kind === "ability" ? "abilities" : "heldItems"][id],
+      attachment:
+        kind === "battleState"
+          ? b.states.registry.get(id)
+          : this[kind === "ability" ? "abilities" : "heldItems"][id],
       target: owner,
       targetSide: ownerSeat,
       emit: (text, event = "trait", extra = {}) =>
@@ -86,6 +98,8 @@ export class BattleTraits {
       "targetSeats",
       "reverseDrain",
       "amount",
+      "substituteDamage",
+      "substituteHit",
     ])
       Object.defineProperty(context, key, {
         get: () => c[key],

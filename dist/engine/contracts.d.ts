@@ -345,7 +345,8 @@ export type ContentKind =
   | "trainers"
   | "encounters"
   | "battleStrategies"
-  | "conditionQueries";
+  | "conditionQueries"
+  | "battleStates";
 export interface PluginStateDefinition {
   clock: "step" | "round" | "manual" | "permanent";
   schema: DataSchema;

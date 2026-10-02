@@ -141,6 +141,7 @@ export class MoveExecutor {
       b.moveEffects.run("afterDamage", c, { scope: "target" });
       if (
         c.dealt &&
+        !c.substituteHit &&
         c.opponent.hp > 0 &&
         definition.secondary?.length &&
         b.rng.next() * 100 <
@@ -248,7 +249,9 @@ export class MoveExecutor {
       if (!Number.isInteger(amount) || amount < 0 || amount > c.opponent.hp)
         throw new Error("Invalid impact amount");
       c.opponent.hp -= amount;
-      c.dealt += amount;
+      c.dealt += amount + (impact.substituteDamage || 0);
+      c.realDealt = (c.realDealt || 0) + amount;
+      c.substituteHit ||= !!impact.substituteHit;
       b.phase = "damage";
       c.emit(
         `${result.critical ? "击中了要害！ " : ""}${result.type === 0 ? "没有效果。" : result.type > 1 ? "效果拔群！" : result.type < 1 ? "效果不太好…" : "攻击命中了！"}`,
@@ -261,10 +264,10 @@ export class MoveExecutor {
         },
       );
       b.traits?.run("after-hit", { ...c, amount, hit: i + 1 });
-      if (c.move.contact)
+      if (c.move.contact && !impact.substituteHit)
         b.traits?.run("contact", { ...c, amount, hit: i + 1 });
       if (c.mon.hp <= 0) break;
     }
-    if (c.targetState.bide) c.targetState.bide.damage += c.dealt;
+    if (c.targetState.bide) c.targetState.bide.damage += c.realDealt || 0;
   }
 }

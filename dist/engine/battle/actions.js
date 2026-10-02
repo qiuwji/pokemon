@@ -96,6 +96,7 @@ export class BattleActions {
       old = b.roster.occupant(seat),
       mon = b.roster.owner(seat).party[index];
     b.traits?.run("leave", { ownerSeat: seat, actorSeat: seat });
+    b.states.clear("leave", seat);
     const originalAbility = b.conditions.get(seat).originalAbility;
     if (originalAbility && old) old.ability = originalAbility;
     b.roster.replace(seat, index);

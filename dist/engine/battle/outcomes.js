@@ -37,6 +37,7 @@ export class BattleOutcomes {
       b.phase = "faint";
       b.emit(`${b.name(mon)} 倒下了！`, "faint", { targetSeat: seat.id });
       b.traits?.run("faint", { targetSeat: seat.id, ownerSeat: seat.id });
+      b.states.clear("faint", seat.id);
       const friendship = new FriendshipService({
         abilities: b.traits.abilities,
         heldItems: b.traits.heldItems,

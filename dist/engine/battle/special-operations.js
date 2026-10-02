@@ -1,6 +1,22 @@
 import { effectiveness } from "../model.js";
 /** Special move operations use the same validated effect registry as ordinary attacks. */
 export const SPECIAL_MOVE_OPERATIONS = {
+  createSubstitute(c) {
+    const cost = Math.max(1, Math.floor(c.mon.stats.hp / 4));
+    if (c.mon.hp <= cost || c.battle.states.lookup("substitute", c.actorSeat)) {
+      c.successful = false;
+      c.emit("无法制造替身。", "failed");
+      return;
+    }
+    c.battle.states.attach("substitute", c.actorSeat, {
+      data: { hp: cost },
+      sourceSeat: c.actorSeat,
+      moveId: c.move.id,
+    });
+    c.mon.hp -= cost;
+    c.selfState.traps = 0;
+    c.emit("制造了替身！", "barrier", { targetSeat: c.actorSeat });
+  },
   forceSwitch(c) {
     const b = c.battle;
     const permission = { ...c, forced: true, allowed: true };

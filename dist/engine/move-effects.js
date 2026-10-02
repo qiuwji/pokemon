@@ -1,3 +1,4 @@
+import { BATTLE_STATE_OPERATIONS } from "./battle/state-operations.js";
 import { TARGET_MODES } from "./battle/targeting.js";
 import { EffectRegistry } from "./effects.js";
 import { SPECIAL_MOVE_OPERATIONS } from "./battle/special-operations.js";
@@ -26,6 +27,20 @@ const stages = (target, changes) => ({
 /** One catalog; phases describe when effects run. No fallback string dispatch. */
 export const MOVE_EFFECTS = {
   hit: {},
+  reflect: {
+    target: "self",
+    primary: [{ op: "applyBattleState", id: "reflect", target: "self" }],
+  },
+  light_screen: {
+    target: "self",
+    primary: [{ op: "applyBattleState", id: "light_screen", target: "self" }],
+  },
+  mist: {
+    target: "self",
+    primary: [{ op: "applyBattleState", id: "mist", target: "self" }],
+  },
+  taunt: { primary: [{ op: "applyBattleState", id: "taunt" }] },
+  substitute: { target: "self", primary: [{ op: "createSubstitute" }] },
   ohko: { ...PRIMARY("ohko"), alwaysHits: true },
   roar: PRIMARY("forceSwitch"),
   thief: { afterDamage: [{ op: "stealItem" }] },
@@ -119,10 +134,8 @@ for (const id of [
   "mirror_move",
   "endeavor",
   "swagger",
-  "taunt",
   "flail",
   "belly_drum",
-  "mist",
   "stockpile",
   "swallow",
   "spit_up",
@@ -287,6 +300,7 @@ export class MoveEffectRegistry {
     this.operations = new EffectRegistry({
       ...MOVE_OPERATIONS,
       ...TRAIT_OPERATIONS,
+      ...BATTLE_STATE_OPERATIONS,
       ...SPECIAL_MOVE_OPERATIONS,
       ...operations,
     });

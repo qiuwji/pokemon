@@ -3,6 +3,11 @@ import { BATTLE_RULES } from "./battle-rules.js";
 import { MoveEffectRegistry } from "./move-effects.js";
 import { createItemService } from "./items.js";
 import { BattleRoster, teamRoster } from "./battle/roster.js";
+import {
+  BattleStateRegistry,
+  BattleStateService,
+} from "./battle/state-registry.js";
+import { GEN3_BATTLE_STATES } from "./rules/gen3/battle-states.js";
 import { BattleVolatiles } from "./battle/volatiles.js";
 import { BattleEvents, monsterView } from "./battle/events.js";
 import { BattleActions } from "./battle/actions.js";
@@ -38,6 +43,7 @@ export class Battle {
     format = "singles",
     ai = randomDecision,
     environment = {},
+    states = {},
     traits = {
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
@@ -83,6 +89,11 @@ export class Battle {
         throw new Error("Invalid battle move reference");
     }
     this.conditions = new BattleVolatiles(this.roster);
+    this.states = new BattleStateService(
+      this,
+      new BattleStateRegistry({ ...GEN3_BATTLE_STATES, ...states }),
+    );
+    this.states.registry.validateEffects(this.moveEffects);
     this.recorder = new BattleEvents(
       this.roster,
       () => this.decisionView(),
@@ -94,8 +105,14 @@ export class Battle {
               volatile: {
                 stages: { ...this.conditions.get(seat).stages },
                 protected: !!this.conditions.get(seat).protected,
-                barriers: [...(this.conditions.get(seat).barriers || [])],
-                substitute: !!this.conditions.get(seat).substitute,
+                barriers: this.states
+                  .view(seat)
+                  .filter((s) =>
+                    ["reflect", "light_screen", "mist"].includes(s.id),
+                  )
+                  .map((s) => s.id),
+                substitute: !!this.states.lookup("substitute", seat),
+                states: this.states.view(seat),
               },
             }
           : {},
@@ -384,6 +401,7 @@ export class Battle {
         if (original && this.roster.occupant(seat.id))
           this.roster.occupant(seat.id).ability = original;
       }
+      this.states.clear("end");
       this.result = result;
       this.winner = winner;
     }

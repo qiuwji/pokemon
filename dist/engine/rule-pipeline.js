@@ -1,6 +1,9 @@
 /** Ordered rule hooks are session-owned. Effects use one operation registry; numeric rules return values. */
 export const RULE_PHASES = Object.freeze([
   "entry",
+  "state-applied",
+  "state-tick",
+  "state-removed",
   "weather",
   "types",
   "form",
