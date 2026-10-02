@@ -2,14 +2,15 @@ import { PartyTraits } from "./rules/party-traits.js";
 import { createMonster, calculateStats } from "./model.js";
 /** Portable seeded encounter selection. A map supplies weights; party traits supply rule extensions. */
 export class EncounterService {
-  constructor({ db, rng, abilities, heldItems }) {
-    Object.assign(this, { db, rng, abilities, heldItems });
+  constructor({ db, rng, abilities, heldItems, hooks = [] }) {
+    Object.assign(this, { db, rng, abilities, heldItems, hooks });
   }
   traits(party, onEvent = () => {}) {
     return new PartyTraits({
       party,
       abilities: this.abilities,
       heldItems: this.heldItems,
+      hooks: this.hooks,
       onEvent,
     });
   }

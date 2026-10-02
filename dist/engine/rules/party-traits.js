@@ -9,11 +9,13 @@ export class PartyTraits {
     heldItems,
     operations = new EffectRegistry(TRAIT_OPERATIONS),
     onEvent = () => {},
+    hooks = [],
   }) {
     this.party = party;
     this.runtime = new AttachedRules({
       definitions: { ability: abilities, heldItem: heldItems },
       operations,
+      hooks,
       owners: (kind, id, hook, c) => {
         const candidates =
           hook.role === "actor"

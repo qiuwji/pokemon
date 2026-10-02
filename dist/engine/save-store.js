@@ -1,14 +1,45 @@
+export class SaveConflict extends Error {
+  constructor() {
+    super("Save changed in another session");
+    this.code = "save_conflict";
+  }
+}
 /** Storage is a port, not global localStorage. Migration runs before validation. */
 export class SaveStore {
-  constructor(storage, key, validate, version = 1, { migrations = {} } = {}) {
-    Object.assign(this, { storage, key, validate, version, migrations });
+  constructor(
+    storage,
+    key,
+    validate,
+    version = 1,
+    { migrations = {}, diagnose = () => null } = {},
+  ) {
+    Object.assign(this, {
+      storage,
+      key,
+      validate,
+      version,
+      migrations,
+      diagnose,
+    });
+  }
+  acceptCurrent() {
+    this.expectedRaw = this.storage.getItem(this.key) ?? null;
+    this.baselineKnown = true;
+  }
+  raw() {
+    return this.storage.getItem(this.key) ?? null;
   }
   save(state) {
+    const current = this.raw();
+    if (this.baselineKnown && current !== this.expectedRaw)
+      throw new SaveConflict();
     const envelope = { version: this.version, savedAt: Date.now(), state };
     this.storage.setItem(this.key, JSON.stringify(envelope));
+    this.acceptCurrent();
     return envelope.savedAt;
   }
   decode(input) {
+    this.lastIssue = null;
     try {
       const envelope = structuredClone(
         typeof input === "string" ? JSON.parse(input) : input,
@@ -24,14 +55,23 @@ export class SaveStore {
         envelope.state = migrate(envelope.state);
         envelope.version++;
       }
-      return this.validate(envelope.state) ? envelope : null;
+      if (this.validate(envelope.state)) return envelope;
+      this.lastIssue = this.diagnose(envelope.state) || {
+        code: "invalid_state",
+      };
+      return null;
     } catch {
+      this.lastIssue = { code: "invalid_state" };
       return null;
     }
   }
   load() {
     try {
       const raw = this.storage.getItem(this.key);
+      if (!this.baselineKnown) {
+        this.expectedRaw = raw ?? null;
+        this.baselineKnown = true;
+      }
       return raw ? this.decode(raw) : null;
     } catch {
       return null;

@@ -12,8 +12,8 @@ export const FRIENDSHIP_EVENTS = Object.freeze({
   largeFaint: [-5, -5, -10],
 });
 export class FriendshipService {
-  constructor({ abilities, heldItems, events = FRIENDSHIP_EVENTS }) {
-    Object.assign(this, { abilities, heldItems, events });
+  constructor({ abilities, heldItems, hooks = [], events = FRIENDSHIP_EVENTS }) {
+    Object.assign(this, { abilities, heldItems, events, hooks });
   }
   change(
     mon,
@@ -37,6 +37,7 @@ export class FriendshipService {
       party,
       abilities: this.abilities,
       heldItems: this.heldItems,
+      hooks: this.hooks,
     });
     if (delta > 0) {
       delta = Math.floor(

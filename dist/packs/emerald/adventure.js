@@ -1,3 +1,6 @@
+import { extensionGrowthConditions } from "../../engine/extensions/growth-conditions.js";
+import { StoryEngine } from "../../engine/story.js";
+import { GEN3_GLOBAL_HOOKS } from "../../engine/rules/gen3/global-rules.js";
 import { StateCheckpoint } from "../../engine/state-checkpoint.js";
 import { setLead, learnPendingMove } from "../../engine/party.js";
 import { Random, createMonster, healMonster } from "../../engine/model.js";
@@ -57,6 +60,15 @@ export class EmeraldAdventure {
     onMap = () => {},
     onSave = () => {},
     clearInput = () => {},
+    plugins = null,
+    catalog = {
+      items: ITEMS,
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+      movement: MOVEMENT_MODES,
+      destinations: TRAVEL_DESTINATIONS,
+      moveEffects: {},
+    },
   }) {
     Object.assign(this, {
       db,
@@ -69,22 +81,54 @@ export class EmeraldAdventure {
       onMap,
       onSave,
       clearInput,
+      plugins,
+      catalog,
     });
-    this.items = createItemService(ITEMS);
+    this.itemDefinitions = catalog.items;
+    this.story = new StoryEngine(
+      [...(plugins?.story.values() || []), ...EMERALD_STORY.events],
+      EMERALD_STORY.quests,
+    );
+    this.items = createItemService(catalog.items);
     this.partyStorage = new PartyStorageService();
     this.trading = new TradeService({ db });
-    this.equipment = new EquipmentService(GEN3_HELD_ITEMS);
-    this.moveEffects = new MoveEffectRegistry();
+    this.equipment = new EquipmentService(catalog.heldItems);
+    this.moveEffects = new MoveEffectRegistry({
+      definitions: catalog.moveEffects,
+    });
+    this.ruleHooks = plugins?.hooks(this.moveEffects.operations) || [];
     this.moveEffects.validateMoves(db.moves);
-    for (const item of Object.values(ITEMS))
+    for (const item of Object.values(this.itemDefinitions))
       validateCondition(item.purchaseRequires);
     this.saveStore = new SaveStore(
       storage,
       PACK.id,
-      (s) => validateSave(s, db),
+      (s) => validateSave(s, db, catalog, plugins),
       PACK.version,
+      {
+        diagnose: (state) => {
+          const missing = (state?.contentDependencies || []).filter(
+            (id) => !plugins?.manifests.has(id),
+          );
+          return missing.length
+            ? { code: "missing_dependency", dependencies: missing }
+            : null;
+        },
+      },
     );
     const loaded = this.saveStore.load();
+    this.saveProtected =
+      this.saveStore.lastIssue !== null &&
+      ["missing_dependency", "invalid_state"].includes(
+        this.saveStore.lastIssue?.code,
+      );
+    this.saveWarning = this.saveProtected
+      ? this.saveStore.lastIssue.code === "missing_dependency"
+        ? "存档需要插件：" +
+          this.saveStore.lastIssue.dependencies.join("、") +
+          "。原存档已保留，请恢复插件或从菜单明确开始新冒险。"
+        : "存档数据未通过检查。原存档已保留，请导出备份，或从菜单明确开始新冒险。"
+      : null;
     this.state = loaded?.state || this.newState();
     this.lastSave = loaded?.savedAt || 0;
     this.storyBusy = false;
@@ -157,9 +201,10 @@ export class EmeraldAdventure {
               flags: { [c.flag]: true },
               items: { [c.item]: c.amount },
             },
-            { items: ITEMS },
+            { items: this.itemDefinitions },
           ),
-        reward: (c) => grantReward(this.state, c, { items: ITEMS }),
+        reward: (c) =>
+          grantReward(this.state, c, { items: this.itemDefinitions }),
         completeEvent: (c) => completeEvent(this.state, c.id),
         captureMonster: (c) => {
           if (
@@ -197,7 +242,7 @@ export class EmeraldAdventure {
                 c.level <= 100)
           )
             throw new Error("Invalid battle content reference");
-          if (c.type === "reward") validateReward(c, ITEMS);
+          if (c.type === "reward") validateReward(c, this.itemDefinitions);
           if (c.type === "grant")
             validateReward(
               {
@@ -205,11 +250,11 @@ export class EmeraldAdventure {
                 flags: { [c.flag]: true },
                 items: { [c.item]: c.amount },
               },
-              ITEMS,
+              this.itemDefinitions,
             );
           if (
             c.type === "completeEvent" &&
-            !EMERALD_STORY.events.some((e) => e.id === c.id)
+            !this.story.events.some((e) => e.id === c.id)
           )
             throw new Error(`Unknown event ${c.id}`);
           if (
@@ -226,6 +271,7 @@ export class EmeraldAdventure {
     this.ui = ui;
     ui.updateSide();
     this.onSave(this.lastSave, true);
+    if (this.saveWarning) ui.toast(this.saveWarning);
   }
   get world() {
     return this.field.world;
@@ -248,7 +294,9 @@ export class EmeraldAdventure {
       position: { ...PACK.start },
       party: [],
       box: [],
-      bag: Object.fromEntries(Object.keys(ITEMS).map((id) => [id, 0])),
+      bag: Object.fromEntries(
+        Object.keys(this.itemDefinitions).map((id) => [id, 0]),
+      ),
       story: emptyStoryProgress(),
       flags: {},
       money: 3000,
@@ -274,8 +322,13 @@ export class EmeraldAdventure {
       state: this.state,
       db: this.db,
       rng: this.rng,
-      abilities: GEN3_ABILITIES,
-      heldItems: GEN3_HELD_ITEMS,
+      abilities: this.catalog.abilities,
+      heldItems: this.catalog.heldItems,
+      hooks: this.ruleHooks,
+      conditions: extensionGrowthConditions(
+        this.catalog.growthConditions,
+        (fn, ...args) => this.plugins.runtime.evaluate(fn, ...args),
+      ),
       hour: () => new Date().getHours(),
     });
     this.friendship = this.growth.friendship;
@@ -290,14 +343,14 @@ export class EmeraldAdventure {
       visited: [this.state.position.map],
     };
     this.movement = new MovementService({
-      registry: new MovementRegistry(MOVEMENT_MODES),
+      registry: new MovementRegistry(this.catalog.movement),
       state: this.state.movement,
       context: () => ({ capabilities: this.fieldCapabilities() }),
       onChange: () => this.ui?.updateSide(),
     });
     this.travel = new TravelService({
       maps: this.db.maps,
-      destinations: TRAVEL_DESTINATIONS,
+      destinations: this.catalog.destinations,
       position: this.state.position,
       context: () => ({
         capabilities: this.fieldCapabilities(),
@@ -320,11 +373,15 @@ export class EmeraldAdventure {
       transitions: this.transitions,
       movement: this.movement,
       now: this.timeline.now,
-      objects: (map) =>
-        objectsFor(
+      objects: (map) => [
+        ...objectsFor(
           { ...this.state, position: { ...this.state.position, map } },
           this.db,
         ),
+        ...(this.db.maps[map].elements || []).filter((e) =>
+          matchesCondition(e.requires, this.state),
+        ),
+      ],
       onStep: (cell) => this.step(cell),
       onProgress: () => this.advanceTravelClocks(),
       onMap: () => {
@@ -351,6 +408,7 @@ export class EmeraldAdventure {
       reducedMotion: this.reducedMotion,
     });
     this.visitMap();
+    this.plugins?.rebind();
     this.onMap(this.world.map.title, this.state.position.map);
   }
   enter(position) {
@@ -358,6 +416,10 @@ export class EmeraldAdventure {
     this.motion.snap(this.state.position);
   }
   save(show = false) {
+    if (this.saveProtected) {
+      if (show) this.ui?.toast(this.saveWarning);
+      return;
+    }
     if (
       this.battle ||
       this.busy ||
@@ -370,11 +432,22 @@ export class EmeraldAdventure {
     }
     try {
       this.state.randomSeed = this.rng.seed;
+      if (this.plugins)
+        this.state.contentDependencies = this.plugins.catalog.dependencies(
+          this.state,
+        );
       this.lastSave = this.saveStore.save(this.state);
       this.onSave(this.lastSave);
       if (show) this.ui.toast("进度已保存在当前浏览器。");
-    } catch {
-      if (show) this.ui.toast("浏览器无法保存，请从存档菜单导出进度。");
+    } catch (error) {
+      if (error.code === "save_conflict") {
+        this.saveProtected = true;
+        this.saveWarning =
+          "另一个游戏页面已保存进度。本页暂停覆盖存档；可导出本页进度，或明确读取另一页的存档。";
+        this.saveConflict = true;
+        this.ui?.toast(this.saveWarning);
+        this.ui?.updateSide();
+      } else if (show) this.ui.toast("浏览器无法保存，请从存档菜单导出进度。");
     }
   }
   async runStory(commands) {
@@ -414,7 +487,10 @@ export class EmeraldAdventure {
   }
   visitMap() {
     const id = this.state.position.map;
-    if (TRAVEL_DESTINATIONS[id] && !this.state.movement.visited.includes(id))
+    if (
+      this.catalog.destinations[id] &&
+      !this.state.movement.visited.includes(id)
+    )
       this.state.movement.visited.push(id);
   }
   fieldCapabilities() {
@@ -441,21 +517,24 @@ export class EmeraldAdventure {
     return true;
   }
   movementOptions() {
-    return ["walk", "mach-bike", "acro-bike"].map((id) => ({
-      id,
-      name: MOVEMENT_MODES[id].name,
-      allowed:
-        this.movement.available(id, this.world.map) &&
-        !isWater(
-          this.world.cell(this.state.position.x, this.state.position.y)
-            ?.behavior,
-        ),
-    }));
+    return Object.keys(this.catalog.movement)
+      .filter((id) => !["run", "surf"].includes(id))
+      .map((id) => ({
+        id,
+        name: this.catalog.movement[id].name,
+        allowed:
+          this.movement.available(id, this.world.map) &&
+          !isWater(
+            this.world.cell(this.state.position.x, this.state.position.y)
+              ?.behavior,
+          ),
+      }));
   }
   setMovementMode(mode) {
     if (
       !this.canManageParty() ||
-      !["walk", "mach-bike", "acro-bike"].includes(mode)
+      !Object.hasOwn(this.catalog.movement, mode) ||
+      ["run", "surf"].includes(mode)
     )
       return { ok: false, reason: "现在不能更换移动方式。" };
     if (
@@ -553,15 +632,24 @@ export class EmeraldAdventure {
           this.state.position.dir
         ],
       );
-    void this.playStory(interaction(this.state, object, this.world.map.title));
+    void this.playStory(
+      this.story.resolve("interact", this.state, {
+        object,
+        mapTitle: this.world.map.title,
+      }),
+    );
   }
   advanceTravelClocks() {
     this.growth.advance();
+    this.plugins?.runtime?.advance("step");
+    this.plugins?.events.emit("core:field-step", {
+      position: { ...this.state.position },
+    });
   }
   step(cell) {
     if (this.storyBusy) return;
     const s = this.state;
-    const scene = EMERALD_STORY.resolve("step", s, {
+    const scene = this.story.resolve("step", s, {
       map: s.position.map,
       cell,
     });
@@ -624,6 +712,11 @@ export class EmeraldAdventure {
       bag: this.state.bag,
       items: this.items,
       effects: this.moveEffects,
+      traits: {
+        abilities: this.catalog.abilities,
+        heldItems: this.catalog.heldItems,
+        hooks: [...GEN3_GLOBAL_HOOKS, ...this.ruleHooks],
+      },
       ...options,
     });
   }
@@ -631,20 +724,34 @@ export class EmeraldAdventure {
     if (this.busy || !this.battle) return false;
     this.clearInput();
     this.ui.closeModal();
-    return this.combat.act(action);
+    const battle = this.battle,
+      round = battle.turn;
+    const result = await this.combat.act(action);
+    if (result && battle.turn !== round) {
+      this.plugins?.runtime?.advance("round");
+      this.plugins?.events.emit("core:battle-round", { round: battle.turn });
+    }
+    if (result)
+      for (const event of battle.events)
+        this.plugins?.events.emit("core:battle-event", event);
+    return result;
   }
   encounterService() {
     return new EncounterService({
       db: this.db,
       rng: this.rng,
-      abilities: GEN3_ABILITIES,
-      heldItems: GEN3_HELD_ITEMS,
+      abilities: this.catalog.abilities,
+      heldItems: this.catalog.heldItems,
+      hooks: this.ruleHooks,
     });
   }
   resultPlan(b) {
     const drops = [];
     let committed = false;
-    const commands = battleOutcome(this.state, b, this.db);
+    const commands = this.story.resolve("battleResult", this.state, {
+      battle: b,
+      db: this.db,
+    });
     return {
       commit: () => {
         if (committed) return;
@@ -735,7 +842,7 @@ export class EmeraldAdventure {
     return this.equipment.equip(this.state, uid, itemId);
   }
   canBuyItem(id) {
-    const item = ITEMS[id];
+    const item = this.itemDefinitions[id];
     return (
       !!item &&
       this.state.money >= item.price &&
@@ -961,7 +1068,7 @@ export class EmeraldAdventure {
     }
   }
   buyItem(id) {
-    const item = ITEMS[id];
+    const item = this.itemDefinitions[id];
     if (!this.canManageParty() || !this.canBuyItem(id)) return false;
     this.state.money -= item.price;
     this.state.bag[id] = (this.state.bag[id] || 0) + 1;
@@ -984,19 +1091,43 @@ export class EmeraldAdventure {
     );
   }
   loadDocument(d) {
+    const missing = (d?.state?.contentDependencies || []).filter(
+      (id) => !this.plugins?.manifests.has(id),
+    );
+    if (missing.length) throw new Error("存档需要插件：" + missing.join("、"));
     const compatible = this.saveStore.decode(d);
     if (!this.canManageParty() || (d.pack && d.pack !== PACK.id) || !compatible)
       throw new Error("Invalid save");
+    this.saveStore.acceptCurrent();
+    this.saveProtected = false;
+    this.saveWarning = null;
+    this.saveConflict = false;
     this.state = compatible.state;
     this.bindField();
   }
   exportDocument() {
+    if (this.saveProtected && !this.saveConflict) {
+      const raw = this.saveStore.raw();
+      if (raw) {
+        try {
+          return JSON.parse(raw);
+        } catch {
+          return { recoveryRaw: raw };
+        }
+      }
+    }
     const state = structuredClone(this.state);
     state.randomSeed = this.rng.seed;
+    if (this.plugins)
+      state.contentDependencies = this.plugins.catalog.dependencies(state);
     return { version: PACK.version, pack: PACK.id, savedAt: Date.now(), state };
   }
   reset() {
     if (!this.canManageParty()) return false;
+    this.saveStore.acceptCurrent();
+    this.saveProtected = false;
+    this.saveWarning = null;
+    this.saveConflict = false;
     this.state = this.newState();
     this.bindField();
     return true;

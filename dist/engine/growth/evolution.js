@@ -11,8 +11,9 @@ export class EvolutionService {
     abilities,
     heldItems,
     conditions = new GrowthConditions(),
+    hooks = [],
   }) {
-    Object.assign(this, { db, abilities, heldItems, conditions });
+    Object.assign(this, { db, abilities, heldItems, conditions, hooks });
     this.plans = new WeakMap();
     this.definitions = {};
     const ids = new Set();
@@ -99,6 +100,7 @@ export class EvolutionService {
       party,
       abilities: this.abilities,
       heldItems: this.heldItems,
+      hooks: this.hooks,
     }).run("evolution-check", c);
     if (!c.allowed) return null;
     const matches = (this.definitions[mon.species] || []).filter(

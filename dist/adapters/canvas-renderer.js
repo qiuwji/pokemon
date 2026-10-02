@@ -273,16 +273,17 @@ export class Renderer {
   }
 }
 export async function loadAssets(db) {
-  for (const [id, pack] of Object.entries(db.tilesets)) pack.id = id;
+  for (const [id, pack] of Object.entries(db.tilesets)) if(!Object.isFrozen(pack)) pack.id = id;
   const ids = [
     "battle-bg",
+    ...Object.keys(db.resources || {}),
     ...Object.keys(db.tilesets).map((k) => "tiles-" + k),
     ...Object.keys(db.actors).map((k) => "actor-" + k),
     ...Object.keys(db.species).flatMap((k) => [k + "-front", k + "-back"]),
   ];
   const loaded = {};
   await Promise.all(
-    ids.map(
+    [...new Set(ids)].map(
       (id) =>
         new Promise((resolve, reject) => {
           const image = new Image();
@@ -291,7 +292,7 @@ export async function loadAssets(db) {
             resolve();
           };
           image.onerror = () => reject(new Error(`无法加载图像 ${id}`));
-          image.src = `assets/${id}.png`;
+          image.src = db.resources?.[id] || `assets/${id}.png`;
         }),
     ),
   );

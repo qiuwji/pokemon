@@ -1,0 +1,81 @@
+import { validateWorldExtensions } from "../../engine/extensions/world-content.js";
+import { extensionGrowthConditions } from "../../engine/extensions/growth-conditions.js";
+import { PluginHost } from "../../engine/extensions/plugin-host.js";
+import { assertContent } from "../../engine/content.js";
+import { MovementRegistry } from "../../engine/movement.js";
+import { createItemService } from "../../engine/items.js";
+import { MoveEffectRegistry } from "../../engine/move-effects.js";
+import { EvolutionService } from "../../engine/growth/evolution.js";
+import { AttachedRules } from "../../engine/rules/attachments.js";
+import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
+import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
+import { ITEMS } from "./items.js";
+/** Content-pack adapter validates extension content using the same domain contracts as built-ins. */
+export function createEmeraldPlugins(db, plugins, onError) {
+  const resources = Object.fromEntries(
+    Object.keys(db.species).map((id) => [
+      id + "-front",
+      `assets/${id}-front.png`,
+    ]),
+  );
+  const host = new PluginHost({
+    base: {
+      ...db,
+      resources,
+      items: ITEMS,
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+      movement: MOVEMENT_MODES,
+      destinations: TRAVEL_DESTINATIONS,
+    },
+    onError,
+  });
+  host.load(plugins);
+  const catalog = host.seal((c) => {
+    assertContent({ ...db, ...c });
+    validateWorldExtensions(c, host.catalog.entries.values());
+    const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
+    effects.validateMoves(c.moves);
+    createItemService(c.items);
+    new MovementRegistry(c.movement);
+    new EvolutionService({
+      db: { ...db, ...c },
+      abilities: c.abilities,
+      heldItems: c.heldItems,
+      conditions: extensionGrowthConditions(c.growthConditions),
+    });
+    new AttachedRules({
+      definitions: { ability: c.abilities, heldItem: c.heldItems },
+      operations: effects.operations,
+      owners: () => [],
+      context: (c) => c,
+    });
+    for (const mode of Object.values(c.movement))
+      if (!c.actors[mode.actor]) throw new Error("Unknown movement actor");
+    for (const [id, resource] of Object.entries(c.resources))
+      if (
+        typeof resource !== "string" ||
+        !/^(assets\/|plugins\/|https:\/\/)/.test(resource) ||
+        resource.length > 4096
+      )
+        throw new Error(`Invalid resource ${id}`);
+    for (const [id, map] of Object.entries(c.maps)) {
+      if (
+        (map.elements || []).some(
+          (e) =>
+            !e.id ||
+            !c.actors[e.actor] ||
+            !Number.isInteger(e.x) ||
+            !Number.isInteger(e.y) ||
+            e.x < 0 ||
+            e.x >= map.width ||
+            e.y < 0 ||
+            e.y >= map.height,
+        )
+      )
+        throw new Error(`Invalid map element ${id}`);
+    }
+  });
+  return { host, catalog, db: { ...db, ...catalog } };
+}

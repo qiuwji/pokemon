@@ -1,3 +1,4 @@
+import { ExtensionDOM } from "../../adapters/extension-dom.js";
 import { createGrowthInterface } from "./growth-interface.js";
 import { createMovementInterface } from "./movement-interface.js";
 import { createBattleInterface } from "./battle-interface.js";
@@ -8,19 +9,19 @@ import {
   STATUS_NAMES,
   ABILITIES,
   NATURES,
-  ITEMS,
   questFor,
 } from "./pack.js";
 // Emerald-specific DOM interface. It sends commands; it does not execute combat rules.
 export function createEmeraldInterface(
   game,
-  { document: doc = document, tone = () => {} } = {},
+  { document: doc = document, tone = () => {}, extensionAssets = {} } = {},
 ) {
   const $ = (id) => doc.getElementById(id),
     root = $("modal-root"),
     canvas = $("game"),
     db = game.db,
-    saveStore = game.saveStore;
+    saveStore = game.saveStore,
+    ITEMS = game.itemDefinitions;
   let dialog = null,
     modalBack = null,
     modalType = null,
@@ -50,6 +51,7 @@ export function createEmeraldInterface(
   }
 
   function updateSide() {
+    game.ui?.extensions?.refreshHUD();
     const q = questFor(game.state);
     $("quest-title").textContent = q.title;
     $("quest-description").textContent = q.description;
@@ -98,6 +100,7 @@ export function createEmeraldInterface(
         : game.state.flags.rescued
           ? "北边的古辰镇有宝可梦中心。恢复体力，再去找小遥。"
           : "风吹过草丛，新的冒险就在小镇的北边。";
+    if (game.saveWarning) $("field-note").textContent = game.saveWarning;
   }
 
   function hpColor(m) {
@@ -335,6 +338,12 @@ export function createEmeraldInterface(
         )}</div><div class="inline-actions"><button class="secondary-button" id="growth-options">伙伴的成长</button><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.state.bag.potion || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.state.bag.potion})</button></div>`,
       { back: () => showParty(), type: "detail" },
     );
+    game.ui?.extensions?.mountSlot(
+      "monster.detail",
+      root.querySelector(".inline-actions"),
+      { uid: m.uid },
+      () => showMonster(game.state.party.findIndex((mon) => mon.uid === m.uid)),
+    );
     $("held-item").onclick = () => showEquipment(m.uid, index);
     $("growth-options").onclick = () => growthUI.showEvolutionOptions(index);
     $("lead").onclick = () => {
@@ -459,9 +468,7 @@ export function createEmeraldInterface(
   function showShop() {
     modal(
       "友好商店",
-      `<p>欢迎光临！现有零花钱 ¥${game.state.money.toLocaleString("zh-CN")}</p>${Object.entries(
-        ITEMS,
-      )
+      `<p>欢迎光临！现有零花钱 ¥${game.state.money.toLocaleString("zh-CN")}</p>${Object.entries()
         .map(
           ([id, item]) =>
             `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} · ¥${item.price}</strong><p>${item.description}</p><p>持有 ${game.state.bag[id] || 0} 个</p></div><button class="secondary-button" data-buy="${id}" ${!game.canBuyItem(id) ? "disabled" : ""}>购买 1 个</button></div>`,
@@ -548,6 +555,12 @@ export function createEmeraldInterface(
       `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="daycare" ${game.canUseDaycare() ? "" : "disabled"}>育成研究<small>研究所寄存、蛋与交换</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
       { type: "menu" },
     );
+    game.ui?.extensions?.mountSlot(
+      "menu",
+      root.querySelector(".menu-grid"),
+      {},
+      showMenu,
+    );
     const actions = {
       party: () => showParty(),
       bag: () => showBag(),
@@ -604,8 +617,12 @@ export function createEmeraldInterface(
         closeModal();
         updateSide();
         game.save(true);
-      } catch {
-        toast("这个存档无法读取，请选择有效的序章存档。");
+      } catch (error) {
+        toast(
+          error.message.startsWith("存档需要插件")
+            ? error.message
+            : "这个存档无法读取，请选择有效的当前版本存档。",
+        );
       }
     };
     $("new-game").onclick = () => {
@@ -646,7 +663,7 @@ export function createEmeraldInterface(
     if (game.battle) battleUI.back();
   }
 
-  return {
+  const ui = {
     toast,
     announce,
     updateSide,
@@ -716,4 +733,22 @@ export function createEmeraldInterface(
       $("choose-starter")?.click();
     },
   };
+  if (game.plugins)
+    ui.extensions = new ExtensionDOM({
+      host: game.plugins,
+      shell: {
+        modal,
+        closeModal,
+        toast,
+        root,
+        get modalType() {
+          return modalType;
+        },
+      },
+      document: doc,
+      resources: game.db.resources,
+      assets: extensionAssets,
+      now: game.timeline.now,
+    });
+  return ui;
 }

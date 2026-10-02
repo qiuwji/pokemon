@@ -1,8 +1,8 @@
 import { PartyTraits } from "../rules/party-traits.js";
 /** The saved egg clock follows Emerald's 255 tick boundary in an unsigned 8-bit counter. */
 export class HatchService {
-  constructor({ abilities, heldItems }) {
-    Object.assign(this, { abilities, heldItems });
+  constructor({ abilities, heldItems, hooks = [] }) {
+    Object.assign(this, { abilities, heldItems, hooks });
   }
   advance(clock, party, steps = 1) {
     if (
@@ -28,6 +28,7 @@ export class HatchService {
       party,
       abilities: this.abilities,
       heldItems: this.heldItems,
+      hooks: this.hooks,
     });
     const rate = traits.calculate("hatch-rate", 1, party[0] || { uid: null });
     if (!Number.isInteger(rate) || rate < 1)

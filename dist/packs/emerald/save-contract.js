@@ -1,3 +1,6 @@
+import { PluginState } from "../../engine/extensions/plugin-state.js";
+import { readOnly, localId } from "../../engine/extensions/values.js";
+import { jsonValue, callSync } from "../../engine/extensions/values.js";
 import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
 import { isWater } from "../../engine/terrain.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
@@ -5,7 +8,65 @@ import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { validStoryProgress } from "../../engine/story.js";
 
 /** Current Emerald development save contract. Previous envelopes are rejected by SaveStore. */
-export function validateSave(s, db) {
+export function validateSave(
+  s,
+  db,
+  catalog = {
+    abilities: GEN3_ABILITIES,
+    heldItems: GEN3_HELD_ITEMS,
+    movement: MOVEMENT_MODES,
+    destinations: TRAVEL_DESTINATIONS,
+  },
+  plugins = null,
+) {
+  try {
+    if (s?.extensions !== undefined) jsonValue(s.extensions, 1024 * 1024);
+  } catch {
+    return false;
+  }
+  try {
+    for (const [owner, record] of Object.entries(s?.extensions || {})) {
+      if (
+        !localId(owner) ||
+        !Number.isInteger(record.version) ||
+        !record.data ||
+        !record.states ||
+        typeof record.data !== "object" ||
+        typeof record.states !== "object" ||
+        Array.isArray(record.data) ||
+        Array.isArray(record.states)
+      )
+        return false;
+      const manifest = plugins?.manifests.get(owner);
+      if (
+        manifest &&
+        record.version !== manifest.dataVersion &&
+        manifest.migrate
+      ) {
+        const migrated = jsonValue(
+          callSync(manifest.migrate, [readOnly(record), manifest.dataVersion]),
+        );
+        if (migrated.version !== manifest.dataVersion) return false;
+        s.extensions[owner] = migrated;
+        new PluginState(plugins.states).validate(migrated, owner);
+        callSync(manifest.validateData, [readOnly(migrated.data)]);
+        continue;
+      }
+      if (manifest && record.version === manifest.dataVersion) {
+        new PluginState(plugins.states).validate(record, owner);
+        callSync(manifest.validateData, [readOnly(record.data)]);
+      } else if (manifest && typeof manifest.migrate !== "function")
+        return false;
+    }
+  } catch {
+    return false;
+  }
+  if (
+    s?.contentDependencies !== undefined &&
+    (!Array.isArray(s.contentDependencies) ||
+      s.contentDependencies.some((id) => !plugins?.manifests.has(id)))
+  )
+    return false;
   if (
     !s ||
     !db.maps[s.position?.map] ||
@@ -43,18 +104,22 @@ export function validateSave(s, db) {
     const movement = s.movement;
     if (
       !movement ||
-      !Object.hasOwn(MOVEMENT_MODES, movement.mode) ||
+      !Object.hasOwn(catalog.movement, movement.mode) ||
       movement.mode === "run" ||
       !Array.isArray(movement.visited) ||
       new Set(movement.visited).size !== movement.visited.length ||
-      movement.visited.some((id) => !Object.hasOwn(TRAVEL_DESTINATIONS, id))
+      movement.visited.some((id) => !Object.hasOwn(catalog.destinations, id))
     )
       return false;
     const water = isWater(
       map.behavior[s.position.y * map.width + s.position.x],
     );
     if (
-      water !== (movement.mode === "surf") ||
+      (catalog.movement[movement.mode].surface === "both"
+        ? false
+        : water !==
+          (catalog.movement[movement.mode].surface === "water" ||
+            movement.mode === "surf")) ||
       (map.indoor && movement.mode.endsWith("bike"))
     )
       return false;
@@ -106,8 +171,8 @@ export function validateSave(s, db) {
       !m.uid ||
       identities.has(m.uid) ||
       !db.species[m.species] ||
-      !Object.hasOwn(GEN3_ABILITIES, m.ability) ||
-      (m.heldItem != null && !Object.hasOwn(GEN3_HELD_ITEMS, m.heldItem)) ||
+      !Object.hasOwn(catalog.abilities, m.ability) ||
+      (m.heldItem != null && !Object.hasOwn(catalog.heldItems, m.heldItem)) ||
       (m.friendship !== undefined &&
         (!Number.isInteger(m.friendship) ||
           m.friendship < 0 ||

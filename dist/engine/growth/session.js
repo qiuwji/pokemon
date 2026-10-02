@@ -6,11 +6,26 @@ import { FriendshipService } from "./friendship.js";
 
 /** Reusable growth orchestration. Storage, player permissions and presentation are injected by the application. */
 export class GrowthSession {
-  constructor({ state, db, rng, abilities, heldItems, hour = () => 12 }) {
+  constructor({
+    state,
+    db,
+    rng,
+    abilities,
+    heldItems,
+    hooks = [],
+    conditions,
+    hour = () => 12,
+  }) {
     Object.assign(this, { state, db, rng, hour });
-    this.friendship = new FriendshipService({ abilities, heldItems });
-    this.evolutions = new EvolutionService({ db, abilities, heldItems });
-    this.hatching = new HatchService({ abilities, heldItems });
+    this.friendship = new FriendshipService({ abilities, heldItems, hooks });
+    this.evolutions = new EvolutionService({
+      db,
+      abilities,
+      heldItems,
+      hooks,
+      conditions,
+    });
+    this.hatching = new HatchService({ abilities, heldItems, hooks });
     this.daycare = new DaycareService({
       state: state.daycare,
       db,

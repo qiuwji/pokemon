@@ -1,3 +1,7 @@
+import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
+import { attachEmeraldExtensions } from "./packs/emerald/extension-ports.js";
+import { companionCare } from "./plugins/companion-care.js";
+import { createFieldJournal } from "./plugins/field-journal.js";
 import { PACK } from "./packs/emerald/pack.js";
 import { assertPackContent } from "./packs/emerald/content.js";
 import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
@@ -19,8 +23,16 @@ async function boot() {
   try {
     const response = await fetch("content.json");
     if (!response.ok) throw new Error("内容未能载入");
-    const db = assertPackContent(await response.json()),
-      assets = await loadAssets(db);
+    const base = assertPackContent(await response.json());
+    const { host, catalog, db } = createEmeraldPlugins(
+      base,
+      [
+        companionCare,
+        createFieldJournal(base.maps.LittlerootTown_ProfessorBirchsLab),
+      ],
+      console.error,
+    );
+    const assets = await loadAssets(db);
     const timeline = new Timeline(),
       camera = new CameraRig(timeline),
       renderer = new Renderer($("game"), db, assets, {
@@ -41,6 +53,8 @@ async function boot() {
     let input, sceneTimer;
     const game = new EmeraldAdventure({
       db,
+      catalog,
+      plugins: host,
       storage: localStorage,
       motion: renderer.motion,
       director,
@@ -71,8 +85,10 @@ async function boot() {
         );
       },
     });
+    attachEmeraldExtensions(game, host);
     const ui = createEmeraldInterface(game, {
       tone: (...args) => audio.tone(...args),
+      extensionAssets: assets,
     });
     game.attachUI(ui);
     input = new BrowserInput({ game, ui });
@@ -140,6 +156,10 @@ async function boot() {
           });
         overlay.render(transitions.sample(now));
         growthOverlay.render(game.growthDirector.sample(now));
+        ui.extensions?.render(now, {
+          mode: game.battle ? "battle" : "field",
+          position: { ...game.state.position },
+        });
       }
       requestAnimationFrame(frame);
     }

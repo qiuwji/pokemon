@@ -93,3 +93,23 @@ test("Emerald UI sends commands and does not directly mutate persisted game stat
     ),
   );
 });
+
+// Examples are real extension consumers: they cannot reach application internals or browser globals.
+test("Example plugins depend only on public extension utilities", () => {
+  for (const file of modules(new URL("plugins/", base).pathname)) {
+    const source = fs
+      .readFileSync(file, "utf8")
+      .replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
+    assert(
+      !/\b(document|window|localStorage|EmeraldAdventure)\b/.test(source),
+      file,
+    );
+    const imports = [...source.matchAll(/from\s+["']([^"']+)["']/g)].map(
+      (x) => x[1],
+    );
+    assert(
+      imports.every((x) => x.startsWith("../engine/extensions/")),
+      file,
+    );
+  }
+});

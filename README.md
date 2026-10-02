@@ -132,3 +132,5 @@ python3 tools/import-encounters.py /path/to/pokeemerald
 当前 v0.8.0：248 项检查。旅行菜单可在领取图鉴后借用研究装备，试用自行车、103 号道路冲浪和已到访城镇飞行。详细边界与复用入口见 [移动架构](MOVEMENT_ARCHITECTURE.md)。P5 可玩育成、P6 插件和 P7 网络入口仍在执行，尚未宣称全部完成。开发用 `npm run dev` 禁用缓存。
 
 育成与进化架构见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)。v0.9.0 可在研究所寄存、领蛋、孵化与交换，伙伴详情支持进化石；旧开发档不兼容。
+
+插件 API 1 与 14 项能力见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md)。v0.10.0 启动加载两个独立插件，详情页支持抚摸/玩耍/喂食，研究所东侧通往插件观察室。开发存档版本 6，不兼容旧开发档。
