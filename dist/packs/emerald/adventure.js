@@ -1,3 +1,5 @@
+import { EncounterTableRegistry } from "../../engine/encounter-tables.js";
+import { BattleStrategyRegistry } from "../../engine/battle/strategy-registry.js";
 import { NPCBehaviorRegistry } from "../../engine/npc-behaviors.js";
 import { extensionGrowthConditions } from "../../engine/extensions/growth-conditions.js";
 import { StoryEngine } from "../../engine/story.js";
@@ -88,6 +90,11 @@ export class EmeraldAdventure {
       catalog,
     });
     this.itemDefinitions = catalog.items;
+    this.trainerDefinitions = catalog.trainers || TRAINERS;
+    this.battleStrategies = new BattleStrategyRegistry(
+      catalog.battleStrategies,
+    );
+    this.encounterTables = new EncounterTableRegistry(catalog.encounters, db);
     this.story = new StoryEngine(
       [...(plugins?.story.values() || []), ...EMERALD_STORY.events],
       EMERALD_STORY.quests,
@@ -158,16 +165,7 @@ export class EmeraldAdventure {
         starter: () => this.ui.starterPicker(),
         shop: () => this.ui.showShop(),
         battle: (c) => {
-          if (c.trainerId) {
-            const trainer = TRAINERS[c.trainerId];
-            const encounter = createTrainerEncounter(trainer, {
-              party: this.state.party,
-              bag: this.state.bag,
-              db,
-              rng: this.rng,
-            });
-            return this.startBattle(encounter.enemyParty, encounter);
-          }
+          if (c.trainerId) return this.startTrainerBattle(c.trainerId);
           return this.startBattle(
             createMonster(c.species, c.level, db, this.rng, {
               trainer: c.options?.trainer,
@@ -246,7 +244,7 @@ export class EmeraldAdventure {
           if (
             c.type === "battle" &&
             !(c.trainerId
-              ? TRAINERS[c.trainerId]
+              ? this.trainerDefinitions[c.trainerId]
               : db.species[c.species] &&
                 Number.isInteger(c.level) &&
                 c.level >= 1 &&
@@ -672,9 +670,11 @@ export class EmeraldAdventure {
     }
     const water =
       this.state.movement.mode === "surf" && isWater(cell?.behavior);
-    const entries = water
-      ? this.world.map.waterEncounters
-      : this.world.map.encounters;
+    const area = water ? "water" : "land";
+    const registered = this.encounterTables.select(s.position.map, area, s);
+    const entries =
+      registered?.entries ||
+      (water ? this.world.map.waterEncounters : this.world.map.encounters);
     if (
       s.party.some((m) => !m.egg) &&
       s.flags.rescued &&
@@ -686,9 +686,11 @@ export class EmeraldAdventure {
       const monster = this.encounterService().attempt({
         party: s.party,
         entries,
-        rate: water
-          ? this.world.map.waterEncounterRate
-          : this.world.map.encounterRate,
+        rate:
+          registered?.rate ??
+          (water
+            ? this.world.map.waterEncounterRate
+            : this.world.map.encounterRate),
         area: water ? "water" : "land",
         mode: this.state.movement.mode,
       });
@@ -699,6 +701,21 @@ export class EmeraldAdventure {
     }
 
     if (this.world.steps % 20 === 0) this.save();
+  }
+  async startTrainerBattle(id) {
+    const trainer = this.trainerDefinitions[id];
+    if (!trainer) throw new Error("Unknown trainer encounter");
+    const encounter = createTrainerEncounter(trainer, {
+      party: this.state.party,
+      bag: this.state.bag,
+      db: this.db,
+      rng: this.rng,
+      strategies: this.battleStrategies,
+    });
+    return this.startBattle(encounter.enemyParty, {
+      ...encounter,
+      trainerId: id,
+    });
   }
   async startBattle(enemy, options = {}) {
     if (!this.state.party.some((m) => !m.egg)) return false;
@@ -739,7 +756,11 @@ export class EmeraldAdventure {
         ? {
             trainers: [
               { actor: "BrendanNormal", back: true },
-              { actor: options.script === "rival" ? "MayNormal" : "Youngster" },
+              {
+                actor:
+                  this.trainerDefinitions[options.trainerId]?.actor ||
+                  (options.script === "rival" ? "MayNormal" : "Youngster"),
+              },
             ],
           }
         : {},
@@ -790,10 +811,26 @@ export class EmeraldAdventure {
   resultPlan(b) {
     const drops = [];
     let committed = false;
-    const commands = this.story.resolve("battleResult", this.state, {
+    let commands = this.story.resolve("battleResult", this.state, {
       battle: b,
       db: this.db,
     });
+    if (!commands.length && b.result === "win" && b.trainerId) {
+      const trainer = this.trainerDefinitions[b.trainerId];
+      const amount = trainer.prize * (b.prizeMultiplier || 1);
+      commands = [
+        { type: "reward", id: `trainer.${b.trainerId}.prize`, money: amount },
+        {
+          type: "dialog",
+          name: trainer.name,
+          lines: [
+            this.state.story.rewards.includes(`trainer.${b.trainerId}.prize`)
+              ? "这次挑战已经完成。"
+              : `全队获胜！获得了 ¥${amount}。`,
+          ],
+        },
+      ];
+    }
     return {
       commit: () => {
         if (committed) return;

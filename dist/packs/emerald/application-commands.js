@@ -72,6 +72,12 @@ export function registerEmeraldCommands(game, bus) {
     },
   );
   register(
+    "battle.start",
+    objectSchema({ trainerId: id }, ["trainerId"]),
+    ({ trainerId }) => game.startTrainerBattle(trainerId),
+    { mode: "async", ready: field, permission: "battle" },
+  );
+  register(
     "battle.action",
     objectSchema(
       {

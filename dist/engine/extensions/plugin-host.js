@@ -110,6 +110,15 @@ export class PluginHost {
         id: owner,
         content: Object.freeze({
           register: (kind, id, value) => {
+            if (kind === "battleStrategies") {
+              const original = value;
+              if (typeof original.decide !== "function")
+                throw new Error("Battle strategy requires decide");
+              value = {
+                ...value,
+                decide: (c) => evaluate(original.decide, readOnly(c)),
+              };
+            }
             if (kind === "npcBehaviors") {
               const original = value;
               if (typeof original.decide !== "function")
@@ -317,6 +326,8 @@ export class PluginHost {
               winner: context.battle.winner,
               script: context.battle.script,
               trainer: context.battle.trainer,
+              trainerId: context.battle.trainerId ?? null,
+              result: context.battle.result ?? null,
             },
           }
         : {}),

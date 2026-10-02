@@ -1,0 +1,2217 @@
+{
+  "reference": "pret/pokeemerald",
+  "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "moveCount": 354,
+  "effectCount": 214,
+  "usedEffectCount": 198,
+  "counts": {
+    "missing": 123,
+    "disabled": 14,
+    "registered-unverified": 61
+  },
+  "effects": [
+    {
+      "id": "hit",
+      "code": 0,
+      "moves": [
+        "pound",
+        "mega_punch",
+        "scratch",
+        "vice_grip",
+        "cut",
+        "wing_attack",
+        "slam",
+        "vine_whip",
+        "mega_kick",
+        "horn_attack",
+        "tackle",
+        "water_gun",
+        "hydro_pump",
+        "surf",
+        "peck",
+        "drill_peck",
+        "strength",
+        "rock_throw",
+        "egg_bomb",
+        "waterfall",
+        "megahorn",
+        "hyper_voice",
+        "dragon_claw"
+      ],
+      "imported": [
+        "pound",
+        "scratch",
+        "wing_attack",
+        "slam",
+        "tackle",
+        "water_gun",
+        "hydro_pump",
+        "peck"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "sleep",
+      "code": 1,
+      "moves": [
+        "sing",
+        "sleep_powder",
+        "hypnosis",
+        "lovely_kiss",
+        "spore",
+        "grass_whistle"
+      ],
+      "imported": [
+        "hypnosis"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "poison_hit",
+      "code": 2,
+      "moves": [
+        "poison_sting",
+        "smog",
+        "sludge",
+        "sludge_bomb"
+      ],
+      "imported": [
+        "poison_sting"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "absorb",
+      "code": 3,
+      "moves": [
+        "absorb",
+        "mega_drain",
+        "leech_life",
+        "giga_drain"
+      ],
+      "imported": [
+        "absorb",
+        "mega_drain",
+        "giga_drain"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "burn_hit",
+      "code": 4,
+      "moves": [
+        "fire_punch",
+        "ember",
+        "flamethrower",
+        "fire_blast",
+        "heat_wave"
+      ],
+      "imported": [
+        "fire_punch",
+        "ember",
+        "flamethrower"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "freeze_hit",
+      "code": 5,
+      "moves": [
+        "ice_punch",
+        "ice_beam",
+        "blizzard",
+        "powder_snow"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "paralyze_hit",
+      "code": 6,
+      "moves": [
+        "thunder_punch",
+        "body_slam",
+        "thunder_shock",
+        "thunderbolt",
+        "lick",
+        "zap_cannon",
+        "spark",
+        "dragon_breath"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "explosion",
+      "code": 7,
+      "moves": [
+        "self_destruct",
+        "explosion"
+      ],
+      "imported": [
+        "explosion"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "dream_eater",
+      "code": 8,
+      "moves": [
+        "dream_eater"
+      ],
+      "imported": [
+        "dream_eater"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "mirror_move",
+      "code": 9,
+      "moves": [
+        "mirror_move"
+      ],
+      "imported": [
+        "mirror_move"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "attack_up",
+      "code": 10,
+      "moves": [
+        "meditate",
+        "sharpen",
+        "howl"
+      ],
+      "imported": [
+        "howl"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "defense_up",
+      "code": 11,
+      "moves": [
+        "harden",
+        "withdraw"
+      ],
+      "imported": [
+        "harden"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "speed_up",
+      "code": 12,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "special_attack_up",
+      "code": 13,
+      "moves": [
+        "growth"
+      ],
+      "imported": [
+        "growth"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "special_defense_up",
+      "code": 14,
+      "moves": [],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "accuracy_up",
+      "code": 15,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "evasion_up",
+      "code": 16,
+      "moves": [
+        "double_team"
+      ],
+      "imported": [
+        "double_team"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "always_hit",
+      "code": 17,
+      "moves": [
+        "swift",
+        "faint_attack",
+        "shadow_punch",
+        "aerial_ace",
+        "magical_leaf",
+        "shock_wave"
+      ],
+      "imported": [
+        "aerial_ace"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "attack_down",
+      "code": 18,
+      "moves": [
+        "growl"
+      ],
+      "imported": [
+        "growl"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "defense_down",
+      "code": 19,
+      "moves": [
+        "tail_whip",
+        "leer"
+      ],
+      "imported": [
+        "tail_whip",
+        "leer"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "speed_down",
+      "code": 20,
+      "moves": [
+        "string_shot"
+      ],
+      "imported": [
+        "string_shot"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "special_attack_down",
+      "code": 21,
+      "moves": [],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "special_defense_down",
+      "code": 22,
+      "moves": [],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "accuracy_down",
+      "code": 23,
+      "moves": [
+        "sand_attack",
+        "smokescreen",
+        "kinesis",
+        "flash"
+      ],
+      "imported": [
+        "sand_attack"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "evasion_down",
+      "code": 24,
+      "moves": [
+        "sweet_scent"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "haze",
+      "code": 25,
+      "moves": [
+        "haze"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "bide",
+      "code": 26,
+      "moves": [
+        "bide"
+      ],
+      "imported": [
+        "bide"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "rampage",
+      "code": 27,
+      "moves": [
+        "thrash",
+        "petal_dance",
+        "outrage"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "roar",
+      "code": 28,
+      "moves": [
+        "whirlwind",
+        "roar"
+      ],
+      "imported": [
+        "roar"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "multi_hit",
+      "code": 29,
+      "moves": [
+        "double_slap",
+        "comet_punch",
+        "fury_attack",
+        "pin_missile",
+        "spike_cannon",
+        "barrage",
+        "fury_swipes",
+        "bone_rush",
+        "arm_thrust",
+        "bullet_seed",
+        "icicle_spear",
+        "rock_blast"
+      ],
+      "imported": [
+        "pin_missile",
+        "fury_swipes"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "conversion",
+      "code": 30,
+      "moves": [
+        "conversion"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "flinch_hit",
+      "code": 31,
+      "moves": [
+        "rolling_kick",
+        "headbutt",
+        "bite",
+        "bone_club",
+        "rock_slide",
+        "hyper_fang"
+      ],
+      "imported": [
+        "headbutt",
+        "bite"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "restore_hp",
+      "code": 32,
+      "moves": [
+        "recover",
+        "slack_off"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "toxic",
+      "code": 33,
+      "moves": [
+        "toxic"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "pay_day",
+      "code": 34,
+      "moves": [
+        "pay_day"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "light_screen",
+      "code": 35,
+      "moves": [
+        "light_screen"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "tri_attack",
+      "code": 36,
+      "moves": [
+        "tri_attack"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "rest",
+      "code": 37,
+      "moves": [
+        "rest"
+      ],
+      "imported": [
+        "rest"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "ohko",
+      "code": 38,
+      "moves": [
+        "guillotine",
+        "horn_drill",
+        "fissure",
+        "sheer_cold"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "razor_wind",
+      "code": 39,
+      "moves": [
+        "razor_wind"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "super_fang",
+      "code": 40,
+      "moves": [
+        "super_fang"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "dragon_rage",
+      "code": 41,
+      "moves": [
+        "dragon_rage"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "trap",
+      "code": 42,
+      "moves": [
+        "bind",
+        "wrap",
+        "fire_spin",
+        "clamp",
+        "whirlpool",
+        "sand_tomb"
+      ],
+      "imported": [
+        "fire_spin",
+        "whirlpool"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "high_critical",
+      "code": 43,
+      "moves": [
+        "karate_chop",
+        "razor_leaf",
+        "crabhammer",
+        "slash",
+        "aeroblast",
+        "cross_chop",
+        "air_cutter",
+        "leaf_blade"
+      ],
+      "imported": [
+        "slash",
+        "leaf_blade"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "double_hit",
+      "code": 44,
+      "moves": [
+        "double_kick",
+        "bonemerang"
+      ],
+      "imported": [
+        "double_kick"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "recoil_if_miss",
+      "code": 45,
+      "moves": [
+        "jump_kick",
+        "hi_jump_kick"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "mist",
+      "code": 46,
+      "moves": [
+        "mist"
+      ],
+      "imported": [
+        "mist"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "focus_energy",
+      "code": 47,
+      "moves": [
+        "focus_energy"
+      ],
+      "imported": [
+        "focus_energy"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "recoil",
+      "code": 48,
+      "moves": [
+        "take_down",
+        "submission",
+        "struggle"
+      ],
+      "imported": [
+        "take_down"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "confuse",
+      "code": 49,
+      "moves": [
+        "supersonic",
+        "confuse_ray",
+        "sweet_kiss"
+      ],
+      "imported": [
+        "supersonic"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "attack_up_2",
+      "code": 50,
+      "moves": [
+        "swords_dance"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "defense_up_2",
+      "code": 51,
+      "moves": [
+        "barrier",
+        "acid_armor",
+        "iron_defense"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "speed_up_2",
+      "code": 52,
+      "moves": [
+        "agility"
+      ],
+      "imported": [
+        "agility"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "special_attack_up_2",
+      "code": 53,
+      "moves": [
+        "tail_glow"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "special_defense_up_2",
+      "code": 54,
+      "moves": [
+        "amnesia"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "accuracy_up_2",
+      "code": 55,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "evasion_up_2",
+      "code": 56,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "transform",
+      "code": 57,
+      "moves": [
+        "transform"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "attack_down_2",
+      "code": 58,
+      "moves": [
+        "charm",
+        "feather_dance"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "defense_down_2",
+      "code": 59,
+      "moves": [
+        "screech"
+      ],
+      "imported": [
+        "screech"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "speed_down_2",
+      "code": 60,
+      "moves": [
+        "cotton_spore",
+        "scary_face"
+      ],
+      "imported": [
+        "scary_face"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "special_attack_down_2",
+      "code": 61,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "special_defense_down_2",
+      "code": 62,
+      "moves": [
+        "fake_tears",
+        "metal_sound"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "accuracy_down_2",
+      "code": 63,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "evasion_down_2",
+      "code": 64,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "reflect",
+      "code": 65,
+      "moves": [
+        "reflect"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "poison",
+      "code": 66,
+      "moves": [
+        "poison_powder",
+        "poison_gas"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "paralyze",
+      "code": 67,
+      "moves": [
+        "stun_spore",
+        "thunder_wave",
+        "glare"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "attack_down_hit",
+      "code": 68,
+      "moves": [
+        "aurora_beam"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "defense_down_hit",
+      "code": 69,
+      "moves": [
+        "acid",
+        "iron_tail",
+        "rock_smash",
+        "crush_claw"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "speed_down_hit",
+      "code": 70,
+      "moves": [
+        "bubble_beam",
+        "constrict",
+        "bubble",
+        "icy_wind",
+        "rock_tomb",
+        "mud_shot"
+      ],
+      "imported": [
+        "mud_shot"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "special_attack_down_hit",
+      "code": 71,
+      "moves": [
+        "mist_ball"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "special_defense_down_hit",
+      "code": 72,
+      "moves": [
+        "psychic",
+        "crunch",
+        "shadow_ball",
+        "luster_purge"
+      ],
+      "imported": [
+        "psychic",
+        "crunch"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "accuracy_down_hit",
+      "code": 73,
+      "moves": [
+        "mud_slap",
+        "octazooka",
+        "muddy_water"
+      ],
+      "imported": [
+        "mud_slap",
+        "muddy_water"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "evasion_down_hit",
+      "code": 74,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "sky_attack",
+      "code": 75,
+      "moves": [
+        "sky_attack"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "confuse_hit",
+      "code": 76,
+      "moves": [
+        "psybeam",
+        "confusion",
+        "dizzy_punch",
+        "dynamic_punch",
+        "signal_beam",
+        "water_pulse"
+      ],
+      "imported": [
+        "confusion"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "twineedle",
+      "code": 77,
+      "moves": [
+        "twineedle"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "vital_throw",
+      "code": 78,
+      "moves": [
+        "vital_throw"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "substitute",
+      "code": 79,
+      "moves": [
+        "substitute"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "recharge",
+      "code": 80,
+      "moves": [
+        "hyper_beam",
+        "blast_burn",
+        "hydro_cannon",
+        "frenzy_plant"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "rage",
+      "code": 81,
+      "moves": [
+        "rage"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "mimic",
+      "code": 82,
+      "moves": [
+        "mimic"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "metronome",
+      "code": 83,
+      "moves": [
+        "metronome"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "leech_seed",
+      "code": 84,
+      "moves": [
+        "leech_seed"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "splash",
+      "code": 85,
+      "moves": [
+        "splash"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "disable",
+      "code": 86,
+      "moves": [
+        "disable"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "level_damage",
+      "code": 87,
+      "moves": [
+        "seismic_toss",
+        "night_shade"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "psywave",
+      "code": 88,
+      "moves": [
+        "psywave"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "counter",
+      "code": 89,
+      "moves": [
+        "counter"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "encore",
+      "code": 90,
+      "moves": [
+        "encore"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "pain_split",
+      "code": 91,
+      "moves": [
+        "pain_split"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "snore",
+      "code": 92,
+      "moves": [
+        "snore"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "conversion_2",
+      "code": 93,
+      "moves": [
+        "conversion_2"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "lock_on",
+      "code": 94,
+      "moves": [
+        "mind_reader",
+        "lock_on"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "sketch",
+      "code": 95,
+      "moves": [
+        "sketch"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "unused_60",
+      "code": 96,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "sleep_talk",
+      "code": 97,
+      "moves": [
+        "sleep_talk"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "destiny_bond",
+      "code": 98,
+      "moves": [
+        "destiny_bond"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "flail",
+      "code": 99,
+      "moves": [
+        "flail",
+        "reversal"
+      ],
+      "imported": [
+        "flail"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "spite",
+      "code": 100,
+      "moves": [
+        "spite"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "false_swipe",
+      "code": 101,
+      "moves": [
+        "false_swipe"
+      ],
+      "imported": [
+        "false_swipe"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "heal_bell",
+      "code": 102,
+      "moves": [
+        "heal_bell",
+        "aromatherapy"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "quick_attack",
+      "code": 103,
+      "moves": [
+        "quick_attack",
+        "mach_punch",
+        "extreme_speed"
+      ],
+      "imported": [
+        "quick_attack"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "triple_kick",
+      "code": 104,
+      "moves": [
+        "triple_kick"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "thief",
+      "code": 105,
+      "moves": [
+        "thief",
+        "covet"
+      ],
+      "imported": [
+        "thief",
+        "covet"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "mean_look",
+      "code": 106,
+      "moves": [
+        "spider_web",
+        "mean_look",
+        "block"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "nightmare",
+      "code": 107,
+      "moves": [
+        "nightmare"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "minimize",
+      "code": 108,
+      "moves": [
+        "minimize"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "curse",
+      "code": 109,
+      "moves": [
+        "curse"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "unused_6e",
+      "code": 110,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "protect",
+      "code": 111,
+      "moves": [
+        "protect",
+        "detect"
+      ],
+      "imported": [
+        "protect",
+        "detect"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "spikes",
+      "code": 112,
+      "moves": [
+        "spikes"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "foresight",
+      "code": 113,
+      "moves": [
+        "foresight",
+        "odor_sleuth"
+      ],
+      "imported": [
+        "foresight",
+        "odor_sleuth"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "perish_song",
+      "code": 114,
+      "moves": [
+        "perish_song"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "sandstorm",
+      "code": 115,
+      "moves": [
+        "sandstorm"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "endure",
+      "code": 116,
+      "moves": [
+        "endure"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "rollout",
+      "code": 117,
+      "moves": [
+        "rollout",
+        "ice_ball"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "swagger",
+      "code": 118,
+      "moves": [
+        "swagger"
+      ],
+      "imported": [
+        "swagger"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "fury_cutter",
+      "code": 119,
+      "moves": [
+        "fury_cutter"
+      ],
+      "imported": [
+        "fury_cutter"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "attract",
+      "code": 120,
+      "moves": [
+        "attract"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "return",
+      "code": 121,
+      "moves": [
+        "return"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "present",
+      "code": 122,
+      "moves": [
+        "present"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "frustration",
+      "code": 123,
+      "moves": [
+        "frustration"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "safeguard",
+      "code": 124,
+      "moves": [
+        "safeguard"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "thaw_hit",
+      "code": 125,
+      "moves": [
+        "flame_wheel",
+        "sacred_fire"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "magnitude",
+      "code": 126,
+      "moves": [
+        "magnitude"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "baton_pass",
+      "code": 127,
+      "moves": [
+        "baton_pass"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "pursuit",
+      "code": 128,
+      "moves": [
+        "pursuit"
+      ],
+      "imported": [
+        "pursuit"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "rapid_spin",
+      "code": 129,
+      "moves": [
+        "rapid_spin"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "sonicboom",
+      "code": 130,
+      "moves": [
+        "sonic_boom"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "unused_83",
+      "code": 131,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "morning_sun",
+      "code": 132,
+      "moves": [
+        "morning_sun"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "synthesis",
+      "code": 133,
+      "moves": [
+        "synthesis"
+      ],
+      "imported": [
+        "synthesis"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "moonlight",
+      "code": 134,
+      "moves": [
+        "moonlight"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "hidden_power",
+      "code": 135,
+      "moves": [
+        "hidden_power"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "rain_dance",
+      "code": 136,
+      "moves": [
+        "rain_dance"
+      ],
+      "imported": [
+        "rain_dance"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "sunny_day",
+      "code": 137,
+      "moves": [
+        "sunny_day"
+      ],
+      "imported": [
+        "sunny_day"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "defense_up_hit",
+      "code": 138,
+      "moves": [
+        "steel_wing"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "attack_up_hit",
+      "code": 139,
+      "moves": [
+        "metal_claw",
+        "meteor_mash"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "all_stats_up_hit",
+      "code": 140,
+      "moves": [
+        "ancient_power",
+        "silver_wind"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "unused_8d",
+      "code": 141,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "belly_drum",
+      "code": 142,
+      "moves": [
+        "belly_drum"
+      ],
+      "imported": [
+        "belly_drum"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "psych_up",
+      "code": 143,
+      "moves": [
+        "psych_up"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "mirror_coat",
+      "code": 144,
+      "moves": [
+        "mirror_coat"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "skull_bash",
+      "code": 145,
+      "moves": [
+        "skull_bash"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "twister",
+      "code": 146,
+      "moves": [
+        "twister"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "earthquake",
+      "code": 147,
+      "moves": [
+        "earthquake"
+      ],
+      "imported": [
+        "earthquake"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "future_sight",
+      "code": 148,
+      "moves": [
+        "future_sight",
+        "doom_desire"
+      ],
+      "imported": [
+        "future_sight"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "gust",
+      "code": 149,
+      "moves": [
+        "gust"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "flinch_minimize_hit",
+      "code": 150,
+      "moves": [
+        "stomp",
+        "needle_arm",
+        "astonish",
+        "extrasensory"
+      ],
+      "imported": [
+        "astonish"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "solar_beam",
+      "code": 151,
+      "moves": [
+        "solar_beam"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "thunder",
+      "code": 152,
+      "moves": [
+        "thunder"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "teleport",
+      "code": 153,
+      "moves": [
+        "teleport"
+      ],
+      "imported": [
+        "teleport"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "beat_up",
+      "code": 154,
+      "moves": [
+        "beat_up"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "semi_invulnerable",
+      "code": 155,
+      "moves": [
+        "fly",
+        "dig",
+        "dive",
+        "bounce"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "defense_curl",
+      "code": 156,
+      "moves": [
+        "defense_curl"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "softboiled",
+      "code": 157,
+      "moves": [
+        "soft_boiled",
+        "milk_drink"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "fake_out",
+      "code": 158,
+      "moves": [
+        "fake_out"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "uproar",
+      "code": 159,
+      "moves": [
+        "uproar"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "stockpile",
+      "code": 160,
+      "moves": [
+        "stockpile"
+      ],
+      "imported": [
+        "stockpile"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "spit_up",
+      "code": 161,
+      "moves": [
+        "spit_up"
+      ],
+      "imported": [
+        "spit_up"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "swallow",
+      "code": 162,
+      "moves": [
+        "swallow"
+      ],
+      "imported": [
+        "swallow"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "unused_a3",
+      "code": 163,
+      "moves": [],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "hail",
+      "code": 164,
+      "moves": [
+        "hail"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "torment",
+      "code": 165,
+      "moves": [
+        "torment"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "flatter",
+      "code": 166,
+      "moves": [
+        "flatter"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "will_o_wisp",
+      "code": 167,
+      "moves": [
+        "will_o_wisp"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "memento",
+      "code": 168,
+      "moves": [
+        "memento"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "facade",
+      "code": 169,
+      "moves": [
+        "facade"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "focus_punch",
+      "code": 170,
+      "moves": [
+        "focus_punch"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "smellingsalt",
+      "code": 171,
+      "moves": [
+        "smelling_salt"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "follow_me",
+      "code": 172,
+      "moves": [
+        "follow_me"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "nature_power",
+      "code": 173,
+      "moves": [
+        "nature_power"
+      ],
+      "imported": [
+        "nature_power"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "charge",
+      "code": 174,
+      "moves": [
+        "charge"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "taunt",
+      "code": 175,
+      "moves": [
+        "taunt"
+      ],
+      "imported": [
+        "taunt"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "helping_hand",
+      "code": 176,
+      "moves": [
+        "helping_hand"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "trick",
+      "code": 177,
+      "moves": [
+        "trick"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "role_play",
+      "code": 178,
+      "moves": [
+        "role_play"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "wish",
+      "code": 179,
+      "moves": [
+        "wish"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "assist",
+      "code": 180,
+      "moves": [
+        "assist"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "ingrain",
+      "code": 181,
+      "moves": [
+        "ingrain"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "superpower",
+      "code": 182,
+      "moves": [
+        "superpower"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "magic_coat",
+      "code": 183,
+      "moves": [
+        "magic_coat"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "recycle",
+      "code": 184,
+      "moves": [
+        "recycle"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "revenge",
+      "code": 185,
+      "moves": [
+        "revenge"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "brick_break",
+      "code": 186,
+      "moves": [
+        "brick_break"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "yawn",
+      "code": 187,
+      "moves": [
+        "yawn"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "knock_off",
+      "code": 188,
+      "moves": [
+        "knock_off"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "endeavor",
+      "code": 189,
+      "moves": [
+        "endeavor"
+      ],
+      "imported": [
+        "endeavor"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "eruption",
+      "code": 190,
+      "moves": [
+        "eruption",
+        "water_spout"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "skill_swap",
+      "code": 191,
+      "moves": [
+        "skill_swap"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "imprison",
+      "code": 192,
+      "moves": [
+        "imprison"
+      ],
+      "imported": [
+        "imprison"
+      ],
+      "status": "disabled"
+    },
+    {
+      "id": "refresh",
+      "code": 193,
+      "moves": [
+        "refresh"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "grudge",
+      "code": 194,
+      "moves": [
+        "grudge"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "snatch",
+      "code": 195,
+      "moves": [
+        "snatch"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "low_kick",
+      "code": 196,
+      "moves": [
+        "low_kick"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "secret_power",
+      "code": 197,
+      "moves": [
+        "secret_power"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "double_edge",
+      "code": 198,
+      "moves": [
+        "double_edge",
+        "volt_tackle"
+      ],
+      "imported": [],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "teeter_dance",
+      "code": 199,
+      "moves": [
+        "teeter_dance"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "blaze_kick",
+      "code": 200,
+      "moves": [
+        "blaze_kick"
+      ],
+      "imported": [
+        "blaze_kick"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "mud_sport",
+      "code": 201,
+      "moves": [
+        "mud_sport"
+      ],
+      "imported": [
+        "mud_sport"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "poison_fang",
+      "code": 202,
+      "moves": [
+        "poison_fang"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "weather_ball",
+      "code": 203,
+      "moves": [
+        "weather_ball"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "overheat",
+      "code": 204,
+      "moves": [
+        "overheat",
+        "psycho_boost"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "tickle",
+      "code": 205,
+      "moves": [
+        "tickle"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "cosmic_power",
+      "code": 206,
+      "moves": [
+        "cosmic_power"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "sky_uppercut",
+      "code": 207,
+      "moves": [
+        "sky_uppercut"
+      ],
+      "imported": [
+        "sky_uppercut"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "bulk_up",
+      "code": 208,
+      "moves": [
+        "bulk_up"
+      ],
+      "imported": [
+        "bulk_up"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "poison_tail",
+      "code": 209,
+      "moves": [
+        "poison_tail"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "water_sport",
+      "code": 210,
+      "moves": [
+        "water_sport"
+      ],
+      "imported": [
+        "water_sport"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "calm_mind",
+      "code": 211,
+      "moves": [
+        "calm_mind"
+      ],
+      "imported": [
+        "calm_mind"
+      ],
+      "status": "registered-unverified"
+    },
+    {
+      "id": "dragon_dance",
+      "code": 212,
+      "moves": [
+        "dragon_dance"
+      ],
+      "imported": [],
+      "status": "missing"
+    },
+    {
+      "id": "camouflage",
+      "code": 213,
+      "moves": [
+        "camouflage"
+      ],
+      "imported": [],
+      "status": "missing"
+    }
+  ]
+}

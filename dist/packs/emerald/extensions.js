@@ -1,3 +1,7 @@
+import { TRAINERS } from "./trainers.js";
+import { validateTrainers } from "../../engine/trainer-encounters.js";
+import { EncounterTableRegistry } from "../../engine/encounter-tables.js";
+import { BattleStrategyRegistry } from "../../engine/battle/strategy-registry.js";
 import { NPCBehaviorRegistry } from "../../engine/npc-behaviors.js";
 import { EMERALD_PLUGIN_PERMISSIONS } from "./extension-intents.js";
 import { validateWorldExtensions } from "../../engine/extensions/world-content.js";
@@ -26,6 +30,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     base: {
       ...db,
       resources,
+      trainers: TRAINERS,
       items: ITEMS,
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
@@ -37,6 +42,9 @@ export function createEmeraldPlugins(db, plugins, onError) {
   host.load(plugins);
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
+    const strategies = new BattleStrategyRegistry(c.battleStrategies);
+    validateTrainers(c.trainers, c, strategies);
+    new EncounterTableRegistry(c.encounters, c);
     validateWorldExtensions(c, host.catalog.entries.values());
     const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
     effects.validateMoves(c.moves);
@@ -68,12 +76,15 @@ export function createEmeraldPlugins(db, plugins, onError) {
       if (!c.moves[definition.moveId])
         throw new Error("Unknown animation move");
     for (const [id, map] of Object.entries(c.maps)) {
-      for (const element of map.elements || [])
+      for (const element of map.elements || []) {
+        if (element.trainerId && !c.trainers[element.trainerId])
+          throw new Error("Unknown world trainer");
         if (
           element.movement?.mode &&
           !npcBehaviors.definitions.has(element.movement.mode)
         )
           throw new Error("Unknown NPC behavior");
+      }
       if (
         map.presentation?.weather &&
         !["rain", "sun", "sand", "hail"].includes(map.presentation.weather)

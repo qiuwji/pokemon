@@ -333,7 +333,10 @@ export type ContentKind =
   | "resources"
   | "mapExtensions"
   | "growthConditions"
-  | "npcBehaviors";
+  | "npcBehaviors"
+  | "trainers"
+  | "encounters"
+  | "battleStrategies";
 export interface PluginStateDefinition {
   clock: "step" | "round" | "manual" | "permanent";
   schema: DataSchema;

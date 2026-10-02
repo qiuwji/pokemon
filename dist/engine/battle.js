@@ -29,6 +29,7 @@ export class Battle {
     rng,
     bag,
     trainer = false,
+    trainerId = null,
     script = null,
     effects = {},
     rules = {},
@@ -45,7 +46,7 @@ export class Battle {
   }) {
     if (!["singles", "doubles"].includes(format))
       throw new Error("Unknown battle format");
-    Object.assign(this, { db, rng, trainer, script, items, ai });
+    Object.assign(this, { db, rng, trainer, trainerId, script, items, ai });
     this.environment = { terrain: environment.terrain || "grass" };
     this.rules = { ...BATTLE_RULES, ...rules };
     this.moveEffects =
