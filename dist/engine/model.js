@@ -1,3 +1,4 @@
+import { validCreatureValues } from "./creature-contract.js";
 import { PHYSICAL_TYPES } from "./type-rules.js";
 export { PHYSICAL_TYPES } from "./type-rules.js";
 import { defaultAbilityModifier } from "./rules/gen3/numeric.js";
@@ -60,7 +61,18 @@ export function calculateStats(mon, species) {
   }
   return result;
 }
-export function createMonster(
+/** Failed policies restore the creation random stream before exposing any creature. */
+export function createMonster(...args) {
+  const rng = args[3],
+    seed = rng?.snapshot?.();
+  try {
+    return createMonsterDraft(...args);
+  } catch (error) {
+    if (seed !== undefined) rng.restore(seed);
+    throw error;
+  }
+}
+function createMonsterDraft(
   id,
   level,
   db,
@@ -114,6 +126,8 @@ export function createMonster(
   mon.originalTrainer = originalTrainer;
   mon.stats = calculateStats(mon, spec);
   mon.hp = mon.stats.hp;
+  if (!validCreatureValues(mon))
+    throw new Error("Creation policy produced invalid creature values");
   return mon;
 }
 export function healMonster(mon, db) {

@@ -21,7 +21,14 @@ export type CommonEffect =
   | { op: "restoreHP"; amount: number; fraction?: never }
   | { op: "restoreHP"; fraction: number; amount?: never }
   | { op: "cureStatus"; status: Status | "any" }
-  | { op: "capture"; bonus: number };
+  | { op: "capture"; bonus: number }
+  | {
+      op: "feed";
+      flavors: Partial<
+        Record<"cool" | "beauty" | "cute" | "smart" | "tough", number>
+      >;
+      feel: number;
+    };
 export interface ItemDefinition {
   name: string;
   holdable?: boolean;
@@ -164,3 +171,349 @@ export interface EvolutionDefinition {
   consumeHeld?: boolean;
   extra?: string;
 }
+
+export type Json =
+  | null
+  | boolean
+  | number
+  | string
+  | Json[]
+  | { [key: string]: Json };
+export type StatKey = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
+export type StatValues = Record<StatKey, number>;
+export type Direction = "up" | "down" | "left" | "right";
+export interface Position {
+  map: string;
+  x: number;
+  y: number;
+  dir: Direction;
+}
+export interface Creature extends Omit<BattleMonster, "gender" | "stats"> {
+  gender: "♂" | "♀" | "—";
+  stats: StatValues;
+  iv: StatValues;
+  ev: StatValues;
+  nature: number;
+  personality: number;
+  originalTrainer: string;
+  sleep?: number;
+  heldItem: string | null;
+  ability: string;
+  friendship: number;
+  egg?: EggState;
+  pendingMoves?: string[];
+  pendingEvolution?: number;
+  evolutionSkipped?: number;
+  growthCompanions?: string[];
+  cool?: number;
+  beauty?: number;
+  cute?: number;
+  smart?: number;
+  tough?: number;
+  sheen?: number;
+}
+export interface PluginRecord {
+  version: number;
+  data: Record<string, Json>;
+  states: Record<string, Record<string, { remaining: number; data: Json }>>;
+}
+export interface AdventureState {
+  position: Position;
+  party: Creature[];
+  box: Creature[];
+  bag: Record<string, number>;
+  flags: Record<string, boolean | number | string>;
+  story: StoryProgress;
+  money: number;
+  seen: string[];
+  caught: string[];
+  randomSeed: number;
+  playSeconds: number;
+  movement: { mode: string; visited: string[] };
+  friendshipSteps: number;
+  growth: { hatchTick: number };
+  daycare: {
+    slots: { mon: Creature; initialLevel: number; steps: number }[];
+    steps: number;
+    egg?: Creature | null;
+  };
+  tradePartner: Creature[];
+  extensions: Record<string, PluginRecord>;
+  contentDependencies: string[];
+}
+export interface SaveEnvelope<S = AdventureState> {
+  version: number;
+  pack?: string;
+  savedAt: number;
+  state: S;
+}
+export type CommandSource = "ui" | "plugin" | "network" | "system";
+/** Supported strict schema subset. Runtime rejects extra object keys and unsupported schema features. */
+export type DataSchema = {
+  type:
+    | "object"
+    | "array"
+    | "string"
+    | "integer"
+    | "number"
+    | "boolean"
+    | "null";
+  properties?: Record<string, DataSchema>;
+  required?: string[];
+  additionalProperties?: false;
+  items?: DataSchema;
+  enum?: Json[];
+  minimum?: number;
+  maximum?: number;
+  minLength?: number;
+  maxLength?: number;
+  minItems?: number;
+  maxItems?: number;
+};
+export interface CommandDefinition<I extends Json = Json, O = unknown> {
+  schema: DataSchema;
+  run: (input: I) => O | Promise<O>;
+  mode?: "instant" | "async";
+  network?: boolean;
+  plugin?: boolean;
+  permission?: string;
+  concurrent?: boolean;
+  maxInputBytes?: number;
+  ready?: (source: CommandSource, input: I) => boolean;
+}
+export interface CommandPort {
+  execute(id: string, input: Json, source?: CommandSource): Promise<unknown>;
+  executeSync(id: string, input: Json, source?: CommandSource): unknown;
+}
+export interface NetworkHello {
+  protocol: 1;
+  type: "hello";
+  session: string;
+  nextSequence: number;
+}
+export interface NetworkCommand {
+  protocol: 1;
+  type: "command";
+  session: string;
+  id: string;
+  sequence: number;
+  command: string;
+  input: Record<string, Json>;
+  policy?: "reject" | "wait";
+}
+export interface NetworkResult {
+  protocol: 1;
+  type: "result";
+  session: string;
+  id: string;
+  sequence: number;
+  ok: boolean;
+  result?: Json;
+  error?: { code: string; message: string };
+}
+export interface NetworkTransport {
+  send(message: string): void;
+  onMessage(listener: (message: string) => void): () => void;
+  onClose(listener: () => void): () => void;
+  close(): void;
+}
+export type ContentKind =
+  | "species"
+  | "moves"
+  | "maps"
+  | "tilesets"
+  | "actors"
+  | "evolutions"
+  | "items"
+  | "abilities"
+  | "heldItems"
+  | "moveEffects"
+  | "movement"
+  | "destinations"
+  | "resources"
+  | "mapExtensions"
+  | "growthConditions"
+  | "npcBehaviors";
+export interface PluginStateDefinition {
+  clock: "step" | "round" | "manual" | "permanent";
+  schema: DataSchema;
+  onApply?: (context: PluginTransaction, state: Readonly<Json>) => void;
+  onTick?: (context: PluginTransaction, state: Readonly<Json>) => void;
+  onRemove?: (context: PluginTransaction, state: Readonly<Json>) => void;
+}
+export interface PluginTransaction {
+  query(): Readonly<Json>;
+  store: {
+    get(key: string): Readonly<Json>;
+    set(key: string, value: Json): void;
+  };
+  states: {
+    list(uid: string): Readonly<Json>;
+    attach(
+      id: string,
+      uid: string,
+      options?: { duration?: number; data?: Json },
+    ): Readonly<Json>;
+    update(
+      id: string,
+      uid: string,
+      options?: { duration?: number; data?: Json },
+    ): Readonly<Json>;
+    remove(id: string, uid: string): boolean;
+  };
+  intent(value: Json): void;
+  emit(type: string, payload?: Json): void;
+  feedback(id: string, payload?: Json): void;
+}
+export type LayoutKind =
+  | "text"
+  | "heading"
+  | "image"
+  | "button"
+  | "row"
+  | "grid"
+  | "panel"
+  | "meter"
+  | "select";
+export interface LayoutNode {
+  kind: LayoutKind;
+  text?: string;
+  src?: string;
+  alt?: string;
+  label?: string;
+  theme?: string;
+  action?: string;
+  input?: Record<string, Json>;
+  disabled?: boolean;
+  children?: LayoutNode[];
+  value?: number | string;
+  max?: number;
+  options?: { label: string; value: string }[];
+}
+export interface MoveAnimation {
+  duration: number;
+  lunge?: number;
+  tracks: {
+    effect: string;
+    anchor: "actor" | "targets" | "field";
+    start: number;
+    end: number;
+    parameters?: Record<string, Json>;
+  }[];
+}
+export interface AudioCue {
+  kind: "music" | "sound";
+  volume: number;
+  loop: boolean;
+  source?: string;
+  notes?: [number, number][];
+}
+export interface NPCIntent {
+  dir?: Direction;
+  move: boolean;
+  pose: "still" | "walk" | "jog" | "hop" | "spin" | "sleep" | "cheer";
+  duration?: number;
+}
+export interface PluginAPI {
+  readonly version: 1;
+  readonly id: string;
+  content: { register(kind: ContentKind, id: string, value: unknown): string };
+  states: { register(id: string, definition: PluginStateDefinition): string };
+  actions: {
+    register(
+      id: string,
+      definition: {
+        schema: DataSchema;
+        network?: boolean;
+        run: (context: PluginTransaction, input: Readonly<Json>) => Json | void;
+      },
+    ): string;
+  };
+  events: {
+    on(type: string, listener: (payload: Readonly<Json>) => void): void;
+  };
+  query(): Readonly<Json>;
+  store: { get(key: string): Readonly<Json> };
+  commands: {
+    dispatch(id: string, input?: Record<string, Json>): Promise<unknown>;
+  };
+  rules: { register(id: string, definition: unknown): string };
+  story: { register(id: string, definition: unknown): string };
+  ui: {
+    page(id: string, definition: unknown): string;
+    entry(id: string, definition: unknown): string;
+    hud(id: string, definition: unknown): string;
+    theme(
+      id: string,
+      definition: Partial<
+        Record<"background" | "foreground" | "border" | "accent", string>
+      >,
+    ): string;
+  };
+  presentation: {
+    register(
+      id: string,
+      definition: {
+        duration: number;
+        scope?: "page" | "field" | "battle";
+        draw: (
+          context: unknown,
+          frame: Readonly<Json>,
+          assets: unknown,
+        ) => void;
+      },
+    ): string;
+    play(id: string, payload?: Record<string, Json>): void;
+    effect(
+      id: string,
+      definition: { draw: (context: unknown, frame: Readonly<Json>) => void },
+    ): string;
+    move(
+      id: string,
+      definition: { moveId: string; animation: MoveAnimation },
+    ): string;
+    scene(
+      id: string,
+      definition: {
+        duration: number;
+        schema: DataSchema;
+        sound?: string;
+        draw: (
+          context: unknown,
+          frame: Readonly<Json>,
+          assets: unknown,
+        ) => void;
+      },
+    ): string;
+    transition(
+      id: string,
+      definition: { draw: (context: unknown, frame: Readonly<Json>) => void },
+    ): string;
+    audio(id: string, definition: AudioCue): string;
+  };
+}
+export interface PluginManifest {
+  id: string;
+  apiVersion: 1;
+  version: string;
+  dataVersion: number;
+  permissions: string[];
+  dependencies?: Record<string, number | string>;
+  setup(api: PluginAPI): void;
+  migrate?: (record: Readonly<PluginRecord>, version: number) => PluginRecord;
+  validateData?: (data: Readonly<Record<string, Json>>) => void;
+}
+export interface MovementDefinition {
+  name?: string;
+  actor: string;
+  surface?: "land" | "water" | "both";
+  durations: number[];
+  allowed?: (context: Readonly<Json>) => boolean;
+  traverse?: (context: Readonly<Json>) => boolean;
+  afterStep?: (context: Readonly<Json>) => Json;
+}
+export type PresentationCommand = {
+  type: "presentation";
+  id: string;
+  payload?: Record<string, Json>;
+};

@@ -122,6 +122,31 @@ test("Audio resources reject traversal/malformed sequence and failed media playb
   assert.equal(audio.voices.size, 0);
   assert.equal(errors.length, 1);
 });
+test("Synchronous media creation failure releases gain and voice before reporting the host error", () => {
+  const f = fakeAudio(),
+    errors = [];
+  const audio = new AudioAdapter({
+    cues: new Map([
+      [
+        "asset",
+        { kind: "sound", volume: 0.1, loop: false, source: "assets/test.ogg" },
+      ],
+    ]),
+    createContext: () => f.context,
+    createMedia: () => {
+      throw new Error("host creation failed");
+    },
+    schedule: f.schedule,
+    cancel: f.cancel,
+    onError: (e) => errors.push(e),
+  });
+  audio.enabled = true;
+  assert.equal(audio.play("asset"), null);
+  assert.equal(audio.voices.size, 0);
+  assert.equal(f.timers.size, 0);
+  assert(f.nodes.every((n) => n.disconnected));
+  assert.equal(errors.length, 1);
+});
 test("Scene clock validates before taking control, rejects overlaps and releases scope even when cue fails", async () => {
   let resolve,
     now = 0;
@@ -157,8 +182,24 @@ test("Scene clock validates before taking control, rejects overlaps and releases
   await assert.rejects(broken.play("emerald:badge"));
   assert(!broken.busy);
 });
-test('UI scene facade serializes typed payload through the shared command envelope',async()=>{
- const { createEmeraldCommandFacade }=await import('../dist/packs/emerald/command-facade.js');let received;
- const game=createEmeraldCommandFacade({}, {definition:()=>({mode:'async'}),execute:async(id,input)=>{received={id,input};return {ok:true};}});
- assert((await game.playPresentation('emerald:dex',{species:'mudkip'})).ok);assert.equal(received.id,'core.presentation.play');assert.deepEqual(JSON.parse(received.input.payload),{species:'mudkip'});
+test("UI scene facade serializes typed payload through the shared command envelope", async () => {
+  const { createEmeraldCommandFacade } = await import(
+    "../dist/packs/emerald/command-facade.js"
+  );
+  let received;
+  const game = createEmeraldCommandFacade(
+    {},
+    {
+      definition: () => ({ mode: "async" }),
+      execute: async (id, input) => {
+        received = { id, input };
+        return { ok: true };
+      },
+    },
+  );
+  assert(
+    (await game.playPresentation("emerald:dex", { species: "mudkip" })).ok,
+  );
+  assert.equal(received.id, "core.presentation.play");
+  assert.deepEqual(JSON.parse(received.input.payload), { species: "mudkip" });
 });

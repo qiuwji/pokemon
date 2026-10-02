@@ -72,18 +72,19 @@ export class AudioAdapter {
       this.onError(new Error(`Unknown audio cue ${id}`));
       return null;
     }
+    let voice;
     try {
       const a = this.contextReady(),
-        gain = a.createGain(),
-        voice = {
-          id,
-          gain,
-          nodes: [],
-          timer: null,
-          media: null,
-          stopped: false,
-          generation: this.generation,
-        };
+        gain = a.createGain();
+      voice = {
+        id,
+        gain,
+        nodes: [],
+        timer: null,
+        media: null,
+        stopped: false,
+        generation: this.generation,
+      };
       this.voices.add(voice);
       gain.connect(a.destination);
       gain.gain.setValueAtTime(music ? 0 : cue.volume, a.currentTime);
@@ -142,6 +143,7 @@ export class AudioAdapter {
       }
       return voice;
     } catch (error) {
+      if (voice) this.stopVoice(voice);
       this.onError(error);
       return null;
     }

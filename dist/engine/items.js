@@ -1,3 +1,4 @@
+import { validStatusValues } from "./creature-contract.js";
 import {
   applyNutrition,
   validateFood,
@@ -64,21 +65,29 @@ export class ItemService {
       .some(Boolean);
     if (!changed) return { ok: false, reason: "使用后不会产生效果。" };
     const fields = ["hp", "status", "sleep", "friendship", ...NUTRITION_FIELDS];
-    for (const key of Object.keys(target)) {
+    for (const key of new Set([
+      ...Object.keys(target),
+      ...Object.keys(draft),
+    ])) {
       if (
         !fields.includes(key) &&
-        JSON.stringify(target[key]) !== JSON.stringify(draft[key])
+        (Object.hasOwn(target, key) !== Object.hasOwn(draft, key) ||
+          JSON.stringify(target[key]) !== JSON.stringify(draft[key]))
       )
         throw new Error(`Item effect cannot change protected field ${key}`);
     }
     if (
+      !validStatusValues(draft) ||
       !Number.isInteger(draft.hp) ||
       draft.hp < 0 ||
       draft.hp > draft.stats.hp ||
       ["friendship", ...NUTRITION_FIELDS].some(
         (key) =>
-          draft[key] !== undefined &&
-          (!Number.isInteger(draft[key]) || draft[key] < 0 || draft[key] > 255),
+          (target[key] !== undefined && draft[key] === undefined) ||
+          (draft[key] !== undefined &&
+            (!Number.isInteger(draft[key]) ||
+              draft[key] < 0 ||
+              draft[key] > 255)),
       )
     )
       throw new Error("Item effect produced invalid target values");
@@ -121,6 +130,7 @@ export class ItemService {
       ])
         if (Object.hasOwn(saved.draft, field))
           saved.target[field] = saved.draft[field];
+        else delete saved.target[field];
     bag[id]--;
     plan.committed = true;
     this.plans.delete(plan);

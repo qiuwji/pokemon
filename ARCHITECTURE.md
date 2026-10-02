@@ -28,15 +28,17 @@ dist/
     content.js                 内容尺寸、图块和数据库引用校验
     save-store.js              存储端口、版本检查与迁移链
   presentation/                把事件变成画面；不决定规则结果
-    duel-view.js               席位集合投影到单打画面
+    battle-view.js             多席位布局和独立快照投影
     battle-director.js         快照→血条、精灵姿态、粒子与球的状态
     battle-canvas.js           战斗画面绘制
-    transition-dom.js          遮盖 Canvas、菜单和 HUD 的转场层
+    effect-registry.js / scene-director.js  注册视觉与独立场景时钟
+    environment-canvas.js      持续天气、状态、影子和昼夜
     field-canvas.js            语义表情→像素气泡，不读取剧情进度
   adapters/                    浏览器有关的输入、绘图、音效与工具接口
     canvas-renderer.js         可视范围内的网格、图块、角色绘制
     browser-input.js           键盘/触屏→命令；可解除绑定
-    audio.js                   合成提示音的宿主实现
+    transition-dom.js          遮盖 Canvas、菜单和 HUD 的转场层
+    audio.js                   资源/合成音频、音乐切换、循环、淡出和释放
     browser-tools.js           可选 WebMCP；不绕过游戏规则
   packs/emerald/               本作的上层建筑，允许了解具体角色和物品
     pack.js                    素材标识、起点与 NPC 内容
@@ -124,13 +126,13 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 
 ### 存档版本
 
-`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本作开发存档版本为 6，按用户授权移除了旧档迁移表，拒绝旧版本。当前结构要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。
+`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本作开发存档版本为 7，按用户授权移除了旧档迁移表，拒绝旧版本。当前结构要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。
 
 ### 另一个同类游戏
 
 保留 `engine/`、通用 director 和输入适配器，建立新的内容包，替换数据库、图集、玩家角色配置、故事、名称和 UI 主题，在 `app.js` 装配新会话。`canvas-renderer.js` 的玩家素材通过 `playerActors` 注入，没有固定小悠；格子规格和 320×224 逻辑视口是当前绘图接口约定。
 
-测试已经用 `Meadow/Cabin` 的独立小地图运行 `FieldSession` 和门转场，没有引用绿宝石 NPC、剧情或 DOM。当前可复用目标是 **16px 格子、单人探索、单打回合制捕捉 RPG**，不是任意类型游戏的万能框架。原作地形行为码、默认第三世代规则与中文默认战斗文案属于现有约定；其他地形规则、语言和玩法需要对应规则/内容适配。
+测试已经用 `Meadow/Cabin` 的独立小地图运行 `FieldSession` 和门转场，没有引用绿宝石 NPC、剧情或 DOM。当前可复用目标是 **16px 格子、单人探索、多席位回合制捕捉 RPG**，不是任意类型游戏的万能框架。原作地形行为码、默认第三世代规则与中文默认战斗文案属于现有约定；其他地形规则、语言和玩法需要对应规则/内容适配。
 
 ## 维护方式和剩余边界
 
@@ -150,3 +152,11 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 状态写入守卫递归覆盖内容包中所有 `*-interface.js`、interface.js 和 ui-shell.js，拆分不会让新页面逃逸检查。独立 DOM 端口测试使用冻结状态验证装配、对话和可见控件焦点循环，浏览器验证详情页插件点击和保存。此阶段全量 300 项测试通过。
 
 应用会话保留有意采用的宽门面和共享领域对象，避免机械改名。真正需要隔离的扩展入口使用 PluginHost 的只读查询、权限化事务、声明式 UI 及 CommandBus。页面、本地自动化与协议 1 网络请求共用命令验证。详情见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md) 与 [NETWORK_ARCHITECTURE.md](NETWORK_ARCHITECTURE.md)。
+
+## 最终合同检查点（0.14）
+
+contracts.d.ts 定义内容、战斗组织/行动/目标、精灵、存档、插件事务/状态、声明式 UI、移动、视觉与网络协议。严格类型消费样例验证合法使用，并要求错误字段/只读写入产生编译错误；这是公共合同检查，尚不是全量 JS 静态类型化。
+
+creature-contract.js 共享创建与存档的精灵标量约束；物种/招式/UID 归属引用由内容包补充。SaveStore 写入前验证 detached draft；错误或不支持版本不会覆盖原存储。ItemService 禁止草稿添加、删除或修改白名单外字段，治愈睡眠同时移除计时。新创建策略失败恢复 PRNG，避免失败消耗游戏随机数。
+
+最终自动检查及浏览器流程见 FINAL_VALIDATION.md。

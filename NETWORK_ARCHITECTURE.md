@@ -1,6 +1,6 @@
 # 网络协议 1 与统一应用命令
 
-v0.11.0；开发存档仍为 envelope 6。网络适配器控制当前单机会话，不提供联机多人、权威服务器、远程认证或连接服务部署。
+协议 1；当前工程 v0.14.0，开发存档 envelope 7。网络适配器控制当前单机会话，不提供联机多人、权威服务器、远程认证或连接服务部署。
 
 ## 模块职责
 
@@ -65,6 +65,7 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 | 交换 | core.trade.prepare / exchange | 空对象或 uid/partnerUid；trade |
 | 移动 | core.movement.mode / surf / fly / equipment | mode、destination 或空对象；movement |
 | 成长 | core.growth.learn / evolve / cancel | uid、index/skip；进化带 trigger/item/from/to；learnMove/evolution |
+| 表现 | core.presentation.play | id、payload（最多 4096 字符的 JSON 字符串）；presentation；场景自身再校验数据 |
 | 保存 | core.save.write | show；save |
 | 插件 | 声明 network:true 的注册行动 | 使用同一 schema/事务/状态/反馈机制 |
 
@@ -76,4 +77,4 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 
 当前 297 项完整检查（最终执行结果以实现计划中的检查点为准）：协议错误、白名单、重复/乱序、在途去重、队列/断开、等待上限、处理器失败不重试、锁释放、UI/插件/网络同路、UID/进化、权限与步数事件补记。测试同时用 in-memory transport、假 socket 及 Node 标准库测试 peer 的真实 WebSocket handshake/frame；该 peer 位于 tests/helpers，不作为生产服务。
 
-浏览器连接真实本地测试控制端，执行 core.query → 抚摸 → 同 ID 重发 → query，详情页确认只有 1 次互动。断开后原菜单可用；截图 outputs/network-interaction.png。继续验收序章与后续 UI 拆分/表现扩展，不以协议入口完成冒充整个项目目标完成。
+浏览器连接真实本地测试控制端，执行 core.query → 抚摸 → 同 ID 重发 → query，详情页确认只有 1 次互动。断开后原菜单可用；截图 outputs/network-interaction.png。UI 拆分和表现扩展已完成，最终综合验收见 FINAL_VALIDATION.md。

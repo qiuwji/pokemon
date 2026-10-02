@@ -122,15 +122,17 @@ export class EmeraldAdventure {
     const loaded = this.saveStore.load();
     this.saveProtected =
       this.saveStore.lastIssue !== null &&
-      ["missing_dependency", "invalid_state"].includes(
+      ["missing_dependency", "invalid_state", "unsupported_version"].includes(
         this.saveStore.lastIssue?.code,
       );
     this.saveWarning = this.saveProtected
-      ? this.saveStore.lastIssue.code === "missing_dependency"
-        ? "存档需要插件：" +
-          this.saveStore.lastIssue.dependencies.join("、") +
-          "。原存档已保留，请恢复插件或从菜单明确开始新冒险。"
-        : "存档数据未通过检查。原存档已保留，请导出备份，或从菜单明确开始新冒险。"
+      ? this.saveStore.lastIssue.code === "unsupported_version"
+        ? "开发存档版本已更新。原存档已保留，可导出备份或从菜单开始新冒险。"
+        : this.saveStore.lastIssue.code === "missing_dependency"
+          ? "存档需要插件：" +
+            this.saveStore.lastIssue.dependencies.join("、") +
+            "。原存档已保留，请恢复插件或从菜单明确开始新冒险。"
+          : "存档数据未通过检查。原存档已保留，请导出备份，或从菜单明确开始新冒险。"
       : null;
     this.state = loaded?.state || this.newState();
     this.lastSave = loaded?.savedAt || 0;

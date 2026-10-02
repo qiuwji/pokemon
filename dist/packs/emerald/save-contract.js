@@ -1,8 +1,10 @@
+import { validCreatureValues } from "../../engine/creature-contract.js";
 import { PluginState } from "../../engine/extensions/plugin-state.js";
 import { readOnly, localId } from "../../engine/extensions/values.js";
 import { jsonValue, callSync } from "../../engine/extensions/values.js";
 import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
 import { isWater } from "../../engine/terrain.js";
+import { ITEMS } from "./items.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { validStoryProgress } from "../../engine/story.js";
@@ -12,6 +14,7 @@ export function validateSave(
   s,
   db,
   catalog = {
+    items: ITEMS,
     abilities: GEN3_ABILITIES,
     heldItems: GEN3_HELD_ITEMS,
     movement: MOVEMENT_MODES,
@@ -20,7 +23,7 @@ export function validateSave(
   plugins = null,
 ) {
   try {
-    if (s?.extensions !== undefined) jsonValue(s.extensions, 1024 * 1024);
+    jsonValue(s, 2 * 1024 * 1024);
   } catch {
     return false;
   }
@@ -90,7 +93,7 @@ export function validateSave(
     s.box.length > 200 ||
     !s.flags ||
     !s.bag ||
-    !Number.isInteger(s.money) ||
+    !Number.isSafeInteger(s.money) ||
     s.money < 0 ||
     !Array.isArray(s.seen) ||
     (s.friendshipSteps !== undefined &&
@@ -166,7 +169,7 @@ export function validateSave(
   const identities = new Set();
   for (const m of owned) {
     if (
-      !m ||
+      !validCreatureValues(m) ||
       typeof m.uid !== "string" ||
       !m.uid ||
       identities.has(m.uid) ||
@@ -197,6 +200,7 @@ export function validateSave(
           m.heldItem != null ||
           m.status != null)) ||
       (m.pendingEvolution !== undefined && m.pendingEvolution !== m.level) ||
+      m.pendingMoves?.some((id) => !db.moves[id]) ||
       ["cool", "beauty", "cute", "smart", "tough", "sheen"].some(
         (key) =>
           m[key] !== undefined &&
@@ -217,8 +221,27 @@ export function validateSave(
       return false;
     identities.add(m.uid);
   }
+  for (const mon of owned)
+    if (
+      mon.growthCompanions?.some(
+        (uid) => uid === mon.uid || !identities.has(uid),
+      )
+    )
+      return false;
+  if (
+    s.seen.some((id) => !db.species[id]) ||
+    s.caught.some((id) => !db.species[id] || !s.seen.includes(id)) ||
+    new Set(s.seen).size !== s.seen.length ||
+    new Set(s.caught).size !== s.caught.length
+  )
+    return false;
   if (s.daycare?.egg && !s.daycare.egg.egg) return false;
   if (s.flags.rescued && !s.party.some((m) => !m.egg)) return false;
   if (!validStoryProgress(s.story)) return false;
-  return Object.values(s.bag).every((v) => Number.isInteger(v) && v >= 0);
+  return Object.entries(s.bag).every(
+    ([id, v]) =>
+      (v === 0 || Object.hasOwn(catalog.items || db.items || {}, id)) &&
+      Number.isSafeInteger(v) &&
+      v >= 0,
+  );
 }

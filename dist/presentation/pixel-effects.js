@@ -73,7 +73,8 @@ function status(ctx, e) {
   }
 }
 function sparkle(ctx, e) {
-  const p = e.target || e.source;
+  const p = e.target ||
+    e.source || { x: e.side === 0 ? 73 : 250, y: e.side === 0 ? 136 : 56 };
   for (let i = 0; i < 7; i++) {
     const a = i * 2.4,
       t = (e.t + i / 7) % 1,

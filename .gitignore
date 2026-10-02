@@ -4,3 +4,5 @@ __pycache__/
 .sites-runtime/
 
 work/
+
+node_modules/

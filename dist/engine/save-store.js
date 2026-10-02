@@ -33,7 +33,17 @@ export class SaveStore {
     const current = this.raw();
     if (this.baselineKnown && current !== this.expectedRaw)
       throw new SaveConflict();
-    const envelope = { version: this.version, savedAt: Date.now(), state };
+    const draft = structuredClone(state);
+    if (!this.validate(draft)) {
+      const error = new Error("Invalid state cannot be saved");
+      error.code = "invalid_state";
+      throw error;
+    }
+    const envelope = {
+      version: this.version,
+      savedAt: Date.now(),
+      state: draft,
+    };
     this.storage.setItem(this.key, JSON.stringify(envelope));
     this.acceptCurrent();
     return envelope.savedAt;
@@ -47,11 +57,22 @@ export class SaveStore {
       if (
         !Number.isInteger(envelope.version) ||
         envelope.version > this.version
-      )
+      ) {
+        this.lastIssue = {
+          code: "unsupported_version",
+          version: envelope.version,
+        };
         return null;
+      }
       while (envelope.version < this.version) {
         const migrate = this.migrations[envelope.version];
-        if (!migrate) return null;
+        if (!migrate) {
+          this.lastIssue = {
+            code: "unsupported_version",
+            version: envelope.version,
+          };
+          return null;
+        }
         envelope.state = migrate(envelope.state);
         envelope.version++;
       }
