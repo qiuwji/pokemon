@@ -1,3 +1,4 @@
+import { GEN3_SUPPORT_STATES } from "./support-states.js";
 import { GEN3_CONTROL_STATES } from "./control-states.js";
 import { PHYSICAL_TYPES } from "../../model.js";
 import { objectSchema } from "../../extensions/values.js";
@@ -27,6 +28,7 @@ const screen = (physical) => ({
 /** Third-generation policies; timers and HP costs verified in battle_script_commands.c / battle_util.c. */
 export const GEN3_BATTLE_STATES = {
   ...GEN3_CONTROL_STATES,
+  ...GEN3_SUPPORT_STATES,
   curse: {
     scope: "seat",
     clearOn: ["leave", "faint", "end"],

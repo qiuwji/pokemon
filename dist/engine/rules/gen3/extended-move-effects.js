@@ -9,6 +9,26 @@ const stage = (target, changes) => ({
 const secondary = (op, p = {}) => ({ secondary: [{ op, ...p }] });
 /** Semantic families share operations; no move ID dispatch in the executor. */
 export const GEN3_EXTENDED_MOVE_EFFECTS = {
+  charge: primary("applyBattleState", { id: "charge", target: "self" }, true),
+  helping_hand: primary("helpingHand", {}, true),
+  follow_me: primary(
+    "applyBattleState",
+    { id: "follow_me", target: "self" },
+    true,
+  ),
+  destiny_bond: primary(
+    "applyBattleState",
+    { id: "destiny_bond", target: "self" },
+    true,
+  ),
+  grudge: primary("applyBattleState", { id: "grudge", target: "self" }, true),
+  rage: {
+    beforeDamage: [
+      { op: "applyBattleState", id: "rage", target: "self", scope: "action" },
+    ],
+  },
+  memento: { primary: [{ op: "memento" }], bypassHitChecks: true },
+  secret_power: { secondary: [{ op: "secretPower" }] },
   conversion: primary("conversion", {}, true),
   conversion_2: primary("conversionResistance", {}, true),
   camouflage: primary("camouflage", {}, true),

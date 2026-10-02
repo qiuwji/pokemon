@@ -18,7 +18,7 @@ export const RANDOM_POWER_OPERATIONS = {
       type = { rain: "water", sand: "rock", sun: "fire", hail: "ice" }[weather];
     if (type) {
       c.move.type = type;
-      c.power *= 2;
+      c.baseMultiplier = 2;
     }
   },
   present(c) {

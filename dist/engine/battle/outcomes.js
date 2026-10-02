@@ -30,9 +30,13 @@ export class BattleOutcomes {
         Number(b.roster.alliance(a.id) === b.homeAlliance) -
         Number(b.roster.alliance(c.id) === b.homeAlliance),
     );
-    for (const seat of seats) {
+    while (true) {
+      const seat = seats.find((s) => {
+        const mon = b.roster.occupant(s.id);
+        return mon && mon.hp <= 0 && !this.defeated.has(mon.uid);
+      });
+      if (!seat) break;
       const mon = b.roster.occupant(seat.id);
-      if (!mon || mon.hp > 0 || this.defeated.has(mon.uid)) continue;
       this.defeated.add(mon.uid);
       b.phase = "faint";
       b.emit(`${b.name(mon)} 倒下了！`, "faint", { targetSeat: seat.id });

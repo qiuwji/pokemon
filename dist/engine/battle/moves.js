@@ -168,6 +168,7 @@ export class MoveExecutor {
       c.targetCount = targets.length;
       c.targetMode = b.targeting.mode(move);
       c.power = initial.power;
+      c.baseMultiplier = initial.baseMultiplier || 1;
       b.phase = "hit-check";
       const visualResult = { seatId: target.id, successful: false };
       event.move.targetResults.push(visualResult);
@@ -323,6 +324,7 @@ export class MoveExecutor {
                 critical,
                 power,
                 spread,
+                baseMultiplier: c.baseMultiplier || 1,
                 modifier: (phase, value, formula) =>
                   b.traits?.calculate(phase, value, { ...c, ...formula }) ??
                   value,

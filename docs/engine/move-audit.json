@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 22,
+    "missing": 14,
     "disabled": 0,
-    "registered-unverified": 176
+    "registered-unverified": 184
   },
   "effects": [
     {
@@ -944,7 +944,7 @@
         "rage"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "mimic",
@@ -1097,7 +1097,7 @@
         "destiny_bond"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "flail",
@@ -1783,7 +1783,7 @@
         "memento"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "facade",
@@ -1819,7 +1819,7 @@
         "follow_me"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "nature_power",
@@ -1839,7 +1839,7 @@
         "charge"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "taunt",
@@ -1859,7 +1859,7 @@
         "helping_hand"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "trick",
@@ -2026,7 +2026,7 @@
         "grudge"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "snatch",
@@ -2053,7 +2053,7 @@
         "secret_power"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "double_edge",

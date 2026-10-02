@@ -1,3 +1,4 @@
+import { SUPPORT_OPERATIONS } from "./battle/support-operations.js";
 import { UTILITY_OPERATIONS } from "./battle/utility-operations.js";
 import { RANDOM_POWER_OPERATIONS } from "./battle/random-power-operations.js";
 import { REACTIVE_OPERATIONS } from "./battle/reactive-operations.js";
@@ -348,6 +349,7 @@ export class MoveEffectRegistry {
       ...FORM_OPERATIONS,
       ...REACTIVE_OPERATIONS,
       ...UTILITY_OPERATIONS,
+      ...SUPPORT_OPERATIONS,
       ...RANDOM_POWER_OPERATIONS,
       ...operations,
     });

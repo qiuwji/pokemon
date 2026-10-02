@@ -54,6 +54,7 @@ export const RULE_PHASES = Object.freeze([
   "power",
   "damage-modifier",
   "base-damage",
+  "pre-type-damage",
   "screen",
   "accuracy",
   "critical-stage",

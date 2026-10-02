@@ -121,7 +121,6 @@ export class Battle {
         this.traits
           ? {
               species: this.forms.effective(this.roster.occupant(seat)).species,
-              moves: this.movesFor(seat).map(({ id, pp }) => ({ id, pp })),
               sprites:
                 this.forms.effective(this.roster.occupant(seat)).sprites ||
                 null,

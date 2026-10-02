@@ -253,6 +253,7 @@ export function damage(
   v = Math.floor(modifier("base-damage", v, context)) + 2;
   v *= baseMultiplier;
   if (critical) v *= 2;
+  v = Math.floor(modifier("pre-type-damage", v, context));
   if (attackerTypes.includes(move.type)) v = Math.floor(v * 1.5);
   for (const t of defenderTypes)
     v = Math.floor(v * (db.typeChart[move.type]?.[t] ?? 1));
