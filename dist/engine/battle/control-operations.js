@@ -68,9 +68,11 @@ export const CONTROL_OPERATIONS = {
       !b.roster
         .opposing(c.actorSeat)
         .some((s) =>
-          b.roster
-            .occupant(s.id)
-            .moves.some((m) => c.mon.moves.some((slot) => slot.id === m.id)),
+          b
+            .movesFor(s.id)
+            .some((m) =>
+              b.movesFor(c.actorSeat).some((slot) => slot.id === m.id),
+            ),
         )
     ) {
       fail(c);

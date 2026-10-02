@@ -132,7 +132,12 @@ export class BattleActions {
       "switch",
       { actorSeat: seat, targetSeat: seat, previousUid: old?.uid || null },
     );
-    b.traits?.enter(seat);
+    b.traits?.run("switch-in", {
+      actorSeat: seat,
+      targetSeat: seat,
+      ownerSeat: seat,
+    });
+    if (mon.hp > 0) b.traits?.enter(seat);
     b.traits?.run("replacement", {
       actorSeat: seat,
       targetSeat: seat,

@@ -1,3 +1,4 @@
+import { CONTROL_STATE_OPERATIONS } from "./battle/control-state-operations.js";
 import { FORM_OPERATIONS } from "./battle/form-operations.js";
 import { GEN3_EXTENDED_MOVE_EFFECTS } from "./rules/gen3/extended-move-effects.js";
 import { DAMAGE_OPERATIONS } from "./battle/damage-operations.js";
@@ -336,6 +337,7 @@ export class MoveEffectRegistry {
       ...SPECIAL_MOVE_OPERATIONS,
       ...DAMAGE_OPERATIONS,
       ...CONTROL_OPERATIONS,
+      ...CONTROL_STATE_OPERATIONS,
       ...FORM_OPERATIONS,
       ...operations,
     });

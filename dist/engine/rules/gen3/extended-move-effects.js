@@ -9,6 +9,24 @@ const stage = (target, changes) => ({
 const secondary = (op, p = {}) => ({ secondary: [{ op, ...p }] });
 /** Semantic families share operations; no move ID dispatch in the executor. */
 export const GEN3_EXTENDED_MOVE_EFFECTS = {
+  disable: primary("restrictMove", { state: "disable" }),
+  encore: primary("restrictMove", { state: "encore" }),
+  torment: primary("applyBattleState", { id: "torment" }),
+  mean_look: primary("applyBattleState", { id: "mean_look" }),
+  lock_on: primary("applyBattleState", { id: "lock_on" }),
+  safeguard: primary(
+    "applyBattleState",
+    { id: "safeguard", target: "self" },
+    true,
+  ),
+  wish: primary("applyBattleState", { id: "wish", target: "self" }, true),
+  ingrain: primary("applyBattleState", { id: "ingrain", target: "self" }, true),
+  yawn: primary("yawn"),
+  leech_seed: primary("seed"),
+  nightmare: primary("nightmare"),
+  perish_song: primary("perishSong", {}, true),
+  spikes: primary("spikes"),
+  rapid_spin: { afterDamage: [{ op: "rapidSpin" }] },
   transform: primary("transform"),
   mimic: primary("mimic"),
   endeavor: { beforeDamage: [{ op: "fixedDamage", mode: "endeavor" }] },

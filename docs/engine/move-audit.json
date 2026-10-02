@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 61,
+    "missing": 47,
     "disabled": 0,
-    "registered-unverified": 137
+    "registered-unverified": 151
   },
   "effects": [
     {
@@ -971,7 +971,7 @@
         "leech_seed"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "splash",
@@ -989,7 +989,7 @@
         "disable"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "level_damage",
@@ -1026,7 +1026,7 @@
         "encore"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "pain_split",
@@ -1063,7 +1063,7 @@
         "lock_on"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "sketch",
@@ -1185,7 +1185,7 @@
         "block"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "nightmare",
@@ -1194,7 +1194,7 @@
         "nightmare"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "minimize",
@@ -1241,7 +1241,7 @@
         "spikes"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "foresight",
@@ -1263,7 +1263,7 @@
         "perish_song"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "sandstorm",
@@ -1358,7 +1358,7 @@
         "safeguard"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "thaw_hit",
@@ -1406,7 +1406,7 @@
         "rapid_spin"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "sonicboom",
@@ -1756,7 +1756,7 @@
         "torment"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "flatter",
@@ -1886,7 +1886,7 @@
         "wish"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "assist",
@@ -1904,7 +1904,7 @@
         "ingrain"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "superpower",
@@ -1958,7 +1958,7 @@
         "yawn"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "knock_off",

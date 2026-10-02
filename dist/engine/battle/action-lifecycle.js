@@ -118,7 +118,11 @@ export class BattleActionLifecycle {
       [...this.history]
         .reverse()
         .find(
-          (r) => r.seat === seat && r.moveId && (!successful || r.successful),
+          (r) =>
+            r.seat === seat &&
+            r.uid === this.battle.roster.occupant(seat)?.uid &&
+            r.moveId &&
+            (!successful || r.successful),
         )?.moveId || null
     );
   }

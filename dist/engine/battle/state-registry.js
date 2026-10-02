@@ -24,7 +24,9 @@ export class BattleStateRegistry {
               d.duration < 1 ||
               d.duration > 10000)) ||
           (d.clearOn || []).some((v) => !cleanup.includes(v)) ||
-          !Array.isArray(d.hooks)
+          !Array.isArray(d.hooks) ||
+          (d.clearWithSource !== undefined &&
+            typeof d.clearWithSource !== "boolean")
         )
           throw new Error(`Invalid battle state ${id}`);
         return [
@@ -54,6 +56,7 @@ export class BattleStateRegistry {
         "beforeDamage",
         "afterDamage",
         "secondary",
+        "onCharge",
       ])
         for (const s of d[phase] || [])
           if (["applyBattleState", "removeBattleState"].includes(s.op))
@@ -174,6 +177,7 @@ export class BattleStateService {
   }
   tick() {
     for (const r of [...this.instances.values()]) {
+      if (!this.instances.has(r.key) || this.battle.ended) continue;
       this.lifecycle("state-tick", r);
       if (
         this.instances.has(r.key) &&
@@ -182,16 +186,20 @@ export class BattleStateService {
       )
         this.remove(r.key, "expired");
     }
+    this.battle.outcomes.observe();
   }
   clear(reason, seat) {
+    const sourceUid = seat ? this.battle.roster.occupant(seat)?.uid : null;
     for (const r of [...this.instances.values()])
       if (
-        (reason === "end" ||
+        (reason !== "end" &&
+          this.registry.get(r.id).clearWithSource &&
+          r.source.uid === sourceUid) ||
+        ((reason === "end" ||
           this.registry.get(r.id).clearOn.includes(reason)) &&
-        (reason === "end" ||
-          (r.scope === "seat" && r.anchor === seat) ||
-          (r.scope === "creature" &&
-            r.anchor === this.battle.roster.occupant(seat)?.uid))
+          (reason === "end" ||
+            (r.scope === "seat" && r.anchor === seat) ||
+            (r.scope === "creature" && r.anchor === sourceUid)))
       )
         this.remove(r.key, reason);
   }

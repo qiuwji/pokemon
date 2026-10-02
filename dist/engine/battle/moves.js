@@ -52,6 +52,19 @@ export class MoveExecutor {
     const b = this.battle,
       mon = b.roster.occupant(action.seat);
     if (!(mon?.hp > 0)) return;
+    if (!action.overrideMove && action.index >= 0) {
+      const index = b.traits.calculate("selected-move", action.index, {
+        actorSeat: action.seat,
+        action,
+      });
+      if (
+        !Number.isInteger(index) ||
+        index < 0 ||
+        !b.movesFor(action.seat)[index]
+      )
+        throw new Error("Invalid selected move index");
+      action = { ...action, index };
+    }
     const move = {
         ...(action.overrideMove
           ? b.db.moves[action.overrideMove]
@@ -195,8 +208,15 @@ export class MoveExecutor {
   hits(c) {
     if (c.definition.target === "self" || c.definition.bypassHitChecks)
       return true;
+    const hitPermission = { ...c, allowed: true, guaranteed: false };
+    this.battle.traits?.run("hit-check", hitPermission);
+    if (!hitPermission.allowed) return false;
     const hidden = this.battle.actionLifecycle.hidden(c.targetSeat);
-    if (hidden && !c.definition.hitsHidden?.includes(hidden)) {
+    if (
+      hidden &&
+      !hitPermission.guaranteed &&
+      !c.definition.hitsHidden?.includes(hidden)
+    ) {
       c.emit("目标暂时无法被攻击！", "failed");
       return false;
     }
@@ -212,13 +232,11 @@ export class MoveExecutor {
       c.emit("没有效果。", "failed");
       return false;
     }
-    const hitPermission = { ...c, allowed: true };
-    this.battle.traits?.run("hit-check", hitPermission);
-    if (!hitPermission.allowed) return false;
     const b = this.battle,
       stages = (c.selfState.stages.acc || 0) - (c.targetState.stages.eva || 0);
     if (
       c.definition.alwaysHits ||
+      hitPermission.guaranteed ||
       b.rules.accuracy({
         move: c.move,
         modifier: (accuracy) =>
