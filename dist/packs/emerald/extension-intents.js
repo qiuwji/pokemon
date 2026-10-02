@@ -1,3 +1,21 @@
+export const EMERALD_PLUGIN_PERMISSIONS = Object.freeze([
+  "friendship",
+  "useItem",
+  "equip",
+  "setLead",
+  "reward",
+  "createMonster",
+  "movement",
+  "battle",
+  "starter",
+  "buyItem",
+  "storage",
+  "daycare",
+  "trade",
+  "learnMove",
+  "evolution",
+  "save",
+]);
 import {
   objectSchema,
   validateSchema,
@@ -20,8 +38,13 @@ const schemas = Object.fromEntries(
       ["kind", "uid", "item"],
     ),
     equip: objectSchema(
-      { kind: { type: "string", enum: ["equip"] }, uid: id, item: id },
-      ["kind", "uid", "item"],
+      {
+        kind: { type: "string", enum: ["equip"] },
+        uid: id,
+        item: id,
+        remove: { type: "boolean" },
+      },
+      ["kind", "uid"],
     ),
     setLead: objectSchema(
       { kind: { type: "string", enum: ["setLead"] }, uid: id },
@@ -57,4 +80,9 @@ export function validateEmeraldIntent(intent, owner, items) {
   const schema = schemas[intent.kind];
   if (!schema) throw new Error("Unknown core intent");
   validateValue(schema, intent, "intent");
+  if (
+    intent.kind === "equip" &&
+    (intent.remove === true ? intent.item !== undefined : !intent.item)
+  )
+    throw new Error("Specify an item or remove equipment");
 }

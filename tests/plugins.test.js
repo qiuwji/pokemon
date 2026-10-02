@@ -634,3 +634,74 @@ test("Themes and world feedback use bounded public definitions; invalid scopes a
     /bounds/,
   );
 });
+
+test("Domain permissions are supplied by the content pack and queued observation steps flush after asynchronous command completion", async () => {
+  const generic = new PluginHost({ base: {}, permissions: ["custom-domain"] });
+  generic.load([
+    manifest("custom", () => {}, { permissions: ["custom-domain"] }),
+  ]);
+  assert.throws(
+    () =>
+      new PluginHost({ base: {} }).load([
+        manifest("custom", () => {}, { permissions: ["friendship"] }),
+      ]),
+    /manifest/,
+  );
+  const { game, host, bus } = gameWith();
+  let release;
+  bus.register("test.async", {
+    schema: objectSchema(),
+    mode: "async",
+    run: () =>
+      new Promise((r) => {
+        release = r;
+      }),
+  });
+  const pending = bus.execute("test.async");
+  host.events.emit("core:field-step", { x: 1 });
+  host.events.emit("core:field-step", { x: 2 });
+  assert.equal(game.state.extensions["field-journal"].data.steps, undefined);
+  release(true);
+  await pending;
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(game.state.extensions["field-journal"].data.steps, 2);
+});
+
+test("Authorized plugins can use exposed domain commands and equipment removal remains a validated intent", async () => {
+  let api;
+  const controller = manifest(
+    "controller",
+    (extension) => {
+      api = extension;
+      extension.actions.register("remove", {
+        schema: objectSchema({ uid: { type: "string" } }, ["uid"]),
+        run(ctx, { uid }) {
+          ctx.intent({ kind: "equip", uid, remove: true });
+        },
+      });
+    },
+    { permissions: ["movement", "equip"] },
+  );
+  const { game, bus } = gameWith([controller]),
+    uid = game.state.party[0].uid;
+  assert(
+    (await api.commands.dispatch("core.movement.mode", { mode: "walk" })).ok,
+  );
+  game.state.bag.oran_berry = 1;
+  assert(
+    (
+      await api.commands.dispatch("core.item.equip", {
+        uid,
+        item: "oran_berry",
+      })
+    ).ok,
+  );
+  await bus.execute("controller:remove", { uid });
+  assert.equal(game.state.party[0].heldItem, null);
+  assert.equal(game.state.bag.oran_berry, 1);
+  await assert.rejects(
+    api.commands.dispatch("core.growth.learn", { uid, skip: true }),
+    /permission/,
+  );
+  await assert.rejects(api.commands.dispatch("core.save.reset"), /permission/);
+});

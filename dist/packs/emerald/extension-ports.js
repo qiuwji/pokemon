@@ -1,3 +1,4 @@
+import { registerEmeraldCommands } from "./application-commands.js";
 import { validateEmeraldIntent } from "./extension-intents.js";
 import { CommandBus } from "../../engine/extensions/command-bus.js";
 import { objectSchema } from "../../engine/extensions/values.js";
@@ -14,7 +15,7 @@ export function attachEmeraldExtensions(game, host) {
     ...(game.state.daycare.egg ? [game.state.daycare.egg] : []),
   ];
   const query = () => ({
-    busy: !!game.busy,
+    busy: !!game.busy || !!game.commandBus?.active,
     battle: game.battle ? game.battle.snapshot() : null,
     position: { ...game.state.position },
     movement: { ...game.state.movement },
@@ -43,12 +44,11 @@ export function attachEmeraldExtensions(game, host) {
     })),
   });
   const bus = new CommandBus({
+    onError: host.onError,
     ready: (command, source, args) =>
-      command.id === "core.query" ||
-      (!game.busy &&
-        !game.battle &&
-        !game.ui?.dialog &&
-        (!command.ready || command.ready(source, args))),
+      command.ready
+        ? command.ready(source, args)
+        : !game.busy && !game.battle && !game.ui?.dialog,
     onComplete: (id, args, result) =>
       host.events.emit("core:command-complete", {
         id,
@@ -75,6 +75,8 @@ export function attachEmeraldExtensions(game, host) {
     ),
     plugin: true,
     network: true,
+    permission: "movement",
+    ready: () => !game.busy && !game.battle && !game.ui?.blocked,
     run: ({ direction, running = false }) => game.move(direction, { running }),
   });
   bus.register("core.party.lead", {
@@ -85,10 +87,12 @@ export function attachEmeraldExtensions(game, host) {
     run: ({ uid }) =>
       game.setLead(game.state.party.findIndex((m) => m.uid === uid)),
   });
+  registerEmeraldCommands(game, bus);
   const runtime = host.attach({
     bus,
     ports: {
       state: () => game.state,
+      ready: () => !game.busy && !game.battle && !game.ui?.dialog,
       random: () => game.rng,
       query,
       hasUid: (uid) => owned().some((m) => m.uid === uid),
@@ -122,7 +126,10 @@ export function attachEmeraldExtensions(game, host) {
               game.state.party.findIndex((m) => m.uid === intent.uid),
             );
           case "equip":
-            return game.equipItem(intent.uid, intent.item);
+            return game.equipItem(
+              intent.uid,
+              intent.remove ? null : intent.item,
+            );
           case "setLead":
             return game.setLead(
               game.state.party.findIndex((m) => m.uid === intent.uid),

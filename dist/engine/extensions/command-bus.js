@@ -3,6 +3,7 @@ import {
   readOnly,
   validateSchema,
   validateValue,
+  callSync,
 } from "./values.js";
 export class CommandError extends Error {
   constructor(code, message = code) {
@@ -12,8 +13,13 @@ export class CommandError extends Error {
 }
 /** Shared application command registry. Instant input remains synchronous; async commands are serial. */
 export class CommandBus {
-  constructor({ ready = () => true, onComplete = () => {} } = {}) {
+  constructor({
+    ready = () => true,
+    onComplete = () => {},
+    onError = () => {},
+  } = {}) {
     this.ready = ready;
+    this.onError = onError;
     this.onComplete = onComplete;
     this.definitions = new Map();
     this.active = null;
@@ -24,7 +30,12 @@ export class CommandBus {
       !/^[a-z][a-z0-9_.:-]{0,127}$/.test(id) ||
       this.definitions.has(id) ||
       typeof definition.run !== "function" ||
-      !["instant", "async"].includes(definition.mode || "instant")
+      !["instant", "async"].includes(definition.mode || "instant") ||
+      (definition.mode === "async" && definition.concurrent) ||
+      (definition.maxInputBytes !== undefined &&
+        (!Number.isInteger(definition.maxInputBytes) ||
+          definition.maxInputBytes < 1 ||
+          definition.maxInputBytes > 2097152))
     )
       throw new Error(`Invalid command ${id}`);
     const schema = validateSchema(definition.schema);
@@ -32,6 +43,7 @@ export class CommandBus {
       id,
       Object.freeze({
         ...definition,
+        id,
         schema,
         mode: definition.mode || "instant",
       }),
@@ -47,42 +59,44 @@ export class CommandBus {
       throw new CommandError("invalid_source");
     if (source === "network" && command.network !== true)
       throw new CommandError("not_network_enabled");
-    const args = jsonValue(input);
+    const args = jsonValue(input, command.maxInputBytes || 65536);
     validateValue(command.schema, args);
     if (
       (this.active && !command.concurrent) ||
       !this.ready(command, source, args)
     )
       throw new CommandError("busy");
-    return { command, args: readOnly(args) };
+    return { command, args: readOnly(args, command.maxInputBytes || 65536) };
   }
   executeSync(id, input = {}, source = "ui") {
     const { command, args } = this.prepare(id, input, source);
     if (command.mode !== "instant") throw new CommandError("async_command");
-    const result = command.run(args, source);
-    if (result?.then)
-      throw new CommandError(
-        "invalid_handler",
-        "Instant handler returned an async result",
-      );
-    this.onComplete(id, args, result);
+    const result = callSync(command.run, [args, source], this.onError);
+    this.complete(id, args, result);
     return result;
+  }
+  complete(id, args, result) {
+    try {
+      callSync(this.onComplete, [id, args, result], this.onError);
+    } catch (error) {
+      this.onError(error);
+    }
   }
   async execute(id, input = {}, source = "ui") {
     const { command, args } = this.prepare(id, input, source);
     if (command.mode === "instant") {
-      const result = command.run(args, source);
-      if (result?.then) throw new CommandError("invalid_handler");
-      this.onComplete(id, args, result);
+      const result = callSync(command.run, [args, source], this.onError);
+      this.complete(id, args, result);
       return result;
     }
     this.active = id;
+    let result;
     try {
-      const result = await command.run(args, source);
-      this.onComplete(id, args, result);
-      return result;
+      result = await command.run(args, source);
     } finally {
       this.active = null;
     }
+    this.complete(id, args, result);
+    return result;
   }
 }

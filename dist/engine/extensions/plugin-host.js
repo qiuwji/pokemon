@@ -13,17 +13,10 @@ import {
 } from "./values.js";
 import { RULE_PHASES } from "../rule-pipeline.js";
 export const PLUGIN_API_VERSION = 1;
-export const CORE_INTENTS = Object.freeze([
-  "friendship",
-  "useItem",
-  "equip",
-  "setLead",
-  "reward",
-  "createMonster",
-]);
 /** Startup host: content + declarative interfaces + runtime ports. Trusted code, explicit API, no hot unload. */
 export class PluginHost {
-  constructor({ base, onError = () => {} }) {
+  constructor({ base, permissions = [], onError = () => {} }) {
+    this.allowedPermissions = Object.freeze([...permissions]);
     this.catalog = new ExtensionCatalog(base);
     this.ui = new PluginUIRegistry();
     this.manifests = new Map();
@@ -51,7 +44,7 @@ export class PluginHost {
         plugin.dataVersion < 1 ||
         typeof plugin.setup !== "function" ||
         !Array.isArray(plugin.permissions) ||
-        plugin.permissions.some((p) => !CORE_INTENTS.includes(p))
+        plugin.permissions.some((p) => !this.allowedPermissions.includes(p))
       )
         throw new Error("Invalid plugin manifest");
       pending.set(plugin.id, plugin);
@@ -81,6 +74,7 @@ export class PluginHost {
     // All declarations live in a temporary host; caller's catalogs remain unchanged on failure.
     const staged = new PluginHost({
       base: this.catalog.base,
+      permissions: this.allowedPermissions,
       onError: this.onError,
     });
     for (const plugin of ordered) {
@@ -290,6 +284,7 @@ export class PluginHost {
           runtime.transaction(definition.owner, definition.run, input),
         ready: definition.ready
           ? (source, args) =>
+              (ports.ready?.() ?? true) &&
               runtime.evaluate(
                 definition.ready,
                 readOnly(args),

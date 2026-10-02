@@ -1,3 +1,4 @@
+import { createNetworkInterface } from "./network-interface.js";
 import { ExtensionDOM } from "../../adapters/extension-dom.js";
 import { createGrowthInterface } from "./growth-interface.js";
 import { createMovementInterface } from "./movement-interface.js";
@@ -548,11 +549,18 @@ export function createEmeraldInterface(
     escapeHTML,
   });
 
+  const networkUI = createNetworkInterface(game, {
+    modal,
+    root,
+    escapeHTML,
+    showMenu,
+    toast,
+  });
   function showMenu() {
     if (game.busy || game.battle || dialog) return;
     modal(
       "冒险菜单",
-      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="daycare" ${game.canUseDaycare() ? "" : "disabled"}>育成研究<small>研究所寄存、蛋与交换</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
+      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="daycare" ${game.canUseDaycare() ? "" : "disabled"}>育成研究<small>研究所寄存、蛋与交换</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="network">扩展连接<small>本地验证与连接服务</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
       { type: "menu" },
     );
     game.ui?.extensions?.mountSlot(
@@ -568,6 +576,7 @@ export function createEmeraldInterface(
       save: showSave,
       box: showBox,
       help: showHelp,
+      network: networkUI.showNetwork,
       movement: movementUI.showMovement,
       daycare: growthUI.showDaycare,
     };
@@ -606,7 +615,10 @@ export function createEmeraldInterface(
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     };
-    $("import-save").onclick = () => $("save-file").click();
+    $("import-save").onclick = () => {
+      $("save-file").value = "";
+      $("save-file").click();
+    };
     $("save-file").onchange = async (ev) => {
       const file = ev.target.files[0];
       if (!file) return;

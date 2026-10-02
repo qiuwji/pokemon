@@ -4,7 +4,7 @@ export function createFieldJournal(baseMap) {
   return {
     id: "field-journal",
     apiVersion: 1,
-    version: "1.0.0",
+    version: "1.0.1",
     dataVersion: 1,
     permissions: [],
     validateData(data) {
@@ -89,14 +89,39 @@ export function createFieldJournal(baseMap) {
         ],
       });
       const record = api.actions.register("record-step", {
-        schema: objectSchema(),
-        run(ctx) {
-          ctx.store.set("steps", (ctx.store.get("steps") || 0) + 1);
+        schema: objectSchema({
+          count: { type: "integer", minimum: 1, maximum: 128 },
+        }),
+        run(ctx, { count = 1 }) {
+          ctx.store.set("steps", (ctx.store.get("steps") || 0) + count);
         },
       });
+      let pendingSteps = 0,
+        recording = false;
+      const flush = () => {
+        const current = api.query();
+        if (!pendingSteps || recording || current.busy || current.battle)
+          return;
+        const count = Math.min(128, pendingSteps);
+        recording = true;
+        let committed = false;
+        api.commands
+          .dispatch(record, { count })
+          .then(() => {
+            pendingSteps -= count;
+            committed = true;
+          })
+          .catch(() => {})
+          .finally(() => {
+            recording = false;
+            if (committed) flush();
+          });
+      };
       api.events.on("core:field-step", () => {
-        if (!api.query().busy) api.commands.dispatch(record).catch(() => {});
+        pendingSteps++;
+        flush();
       });
+      api.events.on("core:command-complete", flush);
       const page = api.ui.page("journal", {
         title: "旅途 · 观察手记",
         render: (view) => ({

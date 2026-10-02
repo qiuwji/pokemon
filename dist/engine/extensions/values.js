@@ -34,7 +34,8 @@ export function freeze(value) {
   }
   return value;
 }
-export const readOnly = (value) => freeze(jsonValue(value, 1024 * 1024));
+export const readOnly = (value, maxBytes = 1024 * 1024) =>
+  freeze(jsonValue(value, maxBytes));
 export const localId = (value) =>
   typeof value === "string" && /^[a-z][a-z0-9_.-]{0,63}$/.test(value);
 export function qualified(owner, id) {

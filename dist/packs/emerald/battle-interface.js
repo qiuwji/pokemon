@@ -44,7 +44,7 @@ export function createBattleInterface(
     return game.turn({
       ...action,
       seat: game.battle.commandSeat,
-      actor: game.battle.player?.uid,
+      ...(game.battle.player ? { actor: game.battle.player.uid } : {}),
     });
   }
   function pickMove(index) {

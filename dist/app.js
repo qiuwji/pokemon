@@ -1,3 +1,4 @@
+import { createEmeraldCommandFacade } from "./packs/emerald/command-facade.js";
 import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "./packs/emerald/extension-ports.js";
 import { companionCare } from "./plugins/companion-care.js";
@@ -51,7 +52,7 @@ async function boot() {
     const overlay = new TransitionDOM($("transition")),
       audio = new AudioAdapter();
     let input, sceneTimer;
-    const game = new EmeraldAdventure({
+    const adventure = new EmeraldAdventure({
       db,
       catalog,
       plugins: host,
@@ -85,7 +86,8 @@ async function boot() {
         );
       },
     });
-    attachEmeraldExtensions(game, host);
+    const { bus } = attachEmeraldExtensions(adventure, host);
+    const game = createEmeraldCommandFacade(adventure, bus);
     const ui = createEmeraldInterface(game, {
       tone: (...args) => audio.tone(...args),
       extensionAssets: assets,
@@ -116,7 +118,7 @@ async function boot() {
       if (ui.dialog) ui.nextDialogue();
     };
     setInterval(() => {
-      if (!document.hidden) game.state.playSeconds++;
+      if (!document.hidden) game.advancePlayTime();
     }, 1000);
     await registerGameTools({
       inspect: () => game.inspect(),

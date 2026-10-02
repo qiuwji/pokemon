@@ -1,3 +1,4 @@
+import { EMERALD_PLUGIN_PERMISSIONS } from "./extension-intents.js";
 import { validateWorldExtensions } from "../../engine/extensions/world-content.js";
 import { extensionGrowthConditions } from "../../engine/extensions/growth-conditions.js";
 import { PluginHost } from "../../engine/extensions/plugin-host.js";
@@ -20,6 +21,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     ]),
   );
   const host = new PluginHost({
+    permissions: EMERALD_PLUGIN_PERMISSIONS,
     base: {
       ...db,
       resources,

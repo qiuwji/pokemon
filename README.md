@@ -134,3 +134,5 @@ python3 tools/import-encounters.py /path/to/pokeemerald
 育成与进化架构见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)。v0.9.0 可在研究所寄存、领蛋、孵化与交换，伙伴详情支持进化石；旧开发档不兼容。
 
 插件 API 1 与 14 项能力见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md)。v0.10.0 启动加载两个独立插件，详情页支持抚摸/玩耍/喂食，研究所东侧通往插件观察室。开发存档版本 6，不兼容旧开发档。
+
+统一命令与网络协议见 [NETWORK_ARCHITECTURE.md](NETWORK_ARCHITECTURE.md)。v0.11.0 菜单的“扩展连接”支持本地协议验证及可替换 WebSocket；网络控制当前单机，不等于多人同步。
