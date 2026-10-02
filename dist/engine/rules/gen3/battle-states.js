@@ -56,7 +56,7 @@ export const GEN3_BATTLE_STATES = {
         role: "all",
         modify: (v, c) =>
           c.battle.roster.isOpposing(c.actorSeat, c.ownerSeat) &&
-          c.owner.moves.some((m) => m.id === c.move.id)
+          c.battle.movesFor(c.ownerSeat).some((m) => m.id === c.move.id)
             ? 0
             : v,
       },
@@ -66,7 +66,7 @@ export const GEN3_BATTLE_STATES = {
         apply: (c) => {
           if (
             c.battle.roster.isOpposing(c.actorSeat, c.ownerSeat) &&
-            c.owner.moves.some((m) => m.id === c.move.id)
+            c.battle.movesFor(c.ownerSeat).some((m) => m.id === c.move.id)
           )
             c.allowed = false;
         },

@@ -1,3 +1,7 @@
+import {
+  CreatureFormRegistry,
+  CreatureForms,
+} from "../../engine/creatures/forms.js";
 import { WorldStateService } from "../../engine/world-state.js";
 import { validCreatureValues } from "../../engine/creature-contract.js";
 import { PluginState } from "../../engine/extensions/plugin-state.js";
@@ -25,6 +29,22 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (s.forms !== undefined)
+      new CreatureForms({
+        registry: new CreatureFormRegistry(
+          catalog.forms,
+          db,
+          catalog.abilities,
+          catalog.heldItems,
+        ),
+        records: s.forms,
+        creatures: () => [
+          ...(s.party || []),
+          ...(s.box || []),
+          ...(s.daycare?.slots || []).map((s) => s.mon),
+          ...(s.daycare?.egg ? [s.daycare.egg] : []),
+        ],
+      });
     if (s.worldState !== undefined)
       new WorldStateService({ db, state: s.worldState });
   } catch {

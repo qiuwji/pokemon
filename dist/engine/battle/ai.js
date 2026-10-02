@@ -1,7 +1,8 @@
 /** Injectable decision policy. Default deliberately uses seeded random legal moves, not original AI. */
 export function randomDecision(battle, seat) {
   const mon = battle.roster.occupant(seat);
-  const choices = mon.moves
+  const choices = battle
+    .movesFor(seat)
     .map((m, index) => ({ ...m, index }))
     .filter((m) => battle.moveAvailable(seat, m.index));
   const index = choices.length
@@ -10,7 +11,7 @@ export function randomDecision(battle, seat) {
   const move =
     index < 0
       ? { effect: "recoil", target: "selected" }
-      : battle.db.moves[mon.moves[index].id];
+      : battle.db.moves[battle.movesFor(seat)[index].id];
   const options = battle.roster.opposing(seat);
   const target =
     battle.targeting.mode(move) === "selected" && options.length

@@ -123,7 +123,7 @@ export class BattleDirector {
     if (!this.event) return result;
     const { data: e, previous, start, duration } = this.event,
       t = clamp((now - start) / duration),
-      subject = ["hurt", "heal", "faint", "switch"].includes(e.kind)
+      subject = ["hurt", "heal", "faint", "switch", "form"].includes(e.kind)
         ? e.targetSeat
         : e.actorSeat;
     const actor = actors.find((a) => a.seatId === subject),
@@ -204,6 +204,9 @@ export class BattleDirector {
           t,
         },
       ];
+    } else if (e.kind === "form" && actor) {
+      actor.flash = t > 0.25 && t < 0.6;
+      actor.scale = 1 + Math.sin(t * Math.PI) * 0.12;
     } else if (e.kind === "hurt" && actor) {
       if (e.hit)
         result.effects = [

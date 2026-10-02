@@ -9,6 +9,8 @@ const stage = (target, changes) => ({
 const secondary = (op, p = {}) => ({ secondary: [{ op, ...p }] });
 /** Semantic families share operations; no move ID dispatch in the executor. */
 export const GEN3_EXTENDED_MOVE_EFFECTS = {
+  transform: primary("transform"),
+  mimic: primary("mimic"),
   endeavor: { beforeDamage: [{ op: "fixedDamage", mode: "endeavor" }] },
   swagger: primary("boostAndConfuse", { key: "atk" }),
   flatter: primary("boostAndConfuse", { key: "spa" }),

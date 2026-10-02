@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 63,
+    "missing": 61,
     "disabled": 0,
-    "registered-unverified": 135
+    "registered-unverified": 137
   },
   "effects": [
     {
@@ -695,7 +695,7 @@
         "transform"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "attack_down_2",
@@ -953,7 +953,7 @@
         "mimic"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "metronome",

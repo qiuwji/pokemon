@@ -21,6 +21,7 @@ export const CONTENT_KINDS = Object.freeze([
   "battleStrategies",
   "conditionQueries",
   "battleStates",
+  "forms",
 ]);
 /** Startup registration is staged; failed plugin setup cannot leak partial definitions. */
 export class ExtensionCatalog {
@@ -103,6 +104,7 @@ export class ExtensionCatalog {
   dependencies(state) {
     const used = [
       state.position?.map,
+      ...Object.values(state.forms || {}).map((r) => r.id),
       ...Object.keys(state.worldState?.maps || {}),
       ...Object.values(state.worldState?.maps || {}).flatMap((record) =>
         Object.entries(record.objects || {}).flatMap(([id, e]) => [

@@ -45,6 +45,16 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register("creature.form.restore", byUid, ({ uid }) => game.restoreForm(uid), {
+    plugin: true,
+    permission: "forms",
+  });
+  register(
+    "creature.form",
+    objectSchema({ uid: id, form: id }, ["uid", "form"]),
+    ({ uid, form }) => game.changeForm(uid, form),
+    { plugin: true, permission: "forms" },
+  );
   register(
     "world.patch",
     objectSchema({ operations: { type: "string", maxLength: 65536 } }, [
@@ -91,10 +101,20 @@ export function registerEmeraldCommands(game, bus) {
       {
         kind: {
           type: "string",
-          enum: ["move", "switch", "item", "potion", "ball", "run", "cancel"],
+          enum: [
+            "move",
+            "switch",
+            "item",
+            "potion",
+            "ball",
+            "run",
+            "cancel",
+            "form",
+          ],
         },
         index: { type: "integer", minimum: -1, maximum: 5 },
         item: id,
+        form: id,
         seat: id,
         actor: id,
         target: objectSchema(

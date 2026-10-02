@@ -387,7 +387,7 @@ define("forecast", [
     phase: "types",
     role: "actor",
     modify: (value, c) =>
-      c.owner.species === "castform"
+      c.battle.forms.effective(c.owner).species === "castform"
         ? [{ rain: "water", sun: "fire", hail: "ice" }[c.weather] || "normal"]
         : value,
   },
@@ -395,7 +395,7 @@ define("forecast", [
     phase: "form",
     role: "actor",
     modify: (value, c) =>
-      c.owner.species === "castform"
+      c.battle.forms.effective(c.owner).species === "castform"
         ? { rain: "rainy", sun: "sunny", hail: "snowy" }[c.weather] || "normal"
         : value,
   },

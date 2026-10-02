@@ -26,8 +26,8 @@ export const SPECIAL_MOVE_OPERATIONS = {
     const b = c.battle;
     // Gen III snapshots base damage at cast time; STAB/type/random/critical are absent here.
     const amount = b.rules.damage(
-      c.mon,
-      c.opponent,
+      b.forms.effective(c.mon),
+      b.forms.effective(c.opponent),
       c.move,
       b.db,
       { int: () => 15 },

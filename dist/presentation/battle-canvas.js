@@ -41,7 +41,11 @@ export function drawBattle(ctx, assets, frame) {
       pose = actors[i],
       position = layout.get(combatants[i].seatId);
     if (!mon || !position) continue;
-    const image = assets[mon.species + (position.back ? "-back" : "-front")];
+    const image =
+      assets[
+        (position.back ? mon.sprites?.back : mon.sprites?.front) ||
+          mon.species + (position.back ? "-back" : "-front")
+      ];
     if (!image || pose.opacity <= 0 || pose.scale <= 0 || pose.flash) continue;
     const size = position.size * pose.scale,
       x = position.x + pose.x - size / 2,

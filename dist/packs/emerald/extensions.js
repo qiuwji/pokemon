@@ -1,3 +1,4 @@
+import { CreatureFormRegistry } from "../../engine/creatures/forms.js";
 import { NATURE_POWER_MOVES } from "../../engine/rules/gen3/reference-metadata.js";
 import { validateTrainerSight } from "../../engine/field-triggers.js";
 import { BattleStateRegistry } from "../../engine/battle/state-registry.js";
@@ -49,6 +50,12 @@ export function createEmeraldPlugins(db, plugins, onError) {
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
     new ConditionQueries(c.conditionQueries);
+    const forms = new CreatureFormRegistry(
+      c.forms,
+      c,
+      c.abilities,
+      c.heldItems,
+    );
     const strategies = new BattleStrategyRegistry(c.battleStrategies);
     validateTrainers(c.trainers, c, strategies);
     new EncounterTableRegistry(c.encounters, c);
@@ -60,6 +67,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
     effects.validateMoves(c.moves);
     battleStates.validateEffects(effects);
+    forms.validateEffects(effects);
     createItemService(c.items);
     new MovementRegistry(c.movement);
     const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors);

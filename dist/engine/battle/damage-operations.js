@@ -65,7 +65,7 @@ export const DAMAGE_OPERATIONS = {
   hiddenPower(c) {
     const order = ["hp", "atk", "def", "spe", "spa", "spd"];
     const bits = (bit) =>
-      order.reduce((v, k, i) => v | (((c.mon.iv[k] >> bit) & 1) << i), 0);
+      order.reduce((v, k, i) => v | (((c.battle.forms.effective(c.mon).iv[k] >> bit) & 1) << i), 0);
     c.power = Math.floor((40 * bits(1)) / 63) + 30;
     const types = [
       "fighting",

@@ -1,6 +1,7 @@
 export const EMERALD_PLUGIN_PERMISSIONS = Object.freeze([
   "presentation",
   "world",
+  "forms",
   "friendship",
   "useItem",
   "equip",

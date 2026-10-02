@@ -27,14 +27,15 @@ export class BattleStrategyRegistry {
     if (!definition) return randomDecision(battle, seat);
     const mon = battle.roster.occupant(seat),
       candidates = [];
-    const slots = mon.moves
+    const slots = battle
+      .movesFor(seat)
       .map((_, index) => index)
       .filter((index) => battle.moveAvailable(seat, index));
     for (const index of slots.length ? slots : [-1]) {
       const move =
         index < 0
           ? { effect: "recoil", target: "selected" }
-          : battle.db.moves[mon.moves[index].id];
+          : battle.db.moves[battle.movesFor(seat)[index].id];
       const mode = battle.targeting.mode(move);
       const targets = ["selected", "user-or-selected"].includes(mode)
         ? battle.targeting

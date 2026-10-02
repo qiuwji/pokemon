@@ -33,6 +33,8 @@ export function attachEmeraldExtensions(game, host) {
     seen: [...game.state.seen],
     caught: [...game.state.caught],
     story: structuredClone(game.state.story),
+    forms: structuredClone(game.state.forms),
+    effectiveParty: game.state.party.map((mon) => game.forms.view(mon)),
     worldState: game.worldState.view(),
     daycare: structuredClone(game.state.daycare),
     objects: game.field.npcs.objects(game.state.position.map).map((o) =>

@@ -39,7 +39,9 @@ export class BattleTraits {
     return [...new Set(candidates)].filter(
       (seat) =>
         seat &&
-        b.roster.occupant(seat)?.[kind] === id &&
+        (kind === "ability"
+          ? this.ability(seat)
+          : b.roster.occupant(seat)?.[kind]) === id &&
         !(kind === "ability"
           ? b.conditions.get(seat).suppressed
           : b.conditions.get(seat).itemSuppressed),
@@ -122,26 +124,37 @@ export class BattleTraits {
   }
   enter(seat) {
     const visited = new Set();
-    let ability = this.battle.roster.occupant(seat)?.ability;
+    let ability = this.ability(seat);
     while (ability && !visited.has(ability)) {
       visited.add(ability);
       this.run("entry", { actorSeat: seat, targetSeat: seat, ownerSeat: seat });
-      const next = this.battle.roster.occupant(seat)?.ability;
+      const next = this.ability(seat);
       if (next === ability) break;
       ability = next;
     }
+  }
+  ability(seat) {
+    const mon = this.battle.roster.occupant(seat);
+    return mon ? this.battle.forms.effective(mon).ability : null;
   }
   types(seat) {
     const mon = this.battle.roster.occupant(seat),
       state = this.battle.conditions.get(seat);
     return this.pipeline.transform(
       "types",
-      state.types || this.battle.db.species[mon.species].types,
+      state.types ||
+        this.battle.forms.effective(mon).types ||
+        this.battle.db.species[mon.species].types,
       { actorSeat: seat },
     );
   }
   form(seat) {
-    return this.pipeline.transform("form", null, { actorSeat: seat });
+    const mon = this.battle.roster.occupant(seat);
+    return this.pipeline.transform(
+      "form",
+      this.battle.forms.effective(mon).form || null,
+      { actorSeat: seat },
+    );
   }
   weather() {
     return this.pipeline.transform(
@@ -157,7 +170,9 @@ export class BattleTraits {
         ["ability", this.abilities],
         ["heldItem", this.heldItems],
       ].some(([kind, catalog]) =>
-        catalog[mon[kind]]?.hooks.some((h) => h.phase === phase),
+        catalog[
+          kind === "ability" ? this.ability(seat.id) : mon[kind]
+        ]?.hooks.some((h) => h.phase === phase),
       );
     });
   }

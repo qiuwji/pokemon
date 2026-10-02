@@ -1,4 +1,8 @@
 import {
+  CreatureFormRegistry,
+  CreatureForms,
+} from "../../engine/creatures/forms.js";
+import {
   changeStoryVariable,
   validateVariableCommand,
 } from "../../engine/story-variables.js";
@@ -378,7 +382,53 @@ export class EmeraldAdventure {
       randomSeed: Date.now() >>> 0,
     };
   }
+  restoreForm(uid) {
+    const mon = this.state.party.find((m) => m.uid === uid);
+    if (!mon) throw new Error("Unknown creature");
+    const changed = this.forms.restore(mon);
+    if (changed) {
+      this.plugins?.events.emit("core:creature-form-changed", {
+        uid,
+        formId: null,
+      });
+      this.ui?.updateSide();
+      this.save();
+    }
+    return { ok: changed };
+  }
+  changeForm(uid, id) {
+    const mon = this.state.party.find((m) => m.uid === uid);
+    if (
+      !mon ||
+      this.forms.registry.get(id).scope !== "world" ||
+      !this.forms.activate(mon, id)
+    )
+      throw new Error("现在无法改变形态。");
+    this.plugins?.events.emit("core:creature-form-changed", {
+      uid,
+      formId: id,
+    });
+    this.ui?.updateSide();
+    this.save();
+    return { ok: true };
+  }
   bindField() {
+    this.state.forms ??= {};
+    this.forms = new CreatureForms({
+      registry: new CreatureFormRegistry(
+        this.catalog.forms,
+        this.db,
+        this.catalog.abilities,
+        this.catalog.heldItems,
+      ),
+      records: this.state.forms,
+      creatures: () => [
+        ...this.state.party,
+        ...this.state.box,
+        ...this.state.daycare.slots.map((s) => s.mon),
+        ...(this.state.daycare.egg ? [this.state.daycare.egg] : []),
+      ],
+    });
     this.field?.dispose();
     this.rng = new Random(this.state.randomSeed);
     this.state.worldState ||= emptyWorldState();
@@ -527,6 +577,7 @@ export class EmeraldAdventure {
     this.motion.snap(this.state.position);
   }
   save(show = false) {
+    this.forms?.reconcile();
     if (this.saveProtected) {
       if (show) this.ui?.toast(this.saveWarning);
       return;
@@ -878,6 +929,12 @@ export class EmeraldAdventure {
       items: this.items,
       effects: this.moveEffects,
       states: this.catalog.battleStates,
+      formDefinitions: this.catalog.forms,
+      formRecords: Object.fromEntries(
+        [...this.state.party, ...enemies]
+          .filter((m) => this.state.forms[m.uid])
+          .map((m) => [m.uid, this.state.forms[m.uid]]),
+      ),
       environment: {
         terrain: this.world.map.indoor
           ? "indoor"

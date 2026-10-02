@@ -14,7 +14,7 @@ export const STRUGGLE = Object.freeze({
 });
 export function selectedMove(b, seat, index) {
   const mon = b.monster(seat);
-  return index < 0 ? STRUGGLE : b.db.moves[mon.moves[index].id];
+  return index < 0 ? STRUGGLE : b.db.moves[b.movesFor(seat)[index].id];
 }
 /** Executes one action across live targets; PP/readiness and actor effects occur once per action. */
 export class MoveExecutor {
@@ -56,7 +56,10 @@ export class MoveExecutor {
         ...(action.overrideMove
           ? b.db.moves[action.overrideMove]
           : selectedMove(b, action.seat, action.index)),
-        id: action.overrideMove || mon.moves[action.index]?.id || "struggle",
+        id:
+          action.overrideMove ||
+          b.movesFor(action.seat)[action.index]?.id ||
+          "struggle",
       },
       definition = b.moveEffects.get(move.effect);
     let targets = b.targeting.resolve(action.seat, move, action.target);
@@ -87,7 +90,7 @@ export class MoveExecutor {
     }
     initial.action = action;
     const lifecycle = b.actionLifecycle.begin(action, initial);
-    const slot = mon.moves[action.index];
+    const slot = b.movesFor(action.seat)[action.index];
     let ppCost = 1;
     for (const target of targets)
       if (target.id !== action.seat)
@@ -277,18 +280,25 @@ export class MoveExecutor {
               ),
               critical: false,
             }
-          : b.rules.damage(c.mon, c.opponent, c.move, b.db, b.rng, {
-              aStages: c.selfState.stages,
-              dStages: c.targetState.stages,
-              critical,
-              power,
-              spread,
-              modifier: (phase, value, formula) =>
-                b.traits?.calculate(phase, value, { ...c, ...formula }) ??
-                value,
-              attackerTypes: b.traits?.types(c.actorSeat),
-              defenderTypes: b.traits?.types(c.targetSeat),
-            });
+          : b.rules.damage(
+              b.forms.effective(c.mon),
+              b.forms.effective(c.opponent),
+              c.move,
+              b.db,
+              b.rng,
+              {
+                aStages: c.selfState.stages,
+                dStages: c.targetState.stages,
+                critical,
+                power,
+                spread,
+                modifier: (phase, value, formula) =>
+                  b.traits?.calculate(phase, value, { ...c, ...formula }) ??
+                  value,
+                attackerTypes: b.traits?.types(c.actorSeat),
+                defenderTypes: b.traits?.types(c.targetSeat),
+              },
+            );
       let amount = Math.min(
         Math.max(0, c.opponent.hp - (c.definition.minimumHP || 0)),
         result.type === 0 ? 0 : result.amount,

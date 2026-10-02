@@ -1,3 +1,4 @@
+import { CreatureFormRegistry, CreatureForms } from "./creatures/forms.js";
 import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
 import { stageMultiplier } from "./model.js";
 import { BATTLE_RULES } from "./battle-rules.js";
@@ -45,6 +46,8 @@ export class Battle {
     ai = randomDecision,
     environment = {},
     states = {},
+    formDefinitions = {},
+    formRecords = {},
     traits = {
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
@@ -61,10 +64,22 @@ export class Battle {
         ? effects
         : new MoveEffectRegistry({ definitions: effects });
     this.moveEffects.validateMoves(db.moves);
+    // Form reference validation follows roster/form construction.
     this.roster = new BattleRoster(
       topology ||
         teamRoster(party, enemyParty, bag, format === "doubles" ? 2 : 1),
     );
+    this.forms = new CreatureForms({
+      registry: new CreatureFormRegistry(
+        formDefinitions,
+        db,
+        traits.abilities,
+        traits.heldItems,
+      ),
+      records: structuredClone(formRecords),
+      creatures: () =>
+        [...this.roster.controllers.values()].flatMap((c) => c.party),
+    });
     const human = [...this.roster.seats.values()].find(
       (s) => this.roster.owner(s.id).kind === "human",
     );
@@ -89,6 +104,7 @@ export class Battle {
       )
         throw new Error("Invalid battle move reference");
     }
+    this.forms.registry.validateEffects(this.moveEffects);
     this.conditions = new BattleVolatiles(this.roster);
     this.states = new BattleStateService(
       this,
@@ -102,6 +118,11 @@ export class Battle {
       (seat) =>
         this.traits
           ? {
+              species: this.forms.effective(this.roster.occupant(seat)).species,
+              moves: this.movesFor(seat).map(({ id, pp }) => ({ id, pp })),
+              sprites:
+                this.forms.effective(this.roster.occupant(seat)).sprites ||
+                null,
               types: [...this.traits.types(seat)],
               form: this.traits.form(seat),
               volatile: {
@@ -200,7 +221,7 @@ export class Battle {
     return this.seatIds.map((id) => this.conditions.get(id).bide);
   }
   view(mon) {
-    return monsterView(mon);
+    return monsterView(this.forms.effective(mon));
   }
   snapshot() {
     return this.recorder.snapshot();
@@ -220,7 +241,10 @@ export class Battle {
     };
   }
   name(mon) {
-    return this.db.species[mon.species].name;
+    const record = this.forms.records[mon.uid];
+    return record?.id
+      ? this.forms.registry.get(record.id).name
+      : this.db.species[this.forms.effective(mon).species].name;
   }
   emit(text, kind = "text", metadata = {}) {
     const { side, ...extra } = metadata;
@@ -238,8 +262,11 @@ export class Battle {
   speed(mon, seat) {
     const context = { actorSeat: this.seatId(seat) };
     const base =
-      this.traits?.calculate("speed-base", mon.stats.spe, context) ??
-      mon.stats.spe;
+      this.traits?.calculate(
+        "speed-base",
+        this.forms.effective(mon).stats.spe,
+        context,
+      ) ?? this.forms.effective(mon).stats.spe;
     const staged = Math.floor(
       base *
         stageMultiplier(this.conditions.get(context.actorSeat).stages.spe || 0),
@@ -338,6 +365,9 @@ export class Battle {
     this.traits.run("attraction-applied", c);
     return true;
   }
+  movesFor(seat) {
+    return this.forms.moves(this.roster.occupant(this.seatId(seat)));
+  }
   moveAvailable(seat, index) {
     return moveAvailable(this, this.seatId(seat), index);
   }
@@ -378,6 +408,22 @@ export class Battle {
     const prepared = this.actions.prepare(action);
     if (prepared.error) {
       this.emit(prepared.error, "invalid");
+      return this.events;
+    }
+    if (prepared.kind === "form") {
+      const mon = this.roster.occupant(prepared.seat);
+      this.forms.activate(
+        mon,
+        prepared.form,
+        this.roster.owner(prepared.seat).id,
+      );
+      this.emit("形态发生了变化！", "form", {
+        targetSeat: prepared.seat,
+        actorSeat: prepared.seat,
+        formId: prepared.form,
+      });
+      this.traits.enter(prepared.seat);
+      this.outcomes.observe();
       return this.events;
     }
     if (prepared.kind === "cancel") {
@@ -423,6 +469,8 @@ export class Battle {
       }
       this.states.clear("end");
       this.actionLifecycle.clearAll();
+      for (const controller of this.roster.controllers.values())
+        for (const mon of controller.party) this.forms.restore(mon, "end");
       this.result = result;
       this.winner = winner;
     }

@@ -76,22 +76,26 @@ export function createBattleInterface(
       away = frame.combatants.filter((c) => !friendly(frame, c));
     let options = "",
       prompt =
-        message ||
-        `${b.player ? db.species[b.player.species].name : "伙伴"}<br>要做什么？`;
+        message || `${b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;
     if (game.busy) options = "";
     else if (!(b.player?.hp > 0)) {
       prompt = "请选择下一位伙伴。";
       options = '<button data-action="party">替换宝可梦</button>';
     } else if (page === "moves") {
       prompt = "选择招式<br><small>X 返回</small>";
-      options = b.player.moves
+      options = b
+        .movesFor(b.commandSeat)
         .map((slot, i) => {
           const move = db.moves[slot.id],
             supported = b.moveEffects.supports(move.effect);
-          return `<button data-move="${i}" ${(!b.moveAvailable(b.commandSeat, i) && b.player.moves.some((m, j) => b.moveAvailable(b.commandSeat, j))) || !supported ? "disabled" : ""}>${escapeHTML(move.name)}<small>${supported ? TYPE_NAMES[move.type] + " · PP " + slot.pp : "效果尚未开放"}</small></button>`;
+          return `<button data-move="${i}" ${(!b.moveAvailable(b.commandSeat, i) && b.movesFor(b.commandSeat).some((m, j) => b.moveAvailable(b.commandSeat, j))) || !supported ? "disabled" : ""}>${escapeHTML(move.name)}<small>${supported ? TYPE_NAMES[move.type] + " · PP " + slot.pp : "效果尚未开放"}</small></button>`;
         })
         .join("");
-      if (!b.player.moves.some((m, i) => b.moveAvailable(b.commandSeat, i)))
+      if (
+        !b
+          .movesFor(b.commandSeat)
+          .some((m, i) => b.moveAvailable(b.commandSeat, i))
+      )
         options =
           '<button data-move="-1">挣扎<small>没有可用招式</small></button>';
     } else if (page === "targets") {
@@ -99,7 +103,7 @@ export function createBattleInterface(
       const move =
         selectedMove < 0
           ? { effect: "recoil" }
-          : db.moves[b.player.moves[selectedMove].id];
+          : db.moves[b.movesFor(b.commandSeat)[selectedMove].id];
       options = b.targeting
         .candidates(b.commandSeat, move)
         .sort(

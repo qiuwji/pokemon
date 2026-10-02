@@ -21,7 +21,7 @@ export function analyzeCandidate(b, action) {
     };
   const move = {
       ...selectedMove(b, action.seat, action.index),
-      id: mon.moves[action.index]?.id || "struggle",
+      id: b.movesFor(action.seat)[action.index]?.id || "struggle",
     },
     definition = b.moveEffects.get(move.effect),
     mode = b.targeting.mode(move);
@@ -55,8 +55,8 @@ export function analyzeCandidate(b, action) {
       const amount =
         move.power > 0
           ? b.rules.damage(
-              mon,
-              target,
+              b.forms.effective(mon),
+              b.forms.effective(target),
               move,
               b.db,
               { int: () => 7 },

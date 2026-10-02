@@ -39,6 +39,7 @@ export class BattleOutcomes {
       b.traits?.run("faint", { targetSeat: seat.id, ownerSeat: seat.id });
       b.states.clear("faint", seat.id);
       b.actionLifecycle.clear(seat.id);
+      b.forms.restore(mon, "faint");
       const friendship = new FriendshipService({
         abilities: b.traits.abilities,
         heldItems: b.traits.heldItems,

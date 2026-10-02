@@ -36,8 +36,11 @@ export class BattleActions {
     let prepared;
     switch (action.kind) {
       case "move": {
-        const available = mon.moves.some((m, i) => b.moveAvailable(seat, i)),
-          slot = Number.isInteger(action.index) && mon.moves[action.index];
+        const available = b
+            .movesFor(seat)
+            .some((m, i) => b.moveAvailable(seat, i)),
+          slot =
+            Number.isInteger(action.index) && b.movesFor(seat)[action.index];
         if (available && !b.moveAvailable(seat, action.index))
           return { error: "这个招式现在无法使用。" };
         const index = available ? action.index : -1,
@@ -50,6 +53,17 @@ export class BattleActions {
         if (!b.targeting.validate(seat, move, action.target))
           return { error: "当前行动的目标无效。" };
         prepared = { ...base, index };
+        break;
+      }
+      case "form": {
+        const d = b.forms.registry.definitions[action.form];
+        if (
+          !d ||
+          d.scope !== "battle" ||
+          !b.forms.canActivate(mon, action.form, owner.id)
+        )
+          return { error: "现在无法改变形态。" };
+        prepared = base;
         break;
       }
       case "switch": {
@@ -106,6 +120,7 @@ export class BattleActions {
     b.traits?.run("leave", { ownerSeat: seat, actorSeat: seat });
     b.states.clear("leave", seat);
     b.actionLifecycle.clear(seat);
+    if (old) b.forms.restore(old, "leave");
     const originalAbility = b.conditions.get(seat).originalAbility;
     if (originalAbility && old) old.ability = originalAbility;
     b.roster.replace(seat, index);

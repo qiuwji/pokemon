@@ -55,6 +55,7 @@ export type BattleAction = {
 } & (
   | { kind: "move" | "switch"; index: number }
   | { kind: "item"; item: string; index?: number }
+  | { kind: "form"; form: string }
   | { kind: "run" | "cancel" }
   | { kind: "potion"; index?: number }
   | { kind: "ball" }
@@ -241,6 +242,7 @@ export interface PluginRecord {
 }
 export interface AdventureState {
   position: Position;
+  forms?: Record<string, { id: string }>;
   party: Creature[];
   box: Creature[];
   bag: Record<string, number>;
@@ -360,7 +362,8 @@ export type ContentKind =
   | "encounters"
   | "battleStrategies"
   | "conditionQueries"
-  | "battleStates";
+  | "battleStates"
+  | "forms";
 export interface PluginStateDefinition {
   clock: "step" | "round" | "manual" | "permanent";
   schema: DataSchema;
