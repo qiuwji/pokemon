@@ -116,6 +116,7 @@ export class EmeraldAdventure {
       this.travelDirector.busy ||
       this.growthDirector.busy ||
       this.growthBusy ||
+      this.actionBusy ||
       !!this.sceneDirector?.busy
     );
   }
@@ -256,6 +257,24 @@ export class EmeraldAdventure {
   }
   patchWorld(...args) {
     return this.applications.world.patchWorld(...args);
+  }
+  prepareWorldPatch(...args) {
+    return this.applications.world.prepareWorldPatch(...args);
+  }
+  fieldActionOptions(...args) {
+    return this.applications.fieldActions.options(...args);
+  }
+  performFieldAction(...args) {
+    return this.applications.fieldActions.perform(...args);
+  }
+  reelFishing(...args) {
+    return this.applications.fieldActions.reelFishing(...args);
+  }
+  validateFieldActionCommand(...args) {
+    return this.applications.fieldActions.validateCommand(...args);
+  }
+  performStoryFieldAction(...args) {
+    return this.applications.fieldActions.performFromStory(...args);
   }
   enter(...args) {
     return this.applications.world.enter(...args);

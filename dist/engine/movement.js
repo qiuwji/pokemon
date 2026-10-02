@@ -1,3 +1,8 @@
+import { readOnly } from "./extensions/values.js";
+export const movementFitsMap = (definition, map) =>
+  Object.entries(definition.mapRequires || {}).every(
+    ([key, value]) => map[key] === value,
+  );
 /** Mode rules own permissions and traversal. World and motion consume plans without knowing mode IDs. */
 export class MovementRegistry {
   constructor(definitions) {
@@ -22,11 +27,28 @@ export class MovementRegistry {
       typeof definition.afterStep !== "function"
     )
       throw new Error("Invalid movement post-step rule");
+    const mapRequires =
+      definition.mapRequires === undefined
+        ? {}
+        : readOnly(definition.mapRequires, 4096);
+    if (
+      !mapRequires ||
+      Array.isArray(mapRequires) ||
+      typeof mapRequires !== "object" ||
+      Object.keys(mapRequires).length > 16 ||
+      Object.entries(mapRequires).some(
+        ([key, value]) =>
+          !/^[a-zA-Z][a-zA-Z0-9_]*$/.test(key) ||
+          !["string", "boolean", "number"].includes(typeof value),
+      )
+    )
+      throw new Error("Invalid movement map constraint");
     this.definitions.set(
       id,
       Object.freeze({
         ...definition,
         durations: Object.freeze([...definition.durations]),
+        mapRequires,
       }),
     );
   }
@@ -58,7 +80,10 @@ export class MovementService {
   }
   available(mode, map, { scripted = false } = {}) {
     const definition = this.registry.get(mode);
-    return definition.allowed({ ...this.context(), map, scripted });
+    return (
+      movementFitsMap(definition, map) &&
+      definition.allowed({ ...this.context(), map, scripted })
+    );
   }
   set(mode, map, options = {}) {
     if (!this.available(mode, map, options))

@@ -9,6 +9,10 @@ import { GrowthApplication, GROWTH_PORTS } from "./growth-application.js";
 import { BattleApplication, BATTLE_PORTS } from "./battle-application.js";
 import { StoryApplication, STORY_PORTS } from "./story-application.js";
 import { MovementApplication, MOVEMENT_PORTS } from "./movement-application.js";
+import {
+  FieldActionApplication,
+  FIELD_ACTION_PORTS,
+} from "./field-action-application.js";
 import { WorldApplication, WORLD_PORTS } from "./world-application.js";
 import { TriggersApplication, TRIGGERS_PORTS } from "./triggers-application.js";
 import { SaveApplication, SAVE_PORTS } from "./save-application.js";
@@ -41,10 +45,14 @@ export function composeApplications(applications, read, { storage }) {
   applications.movement = new MovementApplication(
     liveApplicationPorts(read, MOVEMENT_PORTS, {}),
   );
+  applications.fieldActions = new FieldActionApplication(
+    liveApplicationPorts(read, FIELD_ACTION_PORTS),
+  );
   applications.world = new WorldApplication(
     liveApplicationPorts(read, WORLD_PORTS, {
       bindMovement: () => applications.movement.bind(),
       resetTriggers: () => applications.triggers.reset(),
+      bindFieldActions: () => applications.fieldActions.bind(),
     }),
   );
   applications.triggers = new TriggersApplication(

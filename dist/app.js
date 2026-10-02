@@ -47,6 +47,10 @@ async function boot() {
       matchMedia("(prefers-reduced-motion: reduce)").matches;
     const timeline = new Timeline(),
       camera = new CameraRig(timeline),
+      presentation = createEmeraldPresentation({
+        host,
+        onError: console.error,
+      }),
       renderer = new Renderer($("game"), db, assets, {
         playerActors: PACK.playerActors,
         travelActor: PACK.travelActor,
@@ -56,6 +60,7 @@ async function boot() {
           hour: new Date().getHours(),
         }),
         reducedMotion,
+        presentation,
       });
     const transitions = new TransitionController(timeline, { reducedMotion });
     const audio = new AudioAdapter({
@@ -64,7 +69,7 @@ async function boot() {
     });
     const director = new BattleDirector(timeline, {
       profiles: ANIMATION_PROFILES,
-      registry: createEmeraldPresentation({ host, onError: console.error }),
+      registry: presentation,
       onCue: (kind) => {
         const id = {
           move: "attack",
@@ -215,6 +220,7 @@ async function boot() {
             emotes: [...game.fieldDirector.emotes.values()],
             movementMode: game.state.movement.mode,
             travel: game.travelDirector.sample(now),
+            action: game.actionDirector.sample(now),
           });
         sceneOverlay.render(sceneDirector.sample(now));
         overlay.render(transitions.sample(now));

@@ -1,5 +1,6 @@
 import { PresentationRegistry } from "../../presentation/effect-registry.js";
 import { PIXEL_EFFECTS } from "../../presentation/pixel-effects.js";
+import { FIELD_ACTION_EFFECTS } from "../../presentation/field-action-canvas.js";
 const track = (effect, anchor = "targets", start = 0, end = 1) => ({
   effect,
   anchor,
@@ -87,7 +88,10 @@ export function createEmeraldPresentation({
   onError = () => {},
 } = {}) {
   const registry = new PresentationRegistry({ onError });
-  for (const [id, draw] of Object.entries(PIXEL_EFFECTS))
+  for (const [id, draw] of Object.entries({
+    ...PIXEL_EFFECTS,
+    ...FIELD_ACTION_EFFECTS,
+  }))
     registry.effect(id, draw);
   for (const [id, definition] of host?.visualEffects || [])
     registry.effect(id, definition.draw);

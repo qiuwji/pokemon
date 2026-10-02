@@ -15,6 +15,10 @@ import { extensionGrowthConditions } from "../../engine/extensions/growth-condit
 import { PluginHost } from "../../engine/extensions/plugin-host.js";
 import { assertContent } from "../../engine/content.js";
 import { MovementRegistry } from "../../engine/movement.js";
+import { FieldActionRegistry } from "../../engine/field-actions.js";
+import { EMERALD_FIELD_ACTIONS, validateFieldLinks } from "./field-actions.js";
+import { FIELD_ACTION_EFFECTS } from "../../presentation/field-action-canvas.js";
+import { PIXEL_EFFECTS } from "../../presentation/pixel-effects.js";
 import { createItemService } from "../../engine/items.js";
 import { MoveEffectRegistry } from "../../engine/move-effects.js";
 import { EvolutionService } from "../../engine/growth/evolution.js";
@@ -46,6 +50,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
       movement: MOVEMENT_MODES,
+      fieldActions: EMERALD_FIELD_ACTIONS,
       destinations: TRAVEL_DESTINATIONS,
     },
     onError,
@@ -74,6 +79,15 @@ export function createEmeraldPlugins(db, plugins, onError) {
     forms.validateEffects(effects);
     createItemService(c.items);
     new MovementRegistry(c.movement);
+    new FieldActionRegistry(c.fieldActions);
+    for (const action of Object.values(c.fieldActions))
+      if (
+        !FIELD_ACTION_EFFECTS[action.cue] &&
+        !PIXEL_EFFECTS[action.cue] &&
+        !host.visualEffects.has(action.cue)
+      )
+        throw new Error(`Unknown field action cue ${action.cue}`);
+    validateFieldLinks(c.fieldLinks, c);
     const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors);
     new EvolutionService({
       db: { ...db, ...c },

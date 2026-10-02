@@ -18,10 +18,14 @@ export class EncounterTableRegistry {
               "entries",
               "requires",
               "priority",
+              "rod",
             ].includes(k),
         ) ||
         !db.maps[t.map] ||
         !["land", "water", "fishing", "rock"].includes(t.area) ||
+        (t.rod !== undefined &&
+          (t.area !== "fishing" ||
+            !["old", "good", "super"].includes(t.rod))) ||
         !Number.isInteger(t.rate) ||
         t.rate < 0 ||
         t.rate > 180 ||
@@ -62,12 +66,13 @@ export class EncounterTableRegistry {
         (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
     );
   }
-  select(map, area, state) {
+  select(map, area, state, { rod } = {}) {
     return (
       this.tables.find(
         (t) =>
           t.map === map &&
           t.area === area &&
+          (t.rod === undefined || t.rod === rod) &&
           matchesCondition(t.requires, state, this.queries),
       ) || null
     );

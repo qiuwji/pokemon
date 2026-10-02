@@ -45,6 +45,8 @@ export class MovementApplication {
       bike: !!flags.bike || !!flags.fieldTraining,
       surf: !!flags.fieldTraining || (!!flags.badgeBalance && knows("surf")),
       fly: !!flags.fieldTraining || (!!flags.badgeFeather && knows("fly")),
+      dive: !!flags.badgeMind && knows("dive"),
+      waterfall: !!flags.badgeRain && knows("waterfall"),
     };
   }
   claimFieldEquipment() {
@@ -59,7 +61,7 @@ export class MovementApplication {
   }
   movementOptions() {
     return Object.keys(this.catalog.movement)
-      .filter((id) => !["run", "surf"].includes(id))
+      .filter((id) => !["run", "surf", "dive", "waterfall"].includes(id))
       .map((id) => ({
         id,
         name: this.catalog.movement[id].name,
@@ -75,7 +77,7 @@ export class MovementApplication {
     if (
       !this.canManageParty() ||
       !Object.hasOwn(this.catalog.movement, mode) ||
-      ["run", "surf"].includes(mode)
+      ["run", "surf", "dive", "waterfall"].includes(mode)
     )
       return { ok: false, reason: "现在不能更换移动方式。" };
     if (

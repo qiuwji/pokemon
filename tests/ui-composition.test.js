@@ -60,6 +60,7 @@ function fixture() {
     bag: { potion: 2 },
     money: 3000,
     playSeconds: 0,
+    movement: { mode: "walk", visited: [] },
   });
   const game = {
     db,
@@ -79,6 +80,9 @@ function fixture() {
     evolutionPlan: () => null,
     daycareView: () => ({ slots: [], compatibility: 0, egg: false }),
     movementOptions: () => [],
+    fieldActionOptions: () => [],
+    reelFishing: (input = {}) =>
+      calls.push(input.cancel ? "cancel fishing" : "reel fishing"),
     travel: { list: () => [] },
     fieldCapabilities: () => ({ surf: true }),
   };
@@ -134,6 +138,19 @@ test("The assembler preserves dynamic shell getters and existing application int
   assert(
     doc.getElementById("modal-root").innerHTML.includes('data-buy="potion"'),
   );
+});
+test("Fishing remains controllable while the world is locked and displays bite feedback through the shared shell", () => {
+  const { game, doc, ui, calls } = fixture();
+  game.busy = true;
+  ui.showFishing();
+  ui.updateFishing({ phase: "bite", dots: 4, round: 1, result: null });
+  assert.match(doc.getElementById("[data-fishing-text]").textContent, /咬钩/);
+  doc.getElementById("[data-reel]").onclick();
+  assert(calls.includes("reel fishing"));
+  ui.back();
+  assert(calls.includes("cancel fishing"));
+  ui.closeFishing();
+  assert.equal(ui.modalType, null);
 });
 test("Shared shell owns dialogue completion, return navigation and command confirmation without global document", async () => {
   const { ui, calls } = fixture();

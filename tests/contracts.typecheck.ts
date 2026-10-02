@@ -4,6 +4,7 @@ import type {
   MoveAnimation,
   MovementDefinition,
   Creature,
+  FieldActionDefinition,
 } from "../dist/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
@@ -67,10 +68,33 @@ const mode: MovementDefinition = {
   allowed: () => true,
   traverse: () => true,
 };
+const fieldAction: FieldActionDefinition<{ objectId: string }> = {
+  name: "Clear object",
+  cue: "field-cut",
+  duration: 600,
+  allowed: (context) => !!context.flags.key,
+  target: (context) =>
+    context.objects[0] ? { objectId: context.objects[0].id } : null,
+  plan: (context, target) => {
+    // @ts-expect-error Domain query coordinates cannot be assigned by content callbacks.
+    context.position.x = 2;
+    return {
+      kind: "world",
+      operations: [
+        {
+          kind: "object",
+          map: context.position.map,
+          id: target.objectId,
+          hidden: true,
+        },
+      ],
+    };
+  },
+};
 // @ts-expect-error Future protocol versions require a separate contract.
 const badMessage: NetworkCommand = { ...message, protocol: 2 };
 function immutableInput(mon: Readonly<Creature>) {
   // @ts-expect-error Query consumers do not mutate creature identity.
   mon.uid = "replacement";
 }
-void [plugin, message, mode, badMessage, immutableInput];
+void [plugin, message, mode, fieldAction, badMessage, immutableInput];

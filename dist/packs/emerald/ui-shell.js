@@ -207,7 +207,12 @@ export function createUIShell(
     canvas.focus({ preventScroll: true });
   }
   function back() {
-    if (game.busy && !dialog && modalType !== "story-choice") return;
+    if (
+      game.busy &&
+      !dialog &&
+      !["story-choice", "fishing"].includes(modalType)
+    )
+      return;
     if (modalType === "learning" || modalType === "evolution") return;
     if (root.children.length) {
       modalBack ? modalBack() : closeModal();

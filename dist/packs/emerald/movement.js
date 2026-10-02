@@ -40,8 +40,29 @@ export const MOVEMENT_MODES = {
     actor: "BrendanSurf",
     durations: [128],
     allowed: (c) => capability("surf", c),
-    traverse: (c) => isWater(c.cell.behavior) || land(c),
+    traverse: (c) =>
+      (isWater(c.cell.behavior) &&
+        !(c.cell.behavior === BEHAVIOR.WATERFALL && c.dir === "up")) ||
+      land(c),
     afterStep: (c) => (isWater(c.cell.behavior) ? "surf" : "walk"),
+  },
+  dive: {
+    name: "潜水",
+    actor: "BrendanSurf",
+    surface: "both",
+    mapRequires: { underwater: true },
+    durations: [128],
+    allowed: (c) => !!c.map.underwater && capability("dive", c),
+    traverse: (c) => c.cell.collision === 0,
+  },
+  waterfall: {
+    name: "攀瀑",
+    actor: "BrendanSurf",
+    surface: "water",
+    durations: [80],
+    allowed: (c) => capability("waterfall", c),
+    traverse: (c) => isWater(c.cell.behavior),
+    afterStep: () => "surf",
   },
 };
 export const TRAVEL_DESTINATIONS = {

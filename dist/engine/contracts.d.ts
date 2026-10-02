@@ -366,6 +366,8 @@ export type ContentKind =
   | "heldItems"
   | "moveEffects"
   | "movement"
+  | "fieldActions"
+  | "fieldLinks"
   | "destinations"
   | "resources"
   | "mapExtensions"
@@ -550,13 +552,93 @@ export interface MovementDefinition {
   name?: string;
   actor: string;
   surface?: "land" | "water" | "both";
+  mapRequires?: Record<string, string | number | boolean>;
   durations: number[];
   allowed?: (context: Readonly<Json>) => boolean;
   traverse?: (context: Readonly<Json>) => boolean;
   afterStep?: (context: Readonly<Json>) => Json;
 }
+export type FieldOperation =
+  | { kind: "world"; operations: Json[]; encounter?: "rock" }
+  | {
+      kind: "travel";
+      position: { map: string; x: number; y: number; dir: string };
+      mode: string;
+    }
+  | { kind: "route"; directions: string[]; mode: string }
+  | { kind: "fishing"; rod: "old" | "good" | "super" };
+export interface FieldActionContext {
+  readonly position: Readonly<{
+    map: string;
+    x: number;
+    y: number;
+    dir: "up" | "down" | "left" | "right";
+  }>;
+  readonly mode: string;
+  readonly revision: number;
+  readonly flags: Readonly<Record<string, boolean | number | string>>;
+  readonly bag: Readonly<Record<string, number>>;
+  readonly map: Readonly<{
+    width: number;
+    height: number;
+    blocks: readonly number[];
+    behavior: readonly number[];
+  }>;
+  readonly party: readonly Readonly<{
+    uid: string;
+    hp: number;
+    egg: boolean;
+    ability: string | null;
+    moves: readonly Readonly<{ id: string }>[];
+  }>[];
+  readonly objects: readonly Readonly<{
+    id: string;
+    kind: string;
+    x: number;
+    y: number;
+    reserved: readonly Readonly<{ x: number; y: number }>[];
+  }>[];
+  readonly links: readonly FieldLinkDefinition[];
+}
+export interface FieldLinkDefinition {
+  readonly map: string;
+  readonly x: number;
+  readonly y: number;
+  readonly action: "dive" | "surface";
+  readonly to: Readonly<{
+    map: string;
+    x: number;
+    y: number;
+    dir: "up" | "down" | "left" | "right";
+  }>;
+}
+export interface FieldActionDefinition<T extends Json = Record<string, Json>> {
+  name: string;
+  cue: string;
+  duration: number;
+  schema?: DataSchema;
+  allowed(
+    context: FieldActionContext,
+    input: Readonly<Record<string, Json>>,
+  ): boolean | { reason: string };
+  target(
+    context: FieldActionContext,
+    input: Readonly<Record<string, Json>>,
+  ): T | null;
+  plan(
+    context: FieldActionContext,
+    target: Readonly<T>,
+    input: Readonly<Record<string, Json>>,
+  ): FieldOperation;
+}
 export type PresentationCommand = {
   type: "presentation";
   id: string;
   payload?: Record<string, Json>;
+};
+export type FieldActionCommand = {
+  type: "fieldAction";
+  id: string;
+  input?: Record<string, Json>;
+  variable?: string;
 };

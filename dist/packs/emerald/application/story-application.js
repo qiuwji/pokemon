@@ -28,6 +28,7 @@ export const STORY_PORTS = Object.freeze([
   "fieldDirector",
   "itemDefinitions",
   "patchWorld",
+  "performStoryFieldAction",
   "rng",
   "save",
   "sceneDirector",
@@ -41,6 +42,7 @@ export const STORY_PORTS = Object.freeze([
   "transitions",
   "ui",
   "worldState",
+  "validateFieldActionCommand",
 ]);
 /** story use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
 export class StoryApplication {
@@ -72,6 +74,19 @@ export class StoryApplication {
           }),
         wait: (c) => this.timeline.wait(c.ms),
         worldPatch: (c) => this.patchWorld(c.operations),
+        fieldAction: async (c) => {
+          const result = await this.performStoryFieldAction(
+            c.id,
+            c.input || {},
+          );
+          if (c.variable)
+            changeStoryVariable(this.state.story, {
+              name: c.variable,
+              value: result.ok,
+            });
+          else if (!result.ok) throw new Error(result.reason);
+          return result;
+        },
         setVariable: (c) => changeStoryVariable(this.state.story, c),
         move: (c) => this.fieldDirector.move(c),
         approach: (c) => this.fieldDirector.approach(c),
@@ -155,6 +170,11 @@ export class StoryApplication {
             validateVariableCommand({ name: c.variable, value: "" });
           if (c.type === "worldPatch")
             this.worldState.validateOperations(c.operations);
+          if (c.type === "fieldAction") {
+            this.validateFieldActionCommand(c);
+            if (c.variable)
+              validateVariableCommand({ name: c.variable, value: false });
+          }
           if (c.type === "presentation")
             this.sceneDirector?.validate(c.id, c.payload || {}) ||
               (() => {

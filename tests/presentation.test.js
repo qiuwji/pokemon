@@ -133,6 +133,7 @@ test("Combat session rejects repeated actions while presenting the previous turn
       return [{ kind: "text", ...view() }];
     },
     ended: false,
+    decisions: { required: () => ["home:0"] },
   };
   director.reset(view());
   const job = session.act({ kind: "move", index: 0 });

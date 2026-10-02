@@ -3,6 +3,7 @@ export const BEHAVIOR = Object.freeze({
   GRASS: 2,
   LONG_GRASS: 3,
   COUNTER: 128,
+  WATERFALL: 0x13,
 });
 const LEDGE_DIRECTIONS = { 56: "right", 57: "left", 58: "up", 59: "down" };
 const BLOCKED_DIRECTIONS = { 48: "right", 49: "left", 50: "up", 51: "down" };

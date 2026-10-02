@@ -4,6 +4,8 @@ import {
 } from "../presentation/environment-canvas.js";
 import { drawBattle } from "../presentation/battle-canvas.js";
 import { drawFieldEmote } from "../presentation/field-canvas.js";
+import { drawFieldAction } from "../presentation/field-action-canvas.js";
+import { createDefaultPresentation } from "../presentation/default-presentation.js";
 import { SceneGraph, GridMotion, actorFrame } from "../engine/motion.js";
 // Draw each 8x8 source tile into a 16x16 map grid. No pre-rendered scene images.
 export class Renderer {
@@ -17,6 +19,7 @@ export class Renderer {
       travelActor = null,
       environment = () => ({ weather: null, hour: 12 }),
       reducedMotion = () => false,
+      presentation = createDefaultPresentation(),
     } = {},
   ) {
     Object.assign(this, {
@@ -28,6 +31,7 @@ export class Renderer {
       travelActor,
       environment,
       reducedMotion,
+      presentation,
     });
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
@@ -166,7 +170,7 @@ export class Renderer {
     world,
     npcs,
     now = performance.now(),
-    { emotes = [], movementMode = "walk", travel = null } = {},
+    { emotes = [], movementMode = "walk", travel = null, action = null } = {},
   ) {
     this.mapProvider = (id) => world.maps[id];
     const p = world.position,
@@ -273,6 +277,18 @@ export class Renderer {
         );
     }
     for (const id of ids) this.drawMap(id, true, now);
+    if (action?.target.map) {
+      const p = this.graph.point(action.target);
+      drawFieldAction(
+        c,
+        action,
+        {
+          x: p.x - this.camera.x + 8,
+          y: p.y - this.camera.y + 8,
+        },
+        this.presentation,
+      );
+    }
     const environment = this.environment(m, now);
     drawDaylight(c, environment.hour, { indoor: m.indoor });
     drawWeather(c, m.indoor ? null : environment.weather, now, {

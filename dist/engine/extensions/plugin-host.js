@@ -161,6 +161,26 @@ export class PluginHost {
                 ),
               };
             }
+            if (kind === "fieldActions") {
+              const original = value;
+              value = {
+                ...value,
+                ...Object.fromEntries(
+                  ["allowed", "target", "plan"].map((key) => {
+                    if (typeof original[key] !== "function")
+                      throw new Error("Field action requires rule callbacks");
+                    return [
+                      key,
+                      (...args) =>
+                        evaluate(
+                          original[key],
+                          ...args.map((arg) => readOnly(arg)),
+                        ),
+                    ];
+                  }),
+                ),
+              };
+            }
             return content.register(kind, id, value);
           },
         }),

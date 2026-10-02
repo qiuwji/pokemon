@@ -9,6 +9,7 @@ import { readOnly, localId } from "../../engine/extensions/values.js";
 import { jsonValue, callSync } from "../../engine/extensions/values.js";
 import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
 import { isWater } from "../../engine/terrain.js";
+import { movementFitsMap } from "../../engine/movement.js";
 import { ITEMS } from "./items.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
@@ -149,6 +150,7 @@ export function validateSave(
       (map.indoor && movement.mode.endsWith("bike"))
     )
       return false;
+    if (!movementFitsMap(catalog.movement[movement.mode], map)) return false;
   }
   if (
     s.growth !== undefined &&

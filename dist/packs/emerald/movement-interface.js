@@ -5,12 +5,14 @@ export function createMovementInterface(
 ) {
   function showMovement() {
     const modes = game.movementOptions(),
+      fieldActions = game.fieldActionOptions(),
       flights = game.travel.list(),
       training = game.state.flags.fieldTraining;
     modal(
       "旅行与移动",
       `<p>当前：${escapeHTML(modes.find((v) => v.id === game.state.movement.mode)?.name || "冲浪")}</p>
       <div class="menu-grid">${modes.map((v) => `<button class="menu-tile" data-mode="${v.id}" ${v.allowed ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.allowed ? "切换移动方式" : "尚未获得或此处不能骑车"}</small></button>`).join("")}</div>
+      <h3>野外行动</h3><div class="menu-grid">${fieldActions.map((v, index) => `<button class="menu-tile" data-field-action="${index}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "使用野外行动" : escapeHTML(v.reason)}</small></button>`).join("")}</div>
       <h3>飞往已到访的城镇</h3><div class="menu-grid">${flights.map((v) => `<button class="menu-tile" data-flight="${v.id}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "准备起飞" : escapeHTML(v.reason)}</small></button>`).join("")}</div>
       ${!training ? `<p>完成博士的图鉴委托后，可以借用两辆研究用自行车，并在本次野外研究中试用冲浪与飞行。</p><button class="primary-button" data-equipment ${game.state.flags.pokedex ? "" : "disabled"}>领取研究用移动装备</button>` : `<p>已借用研究装备。面对水面按 A 使用冲浪，靠岸后自动改为步行。</p>`}`,
       { back: showMenu, type: "movement" },
@@ -32,6 +34,18 @@ export function createMovementInterface(
           const id = button.dataset.flight;
           closeModal();
           const result = await game.flyTo(id);
+          if (!result.ok) toast(result.reason);
+        }),
+    );
+    root.querySelectorAll("[data-field-action]").forEach(
+      (button) =>
+        (button.onclick = async () => {
+          const action = fieldActions[Number(button.dataset.fieldAction)];
+          closeModal();
+          const result = await game.performFieldAction(
+            action.id,
+            action.input || {},
+          );
           if (!result.ok) toast(result.reason);
         }),
     );
@@ -59,5 +73,59 @@ export function createMovementInterface(
       else game.save();
     };
   }
-  return { showMovement, showSurf };
+  function showFieldAction(id) {
+    const action = game.fieldActionOptions().find((entry) => entry.id === id);
+    if (!action) return;
+    modal(
+      action.name,
+      `<p>${escapeHTML(action.ok ? "要使用这项野外行动吗？" : action.reason)}</p><button data-use-field-action ${action.ok ? "" : "disabled"}>${escapeHTML(action.name)}</button><button data-cancel>返回</button>`,
+      { back: closeModal, type: "field-action" },
+    );
+    root.querySelector("[data-cancel]").onclick = closeModal;
+    root.querySelector("[data-use-field-action]").onclick = async () => {
+      closeModal();
+      const result = await game.performFieldAction(
+        action.id,
+        action.input || {},
+      );
+      if (!result.ok) toast(result.reason);
+    };
+  }
+  function showFishing() {
+    modal(
+      "钓鱼",
+      `<p data-fishing-text>正在抛竿……</p><button data-reel>收竿</button><button data-cancel-fishing>收起鱼竿</button>`,
+      { back: () => game.reelFishing({ cancel: true }), type: "fishing" },
+    );
+    root.querySelector("[data-reel]").onclick = () => game.reelFishing();
+    root.querySelector("[data-cancel-fishing]").onclick = () =>
+      game.reelFishing({ cancel: true });
+  }
+  function updateFishing(view) {
+    const text = root.querySelector("[data-fishing-text]");
+    if (text)
+      text.textContent =
+        view.phase === "wait"
+          ? "·".repeat(view.dots) || "等待鱼儿……"
+          : view.phase === "bite"
+            ? "咬钩了！快收竿！"
+            : view.result === "caught"
+              ? "钓到宝可梦了！"
+              : view.result === "no-bite"
+                ? "连一口都没咬……"
+                : view.result === "escaped"
+                  ? "鱼儿逃走了……"
+                  : "正在抛竿……";
+  }
+  function closeFishing() {
+    closeModal();
+  }
+  return {
+    showMovement,
+    showSurf,
+    showFieldAction,
+    showFishing,
+    updateFishing,
+    closeFishing,
+  };
 }

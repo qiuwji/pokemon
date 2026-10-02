@@ -14,11 +14,13 @@ export const WORLD_PORTS = Object.freeze([
   "advanceTravelClocks",
   "battle",
   "bindMovement",
+  "bindFieldActions",
   "busy",
   "camera",
   "catalog",
   "conditionQueries",
   "db",
+  "fieldActionOptions",
   "motion",
   "movement",
   "onMap",
@@ -53,6 +55,20 @@ export class WorldApplication {
     ];
   }
   patchWorld(operations) {
+    const draft = this.prepareWorldPatch(operations);
+    const result = this.worldState.commit(draft);
+    for (const operation of operations)
+      if (operation.kind === "object")
+        this.field.npcs.invalidate(operation.map, operation.id);
+    this.plugins?.events.emit("core:world-changed", {
+      revision: result.revision,
+      operations,
+    });
+    this.ui?.updateSide();
+    if (!this.storyBusy) this.save();
+    return result;
+  }
+  prepareWorldPatch(operations) {
     const draft = this.worldState.prepare(operations);
     const current = this.state.position;
     const record = draft.maps[current.map];
@@ -71,17 +87,7 @@ export class WorldApplication {
       )
         throw new Error("World object would overlap the player");
     }
-    const result = this.worldState.commit(draft);
-    for (const operation of operations)
-      if (operation.kind === "object")
-        this.field.npcs.invalidate(operation.map, operation.id);
-    this.plugins?.events.emit("core:world-changed", {
-      revision: result.revision,
-      operations,
-    });
-    this.ui?.updateSide();
-    if (!this.storyBusy) this.save();
-    return result;
+    return draft;
   }
   enter(position) {
     this.world.enter(position.map, position.x, position.y, position.dir);
@@ -107,6 +113,14 @@ export class WorldApplication {
     if (this.ui.blocked) return;
     const object = this.world.interact();
     if (!object) {
+      const action = this.fieldActionOptions().find(
+        (entry) =>
+          entry.ok && ["dive", "surface", "waterfall"].includes(entry.id),
+      );
+      if (action) {
+        this.ui.showFieldAction(action.id);
+        return;
+      }
       const [dx, dy] = DIRECTIONS[this.state.position.dir];
       const cell = this.world.cell(
         this.state.position.x + dx,
@@ -114,6 +128,10 @@ export class WorldApplication {
       );
       if (isWater(cell?.behavior) && this.state.movement.mode !== "surf")
         this.ui.showSurf();
+      return;
+    }
+    if (["cutTree", "breakableRock"].includes(object.kind)) {
+      this.ui.showFieldAction(object.kind === "cutTree" ? "cut" : "rock-smash");
       return;
     }
     if (object.kind === "daycare") {
@@ -192,6 +210,7 @@ export class WorldApplication {
       camera: this.camera,
       reducedMotion: this.reducedMotion,
     });
+    this.bindFieldActions();
     this.visitMap();
     this.plugins?.rebind();
     this.onMap(this.world.map.title, this.state.position.map);

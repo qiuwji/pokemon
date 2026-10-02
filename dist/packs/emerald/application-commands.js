@@ -179,6 +179,19 @@ export function registerEmeraldCommands(game, bus) {
   );
   register("movement.equipment", empty, () => game.claimFieldEquipment());
   register(
+    "field.action",
+    objectSchema({ id, input: { type: "string", maxLength: 4096 } }, ["id"]),
+    ({ id, input }) =>
+      game.performFieldAction(id, input ? JSON.parse(input) : {}),
+    { mode: "async" },
+  );
+  register(
+    "field.fishing-input",
+    objectSchema({ cancel: { type: "boolean" } }),
+    (input) => game.reelFishing(input),
+    { concurrent: true, ready: () => !!game.fishing },
+  );
+  register(
     "growth.learn",
     objectSchema(
       {

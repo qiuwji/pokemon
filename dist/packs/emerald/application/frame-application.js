@@ -1,6 +1,7 @@
 import { bindApplicationPorts } from "./ports.js";
 export const FRAME_PORTS = Object.freeze([
   "battle",
+  "actionBusy",
   "busy",
   "combat",
   "field",
@@ -52,6 +53,7 @@ export class FrameApplication {
         this.travelDirector.busy ||
         this.growthDirector.busy ||
         this.growthBusy ||
+        this.actionBusy ||
         !!this.sceneDirector?.busy
       ),
       maps: visibleMaps,

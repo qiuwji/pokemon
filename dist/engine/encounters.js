@@ -23,6 +23,9 @@ export class EncounterService {
     mode = "walk",
     repel = false,
     pyramid = false,
+    checkRate = true,
+    checkSelection = true,
+    checkPermission = true,
   }) {
     if (!entries?.length || !party.length) return null;
     if (!Number.isFinite(rate) || rate < 0)
@@ -55,12 +58,14 @@ export class EncounterService {
     let odds = rate * 16;
     if (["mach-bike", "acro-bike"].includes(mode))
       odds = Math.floor(odds * 0.8);
-    odds = lead.egg
-      ? odds
-      : traits.calculate("encounter-rate", odds, lead, context);
-    if (this.rng.int(2880) >= Math.min(2880, Math.floor(odds))) return null;
+    odds =
+      lead.egg || !checkRate
+        ? odds
+        : traits.calculate("encounter-rate", odds, lead, context);
+    if (checkRate && this.rng.int(2880) >= Math.min(2880, Math.floor(odds)))
+      return null;
     const pick = { ...context, selected: null };
-    if (!lead.egg) traits.run("encounter-select", pick);
+    if (!lead.egg && checkSelection) traits.run("encounter-select", pick);
     let entry = pick.selected;
     if (!entry) {
       let roll = this.rng.int(entries.reduce((n, e) => n + e.weight, 0));
@@ -83,7 +88,8 @@ export class EncounterService {
     if (repel && level < (party.find((m) => m.hp > 0 && !m.egg)?.level || 0))
       return null;
     const permission = { ...context, level, allowed: true };
-    if (!lead.egg) traits.run("encounter-permission", permission);
+    if (!lead.egg && checkPermission)
+      traits.run("encounter-permission", permission);
     if (!permission.allowed) return null;
     const mon = createMonster(entry.species, level, this.db, this.rng),
       species = this.db.species[entry.species];

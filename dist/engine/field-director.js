@@ -231,6 +231,7 @@ export function storyResources(c) {
       "shop",
       "presentation",
       "worldPatch",
+      "fieldAction",
     ].includes(c.type)
   )
     return ["*"];

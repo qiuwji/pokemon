@@ -14,6 +14,7 @@
 | battle | 训练家/野生战斗创建、行动协调、结果与奖励剧情 | BattleSession |
 | story | 剧情指令端口、静态验证、输入锁、执行与失败收尾 | CommandRunner、剧情锁 |
 | world | 地图/动态世界绑定、碰撞保护、行走与对象交互 | WorldStateService、FieldSession、FieldDirector |
+| fieldActions | 野外资格/目标、操作预检、演出与世界提交、钓鱼会话协调 | FieldActionService、FieldActionDirector、FishingSession、actionBusy |
 | movement | 移动资格、交通模式、冲浪与飞行协调、访问目的地 | MovementService、TravelService、TravelDirector |
 | triggers | 步进时钟、剧情/训练家视线/遭遇优先级 | 遭遇间隔记录 |
 | frame | 每帧的领域更新与 NPC 暂停/育成提醒协调 | 无复制状态 |
@@ -32,7 +33,7 @@
 
 ## 重载生命周期
 
-加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
+加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑野外行动服务，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
 
 ## 继续开发约束
 
