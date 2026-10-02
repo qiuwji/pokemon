@@ -1,5 +1,7 @@
+import { HELD_ITEMS } from "./held-items.js";
 import { DEFAULT_ITEMS } from "../../engine/items.js";
 export const ITEMS = {
+  ...HELD_ITEMS,
   pokeball: {
     ...DEFAULT_ITEMS.pokeball,
     icon: "◉",

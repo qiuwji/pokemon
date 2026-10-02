@@ -1,6 +1,19 @@
 /** Conditions preventing action; separate from PP, accuracy, effects and scheduling. */
 export function canAct(c) {
   const { battle: b, mon, opponent, selfState: state, side, other } = c;
+  const permission = { ...c, allowed: true };
+  b.traits?.run("action-permission", permission);
+  if (!permission.allowed) return false;
+  if (
+    state.attractedTo &&
+    b.roster
+      .occupied()
+      .some((s) => b.roster.occupant(s.id).uid === state.attractedTo) &&
+    b.rng.next() < 0.5
+  ) {
+    c.emit("因着迷而无法行动！");
+    return false;
+  }
   if (state.flinched) {
     c.emit(`${b.name(mon)} 因畏缩无法行动！`);
     return false;
@@ -57,9 +70,11 @@ export function canAct(c) {
       c.emit(`${b.name(mon)} 正在忍耐！`);
       return false;
     }
-    opponent.hp = Math.max(0, opponent.hp - pending.damage * 2);
+    const victim = other === side ? b.roster.opposing(side)[0]?.id : other;
+    const target = victim && b.roster.occupant(victim);
+    if (target) target.hp = Math.max(0, target.hp - pending.damage * 2);
     state.bide = null;
-    c.emit("释放了忍耐的力量！", "hurt", { side: other });
+    c.emit("释放了忍耐的力量！", "hurt", { targetSeat: victim });
     return false;
   }
   return true;

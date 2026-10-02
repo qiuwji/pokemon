@@ -33,7 +33,7 @@ export class BattleSession {
       let entry;
       await this.transitions.run("encounter", () => {
         this.battle = preparedBattle;
-        const view = this.battle.snapshot();
+        const view = this.battle.entryView || this.battle.snapshot();
         this.director.reset(view);
         entry = {
           kind: "entry",
@@ -44,6 +44,8 @@ export class BattleSession {
         this.onChange();
       });
       await this.director.play(entry, { message: this.onMessage });
+      for (const event of this.battle.events)
+        await this.director.play(event, { message: this.onMessage });
       return true;
     } finally {
       this.locked = false;

@@ -301,14 +301,16 @@ test("Invalid battle item and depleted move leave turn, HP, PP and RNG unchanged
 
 test("Successful battle medicine consumes one turn; all capture items share restrictions and bonus rule", () => {
   let attacks = 0;
-  const { battle, player, bag } = setup({
+  const { battle, player, enemy, bag } = setup({
     rules: {
+      accuracy:()=>true,
       damage: () => {
         attacks++;
         return { amount: 1, type: 1 };
       },
     },
   });
+  enemy.moves=[{id:"tackle",pp:35}];
   player.status = "poison";
   const events = battle.act({ kind: "item", item: "antidote", index: 0 });
   assert.equal(player.status, null);
@@ -358,10 +360,10 @@ test("Effect names and descriptors validate before battle; unsupported moves do 
     /invalid stage/,
   );
   const { battle, player, rng } = setup();
-  player.moves[0] = { id: "roar", pp: db.moves.roar.pp };
+  player.moves[0] = { id: "taunt", pp: db.moves.taunt.pp };
   const seed = rng.seed;
   assert.equal(battle.act({ kind: "move", index: 0 })[0].kind, "invalid");
-  assert.equal(player.moves[0].pp, db.moves.roar.pp);
+  assert.equal(player.moves[0].pp, db.moves.taunt.pp);
   assert.equal(battle.turn, 0);
   assert.equal(rng.seed, seed);
 });

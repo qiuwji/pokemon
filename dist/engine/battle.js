@@ -11,6 +11,12 @@ import { MoveExecutor } from "./battle/moves.js";
 import { RoundResolver } from "./battle/round.js";
 import { BattleTargeting } from "./battle/targeting.js";
 import { BattleDecisions } from "./battle/decisions.js";
+import { moveAvailable } from "./battle/move-selection.js";
+import { BattleCheckpoint } from "./battle/checkpoint.js";
+import { BattleTraits } from "./battle/traits.js";
+import { GEN3_HELD_ITEMS } from "./rules/gen3/held-items.js";
+import { GEN3_GLOBAL_HOOKS } from "./rules/gen3/global-rules.js";
+import { GEN3_ABILITIES } from "./rules/gen3/abilities.js";
 import { randomDecision } from "./battle/ai.js";
 
 /** Composition facade. Domain services use seat IDs; numeric convenience references are singles aliases. */
@@ -30,6 +36,11 @@ export class Battle {
     topology,
     format = "singles",
     ai = randomDecision,
+    traits = {
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+      hooks: GEN3_GLOBAL_HOOKS,
+    },
   }) {
     if (!["singles", "doubles"].includes(format))
       throw new Error("Unknown battle format");
@@ -69,7 +80,17 @@ export class Battle {
         throw new Error("Invalid battle move reference");
     }
     this.conditions = new BattleVolatiles(this.roster);
-    this.recorder = new BattleEvents(this.roster, () => this.decisionView());
+    this.recorder = new BattleEvents(
+      this.roster,
+      () => this.decisionView(),
+      (seat) =>
+        this.traits
+          ? {
+              types: [...this.traits.types(seat)],
+              form: this.traits.form(seat),
+            }
+          : {},
+    );
     this.targeting = new BattleTargeting(this);
     this.decisions = new BattleDecisions(this);
     this.actionSequence = 0;
@@ -84,6 +105,26 @@ export class Battle {
     this.actions = new BattleActions(this);
     this.moves = new MoveExecutor(this);
     this.rounds = new RoundResolver(this);
+    this.traits = new BattleTraits(this, traits);
+    this.entryView = this.snapshot();
+    const initial = new BattleCheckpoint(this);
+    try {
+      const seats = this.roster
+        .occupied()
+        .map((seat, index) => ({
+          seat,
+          index,
+          speed: this.speed(this.roster.occupant(seat.id), seat.id),
+        }));
+      seats.sort((a, b) => b.speed - a.speed || a.index - b.index);
+      for (const { seat } of seats) {
+        this.conditions.get(seat.id).entryTurn = 0;
+        this.traits.enter(seat.id);
+      }
+    } catch (error) {
+      initial.restore();
+      throw error;
+    }
   }
   seatId(reference) {
     const id =
@@ -164,22 +205,116 @@ export class Battle {
     });
   }
   speed(mon, seat) {
+    const context = { actorSeat: this.seatId(seat) };
+    const base =
+      this.traits?.calculate("speed-base", mon.stats.spe, context) ??
+      mon.stats.spe;
+    const staged = Math.floor(
+      base *
+        stageMultiplier(this.conditions.get(context.actorSeat).stages.spe || 0),
+    );
+    const equipped = Math.floor(
+      this.traits?.calculate("speed", staged, context) ?? staged,
+    );
     return Math.floor(
-      mon.stats.spe *
-        stageMultiplier(
-          this.conditions.get(this.seatId(seat)).stages.spe || 0,
-        ) *
+      equipped *
         (mon.status === "paralysis" ? this.rules.paralysisSpeedMultiplier : 1),
     );
   }
-  changeStage(seat, key, amount) {
-    return this.conditions.changeStage(this.seatId(seat), key, amount);
+
+  changeStage(seat, key, amount, { sourceSeat = seat } = {}) {
+    const targetSeat = this.seatId(seat),
+      permission = {
+        targetSeat,
+        sourceSeat: this.seatId(sourceSeat),
+        key,
+        amount,
+        allowed: true,
+      };
+    this.traits?.run("stage-check", permission);
+    const changed =
+      permission.allowed &&
+      this.conditions.changeStage(targetSeat, key, amount);
+    if (changed) this.traits?.run("stage-applied", permission);
+    return changed;
+  }
+  applyConfusion(targetSeat, sourceSeat) {
+    const state = this.conditions.get(targetSeat);
+    if (state.confused || !(this.roster.occupant(targetSeat)?.hp > 0))
+      return false;
+    const c = { targetSeat, actorSeat: sourceSeat, sourceSeat, allowed: true };
+    this.traits.run("confusion-check", c);
+    if (!c.allowed) return false;
+    state.confused = 2 + this.rng.int(4);
+    this.emit("陷入了混乱！", "status", { targetSeat });
+    this.traits.run("confusion-applied", c);
+    return true;
+  }
+  applyFlinch(targetSeat, sourceSeat) {
+    const c = { targetSeat, actorSeat: sourceSeat, sourceSeat, allowed: true };
+    this.traits.run("flinch-check", c);
+    if (!c.allowed) return false;
+    this.conditions.get(targetSeat).flinched = true;
+    return true;
+  }
+
+  applyStatus(seat, status, { sourceSeat = seat, sourceKind = "move" } = {}) {
+    const targetSeat = this.seatId(seat),
+      target = this.roster.occupant(targetSeat);
+    if (!target || target.hp <= 0) return false;
+    const types =
+      this.traits?.types(targetSeat) || this.db.species[target.species].types;
+    const permission = {
+      targetSeat,
+      sourceSeat: this.seatId(sourceSeat),
+      sourceKind,
+      status,
+      allowed: this.rules.statusAllowed({ status, target, types }),
+    };
+    this.traits?.run("status-check", permission);
+    if (!permission.allowed) return false;
+    target.status = status;
+    if (status === "sleep") target.sleep = 2 + this.rng.int(4);
+    this.emit("陷入了异常状态！", "status", { targetSeat, status });
+    this.traits?.run("status-applied", permission);
+    return true;
+  }
+  applyAttraction(targetSeat, sourceSeat) {
+    const target = this.roster.occupant(targetSeat),
+      source = this.roster.occupant(sourceSeat);
+    if (
+      !target ||
+      !source ||
+      !["♀", "♂"].includes(target.gender) ||
+      !["♀", "♂"].includes(source.gender) ||
+      target.gender === source.gender
+    )
+      return false;
+    const c = { targetSeat, sourceSeat, allowed: true };
+    this.traits.run("attraction-check", c);
+    if (!c.allowed) return false;
+    this.conditions.get(targetSeat).attractedTo = source.uid;
+    this.emit("陷入了着迷！", "trait", { targetSeat });
+    this.traits.run("attraction-applied", c);
+    return true;
+  }
+  moveAvailable(seat, index) {
+    return moveAvailable(this, this.seatId(seat), index);
   }
   enemyMove() {
     return this.ai(this, this.awaySeat).index;
   }
   /** Collect or execute one legal human command. All human seats choose before AI or RNG advances. */
   act(action) {
+    const checkpoint = new BattleCheckpoint(this);
+    try {
+      return this.applyAction(action);
+    } catch (error) {
+      checkpoint.restore();
+      throw error;
+    }
+  }
+  applyAction(action) {
     this.recorder.begin();
     this.actionId = null;
     if (this.ended) return this.events;
@@ -217,7 +352,18 @@ export class Battle {
   }
   finish(result, winner = null) {
     if (!this.ended) {
+      this.traits?.run("outcome", { result, winner });
+      this.prizeMultiplier =
+        this.traits?.calculate("prize-modifier", this.prizeMultiplier || 1, {
+          result,
+          winner,
+        }) ?? 1;
       this.ended = true;
+      for (const seat of this.roster.seats.values()) {
+        const original = this.conditions.get(seat.id).originalAbility;
+        if (original && this.roster.occupant(seat.id))
+          this.roster.occupant(seat.id).ability = original;
+      }
       this.result = result;
       this.winner = winner;
     }

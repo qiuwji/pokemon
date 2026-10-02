@@ -373,7 +373,7 @@ test("Missed moves identify the failed hit so presentation does not draw an impa
       party,
       enemy,
       db,
-      rng: { next: () => 0.999, int: () => 0 },
+      rng: { next: () => 0.999, int: (max) => max - 1 },
       bag: {},
     });
   battle.executeMove(0, 0);

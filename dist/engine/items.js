@@ -12,7 +12,7 @@ export class ItemService {
         !Number.isInteger(item.price) ||
         item.price < 0 ||
         !Array.isArray(item.contexts) ||
-        !item.contexts.length ||
+        (!item.contexts.length && !item.holdable) ||
         item.contexts.some((v) => !["field", "battle"].includes(v)) ||
         !["party", "enemy"].includes(item.target)
       )

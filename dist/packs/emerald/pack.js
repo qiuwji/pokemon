@@ -34,20 +34,7 @@ export const STATUS_NAMES = {
   sleep: "睡眠",
   freeze: "冰冻",
 };
-export const ABILITIES = {
-  overgrow: "茂盛",
-  blaze: "猛火",
-  torrent: "激流",
-  run_away: "逃跑",
-  pickup: "捡拾",
-  shield_dust: "鳞粉",
-  keen_eye: "锐利目光",
-  intimidate: "威吓",
-  guts: "毅力",
-  rain_dish: "雨盘",
-  chlorophyll: "叶绿素",
-  synchronize: "同步",
-};
+export { ABILITY_NAMES as ABILITIES } from "./ability-names.js";
 export const NATURES = [
   "勤奋",
   "怕寂寞",

@@ -1,3 +1,6 @@
+import { experienceDistribution } from "../experience.js";
+import { FriendshipService } from "../growth/friendship.js";
+import { PartyTraits } from "../rules/party-traits.js";
 /** Faint settlement and participation are per UID; victory is based on living alliances, not active seats. */
 export class BattleOutcomes {
   constructor(battle) {
@@ -6,29 +9,18 @@ export class BattleOutcomes {
     this.encounters = new Map();
     for (const seat of battle.roster.occupied()) this.enter(seat.id);
   }
-  friendly() {
-    const b = this.battle;
-    return b.roster
-      .occupied()
-      .filter((s) => b.roster.alliance(s.id) === b.homeAlliance);
-  }
   enter(seat) {
-    const b = this.battle,
-      mon = b.roster.occupant(seat);
-    if (!(mon?.hp > 0)) return;
-    if (b.roster.alliance(seat) === b.homeAlliance) {
-      for (const enemy of b.roster
-        .occupied()
-        .filter((s) => b.roster.isOpposing(seat, s.id))) {
-        const uid = b.roster.occupant(enemy.id).uid;
-        if (!this.encounters.has(uid)) this.encounters.set(uid, new Set());
-        this.encounters.get(uid).add(mon.uid);
-      }
-    } else if (!this.encounters.has(mon.uid))
-      this.encounters.set(
-        mon.uid,
-        new Set(this.friendly().map((s) => b.roster.occupant(s.id).uid)),
-      );
+    const b = this.battle;
+    for (const target of b.roster.occupied()) {
+      const mon = b.roster.occupant(target.id);
+      if (!this.encounters.has(mon.uid))
+        this.encounters.set(mon.uid, new Set());
+      for (const participant of b.roster.occupied())
+        if (b.roster.isOpposing(target.id, participant.id))
+          this.encounters
+            .get(mon.uid)
+            .add(b.roster.occupant(participant.id).uid);
+    }
   }
   observe() {
     const b = this.battle;
@@ -44,7 +36,19 @@ export class BattleOutcomes {
       this.defeated.add(mon.uid);
       b.phase = "faint";
       b.emit(`${b.name(mon)} 倒下了！`, "faint", { targetSeat: seat.id });
-      if (b.roster.alliance(seat.id) !== b.homeAlliance) this.experience(mon);
+      b.traits?.run("faint", { targetSeat: seat.id, ownerSeat: seat.id });
+      const friendship = new FriendshipService({
+        abilities: b.traits.abilities,
+        heldItems: b.traits.heldItems,
+      });
+      friendship.change(mon, "faint", { party: b.roster.owner(seat.id).party });
+      for (const alliance of new Set(
+        [...b.roster.controllers.values()]
+          .filter((c) => c.kind === "human")
+          .map((c) => b.roster.sides.get(c.sideId).allianceId),
+      ))
+        if (alliance !== b.roster.alliance(seat.id))
+          this.experience(mon, alliance);
     }
     const alliances = new Map();
     for (const side of b.roster.sides.values())
@@ -81,27 +85,55 @@ export class BattleOutcomes {
       if (result === "loss") b.emit("没有能够继续战斗的宝可梦了…", "end");
     }
   }
-  experience(defeated) {
+  experience(defeated, alliance = this.battle.homeAlliance) {
     const b = this.battle,
       spec = b.db.species[defeated.species],
       participants = this.encounters.get(defeated.uid) || new Set();
-    const recipients = [...b.roster.controllers.values()]
-      .filter((c) => b.roster.sides.get(c.sideId).allianceId === b.homeAlliance)
-      .flatMap((c) => c.party)
-      .filter((m) => m.hp > 0 && participants.has(m.uid));
-    const total = b.rules.experienceAward({
-      species: spec,
-      level: defeated.level,
-      trainer: b.trainer,
+    const party = [...b.roster.controllers.values()]
+      .filter((c) => b.roster.sides.get(c.sideId).allianceId === alliance)
+      .flatMap((c) => c.party);
+    const traits = new PartyTraits({
+      party,
+      abilities: b.traits.abilities,
+      heldItems: b.traits.heldItems,
+    });
+    const friendship = new FriendshipService({
+      abilities: b.traits.abilities,
+      heldItems: b.traits.heldItems,
+    });
+    const distribution = experienceDistribution({
+      party,
+      participants,
+      total: b.rules.experienceAward({
+        species: spec,
+        level: defeated.level,
+        trainer: false,
+      }),
+      isShare: (mon) =>
+        b.traits.heldItems[mon.heldItem]?.holdEffect === "exp_share",
+    });
+    b.traits?.run("experience", {
+      defeatedUid: defeated.uid,
+      alliance,
+      recipients: distribution.map((d) => d.mon.uid),
     });
     b.phase = "experience";
-    for (const mon of recipients) {
-      const xp = Math.max(1, Math.floor(total / recipients.length));
+    for (const { mon, amount } of distribution) {
+      let xp = Math.floor(traits.calculate("experience-modifier", amount, mon));
+      xp = b.rules.experienceFinal({
+        amount: xp,
+        trainer: b.trainer,
+        traded: !!mon.traded,
+      });
       b.emit(`${b.name(mon)} 获得了 ${xp} 点经验！`, "text", {
         targetUid: mon.uid,
       });
-      for (const event of b.rules.grantExperience(mon, xp, spec, b.db))
+      for (const event of b.rules.grantExperience(mon, xp, spec, b.db, {
+        evMultiplier: traits.calculate("ev-modifier", 1, mon),
+      })) {
+        if (event.kind === "level") friendship.change(mon, "level", { party });
         b.emit(event.text, event.kind, { targetUid: mon.uid });
+      }
     }
   }
   vacancies() {

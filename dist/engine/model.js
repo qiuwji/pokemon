@@ -1,9 +1,20 @@
+import { PHYSICAL_TYPES } from "./type-rules.js";
+export { PHYSICAL_TYPES } from "./type-rules.js";
+import { defaultAbilityModifier } from "./rules/gen3/numeric.js";
 import { CREATION_POLICY } from "./rule-policy.js";
 // Portable RPG domain layer: no browser, DOM, or game-specific story dependencies.
 export const STAT_KEYS = ["hp", "atk", "def", "spa", "spd", "spe"];
 export class Random {
   constructor(seed = Date.now()) {
     this.seed = seed >>> 0;
+  }
+  snapshot() {
+    return this.seed;
+  }
+  restore(seed) {
+    if (!Number.isInteger(seed) || seed < 0 || seed > 0xffffffff)
+      throw new Error("Invalid RNG state");
+    this.seed = seed;
   }
   next() {
     this.seed = (this.seed + 0x6d2b79f5) >>> 0;
@@ -44,7 +55,7 @@ export function calculateStats(mon, species) {
     );
     result[k] =
       k === "hp"
-        ? v + mon.level + 10
+        ? (species.fixedHP ?? v + mon.level + 10)
         : Math.floor((v + 5) * natureMultiplier(mon.nature, k));
   }
   return result;
@@ -56,23 +67,33 @@ export function createMonster(
   rng,
   { trainer = false, rules = {} } = {},
 ) {
+  if (!Number.isInteger(level) || level < 1 || level > 100)
+    throw new Error("Invalid creature level");
   const spec = db.species[id];
   if (!spec) throw new Error(`Unknown species ${id}`);
   const policy = { ...CREATION_POLICY, ...rules };
-  const context = { trainer, rng, species: spec };
+  const context = {
+    trainer,
+    rng,
+    species: spec,
+    personality: rng.int(0x100000000),
+  };
   const mon = {
     uid: `${rng.seed.toString(36)}-${rng.int(1e9)}`,
     species: id,
     level,
     exp: experienceAt(level, spec.growth),
     nature: policy.nature(context),
-    gender: rng.next() < (spec.femaleRatio ?? 0.5) ? "♀" : "♂",
+    gender: policy.gender(context),
+    personality: context.personality,
     iv: {},
     ev: {},
     status: null,
     sleep: 0,
     moves: [],
     ability: policy.ability(context),
+    heldItem: null,
+    friendship: spec.friendship ?? 70,
   };
   for (const k of STAT_KEYS) {
     mon.iv[k] = policy.individualValue({ ...context, stat: k });
@@ -84,24 +105,36 @@ export function createMonster(
     ),
   ].slice(-4);
   mon.moves = known.map((id) => ({ id, pp: db.moves[id].pp }));
+  mon.originalTrainer = "player";
   mon.stats = calculateStats(mon, spec);
   mon.hp = mon.stats.hp;
   return mon;
 }
 export function healMonster(mon, db) {
+  if (mon.egg) return;
   mon.hp = mon.stats.hp;
   mon.status = null;
   mon.sleep = 0;
   for (const move of mon.moves) move.pp = db.moves[move.id].pp;
 }
-export function grantExperience(mon, amount, defeated, db) {
+export function grantExperience(
+  mon,
+  amount,
+  defeated,
+  db,
+  { evMultiplier = 1 } = {},
+) {
   const events = [];
   mon.exp += amount;
   for (const k of STAT_KEYS) {
     const total = Object.values(mon.ev).reduce((a, b) => a + b, 0);
     mon.ev[k] = Math.min(
       255,
-      mon.ev[k] + Math.min(defeated.evYield[k] || 0, Math.max(0, 510 - total)),
+      mon.ev[k] +
+        Math.min(
+          (defeated.evYield[k] || 0) * evMultiplier,
+          Math.max(0, 510 - total),
+        ),
     );
   }
   while (
@@ -137,17 +170,6 @@ export function grantExperience(mon, amount, defeated, db) {
 }
 export const stageMultiplier = (s) => (s >= 0 ? (2 + s) / 2 : 2 / (2 - s));
 export const accuracyMultiplier = (s) => (s >= 0 ? (3 + s) / 3 : 3 / (3 - s));
-export const PHYSICAL_TYPES = new Set([
-  "normal",
-  "fighting",
-  "flying",
-  "poison",
-  "ground",
-  "rock",
-  "bug",
-  "ghost",
-  "steel",
-]);
 export function effectiveness(type, types, chart) {
   return types.reduce((v, t) => v * (chart[type]?.[t] ?? 1), 1);
 }
@@ -163,55 +185,64 @@ export function damage(
     critical = false,
     power = move.power,
     spread = 1,
+    modifier = defaultAbilityModifier,
+    attackerTypes = db.species[attacker.species].types,
+    defenderTypes = db.species[defender.species].types,
   } = {},
 ) {
   const physical = PHYSICAL_TYPES.has(move.type),
     a = physical ? "atk" : "spa",
     d = physical ? "def" : "spd";
-  let atk = Math.floor(
-    attacker.stats[a] *
+  const context = { attacker, defender, move };
+  let atk = Math.max(
+    1,
+    Math.floor(modifier("attack", attacker.stats[a], { ...context, stat: a })),
+  );
+  let def = Math.max(
+    1,
+    Math.floor(modifier("defense", defender.stats[d], { ...context, stat: d })),
+  );
+  atk = Math.floor(
+    atk *
       stageMultiplier(
         critical ? Math.max(0, aStages[a] || 0) : aStages[a] || 0,
       ),
   );
-  let def = Math.floor(
-    defender.stats[d] *
+  def = Math.floor(
+    def *
       stageMultiplier(
         critical ? Math.min(0, dStages[d] || 0) : dStages[d] || 0,
       ),
   );
-  if (physical && attacker.status && attacker.ability === "guts")
-    atk = Math.floor(atk * 1.5);
-  else if (physical && attacker.status === "burn")
-    atk = Math.max(1, Math.floor(atk / 2));
-  if (
-    attacker.hp <= Math.floor(attacker.stats.hp / 3) &&
-    { overgrow: "grass", blaze: "fire", torrent: "water" }[attacker.ability] ===
-      move.type
-  )
-    power = Math.floor(power * 1.5);
-  const type = effectiveness(
-    move.type,
-    db.species[defender.species].types,
-    db.typeChart,
-  );
+  power = Math.max(1, Math.floor(modifier("power", power, context)));
+  const type = effectiveness(move.type, defenderTypes, db.typeChart);
   if (type === 0) return { amount: 0, type, critical };
   let v = Math.floor(
     Math.floor(
-      Math.floor(
-        ((Math.floor((2 * attacker.level) / 5) + 2) * power * atk) /
-          Math.max(1, def),
-      ) / 50,
-    ) + 2,
+      ((Math.floor((2 * attacker.level) / 5) + 2) * power * atk) /
+        Math.max(1, def),
+    ) / 50,
   );
-  v = Math.max(1, Math.floor(v * spread));
+  if (physical && attacker.status === "burn")
+    v = Math.floor(v * modifier("burn-modifier", 0.5, context));
+  v = Math.floor(v * spread);
+  if (physical) v = Math.max(1, v);
+  v = Math.floor(modifier("base-damage", v, context)) + 2;
   if (critical) v *= 2;
-  if (db.species[attacker.species].types.includes(move.type))
-    v = Math.floor(v * 1.5);
-  for (const t of db.species[defender.species].types)
+  if (attackerTypes.includes(move.type)) v = Math.floor(v * 1.5);
+  for (const t of defenderTypes)
     v = Math.floor(v * (db.typeChart[move.type]?.[t] ?? 1));
   v = Math.floor((v * (85 + rng.int(16))) / 100);
-  return { amount: Math.max(1, v), type, critical };
+  return {
+    amount: Math.max(
+      1,
+      Math.floor(
+        modifier("damage-modifier", v, { ...context, type, critical }),
+      ),
+    ),
+    type,
+    critical,
+  };
 }
 export function captureCheck(mon, species, rng, ballBonus = 1) {
   let a = Math.floor(

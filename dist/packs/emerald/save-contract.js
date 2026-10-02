@@ -1,3 +1,5 @@
+import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { validStoryProgress } from "../../engine/story.js";
 
 /** Current Emerald development save contract. Previous envelopes are rejected by SaveStore. */
@@ -28,6 +30,10 @@ export function validateSave(s, db) {
     !Number.isInteger(s.money) ||
     s.money < 0 ||
     !Array.isArray(s.seen) ||
+    (s.friendshipSteps !== undefined &&
+      (!Number.isInteger(s.friendshipSteps) ||
+        s.friendshipSteps < 0 ||
+        s.friendshipSteps >= 128)) ||
     !Array.isArray(s.caught)
   )
     return false;
@@ -39,6 +45,12 @@ export function validateSave(s, db) {
       !m.uid ||
       identities.has(m.uid) ||
       !db.species[m.species] ||
+      !Object.hasOwn(GEN3_ABILITIES, m.ability) ||
+      (m.heldItem != null && !Object.hasOwn(GEN3_HELD_ITEMS, m.heldItem)) ||
+      (m.friendship !== undefined &&
+        (!Number.isInteger(m.friendship) ||
+          m.friendship < 0 ||
+          m.friendship > 255)) ||
       !Number.isInteger(m.level) ||
       m.level < 1 ||
       m.level > 100 ||

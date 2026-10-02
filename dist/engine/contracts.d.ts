@@ -24,6 +24,7 @@ export type CommonEffect =
   | { op: "capture"; bonus: number };
 export interface ItemDefinition {
   name: string;
+  holdable?: boolean;
   price: number;
   contexts: ("field" | "battle")[];
   target: "party" | "enemy";
@@ -59,6 +60,7 @@ export interface MoveEffectDefinition {
   criticalStage?: number;
   alwaysHits?: boolean;
   minimumHP?: 1;
+  requiresStatus?: Status;
 }
 
 /** UID identifies a creature; seat ID identifies a place, surviving replacements. */
@@ -124,4 +126,41 @@ export interface BattleEvent extends BattleSnapshot {
   actorUid?: string | null;
   targetSeat?: string;
   targetUid?: string | null;
+}
+
+/** Versioned rule interfaces: trusted internal adapters own mutation; plugin adapters expose queries/intents. */
+export interface RuleHook<C> {
+  id: string;
+  phase: string;
+  priority?: number;
+  when?: (context: Readonly<C>) => boolean;
+  apply?: (context: C) => void;
+  modify?: (value: number, context: Readonly<C>) => number;
+}
+export interface AttachedRule<C> extends Omit<RuleHook<C>, "id"> {
+  role: "actor" | "target" | "owner" | "all";
+  effects?: EffectStep[] | ((context: Readonly<C>) => EffectStep[]);
+}
+export interface TraitDefinition<C> {
+  hooks: AttachedRule<C>[];
+  holdEffect?: string;
+  parameter?: number;
+}
+export interface EggState {
+  cycles: number;
+  ready: boolean;
+  parents: string[];
+}
+export type EvolutionTrigger = "level" | "item" | "trade";
+export interface GrowthCondition {
+  type: string;
+  [parameter: string]: unknown;
+}
+export interface EvolutionDefinition {
+  id: string;
+  to: string;
+  trigger: EvolutionTrigger;
+  conditions: GrowthCondition[];
+  consumeHeld?: boolean;
+  extra?: string;
 }

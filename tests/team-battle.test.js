@@ -48,6 +48,7 @@ function setup(overrides = {}) {
         critical: false,
       }),
       experienceAward: () => 100,
+      experienceFinal: ({amount}) => amount, // Fixed reward policy isolates participation from trainer bonuses.
       grantExperience: (mon, amount) => {
         mon.exp += amount;
         awards.push({ uid: mon.uid, amount });

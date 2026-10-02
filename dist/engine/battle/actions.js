@@ -28,10 +28,10 @@ export class BattleActions {
     let prepared;
     switch (action.kind) {
       case "move": {
-        const available = mon.moves.some((m) => m.pp > 0),
+        const available = mon.moves.some((m, i) => b.moveAvailable(seat, i)),
           slot = Number.isInteger(action.index) && mon.moves[action.index];
-        if (available && (!slot || slot.pp <= 0))
-          return { error: "这个招式没有剩余 PP。" };
+        if (available && !b.moveAvailable(seat, action.index))
+          return { error: "这个招式现在无法使用。" };
         const index = available ? action.index : -1,
           move =
             index < 0
@@ -44,11 +44,20 @@ export class BattleActions {
         prepared = { ...base, index };
         break;
       }
-      case "switch":
+      case "switch": {
+        const permission = {
+          actorSeat: seat,
+          targetSeat: seat,
+          forced: !(mon?.hp > 0),
+          allowed: true,
+        };
+        if (!permission.forced) b.traits?.run("switch-check", permission);
+        if (!permission.allowed) return { error: "无法离开这场战斗。" };
         if (!b.roster.canReplace(seat, action.index))
           return { error: "这只宝可梦无法替换上场。" };
         prepared = { ...base, forced: !(mon?.hp > 0) };
         break;
+      }
       case "potion":
       case "ball":
       case "item": {
@@ -85,14 +94,25 @@ export class BattleActions {
     const b = this.battle,
       seat = b.seatId(reference),
       old = b.roster.occupant(seat),
-      mon = b.roster.replace(seat, index);
+      mon = b.roster.owner(seat).party[index];
+    b.traits?.run("leave", { ownerSeat: seat, actorSeat: seat });
+    const originalAbility = b.conditions.get(seat).originalAbility;
+    if (originalAbility && old) old.ability = originalAbility;
+    b.roster.replace(seat, index);
     b.conditions.reset(seat);
+    b.conditions.get(seat).entryTurn = b.turn;
     b.outcomes.enter(seat);
     b.emit(
       `${b.roster.alliance(seat) === b.homeAlliance ? "去吧，" : "对方派出了 "}${b.name(mon)}！`,
       "switch",
       { actorSeat: seat, targetSeat: seat, previousUid: old?.uid || null },
     );
+    b.traits?.enter(seat);
+    b.traits?.run("replacement", {
+      actorSeat: seat,
+      targetSeat: seat,
+      previousUid: old?.uid || null,
+    });
   }
   item(action) {
     const b = this.battle,
@@ -134,7 +154,11 @@ export class BattleActions {
       enemy,
       b.db.species[enemy.species],
       b.rng,
-      plan.captureBonus,
+      b.traits?.calculate("capture-modifier", plan.captureBonus, {
+        actorSeat: action.seat,
+        targetSeat: action.targetSeat,
+        item: action.item,
+      }) ?? plan.captureBonus,
     );
     b.emit(
       result.caught
@@ -150,16 +174,22 @@ export class BattleActions {
       mon = b.roster.occupant(action.seat),
       target = b.roster.opposing(action.seat)[0],
       enemy = target && b.roster.occupant(target.id);
+    const permission = {
+      actorSeat: action.seat,
+      allowed: true,
+      guaranteed: false,
+    };
+    b.traits?.run("escape-check", permission);
+    if (!permission.allowed && !permission.guaranteed) {
+      b.emit("无法逃跑！");
+      return;
+    }
     b.fleeAttempts++;
     const speed = b.speed(mon, action.seat),
       awaySpeed = enemy ? b.speed(enemy, target.id) : 0;
     const odds =
       Math.floor((speed * 128) / Math.max(1, awaySpeed)) + 30 * b.fleeAttempts;
-    if (
-      mon.ability === "run_away" ||
-      speed >= awaySpeed ||
-      b.rng.int(256) < odds
-    ) {
+    if (permission.guaranteed || speed >= awaySpeed || b.rng.int(256) < odds) {
       b.finish("escaped");
       b.emit("成功逃脱了！", "end", { actorSeat: action.seat });
     } else b.emit("没能逃脱！");

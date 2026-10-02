@@ -88,10 +88,10 @@ export function createBattleInterface(
         .map((slot, i) => {
           const move = db.moves[slot.id],
             supported = b.moveEffects.supports(move.effect);
-          return `<button data-move="${i}" ${(!slot.pp && b.player.moves.some((m) => m.pp > 0)) || !supported ? "disabled" : ""}>${escapeHTML(move.name)}<small>${supported ? TYPE_NAMES[move.type] + " · PP " + slot.pp : "效果尚未开放"}</small></button>`;
+          return `<button data-move="${i}" ${(!b.moveAvailable(b.commandSeat, i) && b.player.moves.some((m, j) => b.moveAvailable(b.commandSeat, j))) || !supported ? "disabled" : ""}>${escapeHTML(move.name)}<small>${supported ? TYPE_NAMES[move.type] + " · PP " + slot.pp : "效果尚未开放"}</small></button>`;
         })
         .join("");
-      if (!b.player.moves.some((m) => m.pp > 0))
+      if (!b.player.moves.some((m, i) => b.moveAvailable(b.commandSeat, i)))
         options =
           '<button data-move="-1">挣扎<small>没有可用招式</small></button>';
     } else if (page === "targets") {

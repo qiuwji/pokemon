@@ -21,11 +21,13 @@ export class RoundResolver {
     b.turn++;
     b.conditions.startRound();
     const order = this.order(actions);
+    b.turnOrder = order.map((a) => a.seat);
     for (const action of order) {
       if (b.ended) break;
       const mon = b.roster.occupant(action.seat);
       if (!mon || mon.hp <= 0 || mon.uid !== action.actor) continue;
       b.actionId = action.actionId;
+      b.traits?.run("action", { actorSeat: action.seat, action });
       b.phase = "action";
       if (action.kind === "move") b.moves.execute(action);
       if (action.kind === "switch") b.actions.switch(action.seat, action.index);
@@ -46,16 +48,24 @@ export class RoundResolver {
           ? selectedMove(b, a.seat, a.index).priority
           : 6;
     // Stable sorting never calls RNG from a comparator. Consume it only for genuine speed/priority ties.
+    const orderRoll = b.traits?.hasActive("action-order")
+      ? b.rng.int(100)
+      : 100;
     const scored = actions.map((action, index) => ({
       action,
       index,
       priority: priority(action),
+      quick:
+        b.traits?.calculate("action-order", 0, {
+          actorSeat: action.seat,
+          orderRoll,
+        }) || 0,
       speed: b.speed(b.roster.occupant(action.seat), action.seat),
       tie: 0,
     }));
     const groups = new Map();
     for (const entry of scored) {
-      const key = `${entry.priority}:${entry.speed}`;
+      const key = `${entry.priority}:${entry.quick}:${entry.speed}`;
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(entry);
     }
@@ -71,6 +81,7 @@ export class RoundResolver {
       .sort(
         (a, c) =>
           c.priority - a.priority ||
+          c.quick - a.quick ||
           c.speed - a.speed ||
           a.tie - c.tie ||
           a.index - c.index,
@@ -99,6 +110,41 @@ export class RoundResolver {
         b.outcomes.observe();
         if (b.ended) break;
       }
+      if (mon.hp > 0) {
+        const weather = b.traits?.weather();
+        const immune =
+          (weather === "sand" &&
+            b.traits
+              .types(seat.id)
+              .some((t) => ["rock", "ground", "steel"].includes(t))) ||
+          (weather === "hail" && b.traits.types(seat.id).includes("ice"));
+        const weatherPermission = {
+          actorSeat: seat.id,
+          weather,
+          allowed: true,
+        };
+        b.traits?.run("weather-immunity", weatherPermission);
+        if (
+          ["sand", "hail"].includes(weather) &&
+          !immune &&
+          weatherPermission.allowed
+        ) {
+          mon.hp = Math.max(
+            0,
+            mon.hp - Math.max(1, Math.floor(mon.stats.hp / 16)),
+          );
+          b.emit("受到了天气伤害！", "hurt", { targetSeat: seat.id });
+          b.outcomes.observe();
+          if (b.ended) break;
+        }
+        if (mon.hp > 0)
+          b.traits?.run("round-end", {
+            ownerSeat: seat.id,
+            actorSeat: seat.id,
+          });
+        b.outcomes.observe();
+        if (b.ended) break;
+      }
       if (mon.hp > 0 && state.traps > 0) {
         state.traps--;
         mon.hp = Math.max(
@@ -111,6 +157,10 @@ export class RoundResolver {
         b.outcomes.observe();
         if (b.ended) break;
       }
+    }
+    if (b.weather?.turns && --b.weather.turns === 0) {
+      b.weather = null;
+      b.emit("天气恢复了平静。", "weather");
     }
   }
 }

@@ -1,8 +1,4 @@
-import {
-  setLead,
-  learnPendingMove,
-  evolveMonster,
-} from "../../engine/party.js";
+import { setLead, learnPendingMove } from "../../engine/party.js";
 import { Random, createMonster, healMonster } from "../../engine/model.js";
 import { SaveStore } from "../../engine/save-store.js";
 import { FieldSession } from "../../engine/field-session.js";
@@ -29,6 +25,12 @@ import {
   matchesCondition,
   validateCondition,
 } from "../../engine/conditions.js";
+import { EncounterService } from "../../engine/encounters.js";
+import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
+import { EvolutionService } from "../../engine/growth/evolution.js";
+import { FriendshipService } from "../../engine/growth/friendship.js";
+import { EquipmentService } from "../../engine/equipment.js";
+import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { isGrass } from "../../engine/terrain.js";
 import { TRAINERS, createTrainerEncounter } from "./trainers.js";
 
@@ -60,6 +62,16 @@ export class EmeraldAdventure {
       clearInput,
     });
     this.items = createItemService(ITEMS);
+    this.equipment = new EquipmentService(GEN3_HELD_ITEMS);
+    this.evolutions = new EvolutionService({
+      db,
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+    });
+    this.friendship = new FriendshipService({
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+    });
     this.moveEffects = new MoveEffectRegistry();
     this.moveEffects.validateMoves(db.moves);
     for (const item of Object.values(ITEMS))
@@ -234,6 +246,7 @@ export class EmeraldAdventure {
       seen: [],
       caught: [],
       playSeconds: 0,
+      friendshipSteps: 0,
       randomSeed: Date.now() >>> 0,
     };
   }
@@ -368,6 +381,11 @@ export class EmeraldAdventure {
     void this.playStory(interaction(this.state, object, this.world.map.title));
   }
   step(cell) {
+    this.state.friendshipSteps = ((this.state.friendshipSteps || 0) + 1) % 128;
+    if (this.state.friendshipSteps === 0)
+      for (const mon of this.state.party)
+        if (!mon.egg && this.rng.int(2) === 0)
+          this.friendship.change(mon, "walk", { party: this.state.party });
     if (this.storyBusy) return;
     const s = this.state;
     const scene = EMERALD_STORY.resolve("step", s, {
@@ -386,27 +404,17 @@ export class EmeraldAdventure {
       this.world.steps - this.lastEncounterSteps > 3 &&
       !this.ui.dialog
     ) {
-      if (this.rng.next() < (this.world.map.encounterRate * 16) / 2880) {
+      const monster = this.encounterService().attempt({
+        party: s.party,
+        entries: this.world.map.encounters,
+        rate: this.world.map.encounterRate,
+      });
+      if (monster) {
         this.lastEncounterSteps = this.world.steps;
-        let pick = this.rng.int(100),
-          entry = this.world.map.encounters[0];
-        for (const row of this.world.map.encounters) {
-          pick -= row.weight;
-          if (pick < 0) {
-            entry = row;
-            break;
-          }
-        }
-        void this.startBattle(
-          createMonster(
-            entry.species,
-            entry.min + this.rng.int(entry.max - entry.min + 1),
-            this.db,
-            this.rng,
-          ),
-        );
+        void this.startBattle(monster);
       }
     }
+
     if (this.world.steps % 20 === 0) this.save();
   }
   async startBattle(enemy, options = {}) {
@@ -442,12 +450,38 @@ export class EmeraldAdventure {
     this.ui.closeModal();
     return this.combat.act(action);
   }
+  encounterService() {
+    return new EncounterService({
+      db: this.db,
+      rng: this.rng,
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+    });
+  }
   resultPlan(b) {
+    const drops = [];
+    let committed = false;
     const commands = battleOutcome(this.state, b, this.db);
     return {
+      commit: () => {
+        if (committed) return;
+        if (b.result !== "loss")
+          this.encounterService().afterBattle(
+            this.state.party,
+            (text, kind, data) =>
+              drops.push({
+                type: "dialog",
+                name: "伙伴",
+                lines: [
+                  `${this.db.species[this.state.party.find((m) => m.uid === data.uid).species].name} 捡到了 ${ITEMS[data.itemId]?.name || data.itemId}！`,
+                ],
+              }),
+          );
+        committed = true;
+      },
       after: () => {
         // Combat completes at the first dialogue/input boundary. Story continues independently.
-        void this.runStory(commands)
+        void this.runStory([...drops, ...commands])
           .then(() => {
             this.ui.checkGrowth();
             this.ui.updateSide();
@@ -512,6 +546,11 @@ export class EmeraldAdventure {
       context: "field",
     });
   }
+  equipItem(uid, itemId) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    return this.equipment.equip(this.state, uid, itemId);
+  }
   canBuyItem(id) {
     const item = ITEMS[id];
     return (
@@ -527,11 +566,20 @@ export class EmeraldAdventure {
       learnPendingMove(mon, index, this.db)
     );
   }
-  evolve(mon, options) {
+  evolutionPlan(mon, options = {}) {
+    return this.evolutions.prepare(mon, {
+      party: this.state.party,
+      bag: this.state.bag,
+      ...options,
+    });
+  }
+  evolve(mon, options = {}) {
     if (!this.canManageParty() || !this.state.party.includes(mon)) return false;
-    const result = evolveMonster(mon, this.db, options);
-    if (result && !options?.cancel) this.seen(mon.species, true);
-    return result;
+    const plan = options.plan || this.evolutionPlan(mon);
+    if (!plan || plan.uid !== mon.uid) return false;
+    const result = this.evolutions.commit(plan, options);
+    if (result.ok && !result.cancelled) this.seen(mon.species, true);
+    return result.ok;
   }
   buyItem(id) {
     const item = ITEMS[id];

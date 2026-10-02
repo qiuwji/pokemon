@@ -1,5 +1,7 @@
 import { TARGET_MODES } from "./battle/targeting.js";
 import { EffectRegistry } from "./effects.js";
+import { SPECIAL_MOVE_OPERATIONS } from "./battle/special-operations.js";
+import { TRAIT_OPERATIONS } from "./battle/trait-operations.js";
 const PRIMARY = (op, parameters = {}) => ({
   target: [
     "focus",
@@ -24,6 +26,23 @@ const stages = (target, changes) => ({
 /** One catalog; phases describe when effects run. No fallback string dispatch. */
 export const MOVE_EFFECTS = {
   hit: {},
+  ohko: { ...PRIMARY("ohko"), alwaysHits: true },
+  roar: PRIMARY("forceSwitch"),
+  thief: { afterDamage: [{ op: "stealItem" }] },
+  explosion: { afterDamage: [{ op: "selfFaint" }] },
+  rain_dance: {
+    ...PRIMARY("setWeather", { weather: "rain", turns: 5 }),
+    target: "self",
+  },
+  sunny_day: {
+    ...PRIMARY("setWeather", { weather: "sun", turns: 5 }),
+    target: "self",
+  },
+  dream_eater: {
+    requiresStatus: "sleep",
+    afterDamage: [{ op: "drain", fraction: 0.5 }],
+  },
+
   earthquake: {},
   quick_attack: {},
   pursuit: {},
@@ -84,9 +103,9 @@ export const MOVE_EFFECTS = {
     changes: { spd: -1 },
   }),
   rest: PRIMARY("rest"),
-  synthesis: PRIMARY("restoreHP", { fraction: 0.5 }),
-  morning_sun: PRIMARY("restoreHP", { fraction: 0.5 }),
-  moonlight: PRIMARY("restoreHP", { fraction: 0.5 }),
+  synthesis: { ...PRIMARY("weatherHeal"), target: "self" },
+  morning_sun: { ...PRIMARY("weatherHeal"), target: "self" },
+  moonlight: { ...PRIMARY("weatherHeal"), target: "self" },
   water_sport: PRIMARY("environment", { key: "waterSport" }),
   mud_sport: PRIMARY("environment", { key: "mudSport" }),
   foresight: PRIMARY("identify"),
@@ -99,10 +118,8 @@ export const MOVE_EFFECTS = {
 for (const id of [
   "mirror_move",
   "endeavor",
-  "roar",
   "swagger",
   "taunt",
-  "thief",
   "flail",
   "belly_drum",
   "mist",
@@ -111,12 +128,8 @@ for (const id of [
   "spit_up",
   "flinch_minimize_hit",
   "nature_power",
-  "rain_dance",
-  "sunny_day",
-  "explosion",
   "imprison",
   "future_sight",
-  "dream_eater",
 ])
   MOVE_EFFECTS[id] = { supported: false, reason: "该招式的特殊机制尚未实现。" };
 const MOVE_OPERATIONS = {
@@ -124,7 +137,9 @@ const MOVE_OPERATIONS = {
     const side = s.target === "self" ? c.side : c.other;
     let changed = false;
     for (const [key, value] of Object.entries(s.changes))
-      changed = c.battle.changeStage(side, key, value) || changed;
+      changed =
+        c.battle.changeStage(side, key, value, { sourceSeat: c.side }) ||
+        changed;
     c.emit(
       changed
         ? Object.values(s.changes)[0] > 0
@@ -142,31 +157,31 @@ const MOVE_OPERATIONS = {
     c.emit("保护了自己！");
   },
   confuse: (c) => {
-    if (!c.targetState.confused) {
-      c.targetState.confused = 2 + c.battle.rng.int(4);
-      c.emit("对方陷入了混乱！");
-    }
+    c.battle.applyConfusion(c.other, c.side);
   },
+
   status(c, s) {
-    const types = c.battle.db.species[c.opponent.species].types;
-    if (
-      !c.battle.rules.statusAllowed({
-        status: s.status,
-        target: c.opponent,
-        types,
-      })
-    ) {
+    c.battle.applyStatus(c.other, s.status, {
+      sourceSeat: c.side,
+      sourceKind: "move",
+    });
+  },
+  flinch: (c) => {
+    c.battle.applyFlinch(c.other, c.side);
+  },
+
+  rest: (c) => {
+    const permission = {
+      targetSeat: c.side,
+      sourceSeat: c.side,
+      status: "sleep",
+      allowed: true,
+    };
+    c.battle.traits?.run("status-check", permission);
+    if (!permission.allowed) {
       c.emit("没有效果。");
       return;
     }
-    c.opponent.status = s.status;
-    if (s.status === "sleep") c.opponent.sleep = 2 + c.battle.rng.int(4);
-    c.emit("对方陷入了异常状态！");
-  },
-  flinch: (c) => {
-    c.targetState.flinched = true;
-  },
-  rest: (c) => {
     c.mon.hp = c.mon.stats.hp;
     c.mon.status = "sleep";
     c.mon.sleep = 3;
@@ -182,8 +197,7 @@ const MOVE_OPERATIONS = {
   },
   escape: (c) => {
     if (!c.battle.trainer) {
-      c.battle.ended = true;
-      c.battle.result = "escaped";
+      c.battle.finish("escaped");
       c.emit("成功逃脱了！", "end");
     } else c.emit("没有效果。");
   },
@@ -196,18 +210,33 @@ const MOVE_OPERATIONS = {
   },
   drain: (c, s) => {
     if (!c.dealt) return;
-    c.registry.run(
-      [
-        {
-          op: "restoreHP",
-          amount: Math.max(1, Math.floor(c.dealt * s.fraction)),
-        },
-      ],
-      c,
-    );
+    let restore = 0;
+    for (const part of c.drains || [{ targetSeat: c.other, amount: c.dealt }]) {
+      const amount = Math.max(1, Math.floor(part.amount * s.fraction)),
+        feedback = {
+          ...c,
+          targetSeat: part.targetSeat,
+          drain: true,
+          reverseDrain: false,
+        };
+      c.battle.traits?.run("drain-check", feedback);
+      restore += feedback.reverseDrain ? -amount : amount;
+    }
+    if (restore > 0) c.registry.run([{ op: "restoreHP", amount: restore }], c);
+    if (restore < 0) {
+      c.mon.hp = Math.max(0, c.mon.hp + restore);
+      c.emit("污泥反噬了体力！", "hurt", { targetSeat: c.side });
+    }
   },
   recoil: (c, s) => {
     if (!c.dealt) return;
+    const permission = {
+      ...c,
+      recoil: c.move.id !== "struggle",
+      allowed: true,
+    };
+    c.battle.traits?.run("recoil-check", permission);
+    if (!permission.allowed) return;
     c.mon.hp = Math.max(
       0,
       c.mon.hp - Math.max(1, Math.floor(c.dealt * s.fraction)),
@@ -255,7 +284,12 @@ MOVE_OPERATIONS.recoil.scope = "action";
 export class MoveEffectRegistry {
   constructor({ definitions = {}, operations = {} } = {}) {
     this.definitions = { ...MOVE_EFFECTS, ...definitions };
-    this.operations = new EffectRegistry({ ...MOVE_OPERATIONS, ...operations });
+    this.operations = new EffectRegistry({
+      ...MOVE_OPERATIONS,
+      ...TRAIT_OPERATIONS,
+      ...SPECIAL_MOVE_OPERATIONS,
+      ...operations,
+    });
     for (const [id, definition] of Object.entries(this.definitions)) {
       if (
         !definition ||
@@ -277,9 +311,17 @@ export class MoveEffectRegistry {
             "criticalStage",
             "alwaysHits",
             "minimumHP",
+            "requiresStatus",
           ].includes(key)
         )
           throw new Error(`effects.${id}: unknown field ${key}`);
+      if (
+        definition.requiresStatus !== undefined &&
+        !["sleep", "freeze", "poison", "burn", "paralysis"].includes(
+          definition.requiresStatus,
+        )
+      )
+        throw new Error(`effects.${id}: invalid required status`);
       if (
         definition.primary &&
         ["beforeDamage", "afterDamage", "secondary", "hits", "minimumHP"].some(
@@ -357,6 +399,7 @@ export class MoveEffectRegistry {
         !scope ||
         (this.operations.operations[step.op].scope || "target") === scope,
     );
-    this.operations.run(steps, context);
+    if (context.battle.traits) context.battle.traits.effects(steps, context);
+    else this.operations.run(steps, context);
   }
 }

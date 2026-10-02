@@ -25,15 +25,24 @@ export const BATTLE_RULES = {
       ? { result: "loss", winner: null }
       : null;
   },
-  experienceAward: ({ species, level, trainer }) =>
-    Math.floor((species.expYield * level * (trainer ? 1.5 : 1)) / 7),
+  experienceAward: ({ species, level }) =>
+    Math.floor((species.expYield * level) / 7),
+  experienceFinal: ({ amount, trainer, traded }) => {
+    if (trainer) amount = Math.floor(amount * 1.5);
+    if (traded) amount = Math.floor(amount * 1.5);
+    return amount;
+  },
   damage,
   captureCheck,
   grantExperience,
-  accuracy: ({ move, stages, rng }) =>
+  accuracy: ({ move, stages, rng, modifier = (v) => v }) =>
     !move.accuracy ||
-    rng.next() * 100 <
-      move.accuracy * accuracyMultiplier(Math.max(-6, Math.min(6, stages))),
+    rng.int(100) <
+      modifier(
+        Math.floor(
+          move.accuracy * accuracyMultiplier(Math.max(-6, Math.min(6, stages))),
+        ),
+      ),
   critical: ({ stage, rng, chances }) =>
     rng.next() < chances[Math.min(chances.length - 1, stage)],
   environmentPower: ({ power, type, waterSport, mudSport }) =>

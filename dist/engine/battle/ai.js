@@ -3,10 +3,7 @@ export function randomDecision(battle, seat) {
   const mon = battle.roster.occupant(seat);
   const choices = mon.moves
     .map((m, index) => ({ ...m, index }))
-    .filter(
-      (m) =>
-        m.pp > 0 && battle.moveEffects.supports(battle.db.moves[m.id].effect),
-    );
+    .filter((m) => battle.moveAvailable(seat, m.index));
   const index = choices.length
     ? choices[battle.rng.int(choices.length)].index
     : -1;

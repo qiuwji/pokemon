@@ -243,19 +243,15 @@ export function createEmeraldInterface(
         $("skip-move").onclick = () => done(null);
         return;
       }
-      const evolution = db.evolutions[mon.species];
-      if (
-        evolution &&
-        mon.level >= evolution.level &&
-        mon.evolutionSkipped !== mon.level
-      ) {
+      const evolution = game.evolutionPlan(mon);
+      if (evolution) {
         modal(
           "伙伴正在进化",
           `<div class="detail-row"><img src="assets/${mon.species}-front.png" alt=""><div><p>${db.species[mon.species].name} 身上出现了光芒！</p><p>它将进化成 ${db.species[evolution.to].name}。</p></div></div><div class="choice-actions"><button class="primary-button" id="evolve">继续进化</button><button class="secondary-button" id="cancel-evolve">停止进化</button></div>`,
           { type: "evolution", close: false },
         );
         $("evolve").onclick = () => {
-          game.evolve(mon);
+          game.evolve(mon, { plan: evolution });
           closeModal();
           toast(`进化成了 ${db.species[mon.species].name}！`);
           updateSide();
@@ -263,7 +259,7 @@ export function createEmeraldInterface(
           checkGrowth();
         };
         $("cancel-evolve").onclick = () => {
-          game.evolve(mon, { cancel: true });
+          game.evolve(mon, { cancel: true, plan: evolution });
           closeModal();
           game.save();
           checkGrowth();
@@ -301,7 +297,7 @@ export function createEmeraldInterface(
     const s = db.species[m.species];
     modal(
       s.name,
-      `<div class="detail-row"><img src="assets/${m.species}-front.png" alt="${s.name}"><div><p>Lv.${m.level} · ${m.gender} · ${s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</p><p>${NATURES[m.nature]}性格 · 特性：${ABILITIES[m.ability] || m.ability}</p><p>HP ${m.hp} / ${m.stats.hp} ${m.status ? " · " + STATUS_NAMES[m.status] : ""}</p><p>距离升级还需 ${Math.max(0, experienceAt(m.level + 1, s.growth) - m.exp)} 点经验</p></div></div><div class="detail-stats">${Object.entries(
+      `<div class="detail-row"><img src="assets/${m.species}-front.png" alt="${s.name}"><div><p>Lv.${m.level} · ${m.gender} · ${s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</p><p>${NATURES[m.nature]}性格 · 特性：${ABILITIES[m.ability] || m.ability}</p><p>持有：${ITEMS[m.heldItem]?.name || "无"}</p><p>HP ${m.hp} / ${m.stats.hp} ${m.status ? " · " + STATUS_NAMES[m.status] : ""}</p><p>距离升级还需 ${Math.max(0, experienceAt(m.level + 1, s.growth) - m.exp)} 点经验</p></div></div><div class="detail-stats">${Object.entries(
         {
           hp: "体力",
           atk: "攻击",
@@ -319,9 +315,10 @@ export function createEmeraldInterface(
         })
         .join(
           "",
-        )}</div><div class="inline-actions"><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.state.bag.potion || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.state.bag.potion})</button></div>`,
+        )}</div><div class="inline-actions"><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.state.bag.potion || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.state.bag.potion})</button></div>`,
       { back: () => showParty(), type: "detail" },
     );
+    $("held-item").onclick = () => showEquipment(m.uid, index);
     $("lead").onclick = () => {
       game.setLead(index);
       updateSide();
@@ -337,10 +334,40 @@ export function createEmeraldInterface(
     };
   }
 
+  function showEquipment(uid, index) {
+    const mon = game.state.party.find((m) => m.uid === uid);
+    if (!mon) return;
+    const choices = Object.entries(ITEMS).filter(
+      ([id]) => game.equipment.definitions[id] && (game.state.bag[id] || 0) > 0,
+    );
+    modal(
+      "持有道具",
+      `<p>当前持有：${escapeHTML(ITEMS[mon.heldItem]?.name || "无")}</p><div class="menu-list">${choices.map(([id, item]) => `<button data-equip="${id}">${escapeHTML(item.name)} × ${game.state.bag[id]}<small>${escapeHTML(item.description)}</small></button>`).join("")}${mon.heldItem ? "<button data-remove-held>取下持有道具</button>" : ""}</div>${!choices.length ? "<p>背包里没有可持有的道具。友好商店可以买到树果与训练道具。</p>" : ""}`,
+      { back: () => showMonster(index), type: "equipment" },
+    );
+    const equip = (id) => {
+      const result = game.equipItem(uid, id);
+      if (result.ok) {
+        game.save();
+        showMonster(index);
+      } else game.ui.toast(result.reason);
+    };
+    root
+      .querySelectorAll("[data-equip]")
+      .forEach(
+        (button) => (button.onclick = () => equip(button.dataset.equip)),
+      );
+    root
+      .querySelector("[data-remove-held]")
+      ?.addEventListener("click", () => equip(null));
+  }
   function showBag(inBattle = false) {
     modal(
       "背包",
       Object.entries(ITEMS)
+        .filter(
+          ([id, item]) => item.contexts.length || (game.state.bag[id] || 0) > 0,
+        )
         .map(([id, item]) => {
           const usable =
             item.contexts.includes(inBattle ? "battle" : "field") &&

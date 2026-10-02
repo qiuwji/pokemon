@@ -55,12 +55,16 @@ export const STORY_EVENTS = [
       const id = b.script.slice(6),
         trainer = TRAINERS[id];
       return [
-        { type: "reward", id: `arena.${id}.prize`, money: trainer.prize },
+        {
+          type: "reward",
+          id: `arena.${id}.prize`,
+          money: trainer.prize * (b.prizeMultiplier || 1),
+        },
         dialog(
           trainer.name,
           s.story.rewards.includes(`arena.${id}.prize`)
             ? "配合得很好！这次练习就到这里。"
-            : `全队获胜！获得了 ¥${trainer.prize}。`,
+            : `全队获胜！获得了 ¥${trainer.prize * (b.prizeMultiplier || 1)}。`,
         ),
       ];
     },
@@ -80,16 +84,16 @@ export const STORY_EVENTS = [
     once: true,
     requires: not("practiceWon"),
     match: ({ battle: b }) => b.script === "practice" && b.result === "win",
-    build: () => [
+    build: (s, { battle: b }) => [
       {
         type: "reward",
         id: "trainer.practice.prize",
         flags: { practiceWon: true },
-        money: TRAINERS.youngster.prize,
+        money: TRAINERS.youngster.prize * (b.prizeMultiplier || 1),
       },
       dialog(
         "练习训练家",
-        `两位伙伴都败下阵来了！获得了 ¥${TRAINERS.youngster.prize}。`,
+        `两位伙伴都败下阵来了！获得了 ¥${TRAINERS.youngster.prize * (b.prizeMultiplier || 1)}。`,
         "以后也可以来练习对战。记得先恢复伙伴的体力！",
       ),
     ],
@@ -241,16 +245,16 @@ export const STORY_EVENTS = [
     trigger: "battleResult",
     once: true,
     match: ({ battle: b }) => b.script === "rival" && b.result === "win",
-    build: () => [
+    build: (s, { battle: b }) => [
       {
         type: "reward",
         id: "rival.prize",
         flags: { rivalWon: true },
-        money: 300,
+        money: 300 * (b.prizeMultiplier || 1),
       },
       dialog(
         "小遥",
-        "你和搭档配合得真不错！获得了 ¥300。",
+        `你和搭档配合得真不错！获得了 ¥${300 * (b.prizeMultiplier || 1)}。`,
         "爸爸一定也很高兴。我们回未白镇的研究所吧，我还有礼物要送给你！",
       ),
     ],
