@@ -13,7 +13,10 @@ import {
   validateSchema,
   callSync,
 } from "./values.js";
-import { validateMoveAnimation } from "./visual-contracts.js";
+import {
+  validateMoveAnimation,
+  validateBattleAnimation,
+} from "./visual-contracts.js";
 import { RULE_PHASES } from "../rule-pipeline.js";
 export const PLUGIN_API_VERSION = 1;
 /** Startup host: content + declarative interfaces + runtime ports. Trusted code, explicit API, no hot unload. */
@@ -29,6 +32,7 @@ export class PluginHost {
     this.presentation = new Map();
     this.visualEffects = new Map();
     this.moveAnimations = new Map();
+    this.battleAnimations = new Map();
     this.presentationScenes = new Map();
     this.audioCues = new Map();
     this.transitionPatterns = new Map();
@@ -315,6 +319,10 @@ export class PluginHost {
               draw: (ctx, frame) =>
                 evaluate(definition.draw, ctx, readOnly(frame)),
             });
+          },
+          battle: (id, definition) => {
+            validateBattleAnimation(definition);
+            return register(staged.battleAnimations, id, readOnly(definition));
           },
           move: (id, definition) => {
             if (typeof definition.moveId !== "string" || !definition.moveId)

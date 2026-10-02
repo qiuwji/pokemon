@@ -50,6 +50,14 @@ test("Presentation modules do not calculate battle outcomes or consume gameplay 
       file,
     );
     assert(!/from\s+["'][^"']*packs\//.test(source), file);
+    assert(
+      !/Math\.random\s*\(/.test(source),
+      file + " presentation must be deterministic",
+    );
+    assert(
+      !/Math\.random\s*\(/.test(source),
+      file + " presentation must be deterministic",
+    );
   }
 });
 test("Composition root does not own story, inventory or damage rules", () => {

@@ -42,6 +42,25 @@ const plugin: PluginManifest = {
         return { ok: true };
       },
     });
+    api.presentation.battle("mega", {
+      kind: "form",
+      match: { formId: "demo:mega" },
+      animation: {
+        duration: 900,
+        tracks: [],
+        poses: [
+          {
+            anchor: "actor",
+            start: 0,
+            end: 1,
+            keyframes: [
+              { at: 0, values: { scale: 1 } },
+              { at: 1, values: { scale: 1.3 } },
+            ],
+          },
+        ],
+      },
+    });
     // @ts-expect-error State writes use the public states API, not a mutable state object.
     api.state.party.push({});
     api.presentation.move("bad", {

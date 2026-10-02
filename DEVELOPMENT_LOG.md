@@ -156,3 +156,10 @@
 - 受影响 movement/motion/cutscene/field-actions/world-state/application-services/plugins/ui-composition/architecture 91 项一次通过；类型检查通过，语法 209 文件通过。沿用未受影响既有证据，未全工程回归。
 - 原作来源、公开合同、验证失效条件和完整自行车 B 键时序/破冰/地板/桥面/原帧等余项见 FIELD_TERRAIN.md。C2 首轮接口不等于 C2 全部还原。
 - 用户新 Actor 与演出要求已纳入 C6/独立演出工作线；核实已有能力后记录真实缺口，详见 ENGINE_ROADMAP.md 和 PLUGIN_EVOLUTION.md。下一步继续完整 C2/C3/C5/C6，与可注册演出合同渐进推进，D/E 未完成。
+
+### 开放演出 · 纯轨迹与语义事件编排（2026-10-03）
+
+- 抽出 animation-timing：纯插值/具名缓动；公开描述增加关键帧、hit/miss 事实分支、姿态数值通道和复用区间工具。既有招式走相同取样，绘制仍按注册效果；不计算规则、不调用随机数、不依赖浏览器。
+- PluginAPI.presentation.battle 与 PresentationRegistry.battle 注册事件描述，按 kind/标量 match/优先级/具体度选定，重复 selector/未知效果启动拒绝。BattleDirector 支持 replace/append，保留 HP 视图/隐藏生命周期、注入时钟和 reducedMotion；form 插件验收无需新增导演形态分支。
+- 新增 9 项动画用例。一次受影响 animation-timing/visual-registry/presentation/plugins/architecture/field-actions 73 项，72 首次通过；宿主 id/owner 被严格动画合同拒绝，在组装时剥离元数据后仅重跑失败项通过。追加全屏锚点及受影响逐目标取样 2 项通过；模式分发等价整理后重查 replace/append 2 项通过。公开类型检查通过，新增 Math.random 架构守卫单项通过。没有反复全量回归。
+- 规则现代化和 Actor 持久行为尚未因此完成；Canvas/DOM/SVG 生命周期与环境注册、默认阶段的后续迁移、逐原作视觉/浏览器对比仍在目标中。细节/边界/失效条件见 ANIMATION_CONTRACT.md。下一步继续 C3/C6/C5 与原 C/D/E，保留已验证模块证据。

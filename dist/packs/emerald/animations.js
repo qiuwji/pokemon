@@ -105,5 +105,9 @@ export function createEmeraldPresentation({
     registry.move(id, overrides.get(id) || definition);
   for (const [id, definition] of overrides)
     if (!Object.hasOwn(MOVE_ANIMATIONS, id)) registry.move(id, definition);
+  for (const [id, definition] of host?.battleAnimations || []) {
+    const { id: registrationId, owner, ...choreography } = definition;
+    registry.battle(id, choreography);
+  }
   return registry.seal();
 }

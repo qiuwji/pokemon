@@ -436,16 +436,46 @@ export interface LayoutNode {
   max?: number;
   options?: { label: string; value: string }[];
 }
+export type AnimationEasing =
+  | "linear"
+  | "in-quad"
+  | "out-quad"
+  | "in-out-quad"
+  | "smoothstep"
+  | "step-end";
+export interface AnimationKeyframe {
+  at: number;
+  values: Record<string, number>;
+  easing?: AnimationEasing;
+}
+export interface AnimationTiming {
+  anchor: "actor" | "targets" | "field";
+  start: number;
+  end: number;
+  easing?: AnimationEasing;
+  when?: "always" | "hit" | "miss";
+  keyframes?: AnimationKeyframe[];
+}
 export interface MoveAnimation {
   duration: number;
   lunge?: number;
-  tracks: {
+  tracks: (AnimationTiming & {
     effect: string;
-    anchor: "actor" | "targets" | "field";
-    start: number;
-    end: number;
     parameters?: Record<string, Json>;
-  }[];
+  })[];
+  poses?: (Omit<AnimationTiming, "anchor" | "keyframes"> & {
+    anchor: "actor" | "targets";
+    keyframes: (Omit<AnimationKeyframe, "values"> & {
+      values: Partial<Record<"x" | "y" | "scale" | "opacity", number>>;
+    })[];
+  })[];
+}
+export interface BattleAnimationDefinition {
+  kind: string;
+  match?: Record<string, string | number | boolean | null>;
+  priority?: number;
+  mode?: "replace" | "append";
+  animation: MoveAnimation;
 }
 export interface AudioCue {
   kind: "music" | "sound";
@@ -514,6 +544,7 @@ export interface PluginAPI {
       id: string,
       definition: { draw: (context: unknown, frame: Readonly<Json>) => void },
     ): string;
+    battle(id: string, definition: BattleAnimationDefinition): string;
     move(
       id: string,
       definition: { moveId: string; animation: MoveAnimation },
@@ -601,9 +632,7 @@ export interface TerrainRuleDefinition {
   before?(
     context: TerrainContext,
   ): (TerrainVisual & { allowed?: boolean }) | null;
-  after?(
-    context: TerrainContext,
-  ):
+  after?(context: TerrainContext):
     | (TerrainVisual & {
         direction: TerrainContext["dir"];
         resetMomentum?: boolean;
