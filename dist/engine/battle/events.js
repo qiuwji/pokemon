@@ -59,7 +59,8 @@ export class BattleEvents {
     if (actorSeat)
       Object.assign(event, {
         actorSeat,
-        actorUid: this.roster.occupant(actorSeat)?.uid ?? null,
+        actorUid:
+          metadata.actorUid ?? this.roster.occupant(actorSeat)?.uid ?? null,
       });
     if (targetSeat)
       Object.assign(event, {

@@ -10,8 +10,21 @@ export class RoundResolver {
       ...humanActions,
       ...b.roster
         .occupied()
+        .filter((s) => b.roster.owner(s.id).kind === "human")
+        .flatMap((s) => {
+          const a = b.actionLifecycle.continuation(s.id);
+          return a ? [{ ...a, actionId: `action:${++b.actionSequence}` }] : [];
+        }),
+      ...b.roster
+        .occupied()
         .filter((s) => b.roster.owner(s.id).kind === "ai")
         .map((s) => {
+          const continuation = b.actionLifecycle.continuation(s.id);
+          if (continuation)
+            return {
+              ...continuation,
+              actionId: `action:${++b.actionSequence}`,
+            };
           const action = b.actions.prepare(b.ai(b, s.id), s.id);
           if (action.error)
             throw new Error(`Invalid AI decision for ${s.id}: ${action.error}`);
@@ -33,6 +46,9 @@ export class RoundResolver {
       if (action.kind === "switch") b.actions.switch(action.seat, action.index);
       if (action.kind === "item") b.actions.item(action);
       if (action.kind === "run") b.actions.run(action);
+      if (action.kind === "wait") b.actionLifecycle.wait(action);
+      if (action.kind !== "move" && action.kind !== "wait")
+        b.actionLifecycle.record(action, null, true);
       b.outcomes.observe();
     }
     if (!b.ended) this.residuals();
@@ -45,8 +61,13 @@ export class RoundResolver {
       a.kind === "switch"
         ? 7
         : a.kind === "move"
-          ? selectedMove(b, a.seat, a.index).priority
-          : 6;
+          ? (a.overrideMove
+              ? b.db.moves[a.overrideMove]
+              : selectedMove(b, a.seat, a.index)
+            ).priority
+          : a.kind === "wait"
+            ? 0
+            : 6;
     // Stable sorting never calls RNG from a comparator. Consume it only for genuine speed/priority ties.
     const orderRoll = b.traits?.hasActive("action-order")
       ? b.rng.int(100)
@@ -158,6 +179,7 @@ export class RoundResolver {
         if (b.ended) break;
       }
     }
+    if (!b.ended) b.actionLifecycle.settle();
     if (!b.ended) b.states.tick();
     if (b.weather?.turns && --b.weather.turns === 0) {
       b.weather = null;

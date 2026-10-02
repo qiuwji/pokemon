@@ -1,3 +1,4 @@
+import { validateActionPolicy } from "./battle/action-lifecycle.js";
 import { BATTLE_STATE_OPERATIONS } from "./battle/state-operations.js";
 import { TARGET_MODES } from "./battle/targeting.js";
 import { EffectRegistry } from "./effects.js";
@@ -58,10 +59,52 @@ export const MOVE_EFFECTS = {
     afterDamage: [{ op: "drain", fraction: 0.5 }],
   },
 
-  earthquake: {},
+  solar_beam: { action: { kind: "charge", skipWeather: "sun" } },
+  semi_invulnerable: {
+    action: {
+      kind: "charge",
+      hiddenByMove: {
+        fly: "air",
+        bounce: "air",
+        dig: "underground",
+        dive: "underwater",
+      },
+    },
+  },
+  razor_wind: { action: { kind: "charge" }, criticalStage: 1 },
+  sky_attack: {
+    action: { kind: "charge" },
+    criticalStage: 1,
+    secondary: [{ op: "flinch" }],
+  },
+  skull_bash: {
+    action: { kind: "charge" },
+    onCharge: [{ op: "stages", target: "self", changes: { def: 1 } }],
+  },
+  recharge: { action: { kind: "recharge" } },
+  rampage: {
+    action: { kind: "repeat", minTurns: 2, maxTurns: 3, confuseAfter: true },
+  },
+  mirror_move: { primary: [{ op: "copyLastMove" }], bypassHitChecks: true },
+  future_sight: {
+    primary: [{ op: "futureAttack", delay: 3 }],
+    bypassHitChecks: true,
+  },
+  gust: { hitsHidden: ["air"], hiddenMultiplier: 2 },
+  twister: {
+    hitsHidden: ["air"],
+    hiddenMultiplier: 2,
+    secondary: [{ op: "flinch" }],
+  },
+  thunder: {
+    hitsHidden: ["air"],
+    secondary: [{ op: "status", status: "paralysis" }],
+  },
+  surf: { hitsHidden: ["underwater"], hiddenMultiplier: 2 },
+  earthquake: { hitsHidden: ["underground"], hiddenMultiplier: 2 },
   quick_attack: {},
   pursuit: {},
-  sky_uppercut: {},
+  sky_uppercut: { hitsHidden: ["air"] },
   blaze_kick: {
     criticalStage: 1,
     secondary: [{ op: "status", status: "burn" }],
@@ -131,7 +174,6 @@ export const MOVE_EFFECTS = {
 };
 // Content retains learnsets for expansion. Unimplemented mechanics are explicit capability data.
 for (const id of [
-  "mirror_move",
   "endeavor",
   "swagger",
   "flail",
@@ -142,7 +184,6 @@ for (const id of [
   "flinch_minimize_hit",
   "nature_power",
   "imprison",
-  "future_sight",
 ])
   MOVE_EFFECTS[id] = { supported: false, reason: "该招式的特殊机制尚未实现。" };
 const MOVE_OPERATIONS = {
@@ -326,9 +367,30 @@ export class MoveEffectRegistry {
             "alwaysHits",
             "minimumHP",
             "requiresStatus",
+            "action",
+            "onCharge",
+            "hitsHidden",
+            "hiddenMultiplier",
+            "bypassHitChecks",
           ].includes(key)
         )
           throw new Error(`effects.${id}: unknown field ${key}`);
+      if (definition.action) validateActionPolicy(definition.action);
+      if (
+        definition.hitsHidden &&
+        (!Array.isArray(definition.hitsHidden) ||
+          definition.hitsHidden.some(
+            (v) => !["air", "underground", "underwater"].includes(v),
+          ))
+      )
+        throw new Error(`effects.${id}: invalid concealed targets`);
+      if (
+        definition.hiddenMultiplier !== undefined &&
+        (!Number.isFinite(definition.hiddenMultiplier) ||
+          definition.hiddenMultiplier < 1 ||
+          definition.hiddenMultiplier > 4)
+      )
+        throw new Error(`effects.${id}: invalid concealed multiplier`);
       if (
         definition.requiresStatus !== undefined &&
         !["sleep", "freeze", "poison", "burn", "paralysis"].includes(
@@ -348,7 +410,7 @@ export class MoveEffectRegistry {
         !["self", "opponent"].includes(definition.target)
       )
         throw new Error(`effects.${id}.target: invalid target`);
-      for (const key of ["supported", "alwaysHits"])
+      for (const key of ["supported", "alwaysHits", "bypassHitChecks"])
         if (
           definition[key] !== undefined &&
           typeof definition[key] !== "boolean"
@@ -368,6 +430,7 @@ export class MoveEffectRegistry {
         "beforeDamage",
         "afterDamage",
         "secondary",
+        "onCharge",
       ])
         if (definition[phase])
           this.operations.validate(definition[phase], `effects.${id}.${phase}`);

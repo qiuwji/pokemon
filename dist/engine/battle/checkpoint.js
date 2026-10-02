@@ -20,6 +20,12 @@ export class BattleCheckpoint {
     this.conditions = clone(b.conditions.states);
     this.battleStates = clone(b.states.instances);
     this.stateSequence = b.states.sequence;
+    this.lifecycle = {
+      locks: clone(b.actionLifecycle.locks),
+      delayed: clone(b.actionLifecycle.delayed),
+      history: clone(b.actionLifecycle.history),
+      sequence: b.actionLifecycle.sequence,
+    };
     this.defeated = clone(b.outcomes.defeated);
     this.encounters = clone(b.outcomes.encounters);
     this.pending = clone(b.decisions.pending);
@@ -59,6 +65,7 @@ export class BattleCheckpoint {
     b.conditions.states = clone(this.conditions);
     b.states.instances = clone(this.battleStates);
     b.states.sequence = this.stateSequence;
+    Object.assign(b.actionLifecycle, clone(this.lifecycle));
     b.outcomes.defeated = clone(this.defeated);
     b.outcomes.encounters = clone(this.encounters);
     b.decisions.pending = clone(this.pending);

@@ -7,7 +7,7 @@ const screen = (physical) => ({
   schema: empty,
   hooks: [
     {
-      phase: "base-damage",
+      phase: "screen",
       role: "target",
       priority: -20,
       modify: (value, c) => {
@@ -18,7 +18,7 @@ const screen = (physical) => ({
           .filter(
             (s) => s.sideId === c.battle.roster.seat(c.targetSeat).sideId,
           ).length;
-        return Math.floor(value * (count > 1 ? 2 / 3 : 1 / 2));
+        return count > 1 ? 2 * Math.floor(value / 3) : Math.floor(value / 2);
       },
     },
   ],

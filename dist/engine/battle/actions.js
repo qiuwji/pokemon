@@ -24,7 +24,15 @@ export class BattleActions {
       return { error: "这位伙伴不能执行该行动。" };
     if (!(mon?.hp > 0) && action.kind !== "switch")
       return { error: "请选择一只还能战斗的宝可梦。" };
-    const base = { ...action, seat, actor: mon?.uid ?? null };
+    const {
+      continuation,
+      overrideMove,
+      skipPP,
+      skipReadiness,
+      replacement,
+      ...request
+    } = action;
+    const base = { ...request, seat, actor: mon?.uid ?? null };
     let prepared;
     switch (action.kind) {
       case "move": {
@@ -97,6 +105,7 @@ export class BattleActions {
       mon = b.roster.owner(seat).party[index];
     b.traits?.run("leave", { ownerSeat: seat, actorSeat: seat });
     b.states.clear("leave", seat);
+    b.actionLifecycle.clear(seat);
     const originalAbility = b.conditions.get(seat).originalAbility;
     if (originalAbility && old) old.ability = originalAbility;
     b.roster.replace(seat, index);

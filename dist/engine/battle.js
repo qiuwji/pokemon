@@ -1,3 +1,4 @@
+import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
 import { stageMultiplier } from "./model.js";
 import { BATTLE_RULES } from "./battle-rules.js";
 import { MoveEffectRegistry } from "./move-effects.js";
@@ -94,6 +95,7 @@ export class Battle {
       new BattleStateRegistry({ ...GEN3_BATTLE_STATES, ...states }),
     );
     this.states.registry.validateEffects(this.moveEffects);
+    this.actionLifecycle = new BattleActionLifecycle(this);
     this.recorder = new BattleEvents(
       this.roster,
       () => this.decisionView(),
@@ -210,6 +212,7 @@ export class Battle {
         ...this.environment,
         weather: this.traits?.weather() || null,
       },
+      actionLifecycle: this.actionLifecycle?.view(),
       decision: {
         required: this.decisions?.required().map((s) => s.id) || [],
         queued: [...(this.decisions?.pending.keys() || [])],
@@ -351,6 +354,23 @@ export class Battle {
       throw error;
     }
   }
+  advance() {
+    if (
+      this.ended ||
+      this.decisions.required().length ||
+      this.decisions.pending.size
+    )
+      return [];
+    const checkpoint = new BattleCheckpoint(this);
+    try {
+      this.recorder.begin();
+      this.rounds.resolve([]);
+      return this.events;
+    } catch (error) {
+      checkpoint.restore();
+      throw error;
+    }
+  }
   applyAction(action) {
     this.recorder.begin();
     this.actionId = null;
@@ -402,6 +422,7 @@ export class Battle {
           this.roster.occupant(seat.id).ability = original;
       }
       this.states.clear("end");
+      this.actionLifecycle.clearAll();
       this.result = result;
       this.winner = winner;
     }

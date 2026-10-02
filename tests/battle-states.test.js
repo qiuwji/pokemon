@@ -146,7 +146,7 @@ test("Reflect protects the side, survives switching, ignores critical hits and e
   const { b, p } = fixture();
   b.executeMove(b.homeSeat, 1);
   assert.equal(
-    b.traits.calculate("base-damage", 30, {
+    b.traits.calculate("screen", 30, {
       actorSeat: b.awaySeat,
       targetSeat: b.homeSeat,
       move: { type: "normal" },
@@ -155,7 +155,7 @@ test("Reflect protects the side, survives switching, ignores critical hits and e
     15,
   );
   assert.equal(
-    b.traits.calculate("base-damage", 30, {
+    b.traits.calculate("screen", 30, {
       actorSeat: b.awaySeat,
       targetSeat: b.homeSeat,
       move: { type: "normal" },

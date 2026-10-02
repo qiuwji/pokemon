@@ -61,6 +61,14 @@ export class BattleSession {
       const events = this.battle.act(action);
       for (const event of events)
         await this.director.play(event, { message: this.onMessage });
+      let automaticRounds = 0;
+      while (!this.battle.ended && !this.battle.decisions.required().length) {
+        if (++automaticRounds > 32)
+          throw new Error("Automatic action limit exceeded");
+        const automatic = this.battle.advance();
+        for (const event of automatic)
+          await this.director.play(event, { message: this.onMessage });
+      }
       if (this.battle.ended) {
         const result = (this.pendingResult ??= this.onResult(this.battle));
         await this.transitions.run("battle-exit", () => {

@@ -246,6 +246,7 @@ export function damage(
   );
   if (physical && attacker.status === "burn")
     v = Math.floor(v * modifier("burn-modifier", 0.5, context));
+  v = Math.floor(modifier("screen", v, context));
   v = Math.floor(v * spread);
   if (physical) v = Math.max(1, v);
   v = Math.floor(modifier("base-damage", v, context)) + 2;

@@ -1,6 +1,59 @@
 import { effectiveness } from "../model.js";
 /** Special move operations use the same validated effect registry as ordinary attacks. */
 export const SPECIAL_MOVE_OPERATIONS = {
+  copyLastMove(c) {
+    const b = c.battle,
+      id = b.actionLifecycle.lastMove(c.targetSeat);
+    if (
+      !id ||
+      b.db.moves[id].effect === "mirror_move" ||
+      c.action?.replacement
+    ) {
+      c.successful = false;
+      c.emit("没有可模仿的招式！", "failed");
+      return;
+    }
+    const replacement = b.actionLifecycle.replace(c.action, id);
+    b.moves.execute({
+      ...replacement,
+      target: { kind: "seat", id: c.targetSeat },
+      skipReadiness: true,
+      skipPP: true,
+      replacement: true,
+    });
+  },
+  futureAttack(c, s) {
+    const b = c.battle;
+    // Gen III snapshots base damage at cast time; STAB/type/random/critical are absent here.
+    const amount = b.rules.damage(
+      c.mon,
+      c.opponent,
+      c.move,
+      b.db,
+      { int: () => 15 },
+      {
+        aStages: c.selfState.stages,
+        dStages: c.targetState.stages,
+        critical: false,
+        attackerTypes: [],
+        defenderTypes: [],
+        modifier: (phase, v, formula) =>
+          b.traits.calculate(phase, v, { ...c, ...formula }),
+      },
+    ).amount;
+    if (
+      !b.actionLifecycle.schedule({
+        targetSeat: c.targetSeat,
+        sourceSeat: c.actorSeat,
+        move: c.move,
+        amount,
+        delay: s.delay,
+      })
+    ) {
+      c.successful = false;
+      c.emit("该目标已有预知攻击！", "failed");
+    }
+  },
   createSubstitute(c) {
     const cost = Math.max(1, Math.floor(c.mon.stats.hp / 4));
     if (c.mon.hp <= cost || c.battle.states.lookup("substitute", c.actorSeat)) {
@@ -106,3 +159,8 @@ export const SPECIAL_MOVE_OPERATIONS = {
   },
 };
 SPECIAL_MOVE_OPERATIONS.selfFaint.scope = "action";
+
+SPECIAL_MOVE_OPERATIONS.futureAttack.validate = (s) => {
+  if (!Number.isInteger(s.delay) || s.delay < 1 || s.delay > 10000)
+    throw new Error("Invalid delayed move turns");
+};

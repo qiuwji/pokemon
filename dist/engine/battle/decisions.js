@@ -21,7 +21,8 @@ export class BattleDecisions {
       (s) =>
         b.roster.owner(s.id).kind === "human" &&
         b.roster.occupant(s.id)?.hp > 0 &&
-        !this.pending.has(s.id),
+        !this.pending.has(s.id) &&
+        !b.actionLifecycle.locked(s.id),
     );
   }
   next() {

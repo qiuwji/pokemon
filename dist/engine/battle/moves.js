@@ -52,8 +52,10 @@ export class MoveExecutor {
       mon = b.roster.occupant(action.seat);
     if (!(mon?.hp > 0)) return;
     const move = {
-        ...selectedMove(b, action.seat, action.index),
-        id: mon.moves[action.index]?.id || "struggle",
+        ...(action.overrideMove
+          ? b.db.moves[action.overrideMove]
+          : selectedMove(b, action.seat, action.index)),
+        id: action.overrideMove || mon.moves[action.index]?.id || "struggle",
       },
       definition = b.moveEffects.get(move.effect);
     let targets = b.targeting.resolve(action.seat, move, action.target);
@@ -61,6 +63,8 @@ export class MoveExecutor {
       b.emit("目标已不在场上，行动无法完成。", "failed", {
         actorSeat: action.seat,
       });
+      b.actionLifecycle.clear(action.seat);
+      b.actionLifecycle.record(action, move.id, false);
       return;
     }
     const selection = {
@@ -72,7 +76,16 @@ export class MoveExecutor {
     targets = selection.targetSeats.map((id) => b.roster.seat(id));
     const initial = this.context(action.seat, targets[0].id, move, definition);
     b.phase = "action-permission";
-    if (definition.supported === false || !canAct(initial)) return;
+    if (
+      definition.supported === false ||
+      (!action.skipReadiness && !canAct(initial))
+    ) {
+      b.actionLifecycle.clear(action.seat);
+      b.actionLifecycle.record(action, move.id, false);
+      return;
+    }
+    initial.action = action;
+    const lifecycle = b.actionLifecycle.begin(action, initial);
     const slot = mon.moves[action.index];
     let ppCost = 1;
     for (const target of targets)
@@ -82,13 +95,14 @@ export class MoveExecutor {
             ...initial,
             targetSeat: target.id,
           }) ?? ppCost;
-    if (slot) slot.pp = Math.max(0, slot.pp - ppCost);
+    if (slot && !lifecycle.skipPP && !action.skipPP)
+      slot.pp = Math.max(0, slot.pp - ppCost);
     b.traits?.run("move-start", initial);
     b.phase = "move-start";
     const event = initial.emit(`${b.name(mon)} 使用了 ${move.name}！`, "move", {
       targetSeats: targets.map((s) => s.id),
       move: {
-        id: slot?.id || "struggle",
+        id: move.id,
         type: move.type,
         power: move.power,
         effect: move.effect,
@@ -100,6 +114,18 @@ export class MoveExecutor {
     b.traits?.run("move-check", movePermission);
     if (!movePermission.allowed) {
       event.move.successful = false;
+      b.actionLifecycle.clear(action.seat);
+      b.actionLifecycle.record(action, move.id, false);
+      return;
+    }
+    if (lifecycle.charging) {
+      b.moveEffects.run("onCharge", initial);
+      initial.emit("正在蓄力！", "charge", {
+        actorSeat: action.seat,
+        moveId: move.id,
+        hidden: b.actionLifecycle.hidden(action.seat),
+      });
+      b.actionLifecycle.record(action, move.id, true);
       return;
     }
     if (!definition.beforeDamage?.some((s) => s.op === "streakPower"))
@@ -112,6 +138,7 @@ export class MoveExecutor {
     for (const target of targets) {
       if (!(b.roster.occupant(target.id)?.hp > 0)) continue;
       const c = this.context(action.seat, target.id, move, definition);
+      c.action = action;
       c.targetCount = targets.length;
       c.targetMode = b.targeting.mode(move);
       c.power = initial.power;
@@ -159,9 +186,17 @@ export class MoveExecutor {
     b.moveEffects.run("afterDamage", initial, { scope: "action" });
     b.traits?.run("after-action", { ...initial, completed: true });
     event.move.successful = successful;
+    b.actionLifecycle.after(action, initial, successful);
   }
   hits(c) {
-    if (c.definition.target === "self") return true;
+    if (c.definition.target === "self" || c.definition.bypassHitChecks)
+      return true;
+    const hidden = this.battle.actionLifecycle.hidden(c.targetSeat);
+    if (hidden && !c.definition.hitsHidden?.includes(hidden)) {
+      c.emit("目标暂时无法被攻击！", "failed");
+      return false;
+    }
+    if (hidden) c.power *= c.definition.hiddenMultiplier || 1;
     if (c.targetState.protected) {
       c.emit("对方保护了自己！");
       return false;
