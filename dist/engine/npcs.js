@@ -21,7 +21,7 @@ export class NPCSystem {
   state(map, def) {
     const key = map + ":" + def.id;
     let n = this.states.get(key);
-    if (!n) {
+    if (!n || n._worldVersion !== def._worldVersion) {
       n = {
         ...def,
         originX: def.x,
@@ -59,6 +59,12 @@ export class NPCSystem {
         if (this.scene.hidden.has(map + ":" + id)) objects.delete(id);
     }
     return [...objects.values()];
+  }
+  invalidate(map, id) {
+    const key = map + ":" + id;
+    this.states.delete(key);
+    this.scene?.pins.delete(key);
+    this.scene?.hidden.delete(key);
   }
   clear() {
     this.states.clear();

@@ -133,7 +133,7 @@ export class Renderer {
       );
   }
   drawMap(id, overlay, now) {
-    const m = this.db.maps[id],
+    const m = this.mapProvider?.(id) || this.db.maps[id],
       origin = this.graph.placements[id],
       pack = this.db.tilesets[m.tileset];
     const minX = Math.max(0, Math.floor(this.camera.x / 16) - origin.x),
@@ -168,6 +168,7 @@ export class Renderer {
     now = performance.now(),
     { emotes = [], movementMode = "walk", travel = null } = {},
   ) {
+    this.mapProvider = (id) => world.maps[id];
     const p = world.position,
       m = world.map,
       player = this.motion.sample(p, now),

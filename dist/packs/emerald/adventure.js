@@ -1,3 +1,7 @@
+import {
+  WorldStateService,
+  emptyWorldState,
+} from "../../engine/world-state.js";
 import { EncounterTableRegistry } from "../../engine/encounter-tables.js";
 import { BattleStrategyRegistry } from "../../engine/battle/strategy-registry.js";
 import { NPCBehaviorRegistry } from "../../engine/npc-behaviors.js";
@@ -181,6 +185,7 @@ export class EmeraldAdventure {
             this.fieldDirector.stage(c.actors);
           }),
         wait: (c) => this.timeline.wait(c.ms),
+        worldPatch: (c) => this.patchWorld(c.operations),
         move: (c) => this.fieldDirector.move(c),
         approach: (c) => this.fieldDirector.approach(c),
         face: (c) => this.fieldDirector.face(c),
@@ -236,6 +241,8 @@ export class EmeraldAdventure {
         resources: storyResources,
         validateCommand: (c) => {
           validateFieldCommand(c, db.maps);
+          if (c.type === "worldPatch")
+            this.worldState.validateOperations(c.operations);
           if (c.type === "presentation")
             this.sceneDirector?.validate(c.id, c.payload || {}) ||
               (() => {
@@ -308,6 +315,7 @@ export class EmeraldAdventure {
         Object.keys(this.itemDefinitions).map((id) => [id, 0]),
       ),
       story: emptyStoryProgress(),
+      worldState: emptyWorldState(),
       flags: {},
       money: 3000,
       seen: [],
@@ -324,6 +332,12 @@ export class EmeraldAdventure {
   bindField() {
     this.field?.dispose();
     this.rng = new Random(this.state.randomSeed);
+    this.state.worldState ||= emptyWorldState();
+    this.worldState = new WorldStateService({
+      db: this.db,
+      state: this.state.worldState,
+      objects: (map) => this.baseWorldObjects(map),
+    });
     this.lastEncounterSteps = -5;
     this.state.growth ||= { hatchTick: 0 };
     this.state.tradePartner ||= [];
@@ -359,7 +373,7 @@ export class EmeraldAdventure {
       onChange: () => this.ui?.updateSide(),
     });
     this.travel = new TravelService({
-      maps: this.db.maps,
+      maps: this.worldState.maps,
       destinations: this.catalog.destinations,
       position: this.state.position,
       context: () => ({
@@ -377,22 +391,17 @@ export class EmeraldAdventure {
       reducedMotion: this.reducedMotion,
     });
     this.field = new FieldSession({
-      maps: this.db.maps,
+      maps: this.worldState.maps,
       position: this.state.position,
       motion: this.motion,
       transitions: this.transitions,
       movement: this.movement,
       npcBehaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors),
       now: this.timeline.now,
-      objects: (map) => [
-        ...objectsFor(
-          { ...this.state, position: { ...this.state.position, map } },
-          this.db,
-        ),
-        ...(this.db.maps[map].elements || []).filter((e) =>
-          matchesCondition(e.requires, this.state),
-        ),
-      ],
+      objects: (map) =>
+        this.worldState
+          .projectObjects(map)
+          .filter((e) => matchesCondition(e.requires, this.state)),
       onStep: (cell) => this.step(cell),
       onProgress: () => this.advanceTravelClocks(),
       onMap: () => {
@@ -421,6 +430,46 @@ export class EmeraldAdventure {
     this.visitMap();
     this.plugins?.rebind();
     this.onMap(this.world.map.title, this.state.position.map);
+  }
+  baseWorldObjects(map) {
+    return [
+      ...objectsFor(
+        { ...this.state, position: { ...this.state.position, map } },
+        this.db,
+      ),
+      ...(this.db.maps[map].elements || []),
+    ];
+  }
+  patchWorld(operations) {
+    const draft = this.worldState.prepare(operations);
+    const current = this.state.position;
+    const record = draft.maps[current.map];
+    const tile =
+      record?.tiles[current.y * this.db.maps[current.map].width + current.x];
+    if (tile?.block !== undefined && (tile.block >> 10) & 3)
+      throw new Error("World patch would block the player");
+    for (const [id, entry] of Object.entries(record?.objects || {})) {
+      const base = this.baseWorldObjects(current.map).find((o) => o.id === id);
+      const position = { ...base, ...entry.changes };
+      if (
+        !entry.hidden &&
+        (entry.spawn || base) &&
+        position.x === current.x &&
+        position.y === current.y
+      )
+        throw new Error("World object would overlap the player");
+    }
+    const result = this.worldState.commit(draft);
+    for (const operation of operations)
+      if (operation.kind === "object")
+        this.field.npcs.invalidate(operation.map, operation.id);
+    this.plugins?.events.emit("core:world-changed", {
+      revision: result.revision,
+      operations,
+    });
+    this.ui?.updateSide();
+    if (!this.storyBusy) this.save();
+    return result;
   }
   enter(position) {
     this.world.enter(position.map, position.x, position.y, position.dir);

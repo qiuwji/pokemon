@@ -223,9 +223,15 @@ export function storyResources(c) {
   if (["cameraTo", "cameraFollow"].includes(c.type)) return ["camera"];
   if (c.type === "dialog") return ["dialog"];
   if (
-    ["scene", "teleport", "battle", "starter", "shop", "presentation"].includes(
-      c.type,
-    )
+    [
+      "scene",
+      "teleport",
+      "battle",
+      "starter",
+      "shop",
+      "presentation",
+      "worldPatch",
+    ].includes(c.type)
   )
     return ["*"];
   if (

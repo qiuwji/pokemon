@@ -101,6 +101,14 @@ export class ExtensionCatalog {
   dependencies(state) {
     const used = [
       state.position?.map,
+      ...Object.keys(state.worldState?.maps || {}),
+      ...Object.values(state.worldState?.maps || {}).flatMap((record) =>
+        Object.entries(record.objects || {}).flatMap(([id, e]) => [
+          id,
+          e.changes.actor,
+          e.changes.trainerId,
+        ]),
+      ),
       state.movement?.mode,
       ...Object.keys(state.bag || {}).filter((id) => state.bag[id] > 0),
       ...[

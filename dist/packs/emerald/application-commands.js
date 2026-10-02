@@ -9,6 +9,7 @@ export function registerEmeraldCommands(game, bus) {
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
   const domainPermissions = {
     field: "movement",
+    world: "world",
     movement: "movement",
     battle: "battle",
     starter: "starter",
@@ -44,6 +45,13 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register(
+    "world.patch",
+    objectSchema({ operations: { type: "string", maxLength: 65536 } }, [
+      "operations",
+    ]),
+    ({ operations }) => game.patchWorld(JSON.parse(operations)),
+  );
   register(
     "presentation.play",
     objectSchema({ id, payload: { type: "string", maxLength: 4096 } }, ["id"]),

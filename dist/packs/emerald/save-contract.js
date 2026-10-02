@@ -1,3 +1,4 @@
+import { WorldStateService } from "../../engine/world-state.js";
 import { validCreatureValues } from "../../engine/creature-contract.js";
 import { PluginState } from "../../engine/extensions/plugin-state.js";
 import { readOnly, localId } from "../../engine/extensions/values.js";
@@ -24,6 +25,8 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (s.worldState !== undefined)
+      new WorldStateService({ db, state: s.worldState });
   } catch {
     return false;
   }
