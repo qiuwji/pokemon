@@ -30,6 +30,7 @@ export class BattleActions {
       skipPP,
       skipReadiness,
       replacement,
+      callDepth,
       ...request
     } = action;
     const base = { ...request, seat, actor: mon?.uid ?? null };

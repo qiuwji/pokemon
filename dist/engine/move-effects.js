@@ -1,3 +1,5 @@
+import { COPY_OPERATIONS } from "./battle/copy-operations.js";
+import { CONTINUOUS_OPERATIONS } from "./battle/continuous-operations.js";
 import { SUPPORT_OPERATIONS } from "./battle/support-operations.js";
 import { UTILITY_OPERATIONS } from "./battle/utility-operations.js";
 import { RANDOM_POWER_OPERATIONS } from "./battle/random-power-operations.js";
@@ -350,6 +352,8 @@ export class MoveEffectRegistry {
       ...REACTIVE_OPERATIONS,
       ...UTILITY_OPERATIONS,
       ...SUPPORT_OPERATIONS,
+      ...COPY_OPERATIONS,
+      ...CONTINUOUS_OPERATIONS,
       ...RANDOM_POWER_OPERATIONS,
       ...operations,
     });
@@ -383,6 +387,11 @@ export class MoveEffectRegistry {
             "noCritical",
             "retaliation",
             "preparation",
+            "usableAsleep",
+            "requiresUserStatus",
+            "thawsUser",
+            "hitPowers",
+            "accuracyEachHit",
           ].includes(key)
         )
           throw new Error(`effects.${id}: unknown field ${key}`);
@@ -422,10 +431,34 @@ export class MoveEffectRegistry {
       )
         throw new Error(`effects.${id}: invalid required status`);
       if (
-        definition.primary &&
-        ["beforeDamage", "afterDamage", "secondary", "hits", "minimumHP"].some(
-          (key) => definition[key] !== undefined,
+        definition.requiresUserStatus !== undefined &&
+        !["sleep", "freeze", "poison", "toxic", "burn", "paralysis"].includes(
+          definition.requiresUserStatus,
         )
+      )
+        throw new Error(`effects.${id}: invalid required user status`);
+      if (
+        definition.hitPowers !== undefined &&
+        (!Array.isArray(definition.hitPowers) ||
+          !definition.hitPowers.length ||
+          definition.hitPowers.length > 10 ||
+          definition.hitPowers.some(
+            (p) => !Number.isInteger(p) || p < 1 || p > 1000,
+          ) ||
+          definition.hits !== undefined)
+      )
+        throw new Error(`effects.${id}: invalid hit power sequence`);
+      if (
+        definition.primary &&
+        [
+          "beforeDamage",
+          "afterDamage",
+          "secondary",
+          "hits",
+          "hitPowers",
+          "accuracyEachHit",
+          "minimumHP",
+        ].some((key) => definition[key] !== undefined)
       )
         throw new Error(`effects.${id}: primary cannot mix with damage phases`);
       if (
@@ -438,6 +471,9 @@ export class MoveEffectRegistry {
         "alwaysHits",
         "bypassHitChecks",
         "noCritical",
+        "usableAsleep",
+        "thawsUser",
+        "accuracyEachHit",
       ])
         if (
           definition[key] !== undefined &&

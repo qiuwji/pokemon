@@ -42,7 +42,29 @@ export const GEN3_EXTENDED_MOVE_EFFECTS = {
     beforeDamage: [{ op: "firstTurnOnly" }],
     secondary: [{ op: "flinch" }],
   },
-  thaw_hit: { afterDamage: [{ op: "thawTarget" }] },
+  thaw_hit: { thawsUser: true, afterDamage: [{ op: "thawTarget" }] },
+  snore: {
+    usableAsleep: true,
+    requiresUserStatus: "sleep",
+    secondary: [{ op: "flinch" }],
+  },
+  sleep_talk: {
+    ...primary("callMove", { mode: "sleep_talk" }, true),
+    usableAsleep: true,
+    requiresUserStatus: "sleep",
+  },
+  metronome: primary("callMove", { mode: "metronome" }, true),
+  assist: primary("callMove", { mode: "assist" }, true),
+  sketch: { primary: [{ op: "sketch" }], bypassHitChecks: true },
+  rollout: {
+    action: { kind: "repeat", minTurns: 5, maxTurns: 5, stopOnFailure: true },
+    beforeDamage: [{ op: "rolloutPower" }],
+  },
+  uproar: {
+    action: { kind: "repeat", minTurns: 2, maxTurns: 5 },
+    afterDamage: [{ op: "uproar" }],
+  },
+  triple_kick: { hitPowers: [10, 20, 30], accuracyEachHit: true },
   smellingsalt: {
     beforeDamage: [{ op: "paralysisPower" }],
     afterDamage: [{ op: "wakeTarget" }],

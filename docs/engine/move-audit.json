@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 14,
+    "missing": 6,
     "disabled": 0,
-    "registered-unverified": 184
+    "registered-unverified": 192
   },
   "effects": [
     {
@@ -962,7 +962,7 @@
         "metronome"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "leech_seed",
@@ -1044,7 +1044,7 @@
         "snore"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "conversion_2",
@@ -1072,7 +1072,7 @@
         "sketch"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "unused_60",
@@ -1088,7 +1088,7 @@
         "sleep_talk"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "destiny_bond",
@@ -1161,7 +1161,7 @@
         "triple_kick"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "thief",
@@ -1291,7 +1291,7 @@
         "ice_ball"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "swagger",
@@ -1698,7 +1698,7 @@
         "uproar"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "stockpile",
@@ -1895,7 +1895,7 @@
         "assist"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "ingrain",

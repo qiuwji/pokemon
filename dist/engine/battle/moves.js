@@ -51,7 +51,7 @@ export class MoveExecutor {
   execute(action) {
     const b = this.battle,
       mon = b.roster.occupant(action.seat);
-    if (!(mon?.hp > 0)) return;
+    if (!(mon?.hp > 0)) return false;
     if (!action.overrideMove && action.index >= 0) {
       const index = b.traits.calculate("selected-move", action.index, {
         actorSeat: action.seat,
@@ -91,7 +91,7 @@ export class MoveExecutor {
       });
       b.actionLifecycle.clear(action.seat);
       b.actionLifecycle.record(action, move.id, false);
-      return;
+      return false;
     }
     const selection = {
       actorSeat: action.seat,
@@ -108,7 +108,7 @@ export class MoveExecutor {
     ) {
       b.actionLifecycle.clear(action.seat);
       b.actionLifecycle.record(action, move.id, false);
-      return;
+      return false;
     }
     initial.action = action;
     const lifecycle = b.actionLifecycle.begin(action, initial);
@@ -138,11 +138,20 @@ export class MoveExecutor {
     });
     const movePermission = { ...initial, allowed: true };
     b.traits?.run("move-check", movePermission);
-    if (!movePermission.allowed) {
+    if (
+      !movePermission.allowed ||
+      (definition.requiresUserStatus &&
+        mon.status !== definition.requiresUserStatus)
+    ) {
+      if (
+        definition.requiresUserStatus &&
+        mon.status !== definition.requiresUserStatus
+      )
+        initial.emit("没有效果。", "failed");
       event.move.successful = false;
       b.actionLifecycle.clear(action.seat);
       b.actionLifecycle.record(action, move.id, false);
-      return;
+      return false;
     }
     if (lifecycle.charging) {
       b.moveEffects.run("onCharge", initial);
@@ -152,7 +161,7 @@ export class MoveExecutor {
         hidden: b.actionLifecycle.hidden(action.seat),
       });
       b.actionLifecycle.record(action, move.id, true);
-      return;
+      return true;
     }
     if (!definition.beforeDamage?.some((s) => s.op === "streakPower"))
       initial.selfState.fury = 0;
@@ -218,6 +227,7 @@ export class MoveExecutor {
     event.move.type = move.type;
     event.move.power = initial.power;
     b.actionLifecycle.after(action, initial, successful);
+    return successful;
   }
   hits(c) {
     if (c.definition.target === "self" || c.definition.bypassHitChecks)
@@ -274,8 +284,13 @@ export class MoveExecutor {
     const b = this.battle,
       options = c.definition.hits || [1],
       hits =
-        options.length === 1 ? options[0] : options[b.rng.int(options.length)];
+        c.definition.hitPowers?.length ||
+        (options.length === 1
+          ? options[0]
+          : options[b.rng.int(options.length)]);
     for (let i = 0; i < hits && c.opponent.hp > 0; i++) {
+      if (c.definition.hitPowers) c.power = c.definition.hitPowers[i];
+      if (i > 0 && c.definition.accuracyEachHit && !this.hits(c)) break;
       const criticalPermission = { ...c, allowed: true };
       b.traits?.run("critical-check", criticalPermission);
       const critical =

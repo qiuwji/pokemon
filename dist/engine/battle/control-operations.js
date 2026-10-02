@@ -1,3 +1,4 @@
+import { executeCalledMove } from "./called-moves.js";
 const fail = (c) => {
   c.successful = false;
   c.emit("没有效果。", "failed");
@@ -86,12 +87,7 @@ export const CONTROL_OPERATIONS = {
       id = environmentMoves[b.environment.terrain];
     if (!id || !b.db.moves[id])
       throw new Error("Nature Power move catalog dependency missing");
-    const action = b.actionLifecycle.replace(c.action, id);
-    b.moves.execute({
-      ...action,
-      replacement: true,
-      skipPP: true,
-      skipReadiness: true,
+    c.successful = executeCalledMove(c, id, {
       target: { kind: "seat", id: c.targetSeat },
     });
   },

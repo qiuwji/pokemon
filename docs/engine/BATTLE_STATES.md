@@ -30,3 +30,12 @@
 精灵 `status` 增加 `toxic`；持久化保留异常类别，`toxic_counter` 战斗席位状态拥有递增计数（最多 15），换人/倒下/结束清理，重新上场从 1 开始。伤害先计算 `max(1, floor(maxHP / 16))` 再乘计数，不能先乘后除。BattleMajorStatus 统一施加、防护、恢复与持续伤害；治疗道具、特性和树果通过共享毒家族匹配同时支持普通中毒与剧毒。
 
 特性检查的 `status` 使用家族 `poison`，`majorStatus` 为实际 `toxic`；同步按第三世代传播普通中毒。公开插件只读规则上下文包含这两个字段与来源信息。依据 `battle_util.c` 的 ENDTURN_BAD_POISON 与特性同步分支；保存验证引用统一 STATUSES。
+
+
+## 调用与连续行动补充（2026-10-03）
+
+固定参考 battle_script_commands.c 的 IsInvalidForSleepTalkOrAssist、IsTwoTurnsMove、sMovesForbiddenToCopy、trychoosesleeptalkmove、assistattackselect、Sketch 与 rolloutdamagecalculation；battle_util.c 的睡眠取消与 ENDTURN_UPROAR。梦话/打鼾只允许仍在睡眠中的使用者；梦话忽略被调用槽的 PP，但尊重禁用等选择限制。借助可使用其他非蛋成员的招式，即使该成员倒下或有异常。写生使用最近已打印（可失败）的选择招式，永久替换本体槽并恢复该招式基础 PP。
+
+共用 called-moves 端口进入原执行器，被调用动作不再检查行动资格或扣 PP，并且不继承旧连续行动标志。递归上限 8 是项目防故障政策，不是原作规则。原作调用禁表保持；抽取有效候选采用等概率选择，不承诺原作拒绝采样的随机位序一致。元数据提取已有全部 354 招式及原始接触/反射/抢夺旗标和声音表；运行目录尚未整体接入，挥指当前可调用池仍受已导入招式限制，不能声称完整 354 招式已可用。
+
+连续行动政策可声明 stopOnFailure；滚动为五次、逐次威力翻倍，变圆额外翻倍，失败或不能行动立即解锁。吵闹使用同一个 2–5 回合锁，不另造计时器；在状态阶段唤醒非隔音对象，防止再次入睡，锁结束/换人/倒下时清理。三连踢为声明式 hitPowers [10,20,30] 与逐击命中检查，后续一击失败停止，已经造成的伤害保留。多段语义事件包含 hit 序号；具体表现仍待组合验收。

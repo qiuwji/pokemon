@@ -1,4 +1,5 @@
 import { effectiveness } from "../model.js";
+import { executeCalledMove } from "./called-moves.js";
 /** Special move operations use the same validated effect registry as ordinary attacks. */
 export const SPECIAL_MOVE_OPERATIONS = {
   copyLastMove(c) {
@@ -6,20 +7,14 @@ export const SPECIAL_MOVE_OPERATIONS = {
       id = b.actionLifecycle.lastMove(c.targetSeat);
     if (
       !id ||
-      b.db.moves[id].effect === "mirror_move" ||
-      c.action?.replacement
+      b.db.moves[id].effect === "mirror_move"
     ) {
       c.successful = false;
       c.emit("没有可模仿的招式！", "failed");
       return;
     }
-    const replacement = b.actionLifecycle.replace(c.action, id);
-    b.moves.execute({
-      ...replacement,
+    c.successful = executeCalledMove(c, id, {
       target: { kind: "seat", id: c.targetSeat },
-      skipReadiness: true,
-      skipPP: true,
-      replacement: true,
     });
   },
   futureAttack(c, s) {

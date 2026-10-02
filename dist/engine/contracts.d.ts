@@ -83,11 +83,17 @@ export interface MoveEffectDefinition {
   alwaysHits?: boolean;
   minimumHP?: 1;
   requiresStatus?: Status;
+  requiresUserStatus?: Status;
+  usableAsleep?: boolean;
+  thawsUser?: boolean;
+  hitPowers?: number[];
+  accuracyEachHit?: boolean;
   action?: {
     kind: "charge" | "repeat" | "recharge";
     minTurns?: number;
     maxTurns?: number;
     confuseAfter?: boolean;
+    stopOnFailure?: boolean;
     hidden?: "air" | "underground" | "underwater";
     hiddenByMove?: Record<string, "air" | "underground" | "underwater">;
     skipWeather?: string;

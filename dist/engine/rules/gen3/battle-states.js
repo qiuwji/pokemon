@@ -1,3 +1,4 @@
+import { GEN3_CONTINUOUS_STATES } from "./continuous-states.js";
 import { GEN3_SUPPORT_STATES } from "./support-states.js";
 import { GEN3_CONTROL_STATES } from "./control-states.js";
 import { PHYSICAL_TYPES } from "../../model.js";
@@ -29,6 +30,7 @@ const screen = (physical) => ({
 export const GEN3_BATTLE_STATES = {
   ...GEN3_CONTROL_STATES,
   ...GEN3_SUPPORT_STATES,
+  ...GEN3_CONTINUOUS_STATES,
   curse: {
     scope: "seat",
     clearOn: ["leave", "faint", "end"],

@@ -89,13 +89,16 @@ export class BattleActionLifecycle {
       policy = c.definition.action,
       lock = this.locked(action.seat);
     if (lock && action.continuation && lock.kind === "repeat") {
-      if (--lock.remaining <= 0) {
+      if ((policy?.stopOnFailure && !successful) || --lock.remaining <= 0) {
         this.clear(action.seat);
         if (policy?.confuseAfter) b.applyConfusion(action.seat, action.seat);
       }
     } else if (policy?.kind === "repeat" && successful && !lock) {
       const total =
-        policy.minTurns + b.rng.int(policy.maxTurns - policy.minTurns + 1);
+        policy.minTurns +
+        (policy.maxTurns === policy.minTurns
+          ? 0
+          : b.rng.int(policy.maxTurns - policy.minTurns + 1));
       this.locks.set(action.seat, {
         kind: "repeat",
         actor: c.mon.uid,
@@ -295,6 +298,7 @@ export function validateActionPolicy(policy) {
           "minTurns",
           "maxTurns",
           "confuseAfter",
+          "stopOnFailure",
           "hidden",
           "skipWeather",
           "hiddenByMove",
@@ -333,4 +337,9 @@ export function validateActionPolicy(policy) {
     typeof policy.confuseAfter !== "boolean"
   )
     throw new Error("Invalid repeat confusion");
+  if (
+    policy.stopOnFailure !== undefined &&
+    typeof policy.stopOnFailure !== "boolean"
+  )
+    throw new Error("Invalid repeated action failure policy");
 }

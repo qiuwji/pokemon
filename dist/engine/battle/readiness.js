@@ -19,17 +19,28 @@ export function canAct(c) {
     return false;
   }
   if (mon.status === "sleep") {
+    if (
+      b.traits.ability(side) !== "soundproof" &&
+      b.roster.occupied().some((s) => b.states.lookup("uproar", s.id))
+    ) {
+      b.statuses.clear(mon);
+      const nightmare = b.states.lookup("nightmare", side);
+      if (nightmare) b.states.remove(nightmare.key, "awakened");
+      c.emit(`${b.name(mon)} 因吵闹醒来了！`);
+    }
+  }
+  if (mon.status === "sleep") {
     if (--mon.sleep <= 0) {
-      mon.status = null;
+      b.statuses.clear(mon);
       c.emit(`${b.name(mon)} 醒来了！`);
     } else {
       c.emit(`${b.name(mon)} 正在熟睡。`);
-      return false;
+      if (!c.definition.usableAsleep) return false;
     }
   }
   if (mon.status === "freeze") {
-    if (b.rng.next() < b.rules.thawChance) {
-      mon.status = null;
+    if (b.rng.next() < b.rules.thawChance || c.definition.thawsUser) {
+      b.statuses.clear(mon);
       c.emit("冰冻解除了！");
     } else {
       c.emit(`${b.name(mon)} 被冻住了！`);
