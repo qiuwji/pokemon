@@ -1,4 +1,5 @@
 import { readOnly } from "../extensions/values.js";
+import { PHYSICAL_TYPES } from "../model.js";
 /** Owns scheduled actions and bounded history. Effect definitions describe policy, never the round loop. */
 export class BattleActionLifecycle {
   constructor(battle) {
@@ -7,6 +8,7 @@ export class BattleActionLifecycle {
     this.delayed = [];
     this.history = [];
     this.sequence = 0;
+    this.received = new Map();
   }
   locked(seat) {
     const r = this.locks.get(seat),
@@ -32,6 +34,7 @@ export class BattleActionLifecycle {
   clearAll() {
     this.locks.clear();
     this.delayed = [];
+    this.received.clear();
   }
   begin(action, c) {
     const b = this.battle,
@@ -126,6 +129,40 @@ export class BattleActionLifecycle {
         )?.moveId || null
     );
   }
+  recordDamage(c, amount) {
+    if (amount <= 0 || c.actorSeat === c.targetSeat) return;
+    const category = PHYSICAL_TYPES.has(c.move.type) ? "physical" : "special";
+    const record = {
+      turn: this.battle.turn,
+      sourceSeat: c.actorSeat,
+      sourceUid: c.mon.uid,
+      moveId: c.move.id,
+      amount,
+      lethal: c.opponent.hp === 0,
+      category,
+    };
+    this.received.set(c.opponent.uid, {
+      ...this.received.get(c.opponent.uid),
+      [category]: record,
+      last: record,
+    });
+  }
+  damageFor(seat, category = "last") {
+    const b = this.battle,
+      uid = b.roster.occupant(seat)?.uid,
+      r = this.received.get(uid)?.[category];
+    return r?.turn === b.turn ? r : null;
+  }
+  retaliation(seat, category) {
+    const b = this.battle,
+      r = this.damageFor(seat, category),
+      source = r && b.roster.occupant(r.sourceSeat);
+    return source?.hp > 0 &&
+      source.uid === r.sourceUid &&
+      b.roster.isOpposing(seat, r.sourceSeat)
+      ? r
+      : null;
+  }
   replace(action, moveId) {
     if (
       !this.battle.db.moves[moveId] ||
@@ -219,6 +256,10 @@ export class BattleActionLifecycle {
       delayed: this.delayed.map(({ move, ...r }) => ({
         ...r,
         moveId: move.id,
+      })),
+      received: [...this.received.entries()].map(([uid, records]) => ({
+        uid,
+        ...records,
       })),
       history: this.history,
     });

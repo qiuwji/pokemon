@@ -32,9 +32,22 @@ export class RoundResolver {
         }),
     ];
     b.turn++;
+    b.actionLifecycle.received.clear();
     b.conditions.startRound();
     const order = this.order(actions);
     b.turnOrder = order.map((a) => a.seat);
+    for (const action of order) {
+      if (action.kind !== "move") continue;
+      const move = action.overrideMove
+        ? b.db.moves[action.overrideMove]
+        : selectedMove(b, action.seat, action.index);
+      const preparation = b.moveEffects.get(move.effect).preparation;
+      if (preparation)
+        b.emit(preparation, "prepare", {
+          actorSeat: action.seat,
+          moveId: move.id || b.movesFor(action.seat)[action.index]?.id,
+        });
+    }
     for (const action of order) {
       if (b.ended) break;
       const mon = b.roster.occupant(action.seat);
@@ -117,20 +130,9 @@ export class RoundResolver {
       if (!(mon?.hp > 0)) continue;
       b.phase = "round-end";
       b.actionId = null;
-      if (["poison", "burn"].includes(mon.status)) {
-        mon.hp = Math.max(
-          0,
-          mon.hp -
-            Math.max(1, Math.floor(mon.stats.hp / b.rules.residualDivisor)),
-        );
-        b.emit(
-          `${b.name(mon)} 受到了${mon.status === "poison" ? "中毒" : "灼伤"}伤害！`,
-          "hurt",
-          { targetSeat: seat.id },
-        );
-        b.outcomes.observe();
-        if (b.ended) break;
-      }
+      b.statuses.residual(seat.id);
+      b.outcomes.observe();
+      if (b.ended) break;
       if (mon.hp > 0) {
         const weather = b.traits?.weather();
         const immune =

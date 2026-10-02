@@ -77,6 +77,6 @@ for (const op of ["traitHeal", "traitHurt"])
       throw new Error("Invalid trait health amount");
   };
 TRAIT_OPERATIONS.traitStatus.validate = (s) => {
-  if (!["poison", "burn", "paralysis", "sleep", "freeze"].includes(s.status))
+  if (!["poison", "toxic", "burn", "paralysis", "sleep", "freeze"].includes(s.status))
     throw new Error("Invalid trait status");
 };

@@ -1,3 +1,4 @@
+import { clearStatus, matchesStatus } from "./creatures/status.js";
 /** @typedef {{op:string, [key:string]:unknown}} EffectStep */
 /** A single operation registry is used by moves and items. Validate before any cost. */
 export class EffectRegistry {
@@ -37,21 +38,24 @@ const restoreHP = (c, step) => {
 restoreHP.validate = (s, p) =>
   positive(s.amount ?? s.fraction, p + ".amount/fraction");
 const cureStatus = (c, step) => {
-  if (
-    !c.target?.status ||
-    (step.status !== "any" && c.target.status !== step.status)
-  )
+  if (!c.target?.status || !matchesStatus(c.target.status, step.status))
     return false;
-  c.target.status = null;
-  delete c.target.sleep;
+  if (c.battle?.statuses) c.battle.statuses.clear(c.target);
+  else clearStatus(c.target);
   c.emit?.("异常状态解除了！", "heal", { side: c.targetSide });
   return true;
 };
 cureStatus.validate = (s, p) => {
   if (
-    !["poison", "burn", "paralysis", "sleep", "freeze", "any"].includes(
-      s.status,
-    )
+    ![
+      "poison",
+      "toxic",
+      "burn",
+      "paralysis",
+      "sleep",
+      "freeze",
+      "any",
+    ].includes(s.status)
   )
     throw new Error(`${p}.status: unknown status`);
 };

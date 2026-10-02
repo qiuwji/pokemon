@@ -1,5 +1,11 @@
 /** Public content contracts for editors and future TypeScript clients. Runtime validation is separate. */
-export type Status = "poison" | "burn" | "paralysis" | "sleep" | "freeze";
+export type Status =
+  | "toxic"
+  | "poison"
+  | "burn"
+  | "paralysis"
+  | "sleep"
+  | "freeze";
 export type Condition =
   | {
       compare: {

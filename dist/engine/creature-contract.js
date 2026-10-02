@@ -9,6 +9,7 @@ export const CREATURE_STATS = Object.freeze([
 ]);
 export const STATUSES = Object.freeze([
   "poison",
+  "toxic",
   "burn",
   "paralysis",
   "sleep",

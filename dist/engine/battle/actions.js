@@ -164,6 +164,7 @@ export class BattleActions {
       return;
     }
     if (plan.target) {
+      b.statuses.reconcile(plan.target);
       const target = [...b.roster.seats.keys()].find(
         (id) => b.roster.occupant(id)?.uid === plan.target.uid,
       );

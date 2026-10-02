@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 47,
+    "missing": 40,
     "disabled": 0,
-    "registered-unverified": 151
+    "registered-unverified": 158
   },
   "effects": [
     {
@@ -440,7 +440,7 @@
         "toxic"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "pay_day",
@@ -1017,7 +1017,7 @@
         "counter"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "encore",
@@ -1281,7 +1281,7 @@
         "endure"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "rollout",
@@ -1547,7 +1547,7 @@
         "mirror_coat"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "skull_bash",
@@ -1801,7 +1801,7 @@
         "focus_punch"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "smellingsalt",
@@ -1940,7 +1940,7 @@
         "revenge"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "brick_break",
@@ -2103,7 +2103,7 @@
         "poison_fang"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "weather_ball",

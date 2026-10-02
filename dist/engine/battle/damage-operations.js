@@ -40,7 +40,8 @@ export const DAMAGE_OPERATIONS = {
         Math.max(1, Math.floor(((255 - (m.friendship ?? 70)) * 10) / 25)),
       eruption: () => Math.max(1, Math.floor((150 * m.hp) / m.stats.hp)),
       facade: () =>
-        c.power * (["poison", "burn", "paralysis"].includes(m.status) ? 2 : 1),
+        c.power *
+        (["poison", "toxic", "burn", "paralysis"].includes(m.status) ? 2 : 1),
       weight: () => {
         const w =
           c.battle.db.species[c.opponent.species].weight ??
@@ -65,7 +66,11 @@ export const DAMAGE_OPERATIONS = {
   hiddenPower(c) {
     const order = ["hp", "atk", "def", "spe", "spa", "spd"];
     const bits = (bit) =>
-      order.reduce((v, k, i) => v | (((c.battle.forms.effective(c.mon).iv[k] >> bit) & 1) << i), 0);
+      order.reduce(
+        (v, k, i) =>
+          v | (((c.battle.forms.effective(c.mon).iv[k] >> bit) & 1) << i),
+        0,
+      );
     c.power = Math.floor((40 * bits(1)) / 63) + 30;
     const types = [
       "fighting",

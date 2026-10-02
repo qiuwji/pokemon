@@ -23,3 +23,10 @@
 - 灭亡之歌在施加回合显示 3，四次回合末归零，换人解除；状态批次结束后统一观察倒下，避免同时归零提前结算胜负。
 
 依据：固定参考 `battle_script_commands.c` 的 `Cmd_trysetdisable`、`Cmd_trysetencore`、`Cmd_trysetwish`、`Cmd_setyawn`、`Cmd_setperishsong`、`Cmd_switchineffects`、`AccuracyCalcHelper`；`battle_util.c` 的定时器和持续效果顺序。当前已验证这些机制的组合边界，不代表完整原作所有回合末优先顺序已经验证。
+
+
+## 持久剧毒与临时计数
+
+精灵 `status` 增加 `toxic`；持久化保留异常类别，`toxic_counter` 战斗席位状态拥有递增计数（最多 15），换人/倒下/结束清理，重新上场从 1 开始。伤害先计算 `max(1, floor(maxHP / 16))` 再乘计数，不能先乘后除。BattleMajorStatus 统一施加、防护、恢复与持续伤害；治疗道具、特性和树果通过共享毒家族匹配同时支持普通中毒与剧毒。
+
+特性检查的 `status` 使用家族 `poison`，`majorStatus` 为实际 `toxic`；同步按第三世代传播普通中毒。公开插件只读规则上下文包含这两个字段与来源信息。依据 `battle_util.c` 的 ENDTURN_BAD_POISON 与特性同步分支；保存验证引用统一 STATUSES。

@@ -9,6 +9,14 @@ const stage = (target, changes) => ({
 const secondary = (op, p = {}) => ({ secondary: [{ op, ...p }] });
 /** Semantic families share operations; no move ID dispatch in the executor. */
 export const GEN3_EXTENDED_MOVE_EFFECTS = {
+  counter: { retaliation: "physical", beforeDamage: [{ op: "retaliate" }] },
+  mirror_coat: { retaliation: "special", beforeDamage: [{ op: "retaliate" }] },
+  revenge: { beforeDamage: [{ op: "revengePower" }] },
+  focus_punch: {
+    preparation: "正在集中精神！",
+    beforeDamage: [{ op: "focusedAttack" }],
+  },
+  endure: primary("protect", { endure: true }, true),
   disable: primary("restrictMove", { state: "disable" }),
   encore: primary("restrictMove", { state: "encore" }),
   torment: primary("applyBattleState", { id: "torment" }),
@@ -50,6 +58,8 @@ export const GEN3_EXTENDED_MOVE_EFFECTS = {
   haze: primary("clearStages", {}, true),
   restore_hp: primary("restoreHP", { fraction: 0.5 }, true),
   softboiled: primary("restoreHP", { fraction: 0.5 }, true),
+  toxic: primary("status", { status: "toxic" }),
+  poison_fang: { secondary: [{ op: "status", status: "toxic" }] },
   poison: primary("status", { status: "poison" }),
   paralyze: primary("status", { status: "paralysis" }),
   will_o_wisp: primary("status", { status: "burn" }),

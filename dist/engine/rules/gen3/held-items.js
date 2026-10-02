@@ -1,3 +1,4 @@
+import { matchesStatus } from "../../creatures/status.js";
 import { ITEM_METADATA } from "./item-metadata.js";
 import { HELD_ITEM_METADATA } from "./held-catalog.js";
 import { natureMultiplier } from "../../model.js";
@@ -54,7 +55,9 @@ for (const [effect, status] of Object.entries({
   define(
     effect,
     berry(
-      (c) => c.owner.status && (status === "any" || c.owner.status === status),
+      (c) =>
+        c.owner.status &&
+        (status === "any" || matchesStatus(c.owner.status, status)),
       [{ op: "cureStatus", status }],
     ),
   );

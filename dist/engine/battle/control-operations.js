@@ -114,19 +114,18 @@ export const CONTROL_OPERATIONS = {
   },
   failMove: fail,
   refresh(c) {
-    if (!["poison", "burn", "paralysis"].includes(c.mon.status)) {
+    if (!["poison", "toxic", "burn", "paralysis"].includes(c.mon.status)) {
       fail(c);
       return;
     }
-    c.mon.status = null;
+    c.battle.statuses.clear(c.mon);
     c.emit("恢复了异常状态！", "heal", { targetSeat: c.actorSeat });
   },
   partyCure(c) {
     const b = c.battle;
     for (const mon of b.roster.owner(c.actorSeat).party) {
       if (c.move.id === "heal_bell" && mon.ability === "soundproof") continue;
-      mon.status = null;
-      mon.sleep = 0;
+      b.statuses.clear(mon);
     }
     c.emit("队伍的异常状态恢复了！", "heal", { targetSeat: c.actorSeat });
   },

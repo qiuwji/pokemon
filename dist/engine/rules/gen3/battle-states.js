@@ -27,6 +27,43 @@ const screen = (physical) => ({
 /** Third-generation policies; timers and HP costs verified in battle_script_commands.c / battle_util.c. */
 export const GEN3_BATTLE_STATES = {
   ...GEN3_CONTROL_STATES,
+  guard_chain: {
+    scope: "seat",
+    stack: "refresh",
+    clearOn: ["leave", "faint", "end"],
+    schema: objectSchema(
+      { uses: { type: "integer", minimum: 0, maximum: 3 } },
+      ["uses"],
+    ),
+    hooks: [],
+  },
+  endure: {
+    scope: "seat",
+    duration: 1,
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [
+      {
+        phase: "damage",
+        role: "target",
+        priority: 10001,
+        apply: (c) => {
+          if (c.actorSeat !== c.targetSeat)
+            c.amount = Math.min(c.amount, Math.max(0, c.owner.hp - 1));
+        },
+      },
+    ],
+  },
+  toxic_counter: {
+    scope: "seat",
+    stack: "refresh",
+    clearOn: ["leave", "faint", "end"],
+    schema: objectSchema(
+      { turns: { type: "integer", minimum: 0, maximum: 15 } },
+      ["turns"],
+    ),
+    hooks: [],
+  },
   stockpile: {
     scope: "seat",
     clearOn: ["leave", "faint", "end"],

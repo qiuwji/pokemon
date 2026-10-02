@@ -75,7 +75,16 @@ export class MoveExecutor {
           "struggle",
       },
       definition = b.moveEffects.get(move.effect);
-    let targets = b.targeting.resolve(action.seat, move, action.target);
+    const retaliation =
+      definition.retaliation &&
+      b.actionLifecycle.retaliation(action.seat, definition.retaliation);
+    let targets = b.targeting.resolve(
+      action.seat,
+      move,
+      retaliation
+        ? { kind: "seat", id: retaliation.sourceSeat }
+        : action.target,
+    );
     if (!targets.length) {
       b.emit("目标已不在场上，行动无法完成。", "failed", {
         actorSeat: action.seat,
@@ -327,6 +336,7 @@ export class MoveExecutor {
       if (!Number.isInteger(amount) || amount < 0 || amount > c.opponent.hp)
         throw new Error("Invalid impact amount");
       c.opponent.hp -= amount;
+      b.actionLifecycle.recordDamage(c, amount);
       c.dealt += amount + (impact.substituteDamage || 0);
       c.realDealt = (c.realDealt || 0) + amount;
       c.substituteHit ||= !!impact.substituteHit;

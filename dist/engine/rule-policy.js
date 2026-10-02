@@ -19,6 +19,7 @@ export const BATTLE_POLICY = {
   confusionChance: 0.5,
   criticalChances: [1 / 16, 1 / 8, 1 / 4, 1 / 3, 1 / 2],
   residualDivisor: 8,
+  protectSuccessRates: [65535, 32767, 16383, 8191],
   trapDivisor: 16,
   canCapture: ({ trainer, script }) => !trainer && script !== "rescue",
   canEscape: ({ trainer, script }) => !trainer && script !== "rescue",

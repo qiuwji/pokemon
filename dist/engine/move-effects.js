@@ -1,3 +1,4 @@
+import { REACTIVE_OPERATIONS } from "./battle/reactive-operations.js";
 import { CONTROL_STATE_OPERATIONS } from "./battle/control-state-operations.js";
 import { FORM_OPERATIONS } from "./battle/form-operations.js";
 import { GEN3_EXTENDED_MOVE_EFFECTS } from "./rules/gen3/extended-move-effects.js";
@@ -312,7 +313,11 @@ MOVE_OPERATIONS.stages.validate = (s, p) => {
     throw new Error(`${p}: invalid stage change`);
 };
 MOVE_OPERATIONS.status.validate = (s, p) => {
-  if (!["poison", "burn", "paralysis", "sleep", "freeze"].includes(s.status))
+  if (
+    !["poison", "toxic", "burn", "paralysis", "sleep", "freeze"].includes(
+      s.status,
+    )
+  )
     throw new Error(`${p}: invalid status`);
 };
 MOVE_OPERATIONS.environment.validate = (s, p) => {
@@ -339,6 +344,7 @@ export class MoveEffectRegistry {
       ...CONTROL_OPERATIONS,
       ...CONTROL_STATE_OPERATIONS,
       ...FORM_OPERATIONS,
+      ...REACTIVE_OPERATIONS,
       ...operations,
     });
     for (const [id, definition] of Object.entries(this.definitions)) {
@@ -369,10 +375,24 @@ export class MoveEffectRegistry {
             "hiddenMultiplier",
             "bypassHitChecks",
             "noCritical",
+            "retaliation",
+            "preparation",
           ].includes(key)
         )
           throw new Error(`effects.${id}: unknown field ${key}`);
       if (definition.action) validateActionPolicy(definition.action);
+      if (
+        definition.retaliation !== undefined &&
+        !["physical", "special"].includes(definition.retaliation)
+      )
+        throw new Error(`effects.${id}: invalid retaliation category`);
+      if (
+        definition.preparation !== undefined &&
+        (typeof definition.preparation !== "string" ||
+          !definition.preparation ||
+          definition.preparation.length > 200)
+      )
+        throw new Error(`effects.${id}: invalid preparation message`);
       if (
         definition.hitsHidden &&
         (!Array.isArray(definition.hitsHidden) ||
@@ -390,7 +410,7 @@ export class MoveEffectRegistry {
         throw new Error(`effects.${id}: invalid concealed multiplier`);
       if (
         definition.requiresStatus !== undefined &&
-        !["sleep", "freeze", "poison", "burn", "paralysis"].includes(
+        !["sleep", "freeze", "poison", "toxic", "burn", "paralysis"].includes(
           definition.requiresStatus,
         )
       )

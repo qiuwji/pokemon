@@ -36,6 +36,7 @@ export const TYPE_NAMES = {
 };
 export const STATUS_NAMES = {
   poison: "中毒",
+  toxic: "剧毒",
   burn: "灼伤",
   paralysis: "麻痹",
   sleep: "睡眠",

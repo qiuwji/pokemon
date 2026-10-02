@@ -26,6 +26,7 @@ export class BattleCheckpoint {
       delayed: clone(b.actionLifecycle.delayed),
       history: clone(b.actionLifecycle.history),
       sequence: b.actionLifecycle.sequence,
+      received: clone(b.actionLifecycle.received),
     };
     this.defeated = clone(b.outcomes.defeated);
     this.encounters = clone(b.outcomes.encounters);

@@ -1,3 +1,4 @@
+import { BattleMajorStatus } from "./battle/major-status.js";
 import { CreatureFormRegistry, CreatureForms } from "./creatures/forms.js";
 import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
 import { stageMultiplier } from "./model.js";
@@ -155,6 +156,7 @@ export class Battle {
     this.moves = new MoveExecutor(this);
     this.rounds = new RoundResolver(this);
     this.traits = new BattleTraits(this, traits);
+    this.statuses = new BattleMajorStatus(this);
     this.entryView = this.snapshot();
     const initial = new BattleCheckpoint(this);
     try {
@@ -325,26 +327,8 @@ export class Battle {
     return true;
   }
 
-  applyStatus(seat, status, { sourceSeat = seat, sourceKind = "move" } = {}) {
-    const targetSeat = this.seatId(seat),
-      target = this.roster.occupant(targetSeat);
-    if (!target || target.hp <= 0) return false;
-    const types =
-      this.traits?.types(targetSeat) || this.db.species[target.species].types;
-    const permission = {
-      targetSeat,
-      sourceSeat: this.seatId(sourceSeat),
-      sourceKind,
-      status,
-      allowed: this.rules.statusAllowed({ status, target, types }),
-    };
-    this.traits?.run("status-check", permission);
-    if (!permission.allowed) return false;
-    target.status = status;
-    if (status === "sleep") target.sleep = 2 + this.rng.int(4);
-    this.emit("陷入了异常状态！", "status", { targetSeat, status });
-    this.traits?.run("status-applied", permission);
-    return true;
+  applyStatus(seat, status, source = {}) {
+    return this.statuses.apply(seat, status, source);
   }
   applyAttraction(targetSeat, sourceSeat) {
     const target = this.roster.occupant(targetSeat),

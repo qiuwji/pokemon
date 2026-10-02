@@ -1,3 +1,4 @@
+import { matchesStatus } from "../../creatures/status.js";
 import { ABILITY_IDS } from "./ability-catalog.js";
 import { NUMERIC_ABILITIES, isPhysical } from "./numeric.js";
 import { effectiveness } from "../../model.js";
@@ -48,7 +49,7 @@ for (const [id, status] of Object.entries({
     {
       phase: "entry",
       role: "owner",
-      when: (c) => c.owner.status === status,
+      when: (c) => matchesStatus(c.owner.status, status),
       effects: [{ op: "cureStatus", status }],
     },
   ]);
