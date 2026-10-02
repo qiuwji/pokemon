@@ -1,5 +1,6 @@
 import { BattleHeldItems } from "./battle/held-items.js";
 import { BattleSpoils } from "./battle/spoils.js";
+import { BattleReplacementRequests } from "./battle/replacement-requests.js";
 import { BattleMajorStatus } from "./battle/major-status.js";
 import { CreatureFormRegistry, CreatureForms } from "./creatures/forms.js";
 import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
@@ -144,6 +145,7 @@ export class Battle {
           : {},
     );
     this.targeting = new BattleTargeting(this);
+    this.replacements = new BattleReplacementRequests(this);
     this.decisions = new BattleDecisions(this);
     this.actionSequence = 0;
     this.actionId = null;
@@ -240,6 +242,7 @@ export class Battle {
         weather: this.traits?.weather() || null,
       },
       actionLifecycle: this.actionLifecycle?.view(),
+      replacements: this.replacements?.view() || [],
       decision: {
         required: this.decisions?.required().map((s) => s.id) || [],
         queued: [...(this.decisions?.pending.keys() || [])],
@@ -421,7 +424,12 @@ export class Battle {
     }
     prepared.actionId = `action:${++this.actionSequence}`;
     this.actionId = prepared.actionId;
-    if (prepared.forced && this.rules.forcedReplacementFree) {
+    if (prepared.requestedReplacement) {
+      this.phase = "replacement";
+      this.replacements.fulfill(prepared);
+      this.outcomes.observe();
+      this.rounds.resume();
+    } else if (prepared.forced && this.rules.forcedReplacementFree) {
       this.phase = "replacement";
       this.actions.switch(prepared.seat, prepared.index);
       this.outcomes.vacancies();
@@ -459,6 +467,8 @@ export class Battle {
           this.roster.occupant(seat.id).ability = original;
       }
       this.equipment.restore();
+      this.replacements.clear();
+      this.rounds.clear();
       this.states.clear("end");
       this.actionLifecycle.clearAll();
       for (const controller of this.roster.controllers.values())

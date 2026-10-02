@@ -16,6 +16,7 @@ export class BattleDecisions {
   required() {
     const b = this.battle,
       forced = this.forced();
+    if (b.replacements.required().length) return b.replacements.required();
     if (forced.length) return forced;
     return [...b.roster.seats.values()].filter(
       (s) =>

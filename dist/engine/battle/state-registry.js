@@ -29,6 +29,22 @@ export class BattleStateRegistry {
             typeof d.clearWithSource !== "boolean")
         )
           throw new Error(`Invalid battle state ${id}`);
+        for (const key of ["transferOn", "sourceTransferOn"])
+          if (
+            d[key] !== undefined &&
+            (!Array.isArray(d[key]) ||
+              d[key].length > 8 ||
+              new Set(d[key]).size !== d[key].length ||
+              d[key].some((v) => typeof v !== "string" || !v))
+          )
+            throw new Error(`Invalid state transfer policy ${id}`);
+        if (
+          d.sourceTransferDuration !== undefined &&
+          (!Number.isInteger(d.sourceTransferDuration) ||
+            d.sourceTransferDuration < 1 ||
+            d.sourceTransferDuration > 10000)
+        )
+          throw new Error(`Invalid source transfer duration ${id}`);
         return [
           id,
           {
@@ -189,20 +205,50 @@ export class BattleStateService {
     }
     this.battle.outcomes.observe();
   }
-  clear(reason, seat) {
+  clear(reason, seat, { handoff = null } = {}) {
     const sourceUid = seat ? this.battle.roster.occupant(seat)?.uid : null;
-    for (const r of [...this.instances.values()])
-      if (
-        (reason !== "end" &&
-          this.registry.get(r.id).clearWithSource &&
-          r.source.uid === sourceUid) ||
-        ((reason === "end" ||
-          this.registry.get(r.id).clearOn.includes(reason)) &&
-          (reason === "end" ||
-            (r.scope === "seat" && r.anchor === seat) ||
-            (r.scope === "creature" && r.anchor === sourceUid)))
-      )
+    for (const r of [...this.instances.values()]) {
+      const d = this.registry.get(r.id);
+      const owner =
+        (r.scope === "seat" && r.anchor === seat) ||
+        (r.scope === "creature" && r.anchor === sourceUid);
+      const clearOwner =
+        owner && d.clearOn.includes(reason) && !d.transferOn?.includes(handoff);
+      const clearSource =
+        d.clearWithSource &&
+        r.source.uid === sourceUid &&
+        !d.sourceTransferOn?.includes(handoff);
+      if (reason === "end" || clearOwner || clearSource)
         this.remove(r.key, reason);
+    }
+  }
+  handoff(seat, previousUid, mode) {
+    const b = this.battle,
+      nextUid = b.roster.occupant(seat).uid;
+    for (const r of this.instances.values()) {
+      const d = this.registry.get(r.id);
+      let changed = false;
+      if (
+        r.scope === "creature" &&
+        r.anchor === previousUid &&
+        d.transferOn?.includes(mode)
+      ) {
+        r.anchor = nextUid;
+        changed = true;
+      }
+      if (r.source.uid === previousUid && d.sourceTransferOn?.includes(mode)) {
+        r.source = { ...r.source, uid: nextUid };
+        if (d.sourceTransferDuration) r.remaining = d.sourceTransferDuration;
+        changed = true;
+      }
+      if (changed)
+        b.emit("战斗状态交接了。", "state", {
+          targetSeat: seat,
+          state: readOnly(r),
+          stateChange: "handoff",
+          handoff: mode,
+        });
+    }
   }
   seatFor(r, c) {
     const b = this.battle,

@@ -78,8 +78,10 @@ export function createBattleInterface(
       prompt =
         message || `${b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;
     if (game.busy) options = "";
-    else if (!(b.player?.hp > 0)) {
-      prompt = "请选择下一位伙伴。";
+    else if (!(b.player?.hp > 0) || b.replacements.get(b.commandSeat)) {
+      prompt = b.replacements.get(b.commandSeat)
+        ? "接棒：请选择接替的伙伴。"
+        : "请选择下一位伙伴。";
       options = '<button data-action="party">替换宝可梦</button>';
     } else if (page === "moves") {
       prompt = "选择招式<br><small>X 返回</small>";

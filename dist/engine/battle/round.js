@@ -3,9 +3,12 @@ import { selectedMove } from "./moves.js";
 export class RoundResolver {
   constructor(battle) {
     this.battle = battle;
+    this.queue = [];
+    this.running = false;
   }
   resolve(humanActions) {
     const b = this.battle;
+    if (this.running) throw new Error("An unresolved round cannot be replaced");
     const actions = [
       ...humanActions,
       ...b.roster
@@ -48,8 +51,23 @@ export class RoundResolver {
           moveId: move.id || b.movesFor(action.seat)[action.index]?.id,
         });
     }
-    for (const action of order) {
-      if (b.ended) break;
+    this.queue = order;
+    this.running = true;
+    this.resume();
+  }
+  clear() {
+    this.queue = [];
+    this.running = false;
+  }
+  resume() {
+    const b = this.battle;
+    if (b.replacements.required().length) return;
+    if (!this.running) {
+      b.outcomes.vacancies();
+      return;
+    }
+    while (this.queue.length && !b.ended) {
+      const action = this.queue.shift();
       const mon = b.roster.occupant(action.seat);
       if (!mon || mon.hp <= 0 || mon.uid !== action.actor) continue;
       b.actionId = action.actionId;
@@ -63,10 +81,12 @@ export class RoundResolver {
       if (action.kind !== "move" && action.kind !== "wait")
         b.actionLifecycle.record(action, null, true);
       b.outcomes.observe();
+      if (b.replacements.required().length) return;
     }
     if (!b.ended) this.residuals();
     b.actionId = null;
     b.outcomes.vacancies();
+    this.clear();
   }
   order(actions) {
     const b = this.battle;

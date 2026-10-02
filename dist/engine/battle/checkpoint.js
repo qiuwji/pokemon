@@ -33,10 +33,13 @@ export class BattleCheckpoint {
       sequence: b.actionLifecycle.sequence,
       received: clone(b.actionLifecycle.received),
       landed: clone(b.actionLifecycle.landed),
+      enteredAfter: clone(b.actionLifecycle.enteredAfter),
     };
     this.defeated = clone(b.outcomes.defeated);
     this.encounters = clone(b.outcomes.encounters);
     this.pending = clone(b.decisions.pending);
+    this.replacements = clone(b.replacements.pending);
+    this.round = { queue: clone(b.rounds.queue), running: b.rounds.running };
     this.fields = {};
     for (const key of [
       "turn",
@@ -80,6 +83,8 @@ export class BattleCheckpoint {
     b.outcomes.defeated = clone(this.defeated);
     b.outcomes.encounters = clone(this.encounters);
     b.decisions.pending = clone(this.pending);
+    b.replacements.pending = clone(this.replacements);
+    Object.assign(b.rounds, clone(this.round));
     for (const [key, field] of Object.entries(this.fields))
       if (field.present) b[key] = clone(field.value);
       else delete b[key];

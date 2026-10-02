@@ -12,6 +12,7 @@ export function battleFixture({
   format = "singles",
   hooks = [],
   rules = {},
+  states = {},
 } = {}) {
   const definitions = Object.fromEntries(
     Object.entries(moves).map(([id, value]) => [
@@ -53,6 +54,7 @@ export function battleFixture({
       grantExperience: () => [],
       ...rules,
     },
+    states,
   });
   const use = (
     seat,

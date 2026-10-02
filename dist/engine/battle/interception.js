@@ -1,5 +1,6 @@
 import { GEN3_REFERENCE_MOVES } from "../rules/gen3/reference-metadata.js";
 import { executeCalledMove } from "./called-moves.js";
+import { normalizeMoveFlags } from "../move-flags.js";
 /** Reassigns a declared move to a live interceptor; the selecting actor has already paid PP. */
 export class BattleMoveInterception {
   constructor(battle) {
@@ -7,7 +8,9 @@ export class BattleMoveInterception {
   }
   execute(c, targets) {
     const b = this.battle,
-      flags = c.move.flags || GEN3_REFERENCE_MOVES[c.move.id]?.flags || [];
+      flags = normalizeMoveFlags(
+        c.move.flags ?? GEN3_REFERENCE_MOVES[c.move.id]?.flags ?? [],
+      );
     let seat, record, target, kind;
     if (flags.includes("magic_coat_affected")) {
       const victim = targets.find((s) => b.states.lookup("magic_coat", s.id));

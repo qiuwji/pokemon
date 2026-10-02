@@ -10,6 +10,7 @@ export class BattleActionLifecycle {
     this.sequence = 0;
     this.received = new Map();
     this.landed = new Map();
+    this.enteredAfter = new Map();
   }
   locked(seat) {
     const r = this.locks.get(seat),
@@ -34,6 +35,7 @@ export class BattleActionLifecycle {
   }
   leave(seat) {
     this.clear(seat);
+    this.enteredAfter.set(seat, this.sequence);
     const uid = this.battle.roster.occupant(seat)?.uid;
     if (uid) {
       this.received.delete(uid);
@@ -127,6 +129,7 @@ export class BattleActionLifecycle {
   }
   record(action, moveId, successful) {
     this.history.push({
+      sequence: ++this.sequence,
       turn: this.battle.turn,
       actionId: action.actionId || null,
       seat: action.seat,
@@ -146,6 +149,7 @@ export class BattleActionLifecycle {
           (r) =>
             r.seat === seat &&
             r.uid === this.battle.roster.occupant(seat)?.uid &&
+            r.sequence > (this.enteredAfter.get(seat) || 0) &&
             r.moveId &&
             (!successful || r.successful),
         )?.moveId || null

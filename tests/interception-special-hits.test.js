@@ -248,6 +248,14 @@ test("Interception metadata rejects malformed flags at registration before they 
   registry.validateMoves({
     sample: { effect: "hit", flags: ["snatch_affected"] },
   });
+  registry.validateMoves({
+    bitmask: { effect: "hit", flags: 8 },
+    importedZero: { effect: "protect", flags: ["0"] },
+    importedNamed: {
+      effect: "attack_down",
+      flags: ["FLAG_MAGIC_COAT_AFFECTED"],
+    },
+  });
 });
 test("Interception ownership, coin storage and per-hit mutations all roll back after a registered rule fault", () => {
   const { b, p, e, use, rng } = battleFixture({

@@ -6,6 +6,14 @@ import {
 } from "./model.js";
 import { BATTLE_POLICY } from "./rule-policy.js";
 export const BATTLE_RULES = {
+  replacementPolicies: {
+    baton_pass: {
+      handoff: "baton_pass",
+      volatileFields: ["stages", "confused", "focus"],
+      bypassSwitchCheck: true,
+    },
+  },
+  replacementIndex: ({ candidates }) => candidates[0].index,
   payDayReward: ({ result, coins, multiplier }) =>
     result === "win" ? coins * multiplier : 0,
   rewardCurrency: ({ current, amount }) => Math.min(999999, current + amount),

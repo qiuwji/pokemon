@@ -38,6 +38,7 @@ export class BattleOutcomes {
       if (!seat) break;
       const mon = b.roster.occupant(seat.id);
       this.defeated.add(mon.uid);
+      b.replacements.clear(seat.id);
       b.phase = "faint";
       b.emit(`${b.name(mon)} 倒下了！`, "faint", { targetSeat: seat.id });
       b.traits?.run("faint", { targetSeat: seat.id, ownerSeat: seat.id });

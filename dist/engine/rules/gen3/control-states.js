@@ -78,6 +78,8 @@ export const GEN3_CONTROL_STATES = {
   mean_look: {
     ...seat,
     clearWithSource: true,
+    transferOn: ["baton_pass"],
+    sourceTransferOn: ["baton_pass"],
     hooks: [
       {
         phase: "switch-check",
@@ -93,6 +95,9 @@ export const GEN3_CONTROL_STATES = {
     ...seat,
     duration: 2,
     clearWithSource: true,
+    transferOn: ["baton_pass"],
+    sourceTransferOn: ["baton_pass"],
+    sourceTransferDuration: 2,
     hooks: [
       {
         phase: "hit-check",
@@ -159,6 +164,7 @@ export const GEN3_CONTROL_STATES = {
     ],
   },
   ingrain: {
+    transferOn: ["baton_pass"],
     ...seat,
     hooks: [
       periodic("traitHeal", 1 / 16),
@@ -188,6 +194,7 @@ export const GEN3_CONTROL_STATES = {
     ],
   },
   leech_seed: {
+    transferOn: ["baton_pass"],
     ...seat,
     hooks: [
       {
@@ -223,6 +230,7 @@ export const GEN3_CONTROL_STATES = {
     ],
   },
   perish_song: {
+    transferOn: ["baton_pass"],
     ...seat,
     duration: 4,
     hooks: [

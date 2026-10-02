@@ -55,6 +55,7 @@ export class MoveExecutor {
     const b = this.battle,
       mon = b.roster.occupant(action.seat);
     if (!(mon?.hp > 0)) return false;
+    action = { ...action, actor: mon.uid };
     if (!action.overrideMove && action.index >= 0) {
       const index = b.traits.calculate("selected-move", action.index, {
         actorSeat: action.seat,

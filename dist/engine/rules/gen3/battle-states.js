@@ -46,6 +46,7 @@ export const GEN3_BATTLE_STATES = {
   ...GEN3_SUPPORT_STATES,
   ...GEN3_CONTINUOUS_STATES,
   curse: {
+    transferOn: ["baton_pass"],
     scope: "seat",
     clearOn: ["leave", "faint", "end"],
     schema: empty,
@@ -190,6 +191,7 @@ export const GEN3_BATTLE_STATES = {
     ],
   },
   substitute: {
+    transferOn: ["baton_pass"],
     scope: "seat",
     clearOn: ["leave", "faint", "end"],
     schema: objectSchema(

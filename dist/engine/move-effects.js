@@ -1,5 +1,7 @@
 import { COPY_OPERATIONS } from "./battle/copy-operations.js";
 import { SPECIAL_HIT_OPERATIONS } from "./battle/special-hit-operations.js";
+import { REPLACEMENT_OPERATIONS } from "./battle/replacement-requests.js";
+import { normalizeMoveFlags } from "./move-flags.js";
 import { CONTINUOUS_OPERATIONS } from "./battle/continuous-operations.js";
 import { SUPPORT_OPERATIONS } from "./battle/support-operations.js";
 import { UTILITY_OPERATIONS } from "./battle/utility-operations.js";
@@ -355,6 +357,7 @@ export class MoveEffectRegistry {
       ...SUPPORT_OPERATIONS,
       ...COPY_OPERATIONS,
       ...SPECIAL_HIT_OPERATIONS,
+      ...REPLACEMENT_OPERATIONS,
       ...CONTINUOUS_OPERATIONS,
       ...RANDOM_POWER_OPERATIONS,
       ...operations,
@@ -535,23 +538,13 @@ export class MoveEffectRegistry {
         throw new Error(`moves.${id}.contact: expected boolean`);
       if (move.sound !== undefined && typeof move.sound !== "boolean")
         throw new Error(`moves.${id}.sound: expected boolean`);
-      if (
-        move.flags !== undefined &&
-        (!Array.isArray(move.flags) ||
-          new Set(move.flags).size !== move.flags.length ||
-          move.flags.some(
-            (flag) =>
-              ![
-                "makes_contact",
-                "protect_affected",
-                "magic_coat_affected",
-                "snatch_affected",
-                "mirror_move_affected",
-                "kings_rock_affected",
-              ].includes(flag),
-          ))
-      )
-        throw new Error(`moves.${id}.flags: invalid move flags`);
+      if (move.flags !== undefined) {
+        try {
+          normalizeMoveFlags(move.flags);
+        } catch {
+          throw new Error(`moves.${id}.flags: invalid move flags`);
+        }
+      }
       try {
         this.get(move.effect);
       } catch {

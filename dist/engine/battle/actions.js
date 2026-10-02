@@ -20,6 +20,9 @@ export class BattleActions {
       return { error: "该席位现在不能选择行动。" };
     const mon = b.roster.occupant(seat),
       owner = b.roster.owner(seat);
+    const replacementRequest = b.replacements.get(seat);
+    if (replacementRequest && action.kind !== "switch")
+      return { error: "请先选择接替上场的伙伴。" };
     if (action.actor !== undefined && action.actor !== mon?.uid)
       return { error: "这位伙伴不能执行该行动。" };
     if (!(mon?.hp > 0) && action.kind !== "switch")
@@ -31,6 +34,8 @@ export class BattleActions {
       skipReadiness,
       replacement,
       callDepth,
+      requestedReplacement,
+      forced,
       ...request
     } = action;
     const base = { ...request, seat, actor: mon?.uid ?? null };
@@ -74,11 +79,22 @@ export class BattleActions {
           forced: !(mon?.hp > 0),
           allowed: true,
         };
-        if (!permission.forced) b.traits?.run("switch-check", permission);
+        if (
+          !permission.forced &&
+          !(
+            replacementRequest &&
+            b.replacements.policies[replacementRequest.reason].bypassSwitchCheck
+          )
+        )
+          b.traits?.run("switch-check", permission);
         if (!permission.allowed) return { error: "无法离开这场战斗。" };
         if (!b.roster.canReplace(seat, action.index))
           return { error: "这只宝可梦无法替换上场。" };
-        prepared = { ...base, forced: !(mon?.hp > 0) };
+        prepared = {
+          ...base,
+          forced: !(mon?.hp > 0),
+          requestedReplacement: replacementRequest?.reason || null,
+        };
         break;
       }
       case "potion":
@@ -113,25 +129,44 @@ export class BattleActions {
     const reservation = b.decisions.reservation(prepared);
     return reservation ? { error: reservation } : prepared;
   }
-  switch(reference, index) {
+  switch(reference, index, { policy = null } = {}) {
     const b = this.battle,
       seat = b.seatId(reference),
       old = b.roster.occupant(seat),
       mon = b.roster.owner(seat).party[index];
-    b.traits?.run("leave", { ownerSeat: seat, actorSeat: seat });
-    b.states.clear("leave", seat);
+    const transferred = policy
+      ? Object.fromEntries(
+          policy.volatileFields.map((key) => [
+            key,
+            structuredClone(b.conditions.get(seat)[key]),
+          ]),
+        )
+      : {};
+    b.traits?.run("leave", {
+      ownerSeat: seat,
+      actorSeat: seat,
+      handoff: policy?.handoff || null,
+    });
+    b.states.clear("leave", seat, { handoff: policy?.handoff });
     b.actionLifecycle.leave(seat);
     if (old) b.forms.restore(old, "leave");
     const originalAbility = b.conditions.get(seat).originalAbility;
     if (originalAbility && old) old.ability = originalAbility;
     b.roster.replace(seat, index);
     b.conditions.reset(seat);
+    Object.assign(b.conditions.get(seat), transferred);
+    if (policy) b.states.handoff(seat, old.uid, policy.handoff);
     b.conditions.get(seat).entryTurn = b.turn;
     b.outcomes.enter(seat);
     b.emit(
       `${b.roster.alliance(seat) === b.homeAlliance ? "去吧，" : "对方派出了 "}${b.name(mon)}！`,
       "switch",
-      { actorSeat: seat, targetSeat: seat, previousUid: old?.uid || null },
+      {
+        actorSeat: seat,
+        targetSeat: seat,
+        previousUid: old?.uid || null,
+        handoff: policy?.handoff || null,
+      },
     );
     b.traits?.run("switch-in", {
       actorSeat: seat,

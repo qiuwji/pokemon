@@ -9,6 +9,7 @@ const stage = (target, changes) => ({
 const secondary = (op, p = {}) => ({ secondary: [{ op, ...p }] });
 /** Semantic families share operations; no move ID dispatch in the executor. */
 export const GEN3_EXTENDED_MOVE_EFFECTS = {
+  baton_pass: primary("requestReplacement", { reason: "baton_pass" }, true),
   charge: primary("applyBattleState", { id: "charge", target: "self" }, true),
   helping_hand: primary("helpingHand", {}, true),
   follow_me: primary(
