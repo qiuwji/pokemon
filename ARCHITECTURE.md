@@ -46,7 +46,8 @@ dist/
     save-contract.js           当前开发存档校验，不配置旧档迁移
     story.js                   互动和战后故事→指令序列、招式动画配置
     scenes.js                  本作的求救、背包、回研究所和治疗演出数据
-    adventure.js               会话装配、遭遇、本作商店/奖励和命令入口
+    adventure.js               内容装配与兼容门面
+    application/              按领域拆分的应用用例、显式端口与会话所有权
     interface.js               UI 装配器和主菜单入口
     ui-shell.js                对话、弹窗、导航、焦点与共享视图片段
     *-interface.js             队伍、背包、图鉴、商店、盒子、存档等页面
@@ -160,3 +161,6 @@ contracts.d.ts 定义内容、战斗组织/行动/目标、精灵、存档、插
 creature-contract.js 共享创建与存档的精灵标量约束；物种/招式/UID 归属引用由内容包补充。SaveStore 写入前验证 detached draft；错误或不支持版本不会覆盖原存储。ItemService 禁止草稿添加、删除或修改白名单外字段，治愈睡眠同时移除计时。新创建策略失败恢复 PRNG，避免失败消耗游戏随机数。
 
 最终自动检查及浏览器流程见 FINAL_VALIDATION.md。
+
+
+应用层拆分与依赖/生命周期合同见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。门面保持兼容，但剧情、战斗、育成、存档、世界和库存用例已经分别由对应服务拥有。

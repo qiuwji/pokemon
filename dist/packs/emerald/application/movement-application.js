@@ -1,0 +1,172 @@
+import { MovementRegistry, MovementService } from "../../../engine/movement.js";
+import { TravelService } from "../../../engine/travel.js";
+import { TravelDirector } from "../../../presentation/travel-director.js";
+import { DIRECTIONS } from "../../../engine/world.js";
+import { isWater } from "../../../engine/terrain.js";
+import { bindApplicationPorts } from "./ports.js";
+export const MOVEMENT_PORTS = Object.freeze([
+  "battle",
+  "canManageParty",
+  "catalog",
+  "clearInput",
+  "enter",
+  "field",
+  "reducedMotion",
+  "save",
+  "state",
+  "storyBusy",
+  "timeline",
+  "transitions",
+  "ui",
+  "world",
+  "worldState",
+]);
+/** movement use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
+export class MovementApplication {
+  constructor(ports) {
+    bindApplicationPorts(this, ports, MOVEMENT_PORTS);
+  }
+  visitMap() {
+    const id = this.state.position.map;
+    if (
+      this.catalog.destinations[id] &&
+      !this.state.movement.visited.includes(id)
+    )
+      this.state.movement.visited.push(id);
+  }
+  fieldCapabilities() {
+    const flags = this.state.flags,
+      knows = (id) =>
+        this.state.party.some(
+          (m) => !m.egg && m.moves.some((v) => v.id === id),
+        );
+    return {
+      run: true,
+      bike: !!flags.bike || !!flags.fieldTraining,
+      surf: !!flags.fieldTraining || (!!flags.badgeBalance && knows("surf")),
+      fly: !!flags.fieldTraining || (!!flags.badgeFeather && knows("fly")),
+    };
+  }
+  claimFieldEquipment() {
+    if (
+      !this.canManageParty() ||
+      !this.state.flags.pokedex ||
+      this.state.flags.fieldTraining
+    )
+      return false;
+    this.state.flags.fieldTraining = true;
+    return true;
+  }
+  movementOptions() {
+    return Object.keys(this.catalog.movement)
+      .filter((id) => !["run", "surf"].includes(id))
+      .map((id) => ({
+        id,
+        name: this.catalog.movement[id].name,
+        allowed:
+          this.movement.available(id, this.world.map) &&
+          !isWater(
+            this.world.cell(this.state.position.x, this.state.position.y)
+              ?.behavior,
+          ),
+      }));
+  }
+  setMovementMode(mode) {
+    if (
+      !this.canManageParty() ||
+      !Object.hasOwn(this.catalog.movement, mode) ||
+      ["run", "surf"].includes(mode)
+    )
+      return { ok: false, reason: "现在不能更换移动方式。" };
+    if (
+      isWater(
+        this.world.cell(this.state.position.x, this.state.position.y)?.behavior,
+      )
+    )
+      return { ok: false, reason: "请先上岸。" };
+    const result = this.movement.set(mode, this.world.map);
+    if (!result.ok) result.reason = "这里不能使用这辆自行车。";
+    return result;
+  }
+  async boardSurf() {
+    if (!this.canManageParty() || !this.fieldCapabilities().surf)
+      return { ok: false, reason: "还不能使用冲浪。" };
+    const dir = this.state.position.dir,
+      [dx, dy] = DIRECTIONS[dir];
+    if (
+      !isWater(
+        this.world.cell(this.state.position.x + dx, this.state.position.y + dy)
+          ?.behavior,
+      )
+    )
+      return { ok: false, reason: "请面向岸边的水面。" };
+    // Use an explicit mode plan. Persistent mode changes only when the boarding step finishes.
+    this.clearInput();
+    if (!this.field.move(dir, { mode: "surf" }))
+      return { ok: false, reason: "水面被挡住了。" };
+    await this.waitForMovement();
+    return { ok: true };
+  }
+  async flyTo(id) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    const result = this.travel.prepare(id);
+    if (!result.ok) return result;
+    this.clearInput();
+    try {
+      const completed = await this.travelDirector.fly(() => {
+        const changed = this.travel.commit(result.plan);
+        if (!changed.ok) throw new Error(changed.reason);
+        this.movement.set("walk", this.world.map);
+        this.enter(changed.position);
+      });
+      return { ok: completed };
+    } catch (error) {
+      return { ok: false, reason: error.message };
+    } finally {
+      this.clearInput();
+      this.ui?.updateSide();
+      this.save();
+    }
+  }
+  async waitForMovement() {
+    // Automation returns at a story/UI boundary rather than waiting for player input.
+    while (
+      this.field.busy &&
+      !this.storyBusy &&
+      !this.battle &&
+      !this.ui?.blocked
+    )
+      await this.timeline.wait(16);
+  }
+  bind() {
+    this.state.movement ||= {
+      mode: "walk",
+      visited: [this.state.position.map],
+    };
+    this.movement = new MovementService({
+      registry: new MovementRegistry(this.catalog.movement),
+      state: this.state.movement,
+      context: () => ({ capabilities: this.fieldCapabilities() }),
+      onChange: () => this.ui?.updateSide(),
+    });
+    this.travel = new TravelService({
+      maps: this.worldState.maps,
+      destinations: this.catalog.destinations,
+      position: this.state.position,
+      context: () => ({
+        capabilities: this.fieldCapabilities(),
+        visited: this.state.movement.visited,
+      }),
+      objects: (map) =>
+        this.field.npcs
+          .objects(map)
+          .map((n) => ({ ...n, reserved: this.field.npcs.reserved(n) })),
+    });
+    this.travelDirector = new TravelDirector({
+      timeline: this.timeline,
+      transitions: this.transitions,
+      reducedMotion: this.reducedMotion,
+    });
+  }
+}

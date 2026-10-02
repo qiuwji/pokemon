@@ -91,3 +91,12 @@
 - 原作依据：固定 battle_script_commands.c 的 Conversion/Conversion2、Camouflage、CopyAbility、SwapAbilities、SwapItems、Recycle、Spite、Present、Magnitude、Curse 与 first-turn 检查。纹理2采用有效候选等概率抽取，不复刻原参考有缺陷的 1000 次拒绝采样与回退路径；这是规则层明确决定，随机序列不承诺逐位相同。
 - 一次针对性验证 utility-moves 5 项与 traits 13 项共 18 项全部通过。覆盖属性跨回合/换人、形态叠加特性、回收/交换/拍落恢复、多目标同震级、天气属性、幽灵礼物恢复、初回合条件、怨恨与诅咒。未重复其他已记录检查。
 - 下一步：用户新增要求拆细 adventure.js，先完成应用服务拆分，保留公开兼容门面；然后继续剩余 B3、C/D/E。状态/事件表现与完整系统回归仍待收口。
+
+
+### 用户追加 · adventure.js 应用服务拆分（2026-10-03）
+
+- 原门面 1,526 行。用例按 13 个职责拆入 application/，独立状态所有者、实时只读依赖端口、装配文件与兼容字段映射。保持现有 UI、命令、插件和公开字段路径；服务不注入整个 game，不直接导入门面或兄弟服务。说明见 APPLICATION_ARCHITECTURE.md。
+- 一次受影响组合验证：architecture、growth-integration、encounter-content、cutscene、movement、plugins、network 共 87 项。初次 70 项通过，发现提取导入漏掉展开运算中的 objectsFor/GEN3_GLOBAL_HOOKS；修正后只重跑失败的 17 项通过（运行器另外列出 3 个无匹配文件，无新增用例）。覆盖剧情自动行走、开战/队伍奖励、育成、读档、插件原子命令与网络原有路由。
+- 新增应用架构/依赖验证 3 项，全部通过：实时状态更换、依赖不可写/拓宽、兼容字段单一所有者以及应用导入/门面规则守卫。最后只将等价装配语句搬入 composition.js，未重复领域检查；整体系统回归仍留到 E。
+- 验证失效条件：状态所有权、端口合同、读档重绑顺序、兼容入口或相关领域服务行为变化。无核心战斗规则变动；浏览器完整烟雾验收待 E。
+- 下一步返回原引擎路线，B3 仍余 22 个同名效果缺口，随后 C1/C2/C3/C5、D/E。未将本次拆分当作全部目标完成。
