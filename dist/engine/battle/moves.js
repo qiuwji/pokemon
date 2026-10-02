@@ -1,3 +1,4 @@
+import { effectiveness } from "../model.js";
 import { canAct } from "./readiness.js";
 export const STRUGGLE = Object.freeze({
   name: "挣扎",
@@ -155,11 +156,11 @@ export class MoveExecutor {
         successful ||= c.successful;
         continue;
       }
-      successful = true;
       b.traits?.run("before-damage", c);
       b.phase = "before-damage";
       b.moveEffects.run("beforeDamage", c, { scope: "target" });
-      this.deal(c);
+      if (!c.skipDamage) this.deal(c);
+      successful ||= c.dealt > 0;
       visualResult.successful = c.dealt > 0;
       total += c.dealt;
       if (c.dealt)
@@ -243,6 +244,8 @@ export class MoveExecutor {
       const criticalPermission = { ...c, allowed: true };
       b.traits?.run("critical-check", criticalPermission);
       const critical =
+        !c.definition.noCritical &&
+        c.fixedDamage === undefined &&
         criticalPermission.allowed &&
         b.rules.critical({
           stage:
@@ -263,20 +266,32 @@ export class MoveExecutor {
       });
       const spread =
         c.targetMode === "opponents" && c.targetCount > 1 ? 0.5 : 1;
-      const result = b.rules.damage(c.mon, c.opponent, c.move, b.db, b.rng, {
-        aStages: c.selfState.stages,
-        dStages: c.targetState.stages,
-        critical,
-        power,
-        spread,
-        modifier: (phase, value, formula) =>
-          b.traits?.calculate(phase, value, { ...c, ...formula }) ?? value,
-        attackerTypes: b.traits?.types(c.actorSeat),
-        defenderTypes: b.traits?.types(c.targetSeat),
-      });
+      const result =
+        c.fixedDamage !== undefined
+          ? {
+              amount: c.fixedDamage,
+              type: effectiveness(
+                c.move.type,
+                b.traits.types(c.targetSeat),
+                b.db.typeChart,
+              ),
+              critical: false,
+            }
+          : b.rules.damage(c.mon, c.opponent, c.move, b.db, b.rng, {
+              aStages: c.selfState.stages,
+              dStages: c.targetState.stages,
+              critical,
+              power,
+              spread,
+              modifier: (phase, value, formula) =>
+                b.traits?.calculate(phase, value, { ...c, ...formula }) ??
+                value,
+              attackerTypes: b.traits?.types(c.actorSeat),
+              defenderTypes: b.traits?.types(c.targetSeat),
+            });
       let amount = Math.min(
         Math.max(0, c.opponent.hp - (c.definition.minimumHP || 0)),
-        result.amount,
+        result.type === 0 ? 0 : result.amount,
       );
       const impact = { ...c, amount, allowed: true };
       b.traits?.run("damage", impact);

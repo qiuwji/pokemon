@@ -1,3 +1,4 @@
+import { NATURE_POWER_MOVES } from "../../engine/rules/gen3/reference-metadata.js";
 import { validateTrainerSight } from "../../engine/field-triggers.js";
 import { BattleStateRegistry } from "../../engine/battle/state-registry.js";
 import { GEN3_BATTLE_STATES } from "../../engine/rules/gen3/battle-states.js";
@@ -34,6 +35,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     base: {
       ...db,
       resources,
+      moves: { ...NATURE_POWER_MOVES, ...db.moves },
       trainers: TRAINERS,
       items: ITEMS,
       abilities: GEN3_ABILITIES,

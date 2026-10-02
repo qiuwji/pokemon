@@ -1,3 +1,6 @@
+import { GEN3_EXTENDED_MOVE_EFFECTS } from "./rules/gen3/extended-move-effects.js";
+import { DAMAGE_OPERATIONS } from "./battle/damage-operations.js";
+import { CONTROL_OPERATIONS } from "./battle/control-operations.js";
 import { validateActionPolicy } from "./battle/action-lifecycle.js";
 import { BATTLE_STATE_OPERATIONS } from "./battle/state-operations.js";
 import { TARGET_MODES } from "./battle/targeting.js";
@@ -172,20 +175,7 @@ export const MOVE_EFFECTS = {
   trap: { afterDamage: [{ op: "trap" }] },
   bide: PRIMARY("bide"),
 };
-// Content retains learnsets for expansion. Unimplemented mechanics are explicit capability data.
-for (const id of [
-  "endeavor",
-  "swagger",
-  "flail",
-  "belly_drum",
-  "stockpile",
-  "swallow",
-  "spit_up",
-  "flinch_minimize_hit",
-  "nature_power",
-  "imprison",
-])
-  MOVE_EFFECTS[id] = { supported: false, reason: "该招式的特殊机制尚未实现。" };
+Object.assign(MOVE_EFFECTS, GEN3_EXTENDED_MOVE_EFFECTS);
 const MOVE_OPERATIONS = {
   stages(c, s) {
     const side = s.target === "self" ? c.side : c.other;
@@ -343,6 +333,8 @@ export class MoveEffectRegistry {
       ...TRAIT_OPERATIONS,
       ...BATTLE_STATE_OPERATIONS,
       ...SPECIAL_MOVE_OPERATIONS,
+      ...DAMAGE_OPERATIONS,
+      ...CONTROL_OPERATIONS,
       ...operations,
     });
     for (const [id, definition] of Object.entries(this.definitions)) {
@@ -372,6 +364,7 @@ export class MoveEffectRegistry {
             "hitsHidden",
             "hiddenMultiplier",
             "bypassHitChecks",
+            "noCritical",
           ].includes(key)
         )
           throw new Error(`effects.${id}: unknown field ${key}`);
@@ -410,7 +403,12 @@ export class MoveEffectRegistry {
         !["self", "opponent"].includes(definition.target)
       )
         throw new Error(`effects.${id}.target: invalid target`);
-      for (const key of ["supported", "alwaysHits", "bypassHitChecks"])
+      for (const key of [
+        "supported",
+        "alwaysHits",
+        "bypassHitChecks",
+        "noCritical",
+      ])
         if (
           definition[key] !== undefined &&
           typeof definition[key] !== "boolean"
@@ -432,8 +430,15 @@ export class MoveEffectRegistry {
         "secondary",
         "onCharge",
       ])
-        if (definition[phase])
+        if (definition[phase]) {
+          for (const step of definition[phase])
+            if (
+              step.scope !== undefined &&
+              !["action", "target"].includes(step.scope)
+            )
+              throw new Error(`effects.${id}: invalid effect scope`);
           this.operations.validate(definition[phase], `effects.${id}.${phase}`);
+        }
       if (
         definition.hits &&
         (!Array.isArray(definition.hits) ||
@@ -474,7 +479,9 @@ export class MoveEffectRegistry {
     const steps = (context.definition[phase] || []).filter(
       (step) =>
         !scope ||
-        (this.operations.operations[step.op].scope || "target") === scope,
+        (step.scope ||
+          this.operations.operations[step.op].scope ||
+          "target") === scope,
     );
     if (context.battle.traits) context.battle.traits.effects(steps, context);
     else this.operations.run(steps, context);

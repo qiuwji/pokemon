@@ -59,6 +59,7 @@ export function validateTrainers(definitions, db, strategies = null) {
             "rivals",
             "strategy",
             "actor",
+            "bag",
           ].includes(k),
       ) ||
       typeof t.name !== "string" ||
@@ -75,13 +76,28 @@ export function validateTrainers(definitions, db, strategies = null) {
       (t.actor !== undefined && !db.actors?.[t.actor])
     )
       throw new Error(`Invalid trainer ${id}`);
+    if (
+      t.bag !== undefined &&
+      (!t.bag ||
+        typeof t.bag !== "object" ||
+        Array.isArray(t.bag) ||
+        Object.entries(t.bag).length > 64 ||
+        Object.entries(t.bag).some(
+          ([item, count]) =>
+            !db.items?.[item] ||
+            !Number.isInteger(count) ||
+            count < 1 ||
+            count > 999,
+        ))
+    )
+      throw new Error("Invalid trainer inventory");
     team(t.party, id);
     strategy(t.strategy);
     if (
       t.rivals !== undefined &&
       (!Array.isArray(t.rivals) || t.rivals.length > 6)
     )
-      throw new Error("Invalid rival sides");
+      throw new Error("Invalid rival ID or sides");
     const sides = new Set(["home", "away"]);
     for (const rival of t.rivals || []) {
       if (
@@ -94,7 +110,7 @@ export function validateTrainers(definitions, db, strategies = null) {
         typeof rival.name !== "string" ||
         !rival.name
       )
-        throw new Error("Invalid rival side");
+        throw new Error("Invalid rival ID or side");
       sides.add(rival.id);
       team(rival.party, rival.id);
       strategy(rival.strategy);
@@ -141,6 +157,7 @@ export function createTrainerEncounter(
   try {
     const enemyParty = createTrainerTeam(trainer, db, rng),
       topology = teamRoster(party, enemyParty, bag, seats);
+    topology.sides[1].controllers[0].bag = { ...trainer.bag };
     topology.sides[1].controllers[0].strategy = trainer.strategy || "random";
     for (const rival of trainer.rivals || []) {
       const members = createTrainerTeam(

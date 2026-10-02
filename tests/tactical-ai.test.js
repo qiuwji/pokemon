@@ -1,0 +1,75 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { Battle } from "../dist/engine/battle.js";
+import { createMonster, Random } from "../dist/engine/model.js";
+import { BattleStrategyRegistry } from "../dist/engine/battle/strategy-registry.js";
+import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
+import { analyzeCandidate } from "../dist/engine/battle/analysis.js";
+const base = JSON.parse(
+  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
+);
+function fixture(definitions = {}) {
+  const { db } = createEmeraldPlugins(base, []),
+    rng = new Random(66),
+    p = createMonster("treecko", 30, db, rng),
+    e = createMonster("zigzagoon", 30, db, rng);
+  e.moves = [
+    { id: "tackle", pp: 20 },
+    { id: "ember", pp: 20 },
+  ];
+  const strategies = new BattleStrategyRegistry(definitions);
+  const b = new Battle({
+    party: [p],
+    enemyParty: [e],
+    db,
+    rng,
+    bag: {},
+    trainer: true,
+    ai: (battle, seat) => strategies.decide(battle, seat),
+  });
+  b.roster.owner(b.awaySeat).strategy = "tactical";
+  return { b, p, e, rng, strategies };
+}
+test("Tactical AI considers type, estimated damage and knockout; estimation consumes no gameplay RNG or state", () => {
+  const { b, rng, strategies } = fixture(),
+    before = rng.snapshot(),
+    state = b.snapshot();
+  const observation = analyzeCandidate(b, {
+    kind: "move",
+    seat: b.awaySeat,
+    index: 1,
+    target: { kind: "seat", id: b.homeSeat },
+  });
+  assert.equal(observation.targets[0].type, 2);
+  assert.equal(rng.snapshot(), before);
+  assert.deepEqual(b.snapshot(), state);
+  rng.next();
+  const expected = rng.snapshot();
+  rng.restore(before);
+  const action = strategies.decide(b, b.awaySeat);
+  assert.equal(action.index, 1);
+  assert.equal(rng.snapshot(), expected);
+});
+test("Custom strategy receives legal item candidates and frozen analyses, while battle owns item cost and commit", () => {
+  const { b, e, strategies } = fixture({
+    medic: {
+      decide: (view) => {
+        assert(Object.isFrozen(view.analyses[0]));
+        return view.candidates.findIndex(
+          (a) => a.kind === "item" && a.item === "potion",
+        );
+      },
+    },
+  });
+  b.roster.owner(b.awaySeat).strategy = "medic";
+  b.roster.owner(b.awaySeat).bag.potion = 1;
+  e.hp = 1;
+  const action = strategies.decide(b, b.awaySeat);
+  assert.equal(action.kind, "item");
+  assert.equal(e.hp, 1);
+  assert.equal(b.roster.owner(b.awaySeat).bag.potion, 1);
+  b.actions.item(action);
+  assert.equal(b.roster.owner(b.awaySeat).bag.potion, 0);
+  assert.equal(e.hp, 21);
+});

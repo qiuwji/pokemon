@@ -25,6 +25,54 @@ const screen = (physical) => ({
 });
 /** Third-generation policies; timers and HP costs verified in battle_script_commands.c / battle_util.c. */
 export const GEN3_BATTLE_STATES = {
+  stockpile: {
+    scope: "seat",
+    clearOn: ["leave", "faint", "end"],
+    schema: objectSchema(
+      { count: { type: "integer", minimum: 1, maximum: 3 } },
+      ["count"],
+    ),
+    hooks: [],
+  },
+  minimize: {
+    scope: "seat",
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [],
+  },
+  defense_curl: {
+    scope: "seat",
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [],
+  },
+  imprison: {
+    scope: "seat",
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [
+      {
+        phase: "move-availability",
+        role: "all",
+        modify: (v, c) =>
+          c.battle.roster.isOpposing(c.actorSeat, c.ownerSeat) &&
+          c.owner.moves.some((m) => m.id === c.move.id)
+            ? 0
+            : v,
+      },
+      {
+        phase: "move-check",
+        role: "all",
+        apply: (c) => {
+          if (
+            c.battle.roster.isOpposing(c.actorSeat, c.ownerSeat) &&
+            c.owner.moves.some((m) => m.id === c.move.id)
+          )
+            c.allowed = false;
+        },
+      },
+    ],
+  },
   reflect: screen(true),
   light_screen: screen(false),
   mist: {

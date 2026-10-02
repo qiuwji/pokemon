@@ -76,6 +76,20 @@ export interface MoveEffectDefinition {
   alwaysHits?: boolean;
   minimumHP?: 1;
   requiresStatus?: Status;
+  action?: {
+    kind: "charge" | "repeat" | "recharge";
+    minTurns?: number;
+    maxTurns?: number;
+    confuseAfter?: boolean;
+    hidden?: "air" | "underground" | "underwater";
+    hiddenByMove?: Record<string, "air" | "underground" | "underwater">;
+    skipWeather?: string;
+  };
+  onCharge?: EffectStep[];
+  hitsHidden?: ("air" | "underground" | "underwater")[];
+  hiddenMultiplier?: number;
+  bypassHitChecks?: boolean;
+  noCritical?: boolean;
 }
 
 /** UID identifies a creature; seat ID identifies a place, surviving replacements. */

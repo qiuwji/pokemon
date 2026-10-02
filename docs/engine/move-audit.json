@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 123,
-    "disabled": 14,
-    "registered-unverified": 61
+    "missing": 63,
+    "disabled": 0,
+    "registered-unverified": 135
   },
   "effects": [
     {
@@ -173,7 +173,7 @@
       "imported": [
         "mirror_move"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "attack_up",
@@ -205,7 +205,7 @@
       "code": 12,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "special_attack_up",
@@ -230,7 +230,7 @@
       "code": 15,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "evasion_up",
@@ -329,7 +329,7 @@
         "sweet_scent"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "haze",
@@ -338,7 +338,7 @@
         "haze"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "bide",
@@ -360,7 +360,7 @@
         "outrage"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "roar",
@@ -431,7 +431,7 @@
         "slack_off"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "toxic",
@@ -458,7 +458,7 @@
         "light_screen"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "tri_attack",
@@ -499,7 +499,7 @@
         "razor_wind"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "super_fang",
@@ -508,7 +508,7 @@
         "super_fang"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "dragon_rage",
@@ -517,7 +517,7 @@
         "dragon_rage"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "trap",
@@ -586,7 +586,7 @@
       "imported": [
         "mist"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "focus_energy",
@@ -663,7 +663,7 @@
         "tail_glow"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "special_defense_up_2",
@@ -672,21 +672,21 @@
         "amnesia"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "accuracy_up_2",
       "code": 55,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "evasion_up_2",
       "code": 56,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "transform",
@@ -705,7 +705,7 @@
         "feather_dance"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "defense_down_2",
@@ -735,7 +735,7 @@
       "code": 61,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "special_defense_down_2",
@@ -752,14 +752,14 @@
       "code": 63,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "evasion_down_2",
       "code": 64,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "reflect",
@@ -768,7 +768,7 @@
         "reflect"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "poison",
@@ -778,7 +778,7 @@
         "poison_gas"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "paralyze",
@@ -789,7 +789,7 @@
         "glare"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "attack_down_hit",
@@ -798,7 +798,7 @@
         "aurora_beam"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "defense_down_hit",
@@ -810,7 +810,7 @@
         "crush_claw"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "speed_down_hit",
@@ -835,7 +835,7 @@
         "mist_ball"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "special_defense_down_hit",
@@ -871,7 +871,7 @@
       "code": 74,
       "moves": [],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "sky_attack",
@@ -880,7 +880,7 @@
         "sky_attack"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "confuse_hit",
@@ -905,7 +905,7 @@
         "twineedle"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "vital_throw",
@@ -914,7 +914,7 @@
         "vital_throw"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "substitute",
@@ -923,7 +923,7 @@
         "substitute"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "recharge",
@@ -935,7 +935,7 @@
         "frenzy_plant"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "rage",
@@ -980,7 +980,7 @@
         "splash"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "disable",
@@ -999,7 +999,7 @@
         "night_shade"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "psywave",
@@ -1008,7 +1008,7 @@
         "psywave"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "counter",
@@ -1035,7 +1035,7 @@
         "pain_split"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "snore",
@@ -1109,7 +1109,7 @@
       "imported": [
         "flail"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "spite",
@@ -1139,7 +1139,7 @@
         "aromatherapy"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "quick_attack",
@@ -1203,7 +1203,7 @@
         "minimize"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "curse",
@@ -1272,7 +1272,7 @@
         "sandstorm"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "endure",
@@ -1302,7 +1302,7 @@
       "imported": [
         "swagger"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "fury_cutter",
@@ -1322,7 +1322,7 @@
         "attract"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "return",
@@ -1331,7 +1331,7 @@
         "return"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "present",
@@ -1349,7 +1349,7 @@
         "frustration"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "safeguard",
@@ -1415,7 +1415,7 @@
         "sonic_boom"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "unused_83",
@@ -1460,7 +1460,7 @@
         "hidden_power"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "rain_dance",
@@ -1491,7 +1491,7 @@
         "steel_wing"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "attack_up_hit",
@@ -1501,7 +1501,7 @@
         "meteor_mash"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "all_stats_up_hit",
@@ -1511,7 +1511,7 @@
         "silver_wind"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "unused_8d",
@@ -1529,7 +1529,7 @@
       "imported": [
         "belly_drum"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "psych_up",
@@ -1538,7 +1538,7 @@
         "psych_up"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "mirror_coat",
@@ -1556,7 +1556,7 @@
         "skull_bash"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "twister",
@@ -1565,7 +1565,7 @@
         "twister"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "earthquake",
@@ -1588,7 +1588,7 @@
       "imported": [
         "future_sight"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "gust",
@@ -1597,7 +1597,7 @@
         "gust"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "flinch_minimize_hit",
@@ -1611,7 +1611,7 @@
       "imported": [
         "astonish"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "solar_beam",
@@ -1620,7 +1620,7 @@
         "solar_beam"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "thunder",
@@ -1629,7 +1629,7 @@
         "thunder"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "teleport",
@@ -1661,7 +1661,7 @@
         "bounce"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "defense_curl",
@@ -1670,7 +1670,7 @@
         "defense_curl"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "softboiled",
@@ -1680,7 +1680,7 @@
         "milk_drink"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "fake_out",
@@ -1709,7 +1709,7 @@
       "imported": [
         "stockpile"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "spit_up",
@@ -1720,7 +1720,7 @@
       "imported": [
         "spit_up"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "swallow",
@@ -1731,7 +1731,7 @@
       "imported": [
         "swallow"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "unused_a3",
@@ -1747,7 +1747,7 @@
         "hail"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "torment",
@@ -1765,7 +1765,7 @@
         "flatter"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "will_o_wisp",
@@ -1774,7 +1774,7 @@
         "will_o_wisp"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "memento",
@@ -1792,7 +1792,7 @@
         "facade"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "focus_punch",
@@ -1830,7 +1830,7 @@
       "imported": [
         "nature_power"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "charge",
@@ -1850,7 +1850,7 @@
       "imported": [
         "taunt"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "helping_hand",
@@ -1913,7 +1913,7 @@
         "superpower"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "magic_coat",
@@ -1949,7 +1949,7 @@
         "brick_break"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "yawn",
@@ -1978,7 +1978,7 @@
       "imported": [
         "endeavor"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "eruption",
@@ -1988,7 +1988,7 @@
         "water_spout"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "skill_swap",
@@ -2008,7 +2008,7 @@
       "imported": [
         "imprison"
       ],
-      "status": "disabled"
+      "status": "registered-unverified"
     },
     {
       "id": "refresh",
@@ -2017,7 +2017,7 @@
         "refresh"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "grudge",
@@ -2044,7 +2044,7 @@
         "low_kick"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "secret_power",
@@ -2122,7 +2122,7 @@
         "psycho_boost"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "tickle",
@@ -2131,7 +2131,7 @@
         "tickle"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "cosmic_power",
@@ -2140,7 +2140,7 @@
         "cosmic_power"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "sky_uppercut",
@@ -2171,7 +2171,7 @@
         "poison_tail"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "water_sport",
@@ -2202,7 +2202,7 @@
         "dragon_dance"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "camouflage",

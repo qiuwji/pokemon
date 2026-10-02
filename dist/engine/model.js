@@ -206,6 +206,7 @@ export function damage(
     critical = false,
     power = move.power,
     spread = 1,
+    baseMultiplier = 1,
     modifier = defaultAbilityModifier,
     attackerTypes = db.species[attacker.species].types,
     defenderTypes = db.species[defender.species].types,
@@ -250,6 +251,7 @@ export function damage(
   v = Math.floor(v * spread);
   if (physical) v = Math.max(1, v);
   v = Math.floor(modifier("base-damage", v, context)) + 2;
+  v *= baseMultiplier;
   if (critical) v *= 2;
   if (attackerTypes.includes(move.type)) v = Math.floor(v * 1.5);
   for (const t of defenderTypes)

@@ -1,10 +1,15 @@
+import { TACTICAL_STRATEGY } from "../rules/gen3/tactical-strategy.js";
+import { analyzeCandidate } from "./analysis.js";
 import { readOnly, callSync } from "../extensions/values.js";
 import { randomDecision } from "./ai.js";
 
 /** A policy chooses a candidate index from detached observations; the battle owns legality and RNG. */
 export class BattleStrategyRegistry {
   constructor(definitions = {}) {
-    this.definitions = new Map([["random", null]]);
+    this.definitions = new Map([
+      ["random", null],
+      ["tactical", TACTICAL_STRATEGY],
+    ]);
     for (const [id, definition] of Object.entries(definitions)) {
       if (this.definitions.has(id) || typeof definition?.decide !== "function")
         throw new Error(`Invalid battle strategy ${id}`);
@@ -49,6 +54,18 @@ export class BattleStrategyRegistry {
       const action = { kind: "switch", seat, actor: mon.uid, index };
       if (!battle.actions.prepare(action, seat).error) candidates.push(action);
     }
+    for (const [item, count] of Object.entries(battle.roster.owner(seat).bag)) {
+      if (count <= 0) continue;
+      for (
+        let index = 0;
+        index < battle.roster.owner(seat).party.length;
+        index++
+      ) {
+        const action = { kind: "item", seat, actor: mon.uid, item, index };
+        if (!battle.actions.prepare(action, seat).error)
+          candidates.push(action);
+      }
+    }
     if (!candidates.length)
       throw new Error(`No strategy candidates for ${seat}`);
     const view = readOnly({
@@ -56,6 +73,7 @@ export class BattleStrategyRegistry {
       turn: battle.turn,
       snapshot: battle.snapshot(),
       candidates,
+      analyses: candidates.map((action) => analyzeCandidate(battle, action)),
       roll: battle.rng.next(),
     });
     const choice = callSync(definition.decide, [view]);
