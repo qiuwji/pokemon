@@ -34,14 +34,20 @@ export function attachEmeraldExtensions(game, host) {
     caught: [...game.state.caught],
     story: structuredClone(game.state.story),
     daycare: structuredClone(game.state.daycare),
-    objects: game.field.npcs.objects(game.state.position.map).map((o) => ({
-      id: o.id,
-      x: o.x,
-      y: o.y,
-      dir: o.dir,
-      actor: o.actor,
-      kind: o.kind,
-    })),
+    objects: game.field.npcs
+      .objects(game.state.position.map)
+      .map((o) =>
+        Object.fromEntries(
+          Object.entries({
+            id: o.id,
+            x: o.x,
+            y: o.y,
+            dir: o.dir,
+            actor: o.actor,
+            kind: o.kind,
+          }).filter(([, value]) => value !== undefined),
+        ),
+      ),
   });
   const bus = new CommandBus({
     onError: host.onError,

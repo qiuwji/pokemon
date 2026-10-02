@@ -45,7 +45,9 @@ dist/
     story.js                   互动和战后故事→指令序列、招式动画配置
     scenes.js                  本作的求救、背包、回研究所和治疗演出数据
     adventure.js               会话装配、遭遇、本作商店/奖励和命令入口
-    interface.js               像素菜单、对话、队伍、图鉴、存档页面
+    interface.js               UI 装配器和主菜单入口
+    ui-shell.js                对话、弹窗、导航、焦点与共享视图片段
+    *-interface.js             队伍、背包、图鉴、商店、盒子、存档等页面
   game-pack.js                 旧调用方的兼容转出口
   content.json                 结构化地图、图集定义、精灵、招式和遭遇表
 ```
@@ -122,7 +124,7 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 
 ### 存档版本
 
-`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本作开发存档版本为 3，按用户授权移除了旧档迁移表，拒绝旧版本。当前结构要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。
+`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本作开发存档版本为 6，按用户授权移除了旧档迁移表，拒绝旧版本。当前结构要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。
 
 ### 另一个同类游戏
 
@@ -140,3 +142,11 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 - 双打/多阵营与特性/持有道具规则已有实现，范围和跨领域验收进度见 BATTLE_ARCHITECTURE.md、GEN3_RULE_COVERAGE.md 与 IMPLEMENTATION_PLAN.md；插件宿主等后续阶段仍在执行中。
 
 剩余目标见 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)。当前采用 JS、JSDoc/声明文件与运行时校验，尚未启用全项目 TypeScript 静态检查。可复用的是格子探索与队伍单打框架；正式插件能力尚待实现。
+
+## UI 页面装配（0.12）
+
+`createUIShell(game, {document, tone})` 管理弹窗、对话、焦点、返回和通知。页面采用 `createXInterface(game, deps)` 工厂，只读取状态并发送应用命令。页面间通过注入的导航回调协作，不互相导入；成长提示由 growth-interface 管理。interface.js 仅装配 shell、页面、扩展 DOM 和主菜单，保留 app.js 使用的动态 getter 与原返回接口。
+
+状态写入守卫递归覆盖内容包中所有 `*-interface.js`、interface.js 和 ui-shell.js，拆分不会让新页面逃逸检查。独立 DOM 端口测试使用冻结状态验证装配、对话和可见控件焦点循环，浏览器验证详情页插件点击和保存。此阶段全量 300 项测试通过。
+
+应用会话保留有意采用的宽门面和共享领域对象，避免机械改名。真正需要隔离的扩展入口使用 PluginHost 的只读查询、权限化事务、声明式 UI 及 CommandBus。页面、本地自动化与协议 1 网络请求共用命令验证。详情见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md) 与 [NETWORK_ARCHITECTURE.md](NETWORK_ARCHITECTURE.md)。

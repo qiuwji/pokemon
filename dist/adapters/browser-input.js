@@ -67,6 +67,10 @@ export class BrowserInput {
     if (this.held) this.game.move(this.held, { running: this.running });
   }
   keydown(e) {
+    if (e.key.toLowerCase() === "tab") {
+      this.ui.focusTrap(e);
+      return;
+    }
     if (e.target.closest("input,select,textarea")) return;
     const key = e.key.toLowerCase(),
       dir = DIRECTIONS[key];
@@ -81,10 +85,6 @@ export class BrowserInput {
       ].includes(key)
     )
       e.preventDefault();
-    if (key === "tab") {
-      this.ui.focusTrap(e);
-      return;
-    }
     if (e.repeat) return;
     if (key === "shift") {
       this.running = true;

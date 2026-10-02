@@ -2,6 +2,8 @@
 export function createGrowthInterface(
   game,
   {
+    document: doc,
+    spriteURL,
     modal,
     closeModal,
     showMenu,
@@ -9,10 +11,11 @@ export function createGrowthInterface(
     root,
     toast,
     updateSide,
-    checkGrowth,
     escapeHTML,
   },
 ) {
+  const db = game.db,
+    $ = (id) => doc.getElementById(id);
   const name = (mon) =>
     mon.egg ? "宝可梦的蛋" : game.db.species[mon.species].name;
   const redraw = (result) => {
@@ -115,5 +118,60 @@ export function createGrowthInterface(
         }),
     );
   }
-  return { showDaycare, showEvolutionOptions };
+  function checkGrowth() {
+    if (game.ui?.dialog || root.children.length || game.battle || game.busy)
+      return;
+    for (const mon of game.state.party) {
+      if (mon.egg) continue;
+      if (mon.pendingMoves?.length) {
+        const id = mon.pendingMoves[0];
+        modal(
+          "学习新的招式",
+          `<p>${db.species[mon.species].name} 想学习 ${db.moves[id].name}，但是已经掌握了四个招式。选择要忘记的招式。</p><div class="move-list">${mon.moves.map((s, i) => `<button class="move-summary" data-forget="${i}">${db.moves[s.id].name}<small>PP ${s.pp} / ${db.moves[s.id].pp}</small></button>`).join("")}</div><div class="inline-actions"><button id="skip-move" class="secondary-button">不学习这个招式</button></div>`,
+          { type: "learning", close: false },
+        );
+        const done = (i) => {
+          game.learnMove(mon, i);
+          closeModal();
+          updateSide();
+          game.save();
+          checkGrowth();
+        };
+        root
+          .querySelectorAll("[data-forget]")
+          .forEach((b) => (b.onclick = () => done(+b.dataset.forget)));
+        $("skip-move").onclick = () => done(null);
+        return;
+      }
+      const evolution = game.evolutionPlan(mon);
+      if (evolution) {
+        modal(
+          "伙伴正在进化",
+          `<div class="detail-row"><img src="${escapeHTML(spriteURL(mon.species))}" alt=""><div><p>${db.species[mon.species].name} 身上出现了光芒！</p><p>它将进化成 ${db.species[evolution.to].name}。</p></div></div><div class="choice-actions"><button class="primary-button" id="evolve">继续进化</button><button class="secondary-button" id="cancel-evolve">停止进化</button></div>`,
+          { type: "evolution", close: false },
+        );
+        $("evolve").onclick = async () => {
+          closeModal();
+          const result = await game.animateEvolution(mon, evolution);
+          toast(
+            result.ok
+              ? `进化成了 ${db.species[mon.species].name}！`
+              : result.reason || "进化未完成。",
+          );
+          updateSide();
+          game.save();
+          checkGrowth();
+        };
+        $("cancel-evolve").onclick = () => {
+          game.evolve(mon, { cancel: true, plan: evolution });
+          closeModal();
+          game.save();
+          checkGrowth();
+        };
+        return;
+      }
+    }
+    game.save();
+  }
+  return { showDaycare, showEvolutionOptions, checkGrowth };
 }

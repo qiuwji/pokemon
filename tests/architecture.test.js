@@ -77,23 +77,34 @@ test("Every local ES module import resolves after refactors", () => {
   }
   walk(new URL("../dist/", import.meta.url).pathname);
 });
-test("Emerald UI sends commands and does not directly mutate persisted game state", () => {
-  const source = fs.readFileSync(
-    new URL("packs/emerald/interface.js", base),
-    "utf8",
+test("Every Emerald page and UI shell sends commands without mutating persisted state", () => {
+  const files = modules(new URL("packs/emerald/", base).pathname).filter(
+    (file) =>
+      file.endsWith("-interface.js") ||
+      ["interface.js", "ui-shell.js"].includes(path.basename(file)),
   );
-  assert(
-    !/game\.state(?:\.[A-Za-z_$]\w*|\[[^\]]+\])*\s*(?:=(?!=)|\+\+|--|\+=|-=)/.test(
-      source,
-    ),
-  );
-  assert(
-    !/\bmon\.(?:hp|species|stats|moves|evolutionSkipped)\s*(?:=(?!=)|\+=)/.test(
-      source,
-    ),
-  );
+  for (const file of files) {
+    const source = fs.readFileSync(file, "utf8");
+    assert(
+      !/game\.state(?:\.[A-Za-z_$]\w*|\[[^\]]+\])*\s*(?:=(?!=)|\+\+|--|\+=|-=)/.test(
+        source,
+      ),
+      file,
+    );
+    assert(
+      !/game\.state(?:\.[A-Za-z_$]\w*|\[[^\]]+\])*\.(?:push|pop|splice|shift|unshift|sort|reverse)\s*\(/.test(
+        source,
+      ),
+      file,
+    );
+    assert(
+      !/\bmon\.(?:hp|species|stats|moves|evolutionSkipped)\s*(?:=(?!=)|\+=)/.test(
+        source,
+      ),
+      file,
+    );
+  }
 });
-
 // Examples are real extension consumers: they cannot reach application internals or browser globals.
 test("Example plugins depend only on public extension utilities", () => {
   for (const file of modules(new URL("plugins/", base).pathname)) {
