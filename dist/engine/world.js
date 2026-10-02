@@ -19,12 +19,23 @@ export class World {
       onStep = () => {},
       onBlocked = () => {},
       onMap = () => {},
+      beforeMove = () => {},
       deferWarps = false,
+      passage = ({ cell, warp }) =>
+        !isWater(cell.behavior) && (cell.collision === 0 || !!warp),
     } = {},
   ) {
     this.maps = maps;
     this.position = position;
-    Object.assign(this, { objects, onStep, onBlocked, onMap, deferWarps });
+    Object.assign(this, {
+      objects,
+      onStep,
+      onBlocked,
+      onMap,
+      beforeMove,
+      deferWarps,
+      passage,
+    });
     this.steps = 0;
   }
   get map() {
@@ -87,7 +98,18 @@ export class World {
           y < 0 ||
           x >= dest.width ||
           y >= dest.height ||
-          ((dest.blocks[i] >> 10) & 3) !== 0 ||
+          !this.passage({
+            cell: {
+              block: dest.blocks[i],
+              behavior: dest.behavior[i],
+              collision: (dest.blocks[i] >> 10) & 3,
+              elevation: dest.blocks[i] >> 12,
+            },
+            map: dest,
+            dir,
+            from: { ...p },
+            warp: null,
+          }) ||
           this.objects(id).some(
             (n) =>
               (n.x === x && n.y === y) ||
@@ -95,6 +117,15 @@ export class World {
           )
         )
           return false;
+        this.beforeMove({
+          map: dest,
+          cell: {
+            block: dest.blocks[i],
+            behavior: dest.behavior[i],
+            collision: (dest.blocks[i] >> 10) & 3,
+          },
+          dir,
+        });
         this.steps++;
         this.enter(id, x, y, dir);
         this.onStep(this.cell(x, y));
@@ -131,13 +162,13 @@ export class World {
     if (
       !cell ||
       obj ||
-      (cell.collision !== 0 && !warp) ||
-      isWater(cell.behavior) ||
+      !this.passage({ cell, map: m, dir, from: { ...p }, warp }) ||
       oneWay === dir
     ) {
       this.onBlocked(obj ? "object" : "wall", obj);
       return false;
     }
+    this.beforeMove({ map: m, cell, dir });
     p.x = x;
     p.y = y;
     this.steps++;

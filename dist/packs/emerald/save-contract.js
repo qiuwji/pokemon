@@ -1,3 +1,5 @@
+import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
+import { isWater } from "../../engine/terrain.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { validStoryProgress } from "../../engine/story.js";
@@ -37,6 +39,26 @@ export function validateSave(s, db) {
     !Array.isArray(s.caught)
   )
     return false;
+  if (s.movement !== undefined) {
+    const movement = s.movement;
+    if (
+      !movement ||
+      !Object.hasOwn(MOVEMENT_MODES, movement.mode) ||
+      movement.mode === "run" ||
+      !Array.isArray(movement.visited) ||
+      new Set(movement.visited).size !== movement.visited.length ||
+      movement.visited.some((id) => !Object.hasOwn(TRAVEL_DESTINATIONS, id))
+    )
+      return false;
+    const water = isWater(
+      map.behavior[s.position.y * map.width + s.position.x],
+    );
+    if (
+      water !== (movement.mode === "surf") ||
+      (map.indoor && movement.mode.endsWith("bike"))
+    )
+      return false;
+  }
   const identities = new Set();
   for (const m of [...s.party, ...s.box]) {
     if (

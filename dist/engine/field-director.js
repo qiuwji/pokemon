@@ -55,7 +55,7 @@ export class FieldDirector {
       objects.push({ ...this.field.position, id: "player" });
     return objects;
   }
-  route(id, to, allowVacatedBy = null) {
+  route(id, to, allowVacatedBy = null, mode) {
     const from = this.actor(id);
     return findRoute(
       this.field.world.maps,
@@ -63,13 +63,24 @@ export class FieldDirector {
       { map: from.map, ...to },
       {
         objects: (map) => this.objects(map, id, allowVacatedBy),
+        ...(id === "player" && this.field.movement
+          ? {
+              passage: (c) =>
+                this.field.movement.traversal(
+                  mode || this.field.movement.state.mode,
+                  c,
+                ),
+            }
+          : {}),
       },
     );
   }
-  async step(id, dir, { running = false, allowVacatedBy = null } = {}) {
+  async step(id, dir, { running = false, allowVacatedBy = null, mode } = {}) {
     if (!DIRECTIONS[dir]) throw new Error(`Invalid walking direction ${dir}`);
     if (id === "player") {
-      if (!this.field.move(dir, { running, scripted: true, allowVacatedBy }))
+      if (
+        !this.field.move(dir, { running, scripted: true, allowVacatedBy, mode })
+      )
         throw new Error(`Scripted player movement blocked: ${dir}`);
       await this.timeline.wait(this.field.motion.duration);
       this.field.tick(this.timeline.now());
@@ -108,13 +119,14 @@ export class FieldDirector {
     path,
     running = false,
     allowVacatedBy = null,
+    mode,
   }) {
     await this.ready(actor);
-    const route = path || this.route(actor, to, allowVacatedBy);
+    const route = path || this.route(actor, to, allowVacatedBy, mode);
     if (!Array.isArray(route))
       throw new Error("Movement needs a path or a destination");
     for (const dir of route)
-      await this.step(actor, dir, { running, allowVacatedBy });
+      await this.step(actor, dir, { running, allowVacatedBy, mode });
   }
   async approach({ actor, target = "player" }) {
     await this.ready(actor);
@@ -271,6 +283,7 @@ export function validateFieldCommand(c, maps) {
       : !coordinate(c.to))
   )
     fail();
+  if (c.type === "move" && c.mode !== undefined && !id(c.mode)) fail();
   if (c.type === "face" && !(c.target ? id(c.target) : DIRECTIONS[c.dir]))
     fail();
   if (c.type === "approach" && c.actor === (c.target || "player")) fail();

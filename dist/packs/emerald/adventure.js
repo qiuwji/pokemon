@@ -31,6 +31,12 @@ import { EvolutionService } from "../../engine/growth/evolution.js";
 import { FriendshipService } from "../../engine/growth/friendship.js";
 import { EquipmentService } from "../../engine/equipment.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
+import { MovementRegistry, MovementService } from "../../engine/movement.js";
+import { TravelService } from "../../engine/travel.js";
+import { TravelDirector } from "../../presentation/travel-director.js";
+import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
+import { DIRECTIONS } from "../../engine/world.js";
+import { isWater } from "../../engine/terrain.js";
 import { isGrass } from "../../engine/terrain.js";
 import { TRAINERS, createTrainerEncounter } from "./trainers.js";
 
@@ -232,7 +238,12 @@ export class EmeraldAdventure {
     return this.combat.battle;
   }
   get busy() {
-    return this.storyBusy || this.combat.busy || this.field.busy;
+    return (
+      this.storyBusy ||
+      this.combat.busy ||
+      this.field.busy ||
+      this.travelDirector.busy
+    );
   }
   newState() {
     return {
@@ -247,6 +258,7 @@ export class EmeraldAdventure {
       caught: [],
       playSeconds: 0,
       friendshipSteps: 0,
+      movement: { mode: "walk", visited: [PACK.start.map] },
       randomSeed: Date.now() >>> 0,
     };
   }
@@ -254,11 +266,40 @@ export class EmeraldAdventure {
     this.field?.dispose();
     this.rng = new Random(this.state.randomSeed);
     this.lastEncounterSteps = -5;
+    this.state.movement ||= {
+      mode: "walk",
+      visited: [this.state.position.map],
+    };
+    this.movement = new MovementService({
+      registry: new MovementRegistry(MOVEMENT_MODES),
+      state: this.state.movement,
+      context: () => ({ capabilities: this.fieldCapabilities() }),
+      onChange: () => this.ui?.updateSide(),
+    });
+    this.travel = new TravelService({
+      maps: this.db.maps,
+      destinations: TRAVEL_DESTINATIONS,
+      position: this.state.position,
+      context: () => ({
+        capabilities: this.fieldCapabilities(),
+        visited: this.state.movement.visited,
+      }),
+      objects: (map) =>
+        this.field.npcs
+          .objects(map)
+          .map((n) => ({ ...n, reserved: this.field.npcs.reserved(n) })),
+    });
+    this.travelDirector = new TravelDirector({
+      timeline: this.timeline,
+      transitions: this.transitions,
+      reducedMotion: this.reducedMotion,
+    });
     this.field = new FieldSession({
       maps: this.db.maps,
       position: this.state.position,
       motion: this.motion,
       transitions: this.transitions,
+      movement: this.movement,
       now: this.timeline.now,
       objects: (map) =>
         objectsFor(
@@ -266,7 +307,11 @@ export class EmeraldAdventure {
           this.db,
         ),
       onStep: (cell) => this.step(cell),
-      onMap: () => this.onMap(this.world.map.title, this.state.position.map),
+      onProgress: () => this.advanceTravelClocks(),
+      onMap: () => {
+        this.visitMap();
+        this.onMap(this.world.map.title, this.state.position.map);
+      },
       onBlocked: (kind) => {
         if (kind === "unavailable")
           void this.runStory([
@@ -286,6 +331,7 @@ export class EmeraldAdventure {
       camera: this.camera,
       reducedMotion: this.reducedMotion,
     });
+    this.visitMap();
     this.onMap(this.world.map.title, this.state.position.map);
   }
   enter(position) {
@@ -347,6 +393,103 @@ export class EmeraldAdventure {
       running: running && !this.world.map.indoor,
     });
   }
+  visitMap() {
+    const id = this.state.position.map;
+    if (TRAVEL_DESTINATIONS[id] && !this.state.movement.visited.includes(id))
+      this.state.movement.visited.push(id);
+  }
+  fieldCapabilities() {
+    const flags = this.state.flags,
+      knows = (id) =>
+        this.state.party.some(
+          (m) => !m.egg && m.moves.some((v) => v.id === id),
+        );
+    return {
+      run: true,
+      bike: !!flags.bike || !!flags.fieldTraining,
+      surf: !!flags.fieldTraining || (!!flags.badgeBalance && knows("surf")),
+      fly: !!flags.fieldTraining || (!!flags.badgeFeather && knows("fly")),
+    };
+  }
+  claimFieldEquipment() {
+    if (
+      !this.canManageParty() ||
+      !this.state.flags.pokedex ||
+      this.state.flags.fieldTraining
+    )
+      return false;
+    this.state.flags.fieldTraining = true;
+    return true;
+  }
+  movementOptions() {
+    return ["walk", "mach-bike", "acro-bike"].map((id) => ({
+      id,
+      name: MOVEMENT_MODES[id].name,
+      allowed:
+        this.movement.available(id, this.world.map) &&
+        !isWater(
+          this.world.cell(this.state.position.x, this.state.position.y)
+            ?.behavior,
+        ),
+    }));
+  }
+  setMovementMode(mode) {
+    if (
+      !this.canManageParty() ||
+      !["walk", "mach-bike", "acro-bike"].includes(mode)
+    )
+      return { ok: false, reason: "现在不能更换移动方式。" };
+    if (
+      isWater(
+        this.world.cell(this.state.position.x, this.state.position.y)?.behavior,
+      )
+    )
+      return { ok: false, reason: "请先上岸。" };
+    const result = this.movement.set(mode, this.world.map);
+    if (!result.ok) result.reason = "这里不能使用这辆自行车。";
+    return result;
+  }
+  async boardSurf() {
+    if (!this.canManageParty() || !this.fieldCapabilities().surf)
+      return { ok: false, reason: "还不能使用冲浪。" };
+    const dir = this.state.position.dir,
+      [dx, dy] = DIRECTIONS[dir];
+    if (
+      !isWater(
+        this.world.cell(this.state.position.x + dx, this.state.position.y + dy)
+          ?.behavior,
+      )
+    )
+      return { ok: false, reason: "请面向岸边的水面。" };
+    // Use an explicit mode plan. Persistent mode changes only when the boarding step finishes.
+    this.clearInput();
+    if (!this.field.move(dir, { mode: "surf" }))
+      return { ok: false, reason: "水面被挡住了。" };
+    await this.waitForMovement();
+    return { ok: true };
+  }
+  async flyTo(id) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    const result = this.travel.prepare(id);
+    if (!result.ok) return result;
+    this.clearInput();
+    try {
+      const completed = await this.travelDirector.fly(() => {
+        const changed = this.travel.commit(result.plan);
+        if (!changed.ok) throw new Error(changed.reason);
+        this.movement.set("walk", this.world.map);
+        this.enter(changed.position);
+      });
+      return { ok: completed };
+    } catch (error) {
+      return { ok: false, reason: error.message };
+    } finally {
+      this.clearInput();
+      this.ui?.updateSide();
+      this.save();
+    }
+  }
   async waitForMovement() {
     // Automation returns at a story/UI boundary rather than waiting for player input.
     while (
@@ -369,7 +512,16 @@ export class EmeraldAdventure {
     }
     if (this.ui.blocked) return;
     const object = this.world.interact();
-    if (!object) return;
+    if (!object) {
+      const [dx, dy] = DIRECTIONS[this.state.position.dir];
+      const cell = this.world.cell(
+        this.state.position.x + dx,
+        this.state.position.y + dy,
+      );
+      if (isWater(cell?.behavior) && this.state.movement.mode !== "surf")
+        this.ui.showSurf();
+      return;
+    }
     if (object.id)
       this.field.npcs.face(
         object.id,
@@ -380,12 +532,14 @@ export class EmeraldAdventure {
       );
     void this.playStory(interaction(this.state, object, this.world.map.title));
   }
-  step(cell) {
+  advanceTravelClocks() {
     this.state.friendshipSteps = ((this.state.friendshipSteps || 0) + 1) % 128;
     if (this.state.friendshipSteps === 0)
       for (const mon of this.state.party)
         if (!mon.egg && this.rng.int(2) === 0)
           this.friendship.change(mon, "walk", { party: this.state.party });
+  }
+  step(cell) {
     if (this.storyBusy) return;
     const s = this.state;
     const scene = EMERALD_STORY.resolve("step", s, {
@@ -396,18 +550,27 @@ export class EmeraldAdventure {
       void this.playStory(scene);
       return;
     }
+    const water =
+      this.state.movement.mode === "surf" && isWater(cell?.behavior);
+    const entries = water
+      ? this.world.map.waterEncounters
+      : this.world.map.encounters;
     if (
-      s.party.length &&
+      s.party.some((m) => !m.egg) &&
       s.flags.rescued &&
-      isGrass(cell?.behavior) &&
-      this.world.map.encounters &&
+      (water || isGrass(cell?.behavior)) &&
+      entries &&
       this.world.steps - this.lastEncounterSteps > 3 &&
       !this.ui.dialog
     ) {
       const monster = this.encounterService().attempt({
         party: s.party,
-        entries: this.world.map.encounters,
-        rate: this.world.map.encounterRate,
+        entries,
+        rate: water
+          ? this.world.map.waterEncounterRate
+          : this.world.map.encounterRate,
+        area: water ? "water" : "land",
+        mode: this.state.movement.mode,
       });
       if (monster) {
         this.lastEncounterSteps = this.world.steps;
@@ -637,7 +800,8 @@ export class EmeraldAdventure {
         this.storyBusy ||
         this.ui.blocked ||
         this.combat.busy ||
-        this.transitions.busy
+        this.transitions.busy ||
+        this.travelDirector.busy
       ),
       maps: visibleMaps,
       playerFrom: this.motion.moving(now) ? this.motion.sourcePosition : null,
@@ -647,6 +811,10 @@ export class EmeraldAdventure {
     const p = this.state.position;
     return {
       location: this.world.map.title,
+      movement: {
+        mode: this.state.movement.mode,
+        capabilities: this.fieldCapabilities(),
+      },
       position: { ...p },
       mode: this.transitions.busy
         ? "transition"

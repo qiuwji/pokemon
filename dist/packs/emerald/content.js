@@ -1,3 +1,5 @@
+import { MovementRegistry } from "../../engine/movement.js";
+import { MOVEMENT_MODES } from "./movement.js";
 import { TRAINERS, validateTrainers } from "./trainers.js";
 import { assertContent } from "../../engine/content.js";
 import { MoveEffectRegistry } from "../../engine/move-effects.js";
@@ -9,6 +11,12 @@ import { EMERALD_STORY } from "./story.js";
 /** Pack composition validates names, references and capabilities before assets are loaded. */
 export function assertPackContent(db) {
   assertContent(db);
+  new MovementRegistry(MOVEMENT_MODES);
+  for (const mode of Object.values(MOVEMENT_MODES))
+    if (!db.actors[mode.actor])
+      throw new Error(`pack: missing movement actor ${mode.actor}`);
+  if (!db.actors[PACK.travelActor])
+    throw new Error("pack: missing flight actor");
   validateTrainers(TRAINERS, db);
   new MoveEffectRegistry().validateMoves(db.moves);
   createItemService(ITEMS);

@@ -1,3 +1,4 @@
+import { createMovementInterface } from "./movement-interface.js";
 import { createBattleInterface } from "./battle-interface.js";
 import { experienceAt } from "../../engine/model.js";
 import {
@@ -503,11 +504,20 @@ export function createEmeraldInterface(
     );
   }
 
+  const movementUI = createMovementInterface(game, {
+    modal,
+    closeModal,
+    showMenu,
+    root,
+    toast,
+    escapeHTML,
+  });
+
   function showMenu() {
     if (game.busy || game.battle || dialog) return;
     modal(
       "冒险菜单",
-      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
+      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
       { type: "menu" },
     );
     const actions = {
@@ -517,6 +527,7 @@ export function createEmeraldInterface(
       save: showSave,
       box: showBox,
       help: showHelp,
+      movement: movementUI.showMovement,
     };
     root
       .querySelectorAll("[data-page]")
@@ -587,7 +598,7 @@ export function createEmeraldInterface(
   function showHelp() {
     modal(
       "操作与范围",
-      `<div class="help-table"><span><kbd>方向键 / WASD</kbd></span><span>移动。按住 Shift 跑步。</span><span><kbd>Z / 回车</kbd></span><span>调查、对话、确认。对话时点按游戏画面也可继续。</span><span><kbd>X / Esc</kbd></span><span>返回上一层菜单。</span><span><kbd>M</kbd></span><span>打开冒险菜单。</span></div><p>触屏设备可使用画面下方的方向键和 A / B 按钮。战斗菜单支持鼠标、方向键与确认键。</p><p>本次序章：未白镇、101 号道路、古辰镇、103 号道路西部，以及研究所、主角的家、宝可梦中心和友好商店。</p><p>已加入三选一初始精灵、博士救助、小遥对战、草丛遇敌、捕捉、经验、能力变化、部分异常状态、学习招式、部分进化、回复与本机存档。</p><p class="notice">开场搬家演出、完整剧情、全部地图、道馆、双打，以及未列出的招式和特性效果尚未实现。地图与像素素材源于原作，非官方同人演示。</p><div class="modal-footer">素材及机制参考：<a href="https://github.com/pret/pokeemerald" target="_blank" rel="noopener" style="color:#b7d398">pret/pokeemerald</a> · Pokémon © Nintendo / Creatures / GAME FREAK</div>`,
+      `<div class="help-table"><span><kbd>方向键 / WASD</kbd></span><span>移动。按住 Shift 跑步。</span><span><kbd>Z / 回车</kbd></span><span>调查、对话、确认。对话时点按游戏画面也可继续。</span><span><kbd>X / Esc</kbd></span><span>返回上一层菜单。</span><span><kbd>M</kbd></span><span>打开冒险菜单。</span></div><p>触屏设备可使用画面下方的方向键和 A / B 按钮。战斗菜单支持鼠标、方向键与确认键。</p><p>本次序章：未白镇、101 号道路、古辰镇、103 号道路西部，以及研究所、主角的家、宝可梦中心和友好商店。</p><p>已加入三选一初始精灵、博士救助、小遥对战、草丛遇敌、捕捉、经验、能力变化、部分异常状态、学习招式、部分进化、回复与本机存档。</p><p class="notice">开场搬家演出、完整剧情、全部地图、道馆，以及未列出的招式效果尚未实现。双打、训练家队伍、特性与持有道具已加入，旅行菜单可以借用本次研究装备。地图与像素素材源于原作，非官方同人演示。</p><div class="modal-footer">素材及机制参考：<a href="https://github.com/pret/pokeemerald" target="_blank" rel="noopener" style="color:#b7d398">pret/pokeemerald</a> · Pokémon © Nintendo / Creatures / GAME FREAK</div>`,
       { back: showMenu, type: "help" },
     );
   }
@@ -621,6 +632,7 @@ export function createEmeraldInterface(
     showBag,
     showMenu,
     showHelp,
+    showSurf: movementUI.showSurf,
     showShop,
     back,
     closeModal,

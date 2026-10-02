@@ -10,9 +10,17 @@ export class Renderer {
     {
       playerActors = { walk: "Player", run: "PlayerRun" },
       cameraRig = null,
+      travelActor = null,
     } = {},
   ) {
-    Object.assign(this, { canvas, db, assets, playerActors, cameraRig });
+    Object.assign(this, {
+      canvas,
+      db,
+      assets,
+      playerActors,
+      cameraRig,
+      travelActor,
+    });
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.graph = new SceneGraph(db.maps);
@@ -32,11 +40,21 @@ export class Renderer {
     const image = this.assets[`actor-${name}`],
       def = this.db.actors[name];
     if (!image || !def) return;
-    let frame = actorFrame(dir, progress, foot, moving);
+    if (def.underlay)
+      this.actor(
+        def.underlay.actor,
+        x,
+        y + (def.underlay.offsetY || 0),
+        dir,
+        progress,
+        foot,
+        moving,
+      );
+    let frame = actorFrame(dir, progress, foot, moving, def.frames);
     if (frame.index * def.w >= image.width) frame = { index: 0, flip: false };
     const c = this.ctx,
-      dx = Math.round(x),
-      dy = Math.round(y);
+      dx = Math.round(x + (def.offsetX || 0)),
+      dy = Math.round(y + (def.offsetY || 0));
     c.save();
     if (frame.flip) {
       c.translate(dx + def.w, dy);
@@ -136,7 +154,12 @@ export class Renderer {
     const focus = this.cameraRig?.sample(player, now) || player;
     return { x: Math.round(focus.x - 152), y: Math.round(focus.y - 104) };
   }
-  world(world, npcs, now = performance.now(), { emotes = [] } = {}) {
+  world(
+    world,
+    npcs,
+    now = performance.now(),
+    { emotes = [], movementMode = "walk", travel = null } = {},
+  ) {
     const p = world.position,
       m = world.map,
       player = this.motion.sample(p, now),
@@ -164,14 +187,12 @@ export class Renderer {
     for (const id of ids) this.drawMap(id, false, now);
     const all = ids.flatMap((id) => {
       const o = this.graph.placements[id];
-      return npcs
-        .view(id, now)
-        .map((n) => ({
-          ...n,
-          map: id,
-          px: n.px + o.x * 16,
-          py: n.py + o.y * 16,
-        }));
+      return npcs.view(id, now).map((n) => ({
+        ...n,
+        map: id,
+        px: n.px + o.x * 16,
+        py: n.py + o.y * 16,
+      }));
     });
     all.push({
       ...player,
@@ -186,17 +207,27 @@ export class Renderer {
       const x = n.px - this.camera.x,
         y = n.py - this.camera.y;
       if (x < -32 || x > 352 || y < -32 || y > 256) continue;
-      if (n.player)
+      if (n.player) {
+        if (travel?.carrier && this.travelActor)
+          this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
         this.actor(
-          n.running ? this.playerActors.run : this.playerActors.walk,
+          this.playerActors[
+            travel ? "walk" : n.moving ? n.mode : movementMode
+          ] || this.playerActors.walk,
           x,
-          y - 16 - n.lift,
+          y -
+            16 -
+            n.lift -
+            (travel?.lift || 0) +
+            (movementMode === "surf"
+              ? Math.round(Math.sin(now / 180) * 1.5)
+              : 0),
           n.dir,
           n.progress,
           n.foot,
           n.moving,
         );
-      else if (n.species) {
+      } else if (n.species) {
         const image = this.assets[n.species + "-front"];
         if (image) {
           const hop = n.movement?.mode === "jog" ? Math.sin(now / 80) * 1.3 : 0;

@@ -24,6 +24,7 @@ async function boot() {
       camera = new CameraRig(timeline),
       renderer = new Renderer($("game"), db, assets, {
         playerActors: PACK.playerActors,
+        travelActor: PACK.travelActor,
         cameraRig: camera,
       });
     const reducedMotion = () =>
@@ -132,6 +133,8 @@ async function boot() {
         } else
           renderer.world(game.world, game.field.npcs, now, {
             emotes: [...game.fieldDirector.emotes.values()],
+            movementMode: game.state.movement.mode,
+            travel: game.travelDirector.sample(now),
           });
         overlay.render(transitions.sample(now));
       }

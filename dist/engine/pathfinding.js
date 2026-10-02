@@ -5,7 +5,7 @@ export function findRoute(
   maps,
   from,
   to,
-  { objects = () => [], limit = 12000 } = {},
+  { objects = () => [], limit = 12000, passage } = {},
 ) {
   const key = (p) => `${p.map}:${p.x},${p.y}`;
   const queue = [{ position: { ...from }, path: [] }];
@@ -15,7 +15,10 @@ export function findRoute(
     if (key(node.position) === key(to)) return node.path;
     for (const direction of Object.keys(DIRECTIONS)) {
       const p = { ...node.position };
-      const world = new World(maps, p, { objects });
+      const world = new World(maps, p, {
+        objects,
+        ...(passage ? { passage } : {}),
+      });
       if (!world.move(direction, { ignoreWarps: true })) continue;
       const id = key(p);
       if (visited.has(id)) continue;

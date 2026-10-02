@@ -37,7 +37,10 @@ export function validateContent(db) {
           tiles.metatiles[block & 1023]?.length === 8,
           path + `.metatile[${block & 1023}]`,
         );
-    for (const encounter of map.encounters || [])
+    for (const encounter of [
+      ...(map.encounters || []),
+      ...(map.waterEncounters || []),
+    ])
       check(
         !!db.species[encounter.species] &&
           encounter.min >= 1 &&
@@ -57,6 +60,48 @@ export function validateContent(db) {
           tiles.lookup[value & ~3072] !== undefined,
           `tilesets.${id}.lookup[${value & ~3072}]`,
         );
+  }
+  for (const [id, actor] of Object.entries(db.actors)) {
+    const prefix = `actors.${id}`;
+    check(
+      Number.isInteger(actor.w) &&
+        actor.w > 0 &&
+        actor.w % 8 === 0 &&
+        Number.isInteger(actor.h) &&
+        actor.h > 0 &&
+        actor.h % 8 === 0,
+      prefix + ".grid",
+    );
+    for (const key of ["offsetX", "offsetY"])
+      check(
+        actor[key] === undefined || Number.isInteger(actor[key]),
+        prefix + "." + key,
+      );
+    if (actor.frames)
+      for (const direction of ["down", "up", "left", "right"]) {
+        check(
+          Number.isInteger(actor.frames.facing?.[direction]) &&
+            actor.frames.facing[direction] >= 0,
+          prefix + ".facing." + direction,
+        );
+        check(
+          Array.isArray(actor.frames.walk?.[direction]) &&
+            actor.frames.walk[direction].length > 0 &&
+            actor.frames.walk[direction].every(
+              (v) => Number.isInteger(v) && v >= 0,
+            ),
+          prefix + ".walk." + direction,
+        );
+      }
+    const visited = new Set([id]);
+    let underlay = actor.underlay;
+    while (underlay) {
+      const valid = !!db.actors[underlay.actor] && !visited.has(underlay.actor);
+      check(valid, prefix + ".underlay");
+      if (!valid) break;
+      visited.add(underlay.actor);
+      underlay = db.actors[underlay.actor].underlay;
+    }
   }
   for (const [id, species] of Object.entries(db.species)) {
     check(

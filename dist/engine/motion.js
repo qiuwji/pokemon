@@ -6,11 +6,20 @@ export const WALK_FRAMES = {
   left: [7, 8],
   right: [7, 8],
 };
-export function actorFrame(dir, progress = 1, foot = 0, moving = false) {
-  const facing = FACING_FRAMES[dir] ?? 0;
+export function actorFrame(
+  dir,
+  progress = 1,
+  foot = 0,
+  moving = false,
+  frames = { facing: FACING_FRAMES, walk: WALK_FRAMES },
+) {
+  const facing = frames.facing[dir] ?? 0;
   // Every movement frame belongs to the same direction; right mirrors only the west frames.
   return {
-    index: moving && progress < 0.72 ? WALK_FRAMES[dir][foot % 2] : facing,
+    index:
+      moving && progress < 0.72
+        ? frames.walk[dir][foot % frames.walk[dir].length]
+        : facing,
     flip: dir === "right",
   };
 }
@@ -103,11 +112,22 @@ export class GridMotion {
   moving(now) {
     return this.to !== null && now - this.start < this.duration;
   }
-  begin(from, to, now, { running = false, jump = false } = {}) {
+  begin(
+    from,
+    to,
+    now,
+    {
+      running = false,
+      jump = false,
+      duration,
+      mode = running ? "run" : "walk",
+    } = {},
+  ) {
     const a = this.graph.point(from),
       b = this.graph.point(to);
     this.dir = to.dir;
     this.running = running;
+    this.mode = mode;
     this.jump = jump;
     if (a.zone !== b.zone || Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 32) {
       this.snap(to);
@@ -117,7 +137,7 @@ export class GridMotion {
     this.from = a;
     this.to = { ...to };
     this.start = now;
-    this.duration = jump ? 256 : running ? 96 : 160;
+    this.duration = jump ? 256 : (duration ?? (running ? 96 : 160));
     this.foot = (this.foot + 1) % 2;
     return true;
   }
@@ -141,6 +161,7 @@ export class GridMotion {
       moving: t < 1,
       dir: t < 1 ? this.dir : position.dir,
       running: t < 1 && this.running,
+      mode: this.mode || "walk",
       foot: this.foot,
       lift: this.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0,
     };

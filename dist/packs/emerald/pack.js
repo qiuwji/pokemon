@@ -1,8 +1,15 @@
 // The Emerald slice is a content pack. Engine classes know nothing about these characters.
 export const PACK = {
   id: "emerald-hoenn-01",
-  playerActors: { walk: "BrendanNormal", run: "BrendanRun" },
-  version: 3,
+  playerActors: {
+    walk: "BrendanNormal",
+    run: "BrendanRun",
+    "mach-bike": "BrendanMachBike",
+    "acro-bike": "BrendanAcroBike",
+    surf: "BrendanSurf",
+  },
+  travelActor: "FlyBird",
+  version: 4,
   title: "绿宝石 · 丰缘序章",
   start: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   starters: ["treecko", "torchic", "mudkip"],
