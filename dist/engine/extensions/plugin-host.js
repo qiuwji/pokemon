@@ -1,3 +1,4 @@
+import { validateAudioCue } from "./audio-contracts.js";
 import { ExtensionCatalog, safeTrait, ruleContext } from "./catalog.js";
 import { PluginUIRegistry } from "./ui-registry.js";
 import { PluginRuntime } from "./plugin-runtime.js";
@@ -11,6 +12,7 @@ import {
   validateSchema,
   callSync,
 } from "./values.js";
+import { validateMoveAnimation } from "./visual-contracts.js";
 import { RULE_PHASES } from "../rule-pipeline.js";
 export const PLUGIN_API_VERSION = 1;
 /** Startup host: content + declarative interfaces + runtime ports. Trusted code, explicit API, no hot unload. */
@@ -24,6 +26,11 @@ export class PluginHost {
     this.actions = new Map();
     this.rules = new Map();
     this.presentation = new Map();
+    this.visualEffects = new Map();
+    this.moveAnimations = new Map();
+    this.presentationScenes = new Map();
+    this.audioCues = new Map();
+    this.transitionPatterns = new Map();
     this.story = new Map();
     this.events = new EventBus({ onError });
     this.onError = onError;
@@ -103,6 +110,15 @@ export class PluginHost {
         id: owner,
         content: Object.freeze({
           register: (kind, id, value) => {
+            if (kind === "npcBehaviors") {
+              const original = value;
+              if (typeof original.decide !== "function")
+                throw new Error("NPC behavior requires decide");
+              value = {
+                ...value,
+                decide: (c) => evaluate(original.decide, readOnly(c)),
+              };
+            }
             if (kind === "growthConditions") {
               if (typeof value.test !== "function")
                 throw new Error("Growth condition requires predicate");
@@ -190,6 +206,53 @@ export class PluginHost {
           theme: (id, def) => staged.ui.register(owner, "themes", id, def),
         }),
         presentation: Object.freeze({
+          transition: (id, definition) => {
+            if (typeof definition.draw !== "function")
+              throw new Error("Transition requires draw");
+            return register(staged.transitionPatterns, id, {
+              draw: (ctx, frame) =>
+                evaluate(definition.draw, ctx, readOnly(frame)),
+            });
+          },
+          audio: (id, definition) => {
+            const key = qualified(owner, id);
+            if (staged.audioCues.has(key))
+              throw new Error("Duplicate audio cue");
+            staged.audioCues.set(key, validateAudioCue(definition));
+            return key;
+          },
+          scene: (id, definition) => {
+            if (
+              typeof definition.draw !== "function" ||
+              !Number.isFinite(definition.duration) ||
+              definition.duration < 1 ||
+              definition.duration > 10000
+            )
+              throw new Error("Invalid presentation scene");
+            return register(staged.presentationScenes, id, {
+              ...definition,
+              schema: validateSchema(definition.schema),
+              draw: (ctx, frame, assets) =>
+                evaluate(definition.draw, ctx, readOnly(frame), assets),
+            });
+          },
+          effect: (id, definition) => {
+            if (typeof definition.draw !== "function")
+              throw new Error("Visual effect requires drawing handler");
+            return register(staged.visualEffects, id, {
+              draw: (ctx, frame) =>
+                evaluate(definition.draw, ctx, readOnly(frame)),
+            });
+          },
+          move: (id, definition) => {
+            if (typeof definition.moveId !== "string" || !definition.moveId)
+              throw new Error("Move animation requires moveId");
+            validateMoveAnimation(definition.animation);
+            return register(staged.moveAnimations, id, {
+              moveId: definition.moveId,
+              animation: readOnly(definition.animation),
+            });
+          },
           play: (id, payload = {}) => {
             if (
               !staged.runtime ||

@@ -116,7 +116,7 @@ StoryEngine 按 id/trigger/requires/after/once/build 注册事件，选择条件
 
 Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务，rules 注入计算与政策。事件使用 combatants[] 和 sides[]，携带来源/目标席位和 UID，领域层不输出固定 player/enemy。单打表现适配器才生成双角色视图。模型、示例和结算边界见 [BATTLE_ARCHITECTURE.md](BATTLE_ARCHITECTURE.md)。
 
-`ANIMATION_PROFILES[moveId]` 选择 contact/projectile/status。未逐个配置的招式按威力与属性得到通用演出；新视觉类型只扩展 director 和绘图适配器。动画中途不重新判定命中、暴击、伤害或捕获。
+招式脚本通过 PresentationRegistry 注册，Director 解释多轨时间线，Canvas 通过注册效果绘制；未配置招式保留通用 profile 回退。动画不重新判定命中、伤害或捕获。插件可登记绘制函数、招式覆盖、场景、转场和音频。详情见 [PRESENTATION_ARCHITECTURE.md](PRESENTATION_ARCHITECTURE.md)。
 
 已支持：遭遇遮盖、双方进入、接触攻击、属性弹道、辅助招式波纹、受击闪烁/震动、HP 插值、倒下下沉、换人缩放释放、回复粒子、投球弧线、按真实结果晃球、挣脱释放和成功封球。减少动态效果模式保留时序与转场，移除抖动和闪烁。
 
@@ -137,11 +137,11 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 - `npm test`：领域规则、完整序章可达性、资源合同、时序边界、迁移和依赖方向检查。
 - 内容导入工具保留在 `tools/`，来源与许可保留在 README 和 assets/licenses。
 - 代码已统一格式，模块职责、接口和时钟均可单独测试，不靠浏览器跑出一个“看起来没问题”的结果。
-- 当前没有编辑器、多人同步或正式插件宿主。已有条件 DSL、依赖图与奖励账本，剧情 build 仍使用内容包 JS 返回演出指令。
-- 当前 pack 的 DOM 菜单模板集中在 `interface.js`，可整体替换；以后菜单继续增长时可按队伍/背包/存档拆分。底层引擎不因这种拆分变化。
-- 双打/多阵营与特性/持有道具规则已有实现，范围和跨领域验收进度见 BATTLE_ARCHITECTURE.md、GEN3_RULE_COVERAGE.md 与 IMPLEMENTATION_PLAN.md；插件宿主等后续阶段仍在执行中。
+- 当前没有内容编辑器或多人同步。插件 API 1、事务化状态、声明式 UI、事件与命令已实现；剧情 build 由内容包或插件返回校验后的演出指令。
+- 当前 UI 已按页面工厂拆分，ui-shell 管理基础设施，interface.js 仅负责装配与主菜单。
+- 双打/多阵营与特性/持有道具规则已有实现，范围和跨领域验收进度见 BATTLE_ARCHITECTURE.md、GEN3_RULE_COVERAGE.md 与 IMPLEMENTATION_PLAN.md；插件和网络入口详见各自架构文档。
 
-剩余目标见 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)。当前采用 JS、JSDoc/声明文件与运行时校验，尚未启用全项目 TypeScript 静态检查。可复用的是格子探索与队伍单打框架；正式插件能力尚待实现。
+剩余目标见 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)。当前采用 JS、JSDoc/声明文件与运行时校验，尚未启用全项目 TypeScript 静态检查。可复用范围包括格子探索、队伍/席位战斗、剧情、培育与进化、插件事务、命令协议及注册式表现；不是完整通用游戏编辑器。
 
 ## UI 页面装配（0.12）
 

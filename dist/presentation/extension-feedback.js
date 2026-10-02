@@ -22,17 +22,15 @@ export class ExtensionFeedback {
     for (const effect of this.active) {
       ctx.save();
       try {
-        this.definitions
-          .get(effect.id)
-          .draw(ctx, {
-            assets,
-            view,
-            payload: effect.payload,
-            progress: Math.max(
-              0,
-              Math.min(1, (now - effect.start) / effect.duration),
-            ),
-          });
+        this.definitions.get(effect.id).draw(ctx, {
+          assets,
+          view,
+          payload: effect.payload,
+          progress: Math.max(
+            0,
+            Math.min(1, (now - effect.start) / effect.duration),
+          ),
+        });
       } catch (error) {
         this.active = this.active.filter((e) => e !== effect);
         this.onError(error);

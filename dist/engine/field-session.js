@@ -15,6 +15,7 @@ export class FieldSession {
     onMap = () => {},
     onBlocked = () => {},
     movement = null,
+    npcBehaviors,
   }) {
     Object.assign(this, {
       position,
@@ -25,7 +26,7 @@ export class FieldSession {
       onProgress,
       movement,
     });
-    this.npcs = new NPCSystem(maps, objects);
+    this.npcs = new NPCSystem(maps, objects, { behaviors: npcBehaviors });
     this.world = new World(maps, position, {
       deferWarps: true,
       objects: (map = position.map) =>

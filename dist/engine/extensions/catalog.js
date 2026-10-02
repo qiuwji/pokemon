@@ -15,6 +15,7 @@ export const CONTENT_KINDS = Object.freeze([
   "resources",
   "mapExtensions",
   "growthConditions",
+  "npcBehaviors",
 ]);
 /** Startup registration is staged; failed plugin setup cannot leak partial definitions. */
 export class ExtensionCatalog {

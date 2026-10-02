@@ -1,9 +1,18 @@
+import { NPCBehaviorRegistry } from "./npc-behaviors.js";
 import { isWater, ledgeDirection } from "./terrain.js";
 import { DIRECTIONS } from "./world.js";
 // Ambient NPC simulation has its own random stream, so walking never changes battle RNG.
 export class NPCSystem {
-  constructor(maps, definitions, { random = Math.random } = {}) {
-    Object.assign(this, { maps, definitions, random });
+  constructor(
+    maps,
+    definitions,
+    {
+      random = Math.random,
+      behaviors = new NPCBehaviorRegistry(),
+      onError = () => {},
+    } = {},
+  ) {
+    Object.assign(this, { maps, definitions, random, behaviors, onError });
     this.states = new Map();
     this.now = 0;
     this.activeMap = null;
@@ -121,14 +130,17 @@ export class NPCSystem {
       const t = n.duration
         ? Math.min(1, Math.max(0, (now - n.start) / n.duration))
         : 1;
-      const inPlace = n.movement?.mode === "jog";
+      const inPlace = ["jog", "cheer"].includes(n.pose || n.movement?.mode);
+      const bounce = ["hop", "cheer"].includes(n.pose)
+        ? Math.max(0, Math.sin(now / 130)) * 4
+        : 0;
       return {
         ...n,
         px: (n.fromX + (n.toX - n.fromX) * t) * 16,
         py: (n.fromY + (n.toY - n.fromY) * t) * 16,
         progress: inPlace ? (now % 160) / 160 : t,
         moving: this.moving(n, now) || inPlace,
-        lift: n.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0,
+        lift: (n.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0) + bounce,
       };
     });
   }
@@ -162,23 +174,26 @@ export class NPCSystem {
           continue;
         }
         const config = n.movement || { mode: "still" };
-        if (config.mode === "jog") {
-          n.dir = config.dir || n.dir;
+        if (this.moving(n, now) || now < n.next) continue;
+        n.next = now + 800 + this.random() * 1700;
+        let intent;
+        try {
+          intent = this.behaviors.decide(config.mode, {
+            config,
+            dir: n.dir,
+            now,
+            position: { x: n.x, y: n.y },
+            origin: { x: n.originX, y: n.originY },
+            rolls: [this.random(), this.random()],
+          });
+        } catch (error) {
+          this.onError(error);
           continue;
         }
-        if (this.moving(n, now) || now < n.next || config.mode === "still")
-          continue;
-        n.next = now + 800 + this.random() * 1700;
-        let directions =
-          config.mode === "horizontal"
-            ? ["left", "right"]
-            : config.mode === "vertical"
-              ? ["up", "down"]
-              : ["down", "up", "left", "right"];
-        if (config.mode === "patrol") directions = config.path || directions;
-        const dir = directions[Math.floor(this.random() * directions.length)];
+        n.pose = intent.pose;
+        const dir = intent.dir || n.dir;
         n.dir = dir;
-        if (config.mode === "look" || this.random() < 0.22) continue;
+        if (!intent.move) continue;
         const [dx, dy] = DIRECTIONS[dir],
           x = n.x + dx,
           y = n.y + dy;
@@ -222,7 +237,7 @@ export class NPCSystem {
         n.x = n.toX = x;
         n.y = n.toY = y;
         n.start = now;
-        n.duration = 256;
+        n.duration = intent.duration || 256;
         n.foot = (n.foot + 1) % 2;
       }
     }

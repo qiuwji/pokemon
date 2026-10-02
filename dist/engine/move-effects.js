@@ -154,7 +154,7 @@ const MOVE_OPERATIONS = {
   },
   protect: (c) => {
     c.selfState.protected = true;
-    c.emit("保护了自己！");
+    c.emit("保护了自己！", "barrier", { targetSeat: c.side });
   },
   confuse: (c) => {
     c.battle.applyConfusion(c.other, c.side);

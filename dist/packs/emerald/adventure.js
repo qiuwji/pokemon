@@ -1,3 +1,4 @@
+import { NPCBehaviorRegistry } from "../../engine/npc-behaviors.js";
 import { extensionGrowthConditions } from "../../engine/extensions/growth-conditions.js";
 import { StoryEngine } from "../../engine/story.js";
 import { GEN3_GLOBAL_HOOKS } from "../../engine/rules/gen3/global-rules.js";
@@ -53,6 +54,7 @@ export class EmeraldAdventure {
     storage,
     motion,
     director,
+    sceneDirector = null,
     transitions,
     timeline,
     camera = new CameraRig(timeline),
@@ -74,6 +76,7 @@ export class EmeraldAdventure {
       db,
       motion,
       director,
+      sceneDirector,
       transitions,
       timeline,
       camera,
@@ -148,6 +151,7 @@ export class EmeraldAdventure {
     });
     this.commands = new CommandRunner(
       {
+        presentation: (c) => this.sceneDirector.play(c.id, c.payload || {}),
         dialog: (c) => this.ui.say(c.name, c.lines),
         starter: () => this.ui.starterPicker(),
         shop: () => this.ui.showShop(),
@@ -232,6 +236,11 @@ export class EmeraldAdventure {
         resources: storyResources,
         validateCommand: (c) => {
           validateFieldCommand(c, db.maps);
+          if (c.type === "presentation")
+            this.sceneDirector?.validate(c.id, c.payload || {}) ||
+              (() => {
+                throw new Error("Scene presentation unavailable");
+              })();
           if (
             c.type === "battle" &&
             !(c.trainerId
@@ -286,7 +295,8 @@ export class EmeraldAdventure {
       this.field.busy ||
       this.travelDirector.busy ||
       this.growthDirector.busy ||
-      this.growthBusy
+      this.growthBusy ||
+      !!this.sceneDirector?.busy
     );
   }
   newState() {
@@ -372,6 +382,7 @@ export class EmeraldAdventure {
       motion: this.motion,
       transitions: this.transitions,
       movement: this.movement,
+      npcBehaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors),
       now: this.timeline.now,
       objects: (map) => [
         ...objectsFor(
@@ -712,6 +723,24 @@ export class EmeraldAdventure {
       bag: this.state.bag,
       items: this.items,
       effects: this.moveEffects,
+      environment: {
+        terrain: this.world.map.indoor
+          ? "indoor"
+          : isWater(
+                this.world.cell(this.state.position.x, this.state.position.y)
+                  ?.behavior,
+              )
+            ? "water"
+            : this.world.map.presentation?.terrain || "grass",
+      },
+      presentation: options.trainer
+        ? {
+            trainers: [
+              { actor: "BrendanNormal", back: true },
+              { actor: options.script === "rival" ? "MayNormal" : "Youngster" },
+            ],
+          }
+        : {},
       traits: {
         abilities: this.catalog.abilities,
         heldItems: this.catalog.heldItems,
@@ -719,6 +748,17 @@ export class EmeraldAdventure {
       },
       ...options,
     });
+  }
+  async playPresentation(id, payload = {}) {
+    if (this.busy || this.battle || this.ui?.dialog)
+      throw new Error("请先结束当前行动。");
+    if (!this.sceneDirector) throw new Error("Scene presentation unavailable");
+    this.clearInput();
+    try {
+      return await this.sceneDirector.play(id, payload);
+    } finally {
+      this.clearInput();
+    }
   }
   async turn(action) {
     if (this.busy || !this.battle) return false;
@@ -1162,7 +1202,8 @@ export class EmeraldAdventure {
         this.transitions.busy ||
         this.travelDirector.busy ||
         this.growthDirector.busy ||
-        this.growthBusy
+        this.growthBusy ||
+        !!this.sceneDirector?.busy
       ),
       maps: visibleMaps,
       playerFrom: this.motion.moving(now) ? this.motion.sourcePosition : null,

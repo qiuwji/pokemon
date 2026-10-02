@@ -1273,3 +1273,8 @@ button {
 .extension-world-feedback {position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none;z-index:3;}
 [data-network-url], [data-network-command] { display:block; width:100%; margin:8px 0; padding:8px; font:inherit; border:2px solid #7b8b70; background:#eff0d9; color:#344839; }
 [data-network-result] { max-height:180px; overflow:auto; padding:8px; background:#e3e7cd; border:2px solid #899776; font-size:11px; white-space:pre-wrap; overflow-wrap:anywhere; }
+
+#scene-animation { position:absolute; inset:0; z-index:45; pointer-events:auto; background:#102838; }
+.modal { animation: pixel-menu-in 100ms steps(3,end); }
+@keyframes pixel-menu-in { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce) { .modal { animation:none; } }

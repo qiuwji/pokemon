@@ -36,6 +36,7 @@ export class Battle {
     topology,
     format = "singles",
     ai = randomDecision,
+    environment = {},
     traits = {
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
@@ -45,6 +46,7 @@ export class Battle {
     if (!["singles", "doubles"].includes(format))
       throw new Error("Unknown battle format");
     Object.assign(this, { db, rng, trainer, script, items, ai });
+    this.environment = { terrain: environment.terrain || "grass" };
     this.rules = { ...BATTLE_RULES, ...rules };
     this.moveEffects =
       effects instanceof MoveEffectRegistry
@@ -88,6 +90,12 @@ export class Battle {
           ? {
               types: [...this.traits.types(seat)],
               form: this.traits.form(seat),
+              volatile: {
+                stages: { ...this.conditions.get(seat).stages },
+                protected: !!this.conditions.get(seat).protected,
+                barriers: [...(this.conditions.get(seat).barriers || [])],
+                substitute: !!this.conditions.get(seat).substitute,
+              },
             }
           : {},
     );
@@ -109,13 +117,11 @@ export class Battle {
     this.entryView = this.snapshot();
     const initial = new BattleCheckpoint(this);
     try {
-      const seats = this.roster
-        .occupied()
-        .map((seat, index) => ({
-          seat,
-          index,
-          speed: this.speed(this.roster.occupant(seat.id), seat.id),
-        }));
+      const seats = this.roster.occupied().map((seat, index) => ({
+        seat,
+        index,
+        speed: this.speed(this.roster.occupant(seat.id), seat.id),
+      }));
       seats.sort((a, b) => b.speed - a.speed || a.index - b.index);
       for (const { seat } of seats) {
         this.conditions.get(seat.id).entryTurn = 0;
@@ -182,6 +188,10 @@ export class Battle {
   decisionView() {
     return {
       homeAlliance: this.homeAlliance,
+      environment: {
+        ...this.environment,
+        weather: this.traits?.weather() || null,
+      },
       decision: {
         required: this.decisions?.required().map((s) => s.id) || [],
         queued: [...(this.decisions?.pending.keys() || [])],
@@ -232,10 +242,19 @@ export class Battle {
         allowed: true,
       };
     this.traits?.run("stage-check", permission);
+    const before = this.conditions.get(targetSeat).stages[key] || 0;
     const changed =
       permission.allowed &&
       this.conditions.changeStage(targetSeat, key, amount);
-    if (changed) this.traits?.run("stage-applied", permission);
+    if (changed) {
+      this.emit("能力发生了变化！", "stage", {
+        targetSeat,
+        actorSeat: this.seatId(sourceSeat),
+        stat: key,
+        amount: this.conditions.get(targetSeat).stages[key] - before,
+      });
+      this.traits?.run("stage-applied", permission);
+    }
     return changed;
   }
   applyConfusion(targetSeat, sourceSeat) {

@@ -13,6 +13,10 @@ export function createEmeraldCommandFacade(
     to: plan.to,
   });
   const routes = {
+    playPresentation: (id, payload = {}) => [
+      "presentation.play",
+      { id, payload: JSON.stringify(payload) },
+    ],
     move: (direction, { running = false } = {}) => [
       "field.move",
       { direction, running },
@@ -83,6 +87,7 @@ export function createEmeraldCommandFacade(
     advancePlayTime: () => ["session.play-time", {}],
   };
   const objectFailures = new Set([
+    "playPresentation",
     "useItem",
     "equipItem",
     "depositDaycare",

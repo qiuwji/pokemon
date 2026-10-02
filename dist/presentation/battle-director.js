@@ -20,8 +20,16 @@ const DURATIONS = {
 };
 /** Seat-based animation state. It consumes snapshots and never calculates battle rules. */
 export class BattleDirector {
-  constructor(timeline, { profiles = {}, reducedMotion = () => false } = {}) {
-    Object.assign(this, { timeline, profiles, reducedMotion });
+  constructor(
+    timeline,
+    {
+      profiles = {},
+      registry = null,
+      onCue = () => {},
+      reducedMotion = () => false,
+    } = {},
+  ) {
+    Object.assign(this, { timeline, profiles, registry, reducedMotion, onCue });
     this.reset();
   }
   reset(view = null) {
@@ -45,7 +53,9 @@ export class BattleDirector {
   duration(event) {
     return event.kind === "capture"
       ? 700 + event.shakes * 420
-      : (DURATIONS[event.kind] ?? DURATIONS.text);
+      : event.kind === "move" && this.registry?.moves.has(event.move?.id)
+        ? this.registry.moves.get(event.move.id).duration
+        : (DURATIONS[event.kind] ?? DURATIONS.text);
   }
   async play(event, { message = () => {} } = {}) {
     event = battleView(event);
@@ -60,6 +70,7 @@ export class BattleDirector {
         this.event = { data: event, previous, start, duration };
         if (event.kind === "switch") this.hidden.delete(event.targetSeat);
         message(event.text || "");
+        this.onCue(event.kind, event);
       },
       () => {
         if (event.kind === "faint" || event.kind === "vacancy")
@@ -98,6 +109,9 @@ export class BattleDirector {
       flash: false,
     }));
     const result = {
+      registry: this.registry,
+      now,
+      reducedMotion: this.reducedMotion(),
       view: current,
       combatants,
       actors,
@@ -123,12 +137,20 @@ export class BattleDirector {
           c.monster.hp = Math.round(lerp(old.hp, c.monster.hp, clamp(t / 0.8)));
       }
     if (this.reducedMotion() || e.offscreen) return result;
-    if (e.kind === "entry")
+    if (e.kind === "entry") {
+      result.trainers = (e.trainers || []).map((trainer, i) => ({
+        ...trainer,
+        x:
+          (trainer.back ? 65 : 248) +
+          (trainer.back ? -1 : 1) * Math.max(0, 1 - t * 4) * 140,
+        y: trainer.back ? 158 : 74,
+        opacity: Math.max(0, 1 - t / 0.55),
+      }));
       for (const a of actors) {
         a.x = (layout.get(a.seatId).back ? -130 : 150) * (1 - t);
-        a.opacity = t;
+        a.opacity = e.trainers?.length ? clamp((t - 0.25) / 0.75) : t;
       }
-    else if (e.kind === "move" && actor) {
+    } else if (e.kind === "move" && actor) {
       const profile =
         this.profiles[e.move?.id] ||
         (e.move?.power === 0
@@ -138,25 +160,61 @@ export class BattleDirector {
               )
             ? "projectile"
             : "contact");
-      if (profile === "contact") {
-        actor.x = Math.round(Math.sin(t * Math.PI) * (pose.back ? 20 : -20));
+      const lunge =
+        this.registry?.animation(e.move, profile).lunge ??
+        (profile === "contact" ? 20 : 0);
+      if (lunge) {
+        actor.x = Math.round(
+          Math.sin(t * Math.PI) * (pose.back ? lunge : -lunge),
+        );
         actor.y = -Math.round(Math.sin(t * Math.PI) * 6);
       }
       const targets = e.targetSeats || [e.targetSeat];
-      result.effects = targets
-        .filter((id) => layout.has(id))
-        .map((id) => ({
-          kind: profile,
-          type: e.move?.type || "normal",
-          successful: e.move?.successful !== false,
-          source: pose,
-          target: layout.get(id),
-          sourceSeat: e.actorSeat,
-          targetSeat: id,
-          side: pose.back ? 0 : 1,
+      result.effects = this.registry
+        ? this.registry.sampleMove(e, layout, t, profile)
+        : targets
+            .filter((id) => layout.has(id))
+            .map((id) => ({
+              kind: profile,
+              type: e.move?.type || "normal",
+              successful: e.move?.successful !== false,
+              source: pose,
+              target: layout.get(id),
+              sourceSeat: e.actorSeat,
+              targetSeat: id,
+              side: pose.back ? 0 : 1,
+              t,
+            }));
+    } else if (
+      ["stage", "status", "barrier"].includes(e.kind) &&
+      layout.has(e.targetSeat)
+    ) {
+      result.effects = [
+        {
+          kind:
+            e.kind === "stage"
+              ? "stages"
+              : e.kind === "status"
+                ? "ailment"
+                : "shield",
+          target: layout.get(e.targetSeat),
+          source: layout.get(e.actorSeat) || layout.get(e.targetSeat),
+          ...(e.amount === undefined ? {} : { amount: e.amount }),
+          status: e.status || "confusion",
           t,
-        }));
+        },
+      ];
     } else if (e.kind === "hurt" && actor) {
+      if (e.hit)
+        result.effects = [
+          {
+            kind: "contact",
+            source: layout.get(e.actorSeat) || pose,
+            target: pose,
+            t: 0.5 + t * 0.4,
+            type: e.moveType || "normal",
+          },
+        ];
       actor.x = Math.round(Math.sin(t * Math.PI * 10) * 5 * (1 - t));
       actor.flash = t < 0.65 && Math.floor(t * 12) % 2 === 0;
     } else if (e.kind === "faint" && actor) {

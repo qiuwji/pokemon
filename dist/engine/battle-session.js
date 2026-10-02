@@ -37,6 +37,7 @@ export class BattleSession {
         this.director.reset(view);
         entry = {
           kind: "entry",
+          trainers: options.trainer ? options.presentation?.trainers || [] : [],
           ...view,
           text: options.trainer ? "训练家发起了挑战！" : "野生宝可梦出现了！",
         };

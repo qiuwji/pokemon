@@ -1,3 +1,4 @@
+import { NPCBehaviorRegistry } from "../../engine/npc-behaviors.js";
 import { EMERALD_PLUGIN_PERMISSIONS } from "./extension-intents.js";
 import { validateWorldExtensions } from "../../engine/extensions/world-content.js";
 import { extensionGrowthConditions } from "../../engine/extensions/growth-conditions.js";
@@ -41,6 +42,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     effects.validateMoves(c.moves);
     createItemService(c.items);
     new MovementRegistry(c.movement);
+    const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors);
     new EvolutionService({
       db: { ...db, ...c },
       abilities: c.abilities,
@@ -62,7 +64,21 @@ export function createEmeraldPlugins(db, plugins, onError) {
         resource.length > 4096
       )
         throw new Error(`Invalid resource ${id}`);
+    for (const definition of host.moveAnimations.values())
+      if (!c.moves[definition.moveId])
+        throw new Error("Unknown animation move");
     for (const [id, map] of Object.entries(c.maps)) {
+      for (const element of map.elements || [])
+        if (
+          element.movement?.mode &&
+          !npcBehaviors.definitions.has(element.movement.mode)
+        )
+          throw new Error("Unknown NPC behavior");
+      if (
+        map.presentation?.weather &&
+        !["rain", "sun", "sand", "hail"].includes(map.presentation.weather)
+      )
+        throw new Error("Unknown field weather");
       if (
         (map.elements || []).some(
           (e) =>

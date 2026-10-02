@@ -1,3 +1,11 @@
+import { TransitionPatterns } from "./presentation/transition-patterns.js";
+import {
+  createEmeraldAudio,
+  emeraldMusic,
+} from "./packs/emerald/audio-library.js";
+import { SceneDirector } from "./presentation/scene-director.js";
+import { SceneDOM } from "./adapters/scene-dom.js";
+import { createEmeraldSceneDefinitions } from "./packs/emerald/presentation-scenes.js";
 import { createEmeraldCommandFacade } from "./packs/emerald/command-facade.js";
 import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "./packs/emerald/extension-ports.js";
@@ -16,6 +24,7 @@ import { BattleDirector } from "./presentation/battle-director.js";
 import { TransitionDOM } from "./presentation/transition-dom.js";
 import { EmeraldAdventure } from "./packs/emerald/adventure.js";
 import { createEmeraldInterface } from "./packs/emerald/interface.js";
+import { createEmeraldPresentation } from "./packs/emerald/animations.js";
 import { ANIMATION_PROFILES } from "./packs/emerald/story.js";
 
 // Composition root: chooses a content pack, adapters and services; no gameplay rules.
@@ -34,23 +43,63 @@ async function boot() {
       console.error,
     );
     const assets = await loadAssets(db);
+    const reducedMotion = () =>
+      matchMedia("(prefers-reduced-motion: reduce)").matches;
     const timeline = new Timeline(),
       camera = new CameraRig(timeline),
       renderer = new Renderer($("game"), db, assets, {
         playerActors: PACK.playerActors,
         travelActor: PACK.travelActor,
         cameraRig: camera,
+        environment: (map) => ({
+          weather: map.presentation?.weather || null,
+          hour: new Date().getHours(),
+        }),
+        reducedMotion,
       });
-    const reducedMotion = () =>
-      matchMedia("(prefers-reduced-motion: reduce)").matches;
     const transitions = new TransitionController(timeline, { reducedMotion });
+    const audio = new AudioAdapter({
+      cues: createEmeraldAudio(host),
+      onError: console.error,
+    });
     const director = new BattleDirector(timeline, {
       profiles: ANIMATION_PROFILES,
+      registry: createEmeraldPresentation({ host, onError: console.error }),
+      onCue: (kind) => {
+        const id = {
+          move: "attack",
+          hurt: "hurt",
+          heal: "heal",
+          level: "reward",
+        }[kind];
+        if (id) audio.play("emerald:" + id);
+      },
       reducedMotion,
     });
-    const growthOverlay = new GrowthDOM($("growth-animation"));
-    const overlay = new TransitionDOM($("transition")),
-      audio = new AudioAdapter();
+    const sceneDefinitions = createEmeraldSceneDefinitions(host),
+      sceneDirector = new SceneDirector({
+        timeline,
+        definitions: sceneDefinitions,
+        reducedMotion,
+        onCue: (id) => {
+          if (id) audio.play(id);
+        },
+      }),
+      sceneOverlay = new SceneDOM($("scene-animation"), {
+        definitions: sceneDefinitions,
+        assets,
+        onError: console.error,
+      });
+    const growthOverlay = new GrowthDOM($("growth-animation"), {
+      asset: (id) => db.resources?.[id + "-front"] || `assets/${id}-front.png`,
+    });
+    const patterns = new TransitionPatterns();
+    for (const [id, definition] of host.transitionPatterns)
+      patterns.register(id, definition.draw);
+    const overlay = new TransitionDOM($("transition"), {
+      patterns,
+      onError: console.error,
+    });
     let input, sceneTimer;
     const adventure = new EmeraldAdventure({
       db,
@@ -59,6 +108,7 @@ async function boot() {
       storage: localStorage,
       motion: renderer.motion,
       director,
+      sceneDirector,
       transitions,
       timeline,
       camera,
@@ -76,7 +126,9 @@ async function boot() {
           : "尚未存档"),
       onMap: (title, id) => {
         $("location").textContent = title;
-        $("weather").textContent = db.maps[id].indoor ? "室内" : "晴朗 · 白天";
+        $("weather").textContent = db.maps[id].indoor
+          ? "室内"
+          : `${{ rain: "雨天", sun: "晴朗", sand: "沙尘", hail: "冰雹" }[db.maps[id].presentation?.weather] || "晴朗"} · ${new Date().getHours() < 6 || new Date().getHours() >= 20 ? "夜晚" : new Date().getHours() >= 17 ? "傍晚" : "白天"}`;
         $("scene-name").textContent = title;
         $("scene-name").classList.add("show");
         clearTimeout(sceneTimer);
@@ -106,7 +158,9 @@ async function boot() {
     $("sound").onclick = () => {
       audio.enabled = !audio.enabled;
       $("sound").textContent = audio.enabled ? "♫" : "♪";
-      $("sound").ariaLabel = audio.enabled ? "关闭音效" : "开启音效";
+      $("sound").ariaLabel = audio.enabled
+        ? "关闭音乐与音效"
+        : "开启音乐与音效";
       audio.tone();
       ui.toast(audio.enabled ? "音效已开启。" : "音效已关闭。");
     };
@@ -140,6 +194,12 @@ async function boot() {
     });
     function frame(now) {
       if (!document.hidden) {
+        audio.setMusic(
+          emeraldMusic({
+            battle: !!game.battle,
+            map: { ...game.world.map, id: game.state.position.map },
+          }),
+        );
         input.tick();
         const visible = renderer.graph.visible(
           game.state.position.map,
@@ -156,6 +216,7 @@ async function boot() {
             movementMode: game.state.movement.mode,
             travel: game.travelDirector.sample(now),
           });
+        sceneOverlay.render(sceneDirector.sample(now));
         overlay.render(transitions.sample(now));
         growthOverlay.render(game.growthDirector.sample(now));
         ui.extensions?.render(now, {
@@ -166,6 +227,7 @@ async function boot() {
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
+    window.addEventListener("pagehide", () => audio.dispose(), { once: true });
   } catch (error) {
     $("loading").innerHTML = "<p>游戏未能载入，请刷新页面重试。</p>";
     console.error(error);

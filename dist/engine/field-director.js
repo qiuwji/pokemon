@@ -1,3 +1,4 @@
+import { FIELD_EMOTES } from "./presentation-cues.js";
 import { World, DIRECTIONS } from "./world.js";
 import { findRoute } from "./pathfinding.js";
 
@@ -181,8 +182,7 @@ export class FieldDirector {
   }
   async emote({ actor, kind = "exclamation", ms = 600 }) {
     this.actor(actor);
-    if (!["exclamation", "question", "heart"].includes(kind))
-      throw new Error(`Unknown emote ${kind}`);
+    if (!FIELD_EMOTES.includes(kind)) throw new Error(`Unknown emote ${kind}`);
     if (this.emotes.has(actor))
       throw new Error(`Emote already active: ${actor}`);
     this.emotes.set(actor, { actor, kind, map: this.field.position.map });
@@ -222,7 +222,11 @@ export function storyResources(c) {
   if (c.type === "emote") return [`emote:${c.actor}`];
   if (["cameraTo", "cameraFollow"].includes(c.type)) return ["camera"];
   if (c.type === "dialog") return ["dialog"];
-  if (["scene", "teleport", "battle", "starter", "shop"].includes(c.type))
+  if (
+    ["scene", "teleport", "battle", "starter", "shop", "presentation"].includes(
+      c.type,
+    )
+  )
     return ["*"];
   if (
     [
@@ -292,7 +296,7 @@ export function validateFieldCommand(c, maps) {
   if (
     c.type === "emote" &&
     c.kind !== undefined &&
-    !["exclamation", "question", "heart"].includes(c.kind)
+    !FIELD_EMOTES.includes(c.kind)
   )
     fail();
   if (

@@ -93,6 +93,7 @@ export class MoveExecutor {
         power: move.power,
         effect: move.effect,
         successful: true,
+        targetResults: [],
       },
     });
     const movePermission = { ...initial, allowed: true };
@@ -115,12 +116,15 @@ export class MoveExecutor {
       c.targetMode = b.targeting.mode(move);
       c.power = initial.power;
       b.phase = "hit-check";
+      const visualResult = { seatId: target.id, successful: false };
+      event.move.targetResults.push(visualResult);
       if (!this.hits(c)) continue;
       if (definition.primary) {
         b.traits?.run("primary", c);
         b.phase = "primary";
         c.successful = true;
         b.moveEffects.run("primary", c);
+        visualResult.successful = !!c.successful;
         successful ||= c.successful;
         continue;
       }
@@ -129,6 +133,7 @@ export class MoveExecutor {
       b.phase = "before-damage";
       b.moveEffects.run("beforeDamage", c, { scope: "target" });
       this.deal(c);
+      visualResult.successful = c.dealt > 0;
       total += c.dealt;
       if (c.dealt)
         initial.drains.push({ targetSeat: c.targetSeat, amount: c.dealt });
@@ -248,7 +253,12 @@ export class MoveExecutor {
       c.emit(
         `${result.critical ? "击中了要害！ " : ""}${result.type === 0 ? "没有效果。" : result.type > 1 ? "效果拔群！" : result.type < 1 ? "效果不太好…" : "攻击命中了！"}`,
         "hurt",
-        { targetSeat: c.other, hit: i + 1 },
+        {
+          targetSeat: c.other,
+          hit: i + 1,
+          moveId: c.move.id,
+          moveType: c.move.type,
+        },
       );
       b.traits?.run("after-hit", { ...c, amount, hit: i + 1 });
       if (c.move.contact)

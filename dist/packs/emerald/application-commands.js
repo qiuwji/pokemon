@@ -44,6 +44,13 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register(
+    "presentation.play",
+    objectSchema({ id, payload: { type: "string", maxLength: 4096 } }, ["id"]),
+    ({ id, payload }) =>
+      game.playPresentation(id, payload ? JSON.parse(payload) : {}),
+    { mode: "async", plugin: true, permission: "presentation" },
+  );
   register("field.interact", empty, () => game.interact(), {
     ready: () =>
       !!game.ui?.dialog || (!game.busy && !game.battle && !game.ui?.blocked),

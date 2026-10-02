@@ -129,10 +129,12 @@ python3 tools/import-encounters.py /path/to/pokeemerald
 76 个特性、66 种持有效果的入口与范围见 [覆盖清单](GEN3_RULE_COVERAGE.md)。亲密度、蛋时钟、培育、育成账本和复杂进化已形成独立领域服务，基础检查已通过；P4 移动模式、P5 完整可玩界面/演出、P6 插件宿主和 P7 网络入口仍在继续实现。该版本是工程进度检查点，不代表全部目标完成。
 
 
-当前 v0.8.0：248 项检查。旅行菜单可在领取图鉴后借用研究装备，试用自行车、103 号道路冲浪和已到访城镇飞行。详细边界与复用入口见 [移动架构](MOVEMENT_ARCHITECTURE.md)。P5 可玩育成、P6 插件和 P7 网络入口仍在执行，尚未宣称全部完成。开发用 `npm run dev` 禁用缓存。
+当前 v0.8.0：248 项检查。旅行菜单可在领取图鉴后借用研究装备，试用自行车、103 号道路冲浪和已到访城镇飞行。详细边界与复用入口见 [移动架构](MOVEMENT_ARCHITECTURE.md)。P5 可玩育成、P6 插件和 P7 网络入口已完成其工程阶段，详见各架构文档。开发用 `npm run dev` 禁用缓存。
 
 育成与进化架构见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)。v0.9.0 可在研究所寄存、领蛋、孵化与交换，伙伴详情支持进化石；旧开发档不兼容。
 
 插件 API 1 与 14 项能力见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md)。v0.10.0 启动加载两个独立插件，详情页支持抚摸/玩耍/喂食，研究所东侧通往插件观察室。开发存档版本 6，不兼容旧开发档。
 
 统一命令与网络协议见 [NETWORK_ARCHITECTURE.md](NETWORK_ARCHITECTURE.md)。v0.11.0 菜单的“扩展连接”支持本地协议验证及可替换 WebSocket；网络控制当前单机，不等于多人同步。
+
+当前 v0.13.0：UI 按页面拆分，表现采用注册式效果与招式脚本，新增持续天气/状态、野外环境、可扩展场景与音频。312 项检查通过。[表现扩展架构](PRESENTATION_ARCHITECTURE.md) 说明复用入口与内容边界。

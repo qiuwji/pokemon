@@ -1,3 +1,7 @@
+import {
+  drawWeather,
+  drawDaylight,
+} from "../presentation/environment-canvas.js";
 import { drawBattle } from "../presentation/battle-canvas.js";
 import { drawFieldEmote } from "../presentation/field-canvas.js";
 import { SceneGraph, GridMotion, actorFrame } from "../engine/motion.js";
@@ -11,6 +15,8 @@ export class Renderer {
       playerActors = { walk: "Player", run: "PlayerRun" },
       cameraRig = null,
       travelActor = null,
+      environment = () => ({ weather: null, hour: 12 }),
+      reducedMotion = () => false,
     } = {},
   ) {
     Object.assign(this, {
@@ -20,6 +26,8 @@ export class Renderer {
       playerActors,
       cameraRig,
       travelActor,
+      environment,
+      reducedMotion,
     });
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
@@ -207,6 +215,15 @@ export class Renderer {
       const x = n.px - this.camera.x,
         y = n.py - this.camera.y;
       if (x < -32 || x > 352 || y < -32 || y > 256) continue;
+      // Shadows are visual poses; height never changes grid occupancy.
+      if (n.actor !== "BirchsBag") {
+        c.save();
+        c.globalAlpha = 0.2;
+        c.fillStyle = "#182838";
+        c.fillRect(Math.round(x + 2), Math.round(y + 11), 12, 3);
+        c.fillRect(Math.round(x + 4), Math.round(y + 10), 8, 5);
+        c.restore();
+      }
       if (n.player) {
         if (travel?.carrier && this.travelActor)
           this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
@@ -255,6 +272,12 @@ export class Renderer {
         );
     }
     for (const id of ids) this.drawMap(id, true, now);
+    const environment = this.environment(m, now);
+    drawDaylight(c, environment.hour, { indoor: m.indoor });
+    drawWeather(c, m.indoor ? null : environment.weather, now, {
+      height: 224,
+      reducedMotion: this.reducedMotion(),
+    });
     for (const cue of emotes) {
       const n = all.find((n) => n.id === cue.actor && n.map === cue.map);
       if (!n) continue;
@@ -273,7 +296,8 @@ export class Renderer {
   }
 }
 export async function loadAssets(db) {
-  for (const [id, pack] of Object.entries(db.tilesets)) if(!Object.isFrozen(pack)) pack.id = id;
+  for (const [id, pack] of Object.entries(db.tilesets))
+    if (!Object.isFrozen(pack)) pack.id = id;
   const ids = [
     "battle-bg",
     ...Object.keys(db.resources || {}),
