@@ -1,6 +1,13 @@
 /** Public content contracts for editors and future TypeScript clients. Runtime validation is separate. */
 export type Status = "poison" | "burn" | "paralysis" | "sleep" | "freeze";
 export type Condition =
+  | {
+      compare: {
+        query: { id: string; input?: Record<string, Json> };
+        op: "eq" | "ne" | "gt" | "gte" | "lt" | "lte";
+        value: string | number | boolean | null;
+      };
+    }
   | { all: Condition[] }
   | { any: Condition[] }
   | { not: Condition }
@@ -8,6 +15,7 @@ export type Condition =
   | { event: string }
   | { reward: string };
 export interface StoryProgress {
+  variables?: Record<string, string | number | boolean | null>;
   completed: string[];
   rewards: string[];
 }
@@ -336,7 +344,8 @@ export type ContentKind =
   | "npcBehaviors"
   | "trainers"
   | "encounters"
-  | "battleStrategies";
+  | "battleStrategies"
+  | "conditionQueries";
 export interface PluginStateDefinition {
   clock: "step" | "round" | "manual" | "permanent";
   schema: DataSchema;

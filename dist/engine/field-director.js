@@ -243,6 +243,7 @@ export function storyResources(c) {
       "completeEvent",
       "captureMonster",
       "lossPenalty",
+      "setVariable",
     ].includes(c.type)
   )
     return ["state"];

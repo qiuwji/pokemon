@@ -1,9 +1,13 @@
+import { matchesRegion, validateRegion } from "./field-triggers.js";
+import { validStoryVariables } from "./story-variables.js";
+import { DEFAULT_CONDITION_QUERIES } from "./condition-queries.js";
 import { matchesCondition, validateCondition } from "./conditions.js";
 
 export const emptyStoryProgress = () => ({ completed: [], rewards: [] });
 export function validStoryProgress(progress) {
   return (
     !!progress &&
+    validStoryVariables(progress.variables) &&
     [progress.completed, progress.rewards].every(
       (v) =>
         Array.isArray(v) &&
@@ -14,7 +18,12 @@ export function validStoryProgress(progress) {
 }
 /** Selection is pure. Completion is a final command, separate from animation execution. */
 export class StoryEngine {
-  constructor(events, quests = []) {
+  constructor(
+    events,
+    quests = [],
+    { queries = DEFAULT_CONDITION_QUERIES } = {},
+  ) {
+    this.queries = queries;
     this.events = events;
     this.quests = quests;
     const ids = new Set(events.map((e) => e.id));
@@ -22,7 +31,13 @@ export class StoryEngine {
     for (const event of events) {
       if (!event.id || !event.trigger || typeof event.build !== "function")
         throw new Error(`Invalid event ${event.id}`);
-      validateCondition(event.requires, ids, `events.${event.id}.requires`);
+      if (event.where) validateRegion(event.where, `events.${event.id}.where`);
+      validateCondition(
+        event.requires,
+        ids,
+        `events.${event.id}.requires`,
+        queries,
+      );
       if (event.after?.some((id) => !ids.has(id)))
         throw new Error(`events.${event.id}: unknown prerequisite`);
     }
@@ -37,17 +52,19 @@ export class StoryEngine {
     for (const q of quests) {
       if (!q.id || questIds.has(q.id)) throw new Error(`Invalid quest ${q.id}`);
       questIds.add(q.id);
-      validateCondition(q.requires, ids, `quests.${q.id}.requires`);
-      validateCondition(q.complete, ids, `quests.${q.id}.complete`);
+      validateCondition(q.requires, ids, `quests.${q.id}.requires`, queries);
+      validateCondition(q.complete, ids, `quests.${q.id}.complete`, queries);
     }
   }
   resolve(trigger, state, context = {}) {
     const event = this.events.find(
       (e) =>
         e.trigger === trigger &&
+        (!e.where ||
+          matchesRegion(e.where, context.position || state.position)) &&
         (!e.once || !state.story?.completed.includes(e.id)) &&
         (e.after || []).every((id) => state.story?.completed.includes(id)) &&
-        matchesCondition(e.requires, state) &&
+        matchesCondition(e.requires, state, this.queries) &&
         (!e.match || e.match(context, state)),
     );
     if (!event) return [];
@@ -60,8 +77,8 @@ export class StoryEngine {
     return (
       this.quests.find(
         (q) =>
-          matchesCondition(q.requires, state) &&
-          (!q.complete || !matchesCondition(q.complete, state)),
+          matchesCondition(q.requires, state, this.queries) &&
+          (!q.complete || !matchesCondition(q.complete, state, this.queries)),
       ) || null
     );
   }

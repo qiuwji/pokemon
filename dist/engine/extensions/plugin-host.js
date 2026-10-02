@@ -9,6 +9,7 @@ import {
   localId,
   freeze,
   readOnly,
+  jsonValue,
   validateSchema,
   callSync,
 } from "./values.js";
@@ -110,6 +111,17 @@ export class PluginHost {
         id: owner,
         content: Object.freeze({
           register: (kind, id, value) => {
+            if (kind === "conditionQueries") {
+              const original = value;
+              if (typeof original.read !== "function")
+                throw new Error("Condition query requires read");
+              value = {
+                ...value,
+                schema: validateSchema(value.schema),
+                read: (state, input) =>
+                  evaluate(original.read, readOnly(state), readOnly(input)),
+              };
+            }
             if (kind === "battleStrategies") {
               const original = value;
               if (typeof original.decide !== "function")
@@ -185,8 +197,17 @@ export class PluginHost {
         }),
         story: Object.freeze({
           register: (id, definition) => {
-            if (typeof definition.build !== "function")
-              throw new Error("Story requires a command builder");
+            if (
+              (typeof definition.build === "function") ===
+              Array.isArray(definition.commands)
+            )
+              throw new Error(
+                "Story requires exactly one command builder or command array",
+              );
+            const declarative =
+              definition.commands === undefined
+                ? null
+                : readOnly(definition.commands);
             return register(staged.story, id, {
               ...definition,
               ...(definition.match
@@ -200,11 +221,13 @@ export class PluginHost {
                   }
                 : {}),
               build: (state, context) =>
-                evaluate(
-                  definition.build,
-                  readOnly(state),
-                  readOnly(staged.storyContext(context)),
-                ),
+                declarative
+                  ? jsonValue(declarative)
+                  : evaluate(
+                      definition.build,
+                      readOnly(state),
+                      readOnly(staged.storyContext(context)),
+                    ),
             });
           },
         }),
@@ -318,6 +341,9 @@ export class PluginHost {
   }
   storyContext(context) {
     return {
+      ...(context.map ? { map: context.map } : {}),
+      ...(context.position ? { position: context.position } : {}),
+      ...(context.cell ? { cell: context.cell } : {}),
       ...(context.object ? { object: context.object } : {}),
       ...(context.mapTitle ? { mapTitle: context.mapTitle } : {}),
       ...(context.battle

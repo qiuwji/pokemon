@@ -19,6 +19,7 @@ export const CONTENT_KINDS = Object.freeze([
   "trainers",
   "encounters",
   "battleStrategies",
+  "conditionQueries",
 ]);
 /** Startup registration is staged; failed plugin setup cannot leak partial definitions. */
 export class ExtensionCatalog {

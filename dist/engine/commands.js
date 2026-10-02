@@ -2,9 +2,16 @@
 export class CommandRunner {
   constructor(
     handlers,
-    { resources = () => [], validateCommand = () => {} } = {},
+    {
+      resources = () => [],
+      validateCommand = () => {},
+      testCondition,
+      choose,
+    } = {},
   ) {
     this.handlers = handlers;
+    this.testCondition = testCondition;
+    this.choose = choose;
     this.resources = resources;
     this.validateCommand = validateCommand;
   }
@@ -14,7 +21,35 @@ export class CommandRunner {
     for (const c of commands) {
       if (!c || typeof c.type !== "string")
         throw new Error("Invalid story command");
-      if (c.type === "sequence" || c.type === "parallel") {
+      if (c.type === "if") {
+        if (!this.testCondition)
+          throw new Error("Story conditions unavailable");
+        this.validateCommand(c);
+        this.validate(c.then);
+        this.validate(c.else || []);
+      } else if (c.type === "choice") {
+        if (
+          !this.choose ||
+          !Array.isArray(c.options) ||
+          c.options.length < 2 ||
+          c.options.length > 16 ||
+          typeof c.name !== "string" ||
+          typeof c.prompt !== "string" ||
+          new Set(c.options.map((o) => o.id)).size !== c.options.length ||
+          c.options.some(
+            (o) =>
+              typeof o.id !== "string" ||
+              !o.id ||
+              typeof o.label !== "string" ||
+              !o.label,
+          )
+        )
+          throw new Error("Invalid story choice");
+        if (c.cancel !== undefined && !c.options.some((o) => o.id === c.cancel))
+          throw new Error("Invalid story choice cancellation");
+        this.validateCommand(c);
+        for (const option of c.options) this.validate(option.commands || []);
+      } else if (c.type === "sequence" || c.type === "parallel") {
         this.validate(c.commands);
         if (c.type === "parallel") {
           const owned = new Set();
@@ -36,6 +71,19 @@ export class CommandRunner {
     }
   }
   claims(command) {
+    if (command.type === "if")
+      return new Set(
+        [...command.then, ...(command.else || [])].flatMap((c) => [
+          ...this.claims(c),
+        ]),
+      );
+    if (command.type === "choice")
+      return new Set([
+        "*",
+        ...command.options.flatMap((o) =>
+          (o.commands || []).flatMap((c) => [...this.claims(c)]),
+        ),
+      ]);
     if (command.type === "sequence" || command.type === "parallel")
       return new Set(command.commands.flatMap((c) => [...this.claims(c)]));
     return new Set(this.resources(command));
@@ -51,6 +99,16 @@ export class CommandRunner {
     }
   }
   async execute(c) {
+    if (c.type === "if")
+      return this.sequence(
+        this.testCondition(c.condition) ? c.then : c.else || [],
+      );
+    if (c.type === "choice") {
+      const id = await this.choose(c);
+      const selected = c.options.find((o) => o.id === id);
+      if (!selected) throw new Error("Invalid story choice result");
+      return this.sequence(selected.commands || []);
+    }
     if (c.type === "sequence") return this.sequence(c.commands);
     if (c.type === "parallel") {
       // Drain every branch before releasing the scene. No late writes after a failure.

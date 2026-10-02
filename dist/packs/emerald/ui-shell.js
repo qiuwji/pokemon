@@ -128,6 +128,30 @@ export function createUIShell(
     });
   }
 
+  function choose(name, prompt, options, cancel) {
+    return new Promise((resolve) => {
+      const complete = (id) => {
+        closeModal();
+        resolve(id);
+      };
+      modal(
+        name,
+        `<p>${escapeHTML(prompt)}</p><div class="menu-grid">${options.map((o) => `<button class="menu-tile" data-choice="${escapeHTML(o.id)}">${escapeHTML(o.label)}</button>`).join("")}</div>`,
+        {
+          type: "story-choice",
+          close: false,
+          back: () => {
+            if (cancel) complete(cancel);
+          },
+        },
+      );
+      root
+        .querySelectorAll("[data-choice]")
+        .forEach(
+          (button) => (button.onclick = () => complete(button.dataset.choice)),
+        );
+    });
+  }
   function renderDialogue() {
     const d = $("dialogue");
     if (!dialog) {
@@ -183,7 +207,7 @@ export function createUIShell(
     canvas.focus({ preventScroll: true });
   }
   function back() {
-    if (game.busy && !dialog) return;
+    if (game.busy && !dialog && modalType !== "story-choice") return;
     if (modalType === "learning" || modalType === "evolution") return;
     if (root.children.length) {
       modalBack ? modalBack() : closeModal();
@@ -211,6 +235,7 @@ export function createUIShell(
     hpTrack,
     hpColor,
     say,
+    choose,
     nextDialogue,
     renderDialogue,
     back,

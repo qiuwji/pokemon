@@ -1,3 +1,5 @@
+import { validateTrainerSight } from "./field-triggers.js";
+import { ConditionQueries } from "./condition-queries.js";
 import { jsonValue, readOnly } from "./extensions/values.js";
 import { validateCondition } from "./conditions.js";
 
@@ -16,6 +18,7 @@ const objectFields = [
   "name",
   "text",
   "trainerId",
+  "sightRange",
   "movement",
   "requires",
 ];
@@ -29,6 +32,7 @@ const exact = (value, keys) =>
 export class WorldStateService {
   constructor({ db, state = emptyWorldState(), objects = () => [] }) {
     Object.assign(this, { db, state, objects });
+    this.queries = new ConditionQueries(db.conditionQueries);
     this.cache = new Map();
     this.cacheRevision = -1;
     this.validateState(state);
@@ -98,6 +102,11 @@ export class WorldStateService {
         throw new Error("Invalid object text");
     if (value.trainerId !== undefined && !this.db.trainers?.[value.trainerId])
       throw new Error("Unknown world trainer");
+    if (value.sightRange !== undefined)
+      validateTrainerSight({
+        ...value,
+        trainerId: value.trainerId || (!full ? "existing" : undefined),
+      });
     if (value.movement !== undefined) {
       const movement = value.movement;
       if (
@@ -113,7 +122,12 @@ export class WorldStateService {
       )
         throw new Error("Invalid world movement");
     }
-    validateCondition(value.requires);
+    validateCondition(
+      value.requires,
+      new Set(),
+      "object.requires",
+      this.queries,
+    );
   }
   validateState(state) {
     jsonValue(state, 512 * 1024);
@@ -267,6 +281,7 @@ export class WorldStateService {
           changes: { ...existing?.changes, ...(op.changes || {}) },
         };
         this.object(op.map, op.id, entry.changes, { full: entry.spawn });
+        validateTrainerSight({ ...current, ...entry.changes });
         record.objects[op.id] = entry;
       } else throw new Error("Unknown world operation");
     }

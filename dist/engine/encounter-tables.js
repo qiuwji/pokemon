@@ -1,9 +1,11 @@
+import { ConditionQueries } from "./condition-queries.js";
 import { readOnly } from "./extensions/values.js";
 import { validateCondition, matchesCondition } from "./conditions.js";
 /** Named encounter tables can target existing maps without replacing the immutable map catalog. */
 export class EncounterTableRegistry {
   constructor(definitions = {}, db) {
     this.tables = [];
+    this.queries = new ConditionQueries(db.conditionQueries);
     for (const [id, t] of Object.entries(definitions)) {
       if (
         !t ||
@@ -46,7 +48,12 @@ export class EncounterTableRegistry {
         )
       )
         throw new Error(`Invalid encounter table ${id}`);
-      validateCondition(t.requires);
+      validateCondition(
+        t.requires,
+        new Set(),
+        "encounter.requires",
+        this.queries,
+      );
       this.tables.push(readOnly({ id, ...t }));
     }
     this.tables.sort(
@@ -61,7 +68,7 @@ export class EncounterTableRegistry {
         (t) =>
           t.map === map &&
           t.area === area &&
-          matchesCondition(t.requires, state),
+          matchesCondition(t.requires, state, this.queries),
       ) || null
     );
   }

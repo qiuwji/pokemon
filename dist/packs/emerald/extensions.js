@@ -1,3 +1,5 @@
+import { validateTrainerSight } from "../../engine/field-triggers.js";
+import { ConditionQueries } from "../../engine/condition-queries.js";
 import { TRAINERS } from "./trainers.js";
 import { validateTrainers } from "../../engine/trainer-encounters.js";
 import { EncounterTableRegistry } from "../../engine/encounter-tables.js";
@@ -42,6 +44,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
   host.load(plugins);
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
+    new ConditionQueries(c.conditionQueries);
     const strategies = new BattleStrategyRegistry(c.battleStrategies);
     validateTrainers(c.trainers, c, strategies);
     new EncounterTableRegistry(c.encounters, c);
@@ -77,6 +80,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
         throw new Error("Unknown animation move");
     for (const [id, map] of Object.entries(c.maps)) {
       for (const element of map.elements || []) {
+        validateTrainerSight(element);
         if (element.trainerId && !c.trainers[element.trainerId])
           throw new Error("Unknown world trainer");
         if (

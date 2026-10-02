@@ -1,4 +1,10 @@
 import {
+  changeStoryVariable,
+  validateVariableCommand,
+} from "../../engine/story-variables.js";
+import { findWatchingTrainer } from "../../engine/field-triggers.js";
+import { ConditionQueries } from "../../engine/condition-queries.js";
+import {
   WorldStateService,
   emptyWorldState,
 } from "../../engine/world-state.js";
@@ -93,6 +99,7 @@ export class EmeraldAdventure {
       plugins,
       catalog,
     });
+    this.conditionQueries = new ConditionQueries(catalog.conditionQueries);
     this.itemDefinitions = catalog.items;
     this.trainerDefinitions = catalog.trainers || TRAINERS;
     this.battleStrategies = new BattleStrategyRegistry(
@@ -102,7 +109,18 @@ export class EmeraldAdventure {
     this.story = new StoryEngine(
       [...(plugins?.story.values() || []), ...EMERALD_STORY.events],
       EMERALD_STORY.quests,
+      { queries: this.conditionQueries },
     );
+    for (const event of this.story.events)
+      if (event.where) {
+        const m = db.maps[event.where.map];
+        if (
+          !m ||
+          event.where.x + event.where.width > m.width ||
+          event.where.y + event.where.height > m.height
+        )
+          throw new Error(`Story region outside map: ${event.id}`);
+      }
     this.items = createItemService(catalog.items);
     this.partyStorage = new PartyStorageService();
     this.trading = new TradeService({ db });
@@ -113,7 +131,12 @@ export class EmeraldAdventure {
     this.ruleHooks = plugins?.hooks(this.moveEffects.operations) || [];
     this.moveEffects.validateMoves(db.moves);
     for (const item of Object.values(this.itemDefinitions))
-      validateCondition(item.purchaseRequires);
+      validateCondition(
+        item.purchaseRequires,
+        new Set(),
+        "purchaseRequires",
+        this.conditionQueries,
+      );
     this.saveStore = new SaveStore(
       storage,
       PACK.id,
@@ -186,6 +209,7 @@ export class EmeraldAdventure {
           }),
         wait: (c) => this.timeline.wait(c.ms),
         worldPatch: (c) => this.patchWorld(c.operations),
+        setVariable: (c) => changeStoryVariable(this.state.story, c),
         move: (c) => this.fieldDirector.move(c),
         approach: (c) => this.fieldDirector.approach(c),
         face: (c) => this.fieldDirector.face(c),
@@ -239,8 +263,33 @@ export class EmeraldAdventure {
       },
       {
         resources: storyResources,
+        testCondition: (c) =>
+          matchesCondition(c, this.state, this.conditionQueries),
+        choose: async (c) => {
+          const value = await this.ui.choose(
+            c.name,
+            c.prompt,
+            c.options.map(({ id, label }) => ({ id, label })),
+            c.cancel,
+          );
+          if (!c.options.some((o) => o.id === value))
+            throw new Error("Invalid story choice result");
+          if (c.variable)
+            changeStoryVariable(this.state.story, { name: c.variable, value });
+          return value;
+        },
         validateCommand: (c) => {
           validateFieldCommand(c, db.maps);
+          if (c.type === "if")
+            validateCondition(
+              c.condition,
+              new Set(this.story.events.map((e) => e.id)),
+              "story.if",
+              this.conditionQueries,
+            );
+          if (c.type === "setVariable") validateVariableCommand(c);
+          if (c.type === "choice" && c.variable)
+            validateVariableCommand({ name: c.variable, value: "" });
           if (c.type === "worldPatch")
             this.worldState.validateOperations(c.operations);
           if (c.type === "presentation")
@@ -401,7 +450,9 @@ export class EmeraldAdventure {
       objects: (map) =>
         this.worldState
           .projectObjects(map)
-          .filter((e) => matchesCondition(e.requires, this.state)),
+          .filter((e) =>
+            matchesCondition(e.requires, this.state, this.conditionQueries),
+          ),
       onStep: (cell) => this.step(cell),
       onProgress: () => this.advanceTravelClocks(),
       onMap: () => {
@@ -692,11 +743,16 @@ export class EmeraldAdventure {
           this.state.position.dir
         ],
       );
+    const commands = this.story.resolve("interact", this.state, {
+      object,
+      mapTitle: this.world.map.title,
+    });
     void this.playStory(
-      this.story.resolve("interact", this.state, {
-        object,
-        mapTitle: this.world.map.title,
-      }),
+      commands.length
+        ? commands
+        : object.trainerId
+          ? this.trainerScene(object)
+          : [],
     );
   }
   advanceTravelClocks() {
@@ -711,10 +767,24 @@ export class EmeraldAdventure {
     const s = this.state;
     const scene = this.story.resolve("step", s, {
       map: s.position.map,
+      position: { ...s.position },
       cell,
     });
     if (scene.length) {
       void this.playStory(scene);
+      return;
+    }
+    const watching = findWatchingTrainer({
+      maps: this.world.maps,
+      position: s.position,
+      objects: (map) => this.field.npcs.objects(map),
+      eligible: (o) =>
+        !s.story.rewards.includes(`trainer.${o.trainerId}.prize`) &&
+        s.party.filter((m) => m.hp > 0 && !m.egg).length >=
+          (this.trainerDefinitions[o.trainerId]?.format === "doubles" ? 2 : 1),
+    });
+    if (watching) {
+      void this.playStory(this.trainerScene(watching, true));
       return;
     }
     const water =
@@ -750,6 +820,22 @@ export class EmeraldAdventure {
     }
 
     if (this.world.steps % 20 === 0) this.save();
+  }
+  trainerScene(object, approach = false) {
+    return [
+      ...(approach
+        ? [
+            { type: "emote", actor: object.id, kind: "exclamation", ms: 450 },
+            { type: "approach", actor: object.id },
+          ]
+        : []),
+      {
+        type: "dialog",
+        name: object.name || this.trainerDefinitions[object.trainerId].name,
+        lines: [object.text || "让我们来一场宝可梦对战吧！"],
+      },
+      { type: "battle", trainerId: object.trainerId },
+    ];
   }
   async startTrainerBattle(id) {
     const trainer = this.trainerDefinitions[id];
@@ -974,7 +1060,7 @@ export class EmeraldAdventure {
     return (
       !!item &&
       this.state.money >= item.price &&
-      matchesCondition(item.purchaseRequires, this.state)
+      matchesCondition(item.purchaseRequires, this.state, this.conditionQueries)
     );
   }
   learnMove(mon, index) {
