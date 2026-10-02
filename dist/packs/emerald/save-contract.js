@@ -59,8 +59,47 @@ export function validateSave(s, db) {
     )
       return false;
   }
+  if (
+    s.growth !== undefined &&
+    (!Number.isInteger(s.growth.hatchTick) ||
+      s.growth.hatchTick < 0 ||
+      s.growth.hatchTick > 255)
+  )
+    return false;
+  if (
+    s.daycare !== undefined &&
+    (!s.daycare ||
+      !Array.isArray(s.daycare.slots) ||
+      s.daycare.slots.length > 2 ||
+      !Number.isInteger(s.daycare.steps) ||
+      s.daycare.steps < 0 ||
+      s.daycare.steps > 255 ||
+      s.daycare.slots.some(
+        (slot) =>
+          !slot.mon ||
+          slot.mon.egg ||
+          !Number.isInteger(slot.steps) ||
+          slot.steps < 0 ||
+          slot.steps > 0xffffffff ||
+          !Number.isInteger(slot.initialLevel) ||
+          slot.initialLevel !== slot.mon.level,
+      ))
+  )
+    return false;
+  if (
+    s.tradePartner !== undefined &&
+    (!Array.isArray(s.tradePartner) || s.tradePartner.length > 6)
+  )
+    return false;
+  const owned = [
+    ...s.party,
+    ...s.box,
+    ...(s.daycare?.slots.map((slot) => slot.mon) || []),
+    ...(s.daycare?.egg ? [s.daycare.egg] : []),
+    ...(s.tradePartner || []),
+  ];
   const identities = new Set();
-  for (const m of [...s.party, ...s.box]) {
+  for (const m of owned) {
     if (
       !m ||
       typeof m.uid !== "string" ||
@@ -82,6 +121,22 @@ export function validateSave(s, db) {
       !Number.isInteger(m.hp) ||
       m.hp < 0 ||
       m.hp > m.stats.hp ||
+      (m.egg &&
+        (!Number.isInteger(m.egg.cycles) ||
+          m.egg.cycles < 0 ||
+          m.egg.cycles > 255 ||
+          typeof m.egg.ready !== "boolean" ||
+          !Array.isArray(m.egg.parents) ||
+          m.egg.parents.length !== 2 ||
+          m.egg.parents.some((id) => typeof id !== "string" || !id) ||
+          m.heldItem != null ||
+          m.status != null)) ||
+      (m.pendingEvolution !== undefined && m.pendingEvolution !== m.level) ||
+      ["cool", "beauty", "cute", "smart", "tough", "sheen"].some(
+        (key) =>
+          m[key] !== undefined &&
+          (!Number.isInteger(m[key]) || m[key] < 0 || m[key] > 255),
+      ) ||
       !m.iv ||
       !m.ev ||
       !Array.isArray(m.moves) ||
@@ -97,7 +152,8 @@ export function validateSave(s, db) {
       return false;
     identities.add(m.uid);
   }
-  if (s.flags.rescued && !s.party.length) return false;
+  if (s.daycare?.egg && !s.daycare.egg.egg) return false;
+  if (s.flags.rescued && !s.party.some((m) => !m.egg)) return false;
   if (!validStoryProgress(s.story)) return false;
   return Object.values(s.bag).every((v) => Number.isInteger(v) && v >= 0);
 }

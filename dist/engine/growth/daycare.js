@@ -1,5 +1,5 @@
 import { experienceAt, calculateStats, healMonster } from "../model.js";
-/** Daycare owns persisted deposits and one pending egg. It never owns menus, animation or player movement. */
+/** Deposits retain their original moves until withdrawal, so step experience cannot alter egg inheritance. */
 export class DaycareService {
   constructor({ state, breeding, db }) {
     Object.assign(this, { state, breeding, db });
@@ -11,6 +11,7 @@ export class DaycareService {
       !mon ||
       mon.egg ||
       this.state.slots.length >= 2 ||
+      this.state.slots.some((s) => s.mon.uid === uid) ||
       party.filter((m) => !m.egg && m.hp > 0).length - (mon.hp > 0 ? 1 : 0) < 1
     )
       return { ok: false };
@@ -18,47 +19,70 @@ export class DaycareService {
     this.state.slots.push({ mon, steps: 0, initialLevel: mon.level });
     return { ok: true, uid };
   }
+  preview(slot) {
+    const draft = structuredClone(slot.mon);
+    if (draft.level < 100) {
+      draft.exp = Math.min(
+        experienceAt(100, this.db.species[draft.species].growth),
+        draft.exp + slot.steps,
+      );
+      this.level(draft);
+    }
+    return { mon: draft, price: 100 * (1 + draft.level - slot.initialLevel) };
+  }
   withdraw(party, uid, wallet) {
     const index = this.state.slots.findIndex((s) => s.mon.uid === uid),
       slot = this.state.slots[index];
     if (!slot || party.length >= 6) return { ok: false };
-    const price = 100 * (1 + slot.mon.level - slot.initialLevel);
-    if (wallet.money < price)
-      return { ok: false, reason: "Insufficient money" };
-    slot.mon.stats = calculateStats(
-      slot.mon,
-      this.db.species[slot.mon.species],
-    );
-    healMonster(slot.mon, this.db);
+    const { mon: draft, price } = this.preview(slot);
+    if (!Number.isInteger(wallet.money) || wallet.money < price)
+      return { ok: false, reason: "零花钱不够支付培育费用。" };
+    draft.stats = calculateStats(draft, this.db.species[draft.species]);
+    healMonster(draft, this.db);
+    Object.assign(slot.mon, draft);
     wallet.money -= price;
     this.state.slots.splice(index, 1);
     party.push(slot.mon);
     return { ok: true, uid, price };
   }
   advance(steps = 1) {
-    if (!Number.isInteger(steps) || steps < 0)
-      throw new Error("Invalid daycare steps");
-    for (let i = 0; i < steps; i++) {
-      for (const slot of this.state.slots) {
-        slot.steps++;
-        if (slot.mon.level < 100) {
-          slot.mon.exp++;
-          this.level(slot.mon);
-        }
-      }
-      this.state.steps = (this.state.steps + 1) & 255;
-      if (
-        this.state.steps !== 255 ||
-        this.state.egg ||
-        this.state.slots.length !== 2
+    if (
+      !Number.isInteger(steps) ||
+      steps < 0 ||
+      steps > 100000 ||
+      this.state.slots.some(
+        (s) =>
+          !Number.isInteger(s.steps) ||
+          s.steps < 0 ||
+          s.steps > 0xffffffff ||
+          !this.db.species[s.mon.species],
       )
-        continue;
-      const [a, b] = this.state.slots.map((s) => s.mon),
-        score = this.breeding.compatibility(a, b);
-      if (score > 0 && this.breeding.rng.int(100) < score)
-        this.state.egg = this.breeding.create(a, b);
+    )
+      throw new Error("Invalid daycare steps");
+    const counts = this.state.slots.map((s) => s.steps),
+      snapshot = this.breeding.rng.snapshot?.();
+    let egg = this.state.egg,
+      clock = this.state.steps;
+    try {
+      for (let i = 0; i < steps; i++) {
+        for (let j = 0; j < counts.length; j++)
+          counts[j] = (counts[j] + 1) >>> 0;
+        clock = (clock + 1) & 255;
+        // Emerald checks the second occupied deposit's individual step counter.
+        if (egg || counts.length !== 2 || (counts[1] & 255) !== 255) continue;
+        const [a, b] = this.state.slots.map((s) => s.mon),
+          score = this.breeding.compatibility(a, b);
+        if (score > 0 && this.breeding.rng.int(100) < score)
+          egg = this.breeding.create(a, b);
+      }
+    } catch (error) {
+      if (snapshot !== undefined) this.breeding.rng.restore(snapshot);
+      throw error;
     }
-    return this.state.egg?.uid || null;
+    this.state.slots.forEach((s, i) => (s.steps = counts[i]));
+    this.state.steps = clock;
+    this.state.egg = egg;
+    return egg?.uid || null;
   }
   level(mon) {
     while (
@@ -75,10 +99,14 @@ export class DaycareService {
         if (mon.moves.length > 4) mon.moves.shift();
       }
     }
-    // Withdraw recalculates stats and heals. Deposited creatures gain moves but never evolve.
   }
   collect(party) {
-    if (!this.state.egg || party.length >= 6) return { ok: false };
+    if (
+      !this.state.egg ||
+      party.length >= 6 ||
+      party.some((m) => m.uid === this.state.egg.uid)
+    )
+      return { ok: false };
     const egg = this.state.egg;
     party.push(egg);
     this.state.egg = null;

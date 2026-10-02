@@ -1,3 +1,4 @@
+import { CREATION_POLICY } from "../rule-policy.js";
 import { createMonster, calculateStats } from "../model.js";
 const inheritanceStats = ["hp", "atk", "def", "spe", "spa", "spd"];
 /** Breeding policy is data driven; special offspring and inheritance belong to the supplied species rules. */
@@ -5,6 +6,8 @@ export class BreedingService {
   constructor({ db, rng, rules = {} }) {
     Object.assign(this, { db, rng });
     this.rules = { ivInheritance: "emerald", ...rules };
+    if (!["emerald", "distinct"].includes(this.rules.ivInheritance))
+      throw new Error("Unknown IV inheritance policy");
   }
   compatibility(a, b) {
     if (!a || !b || a.uid === b.uid || a.egg || b.egg) return 0;
@@ -80,6 +83,15 @@ export class BreedingService {
     throw new Error("Cyclic offspring lineage");
   }
   create(a, b) {
+    const seed = this.rng.snapshot?.();
+    try {
+      return this.createDraft(a, b);
+    } catch (error) {
+      if (seed !== undefined) this.rng.restore(seed);
+      throw error;
+    }
+  }
+  createDraft(a, b) {
     if (!this.compatibility(a, b))
       throw new Error("Incompatible breeding parents");
     if (
@@ -142,8 +154,16 @@ export class BreedingService {
     });
     if (parents.nature.heldItem === "everstone" && this.rng.int(2) === 0) {
       egg.nature = parents.nature.nature;
-      egg.personality =
-        (egg.personality - (egg.personality % 25) + egg.nature) >>> 0;
+      const candidate = egg.personality - (egg.personality % 25) + egg.nature;
+      egg.personality = candidate > 0xffffffff ? candidate - 25 : candidate;
+      egg.gender = CREATION_POLICY.gender({
+        species,
+        personality: egg.personality,
+      });
+      egg.ability = CREATION_POLICY.ability({
+        species,
+        personality: egg.personality,
+      });
     }
     const moves = egg.moves.map((m) => m.id);
     const add = (id) => {

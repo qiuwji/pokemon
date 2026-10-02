@@ -140,11 +140,19 @@ export function validateContent(db) {
       path + ".chance",
     );
   }
-  for (const [id, evolution] of Object.entries(db.evolutions || {}))
-    check(
-      !!db.species[id] && !!db.species[evolution.to] && evolution.level > 0,
-      `evolutions.${id}`,
-    );
+  for (const [id, value] of Object.entries(db.evolutions || {})) {
+    for (const rule of Array.isArray(value) ? value : [value])
+      check(
+        !!db.species[id] &&
+          !!db.species[rule.to] &&
+          (Array.isArray(value)
+            ? typeof rule.id === "string" &&
+              ["level", "item", "trade"].includes(rule.trigger) &&
+              Array.isArray(rule.conditions)
+            : rule.level > 0),
+        `evolutions.${id}`,
+      );
+  }
   return [...new Set(errors)];
 }
 export function assertContent(db) {

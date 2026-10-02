@@ -92,7 +92,10 @@ export function createTrainerTeam(trainer, db, rng) {
 /** Content constructs topology; the battle engine only consumes it. */
 export function createTrainerEncounter(trainer, { party, bag, db, rng }) {
   validateTrainers({ selected: trainer }, db);
-  if (party.filter((m) => m.hp > 0).length < (trainer.requiresPartners || 1))
+  if (
+    party.filter((m) => m.hp > 0 && !m.egg).length <
+    (trainer.requiresPartners || 1)
+  )
     throw new Error("需要两位还能战斗的伙伴才能参加这场练习。");
   const enemyParty = createTrainerTeam(trainer, db, rng);
   const seats = trainer.format === "doubles" ? 2 : 1;

@@ -169,3 +169,7 @@ Enigma Berry 默认保持原作未装入 e-Reader 数据时的中性携带行为
 | up_grade | up_grade | EvolutionService validates held-item conditions and consumes the item on a trade commit. |
 | exp_share | exp_share | experienceDistribution divides shared experience before personal modifiers. |
 | repel | cleanse_tag | encounter-rate |
+
+## v0.9.0 跨领域验收
+
+P5 已接入育成界面与演出，见 GROWTH_ARCHITECTURE.md：不变石、安抚之铃、孵化特性、香炉与交换持有物覆盖完成。当前内容切片、未导入招式和位级 RNG 差异均列明；框架与三世代目录覆盖不等同于全部地图/招式素材完成。

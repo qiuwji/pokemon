@@ -63,13 +63,16 @@ export class BattleRoster {
           throw new Error(`Invalid seat ${seat.id}`);
         const index =
           seat.index ??
-          owner.party.findIndex((m) => m.hp > 0 && !assigned.has(m.uid));
+          owner.party.findIndex(
+            (m) => m.hp > 0 && !m.egg && !assigned.has(m.uid),
+          );
         const mon = owner.party[index];
         if (
           index !== -1 &&
           (!Number.isInteger(index) ||
             !mon ||
             mon.hp <= 0 ||
+            mon.egg ||
             assigned.has(mon.uid))
         )
           throw new Error(`Invalid seat occupant ${seat.id}`);
@@ -103,7 +106,7 @@ export class BattleRoster {
     return [...this.controllers.values()]
       .filter((c) => c.sideId === sideId)
       .flatMap((c) => c.party)
-      .filter((m) => m.hp > 0);
+      .filter((m) => m.hp > 0 && !m.egg);
   }
   bench(id) {
     const owner = this.owner(id);
@@ -114,7 +117,9 @@ export class BattleRoster {
     );
     return owner.party
       .map((mon, index) => ({ mon, index }))
-      .filter(({ mon, index }) => mon.hp > 0 && !occupied.has(index));
+      .filter(
+        ({ mon, index }) => mon.hp > 0 && !mon.egg && !occupied.has(index),
+      );
   }
   canReplace(id, index) {
     return (
@@ -192,7 +197,7 @@ export function teamRoster(party, enemies, bag, seats = 1) {
       {
         length: Math.min(
           seats,
-          controller.party.filter((m) => m.hp > 0).length,
+          controller.party.filter((m) => m.hp > 0 && !m.egg).length,
         ),
       },
       (_, i) => ({ id: `${side.id}:${i}`, controllerId: controller.id }),

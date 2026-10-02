@@ -65,10 +65,16 @@ export function createMonster(
   level,
   db,
   rng,
-  { trainer = false, rules = {} } = {},
+  {
+    trainer = false,
+    rules = {},
+    originalTrainer = trainer ? "trainer" : "player",
+  } = {},
 ) {
   if (!Number.isInteger(level) || level < 1 || level > 100)
     throw new Error("Invalid creature level");
+  if (typeof originalTrainer !== "string" || !originalTrainer)
+    throw new Error("Invalid original trainer");
   const spec = db.species[id];
   if (!spec) throw new Error(`Unknown species ${id}`);
   const policy = { ...CREATION_POLICY, ...rules };
@@ -105,7 +111,7 @@ export function createMonster(
     ),
   ].slice(-4);
   mon.moves = known.map((id) => ({ id, pp: db.moves[id].pp }));
-  mon.originalTrainer = "player";
+  mon.originalTrainer = originalTrainer;
   mon.stats = calculateStats(mon, spec);
   mon.hp = mon.stats.hp;
   return mon;
@@ -143,6 +149,7 @@ export function grantExperience(
   ) {
     const before = mon.stats.hp;
     mon.level++;
+    mon.pendingEvolution = mon.level;
     mon.stats = calculateStats(mon, db.species[mon.species]);
     mon.hp += mon.stats.hp - before;
     events.push({

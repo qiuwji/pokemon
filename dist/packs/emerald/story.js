@@ -33,7 +33,7 @@ export const STORY_EVENTS = [
     "trainer.arena",
     "arena",
     (s, { object }) =>
-      s.party.filter((m) => m.hp > 0).length < 2
+      s.party.filter((m) => m.hp > 0 && !m.egg).length < 2
         ? [
             dialog(
               object.name,

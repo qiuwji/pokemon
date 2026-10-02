@@ -1211,3 +1211,47 @@ button {
 .battle-options.target-options small {
   font-size: 1.9cqw;
 }
+
+/* Growth presentation sits over the field while the domain input gate is held. */
+.growth-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  overflow: hidden;
+  background: #203448;
+  display: grid;
+  place-items: center;
+  image-rendering: pixelated;
+}
+.growth-overlay img {
+  grid-area: 1/1;
+  width: 35%;
+  max-width: 160px;
+  image-rendering: pixelated;
+}
+.growth-overlay .growth-flash {
+  position: absolute;
+  inset: 0;
+  background: #fffbe7;
+  pointer-events: none;
+}
+.growth-stars {
+  position: absolute;
+  width: 65%;
+  height: 65%;
+  border: 4px dotted #8fd3ae;
+  transform: rotate(12deg);
+  opacity: 0.45;
+}
+.growth-caption {
+  position: absolute;
+  left: 5%;
+  bottom: 4%;
+  right: 5%;
+  padding: 8px 12px;
+  border: 3px solid #557684;
+  background: #fffbe7;
+  color: #28384a;
+  font-size: 14px;
+  box-shadow: 3px 3px 0 #152434;
+}

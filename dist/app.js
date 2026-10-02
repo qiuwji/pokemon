@@ -3,6 +3,7 @@ import { assertPackContent } from "./packs/emerald/content.js";
 import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
 import { BrowserInput } from "./adapters/browser-input.js";
 import { registerGameTools } from "./adapters/browser-tools.js";
+import { GrowthDOM } from "./adapters/growth-dom.js";
 import { AudioAdapter } from "./adapters/audio.js";
 import { Timeline, TransitionController } from "./engine/timeline.js";
 import { CameraRig } from "./engine/camera.js";
@@ -34,6 +35,7 @@ async function boot() {
       profiles: ANIMATION_PROFILES,
       reducedMotion,
     });
+    const growthOverlay = new GrowthDOM($("growth-animation"));
     const overlay = new TransitionDOM($("transition")),
       audio = new AudioAdapter();
     let input, sceneTimer;
@@ -137,6 +139,7 @@ async function boot() {
             travel: game.travelDirector.sample(now),
           });
         overlay.render(transitions.sample(now));
+        growthOverlay.render(game.growthDirector.sample(now));
       }
       requestAnimationFrame(frame);
     }

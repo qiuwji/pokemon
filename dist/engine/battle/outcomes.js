@@ -61,7 +61,9 @@ export class BattleOutcomes {
     );
     const interactiveAlliances = new Set(
       [...b.roster.controllers.values()]
-        .filter((c) => c.kind === "human" && c.party.some((m) => m.hp > 0))
+        .filter(
+          (c) => c.kind === "human" && c.party.some((m) => m.hp > 0 && !m.egg),
+        )
         .map((c) => b.roster.sides.get(c.sideId).allianceId),
     );
     const outcome = b.rules.outcome({

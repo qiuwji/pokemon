@@ -2,6 +2,16 @@ import { HELD_ITEMS } from "./held-items.js";
 import { DEFAULT_ITEMS } from "../../engine/items.js";
 export const ITEMS = {
   ...HELD_ITEMS,
+  blue_pokeblock: {
+    name: "蓝色能量方块",
+    price: 100,
+    icon: "◆",
+    contexts: ["field"],
+    target: "party",
+    requiresAlive: false,
+    effects: [{ op: "feed", flavors: { beauty: 20 }, feel: 20 }],
+    description: "干燥口味的能量方块，提高美丽度；饱食度满后不能再喂食。",
+  },
   pokeball: {
     ...DEFAULT_ITEMS.pokeball,
     icon: "◉",

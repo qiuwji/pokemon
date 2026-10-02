@@ -1,3 +1,4 @@
+import { createGrowthInterface } from "./growth-interface.js";
 import { createMovementInterface } from "./movement-interface.js";
 import { createBattleInterface } from "./battle-interface.js";
 import { experienceAt } from "../../engine/model.js";
@@ -110,6 +111,8 @@ export function createEmeraldInterface(
 
   function partyCard(m, i) {
     const s = db.species[m.species];
+    if (m.egg)
+      return `<button class="party-card" data-mon="${i}"><img src="assets/egg-front.png" alt="蛋"><div class="mon-main"><div class="mon-heading">宝可梦的蛋</div><p>${m.egg.cycles > 10 ? "一起行走，等待孵化。" : "里面传来了细小的声音。"}</p></div></button>`;
     return `<button class="party-card" data-mon="${i}"><img src="assets/${m.species}-front.png" alt=""><div class="mon-main"><div class="mon-heading">${s.name}<span>Lv.${m.level}</span></div>${hpTrack(m)}<div class="hp-value"><span class="type-pill">${m.status ? STATUS_NAMES[m.status] : s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</span><span>${m.hp} / ${m.stats.hp}</span></div></div></button>`;
   }
 
@@ -222,8 +225,9 @@ export function createEmeraldInterface(
   const confirmBattle = () => battleUI.confirm();
 
   function checkGrowth() {
-    if (dialog || game.battle || game.busy) return;
+    if (dialog || root.children.length || game.battle || game.busy) return;
     for (const mon of game.state.party) {
+      if (mon.egg) continue;
       if (mon.pendingMoves?.length) {
         const id = mon.pendingMoves[0];
         modal(
@@ -251,10 +255,14 @@ export function createEmeraldInterface(
           `<div class="detail-row"><img src="assets/${mon.species}-front.png" alt=""><div><p>${db.species[mon.species].name} 身上出现了光芒！</p><p>它将进化成 ${db.species[evolution.to].name}。</p></div></div><div class="choice-actions"><button class="primary-button" id="evolve">继续进化</button><button class="secondary-button" id="cancel-evolve">停止进化</button></div>`,
           { type: "evolution", close: false },
         );
-        $("evolve").onclick = () => {
-          game.evolve(mon, { plan: evolution });
+        $("evolve").onclick = async () => {
           closeModal();
-          toast(`进化成了 ${db.species[mon.species].name}！`);
+          const result = await game.animateEvolution(mon, evolution);
+          toast(
+            result.ok
+              ? `进化成了 ${db.species[mon.species].name}！`
+              : result.reason || "进化未完成。",
+          );
           updateSide();
           game.save();
           checkGrowth();
@@ -296,6 +304,14 @@ export function createEmeraldInterface(
     const m = game.state.party[index];
     if (!m) return;
     const s = db.species[m.species];
+    if (m.egg) {
+      modal(
+        "宝可梦的蛋",
+        `<div class="detail-row"><img src="assets/egg-front.png" alt="蛋"><div><p>从育成研究中收到的蛋。</p><p>${m.egg.cycles > 10 ? "看起来还需要一段时间才能孵化。" : "里面能听到声音。好像快要孵出来了！"}</p></div></div><p>带着它一起行走吧。蛋不能参加战斗、使用伤药或携带道具。</p>`,
+        { back: () => showParty(), type: "detail" },
+      );
+      return;
+    }
     modal(
       s.name,
       `<div class="detail-row"><img src="assets/${m.species}-front.png" alt="${s.name}"><div><p>Lv.${m.level} · ${m.gender} · ${s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</p><p>${NATURES[m.nature]}性格 · 特性：${ABILITIES[m.ability] || m.ability}</p><p>持有：${ITEMS[m.heldItem]?.name || "无"}</p><p>HP ${m.hp} / ${m.stats.hp} ${m.status ? " · " + STATUS_NAMES[m.status] : ""}</p><p>距离升级还需 ${Math.max(0, experienceAt(m.level + 1, s.growth) - m.exp)} 点经验</p></div></div><div class="detail-stats">${Object.entries(
@@ -316,10 +332,11 @@ export function createEmeraldInterface(
         })
         .join(
           "",
-        )}</div><div class="inline-actions"><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.state.bag.potion || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.state.bag.potion})</button></div>`,
+        )}</div><div class="inline-actions"><button class="secondary-button" id="growth-options">伙伴的成长</button><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.state.bag.potion || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.state.bag.potion})</button></div>`,
       { back: () => showParty(), type: "detail" },
     );
     $("held-item").onclick = () => showEquipment(m.uid, index);
+    $("growth-options").onclick = () => growthUI.showEvolutionOptions(index);
     $("lead").onclick = () => {
       game.setLead(index);
       updateSide();
@@ -471,7 +488,7 @@ export function createEmeraldInterface(
   function showBox() {
     modal(
       "电脑 · 宝可梦盒子",
-      `<p>队伍满员时捕获的宝可梦会送到这里。你可以交换盒子里的伙伴与当前队伍。</p>${game.state.box.length ? `<div class="box-grid">${game.state.box.map((m, i) => `<button class="box-mon" data-box="${i}"><img src="assets/${m.species}-front.png" alt=""><strong>${db.species[m.species].name}</strong><small>Lv.${m.level} · ${m.hp}/${m.stats.hp} HP</small></button>`).join("")}</div>` : "<p>盒子里还没有宝可梦。</p>"}`,
+      `<p>队伍满员时捕获的宝可梦会送到这里。你可以交换盒子里的伙伴与当前队伍。</p>${game.state.box.length ? `<div class="box-grid">${game.state.box.map((m, i) => `<button class="box-mon" data-box="${i}"><img src="assets/${m.egg ? "egg" : m.species}-front.png" alt=""><strong>${m.egg ? "宝可梦的蛋" : db.species[m.species].name}</strong><small>${m.egg ? "一起行走，等待孵化" : `Lv.${m.level} · ${m.hp}/${m.stats.hp} HP`}</small></button>`).join("")}</div>` : "<p>盒子里还没有宝可梦。</p>"}`,
       { back: showMenu, type: "box" },
     );
     root.querySelectorAll("[data-box]").forEach(
@@ -504,6 +521,17 @@ export function createEmeraldInterface(
     );
   }
 
+  const growthUI = createGrowthInterface(game, {
+    modal,
+    closeModal,
+    showMenu,
+    showMonster,
+    root,
+    toast,
+    updateSide,
+    checkGrowth,
+    escapeHTML,
+  });
   const movementUI = createMovementInterface(game, {
     modal,
     closeModal,
@@ -517,17 +545,18 @@ export function createEmeraldInterface(
     if (game.busy || game.battle || dialog) return;
     modal(
       "冒险菜单",
-      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
+      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="daycare" ${game.canUseDaycare() ? "" : "disabled"}>育成研究<small>研究所寄存、蛋与交换</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
       { type: "menu" },
     );
     const actions = {
-      party: showParty,
+      party: () => showParty(),
       bag: () => showBag(),
       dex: showDex,
       save: showSave,
       box: showBox,
       help: showHelp,
       movement: movementUI.showMovement,
+      daycare: growthUI.showDaycare,
     };
     root
       .querySelectorAll("[data-page]")
@@ -633,6 +662,7 @@ export function createEmeraldInterface(
     showMenu,
     showHelp,
     showSurf: movementUI.showSurf,
+    showDaycare: growthUI.showDaycare,
     showShop,
     back,
     closeModal,

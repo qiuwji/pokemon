@@ -1,3 +1,6 @@
+import { EvolutionService } from "../../engine/growth/evolution.js";
+import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { MovementRegistry } from "../../engine/movement.js";
 import { MOVEMENT_MODES } from "./movement.js";
 import { TRAINERS, validateTrainers } from "./trainers.js";
@@ -11,6 +14,11 @@ import { EMERALD_STORY } from "./story.js";
 /** Pack composition validates names, references and capabilities before assets are loaded. */
 export function assertPackContent(db) {
   assertContent(db);
+  new EvolutionService({
+    db,
+    abilities: GEN3_ABILITIES,
+    heldItems: GEN3_HELD_ITEMS,
+  });
   new MovementRegistry(MOVEMENT_MODES);
   for (const mode of Object.values(MOVEMENT_MODES))
     if (!db.actors[mode.actor])

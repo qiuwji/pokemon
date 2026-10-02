@@ -1,3 +1,4 @@
+import { StateCheckpoint } from "../../engine/state-checkpoint.js";
 import { setLead, learnPendingMove } from "../../engine/party.js";
 import { Random, createMonster, healMonster } from "../../engine/model.js";
 import { SaveStore } from "../../engine/save-store.js";
@@ -27,8 +28,10 @@ import {
 } from "../../engine/conditions.js";
 import { EncounterService } from "../../engine/encounters.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
-import { EvolutionService } from "../../engine/growth/evolution.js";
-import { FriendshipService } from "../../engine/growth/friendship.js";
+import { GrowthSession } from "../../engine/growth/session.js";
+import { GrowthDirector } from "../../presentation/growth-director.js";
+import { TradeService } from "../../engine/growth/trading.js";
+import { PartyStorageService } from "../../engine/party-storage.js";
 import { EquipmentService } from "../../engine/equipment.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { MovementRegistry, MovementService } from "../../engine/movement.js";
@@ -68,16 +71,9 @@ export class EmeraldAdventure {
       clearInput,
     });
     this.items = createItemService(ITEMS);
+    this.partyStorage = new PartyStorageService();
+    this.trading = new TradeService({ db });
     this.equipment = new EquipmentService(GEN3_HELD_ITEMS);
-    this.evolutions = new EvolutionService({
-      db,
-      abilities: GEN3_ABILITIES,
-      heldItems: GEN3_HELD_ITEMS,
-    });
-    this.friendship = new FriendshipService({
-      abilities: GEN3_ABILITIES,
-      heldItems: GEN3_HELD_ITEMS,
-    });
     this.moveEffects = new MoveEffectRegistry();
     this.moveEffects.validateMoves(db.moves);
     for (const item of Object.values(ITEMS))
@@ -242,7 +238,9 @@ export class EmeraldAdventure {
       this.storyBusy ||
       this.combat.busy ||
       this.field.busy ||
-      this.travelDirector.busy
+      this.travelDirector.busy ||
+      this.growthDirector.busy ||
+      this.growthBusy
     );
   }
   newState() {
@@ -259,6 +257,9 @@ export class EmeraldAdventure {
       playSeconds: 0,
       friendshipSteps: 0,
       movement: { mode: "walk", visited: [PACK.start.map] },
+      growth: { hatchTick: 0 },
+      daycare: { slots: [], egg: null, steps: 0 },
+      tradePartner: [],
       randomSeed: Date.now() >>> 0,
     };
   }
@@ -266,6 +267,24 @@ export class EmeraldAdventure {
     this.field?.dispose();
     this.rng = new Random(this.state.randomSeed);
     this.lastEncounterSteps = -5;
+    this.state.growth ||= { hatchTick: 0 };
+    this.state.tradePartner ||= [];
+    this.state.daycare ||= { slots: [], egg: null, steps: 0 };
+    this.growth = new GrowthSession({
+      state: this.state,
+      db: this.db,
+      rng: this.rng,
+      abilities: GEN3_ABILITIES,
+      heldItems: GEN3_HELD_ITEMS,
+      hour: () => new Date().getHours(),
+    });
+    this.friendship = this.growth.friendship;
+    this.evolutions = this.growth.evolutions;
+    this.growthDirector = new GrowthDirector({
+      timeline: this.timeline,
+      reducedMotion: this.reducedMotion,
+    });
+    this.growthBusy = false;
     this.state.movement ||= {
       mode: "walk",
       visited: [this.state.position.map],
@@ -522,6 +541,10 @@ export class EmeraldAdventure {
         this.ui.showSurf();
       return;
     }
+    if (object.kind === "daycare") {
+      this.ui.showDaycare();
+      return;
+    }
     if (object.id)
       this.field.npcs.face(
         object.id,
@@ -533,11 +556,7 @@ export class EmeraldAdventure {
     void this.playStory(interaction(this.state, object, this.world.map.title));
   }
   advanceTravelClocks() {
-    this.state.friendshipSteps = ((this.state.friendshipSteps || 0) + 1) % 128;
-    if (this.state.friendshipSteps === 0)
-      for (const mon of this.state.party)
-        if (!mon.egg && this.rng.int(2) === 0)
-          this.friendship.change(mon, "walk", { party: this.state.party });
+    this.growth.advance();
   }
   step(cell) {
     if (this.storyBusy) return;
@@ -581,9 +600,10 @@ export class EmeraldAdventure {
     if (this.world.steps % 20 === 0) this.save();
   }
   async startBattle(enemy, options = {}) {
+    if (!this.state.party.some((m) => !m.egg)) return false;
     if (this.combat.battle || this.combat.busy || this.transitions.busy)
       return false;
-    if (!this.state.party.some((m) => m.hp > 0))
+    if (!this.state.party.some((m) => m.hp > 0 && !m.egg))
       this.state.party.forEach((m) => healMonster(m, this.db));
     const enemies = Array.isArray(enemy) ? enemy : [enemy];
     const opponents = options.topology
@@ -726,23 +746,219 @@ export class EmeraldAdventure {
     return (
       this.canManageParty() &&
       this.state.party.includes(mon) &&
-      learnPendingMove(mon, index, this.db)
+      learnPendingMove(mon, index, this.db, {
+        companions: [...this.state.party, ...this.state.box],
+      })
     );
   }
   evolutionPlan(mon, options = {}) {
-    return this.evolutions.prepare(mon, {
-      party: this.state.party,
-      bag: this.state.bag,
-      ...options,
-    });
+    if (
+      (!options.trigger || options.trigger === "level") &&
+      mon.pendingEvolution !== mon.level
+    )
+      return null;
+    return this.growth.evolutionPlan(mon, options);
   }
   evolve(mon, options = {}) {
     if (!this.canManageParty() || !this.state.party.includes(mon)) return false;
     const plan = options.plan || this.evolutionPlan(mon);
     if (!plan || plan.uid !== mon.uid) return false;
     const result = this.evolutions.commit(plan, options);
-    if (result.ok && !result.cancelled) this.seen(mon.species, true);
+    if (result.ok) {
+      delete mon.pendingEvolution;
+      if (!result.cancelled) {
+        this.seen(mon.species, true);
+        if (result.extraUid)
+          this.seen(
+            this.state.party.find((m) => m.uid === result.extraUid).species,
+            true,
+          );
+      }
+    }
     return result.ok;
+  }
+  canUseDaycare() {
+    return (
+      this.canManageParty() &&
+      this.state.flags.pokedex &&
+      this.state.position.map === "LittlerootTown_ProfessorBirchsLab"
+    );
+  }
+  daycareView() {
+    const nursery = this.growth.daycare;
+    const slots = this.state.daycare.slots.map((s) => ({
+      uid: s.mon.uid,
+      name: this.db.species[s.mon.species].name,
+      species: s.mon.species,
+      ...nursery.preview(s),
+    }));
+    const pair = this.state.daycare.slots.map((s) => s.mon);
+    return {
+      slots,
+      egg: !!this.state.daycare.egg,
+      compatibility:
+        pair.length === 2 ? nursery.breeding.compatibility(...pair) : 0,
+    };
+  }
+  depositDaycare(uid) {
+    return this.canUseDaycare()
+      ? this.growth.daycare.deposit(this.state.party, uid)
+      : { ok: false };
+  }
+  withdrawDaycare(uid) {
+    return this.canUseDaycare()
+      ? this.growth.daycare.withdraw(this.state.party, uid, this.state)
+      : { ok: false };
+  }
+  async collectEgg() {
+    if (
+      !this.canUseDaycare() ||
+      !this.state.daycare.egg ||
+      this.state.party.length >= 6
+    )
+      return { ok: false, reason: "请先在队伍里留一个空位。" };
+    this.clearInput();
+    try {
+      return await this.growthDirector.play({
+        kind: "receive",
+        from: "egg",
+        to: "egg",
+        commit: () => this.growth.daycare.collect(this.state.party),
+      });
+    } finally {
+      this.clearInput();
+      this.ui?.updateSide();
+      this.save();
+    }
+  }
+  async hatchReady() {
+    const mon = this.growth.readyEgg();
+    if (!mon || this.busy || this.battle || this.ui?.blocked) return false;
+    this.growthBusy = true;
+    this.clearInput();
+    try {
+      await this.growthDirector.play({
+        kind: "hatch",
+        from: "egg",
+        to: mon.species,
+        commit: () => this.growth.hatching.hatch(mon),
+      });
+      this.seen(mon.species, true);
+      this.ui?.updateSide();
+      await this.ui.say("宝可梦的蛋", [
+        `蛋里孵出了 ${this.db.species[mon.species].name}！`,
+      ]);
+      return true;
+    } catch (error) {
+      this.ui?.toast("孵化未能完成，请重试。");
+      console.error(error);
+      return false;
+    } finally {
+      this.growthBusy = false;
+      this.clearInput();
+      this.save();
+    }
+  }
+  async animateEvolution(mon, plan) {
+    if (
+      !this.canManageParty() ||
+      !this.state.party.includes(mon) ||
+      plan?.uid !== mon.uid
+    )
+      return { ok: false };
+    this.clearInput();
+    try {
+      const result = await this.growthDirector.play({
+        kind: "evolution",
+        from: mon.species,
+        to: plan.to,
+        commit: () => this.evolutions.commit(plan),
+      });
+      if (result.ok) {
+        delete mon.pendingEvolution;
+        this.seen(mon.species, true);
+        if (result.extraUid)
+          this.seen(
+            this.state.party.find((m) => m.uid === result.extraUid).species,
+            true,
+          );
+      }
+      return result;
+    } catch (error) {
+      return { ok: false, reason: error.message };
+    } finally {
+      this.clearInput();
+      this.ui?.updateSide();
+      this.save();
+    }
+  }
+  prepareTradePartner() {
+    if (!this.canUseDaycare() || this.state.tradePartner.length) return false;
+    for (const [species, level, heldItem] of [
+      ["kadabra", 16, null],
+      ["clamperl", 20, "deep_sea_tooth"],
+      ["eevee", 10, null],
+    ]) {
+      const mon = createMonster(species, level, this.db, this.rng, {
+        originalTrainer: "researcher",
+      });
+      mon.heldItem = heldItem;
+      this.state.tradePartner.push(mon);
+    }
+    return true;
+  }
+  async performTrade(uid, partnerUid) {
+    if (!this.canUseDaycare()) return { ok: false };
+    const given = this.state.party.find((m) => m.uid === uid),
+      received = this.state.tradePartner.find((m) => m.uid === partnerUid);
+    if (!given || !received) return { ok: false };
+    const checkpoint = new StateCheckpoint(this.state, this.rng);
+    this.growthBusy = true;
+    this.clearInput();
+    try {
+      const result = await this.growthDirector.play({
+        kind: "trade",
+        from: given.egg ? "egg" : given.species,
+        to: received.egg ? "egg" : received.species,
+        commit: () =>
+          this.trading.exchange({
+            partyA: this.state.party,
+            partyB: this.state.tradePartner,
+            uidA: uid,
+            uidB: partnerUid,
+            trainerA: "player",
+            trainerB: "researcher",
+          }),
+      });
+      for (const [mon, party] of [
+        [received, this.state.party],
+        [given, this.state.tradePartner],
+      ]) {
+        const plan = this.evolutions.prepare(mon, {
+          trigger: "trade",
+          party,
+          bag: {},
+        });
+        if (plan)
+          await this.growthDirector.play({
+            kind: "evolution",
+            from: mon.species,
+            to: plan.to,
+            commit: () => this.evolutions.commit(plan),
+          });
+      }
+      while (given.pendingMoves?.length) learnPendingMove(given, 0, this.db);
+      if (!received.egg) this.seen(received.species, true);
+      return result;
+    } catch (error) {
+      checkpoint.restore();
+      return { ok: false, reason: error.message };
+    } finally {
+      this.growthBusy = false;
+      this.clearInput();
+      this.ui?.updateSide();
+      this.save();
+    }
   }
   buyItem(id) {
     const item = ITEMS[id];
@@ -752,27 +968,20 @@ export class EmeraldAdventure {
     return true;
   }
   withdrawBox(index) {
-    if (
-      !this.canManageParty() ||
-      this.state.party.length >= 6 ||
-      !this.state.box[index]
-    )
-      return false;
-    this.state.party.push(this.state.box.splice(index, 1)[0]);
-    return true;
+    return (
+      this.canManageParty() && this.partyStorage.withdraw(this.state, index)
+    );
   }
   exchangeBox(boxIndex, partyIndex) {
-    if (
-      !this.canManageParty() ||
-      !this.state.box[boxIndex] ||
-      !this.state.party[partyIndex]
-    )
-      return false;
-    [this.state.box[boxIndex], this.state.party[partyIndex]] = [
-      this.state.party[partyIndex],
-      this.state.box[boxIndex],
-    ];
-    return true;
+    return (
+      this.canManageParty() &&
+      this.partyStorage.exchange(this.state, boxIndex, partyIndex)
+    );
+  }
+  depositBox(index) {
+    return (
+      this.canManageParty() && this.partyStorage.deposit(this.state, index)
+    );
   }
   loadDocument(d) {
     const compatible = this.saveStore.decode(d);
@@ -794,6 +1003,25 @@ export class EmeraldAdventure {
   }
   tick(now, visibleMaps) {
     this.field.tick(now);
+    if (
+      this.ui &&
+      !this.ui.blocked &&
+      !this.busy &&
+      !this.battle &&
+      this.growth.readyEgg()
+    )
+      void this.hatchReady();
+    else if (
+      this.ui &&
+      !this.ui.blocked &&
+      !this.busy &&
+      !this.battle &&
+      this.state.party.some(
+        (m) =>
+          !m.egg && (m.pendingMoves?.length || m.pendingEvolution === m.level),
+      )
+    )
+      this.ui.checkGrowth();
     this.field.npcs.tick(now, this.state.position, {
       paused: !!(
         this.battle ||
@@ -801,7 +1029,9 @@ export class EmeraldAdventure {
         this.ui.blocked ||
         this.combat.busy ||
         this.transitions.busy ||
-        this.travelDirector.busy
+        this.travelDirector.busy ||
+        this.growthDirector.busy ||
+        this.growthBusy
       ),
       maps: visibleMaps,
       playerFrom: this.motion.moving(now) ? this.motion.sourcePosition : null,

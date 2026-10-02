@@ -1,5 +1,7 @@
 import { createItemService, DEFAULT_ITEMS } from "./items.js";
-import { calculateStats } from "./model.js";
+import { EvolutionService } from "./growth/evolution.js";
+import { GEN3_ABILITIES } from "./rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "./rules/gen3/held-items.js";
 
 /** Party commands are domain operations, usable without a browser. */
 export function usePotion(state, index, amount = 20) {
@@ -19,7 +21,7 @@ export function setLead(state, index) {
   [state.party[0], state.party[index]] = [state.party[index], state.party[0]];
   return true;
 }
-export function learnPendingMove(mon, index, db) {
+export function learnPendingMove(mon, index, db, { companions = [] } = {}) {
   const id = mon.pendingMoves?.[0];
   if (!id) return false;
   if (index !== null) {
@@ -27,27 +29,20 @@ export function learnPendingMove(mon, index, db) {
     mon.moves[index] = { id, pp: db.moves[id].pp };
   }
   mon.pendingMoves.shift();
+  for (const sibling of companions.filter((m) =>
+    mon.growthCompanions?.includes(m.uid),
+  ))
+    sibling.moves = structuredClone(mon.moves);
+  if (!mon.pendingMoves.length) delete mon.growthCompanions;
   return true;
 }
+/** Compatibility facade delegates to the single evolution implementation. */
 export function evolveMonster(mon, db, { cancel = false } = {}) {
-  const evolution = db.evolutions[mon.species];
-  if (!evolution || mon.level < evolution.level) return false;
-  if (cancel) {
-    mon.evolutionSkipped = mon.level;
-    return true;
-  }
-  const oldHP = mon.stats.hp;
-  mon.species = evolution.to;
-  mon.ability = db.species[mon.species].abilities[0];
-  mon.stats = calculateStats(mon, db.species[mon.species]);
-  mon.hp = mon.hp === 0 ? 0 : mon.hp + mon.stats.hp - oldHP;
-  for (const entry of db.species[mon.species].learnset.filter(
-    (e) => e.level === mon.level,
-  )) {
-    if (mon.moves.some((m) => m.id === entry.move)) continue;
-    if (mon.moves.length < 4)
-      mon.moves.push({ id: entry.move, pp: db.moves[entry.move].pp });
-    else (mon.pendingMoves ??= []).push(entry.move);
-  }
-  return true;
+  const service = new EvolutionService({
+    db,
+    abilities: GEN3_ABILITIES,
+    heldItems: GEN3_HELD_ITEMS,
+  });
+  const plan = service.prepare(mon);
+  return !!plan && service.commit(plan, { cancel }).ok;
 }

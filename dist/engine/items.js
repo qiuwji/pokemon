@@ -1,11 +1,17 @@
+import {
+  applyNutrition,
+  validateFood,
+  NUTRITION_FIELDS,
+} from "./growth/nutrition.js";
 import { EffectRegistry } from "./effects.js";
 
 /** Item effects run on a draft: invalid use never consumes an item or alters a target. */
 export class ItemService {
   /** @param {Record<string, import("./contracts.js").ItemDefinition>} definitions */
-  constructor(definitions, registry = new EffectRegistry()) {
+  constructor(definitions, registry = new EffectRegistry(ITEM_OPERATIONS)) {
     this.definitions = definitions;
     this.registry = registry;
+    this.plans = new WeakMap();
     for (const [id, item] of Object.entries(definitions)) {
       if (
         !item.name ||
@@ -14,7 +20,9 @@ export class ItemService {
         !Array.isArray(item.contexts) ||
         (!item.contexts.length && !item.holdable) ||
         item.contexts.some((v) => !["field", "battle"].includes(v)) ||
-        !["party", "enemy"].includes(item.target)
+        !["party", "enemy"].includes(item.target) ||
+        (item.requiresAlive !== undefined &&
+          typeof item.requiresAlive !== "boolean")
       )
         throw new Error(`items.${id}: invalid definition`);
       if (
@@ -39,42 +47,83 @@ export class ItemService {
     if (item.target === "enemy") {
       if (!enemy || enemy.hp <= 0 || !canCapture)
         return { ok: false, reason: "现在不能捕捉对方的宝可梦！" };
-      return { ok: true, item, captureBonus: item.effects[0].bonus };
+      const plan = { ok: true, item, captureBonus: item.effects[0].bonus };
+      this.plans.set(plan, { bag, id, party, target: null });
+      return plan;
     }
     const target = Number.isInteger(index) ? party[index] : null;
-    if (!target || target.hp <= 0)
+    if (
+      !target ||
+      target.egg ||
+      (item.requiresAlive !== false && target.hp <= 0)
+    )
       return { ok: false, reason: "请选择还能战斗的伙伴。" };
-    const draft = { ...target, stats: { ...target.stats } };
+    const draft = structuredClone(target);
     const changed = this.registry
       .run(item.effects, { target: draft })
       .some(Boolean);
-    return changed
-      ? {
-          ok: true,
-          item,
-          target,
-          draft,
-          before: { hp: target.hp, status: target.status, sleep: target.sleep },
-        }
-      : { ok: false, reason: "使用后不会产生效果。" };
-  }
-  commit(plan, bag, id) {
-    if (!plan.ok || plan.committed || !(bag[id] > 0)) return false;
+    if (!changed) return { ok: false, reason: "使用后不会产生效果。" };
+    const fields = ["hp", "status", "sleep", "friendship", ...NUTRITION_FIELDS];
+    for (const key of Object.keys(target)) {
+      if (
+        !fields.includes(key) &&
+        JSON.stringify(target[key]) !== JSON.stringify(draft[key])
+      )
+        throw new Error(`Item effect cannot change protected field ${key}`);
+    }
     if (
-      plan.target &&
-      Object.entries(plan.before).some(
-        ([key, value]) => plan.target[key] !== value,
+      !Number.isInteger(draft.hp) ||
+      draft.hp < 0 ||
+      draft.hp > draft.stats.hp ||
+      ["friendship", ...NUTRITION_FIELDS].some(
+        (key) =>
+          draft[key] !== undefined &&
+          (!Number.isInteger(draft[key]) || draft[key] < 0 || draft[key] > 255),
       )
     )
+      throw new Error("Item effect produced invalid target values");
+    const plan = {
+      ok: true,
+      item,
+      target,
+      draft,
+      before: { hp: target.hp, status: target.status, sleep: target.sleep },
+    };
+    this.plans.set(plan, {
+      bag,
+      id,
+      party,
+      target,
+      fingerprint: JSON.stringify(target),
+      draft: structuredClone(draft),
+    });
+    return plan;
+  }
+  commit(plan, bag, id) {
+    const saved = this.plans.get(plan);
+    if (
+      !saved ||
+      saved.bag !== bag ||
+      saved.id !== id ||
+      !(bag[id] > 0) ||
+      (saved.target &&
+        (!saved.party.includes(saved.target) ||
+          saved.fingerprint !== JSON.stringify(saved.target)))
+    )
       return false;
-    if (plan.target)
-      Object.assign(plan.target, {
-        hp: plan.draft.hp,
-        status: plan.draft.status,
-        sleep: plan.draft.sleep,
-      });
+    if (saved.target)
+      for (const field of [
+        "hp",
+        "status",
+        "sleep",
+        "friendship",
+        ...NUTRITION_FIELDS,
+      ])
+        if (Object.hasOwn(saved.draft, field))
+          saved.target[field] = saved.draft[field];
     bag[id]--;
     plan.committed = true;
+    this.plans.delete(plan);
     return true;
   }
   use(options) {
@@ -89,7 +138,9 @@ capture.validate = (s, p) => {
   if (!Number.isFinite(s.bonus) || s.bonus <= 0)
     throw new Error(`${p}.bonus: must be positive`);
 };
-export const ITEM_OPERATIONS = { capture };
+const feed = (c, s) => applyNutrition(c.target, s);
+feed.validate = validateFood;
+export const ITEM_OPERATIONS = { capture, feed };
 export const DEFAULT_ITEMS = {
   potion: {
     name: "伤药",
