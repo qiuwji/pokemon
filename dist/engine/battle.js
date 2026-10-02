@@ -1,3 +1,4 @@
+import { BattleHeldItems } from "./battle/held-items.js";
 import { BattleMajorStatus } from "./battle/major-status.js";
 import { CreatureFormRegistry, CreatureForms } from "./creatures/forms.js";
 import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
@@ -155,6 +156,7 @@ export class Battle {
     this.actions = new BattleActions(this);
     this.moves = new MoveExecutor(this);
     this.rounds = new RoundResolver(this);
+    this.equipment = new BattleHeldItems(this);
     this.traits = new BattleTraits(this, traits);
     this.statuses = new BattleMajorStatus(this);
     this.entryView = this.snapshot();
@@ -451,6 +453,7 @@ export class Battle {
         if (original && this.roster.occupant(seat.id))
           this.roster.occupant(seat.id).ability = original;
       }
+      this.equipment.restore();
       this.states.clear("end");
       this.actionLifecycle.clearAll();
       for (const controller of this.roster.controllers.values())

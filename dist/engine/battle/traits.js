@@ -84,8 +84,7 @@ export class BattleTraits {
         }),
       consume: () => {
         if (kind !== "heldItem" || owner.heldItem !== id) return false;
-        owner.heldItem = null;
-        owner.consumedItem = id;
+        if (!b.equipment.consume(owner, id)) return false;
         b.emit(`${b.name(owner)} 的持有道具生效了！`, "item", {
           actorSeat: ownerSeat,
           sourceId: id,
@@ -132,6 +131,21 @@ export class BattleTraits {
       if (next === ability) break;
       ability = next;
     }
+  }
+  setAbility(seat, id) {
+    if (!this.abilities[id]) throw new Error("Unknown temporary ability");
+    const b = this.battle,
+      mon = b.roster.occupant(seat),
+      state = b.conditions.get(seat),
+      record = b.forms.records[mon.uid];
+    state.originalAbility ||= mon.ability;
+    if (record)
+      b.forms.overlay(
+        mon,
+        { ability: id },
+        { kind: record.kind || "ability", sourceUid: record.sourceUid || null },
+      );
+    else mon.ability = id;
   }
   ability(seat) {
     const mon = this.battle.roster.occupant(seat);

@@ -27,6 +27,18 @@ const screen = (physical) => ({
 /** Third-generation policies; timers and HP costs verified in battle_script_commands.c / battle_util.c. */
 export const GEN3_BATTLE_STATES = {
   ...GEN3_CONTROL_STATES,
+  curse: {
+    scope: "seat",
+    clearOn: ["leave", "faint", "end"],
+    schema: empty,
+    hooks: [
+      {
+        phase: "state-tick",
+        role: "owner",
+        effects: [{ op: "traitHurt", fraction: 1 / 4 }],
+      },
+    ],
+  },
   guard_chain: {
     scope: "seat",
     stack: "refresh",

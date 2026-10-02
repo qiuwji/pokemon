@@ -105,6 +105,8 @@ export const SPECIAL_MOVE_OPERATIONS = {
       !c.dealt ||
       c.mon.heldItem ||
       !item ||
+      !b.equipment.transferable(c.mon) ||
+      !b.equipment.transferable(c.opponent) ||
       !b.rules.canSteal({ battle: b, actorSeat: c.actorSeat, item })
     )
       return;

@@ -372,13 +372,12 @@ define("trace", [
       if (c.battle.conditions.get(c.ownerSeat).originalAbility) return;
       const targets = c.battle.roster
         .opposing(c.ownerSeat)
-        .filter((s) => c.battle.roster.occupant(s.id).ability);
+        .filter((s) => c.battle.traits.ability(s.id));
       if (!targets.length) return;
-      const copied = c.battle.roster.occupant(
+      const copied = c.battle.traits.ability(
         targets[c.battle.rng.int(targets.length)].id,
-      ).ability;
-      c.battle.conditions.get(c.ownerSeat).originalAbility = c.owner.ability;
-      c.owner.ability = copied;
+      );
+      c.battle.traits.setAbility(c.ownerSeat, copied);
       c.emit("复制了对方的特性！", "trait");
     },
   },

@@ -179,14 +179,16 @@ export class MoveExecutor {
         b.moveEffects.run("primary", c);
         visualResult.successful = !!c.successful;
         successful ||= c.successful;
+        if (c.successful) b.actionLifecycle.recordLand(c);
         continue;
       }
       b.traits?.run("before-damage", c);
       b.phase = "before-damage";
       b.moveEffects.run("beforeDamage", c, { scope: "target" });
       if (!c.skipDamage) this.deal(c);
-      successful ||= c.dealt > 0;
-      visualResult.successful = c.dealt > 0;
+      successful ||= !!c.successful || c.dealt > 0;
+      visualResult.successful = !!c.successful || c.dealt > 0;
+      if (visualResult.successful) b.actionLifecycle.recordLand(c);
       total += c.dealt;
       if (c.dealt)
         initial.drains.push({ targetSeat: c.targetSeat, amount: c.dealt });
@@ -212,6 +214,8 @@ export class MoveExecutor {
     b.moveEffects.run("afterDamage", initial, { scope: "action" });
     b.traits?.run("after-action", { ...initial, completed: true });
     event.move.successful = successful;
+    event.move.type = move.type;
+    event.move.power = initial.power;
     b.actionLifecycle.after(action, initial, successful);
   }
   hits(c) {

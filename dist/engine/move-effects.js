@@ -1,3 +1,5 @@
+import { UTILITY_OPERATIONS } from "./battle/utility-operations.js";
+import { RANDOM_POWER_OPERATIONS } from "./battle/random-power-operations.js";
 import { REACTIVE_OPERATIONS } from "./battle/reactive-operations.js";
 import { CONTROL_STATE_OPERATIONS } from "./battle/control-state-operations.js";
 import { FORM_OPERATIONS } from "./battle/form-operations.js";
@@ -345,6 +347,8 @@ export class MoveEffectRegistry {
       ...CONTROL_STATE_OPERATIONS,
       ...FORM_OPERATIONS,
       ...REACTIVE_OPERATIONS,
+      ...UTILITY_OPERATIONS,
+      ...RANDOM_POWER_OPERATIONS,
       ...operations,
     });
     for (const [id, definition] of Object.entries(this.definitions)) {

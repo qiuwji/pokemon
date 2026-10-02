@@ -25,3 +25,10 @@
 保护/看穿/挺住共享连续使用政策与来源历史；成功率表放在 BATTLE_POLICY。挺住在替身之后约束直接承伤，保留 1 HP，不保护毒或天气持续伤害。参考连续成功表只有四个条目，本项目对更长连用饱和使用最后一个概率，避免复刻原参考潜在数组越界；这是明确的健壮性决定。
 
 依据：`battle_script_commands.c` 的 `Cmd_counterdamagecalculator`、`Cmd_mirrorcoatdamagecalculator`、`Cmd_setprotectlike`，以及 `data/battle_scripts_1.s` 的 FocusPunch/Revenge 脚本。验证见 reactive-status.test.js。
+
+
+## 临时道具与有效特性
+
+BattleHeldItems 在每场战斗持有 `used` 与 `knocked` 账本，参加检查点，不保存到精灵本体。消费记入回收账本；拍落结束后归还；戏法与偷取改变持有者并受政策、黏着和已拍落资格约束。BattleTraits.setAbility 是临时特性统一入口：有有效形态时更新覆盖值，否则记录原特性并暂时更新，离场/结束恢复。规则与 UI 查询均使用有效特性。
+
+`landed` 类型历史区别于本回合 HP 承伤账本，供纹理2等跨回合查询。它记录成功影响的招式类型，离场/倒下清理，观察不消耗 RNG。纹理2使用有效候选抽样，未复制参考源码的缺陷回退路径，故不承诺原版随机位序。

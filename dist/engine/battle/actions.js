@@ -119,7 +119,7 @@ export class BattleActions {
       mon = b.roster.owner(seat).party[index];
     b.traits?.run("leave", { ownerSeat: seat, actorSeat: seat });
     b.states.clear("leave", seat);
-    b.actionLifecycle.clear(seat);
+    b.actionLifecycle.leave(seat);
     if (old) b.forms.restore(old, "leave");
     const originalAbility = b.conditions.get(seat).originalAbility;
     if (originalAbility && old) old.ability = originalAbility;

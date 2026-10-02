@@ -9,6 +9,7 @@ export class BattleActionLifecycle {
     this.history = [];
     this.sequence = 0;
     this.received = new Map();
+    this.landed = new Map();
   }
   locked(seat) {
     const r = this.locks.get(seat),
@@ -31,10 +32,28 @@ export class BattleActionLifecycle {
   clear(seat) {
     this.locks.delete(seat);
   }
+  leave(seat) {
+    this.clear(seat);
+    const uid = this.battle.roster.occupant(seat)?.uid;
+    if (uid) {
+      this.received.delete(uid);
+      this.landed.delete(uid);
+    }
+  }
+  recordLand(c) {
+    if (c.targetSeat !== c.actorSeat)
+      this.landed.set(c.opponent.uid, {
+        sourceSeat: c.actorSeat,
+        sourceUid: c.mon.uid,
+        moveId: c.move.id,
+        type: c.move.type,
+      });
+  }
   clearAll() {
     this.locks.clear();
     this.delayed = [];
     this.received.clear();
+    this.landed.clear();
   }
   begin(action, c) {
     const b = this.battle,

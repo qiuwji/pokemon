@@ -17,6 +17,10 @@ export class BattleCheckpoint {
       seat,
       index: seat.index,
     }));
+    this.equipment = {
+      knocked: clone(b.equipment.knocked),
+      used: clone(b.equipment.used),
+    };
     this.forms = { records: clone(b.forms.records), used: clone(b.forms.used) };
     this.conditions = clone(b.conditions.states);
     this.battleStates = clone(b.states.instances);
@@ -27,6 +31,7 @@ export class BattleCheckpoint {
       history: clone(b.actionLifecycle.history),
       sequence: b.actionLifecycle.sequence,
       received: clone(b.actionLifecycle.received),
+      landed: clone(b.actionLifecycle.landed),
     };
     this.defeated = clone(b.outcomes.defeated);
     this.encounters = clone(b.outcomes.encounters);
@@ -65,6 +70,7 @@ export class BattleCheckpoint {
     }
     for (const { seat, index } of this.seats) seat.index = index;
     Object.assign(b.forms, clone(this.forms));
+    Object.assign(b.equipment, clone(this.equipment));
     b.conditions.states = clone(this.conditions);
     b.states.instances = clone(this.battleStates);
     b.states.sequence = this.stateSequence;

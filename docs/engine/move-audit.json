@@ -5,9 +5,9 @@
   "effectCount": 214,
   "usedEffectCount": 198,
   "counts": {
-    "missing": 40,
+    "missing": 22,
     "disabled": 0,
-    "registered-unverified": 158
+    "registered-unverified": 176
   },
   "effects": [
     {
@@ -404,7 +404,7 @@
         "conversion"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "flinch_hit",
@@ -467,7 +467,7 @@
         "tri_attack"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "rest",
@@ -1053,7 +1053,7 @@
         "conversion_2"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "lock_on",
@@ -1118,7 +1118,7 @@
         "spite"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "false_swipe",
@@ -1212,7 +1212,7 @@
         "curse"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "unused_6e",
@@ -1340,7 +1340,7 @@
         "present"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "frustration",
@@ -1368,7 +1368,7 @@
         "sacred_fire"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "magnitude",
@@ -1377,7 +1377,7 @@
         "magnitude"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "baton_pass",
@@ -1689,7 +1689,7 @@
         "fake_out"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "uproar",
@@ -1810,7 +1810,7 @@
         "smelling_salt"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "follow_me",
@@ -1868,7 +1868,7 @@
         "trick"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "role_play",
@@ -1877,7 +1877,7 @@
         "role_play"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "wish",
@@ -1931,7 +1931,7 @@
         "recycle"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "revenge",
@@ -1967,7 +1967,7 @@
         "knock_off"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "endeavor",
@@ -1997,7 +1997,7 @@
         "skill_swap"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "imprison",
@@ -2072,7 +2072,7 @@
         "teeter_dance"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "blaze_kick",
@@ -2112,7 +2112,7 @@
         "weather_ball"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     },
     {
       "id": "overheat",
@@ -2211,7 +2211,7 @@
         "camouflage"
       ],
       "imported": [],
-      "status": "missing"
+      "status": "registered-unverified"
     }
   ]
 }

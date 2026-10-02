@@ -9,6 +9,34 @@ const stage = (target, changes) => ({
 const secondary = (op, p = {}) => ({ secondary: [{ op, ...p }] });
 /** Semantic families share operations; no move ID dispatch in the executor. */
 export const GEN3_EXTENDED_MOVE_EFFECTS = {
+  conversion: primary("conversion", {}, true),
+  conversion_2: primary("conversionResistance", {}, true),
+  camouflage: primary("camouflage", {}, true),
+  role_play: primary("copyAbility"),
+  skill_swap: primary("swapAbilities"),
+  trick: primary("swapItems"),
+  recycle: primary("recycle", {}, true),
+  knock_off: { afterDamage: [{ op: "knockOff" }] },
+  spite: primary("spite"),
+  fake_out: {
+    beforeDamage: [{ op: "firstTurnOnly" }],
+    secondary: [{ op: "flinch" }],
+  },
+  thaw_hit: { afterDamage: [{ op: "thawTarget" }] },
+  smellingsalt: {
+    beforeDamage: [{ op: "paralysisPower" }],
+    afterDamage: [{ op: "wakeTarget" }],
+  },
+  tri_attack: { secondary: [{ op: "triStatus" }] },
+  teeter_dance: primary("danceConfusion", {}, true),
+  curse: { primary: [{ op: "curse" }], bypassHitChecks: true },
+  magnitude: {
+    beforeDamage: [{ op: "magnitude" }],
+    hitsHidden: ["underground"],
+    hiddenMultiplier: 2,
+  },
+  weather_ball: { beforeDamage: [{ op: "weatherBall" }] },
+  present: { beforeDamage: [{ op: "present" }, { op: "presentHeal" }] },
   counter: { retaliation: "physical", beforeDamage: [{ op: "retaliate" }] },
   mirror_coat: { retaliation: "special", beforeDamage: [{ op: "retaliate" }] },
   revenge: { beforeDamage: [{ op: "revengePower" }] },
