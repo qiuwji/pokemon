@@ -7,6 +7,7 @@ export const CONTENT_KINDS = Object.freeze([
   "actors",
   "evolutions",
   "items",
+  "learningMethods",
   "abilities",
   "heldItems",
   "moveEffects",

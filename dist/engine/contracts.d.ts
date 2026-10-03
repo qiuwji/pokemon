@@ -50,9 +50,53 @@ export interface ItemDefinition {
   contexts: ("field" | "battle")[];
   target: "party" | "enemy";
   effects: CommonEffect[];
+  learningMethod?: string;
+  pocket?: string;
+  shopStock?: boolean;
   description?: string;
   icon?: string;
   purchaseRequires?: Condition;
+}
+export type DeepReadonly<T> = T extends object
+  ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+  : T;
+
+/** A learning pathway may be item-backed or a tutor; ordinary replacement respects registered protected moves. */
+export interface LearningMethodDefinition {
+  move: string;
+  item?: string;
+  consume: number;
+  species?: string[];
+  protectMove?: boolean;
+  friendship?: boolean;
+  eligible?: (
+    context: Readonly<{
+      mon: DeepReadonly<Creature>;
+      party: readonly DeepReadonly<Creature>[];
+      position: Readonly<{
+        map: string;
+        x: number;
+        y: number;
+        dir: string;
+        elevation?: number;
+        previousElevation?: number;
+      }> | null;
+      flags: Readonly<Record<string, boolean | number | string>>;
+      species: Readonly<{
+        machineMoves?: readonly string[];
+        [key: string]: unknown;
+      }>;
+    }>,
+  ) => boolean;
+}
+export interface LearningPlan {
+  ok: true;
+  uid: string;
+  method: string;
+  move: string;
+  requiresReplacement: boolean;
+  replaceable: readonly number[];
+  cost: Readonly<{ item: string | null; count: number }>;
 }
 export type BattleAction = {
   seat?: string;
@@ -367,6 +411,7 @@ export type ContentKind =
   | "actors"
   | "evolutions"
   | "items"
+  | "learningMethods"
   | "abilities"
   | "heldItems"
   | "moveEffects"

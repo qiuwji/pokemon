@@ -1,7 +1,14 @@
-import { HELD_ITEMS } from "./held-items.js";
+import { BASE_ITEMS } from "./inventory-items.js";
+import { MACHINE_ITEMS } from "./machine-learning.js";
 import { DEFAULT_ITEMS } from "../../engine/items.js";
 export const ITEMS = {
-  ...HELD_ITEMS,
+  ...BASE_ITEMS,
+  ...Object.fromEntries(
+    Object.entries(MACHINE_ITEMS).map(([id, machine]) => [
+      id,
+      { ...BASE_ITEMS[id], ...machine },
+    ]),
+  ),
   blue_pokeblock: {
     name: "蓝色能量方块",
     price: 100,

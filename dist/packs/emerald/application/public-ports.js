@@ -1,5 +1,6 @@
 /** Explicit host API routing. Each field/method has one application owner; no legacy fallback. */
 export const APPLICATION_FIELDS = Object.freeze({
+  learning: "party",
   crops: "crops",
   clock: "time",
   schedule: "time",
@@ -36,6 +37,9 @@ export const APPLICATION_FIELDS = Object.freeze({
 });
 
 export const APPLICATION_METHODS = Object.freeze({
+  learningView: Object.freeze(["party", "learningView"]),
+  teachMove: Object.freeze(["party", "teachMove"]),
+  canForgetMove: Object.freeze(["party", "canForgetMove"]),
   actorObjects: Object.freeze(["actors", "objects"]),
   cropView: Object.freeze(["crops", "cropView"]),
   cropAction: Object.freeze(["crops", "cropAction"]),

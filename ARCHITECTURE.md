@@ -58,7 +58,7 @@ flowchart TD
 
 ## 应用服务与状态所有权
 
-`adventure.js` 当前 136 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
+`adventure.js` 当前 140 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
 
 - SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
 - 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。
@@ -86,7 +86,7 @@ Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多
 
 StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/STORY_LANGUAGE.md) 和 [CUTSCENES.md](CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。
 
-精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。正式关键道具/TM/HM 操作还在推进。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
+精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；正式关键道具行动仍在推进。见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
 
 ## 表现、音频与界面扩展
 
@@ -102,4 +102,4 @@ SaveStore 只接受开发存档版本 7；插件数据要求当前 dataVersion�
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 本轮自动检查为 **556 项测试通过、235 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项和受影响范围针对性验证，当前 **239 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。

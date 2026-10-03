@@ -139,6 +139,8 @@ export function attachEmeraldExtensions(game, host) {
               party: game.state.party,
               amount: intent.amount,
             });
+          case "learnMove":
+            return game.teachMove(intent.method, intent.uid, intent.index);
           case "useItem":
             return game.useItem(
               intent.item,

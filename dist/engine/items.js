@@ -16,16 +16,35 @@ export class ItemService {
     for (const [id, item] of Object.entries(definitions)) {
       if (
         !item.name ||
+        ["holdable", "shopStock"].some(
+          (key) => item[key] !== undefined && typeof item[key] !== "boolean",
+        ) ||
+        (item.pocket !== undefined &&
+          (typeof item.pocket !== "string" ||
+            !item.pocket ||
+            item.pocket.length > 128)) ||
         !Number.isInteger(item.price) ||
         item.price < 0 ||
         !Array.isArray(item.contexts) ||
-        (!item.contexts.length && !item.holdable) ||
+        (!item.contexts.length && item.effects?.length !== 0) ||
         item.contexts.some((v) => !["field", "battle"].includes(v)) ||
         !["party", "enemy"].includes(item.target) ||
         (item.requiresAlive !== undefined &&
           typeof item.requiresAlive !== "boolean")
       )
         throw new Error(`items.${id}: invalid definition`);
+      if (
+        item.learningMethod !== undefined &&
+        (typeof item.learningMethod !== "string" ||
+          !item.learningMethod ||
+          item.contexts.length !== 1 ||
+          item.contexts[0] !== "field" ||
+          item.target !== "party" ||
+          item.effects.length)
+      )
+        throw new Error(
+          `items.${id}: learning must use a field party method without item effects`,
+        );
       if (
         item.target === "party" &&
         item.effects.some((s) => s.op === "capture")

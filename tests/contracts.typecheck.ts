@@ -9,6 +9,7 @@ import type {
   MovementInputDefinition,
   FieldMechanismDefinition,
   FieldDeviceDefinition,
+  LearningMethodDefinition,
 } from "../dist/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
@@ -242,3 +243,28 @@ const movementInput: MovementInputDefinition = {
   },
 };
 void movementInput;
+
+const learningMethod: LearningMethodDefinition = {
+  move: "demo:move",
+  consume: 0,
+  eligible: (context) => context.mon.level >= 10,
+};
+
+const asyncLearning: LearningMethodDefinition = {
+  move: "demo:move",
+  consume: 0,
+  // @ts-expect-error learning eligibility is synchronous and boolean
+  eligible: async () => true,
+};
+
+const readonlyLearning: LearningMethodDefinition = {
+  move: "demo:move",
+  consume: 0,
+  eligible: (context) => {
+    // @ts-expect-error learning policies cannot mutate creature values
+    context.mon.hp = 0;
+    // @ts-expect-error learning policies cannot replace moves
+    context.mon.moves.push({ id: "tackle", pp: 1 });
+    return true;
+  },
+};

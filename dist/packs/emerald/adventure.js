@@ -1,3 +1,5 @@
+import { emeraldDatabase } from "./database.js";
+import { EMERALD_LEARNING_METHODS } from "./machine-learning.js";
 import { composeApplications } from "./application/composition.js";
 import { exposeApplicationPorts } from "./application/public-ports.js";
 import { ConditionQueries } from "../../engine/condition-queries.js";
@@ -33,6 +35,7 @@ export class EmeraldAdventure {
     plugins = null,
     catalog = {
       items: ITEMS,
+      learningMethods: EMERALD_LEARNING_METHODS,
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
       movement: MOVEMENT_MODES,
@@ -40,6 +43,7 @@ export class EmeraldAdventure {
       moveEffects: {},
     },
   }) {
+    db = emeraldDatabase(db);
     Object.assign(this, {
       db,
       motion,

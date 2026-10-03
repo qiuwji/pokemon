@@ -1,4 +1,4 @@
-import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
+import { ITEM_METADATA } from "../../engine/rules/gen3/item-metadata.js";
 const names = {
   berry_juice: "树果汁",
   cheri_berry: "樱子果",
@@ -81,20 +81,28 @@ const stock = new Set([
   "macho_brace",
   "everstone",
 ]);
-export const HELD_ITEMS = Object.fromEntries(
-  Object.entries(GEN3_HELD_ITEMS).map(([id, item]) => [
+export const BASE_ITEMS = Object.fromEntries(
+  Object.entries(ITEM_METADATA).map(([id, item]) => [
     id,
     {
       name: names[id] || item.name,
-      price: Math.max(10, item.price),
-      holdable: true,
+      pocket: {
+        POCKET_ITEMS: "items",
+        POCKET_POKE_BALLS: "balls",
+        POCKET_TM_HM: "machines",
+        POCKET_BERRIES: "berries",
+        POCKET_KEY_ITEMS: "key",
+      }[item.pocket],
+      price: item.price,
+      holdable: item.holdable,
       contexts: [],
       target: "party",
       effects: [],
       icon: "◆",
       shopStock: stock.has(id),
-      description:
-        item.holdEffect === "none"
+      description: !item.holdable
+        ? "重要道具，不能交给伙伴携带。"
+        : item.holdEffect === "none"
           ? "可以让伙伴携带。"
           : "让宝可梦携带后，会根据战斗或探索条件发挥作用。",
     },

@@ -1,7 +1,17 @@
 /** Owns this page and its navigation; gameplay changes are application commands. */
 export function createBagInterface(
   game,
-  { modal, closeModal, showMenu, root, partyCard, toast, updateSide, sound },
+  {
+    modal,
+    closeModal,
+    showMenu,
+    root,
+    partyCard,
+    toast,
+    updateSide,
+    sound,
+    escapeHTML,
+  },
 ) {
   const ITEMS = game.itemDefinitions;
   function showBag(inBattle = false) {
@@ -9,7 +19,9 @@ export function createBagInterface(
       "背包",
       Object.entries(ITEMS)
         .filter(
-          ([id, item]) => item.contexts.length || (game.state.bag[id] || 0) > 0,
+          ([id, item]) =>
+            (game.state.bag[id] || 0) > 0 ||
+            (!item.learningMethod && item.contexts.length),
         )
         .map(([id, item]) => {
           const usable =
@@ -19,7 +31,7 @@ export function createBagInterface(
               : (inBattle ? game.battle.party : game.state.party).some(
                   (m, index) => game.itemPlan(id, index, inBattle).ok,
                 ));
-          return `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${item.description}</p></div><button class="secondary-button" data-item="${id}" ${!usable ? "disabled" : ""}>使用</button></div>`;
+          return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button></div>`;
         })
         .join("") +
         `<div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
@@ -47,6 +59,13 @@ export function createBagInterface(
       const index = +button.dataset.mon;
       button.disabled = !game.itemPlan(id, index, inBattle).ok;
       button.onclick = () => {
+        if (!inBattle && ITEMS[id].learningMethod) {
+          chooseLearningMove(
+            ITEMS[id].learningMethod,
+            game.state.party[index]?.uid,
+          );
+          return;
+        }
         if (inBattle) {
           void game.turn({ kind: "item", item: id, index });
           return;
@@ -64,5 +83,41 @@ export function createBagInterface(
       };
     });
   }
-  return { showBag, chooseItemTarget };
+  function chooseLearningMove(method, uid) {
+    const view = game.learningView(method, uid);
+    if (!view.ok) {
+      toast(view.reason);
+      return;
+    }
+    const mon = game.state.party.find((value) => value.uid === uid);
+    const move = game.db.moves[view.move];
+    const commit = (index) => {
+      const result = game.teachMove(method, uid, index);
+      if (!result.ok) {
+        toast(result.reason);
+        return;
+      }
+      updateSide();
+      game.save();
+      showBag(false);
+      sound("emerald:confirm");
+      toast(`学会了${move.name}。`);
+    };
+    modal(
+      "学习招式",
+      `<p>让${escapeHTML(game.db.species[mon.species].name)}学习${escapeHTML(move.name)}？${view.cost.count ? "成功后消耗道具。" : "不会消耗道具。"}</p>` +
+        (view.requiresReplacement
+          ? `<p>请选择要忘记的招式。秘传招式不能在这里遗忘。</p><div class="move-list">${mon.moves.map((slot, index) => `<button class="move-summary" data-replace="${index}" ${view.replaceable.includes(index) ? "" : "disabled"}>${escapeHTML(game.db.moves[slot.id].name)}<small>PP ${slot.pp}</small></button>`).join("")}</div>`
+          : `<button class="primary-button" data-learn>学习</button>`),
+      { back: () => showBag(false), type: "machine-learning" },
+    );
+    root
+      .querySelectorAll("[data-replace]")
+      .forEach(
+        (button) => (button.onclick = () => commit(+button.dataset.replace)),
+      );
+    const learn = root.querySelector("[data-learn]");
+    if (learn) learn.onclick = () => commit(undefined);
+  }
+  return { showBag, chooseItemTarget, chooseLearningMove };
 }

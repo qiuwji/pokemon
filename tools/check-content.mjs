@@ -1,3 +1,4 @@
+import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import fs from "node:fs";
 import { assertPackContent } from "../dist/packs/emerald/content.js";
 import { MOVE_EFFECTS } from "../dist/engine/move-effects.js";
@@ -14,4 +15,9 @@ const unavailable = Object.entries(db.moves)
   .map(([id]) => id);
 console.log(
   `Explicitly unavailable move mechanics (${unavailable.length}): ${unavailable.join(", ")}`,
+);
+
+const { catalog } = createEmeraldPlugins(db, []);
+console.log(
+  `Runtime content valid: ${Object.keys(catalog.moves).length} moves, ${Object.keys(catalog.learningMethods).length} learning methods, ${Object.keys(catalog.items).length} items.`,
 );

@@ -131,15 +131,19 @@ export function createGrowthInterface(
           { type: "learning", close: false },
         );
         const done = (i) => {
-          game.learnMove(mon, i);
+          if (!game.learnMove(mon, i)) {
+            toast("这个招式不能在这里遗忘。");
+            return;
+          }
           closeModal();
           updateSide();
           game.save();
           checkGrowth();
         };
-        root
-          .querySelectorAll("[data-forget]")
-          .forEach((b) => (b.onclick = () => done(+b.dataset.forget)));
+        root.querySelectorAll("[data-forget]").forEach((b) => {
+          b.disabled = !game.canForgetMove(mon.moves[+b.dataset.forget].id);
+          b.onclick = () => done(+b.dataset.forget);
+        });
         $("skip-move").onclick = () => done(null);
         return;
       }

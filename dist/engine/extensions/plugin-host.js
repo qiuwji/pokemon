@@ -144,12 +144,24 @@ export class PluginHost {
                 decide: (c) => evaluate(original.decide, readOnly(c)),
               };
             }
+            if (kind === "learningMethods" && value.eligible !== undefined) {
+              const original = value;
+              if (typeof original.eligible !== "function")
+                throw new Error(
+                  "Learning method requires eligibility predicate",
+                );
+              value = {
+                ...value,
+                eligible: (context) =>
+                  evaluate(original.eligible, readOnly(context)),
+              };
+            }
             if (kind === "fieldMechanisms") {
               const original = value;
               value = {
                 ...value,
                 ...Object.fromEntries(
-                  ["enter", "leave", "settle", "timer", "interact"]
+                  ["activate", "enter", "leave", "settle", "timer", "interact"]
                     .filter((key) => original[key])
                     .map((key) => [
                       key,

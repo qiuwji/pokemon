@@ -18,7 +18,12 @@ import {
 test("Application dependencies are explicit, live across state replacement, and cannot be overwritten or broadened", () => {
   let state = { seen: [], caught: [] };
   const ports = liveApplicationPorts(
-    (name) => (name === "state" ? state : null),
+    (name) =>
+      ({
+        state,
+        db: { moves: {}, species: {} },
+        catalog: { items: {}, learningMethods: {} },
+      })[name] ?? null,
     PARTY_PORTS,
   );
   const service = new PartyApplication(ports);

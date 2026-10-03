@@ -1,9 +1,12 @@
+import { MoveLearningService } from "../../../engine/growth/move-learning.js";
 import { learnPendingMove } from "../../../engine/party.js";
 import { createMonster } from "../../../engine/model.js";
 import { PACK } from "../pack.js";
 import { bindApplicationPorts } from "./ports.js";
 export const PARTY_PORTS = Object.freeze([
   "battle",
+  "catalog",
+  "friendship",
   "busy",
   "db",
   "rng",
@@ -15,6 +18,20 @@ export const PARTY_PORTS = Object.freeze([
 export class PartyApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, PARTY_PORTS);
+    this.learning = new MoveLearningService({
+      db: this.db,
+      methods: this.catalog.learningMethods,
+      items: this.catalog.items,
+      friendship: (context) => {
+        const mon = { ...context.mon };
+        this.friendship.change(mon, "learn", {
+          party: context.party.map((value) =>
+            value.uid === mon.uid ? mon : value,
+          ),
+        });
+        return mon.friendship;
+      },
+    });
   }
   seen(id, caught = false) {
     if (!this.state.seen.includes(id)) this.state.seen.push(id);
@@ -38,12 +55,26 @@ export class PartyApplication {
   canManageParty() {
     return !this.battle && !this.busy && !this.storyBusy;
   }
+  learningView(method, uid) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    return this.learning.prepare(this.state, method, uid);
+  }
+  teachMove(method, uid, index) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    return this.learning.use(this.state, method, uid, index);
+  }
+  canForgetMove(id) {
+    return this.learning.canForget(id);
+  }
   learnMove(mon, index) {
     return (
       this.canManageParty() &&
       this.state.party.includes(mon) &&
       learnPendingMove(mon, index, this.db, {
         companions: [...this.state.party, ...this.state.box],
+        protectedMoves: this.learning.protectedMoves,
       })
     );
   }

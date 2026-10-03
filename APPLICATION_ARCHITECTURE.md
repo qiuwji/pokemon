@@ -1,6 +1,6 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0 将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口从 382 行缩至 136 行；用例由 18 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
+`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0 将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，随后学习数据装配为 140 行；用例由 18 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
 
 ## 职责与状态所有权
 
@@ -11,7 +11,7 @@
 | actors | 持续身份、感知导航、角色命令与 NPC 投影协调 | ActorRepository、有限 runtime 端口 |
 | devices | 格子机关、局部延迟任务与领域行动请求协调 | FieldDeviceCatalog、FieldDevices、执行锁 |
 | crops | 树果生命周期、种植/浇水/采摘的库存提交 | CropRegistry、CropService |
-| party | 图鉴登记、初始精灵领取、管理资格、学习招式协调 | 无复制状态 |
+| party | 图鉴登记、初始精灵领取、管理资格、注册学习方式/机器/手动学习协调 | MoveLearningService，无复制持久状态 |
 | inventory | 背包、商店资格/购买、装备、队伍排序与仓库出入 | ItemService、EquipmentService、PartyStorageService |
 | forms | 野外形态操作与保存记录绑定 | CreatureForms |
 | growth | 进化、寄养、领取/孵化、交换及相关演出 | GrowthSession、GrowthDirector、TradeService、育成锁 |
@@ -48,3 +48,5 @@
 验证记录见 DEVELOPMENT_LOG.md。application-services.test.js 守卫门面职责与文件规模（少于 160 行）、全公共方法的所有权/接收者/结果/替换/不可覆写、单一状态所有者、读档后的实时依赖、依赖不可拓宽/覆盖以及应用服务的导入方向。各领域组合回归不每次重复，修改涉及它们的合同或生命周期时再失效重查。
 
 地图访问生命周期见 docs/engine/WORLD_LIFECYCLE.md。门/相邻地图/飞行/野外行动/剧情共用入口；TravelService 通过受控 enter 端口提交，不再提前修改玩家位置。读取存档恢复当前访问，不清除当前临时状态。
+
+学习领域/公共命令/事务与背包协作见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。当前 registry 资格和手动等级学习共享保护集合；ItemService 不允许通过道具效果改 moves。

@@ -113,6 +113,17 @@ export function validateContent(db) {
         Number.isFinite(species.stats?.[stat]) && species.stats[stat] > 0,
         `species.${id}.stats.${stat}`,
       );
+    if (species.machineMoves !== undefined) {
+      check(Array.isArray(species.machineMoves), `species.${id}.machineMoves`);
+      if (Array.isArray(species.machineMoves)) {
+        check(
+          new Set(species.machineMoves).size === species.machineMoves.length,
+          `species.${id}.machineMoves duplicates`,
+        );
+        for (const move of species.machineMoves)
+          check(!!db.moves[move], `species.${id}.machineMoves.${move}`);
+      }
+    }
     for (const row of species.learnset || [])
       check(!!db.moves[row.move], `species.${id}.learnset.${row.move}`);
   }

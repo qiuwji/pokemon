@@ -13,6 +13,7 @@ export const GROWTH_PORTS = Object.freeze([
   "catalog",
   "clearInput",
   "db",
+  "learning",
   "plugins",
   "reducedMotion",
   "rng",
@@ -225,7 +226,14 @@ export class GrowthApplication {
             commit: () => this.evolutions.commit(plan),
           });
       }
-      while (given.pendingMoves?.length) learnPendingMove(given, 0, this.db);
+      while (given.pendingMoves?.length) {
+        const index = given.moves.findIndex((slot) =>
+          this.learning.canForget(slot.id),
+        );
+        learnPendingMove(given, index < 0 ? null : index, this.db, {
+          protectedMoves: this.learning.protectedMoves,
+        });
+      }
       if (!received.egg) this.seen(received.species, true);
       return result;
     } catch (error) {

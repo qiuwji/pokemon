@@ -10,6 +10,7 @@ export const INVENTORY_PORTS = Object.freeze([
   "catalog",
   "conditionQueries",
   "itemDefinitions",
+  "learningView",
   "state",
 ]);
 /** inventory use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
@@ -27,6 +28,9 @@ export class InventoryApplication {
     return this.useItem("potion", index).ok;
   }
   itemPlan(id, index, inBattle = !!this.battle) {
+    const method = this.itemDefinitions[id]?.learningMethod;
+    if (method && !inBattle)
+      return this.learningView(method, this.state.party[index]?.uid);
     return this.items.prepare({
       id,
       bag: inBattle ? this.battle.bag : this.state.bag,
@@ -59,6 +63,8 @@ export class InventoryApplication {
     const item = this.itemDefinitions[id];
     return (
       !!item &&
+      item.shopStock !== false &&
+      item.price > 0 &&
       this.state.money >= item.price &&
       matchesCondition(item.purchaseRequires, this.state, this.conditionQueries)
     );

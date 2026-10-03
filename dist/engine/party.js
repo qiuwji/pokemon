@@ -21,11 +21,21 @@ export function setLead(state, index) {
   [state.party[0], state.party[index]] = [state.party[index], state.party[0]];
   return true;
 }
-export function learnPendingMove(mon, index, db, { companions = [] } = {}) {
+export function learnPendingMove(
+  mon,
+  index,
+  db,
+  { companions = [], protectedMoves = new Set() } = {},
+) {
   const id = mon.pendingMoves?.[0];
   if (!id) return false;
   if (index !== null) {
-    if (!Number.isInteger(index) || !mon.moves[index]) return false;
+    if (
+      !Number.isInteger(index) ||
+      !mon.moves[index] ||
+      protectedMoves.has(mon.moves[index].id)
+    )
+      return false;
     mon.moves[index] = { id, pp: db.moves[id].pp };
   }
   mon.pendingMoves.shift();

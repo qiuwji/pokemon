@@ -28,6 +28,7 @@ export function registerEmeraldCommands(game, bus) {
     "item.equip": "equip",
     "item.buy": "buyItem",
     "growth.learn": "learnMove",
+    "learning.teach": "learnMove",
   };
   const permissionFor = (name) => {
     const permission =
@@ -272,6 +273,18 @@ export function registerEmeraldCommands(game, bus) {
     objectSchema({ cancel: { type: "boolean" } }),
     (input) => game.reelFishing(input),
     { concurrent: true, ready: () => !!game.fishing },
+  );
+  register(
+    "learning.teach",
+    objectSchema(
+      {
+        method: id,
+        uid: id,
+        index: { type: "integer", minimum: 0, maximum: 3 },
+      },
+      ["method", "uid"],
+    ),
+    ({ method, uid, index }) => game.teachMove(method, uid, index),
   );
   register(
     "growth.learn",

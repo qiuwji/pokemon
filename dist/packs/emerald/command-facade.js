@@ -1,4 +1,4 @@
-/** Trusted UI compatibility adapter: preserve method names while routing mutations through the shared bus. */
+/** Trusted UI command adapter: route application mutations through the shared bus. */
 export function createEmeraldCommandFacade(
   game,
   bus,
@@ -13,6 +13,10 @@ export function createEmeraldCommandFacade(
     to: plan.to,
   });
   const routes = {
+    teachMove: (method, uid, index) => [
+      "learning.teach",
+      { method, uid, ...(index !== undefined ? { index } : {}) },
+    ],
     cropAction: (id, action, kind) => [
       "crop.action",
       { id, action, ...(kind ? { kind } : {}) },
@@ -100,6 +104,7 @@ export function createEmeraldCommandFacade(
     "startClock",
     "cropAction",
     "playPresentation",
+    "teachMove",
     "useItem",
     "equipItem",
     "depositDaycare",

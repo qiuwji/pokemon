@@ -40,6 +40,15 @@ const schemas = Object.fromEntries(
       },
       ["kind", "uid", "amount"],
     ),
+    learnMove: objectSchema(
+      {
+        kind: { type: "string", enum: ["learnMove"] },
+        method: id,
+        uid: id,
+        index: { type: "integer", minimum: 0, maximum: 3 },
+      },
+      ["kind", "method", "uid"],
+    ),
     useItem: objectSchema(
       { kind: { type: "string", enum: ["useItem"] }, uid: id, item: id },
       ["kind", "uid", "item"],

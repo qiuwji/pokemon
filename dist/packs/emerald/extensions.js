@@ -12,7 +12,9 @@ import { CropRegistry } from "../../engine/crop-growth.js";
 import { EMERALD_CROPS, validateBerryPlots } from "./berries.js";
 import { TimeTaskRegistry } from "../../engine/world-schedule.js";
 import { CreatureFormRegistry } from "../../engine/creatures/forms.js";
-import { GEN3_REFERENCE_MOVES } from "../../engine/rules/gen3/reference-metadata.js";
+import { emeraldDatabase } from "./database.js";
+import { EMERALD_LEARNING_METHODS } from "./machine-learning.js";
+import { MoveLearningService } from "../../engine/growth/move-learning.js";
 import { validateTrainerSight } from "../../engine/field-triggers.js";
 import { BattleStateRegistry } from "../../engine/battle/state-registry.js";
 import { GEN3_BATTLE_STATES } from "../../engine/rules/gen3/battle-states.js";
@@ -55,11 +57,9 @@ export function createEmeraldPlugins(db, plugins, onError) {
     base: {
       ...db,
       resources,
-      moves: Object.fromEntries(
-        Object.entries({ ...GEN3_REFERENCE_MOVES, ...db.moves }).map(
-          ([id, move]) => [id, { ...GEN3_REFERENCE_MOVES[id], ...move }],
-        ),
-      ),
+      moves: emeraldDatabase(db).moves,
+      species: emeraldDatabase(db).species,
+      learningMethods: EMERALD_LEARNING_METHODS,
       trainers: TRAINERS,
       items: ITEMS,
       crops: EMERALD_CROPS,
@@ -100,6 +100,11 @@ export function createEmeraldPlugins(db, plugins, onError) {
     battleStates.validateEffects(effects);
     forms.validateEffects(effects);
     createItemService(c.items);
+    new MoveLearningService({
+      db: c,
+      methods: c.learningMethods,
+      items: c.items,
+    });
     for (const actor of Object.values(c.actors))
       validateSpriteAnimations(actor);
     new MovementInputRegistry(c.movementInputs).validateMovement(

@@ -7,6 +7,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   ultra_ball: {
     name: "ULTRA BALL",
@@ -15,6 +16,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   great_ball: {
     name: "GREAT BALL",
@@ -23,6 +25,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   pokeball: {
     name: "POKé BALL",
@@ -31,6 +34,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   safari_ball: {
     name: "SAFARI BALL",
@@ -39,6 +43,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   net_ball: {
     name: "NET BALL",
@@ -47,6 +52,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   dive_ball: {
     name: "DIVE BALL",
@@ -55,6 +61,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   nest_ball: {
     name: "NEST BALL",
@@ -63,6 +70,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   repeat_ball: {
     name: "REPEAT BALL",
@@ -71,6 +79,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   timer_ball: {
     name: "TIMER BALL",
@@ -79,6 +88,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   luxury_ball: {
     name: "LUXURY BALL",
@@ -87,6 +97,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   premier_ball: {
     name: "PREMIER BALL",
@@ -95,6 +106,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: null,
+    pocket: "POCKET_POKE_BALLS",
   },
   potion: {
     name: "POTION",
@@ -103,6 +115,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 20,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   antidote: {
     name: "ANTIDOTE",
@@ -111,6 +124,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   burn_heal: {
     name: "BURN HEAL",
@@ -119,6 +133,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   ice_heal: {
     name: "ICE HEAL",
@@ -127,6 +142,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   awakening: {
     name: "AWAKENING",
@@ -135,6 +151,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   paralyze_heal: {
     name: "PARLYZ HEAL",
@@ -143,6 +160,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   full_restore: {
     name: "FULL RESTORE",
@@ -151,6 +169,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 255,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   max_potion: {
     name: "MAX POTION",
@@ -159,6 +178,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 255,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   hyper_potion: {
     name: "HYPER POTION",
@@ -167,6 +187,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 200,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   super_potion: {
     name: "SUPER POTION",
@@ -175,6 +196,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 50,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   full_heal: {
     name: "FULL HEAL",
@@ -183,6 +205,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   revive: {
     name: "REVIVE",
@@ -191,6 +214,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   max_revive: {
     name: "MAX REVIVE",
@@ -199,6 +223,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   fresh_water: {
     name: "FRESH WATER",
@@ -207,6 +232,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 50,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   soda_pop: {
     name: "SODA POP",
@@ -215,6 +241,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 60,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   lemonade: {
     name: "LEMONADE",
@@ -223,6 +250,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 80,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   moomoo_milk: {
     name: "MOOMOO MILK",
@@ -231,6 +259,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 100,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   energy_powder: {
     name: "ENERGYPOWDER",
@@ -239,6 +268,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   energy_root: {
     name: "ENERGY ROOT",
@@ -247,6 +277,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   heal_powder: {
     name: "HEAL POWDER",
@@ -255,6 +286,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   revival_herb: {
     name: "REVIVAL HERB",
@@ -263,6 +295,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   ether: {
     name: "ETHER",
@@ -271,6 +304,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_PPRecovery",
+    pocket: "POCKET_ITEMS",
   },
   max_ether: {
     name: "MAX ETHER",
@@ -279,6 +313,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 255,
     fieldUse: "ItemUseOutOfBattle_PPRecovery",
+    pocket: "POCKET_ITEMS",
   },
   elixir: {
     name: "ELIXIR",
@@ -287,6 +322,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_PPRecovery",
+    pocket: "POCKET_ITEMS",
   },
   max_elixir: {
     name: "MAX ELIXIR",
@@ -295,6 +331,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 255,
     fieldUse: "ItemUseOutOfBattle_PPRecovery",
+    pocket: "POCKET_ITEMS",
   },
   lava_cookie: {
     name: "LAVA COOKIE",
@@ -303,6 +340,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   blue_flute: {
     name: "BLUE FLUTE",
@@ -311,6 +349,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   yellow_flute: {
     name: "YELLOW FLUTE",
@@ -319,6 +358,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   red_flute: {
     name: "RED FLUTE",
@@ -327,6 +367,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   black_flute: {
     name: "BLACK FLUTE",
@@ -335,6 +376,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 50,
     fieldUse: "ItemUseOutOfBattle_BlackWhiteFlute",
+    pocket: "POCKET_ITEMS",
   },
   white_flute: {
     name: "WHITE FLUTE",
@@ -343,6 +385,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 150,
     fieldUse: "ItemUseOutOfBattle_BlackWhiteFlute",
+    pocket: "POCKET_ITEMS",
   },
   berry_juice: {
     name: "BERRY JUICE",
@@ -351,6 +394,7 @@ export const ITEM_METADATA = {
     holdEffect: "restore_hp",
     parameter: 20,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   sacred_ash: {
     name: "SACRED ASH",
@@ -359,6 +403,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_SacredAsh",
+    pocket: "POCKET_ITEMS",
   },
   shoal_salt: {
     name: "SHOAL SALT",
@@ -367,6 +412,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   shoal_shell: {
     name: "SHOAL SHELL",
@@ -375,6 +421,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   red_shard: {
     name: "RED SHARD",
@@ -383,6 +430,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   blue_shard: {
     name: "BLUE SHARD",
@@ -391,6 +439,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   yellow_shard: {
     name: "YELLOW SHARD",
@@ -399,6 +448,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   green_shard: {
     name: "GREEN SHARD",
@@ -407,6 +457,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   hp_up: {
     name: "HP UP",
@@ -415,6 +466,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   protein: {
     name: "PROTEIN",
@@ -423,6 +475,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   iron: {
     name: "IRON",
@@ -431,6 +484,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   carbos: {
     name: "CARBOS",
@@ -439,6 +493,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   calcium: {
     name: "CALCIUM",
@@ -447,6 +502,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   rare_candy: {
     name: "RARE CANDY",
@@ -455,6 +511,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_RareCandy",
+    pocket: "POCKET_ITEMS",
   },
   pp_up: {
     name: "PP UP",
@@ -463,6 +520,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_PPUp",
+    pocket: "POCKET_ITEMS",
   },
   zinc: {
     name: "ZINC",
@@ -471,6 +529,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_ITEMS",
   },
   pp_max: {
     name: "PP MAX",
@@ -479,6 +538,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_PPUp",
+    pocket: "POCKET_ITEMS",
   },
   guard_spec: {
     name: "GUARD SPEC.",
@@ -487,6 +547,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   dire_hit: {
     name: "DIRE HIT",
@@ -495,6 +556,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   x_attack: {
     name: "X ATTACK",
@@ -503,6 +565,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   x_defend: {
     name: "X DEFEND",
@@ -511,6 +574,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   x_speed: {
     name: "X SPEED",
@@ -519,6 +583,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   x_accuracy: {
     name: "X ACCURACY",
@@ -527,6 +592,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   x_special: {
     name: "X SPECIAL",
@@ -535,6 +601,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   poke_doll: {
     name: "POKé DOLL",
@@ -543,6 +610,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   fluffy_tail: {
     name: "FLUFFY TAIL",
@@ -551,6 +619,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   super_repel: {
     name: "SUPER REPEL",
@@ -559,6 +628,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 200,
     fieldUse: "ItemUseOutOfBattle_Repel",
+    pocket: "POCKET_ITEMS",
   },
   max_repel: {
     name: "MAX REPEL",
@@ -567,6 +637,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 250,
     fieldUse: "ItemUseOutOfBattle_Repel",
+    pocket: "POCKET_ITEMS",
   },
   escape_rope: {
     name: "ESCAPE ROPE",
@@ -575,6 +646,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EscapeRope",
+    pocket: "POCKET_ITEMS",
   },
   repel: {
     name: "REPEL",
@@ -583,6 +655,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 100,
     fieldUse: "ItemUseOutOfBattle_Repel",
+    pocket: "POCKET_ITEMS",
   },
   sun_stone: {
     name: "SUN STONE",
@@ -591,6 +664,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EvolutionStone",
+    pocket: "POCKET_ITEMS",
   },
   moon_stone: {
     name: "MOON STONE",
@@ -599,6 +673,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EvolutionStone",
+    pocket: "POCKET_ITEMS",
   },
   fire_stone: {
     name: "FIRE STONE",
@@ -607,6 +682,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EvolutionStone",
+    pocket: "POCKET_ITEMS",
   },
   thunder_stone: {
     name: "THUNDERSTONE",
@@ -615,6 +691,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EvolutionStone",
+    pocket: "POCKET_ITEMS",
   },
   water_stone: {
     name: "WATER STONE",
@@ -623,6 +700,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EvolutionStone",
+    pocket: "POCKET_ITEMS",
   },
   leaf_stone: {
     name: "LEAF STONE",
@@ -631,6 +709,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EvolutionStone",
+    pocket: "POCKET_ITEMS",
   },
   tiny_mushroom: {
     name: "TINYMUSHROOM",
@@ -639,6 +718,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   big_mushroom: {
     name: "BIG MUSHROOM",
@@ -647,6 +727,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   pearl: {
     name: "PEARL",
@@ -655,6 +736,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   big_pearl: {
     name: "BIG PEARL",
@@ -663,6 +745,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   stardust: {
     name: "STARDUST",
@@ -671,6 +754,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   star_piece: {
     name: "STAR PIECE",
@@ -679,6 +763,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   nugget: {
     name: "NUGGET",
@@ -687,6 +772,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   heart_scale: {
     name: "HEART SCALE",
@@ -695,6 +781,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   orange_mail: {
     name: "ORANGE MAIL",
@@ -703,6 +790,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   harbor_mail: {
     name: "HARBOR MAIL",
@@ -711,6 +799,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   glitter_mail: {
     name: "GLITTER MAIL",
@@ -719,6 +808,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   mech_mail: {
     name: "MECH MAIL",
@@ -727,6 +817,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   wood_mail: {
     name: "WOOD MAIL",
@@ -735,6 +826,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   wave_mail: {
     name: "WAVE MAIL",
@@ -743,6 +835,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   bead_mail: {
     name: "BEAD MAIL",
@@ -751,6 +844,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   shadow_mail: {
     name: "SHADOW MAIL",
@@ -759,6 +853,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   tropic_mail: {
     name: "TROPIC MAIL",
@@ -767,6 +862,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   dream_mail: {
     name: "DREAM MAIL",
@@ -775,6 +871,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   fab_mail: {
     name: "FAB MAIL",
@@ -783,6 +880,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   retro_mail: {
     name: "RETRO MAIL",
@@ -791,6 +889,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Mail",
+    pocket: "POCKET_ITEMS",
   },
   cheri_berry: {
     name: "CHERI BERRY",
@@ -799,6 +898,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_par",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   chesto_berry: {
     name: "CHESTO BERRY",
@@ -807,6 +907,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_slp",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   pecha_berry: {
     name: "PECHA BERRY",
@@ -815,6 +916,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_psn",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   rawst_berry: {
     name: "RAWST BERRY",
@@ -823,6 +925,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_brn",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   aspear_berry: {
     name: "ASPEAR BERRY",
@@ -831,6 +934,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_frz",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   leppa_berry: {
     name: "LEPPA BERRY",
@@ -839,6 +943,7 @@ export const ITEM_METADATA = {
     holdEffect: "restore_pp",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_PPRecovery",
+    pocket: "POCKET_BERRIES",
   },
   oran_berry: {
     name: "ORAN BERRY",
@@ -847,6 +952,7 @@ export const ITEM_METADATA = {
     holdEffect: "restore_hp",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   persim_berry: {
     name: "PERSIM BERRY",
@@ -855,6 +961,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_confusion",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   lum_berry: {
     name: "LUM BERRY",
@@ -863,6 +970,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_status",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   sitrus_berry: {
     name: "SITRUS BERRY",
@@ -871,6 +979,7 @@ export const ITEM_METADATA = {
     holdEffect: "restore_hp",
     parameter: 30,
     fieldUse: "ItemUseOutOfBattle_Medicine",
+    pocket: "POCKET_BERRIES",
   },
   figy_berry: {
     name: "FIGY BERRY",
@@ -879,6 +988,7 @@ export const ITEM_METADATA = {
     holdEffect: "confuse_spicy",
     parameter: 8,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   wiki_berry: {
     name: "WIKI BERRY",
@@ -887,6 +997,7 @@ export const ITEM_METADATA = {
     holdEffect: "confuse_dry",
     parameter: 8,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   mago_berry: {
     name: "MAGO BERRY",
@@ -895,6 +1006,7 @@ export const ITEM_METADATA = {
     holdEffect: "confuse_sweet",
     parameter: 8,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   aguav_berry: {
     name: "AGUAV BERRY",
@@ -903,6 +1015,7 @@ export const ITEM_METADATA = {
     holdEffect: "confuse_bitter",
     parameter: 8,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   iapapa_berry: {
     name: "IAPAPA BERRY",
@@ -911,6 +1024,7 @@ export const ITEM_METADATA = {
     holdEffect: "confuse_sour",
     parameter: 8,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   razz_berry: {
     name: "RAZZ BERRY",
@@ -919,6 +1033,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   bluk_berry: {
     name: "BLUK BERRY",
@@ -927,6 +1042,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   nanab_berry: {
     name: "NANAB BERRY",
@@ -935,6 +1051,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   wepear_berry: {
     name: "WEPEAR BERRY",
@@ -943,6 +1060,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   pinap_berry: {
     name: "PINAP BERRY",
@@ -951,6 +1069,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   pomeg_berry: {
     name: "POMEG BERRY",
@@ -959,6 +1078,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_ReduceEV",
+    pocket: "POCKET_BERRIES",
   },
   kelpsy_berry: {
     name: "KELPSY BERRY",
@@ -967,6 +1087,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_ReduceEV",
+    pocket: "POCKET_BERRIES",
   },
   qualot_berry: {
     name: "QUALOT BERRY",
@@ -975,6 +1096,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_ReduceEV",
+    pocket: "POCKET_BERRIES",
   },
   hondew_berry: {
     name: "HONDEW BERRY",
@@ -983,6 +1105,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_ReduceEV",
+    pocket: "POCKET_BERRIES",
   },
   grepa_berry: {
     name: "GREPA BERRY",
@@ -991,6 +1114,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_ReduceEV",
+    pocket: "POCKET_BERRIES",
   },
   tamato_berry: {
     name: "TAMATO BERRY",
@@ -999,6 +1123,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_ReduceEV",
+    pocket: "POCKET_BERRIES",
   },
   cornn_berry: {
     name: "CORNN BERRY",
@@ -1007,6 +1132,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   magost_berry: {
     name: "MAGOST BERRY",
@@ -1015,6 +1141,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   rabuta_berry: {
     name: "RABUTA BERRY",
@@ -1023,6 +1150,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   nomel_berry: {
     name: "NOMEL BERRY",
@@ -1031,6 +1159,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   spelon_berry: {
     name: "SPELON BERRY",
@@ -1039,6 +1168,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   pamtre_berry: {
     name: "PAMTRE BERRY",
@@ -1047,6 +1177,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   watmel_berry: {
     name: "WATMEL BERRY",
@@ -1055,6 +1186,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   durin_berry: {
     name: "DURIN BERRY",
@@ -1063,6 +1195,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   belue_berry: {
     name: "BELUE BERRY",
@@ -1071,6 +1204,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   liechi_berry: {
     name: "LIECHI BERRY",
@@ -1079,6 +1213,7 @@ export const ITEM_METADATA = {
     holdEffect: "attack_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   ganlon_berry: {
     name: "GANLON BERRY",
@@ -1087,6 +1222,7 @@ export const ITEM_METADATA = {
     holdEffect: "defense_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   salac_berry: {
     name: "SALAC BERRY",
@@ -1095,6 +1231,7 @@ export const ITEM_METADATA = {
     holdEffect: "speed_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   petaya_berry: {
     name: "PETAYA BERRY",
@@ -1103,6 +1240,7 @@ export const ITEM_METADATA = {
     holdEffect: "sp_attack_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   apicot_berry: {
     name: "APICOT BERRY",
@@ -1111,6 +1249,7 @@ export const ITEM_METADATA = {
     holdEffect: "sp_defense_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   lansat_berry: {
     name: "LANSAT BERRY",
@@ -1119,6 +1258,7 @@ export const ITEM_METADATA = {
     holdEffect: "critical_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   starf_berry: {
     name: "STARF BERRY",
@@ -1127,6 +1267,7 @@ export const ITEM_METADATA = {
     holdEffect: "random_stat_up",
     parameter: 4,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_BERRIES",
   },
   enigma_berry: {
     name: "ENIGMA BERRY",
@@ -1135,6 +1276,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_EnigmaBerry",
+    pocket: "POCKET_BERRIES",
   },
   bright_powder: {
     name: "BRIGHTPOWDER",
@@ -1143,6 +1285,7 @@ export const ITEM_METADATA = {
     holdEffect: "evasion_up",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   white_herb: {
     name: "WHITE HERB",
@@ -1151,6 +1294,7 @@ export const ITEM_METADATA = {
     holdEffect: "restore_stats",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   macho_brace: {
     name: "MACHO BRACE",
@@ -1159,6 +1303,7 @@ export const ITEM_METADATA = {
     holdEffect: "macho_brace",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   exp_share: {
     name: "EXP. SHARE",
@@ -1167,6 +1312,7 @@ export const ITEM_METADATA = {
     holdEffect: "exp_share",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   quick_claw: {
     name: "QUICK CLAW",
@@ -1175,6 +1321,7 @@ export const ITEM_METADATA = {
     holdEffect: "quick_claw",
     parameter: 20,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   soothe_bell: {
     name: "SOOTHE BELL",
@@ -1183,6 +1330,7 @@ export const ITEM_METADATA = {
     holdEffect: "friendship_up",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   mental_herb: {
     name: "MENTAL HERB",
@@ -1191,6 +1339,7 @@ export const ITEM_METADATA = {
     holdEffect: "cure_attract",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   choice_band: {
     name: "CHOICE BAND",
@@ -1199,6 +1348,7 @@ export const ITEM_METADATA = {
     holdEffect: "choice_band",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   kings_rock: {
     name: "KING'S ROCK",
@@ -1207,6 +1357,7 @@ export const ITEM_METADATA = {
     holdEffect: "flinch",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   silver_powder: {
     name: "SILVERPOWDER",
@@ -1215,6 +1366,7 @@ export const ITEM_METADATA = {
     holdEffect: "bug_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   amulet_coin: {
     name: "AMULET COIN",
@@ -1223,6 +1375,7 @@ export const ITEM_METADATA = {
     holdEffect: "double_prize",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   cleanse_tag: {
     name: "CLEANSE TAG",
@@ -1231,6 +1384,7 @@ export const ITEM_METADATA = {
     holdEffect: "repel",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   soul_dew: {
     name: "SOUL DEW",
@@ -1239,6 +1393,7 @@ export const ITEM_METADATA = {
     holdEffect: "soul_dew",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   deep_sea_tooth: {
     name: "DEEPSEATOOTH",
@@ -1247,6 +1402,7 @@ export const ITEM_METADATA = {
     holdEffect: "deep_sea_tooth",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   deep_sea_scale: {
     name: "DEEPSEASCALE",
@@ -1255,6 +1411,7 @@ export const ITEM_METADATA = {
     holdEffect: "deep_sea_scale",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   smoke_ball: {
     name: "SMOKE BALL",
@@ -1263,6 +1420,7 @@ export const ITEM_METADATA = {
     holdEffect: "can_always_run",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   everstone: {
     name: "EVERSTONE",
@@ -1271,6 +1429,7 @@ export const ITEM_METADATA = {
     holdEffect: "prevent_evolve",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   focus_band: {
     name: "FOCUS BAND",
@@ -1279,6 +1438,7 @@ export const ITEM_METADATA = {
     holdEffect: "focus_band",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   lucky_egg: {
     name: "LUCKY EGG",
@@ -1287,6 +1447,7 @@ export const ITEM_METADATA = {
     holdEffect: "lucky_egg",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   scope_lens: {
     name: "SCOPE LENS",
@@ -1295,6 +1456,7 @@ export const ITEM_METADATA = {
     holdEffect: "scope_lens",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   metal_coat: {
     name: "METAL COAT",
@@ -1303,6 +1465,7 @@ export const ITEM_METADATA = {
     holdEffect: "steel_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   leftovers: {
     name: "LEFTOVERS",
@@ -1311,6 +1474,7 @@ export const ITEM_METADATA = {
     holdEffect: "leftovers",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   dragon_scale: {
     name: "DRAGON SCALE",
@@ -1319,6 +1483,7 @@ export const ITEM_METADATA = {
     holdEffect: "dragon_scale",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   light_ball: {
     name: "LIGHT BALL",
@@ -1327,6 +1492,7 @@ export const ITEM_METADATA = {
     holdEffect: "light_ball",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   soft_sand: {
     name: "SOFT SAND",
@@ -1335,6 +1501,7 @@ export const ITEM_METADATA = {
     holdEffect: "ground_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   hard_stone: {
     name: "HARD STONE",
@@ -1343,6 +1510,7 @@ export const ITEM_METADATA = {
     holdEffect: "rock_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   miracle_seed: {
     name: "MIRACLE SEED",
@@ -1351,6 +1519,7 @@ export const ITEM_METADATA = {
     holdEffect: "grass_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   black_glasses: {
     name: "BLACKGLASSES",
@@ -1359,6 +1528,7 @@ export const ITEM_METADATA = {
     holdEffect: "dark_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   black_belt: {
     name: "BLACK BELT",
@@ -1367,6 +1537,7 @@ export const ITEM_METADATA = {
     holdEffect: "fighting_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   magnet: {
     name: "MAGNET",
@@ -1375,6 +1546,7 @@ export const ITEM_METADATA = {
     holdEffect: "electric_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   mystic_water: {
     name: "MYSTIC WATER",
@@ -1383,6 +1555,7 @@ export const ITEM_METADATA = {
     holdEffect: "water_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   sharp_beak: {
     name: "SHARP BEAK",
@@ -1391,6 +1564,7 @@ export const ITEM_METADATA = {
     holdEffect: "flying_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   poison_barb: {
     name: "POISON BARB",
@@ -1399,6 +1573,7 @@ export const ITEM_METADATA = {
     holdEffect: "poison_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   never_melt_ice: {
     name: "NEVERMELTICE",
@@ -1407,6 +1582,7 @@ export const ITEM_METADATA = {
     holdEffect: "ice_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   spell_tag: {
     name: "SPELL TAG",
@@ -1415,6 +1591,7 @@ export const ITEM_METADATA = {
     holdEffect: "ghost_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   twisted_spoon: {
     name: "TWISTEDSPOON",
@@ -1423,6 +1600,7 @@ export const ITEM_METADATA = {
     holdEffect: "psychic_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   charcoal: {
     name: "CHARCOAL",
@@ -1431,6 +1609,7 @@ export const ITEM_METADATA = {
     holdEffect: "fire_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   dragon_fang: {
     name: "DRAGON FANG",
@@ -1439,6 +1618,7 @@ export const ITEM_METADATA = {
     holdEffect: "dragon_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   silk_scarf: {
     name: "SILK SCARF",
@@ -1447,6 +1627,7 @@ export const ITEM_METADATA = {
     holdEffect: "normal_power",
     parameter: 10,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   up_grade: {
     name: "UP-GRADE",
@@ -1455,6 +1636,7 @@ export const ITEM_METADATA = {
     holdEffect: "up_grade",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   shell_bell: {
     name: "SHELL BELL",
@@ -1463,6 +1645,7 @@ export const ITEM_METADATA = {
     holdEffect: "shell_bell",
     parameter: 8,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   sea_incense: {
     name: "SEA INCENSE",
@@ -1471,6 +1654,7 @@ export const ITEM_METADATA = {
     holdEffect: "water_power",
     parameter: 5,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   lax_incense: {
     name: "LAX INCENSE",
@@ -1479,6 +1663,7 @@ export const ITEM_METADATA = {
     holdEffect: "evasion_up",
     parameter: 5,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   lucky_punch: {
     name: "LUCKY PUNCH",
@@ -1487,6 +1672,7 @@ export const ITEM_METADATA = {
     holdEffect: "lucky_punch",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   metal_powder: {
     name: "METAL POWDER",
@@ -1495,6 +1681,7 @@ export const ITEM_METADATA = {
     holdEffect: "metal_powder",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   thick_club: {
     name: "THICK CLUB",
@@ -1503,6 +1690,7 @@ export const ITEM_METADATA = {
     holdEffect: "thick_club",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   stick: {
     name: "STICK",
@@ -1511,6 +1699,7 @@ export const ITEM_METADATA = {
     holdEffect: "stick",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   red_scarf: {
     name: "RED SCARF",
@@ -1519,6 +1708,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   blue_scarf: {
     name: "BLUE SCARF",
@@ -1527,6 +1717,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   pink_scarf: {
     name: "PINK SCARF",
@@ -1535,6 +1726,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   green_scarf: {
     name: "GREEN SCARF",
@@ -1543,6 +1735,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   yellow_scarf: {
     name: "YELLOW SCARF",
@@ -1551,6 +1744,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_ITEMS",
   },
   mach_bike: {
     name: "MACH BIKE",
@@ -1559,6 +1753,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Bike",
+    pocket: "POCKET_KEY_ITEMS",
   },
   coin_case: {
     name: "COIN CASE",
@@ -1567,6 +1762,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CoinCase",
+    pocket: "POCKET_KEY_ITEMS",
   },
   itemfinder: {
     name: "ITEMFINDER",
@@ -1575,6 +1771,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Itemfinder",
+    pocket: "POCKET_KEY_ITEMS",
   },
   old_rod: {
     name: "OLD ROD",
@@ -1583,6 +1780,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Rod",
+    pocket: "POCKET_KEY_ITEMS",
   },
   good_rod: {
     name: "GOOD ROD",
@@ -1591,6 +1789,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Rod",
+    pocket: "POCKET_KEY_ITEMS",
   },
   super_rod: {
     name: "SUPER ROD",
@@ -1599,6 +1798,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Rod",
+    pocket: "POCKET_KEY_ITEMS",
   },
   ss_ticket: {
     name: "S.S. TICKET",
@@ -1607,6 +1807,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   contest_pass: {
     name: "CONTEST PASS",
@@ -1615,6 +1816,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   wailmer_pail: {
     name: "WAILMER PAIL",
@@ -1623,6 +1825,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_WailmerPail",
+    pocket: "POCKET_KEY_ITEMS",
   },
   devon_goods: {
     name: "DEVON GOODS",
@@ -1631,6 +1834,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   soot_sack: {
     name: "SOOT SACK",
@@ -1639,6 +1843,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   basement_key: {
     name: "BASEMENT KEY",
@@ -1647,6 +1852,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   acro_bike: {
     name: "ACRO BIKE",
@@ -1655,6 +1861,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_Bike",
+    pocket: "POCKET_KEY_ITEMS",
   },
   pokeblock_case: {
     name: "{POKEBLOCK} CASE",
@@ -1663,6 +1870,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_PokeblockCase",
+    pocket: "POCKET_KEY_ITEMS",
   },
   letter: {
     name: "LETTER",
@@ -1671,6 +1879,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   eon_ticket: {
     name: "EON TICKET",
@@ -1679,6 +1888,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   red_orb: {
     name: "RED ORB",
@@ -1687,6 +1897,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   blue_orb: {
     name: "BLUE ORB",
@@ -1695,6 +1906,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   scanner: {
     name: "SCANNER",
@@ -1703,6 +1915,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   go_goggles: {
     name: "GO-GOGGLES",
@@ -1711,6 +1924,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   meteorite: {
     name: "METEORITE",
@@ -1719,6 +1933,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   room_1_key: {
     name: "RM. 1 KEY",
@@ -1727,6 +1942,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   room_2_key: {
     name: "RM. 2 KEY",
@@ -1735,6 +1951,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   room_4_key: {
     name: "RM. 4 KEY",
@@ -1743,6 +1960,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   room_6_key: {
     name: "RM. 6 KEY",
@@ -1751,6 +1969,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   storage_key: {
     name: "STORAGE KEY",
@@ -1759,6 +1978,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   root_fossil: {
     name: "ROOT FOSSIL",
@@ -1767,6 +1987,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   claw_fossil: {
     name: "CLAW FOSSIL",
@@ -1775,6 +1996,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   devon_scope: {
     name: "DEVON SCOPE",
@@ -1783,6 +2005,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   tm_focus_punch: {
     name: "TM01",
@@ -1791,6 +2014,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_dragon_claw: {
     name: "TM02",
@@ -1799,6 +2023,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_water_pulse: {
     name: "TM03",
@@ -1807,6 +2032,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_calm_mind: {
     name: "TM04",
@@ -1815,6 +2041,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_roar: {
     name: "TM05",
@@ -1823,6 +2050,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_toxic: {
     name: "TM06",
@@ -1831,6 +2059,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_hail: {
     name: "TM07",
@@ -1839,6 +2068,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_bulk_up: {
     name: "TM08",
@@ -1847,6 +2077,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_bullet_seed: {
     name: "TM09",
@@ -1855,6 +2086,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_hidden_power: {
     name: "TM10",
@@ -1863,6 +2095,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_sunny_day: {
     name: "TM11",
@@ -1871,6 +2104,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_taunt: {
     name: "TM12",
@@ -1879,6 +2113,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_ice_beam: {
     name: "TM13",
@@ -1887,6 +2122,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_blizzard: {
     name: "TM14",
@@ -1895,6 +2131,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_hyper_beam: {
     name: "TM15",
@@ -1903,6 +2140,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_light_screen: {
     name: "TM16",
@@ -1911,6 +2149,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_protect: {
     name: "TM17",
@@ -1919,6 +2158,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_rain_dance: {
     name: "TM18",
@@ -1927,6 +2167,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_giga_drain: {
     name: "TM19",
@@ -1935,6 +2176,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_safeguard: {
     name: "TM20",
@@ -1943,6 +2185,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_frustration: {
     name: "TM21",
@@ -1951,6 +2194,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_solar_beam: {
     name: "TM22",
@@ -1959,6 +2203,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_iron_tail: {
     name: "TM23",
@@ -1967,6 +2212,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_thunderbolt: {
     name: "TM24",
@@ -1975,6 +2221,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_thunder: {
     name: "TM25",
@@ -1983,6 +2230,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_earthquake: {
     name: "TM26",
@@ -1991,6 +2239,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_return: {
     name: "TM27",
@@ -1999,6 +2248,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_dig: {
     name: "TM28",
@@ -2007,6 +2257,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_psychic: {
     name: "TM29",
@@ -2015,6 +2266,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_shadow_ball: {
     name: "TM30",
@@ -2023,6 +2275,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_brick_break: {
     name: "TM31",
@@ -2031,6 +2284,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_double_team: {
     name: "TM32",
@@ -2039,6 +2293,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_reflect: {
     name: "TM33",
@@ -2047,6 +2302,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_shock_wave: {
     name: "TM34",
@@ -2055,6 +2311,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_flamethrower: {
     name: "TM35",
@@ -2063,6 +2320,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_sludge_bomb: {
     name: "TM36",
@@ -2071,6 +2329,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_sandstorm: {
     name: "TM37",
@@ -2079,6 +2338,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_fire_blast: {
     name: "TM38",
@@ -2087,6 +2347,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_rock_tomb: {
     name: "TM39",
@@ -2095,6 +2356,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_aerial_ace: {
     name: "TM40",
@@ -2103,6 +2365,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_torment: {
     name: "TM41",
@@ -2111,6 +2374,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_facade: {
     name: "TM42",
@@ -2119,6 +2383,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_secret_power: {
     name: "TM43",
@@ -2127,6 +2392,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_rest: {
     name: "TM44",
@@ -2135,6 +2401,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_attract: {
     name: "TM45",
@@ -2143,6 +2410,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_thief: {
     name: "TM46",
@@ -2151,6 +2419,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_steel_wing: {
     name: "TM47",
@@ -2159,6 +2428,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_skill_swap: {
     name: "TM48",
@@ -2167,6 +2437,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_snatch: {
     name: "TM49",
@@ -2175,6 +2446,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   tm_overheat: {
     name: "TM50",
@@ -2183,6 +2455,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_cut: {
     name: "HM01",
@@ -2191,6 +2464,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_fly: {
     name: "HM02",
@@ -2199,6 +2473,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_surf: {
     name: "HM03",
@@ -2207,6 +2482,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_strength: {
     name: "HM04",
@@ -2215,6 +2491,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_flash: {
     name: "HM05",
@@ -2223,6 +2500,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_rock_smash: {
     name: "HM06",
@@ -2231,6 +2509,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_waterfall: {
     name: "HM07",
@@ -2239,6 +2518,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   hm_dive: {
     name: "HM08",
@@ -2247,6 +2527,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_TMHM",
+    pocket: "POCKET_TM_HM",
   },
   oaks_parcel: {
     name: "OAK'S PARCEL",
@@ -2255,6 +2536,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   poke_flute: {
     name: "POKé FLUTE",
@@ -2263,6 +2545,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   secret_key: {
     name: "SECRET KEY",
@@ -2271,6 +2554,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   bike_voucher: {
     name: "BIKE VOUCHER",
@@ -2279,6 +2563,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   gold_teeth: {
     name: "GOLD TEETH",
@@ -2287,6 +2572,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   old_amber: {
     name: "OLD AMBER",
@@ -2295,6 +2581,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   card_key: {
     name: "CARD KEY",
@@ -2303,6 +2590,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   lift_key: {
     name: "LIFT KEY",
@@ -2311,6 +2599,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   helix_fossil: {
     name: "HELIX FOSSIL",
@@ -2319,6 +2608,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   dome_fossil: {
     name: "DOME FOSSIL",
@@ -2327,6 +2617,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   silph_scope: {
     name: "SILPH SCOPE",
@@ -2335,6 +2626,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   bicycle: {
     name: "BICYCLE",
@@ -2343,6 +2635,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   town_map: {
     name: "TOWN MAP",
@@ -2351,6 +2644,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   vs_seeker: {
     name: "VS SEEKER",
@@ -2359,6 +2653,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   fame_checker: {
     name: "FAME CHECKER",
@@ -2367,6 +2662,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   tm_case: {
     name: "TM CASE",
@@ -2375,6 +2671,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   berry_pouch: {
     name: "BERRY POUCH",
@@ -2383,6 +2680,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   teachy_tv: {
     name: "TEACHY TV",
@@ -2391,6 +2689,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   tri_pass: {
     name: "TRI-PASS",
@@ -2399,6 +2698,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   rainbow_pass: {
     name: "RAINBOW PASS",
@@ -2407,6 +2707,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   tea: {
     name: "TEA",
@@ -2415,6 +2716,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   mystic_ticket: {
     name: "MYSTICTICKET",
@@ -2423,6 +2725,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   aurora_ticket: {
     name: "AURORATICKET",
@@ -2431,6 +2734,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   powder_jar: {
     name: "POWDER JAR",
@@ -2439,6 +2743,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_PowderJar",
+    pocket: "POCKET_KEY_ITEMS",
   },
   ruby: {
     name: "RUBY",
@@ -2447,6 +2752,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   sapphire: {
     name: "SAPPHIRE",
@@ -2455,6 +2761,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   magma_emblem: {
     name: "MAGMA EMBLEM",
@@ -2463,6 +2770,7 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
   old_sea_map: {
     name: "OLD SEA MAP",
@@ -2471,5 +2779,6 @@ export const ITEM_METADATA = {
     holdEffect: "none",
     parameter: 0,
     fieldUse: "ItemUseOutOfBattle_CannotUse",
+    pocket: "POCKET_KEY_ITEMS",
   },
 };
