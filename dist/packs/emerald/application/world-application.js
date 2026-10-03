@@ -6,6 +6,7 @@ import {
 } from "../../../engine/world-state.js";
 import { NPCBehaviorRegistry } from "../../../engine/npc-behaviors.js";
 import { FieldSession } from "../../../engine/field-session.js";
+import { WorldQuery } from "../../../engine/world-query.js";
 import { FieldDirector } from "../../../engine/field-director.js";
 import { objectsFor } from "../pack.js";
 import { matchesCondition } from "../../../engine/conditions.js";
@@ -47,6 +48,8 @@ export const WORLD_PORTS = Object.freeze([
   "fieldInteraction",
   "fieldEffectVisit",
   "blockedFieldInteraction",
+  "blockedContact",
+  "bindContacts",
   "motion",
   "movement",
   "onMap",
@@ -248,11 +251,16 @@ export class WorldApplication {
       this.facilityActive
     )
       return false;
+    this.blockedObject = null;
     const moved = this.field.move(dir, {
       running: running && !this.world.map.indoor,
       ...(duration !== undefined ? { duration } : {}),
     });
-    return moved || (!this.field.busy && this.blockedFieldInteraction());
+    const accepted =
+      moved || (!this.field.busy && this.blockedFieldInteraction());
+    if (!accepted && this.blockedObject)
+      this.blockedContact(this.blockedObject);
+    return accepted;
   }
   interact() {
     if (this.ui.dialog) {
@@ -318,6 +326,15 @@ export class WorldApplication {
   }
   get world() {
     return this.field.world;
+  }
+  bounds(map = this.state.position.map) {
+    return this.query.bounds(map);
+  }
+  cells(region) {
+    return this.query.cells({
+      ...region,
+      map: region.map || this.state.position.map,
+    });
   }
   bind() {
     this.field?.dispose();
@@ -408,7 +425,8 @@ export class WorldApplication {
         this.visitMap();
         this.onMap(this.world.map.title, this.state.position.map);
       },
-      onBlocked: (kind) => {
+      onBlocked: (kind, object) => {
+        this.blockedObject = kind === "object" ? object.id : null;
         if (kind === "unavailable")
           void this.runStory([
             {
@@ -430,6 +448,17 @@ export class WorldApplication {
     });
     this.bindDevices({ resume: resumeVisit });
     this.bindFieldActions();
+    this.bindContacts();
+    this.query = new WorldQuery({
+      maps: this.worldState.maps,
+      objects: (map) => this.field.npcs.occupants(map),
+      player: () => this.state.position,
+      playerSource: () =>
+        this.motion.moving(this.timeline.now())
+          ? this.motion.sourcePosition
+          : null,
+      elevation: this.world.elevation,
+    });
     this.visitMap();
     this.plugins?.rebind();
     this.onMap(this.world.map.title, this.state.position.map);

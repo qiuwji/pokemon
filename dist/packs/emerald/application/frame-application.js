@@ -4,6 +4,7 @@ export const FRAME_PORTS = Object.freeze([
   "tickWeather",
   "tickDevices",
   "tickActors",
+  "flushContacts",
   "playActive",
   "facilityActive",
   "battle",
@@ -79,5 +80,6 @@ export class FrameApplication {
       maps: visibleMaps,
       playerFrom: this.motion.moving(now) ? this.motion.sourcePosition : null,
     });
+    this.flushContacts();
   }
 }

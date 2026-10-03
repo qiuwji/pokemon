@@ -510,10 +510,87 @@ export type ContentKind =
   | "facilities"
   | "facilityActivities"
   | "encounters"
+  | "encounterPolicies"
   | "battleStrategies"
   | "conditionQueries"
   | "battleStates"
   | "forms";
+export type EncounterArea = "land" | "water" | "fishing" | "rock";
+export interface EncounterPolicyContext {
+  readonly position: Readonly<Position>;
+  readonly steps: number;
+  readonly lastEncounterSteps: number;
+  readonly mode: string;
+  readonly cell: Readonly<{
+    behavior: number;
+    collision: number;
+    elevation: number;
+    block: number;
+  }> | null;
+  readonly party: readonly DeepReadonly<Creature>[];
+  readonly flags: Readonly<Record<string, Json>>;
+  readonly dialog: boolean;
+  readonly weather: Readonly<Json>;
+}
+export interface EncounterPolicyDefinition {
+  channel: string;
+  priority?: number;
+  when?: (context: EncounterPolicyContext) => boolean;
+  decide(
+    context: EncounterPolicyContext,
+  ): {
+    area: EncounterArea;
+    checkRate?: boolean;
+    checkSelection?: boolean;
+    checkPermission?: boolean;
+  } | null;
+}
+export interface WorldCellView {
+  readonly x: number;
+  readonly y: number;
+  readonly block: number;
+  readonly behavior: number;
+  readonly collision: number;
+  readonly elevation: number;
+  readonly warp: boolean;
+  readonly occupants: readonly {
+    readonly id: string;
+    readonly elevation: number;
+    readonly reserved: boolean;
+  }[];
+}
+export interface WorldRegionView {
+  readonly map: string;
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly cells: readonly WorldCellView[];
+}
+export interface FieldContactView {
+  readonly sequence: number;
+  readonly kind: "bump" | "request";
+  readonly direction: Direction;
+  readonly interaction: string | null;
+  readonly subject: Readonly<{
+    id: string;
+    map: string;
+    x: number;
+    y: number;
+    elevation: number;
+  }>;
+  readonly target: FieldContactView["subject"];
+}
+export interface EncounterTicketView {
+  readonly id: string;
+  readonly actor: string;
+  readonly map: string;
+  readonly area: EncounterArea;
+  readonly table: string | null;
+  readonly species: string;
+  readonly level: number;
+  readonly claimed: boolean;
+}
 export interface PluginStateDefinition {
   clock: "step" | "round" | "manual" | "permanent";
   schema: DataSchema;

@@ -221,7 +221,7 @@ test("Native bicycle registration runs through the command bus, preserves RNG an
   assert.equal(g.state.movement.mode, "walk");
   const before = g.rng.seed,
     saved = g.exportDocument();
-  assert.equal(saved.version, 12);
+  assert.equal(saved.version, 13);
   g.loadDocument(saved);
   assert.deepEqual(g.registeredItemView().selection, {
     item: "mach_bike",

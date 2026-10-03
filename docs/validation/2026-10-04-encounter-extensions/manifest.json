@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-04",
+  "baselineCommit": "0ba2129",
+  "revision": "Working tree at checkpoint; hashes identify verified code before commit.",
+  "projectVersion": "0.20.0",
+  "saveVersion": 13,
+  "pluginApiVersion": 1,
+  "node": "v26.0.0",
+  "scope": "Registered step encounter policy and early suppression; bounded readonly world/occupancy and regional table queries; seeded sampling; stable contacts; single-custody Actor-linked encounter tickets and direct wild battle capture/result lifecycle without StoryRunner. No installed density-spawn gameplay, species appearance binding, camera/viewport or composable fog extension yet.",
+  "tests": [
+    {
+      "log": "full-test.log",
+      "tests": 711,
+      "pass": 702,
+      "fail": 9,
+      "skipped": 0
+    },
+    {
+      "log": "affected-test.log",
+      "tests": 127,
+      "pass": 127,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "contracts-test.log",
+      "tests": 15,
+      "pass": 14,
+      "fail": 1,
+      "skipped": 0
+    },
+    {
+      "log": "contracts-final.log",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "full-final.log",
+      "tests": 719,
+      "pass": 719,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "examples.log",
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "checks": {
+    "content": "14 startup maps, 58 species, 87 base / 354 runtime moves, 310 items",
+    "contracts": "strict consumer passed",
+    "modules": 285,
+    "examples": 10,
+    "docs": "Documentation: 64 Markdown files, 428 local links, 10 synchronized examples valid"
+  },
+  "failureRepairs": "Initial full suite failed 9 current-save fixtures/version assertions after adding required encounter custody. Fixtures were updated; no historic save migration added. Final 719 tests passed. New event-listener fixture was moved to setup registration.",
+  "browser": "Not performed this checkpoint; no visual gameplay plugin installed.",
+  "reference": {
+    "path": "work/pokeemerald",
+    "sha": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "status": "clean, read-only",
+    "policy": "Native opening-slice step conditions retained; plugin contact result policy (consume Actor, recover party locally on loss) is explicitly a project contract, not a claim of full Emerald parity."
+  },
+  "invalidation": "Rerun only affected proofs when implementation, registration, ports, state/save, timing or commands in scope change. Run full suite at next integration checkpoint. UI/browser claims require separate verification.",
+  "fileHashes": {
+    "ARCHITECTURE.md": "78fd537be53f10c3bc15bb553d34e9392479c58f035064391710842776c6bfe3",
+    "README.md": "e670a406274e90f51cb2618d8ea1ac362110d589564e79bb4dd75cbdf7673509",
+    "dist/engine/contracts.d.ts": "93224c9760c0162bccf0291ea091939362d9bc3006124bb03fa2ab9ed65b1ca5",
+    "dist/engine/encounter-policies.js": "c5275ed1861aa75bf98f30999726d33ab052dcf6835867f4a42bc46c24e69aad",
+    "dist/engine/encounter-tables.js": "04088f52fb26202951a066cb994a81fc92342c0cf79386ac6c7f9801d604b708",
+    "dist/engine/encounter-tickets.js": "e93b755d9771a92a5ada86f7b80152e195c9469da3f77c5f4e951e998a868ba2",
+    "dist/engine/encounters.js": "df59357d9687e63bf323e13f5deb0d97a8af9a691599112de912070fbb2d9dd9",
+    "dist/engine/extensions/catalog.js": "4f7dbf01b1e3171c00f35d03d2635ccb8c56144f3e3abb0f90aeda7c242e9ed0",
+    "dist/engine/extensions/plugin-host.js": "84c6dde51b8b38ceed216cbe6a7dd00ede55ad2224de52b211a0919dd839dac6",
+    "dist/engine/extensions/terrain-utils.d.ts": "fbfc858e5debc3f2d137eccc94b4c65664ae3a78602ae9340c3e6098b482e9c8",
+    "dist/engine/extensions/terrain-utils.js": "dbcd744cdecf515b50905f57e87d74d378194d611ca73187fe6eaa08f88a3cd8",
+    "dist/engine/field-contacts.js": "47f67136bc21ab25cd6d68b96aa4b006fe801dcc87da7c06ca83d1bd39310ece",
+    "dist/engine/party-storage.js": "8dfdd2661ca6cba389ddf7e253584b9db335d0a7f150fca915fc1517039dabaf",
+    "dist/engine/random-selection.js": "274e2d1eaf2a3303a169a1d78a29173e3f72a617dba07c8eadce1cf2a6e5d0fc",
+    "dist/engine/world-query.js": "01361e8998c927a9fee3dd4b2fdcb2986be9f4b2e6d725b1d23bb7ed31db9430",
+    "dist/packs/emerald/application-commands.js": "17b86a6763dadb90aede84e73bfb8ecdc3ecef90a80fa3cadbf13dda525df2ae",
+    "dist/packs/emerald/application/actor-application.js": "ced83818207fb56721634001b7e12a5cfcfd9907846954a289f4421fe5240619",
+    "dist/packs/emerald/application/battle-application.js": "d516a8e3316a12a2ccb9fd0d081ee0351cc8f5d19b7114b0dcdd618f954c32d7",
+    "dist/packs/emerald/application/composition.js": "9d7857e42f67619e8f900090e16d1b7108f2e74ae8124cf3cced6685432a2a52",
+    "dist/packs/emerald/application/contact-application.js": "68393ce387c378c467c31f6c9009d5c80ad54850333ea6c48955a38a5321aa54",
+    "dist/packs/emerald/application/encounter-application.js": "9e3db568224b49d9d5c06077d75868df0cebfab99d9bf6b49e6f1ef19eb0a6d0",
+    "dist/packs/emerald/application/frame-application.js": "988ef715fa750c634e67ac8fa90a0597673e09ed3db8b1ff3576ab823e99da40",
+    "dist/packs/emerald/application/public-ports.js": "d9fe099d91f528922b65c86600dcd400ba6819faa4ee93e7f3e282326854036e",
+    "dist/packs/emerald/application/save-application.js": "594035e9165611a5bd0d1812c17780b42117c7153efa761c18d630b69279843b",
+    "dist/packs/emerald/application/triggers-application.js": "da8c61f1771f538935125a83df5017451dcb51ffc29c985fda5c4ae934a0c1ae",
+    "dist/packs/emerald/application/world-application.js": "9f40bb9e038f2d59eaa33800402ad0913dc909bef56d588badd51c1953daa949",
+    "dist/packs/emerald/encounter-policies.js": "32205e95959c0da0b5fbac4f1a226721eb3edb4655405eec1ca2d9801a57c4a2",
+    "dist/packs/emerald/extension-intents.js": "e85cc88ef8f18edbe1ef49f22174d71a09509bd6c887406cd97cb9c3964094db",
+    "dist/packs/emerald/extension-ports.js": "8c8223dafab2f7f1625cb8e35559813f5b52dbe64ea30b4ecc69d3519d04aaa0",
+    "dist/packs/emerald/extensions.js": "5fcbc0cec8c7037f7ec51ed00afe9acb9f677698667af0fd32135eba389a6129",
+    "dist/packs/emerald/pack.js": "8468794f4da3f2d94b06f8b3d35c5cc7d8d773b944a9c574e9ac8df36cf40a5a",
+    "dist/packs/emerald/save-contract.js": "3094d7ac07d75e7526f09e9a4362f08cb631ad5f035ad8997bff88d0255cb66e",
+    "docs/README.md": "4246e8437e92c25b443241c9985820471d5af2ba86d688e9a0b7fc1623f97995",
+    "docs/architecture/APPLICATION.md": "35bf489230024efda03f7c7dd70822cb3dcec71b9a8fbd279b277d0a3844ae4f",
+    "docs/engine/world/ENCOUNTERS_AND_CONTACTS.md": "96df5b1c9ec845aec9a5f856ca381c3892865ee29483fbf3ff56513df50c4a8b",
+    "docs/project/CHANGELOG.md": "8bbeb989281f7ce4f2a1d79e8cca6783082076ef93c8da33c75d2ff34fbbad43",
+    "docs/project/PLUGIN_ROADMAP.md": "2bd9a2818ed68fca3eb0bc7209ceea86a267a7cce2b4c59ff09fd34a86c2419c",
+    "docs/project/STATUS.md": "80349c931065d2bc182290b438f956815e512f82868f158e08ab187447d8fa7a",
+    "docs/project/VALIDATION.md": "cac1f476a1b127b135205f2ed820ebc1733851b0e79c9399392382a57041f586",
+    "examples/README.md": "c1327c6422cc06fd7ec02a6eeda7f8deab645c2baa436a8ea336c91aa3a5943a",
+    "examples/encounter-extension.test.js": "bbeb45da2125b1ec6c2179dc8313deb501b676497923387ff6b99c6a7e406f4e",
+    "package-lock.json": "1dcb8161b978f88971f2056339df45366ef2f38cc008c6268f27955beec3057c",
+    "package.json": "433c37472dd7cdd1cafed2127b5dd46af5e377a082a5e5ee7f5ff3c2dc626052",
+    "skills/emerald-actor-behaviors/SKILL.md": "b6e739429b2a9d767082a34ded58de4feaee3bfa553a99f2ad6d487cbfb93525",
+    "skills/emerald-plugin-authoring/SKILL.md": "f60f595e0a47b8d01c3f811e240683042b4f26ad0319bbae6beecb50d3b895fd",
+    "tests/contracts.typecheck.ts": "8770c2dc17c018d41c6ecce4a90c802e1d335f6598e7087b4ea94d62b7656a69",
+    "tests/creature-contract.test.js": "b4bd95987ca88b2f2ef0dc42176fda343ac8099fdfd8f0c0eb971be2865e2d82",
+    "tests/encounter-extensions.test.js": "1287f39609acb68674520a7baab72d5e1113e30da97dd3c6a13217510815717b",
+    "tests/engine.test.js": "b91aac9c26190b1e9a6e3ad85c5ba272029241aee9ee961a57fd12fae92c5fb6",
+    "tests/evolution.test.js": "9a0c6ad70dd93a0042b50dcc558e6f8500da236e58d1cdcb72eb8721b2871aaf",
+    "tests/growth-integration.test.js": "613ee85db994225104579fc450b30808fbbcd8a74c63d13c40cdf9c19df51da8",
+    "tests/helpers/encounter-extension-fixture.js": "0935907329b8207f86258f9a1689a14bf9088a2317e77ea722999eb25531b32e",
+    "tests/inventory-integration.test.js": "d9568581076fe74f93827d2acde3348838975d7e708dc0ed9524ad091d7948db",
+    "tests/item-shortcut.test.js": "20dee5d56b18205e2599fe549f2cb7880d796735111a403acd53ffe90af48a13",
+    "tests/movement.test.js": "a4ed41ddfff19494d8f493ccd86c6fbf646aec37670c31b5eea2b0bee9a51e8f",
+    "tests/team-battle.test.js": "34bfc28dac72f4101f52f215893314cb8175cd1a0a9c364a002a852256875a7c",
+    "tests/weather.test.js": "64a1fd184ca07c2aa0ae6e25d99f89e72c0b10168ce52c58b8506541547c1b78"
+  },
+  "sourceSnapshot": {
+    "files": 395,
+    "algorithm": "sha256(sorted path + NUL + file SHA256, joined with LF)",
+    "digest": "614e30074011d70829392b4551d408a649497eb2e53e9afdbc20ac2221135cfe",
+    "scope": "JS/MJS/TS/JSON/CSS/HTML/Python under dist/tests/examples/tools plus package metadata; excludes docs, logs, resources and preexisting .bak."
+  },
+  "documentationLogs": [
+    "docs.log",
+    "docs-final.log",
+    "docs-verified.log"
+  ],
+  "documentationRepair": "Root progress links referenced this checkpoint manifest before it was written; final link check after manifest creation passed."
+}

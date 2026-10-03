@@ -1,3 +1,4 @@
+import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
@@ -456,6 +457,7 @@ test("Save owns daycare and trade identities, keeps egg clocks, and rejects dupl
   const s = state([mon()]);
   s.facilities = emptyFacilities();
   s.fieldEffects = emptyFieldEffects();
+  s.encounters = emptyEncounterTickets();
   s.daycare.slots = [{ mon: mon("mudkip"), steps: 254, initialLevel: 5 }];
   const egg = mon();
   egg.egg = {

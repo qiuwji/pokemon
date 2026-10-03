@@ -1,3 +1,4 @@
+import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
@@ -202,6 +203,7 @@ test("Current development save contract rejects older versions without mutating 
   const s = state();
   s.facilities = emptyFacilities();
   s.fieldEffects = emptyFieldEffects();
+  s.encounters = emptyEncounterTickets();
   s.weather = emptyWeather();
   s.registeredItem = null;
   s.party = [createMonster("mudkip", 5, db, new Random(1))];

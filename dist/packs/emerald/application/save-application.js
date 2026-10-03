@@ -1,3 +1,5 @@
+import { sampleSelection } from "../../../engine/random-selection.js";
+import { emptyEncounterTickets } from "../../../engine/encounter-tickets.js";
 import { emptyFacilities } from "../../../engine/facilities.js";
 import { emptyFieldEffects } from "../../../engine/field-effects.js";
 import { emptyWeather } from "../../../engine/weather.js";
@@ -71,6 +73,7 @@ export class SaveApplication {
   newState() {
     return {
       facilities: emptyFacilities(),
+      encounters: emptyEncounterTickets(),
       fieldEffects: emptyFieldEffects(),
       position: { ...PACK.start },
       party: [],
@@ -97,6 +100,18 @@ export class SaveApplication {
       tradePartner: [],
       randomSeed: Date.now() >>> 0,
     };
+  }
+  sampleRandom(values, count) {
+    const seed = this.rng.seed;
+    let result;
+    try {
+      result = sampleSelection(values, count, this.rng);
+    } catch (error) {
+      this.rng.seed = seed;
+      throw error;
+    }
+    this.save();
+    return result;
   }
   save(show = false) {
     if (this.facilityActive) {

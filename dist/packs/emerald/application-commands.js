@@ -44,6 +44,7 @@ export function registerEmeraldCommands(game, bus) {
     device: "world",
     movement: "movement",
     battle: "battle",
+    encounter: "encounters",
     starter: "starter",
     box: "storage",
     daycare: "daycare",
@@ -83,12 +84,116 @@ export function registerEmeraldCommands(game, bus) {
       ...rest,
     });
   register(
+    "random.sample",
+    objectSchema(
+      {
+        values: { type: "string", maxLength: 65536 },
+        count: { type: "integer", minimum: 0, maximum: 256 },
+      },
+      ["values", "count"],
+    ),
+    ({ values, count }) => game.sampleRandom(JSON.parse(values), count),
+    { plugin: true, permission: "random" },
+  );
+  register(
     "facility.enter",
     objectSchema({ id, team: { type: "array", maxItems: 6, items: id } }, [
       "id",
       "team",
     ]),
     ({ id, team }) => game.enterFacility(id, team),
+  );
+  register(
+    "world.bounds",
+    objectSchema({ map: id }),
+    ({ map }) => game.worldBounds(map),
+    {
+      concurrent: true,
+      ready: () => true,
+      permission: undefined,
+    },
+  );
+  register(
+    "world.cells",
+    objectSchema(
+      {
+        map: id,
+        x: { type: "integer", minimum: 0 },
+        y: { type: "integer", minimum: 0 },
+        width: { type: "integer", minimum: 1, maximum: 4096 },
+        height: { type: "integer", minimum: 1, maximum: 4096 },
+      },
+      ["x", "y", "width", "height"],
+    ),
+    (region) => game.worldCells(region),
+    { concurrent: true, ready: () => true, permission: undefined },
+  );
+  register(
+    "encounter.table",
+    objectSchema(
+      {
+        map: id,
+        area: { type: "string", enum: ["land", "water", "fishing", "rock"] },
+        rod: { type: "string", enum: ["old", "good", "super"] },
+      },
+      ["area"],
+    ),
+    (args) => game.encounterTable(args),
+    {
+      concurrent: true,
+      ready: () => true,
+      plugin: true,
+      permission: undefined,
+    },
+  );
+  register(
+    "encounter.policy",
+    objectSchema({ channel: id }, ["channel"]),
+    ({ channel }) => game.encounterPolicy(channel),
+    {
+      concurrent: true,
+      ready: () => true,
+      plugin: true,
+      permission: undefined,
+    },
+  );
+  register(
+    "encounter.sample",
+    objectSchema(
+      {
+        map: id,
+        area: { type: "string", enum: ["land", "water", "fishing", "rock"] },
+        rod: { type: "string", enum: ["old", "good", "super"] },
+      },
+      ["area"],
+    ),
+    (args) => game.sampleEncounter(args),
+  );
+  register(
+    "encounter.prepare",
+    objectSchema(
+      {
+        actor: id,
+        area: { type: "string", enum: ["land", "water", "fishing", "rock"] },
+        rod: { type: "string", enum: ["old", "good", "super"] },
+      },
+      ["actor", "area"],
+    ),
+    (args) => game.prepareEncounter(args),
+  );
+  register(
+    "encounter.release",
+    objectSchema({ ticket: id }, ["ticket"]),
+    ({ ticket }) => game.releaseEncounter(ticket),
+  );
+  register(
+    "encounter.request",
+    objectSchema({ ticket: id, contact: { type: "integer", minimum: 1 } }, [
+      "ticket",
+      "contact",
+    ]),
+    (args) => game.requestEncounter(args),
+    { mode: "async" },
   );
   register(
     "facility.action",

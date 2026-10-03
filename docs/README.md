@@ -19,7 +19,7 @@
 | 领域 | 规格及架构 |
 | --- | --- |
 | 应用服务/公共命令 | [APPLICATION](architecture/APPLICATION.md)、[PLUGINS](architecture/PLUGINS.md)、[NETWORK](architecture/NETWORK.md) |
-| 世界/时间/天气 | [状态与访问](engine/world/STATE_AND_LIFECYCLE.md)、[时间](engine/world/WORLD_TIME.md)、[天气](engine/world/WEATHER.md) |
+| 世界/时间/天气 | [状态与访问](engine/world/STATE_AND_LIFECYCLE.md)、[时间](engine/world/WORLD_TIME.md)、[天气](engine/world/WEATHER.md)、[遇敌与接触](engine/world/ENCOUNTERS_AND_CONTACTS.md) |
 | 地形/移动/HM | [地形](engine/field/FIELD_TERRAIN.md)、[高度](engine/field/FIELD_ELEVATION.md)、[机关](engine/field/FIELD_DEVICES.md)、[野外行动](engine/field/FIELD_ACTIONS.md)、[输入](engine/field/MOVEMENT_INPUT.md)、[桥梁](engine/field/BRIDGES.md)、[移动架构](architecture/MOVEMENT.md) |
 | 剧情/演出 | [剧情语言](engine/story/STORY_LANGUAGE.md)、[原作转写流程](../skills/emerald-story-reconstruction/SKILL.md)、[剧情导演](architecture/CUTSCENES.md) |
 | 战斗 | [架构](architecture/BATTLE.md)、[机制矩阵](engine/battle/MECHANISM_MATRIX.md)、[状态与行动](engine/battle/STATES_AND_ACTIONS.md)、[插件行动增强](engine/battle/AUGMENTS.md)、[语义审计](engine/battle/MOVE_AUDIT.md)、[规则覆盖](engine/battle/GEN3_RULE_COVERAGE.md) |

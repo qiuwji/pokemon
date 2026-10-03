@@ -187,6 +187,26 @@ export class PluginHost {
                 decide: (c) => evaluate(original.decide, readOnly(c)),
               };
             }
+            if (kind === "encounterPolicies") {
+              const original = value;
+              value = {
+                ...value,
+                ...Object.fromEntries(
+                  ["when", "decide"]
+                    .filter((key) => original[key] !== undefined)
+                    .map((key) => {
+                      if (typeof original[key] !== "function")
+                        throw new Error(
+                          "Encounter policy requires synchronous callbacks",
+                        );
+                      return [
+                        key,
+                        (context) => evaluate(original[key], readOnly(context)),
+                      ];
+                    }),
+                ),
+              };
+            }
             if (kind === "npcBehaviors") {
               const original = value;
               if (typeof original.decide !== "function")

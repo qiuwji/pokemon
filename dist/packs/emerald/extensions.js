@@ -11,6 +11,8 @@ import { validateItemActions } from "../../engine/item-actions.js";
 import { GEN3_INVENTORY_POCKETS } from "../../engine/rules/gen3/inventory.js";
 import { createEmeraldInventory } from "./inventory.js";
 import { WeatherRegistry } from "../../engine/weather.js";
+import { EncounterPolicyRegistry } from "../../engine/encounter-policies.js";
+import { EMERALD_ENCOUNTER_POLICIES } from "./encounter-policies.js";
 import { BattleWeatherRegistry } from "../../engine/battle/weather.js";
 import {
   GEN3_WORLD_WEATHER,
@@ -92,6 +94,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       movementInputs: GEN3_MOVEMENT_INPUTS,
       fieldActions: EMERALD_FIELD_ACTIONS,
       fieldEffects: EMERALD_FIELD_EFFECTS,
+      encounterPolicies: EMERALD_ENCOUNTER_POLICIES,
       terrainRules: EMERALD_TERRAIN_RULES,
       fieldMechanisms: EMERALD_FIELD_MECHANISMS,
       destinations: TRAVEL_DESTINATIONS,
@@ -126,6 +129,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       queries: new ConditionQueries(c.conditionQueries),
     });
     new EncounterTableRegistry(c.encounters, c);
+    new EncounterPolicyRegistry(c.encounterPolicies);
     validateWorldExtensions(c, host.catalog.entries.values());
     const battleStates = new BattleStateRegistry({
       ...GEN3_BATTLE_STATES,
@@ -191,7 +195,10 @@ export function createEmeraldPlugins(db, plugins, onError) {
     new ActorTemplateRegistry(c.actorTemplates, {
       actors: c.actors,
       behaviors: npcBehaviors,
-      schedules:new ActorScheduleRegistry(c.actorSchedules,{maps:c.maps,behaviors:npcBehaviors}),
+      schedules: new ActorScheduleRegistry(c.actorSchedules, {
+        maps: c.maps,
+        behaviors: npcBehaviors,
+      }),
     });
     new EvolutionService({
       inventory,

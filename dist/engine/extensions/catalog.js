@@ -39,6 +39,7 @@ export const CONTENT_KINDS = Object.freeze([
   "facilities",
   "facilityActivities",
   "encounters",
+  "encounterPolicies",
   "battleStrategies",
   "conditionQueries",
   "battleStates",
@@ -125,6 +126,14 @@ export class ExtensionCatalog {
   dependencies(state) {
     const used = [
       state.position?.map,
+      ...Object.values(state.encounters?.records || {}).flatMap((t) => [
+        t.map,
+        t.table,
+        t.monster.species,
+        t.monster.ability,
+        t.monster.heldItem,
+        ...t.monster.moves.map((m) => m.id),
+      ]),
       ...Object.values(state.facilities?.results || []).flatMap((r) => [
         r.facility,
         (

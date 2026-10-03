@@ -94,7 +94,39 @@ export class BattleApplication {
       trainerId: id,
     });
   }
-  async startBattle(enemy, options = {}, context = null) {
+  async startEncounterBattle(monster, resultPlan) {
+    return this.startBattle(monster, {}, null, (b) =>
+      this.directResultPlan(b, resultPlan(b)),
+    );
+  }
+  directResultPlan(b, owner) {
+    let committed = false;
+    return {
+      commit: () => {
+        if (committed) return;
+        const reward = b.spoils?.reward || 0,
+          money = reward
+            ? b.rules.rewardCurrency({
+                current: this.state.money,
+                amount: reward,
+              })
+            : this.state.money;
+        if (!Number.isSafeInteger(money) || money < 0)
+          throw new Error("Invalid currency settlement");
+        owner.commit?.();
+        this.state.money = money;
+        if (b.result === "loss")
+          this.state.party.forEach((m) => healMonster(m, this.db));
+        else
+          this.encounterService().afterBattle(this.state.party, (text) =>
+            this.ui?.toast(text),
+          );
+        committed = true;
+      },
+      after: () => owner.after?.(),
+    };
+  }
+  async startBattle(enemy, options = {}, context = null, resultOwner = null) {
     if (this.facilityActive && !context) return false;
     const party = context?.party || this.state.party,
       bag = context?.bag || this.state.bag;
@@ -114,7 +146,7 @@ export class BattleApplication {
     if (!context) for (const mon of opponents) this.seen(mon.species);
     this.clearInput();
     this.ui.closeModal();
-    this.resultOwner = context?.resultPlan || null;
+    this.resultOwner = resultOwner || context?.resultPlan || null;
     return this.combat.start({
       party,
       enemyParty: enemies,

@@ -29,7 +29,7 @@ export const APPLICATION_FIELDS = Object.freeze({
   field: "world",
   fieldDirector: "world",
   worldState: "world",
-  lastEncounterSteps: "triggers",
+  lastEncounterSteps: "encounters",
   saveStore: "save",
   saveProtected: "save",
   saveWarning: "save",
@@ -40,6 +40,18 @@ export const APPLICATION_FIELDS = Object.freeze({
 });
 
 export const APPLICATION_METHODS = Object.freeze({
+  sampleRandom: Object.freeze(["save", "sampleRandom"]),
+  encounterView: Object.freeze(["encounters", "view"]),
+  prepareEncounter: Object.freeze(["encounters", "prepare"]),
+  releaseEncounter: Object.freeze(["encounters", "release"]),
+  requestEncounter: Object.freeze(["encounters", "request"]),
+  encounterTable: Object.freeze(["encounters", "table"]),
+  encounterPolicy: Object.freeze(["encounters", "inspect"]),
+  sampleEncounter: Object.freeze(["encounters", "sample"]),
+  worldBounds: Object.freeze(["world", "bounds"]),
+  worldCells: Object.freeze(["world", "cells"]),
+  flushContacts: Object.freeze(["contacts", "flush"]),
+  contactView: Object.freeze(["contacts", "view"]),
   facilityView: Object.freeze(["facilities", "view"]),
   enterFacility: Object.freeze(["facilities", "enter"]),
   facilityAction: Object.freeze(["facilities", "action"]),

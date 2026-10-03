@@ -1,5 +1,10 @@
 import { FacilityApplication, FACILITY_PORTS } from "./facility-application.js";
 import {
+  EncounterApplication,
+  ENCOUNTER_PORTS,
+} from "./encounter-application.js";
+import { ContactApplication, CONTACT_PORTS } from "./contact-application.js";
+import {
   ItemShortcutApplication,
   ITEM_SHORTCUT_PORTS,
 } from "./item-shortcut-application.js";
@@ -40,11 +45,33 @@ export function composeApplications(applications, read, { storage }) {
   applications.save = new SaveApplication(
     liveApplicationPorts(read, SAVE_PORTS, { storage }),
   );
+  applications.encounters = new EncounterApplication(
+    liveApplicationPorts(read, ENCOUNTER_PORTS, {
+      bindEncounterActor: (uid) =>
+        applications.actors.repository.list()[uid] || null,
+      removeEncounterActor: (uid) => applications.actors.consume(uid),
+      startEncounterBattle: (...args) =>
+        applications.battle.startEncounterBattle(...args),
+    }),
+  );
+  applications.contacts = new ContactApplication(
+    liveApplicationPorts(read, CONTACT_PORTS, {
+      contactReady: () =>
+        !read("busy") &&
+        !read("battle") &&
+        !read("facilityActive") &&
+        !read("ui")?.blocked &&
+        !read("ui")?.dialog,
+    }),
+  );
   applications.weather = new WeatherApplication(
     liveApplicationPorts(read, WEATHER_PORTS),
   );
   applications.actors = new ActorApplication(
-    liveApplicationPorts(read, ACTOR_PORTS),
+    liveApplicationPorts(read, ACTOR_PORTS, {
+      actorContact: (...args) => applications.contacts.request(...args),
+      actorRemoved: (uid) => applications.encounters.removedActor(uid),
+    }),
   );
   applications.crops = new CropApplication(
     liveApplicationPorts(read, CROP_PORTS),
@@ -109,6 +136,11 @@ export function composeApplications(applications, read, { storage }) {
       },
       resetTriggers: () => applications.triggers.reset(),
       bindFieldActions: () => applications.fieldActions.bind(),
+      bindContacts: () => {
+        applications.contacts.bind();
+        applications.encounters.bind();
+      },
+      blockedContact: (id) => applications.contacts.bump(id),
       fieldInteraction: (event) => applications.fieldActions.interaction(event),
       fieldEffectVisit: (map, options) =>
         applications.fieldActions.prepareVisit(map, options),
@@ -116,7 +148,10 @@ export function composeApplications(applications, read, { storage }) {
     }),
   );
   applications.triggers = new TriggersApplication(
-    liveApplicationPorts(read, TRIGGERS_PORTS, {}),
+    liveApplicationPorts(read, TRIGGERS_PORTS, {
+      encounterStep: (cell) => applications.encounters.step(cell),
+      resetEncounters: () => applications.encounters.reset(),
+    }),
   );
   applications.battle = new BattleApplication(
     liveApplicationPorts(read, BATTLE_PORTS, {}),
@@ -139,6 +174,7 @@ export function composeApplications(applications, read, { storage }) {
       tickWeather: (...args) => applications.weather.tick(...args),
       tickDevices: (...args) => applications.devices.tick(...args),
       tickActors: (...args) => applications.actors.tick(...args),
+      flushContacts: () => applications.contacts.flush(),
     }),
   );
   applications.inspection = new InspectionApplication(

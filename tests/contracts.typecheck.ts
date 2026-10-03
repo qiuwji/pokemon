@@ -404,3 +404,16 @@ const region: import("../dist/engine/contracts.js").UIRegionDefinition = {
   }),
 };
 void region;
+
+const encounterPolicy: import("../dist/engine/contracts.js").EncounterPolicyDefinition =
+  {
+    channel: "step",
+    priority: 100,
+    when: (context) => context.position.map === "demo:field",
+    decide: (context) => {
+      // @ts-expect-error Policy queries cannot mutate party members.
+      context.party[0].hp = 1;
+      return null;
+    },
+  };
+void encounterPolicy;

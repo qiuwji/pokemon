@@ -3,6 +3,22 @@ export class PartyStorageService {
   constructor({ partyLimit = 6, boxLimit = 200 } = {}) {
     Object.assign(this, { partyLimit, boxLimit });
   }
+  canReceive(state) {
+    return (
+      state.party.length < this.partyLimit || state.box.length < this.boxLimit
+    );
+  }
+  receive(state, monster) {
+    if (
+      !this.canReceive(state) ||
+      [...state.party, ...state.box].some((m) => m.uid === monster.uid)
+    )
+      return false;
+    (state.party.length < this.partyLimit ? state.party : state.box).push(
+      monster,
+    );
+    return true;
+  }
   withdraw(state, index) {
     if (
       !Number.isInteger(index) ||

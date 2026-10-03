@@ -1,0 +1,9 @@
+
+> emerald-web-engine@0.20.0 check:docs
+> node tools/check-docs.mjs
+
+ARCHITECTURE.md: missing docs/validation/2026-10-04-encounter-extensions/manifest.json
+README.md: missing docs/validation/2026-10-04-encounter-extensions/manifest.json
+docs/project/STATUS.md: missing ../validation/2026-10-04-encounter-extensions/manifest.json
+docs/project/STATUS.md: missing ../validation/2026-10-04-encounter-extensions/manifest.json
+docs/project/VALIDATION.md: missing ../validation/2026-10-04-encounter-extensions/manifest.json

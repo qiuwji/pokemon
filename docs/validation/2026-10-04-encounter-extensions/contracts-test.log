@@ -1,0 +1,32 @@
+✔ Channel policies select one eligible priority and explicit suppression never falls through (0.915375ms)
+✔ Disabled native step encounters consume no random samples and remain independent of StoryRunner (25.86725ms)
+✔ Regional queries merge registered and embedded sources without random draws; sample yields no individual custody (19.846667ms)
+✔ Policy callbacks are pure and sampling permission is separate from free read-only queries (22.007875ms)
+✔ World region queries reflect overlays and true/reserved occupancy with detached snapshots and bounded regions (12.402583ms)
+✔ Contact edges deduplicate held and reversed requests; movement, separation and distinct planes invalidate proofs (0.216209ms)
+✔ Real field collisions publish one stable contact after commands and accept a fresh contact after separation (18.820834ms)
+✔ NPC active interactions bridge into the same contact facts at frame boundary (9.679084ms)
+✔ Prepared individuals have one saved custodian and actor dependency; duplicate or corrupt references are rejected (27.046958ms)
+✔ A ticket starts exactly one real wild battle on published contact; capture transfers custody and never runs a story (22.672959ms)
+✖ Plugin contact listeners can request battle at the stable boundary and a failed start keeps the ticket reusable (12.561167ms)
+✔ Encounter win, escape and loss share release lifecycle without story rewards, dialogues or duplicate actors (48.494542ms)
+✔ Reserved actor source cells are visible to queries but never count as actual contact (8.971833ms)
+✔ Stale and different-actor contact proofs cannot consume a prepared ticket, and dead-party/full storage do not spend it (21.526459ms)
+✔ The native encounter cooldown has one owner and is reset during field rebinding (19.411625ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 14
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 363.396292
+
+✖ failing tests:
+
+test at tests/encounter-extensions.test.js:387:1
+✖ Plugin contact listeners can request battle at the stable boundary and a failed start keeps the ticket reusable (12.561167ms)
+  TypeError: Cannot read properties of undefined (reading 'ok')
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/encounter-extensions.test.js:394:33)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

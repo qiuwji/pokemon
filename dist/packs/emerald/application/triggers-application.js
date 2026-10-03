@@ -1,16 +1,13 @@
 import { findWatchingTrainer } from "../../../engine/field-triggers.js";
-import { isWater } from "../../../engine/terrain.js";
-import { isGrass, hasEncounterTerrain } from "../../../engine/terrain.js";
 import { bindApplicationPorts } from "./ports.js";
 export const TRIGGERS_PORTS = Object.freeze([
-  "encounterService",
-  "encounterTables",
+  "encounterStep",
+  "resetEncounters",
   "field",
   "growth",
   "playStory",
   "plugins",
   "save",
-  "startBattle",
   "state",
   "story",
   "storyBusy",
@@ -22,7 +19,6 @@ export const TRIGGERS_PORTS = Object.freeze([
 export class TriggersApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, TRIGGERS_PORTS);
-    this.lastEncounterSteps = -5;
   }
   advanceTravelClocks() {
     this.growth.advance();
@@ -57,38 +53,7 @@ export class TriggersApplication {
       void this.playStory(this.trainerScene(watching, true));
       return;
     }
-    const water =
-      this.state.movement.mode === "surf" && isWater(cell?.behavior);
-    const area = water ? "water" : "land";
-    const registered = this.encounterTables.select(s.position.map, area, s);
-    const entries =
-      registered?.entries ||
-      (water ? this.world.map.waterEncounters : this.world.map.encounters);
-    if (
-      s.party.some((m) => !m.egg) &&
-      s.flags.rescued &&
-      ((water && hasEncounterTerrain(cell?.behavior)) ||
-        isGrass(cell?.behavior)) &&
-      entries &&
-      this.world.steps - this.lastEncounterSteps > 3 &&
-      !this.ui.dialog
-    ) {
-      const monster = this.encounterService().attempt({
-        party: s.party,
-        entries,
-        rate:
-          registered?.rate ??
-          (water
-            ? this.world.map.waterEncounterRate
-            : this.world.map.encounterRate),
-        area: water ? "water" : "land",
-        mode: this.state.movement.mode,
-      });
-      if (monster) {
-        this.lastEncounterSteps = this.world.steps;
-        void this.startBattle(monster);
-      }
-    }
+    this.encounterStep(cell);
 
     if (this.world.steps % 20 === 0) this.save();
   }
@@ -109,6 +74,6 @@ export class TriggersApplication {
     ];
   }
   reset() {
-    this.lastEncounterSteps = -5;
+    this.resetEncounters();
   }
 }

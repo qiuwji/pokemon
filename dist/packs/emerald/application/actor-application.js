@@ -27,6 +27,8 @@ export const ACTOR_PORTS = Object.freeze([
   "canManageParty",
   "plugins",
   "timeView",
+  "actorContact",
+  "actorRemoved",
 ]);
 /** Persistent actors use the existing field motion/collision. No second simulation or battle RNG stream. */
 export class ActorApplication {
@@ -282,12 +284,14 @@ export class ActorApplication {
         target.uid !== n.id &&
         Math.abs(target.x - n.x) + Math.abs(target.y - n.y) === 1 &&
         this.world.elevation.compatible(n.elevation, target.elevation)
-      )
+      ) {
+        this.actorContact(actor, target, intent.interaction.kind);
         this.plugins?.events.emit("core:actor-interaction-requested", {
           actor: actor.uid,
           target: target.uid,
           kind: intent.interaction.kind,
         });
+      }
     }
   }
   free(position, uid = null) {
@@ -328,10 +332,15 @@ export class ActorApplication {
   }
   remove(uid) {
     if (!this.canManageParty()) return false;
+    return this.consume(uid);
+  }
+  /** Internal settlement port; the public remove method retains field readiness. */
+  consume(uid) {
     const actor = this.repository.view(uid),
       removed = this.repository.remove(uid);
     if (removed) {
       this.field.npcs.invalidate(actor.map, uid);
+      this.actorRemoved(uid);
       this.plugins?.events.emit("core:actor-removed", actor);
     }
     return removed;

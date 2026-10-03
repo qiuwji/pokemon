@@ -84,6 +84,44 @@ test("detail entry renders a clickable action with persistent memory", async () 
 
 此例验证详情页入口、合法控件、与点击相同的action提交和保存；真实鼠标/焦点/返回键须按浏览器清单另验，不能把dispatch写成已验点击。
 
+## 遇敌与动态世界扩展
+
+读[遇敌/接触合同](../../docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)。插件可注册encounterPolicies关闭指定地图的step暗雷，查询地图格子/有效地区表，经宿主种子无放回选格，创建Actor并prepare唯一个体凭证，最后监听稳定接触请求战斗。比例、游走和视觉属于插件业务；不要复制个体、伪造接触、在绘制中发命令，或调用剧情作为旁路。准备和结果渠道不触发原生剧情。
+
+这是独立验收例，使用原有地区表和占位标记，未实现完整可见野生宝可梦插件；外观、相机和环境组合的后续合同仍查PLUGIN_ROADMAP。ActorUID/个体UID/凭证ID是三个不同身份。
+
+<!-- runnable-example: examples/encounter-extension.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session } from "./helpers/session.js";
+test("a plugin controls step encounters and opens a contact-owned wild battle", async () => {
+  let api;
+  const plugin = manifest("visible-demo", value => {
+    api = value;
+    api.content.register("encounterPolicies", "quiet", { channel: "step", priority: 100,
+      when: c => c.position.map === "Route101", decide: () => null });
+    api.content.register("actorTemplates", "marker", {
+      name: "Encounter marker", actor: "ProfBirch", behavior: "still" });
+  }, ["actors", "encounters", "movement"]);
+  const { game } = session([plugin]);
+  game.enter({ map: "Route101", x: 5, y: 11, dir: "up" });
+  const region = await api.commands.dispatch("core.world.cells", { x: 5, y: 10, width: 1, height: 1 });
+  assert.equal(region.cells[0].collision, 0);
+  const { actor } = await api.commands.dispatch("core.actor.spawn", {
+    template: "visible-demo:marker", position: { map: "Route101", x: 5, y: 10, dir: "down" } });
+  const { ticket } = await api.commands.dispatch("core.encounter.prepare", { actor: actor.uid, area: "land" });
+  const story = structuredClone(game.state.story);
+  assert.equal(game.battle, null);
+  assert.equal((await api.commands.dispatch("core.encounter.policy", { channel: "step" })).decision, null);
+  await api.commands.dispatch("core.field.move", { direction: "up" });
+  const contact = api.query().contacts[0].sequence;
+  assert((await api.commands.dispatch("core.encounter.request", { ticket: ticket.id, contact })).ok);
+  assert.equal(game.battle.enemy.species, ticket.species);
+  assert.deepEqual(game.state.story, story);
+});
+```
+
 ## 常见错误与排查
 
 报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。

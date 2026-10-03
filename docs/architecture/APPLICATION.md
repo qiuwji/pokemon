@@ -1,12 +1,14 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0时将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，当前0.17.0经学习/天气/库存装配为149行；用例由 21 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
+`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0时将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，当前0.17.0经学习/天气/库存装配为149行；用例由 23 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
 
 ## 职责与状态所有权
 
 | 服务 | 职责 | 自己持有的会话对象/状态 |
 | --- | --- | --- |
 | save | 默认进度、加载/导入/导出/重开、保存保护、随机数重绑 | state、rng、SaveStore、保存时间与保护信息 |
+| encounters | 遇敌渠道、有效表/候选、关联Actor的唯一野生个体凭证、直接战斗结果 | EncounterPolicyRegistry、EncounterTickets、暗雷冷却 |
+| contacts | 稳定实体接触、去重、输入/帧边界发布与读取 | FieldContacts，无持久副本 |
 | weather | 世界天气生命周期、地图/时间/命令/剧情协调与事实 | WorldWeather、WeatherRegistry |
 | time | 世界 RTC、实际游玩时长、时间边界与持久任务协调 | WorldClock、WorldSchedule |
 | actors | 持续身份、感知导航、角色命令与 NPC 投影协调 | ActorRepository、有限 runtime 端口 |
@@ -22,7 +24,7 @@
 | world | 地图/动态世界绑定、永久/访问覆盖与入口恢复预检、碰撞保护、行走与对象交互 | WorldStateService、FieldSession、FieldDirector |
 | fieldActions | 野外资格/目标、操作预检、演出与世界提交、钓鱼会话协调 | FieldActionService、FieldActionDirector、FishingSession、actionBusy |
 | movement | 移动资格、交通模式、冲浪与飞行协调、访问目的地 | MovementService、MovementInputSession、TravelService、TravelDirector |
-| triggers | 步进时钟、剧情/训练家视线/遭遇优先级 | 遭遇间隔记录 |
+| triggers | 步进时钟、剧情/训练家视线/遭遇优先级 | 无复制状态 |
 | frame | 每帧的领域更新与 NPC 暂停/育成提醒协调 | 无复制状态 |
 | inspection | 将会话和地图投影成诊断视图 | 无领域规则 |
 | presentation | 校验演出资格并调用演出端口 | 无领域规则 |
@@ -41,7 +43,7 @@
 
 ## 重载生命周期
 
-加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 时间 → 天气 → 树果 → Actor → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑机关与野外行动服务，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
+加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 时间 → 天气 → 树果 → Actor → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑机关与野外行动服务，再绑定接触与遇敌仓储，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
 
 ## 继续开发约束
 
@@ -56,3 +58,5 @@
 天气命令与剧情经 WeatherApplication 的独立有限端口；世界/时间/帧通过 composition 调用 enter/step/days/tick，业务不导入兄弟服务。见 [WEATHER.md](../engine/world/WEATHER.md)。
 
 登记道具由 ItemShortcutApplication 独立协调；可登记但暂不可用的道具不缓存旧资格，使用时交还现有物品/野外行动管线。当前应用数量、入口规模与保存版本见根架构/README；详见 docs/engine/items/FIELD_ITEMS.md。InventoryApplication持有唯一库存政策；商店/奖励/采摘/持物/学习/进化/战斗控制者使用同一槽位服务。bagView/itemQuantity只查询，inventoryPreview不生成可提交计划。现行合同见 docs/engine/items/INVENTORY.md。
+
+公开地图快照、暗雷政策、宿主随机选格和接触凭证战斗见[ENCOUNTERS_AND_CONTACTS](../engine/world/ENCOUNTERS_AND_CONTACTS.md)。保存13为野生个体提供唯一仓储；Actor移除和战斗结算通过装配端口释放关联，插件不导入应用服务。

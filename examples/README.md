@@ -12,6 +12,7 @@
 | 战斗 | [battle-effect.test.js](battle-effect.test.js) | 注册效果/招式→真实训练家回合→能力阶段和PP |
 | 非战斗设施 | [facility.test.js](facility.test.js) | 注册活动/设施→推进→待领取→结算/去重→重载 |
 | 页面插件 | [plugin-page.test.js](plugin-page.test.js) | 详情入口→布局校验→控件action→自有记忆→重载 |
+| 遇敌插件 | [encounter-extension.test.js](encounter-extension.test.js) | 关闭step→查询格子→Actor与凭证→接触→真实野生战斗，不经过剧情 |
 | Actor | [actor.test.js](actor.test.js) | 模板→公开创建/更新→持久UID和记忆→移除 |
 | 原作剧情转写入门 | [story-reconstruction.test.js](story-reconstruction.test.js) | 数据剧情到达触发→选择分支/变量→奖励→重载去重 |
 | 失败与验收 | [validation.test.js](validation.test.js) | 后段意图失败→记忆/钱/账本/RNG回滚→只读→重载 |

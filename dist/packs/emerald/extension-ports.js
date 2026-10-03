@@ -23,6 +23,8 @@ export function attachEmeraldExtensions(game, host) {
     actors: game.actors.list(),
     actorRoutines: game.actors.routines(),
     fieldEffects: game.fieldEffectView(),
+    contacts: game.contactView(),
+    encounters: game.encounterView(),
     schedule: game.schedule.view(),
     crops: Object.fromEntries(
       Object.keys(game.catalog.berryPlots || {}).map((id) => [
@@ -83,12 +85,14 @@ export function attachEmeraldExtensions(game, host) {
           !game.busy &&
           !game.battle &&
           !game.ui?.dialog,
-    onComplete: (id, args, result) =>
+    onComplete: (id, args, result) => {
+      game.flushContacts();
       host.events.emit("core:command-complete", {
         id,
         args,
         result: result ?? null,
-      }),
+      });
+    },
   });
   bus.register("core.query", {
     schema: objectSchema(),

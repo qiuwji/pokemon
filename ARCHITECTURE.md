@@ -33,7 +33,7 @@ dist/
   adapters/                      浏览器输入、Canvas/DOM、存储与真实资源音频
   packs/emerald/                 原作规则配置、剧情、地图业务与页面
     adventure.js                 内容配置、应用装配、生命周期和忙碌聚合
-    application/composition.js   21 个应用服务的有限依赖装配
+    application/composition.js   23 个应用服务的有限依赖装配
     application/public-ports.js  当前宿主 API 的显式字段/方法所有权表
     application/*-application.js 按领域拥有会话、协调用例
     extensions.js                通用插件合同的本作校验/默认注册
@@ -103,10 +103,14 @@ interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，�
 
 ## 存档、复用与验证
 
-SaveStore 只接受PACK.version指定的当前开发存档格式（当前12）；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
+SaveStore 只接受PACK.version指定的当前开发存档格式（当前13）；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **701 项通过，0 失败、0 跳过**，九个 Skill 入门例通过，内容/严格类型/**276 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-field-interactions/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **719 项通过，0 失败、0 跳过**，十个 Skill 入门例通过，内容/严格类型/**285 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-encounter-extensions/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
 
 接手材料按职责组织：docs/project持有动态范围/状态/证据索引，docs/architecture解释职责，docs/engine按领域保存合同，docs/development说明业务写法与测试，history保存旧计划。九份Skill链接真实examples；check:docs校验本地链接和片段同步，不替代领域行为检查。
+
+## 插件遇敌增量
+
+遇敌政策从Triggers移入规则包，EncounterApplication独立拥有冷却、区域抽样和唯一野生个体仓储。ContactApplication将真实位置接触在输入/帧边界发布，战斗消费一次性关联凭证而非复制Actor.data。该直接结果通道不调用剧情；保存13校验个体/Actor/内容引用与单一身份。只读查询和宿主随机选格分开，派生草格比例由插件决定。实际合同及未提供的外观/相机/环境能力边界见[遇敌与接触](docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)、[公开能力路线](docs/project/PLUGIN_ROADMAP.md)。

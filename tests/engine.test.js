@@ -1,3 +1,4 @@
+import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
@@ -32,6 +33,7 @@ const state = () => ({
   registeredItem: null,
   facilities: { nextId: 1, results: [] },
   fieldEffects: emptyFieldEffects(),
+  encounters: emptyEncounterTickets(),
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [],
   box: [],

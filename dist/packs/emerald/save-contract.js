@@ -1,3 +1,4 @@
+import { EncounterTickets } from "../../engine/encounter-tickets.js";
 import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
 import {
   FieldEffectRegistry,
@@ -147,6 +148,21 @@ export function validateSave(
         }),
       });
     }
+    if (!s.encounters) return false;
+    for (const t of Object.values(s.encounters.records || {}))
+      if (t.table !== null && !catalog.encounters?.[t.table]) return false;
+    new EncounterTickets({
+      state: s.encounters,
+      maps: db.maps,
+      actors: () => s.actors.records,
+      owned: () => [
+        ...(s.party || []),
+        ...(s.box || []),
+        ...(s.daycare?.slots || []).map((s) => s.mon),
+        ...(s.daycare?.egg ? [s.daycare.egg] : []),
+        ...(s.tradePartner || []),
+      ],
+    });
     if (s.clock !== undefined) {
       validateWorldClock(s.clock);
       if (s.playSeconds !== Math.floor(s.clock.playMs / 1000)) return false;
@@ -333,6 +349,7 @@ export function validateSave(
     ...(s.daycare?.slots.map((slot) => slot.mon) || []),
     ...(s.daycare?.egg ? [s.daycare.egg] : []),
     ...(s.tradePartner || []),
+    ...Object.values(s.encounters.records).map((t) => t.monster),
   ];
   const identities = new Set();
   for (const m of owned) {

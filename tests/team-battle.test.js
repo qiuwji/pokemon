@@ -1,3 +1,4 @@
+import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
@@ -426,6 +427,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
   };
   state.facilities = { nextId: 1, results: [] };
   state.fieldEffects = emptyFieldEffects();
+  state.encounters = emptyEncounterTickets();
   state.weather = emptyWeather();
   state.registeredItem = null;
   assert(validateSave(state, db));

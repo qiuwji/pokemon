@@ -4,6 +4,7 @@ import { validateCondition, matchesCondition } from "./conditions.js";
 /** Named encounter tables can target existing maps without replacing the immutable map catalog. */
 export class EncounterTableRegistry {
   constructor(definitions = {}, db) {
+    this.maps = db.maps;
     this.tables = [];
     this.queries = new ConditionQueries(db.conditionQueries);
     for (const [id, t] of Object.entries(definitions)) {
@@ -76,5 +77,36 @@ export class EncounterTableRegistry {
           matchesCondition(t.requires, state, this.queries),
       ) || null
     );
+  }
+  /** One source of effective regional tables, including the original map-embedded land/water data. */
+  effective(map, area, state, options = {}) {
+    if (
+      !Object.hasOwn(this.maps, map) ||
+      !["land", "water", "fishing", "rock"].includes(area)
+    )
+      throw new Error("Invalid encounter table query");
+    if (
+      options.rod !== undefined &&
+      (area !== "fishing" || !["old", "good", "super"].includes(options.rod))
+    )
+      throw new Error("Invalid encounter rod query");
+    const registered = this.select(map, area, state, options);
+    if (registered) return readOnly({ ...registered, source: "registered" });
+    const m = this.maps[map],
+      entries =
+        area === "land"
+          ? m.encounters
+          : area === "water"
+            ? m.waterEncounters
+            : null;
+    if (!entries?.length) return null;
+    return readOnly({
+      id: null,
+      map,
+      area,
+      entries,
+      rate: area === "land" ? m.encounterRate : m.waterEncounterRate,
+      source: "map",
+    });
   }
 }
