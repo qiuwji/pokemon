@@ -15,6 +15,7 @@ export class FieldSession {
     onProgress = () => {},
     onMap = () => {},
     prepareEntry,
+    elevation = null,
     onBlocked = () => {},
     movement = null,
     npcBehaviors,
@@ -53,6 +54,7 @@ export class FieldSession {
     this.forceVisited = new Set();
     this.npcs = new NPCSystem(maps, objects, {
       behaviors: npcBehaviors,
+      elevation,
       context: npcContext,
       resolveIntent: npcResolveIntent,
       onIntent: npcOnIntent,
@@ -63,6 +65,7 @@ export class FieldSession {
     this.world = new World(maps, position, {
       deferWarps: true,
       prepareEntry,
+      elevation,
       objects: (map = position.map) => this.npcs.occupants(map),
       onMap: (map) => {
         movement?.normalize(maps[map]);
@@ -117,6 +120,12 @@ export class FieldSession {
         allowBike: c.map.allowBike !== false,
       },
       from: { ...from },
+      actor: this.world.elevation
+        ? {
+            elevation: from.elevation,
+            previousElevation: from.previousElevation,
+          }
+        : null,
       mode: mode || "walk",
       momentum: { ...(this.movement?.momentum || {}) },
       technique: this.movement?.technique || "normal",

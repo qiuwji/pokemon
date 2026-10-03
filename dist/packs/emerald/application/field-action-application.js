@@ -84,6 +84,7 @@ export class FieldActionApplication {
         kind: o.kind || "",
         x: o.x,
         y: o.y,
+        elevation: o.elevation,
         reserved: this.field.npcs.reserved(o),
       })),
       links: Object.values(this.catalog.fieldLinks || {}),
@@ -157,6 +158,7 @@ export class FieldActionApplication {
       const position = { ...this.state.position },
         world = new World(this.worldState.maps, position, {
           objects: (map) => this.field.npcs.occupants(map),
+          elevation: this.world.elevation,
           passage: (c) => this.movement.traversal(operation.mode, c),
         });
       for (const direction of operation.directions)

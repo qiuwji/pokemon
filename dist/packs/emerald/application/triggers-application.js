@@ -45,6 +45,7 @@ export class TriggersApplication {
     }
     const watching = findWatchingTrainer({
       maps: this.world.maps,
+      elevation: this.world.elevation,
       position: s.position,
       objects: (map) => this.field.npcs.objects(map),
       eligible: (o) =>
@@ -66,7 +67,8 @@ export class TriggersApplication {
     if (
       s.party.some((m) => !m.egg) &&
       s.flags.rescued &&
-      ((water && hasEncounterTerrain(cell?.behavior)) || isGrass(cell?.behavior)) &&
+      ((water && hasEncounterTerrain(cell?.behavior)) ||
+        isGrass(cell?.behavior)) &&
       entries &&
       this.world.steps - this.lastEncounterSteps > 3 &&
       !this.ui.dialog

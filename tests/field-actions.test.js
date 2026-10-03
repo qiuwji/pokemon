@@ -836,6 +836,8 @@ test("Map-visit observers see committed player location; blocked story entry sto
     x: 1,
     y: 2,
     dir: "right",
+    elevation: 0,
+    previousElevation: 0,
   });
   g.patchWorld([
     {

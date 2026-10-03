@@ -1,3 +1,4 @@
+import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
 import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
   createEmeraldAudio,
@@ -54,6 +55,7 @@ async function boot() {
       }),
       renderer = new Renderer($("game"), db, assets, {
         playerActors: PACK.playerActors,
+        fieldPriority: emeraldFieldPriority,
         travelActor: PACK.travelActor,
         cameraRig: camera,
         environment: (map) => ({

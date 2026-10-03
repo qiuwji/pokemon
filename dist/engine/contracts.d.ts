@@ -223,6 +223,8 @@ export interface Position {
   x: number;
   y: number;
   dir: Direction;
+  elevation?: number;
+  previousElevation?: number;
 }
 export interface Creature extends Omit<BattleMonster, "gender" | "stats"> {
   gender: "♂" | "♀" | "—";
@@ -493,7 +495,13 @@ export interface AudioCue {
 }
 export interface NPCIntent {
   interaction?: { target: string; kind: string };
-  goal?: { map: string; x: number; y: number; adjacent?: boolean };
+  goal?: {
+    map: string;
+    x: number;
+    y: number;
+    adjacent?: boolean;
+    elevation?: number;
+  };
   state?: Json;
   dir?: Direction;
   move: boolean;
@@ -599,6 +607,10 @@ export interface MovementTechnique {
   oneStep?: boolean;
 }
 export interface TerrainContext {
+  readonly actor?: Readonly<{
+    elevation: number;
+    previousElevation: number;
+  }> | null;
   readonly from: Readonly<{ map: string; x: number; y: number; dir: string }>;
   readonly map: Readonly<{
     id: string;
@@ -696,6 +708,8 @@ export interface FieldActionContext {
     x: number;
     y: number;
     dir: "up" | "down" | "left" | "right";
+    elevation?: number;
+    previousElevation?: number;
   }>;
   readonly mode: string;
   readonly revision: number;
@@ -719,7 +733,8 @@ export interface FieldActionContext {
     kind: string;
     x: number;
     y: number;
-    reserved: readonly Readonly<{ x: number; y: number }>[];
+    elevation?: number;
+    reserved: readonly Readonly<{ x: number; y: number; elevation?: number }>[];
   }>[];
   readonly links: readonly FieldLinkDefinition[];
 }

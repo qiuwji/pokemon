@@ -278,6 +278,8 @@ for (const [x, y] of [
       x: 6,
       y: 5,
       dir: "up",
+      elevation: 3,
+      previousElevation: 3,
     });
     assert(game.state.flags.rescued);
     assert.equal(

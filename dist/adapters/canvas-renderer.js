@@ -19,6 +19,7 @@ export class Renderer {
       travelActor = null,
       environment = () => ({ weather: null, hour: 12 }),
       reducedMotion = () => false,
+      fieldPriority = () => 2,
       presentation = createDefaultPresentation(),
     } = {},
   ) {
@@ -31,6 +32,7 @@ export class Renderer {
       travelActor,
       environment,
       reducedMotion,
+      fieldPriority,
       presentation,
     });
     this.ctx = canvas.getContext("2d");
@@ -217,74 +219,81 @@ export class Renderer {
       px: player.x,
       py: player.y,
     });
-    all.sort((a, b) => a.py - b.py);
-    for (const n of all) {
-      const x = n.px - this.camera.x,
-        y = n.py - this.camera.y;
-      if (x < -32 || x > 352 || y < -32 || y > 256) continue;
-      // Shadows are visual poses; height never changes grid occupancy.
-      if (n.actor !== "BirchsBag") {
-        c.save();
-        c.globalAlpha = 0.2;
-        c.fillStyle = "#182838";
-        c.fillRect(Math.round(x + 2), Math.round(y + 11), 12, 3);
-        c.fillRect(Math.round(x + 4), Math.round(y + 10), 8, 5);
-        c.restore();
-      }
-      if (n.player) {
-        if (travel?.carrier && this.travelActor)
-          this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
-        this.actor(
-          this.playerActors[
-            travel
-              ? "walk"
-              : n.moving
-                ? this.playerActors[n.pose]
-                  ? n.pose
-                  : n.mode
-                : movementMode
-          ] || this.playerActors.walk,
-          x,
-          y -
-            16 -
-            n.lift -
-            (travel?.lift || 0) +
-            (movementMode === "surf"
-              ? Math.round(Math.sin(now / 180) * 1.5)
-              : 0),
-          n.dir,
-          n.progress,
-          n.foot,
-          n.moving && !n.freezeAnimation,
-        );
-      } else if (n.species) {
-        const image = this.assets[n.species + "-front"];
-        if (image) {
-          const hop = n.movement?.mode === "jog" ? Math.sin(now / 80) * 1.3 : 0;
-          c.drawImage(
-            image,
-            0,
-            0,
-            64,
-            64,
-            x - 1,
-            y - 6 - hop - (n.lift || 0),
-            20,
-            20,
-          );
+    const priority = (n) =>
+      this.fieldPriority(n.previousElevation ?? n.elevation ?? 0);
+    all.sort((a, b) => priority(b) - priority(a) || a.py - b.py);
+    const drawActors = (actors) => {
+      for (const n of actors) {
+        const x = n.px - this.camera.x,
+          y = n.py - this.camera.y;
+        if (x < -32 || x > 352 || y < -32 || y > 256) continue;
+        // Shadows are visual poses; height never changes grid occupancy.
+        if (n.actor !== "BirchsBag") {
+          c.save();
+          c.globalAlpha = 0.2;
+          c.fillStyle = "#182838";
+          c.fillRect(Math.round(x + 2), Math.round(y + 11), 12, 3);
+          c.fillRect(Math.round(x + 4), Math.round(y + 10), 8, 5);
+          c.restore();
         }
-      } else
-        this.actor(
-          n.actor,
-          x,
-          y - ((this.db.actors[n.actor]?.h || 16) - 16) - (n.lift || 0),
-          n.dir,
-          n.progress,
-          n.foot,
-          n.moving,
-        );
-    }
+        if (n.player) {
+          if (travel?.carrier && this.travelActor)
+            this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
+          this.actor(
+            this.playerActors[
+              travel
+                ? "walk"
+                : n.moving
+                  ? this.playerActors[n.pose]
+                    ? n.pose
+                    : n.mode
+                  : movementMode
+            ] || this.playerActors.walk,
+            x,
+            y -
+              16 -
+              n.lift -
+              (travel?.lift || 0) +
+              (movementMode === "surf"
+                ? Math.round(Math.sin(now / 180) * 1.5)
+                : 0),
+            n.dir,
+            n.progress,
+            n.foot,
+            n.moving && !n.freezeAnimation,
+          );
+        } else if (n.species) {
+          const image = this.assets[n.species + "-front"];
+          if (image) {
+            const hop =
+              n.movement?.mode === "jog" ? Math.sin(now / 80) * 1.3 : 0;
+            c.drawImage(
+              image,
+              0,
+              0,
+              64,
+              64,
+              x - 1,
+              y - 6 - hop - (n.lift || 0),
+              20,
+              20,
+            );
+          }
+        } else
+          this.actor(
+            n.actor,
+            x,
+            y - ((this.db.actors[n.actor]?.h || 16) - 16) - (n.lift || 0),
+            n.dir,
+            n.progress,
+            n.foot,
+            n.moving,
+          );
+      }
+    };
+    drawActors(all.filter((n) => priority(n) >= 2));
     for (const id of ids) this.drawMap(id, true, now);
+    drawActors(all.filter((n) => priority(n) < 2));
     if (action?.target.map) {
       const p = this.graph.point(action.target);
       drawFieldAction(

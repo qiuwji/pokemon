@@ -59,11 +59,12 @@ export class ActorTemplateRegistry {
 }
 /** Global identity and committed grid state outlive map-local animation caches. */
 export class ActorRepository {
-  constructor({ registry, maps, state = emptyActors() }) {
-    Object.assign(this, { registry, maps, state });
+  constructor({ registry, maps, state = emptyActors(), elevation = null }) {
+    Object.assign(this, { registry, maps, state, elevation });
     this.validate();
   }
   location(p) {
+    this.elevation?.validate(p);
     const m = this.maps[p.map];
     if (
       !m ||
@@ -98,6 +99,8 @@ export class ActorRepository {
           "x",
           "y",
           "dir",
+          "elevation",
+          "previousElevation",
           "data",
           "hidden",
           "version",
@@ -118,6 +121,8 @@ export class ActorRepository {
   spawn(template, position) {
     const d = this.registry.get(template);
     this.location(position);
+    position = { ...position };
+    this.elevation?.initialize(position, this.maps[position.map]);
     if (
       Object.keys(this.state.records).length >= 256 ||
       !integer(this.state.sequence + 1)
@@ -133,6 +138,12 @@ export class ActorRepository {
       x: position.x,
       y: position.y,
       dir: position.dir,
+      ...(this.elevation
+        ? {
+            elevation: position.elevation,
+            previousElevation: position.previousElevation,
+          }
+        : {}),
       hidden: false,
       version: 0,
       pose: "still",
@@ -150,11 +161,19 @@ export class ActorRepository {
       draft = structuredClone(r);
     if (position) {
       this.location(position);
+      position = { ...position };
+      this.elevation?.initialize(position, this.maps[position.map]);
       Object.assign(draft, {
         map: position.map,
         x: position.x,
         y: position.y,
         dir: position.dir,
+        ...(this.elevation
+          ? {
+              elevation: position.elevation,
+              previousElevation: position.previousElevation,
+            }
+          : {}),
       });
     }
     if (data !== undefined) {
@@ -200,6 +219,14 @@ export class ActorRepository {
           x: r.x,
           y: r.y,
           dir: r.dir,
+          ...(this.elevation
+            ? {
+                elevation: this.elevation.level(r, this.maps[map]),
+                previousElevation:
+                  r.previousElevation ??
+                  this.elevation.level(r, this.maps[map]),
+              }
+            : {}),
           pose: r.pose,
           actor: d.actor,
           name: d.name,

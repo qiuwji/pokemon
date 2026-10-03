@@ -1,3 +1,4 @@
+import { GEN3_ELEVATION } from "../../../engine/rules/gen3/elevation.js";
 import { NPCPoseRegistry } from "../../../engine/npc-poses.js";
 import {
   ActorRepository,
@@ -47,6 +48,7 @@ export class ActorApplication {
     this.repository = new ActorRepository({
       state: this.state.actors,
       maps: this.db.maps,
+      elevation: GEN3_ELEVATION,
       registry: new ActorTemplateRegistry(this.catalog.actorTemplates, {
         actors: this.db.actors,
         behaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors, {
@@ -67,6 +69,7 @@ export class ActorApplication {
       x: n.x,
       y: n.y,
       dir: n.dir,
+      elevation: n.elevation,
       kind: n.kind || "npc",
     }));
     if (this.state.position.map === map)
@@ -85,6 +88,7 @@ export class ActorApplication {
         r,
         this.entities(map),
         d.perceptionRadius,
+        this.world.elevation,
       ),
     };
   }
@@ -105,9 +109,19 @@ export class ActorApplication {
     if (!intent.goal) return intent;
     const dir = nextActorDirection(
       this.world.maps,
-      { map, x: n.x, y: n.y, dir: n.dir },
+      {
+        map,
+        x: n.x,
+        y: n.y,
+        dir: n.dir,
+        elevation: n.elevation,
+        previousElevation: n.previousElevation,
+      },
       intent.goal,
-      { objects: (id) => this.blockers(id, n.id) },
+      {
+        objects: (id) => this.blockers(id, n.id),
+        elevation: this.world.elevation,
+      },
     );
     return { ...intent, move: !!dir, ...(dir ? { dir } : {}) };
   }
@@ -121,9 +135,17 @@ export class ActorApplication {
       );
   }
   step(map, n, dir, playerFrom) {
-    const position = { map, x: n.x, y: n.y, dir: n.dir };
+    const position = {
+      map,
+      x: n.x,
+      y: n.y,
+      dir: n.dir,
+      elevation: n.elevation,
+      previousElevation: n.previousElevation,
+    };
     const w = new World(this.world.maps, position, {
       objects: (id) => this.blockers(id, n.id, playerFrom),
+      elevation: this.world.elevation,
       passage: ({ cell, warp }) =>
         cell.collision === 0 && !isWater(cell.behavior) && !warp,
     });
@@ -136,7 +158,14 @@ export class ActorApplication {
       actor = this.repository.update(
         n._actorUid,
         {
-          position: { map, x: n.x, y: n.y, dir: n.dir },
+          position: {
+            map,
+            x: n.x,
+            y: n.y,
+            dir: n.dir,
+            elevation: n.elevation,
+            previousElevation: n.previousElevation,
+          },
           pose: n.pose || "still",
         },
         { external: false },
@@ -150,7 +179,8 @@ export class ActorApplication {
       if (
         target &&
         target.uid !== n.id &&
-        Math.abs(target.x - n.x) + Math.abs(target.y - n.y) === 1
+        Math.abs(target.x - n.x) + Math.abs(target.y - n.y) === 1 &&
+        this.world.elevation.compatible(n.elevation, target.elevation)
       )
         this.plugins?.events.emit("core:actor-interaction-requested", {
           actor: actor.uid,
@@ -162,14 +192,14 @@ export class ActorApplication {
   free(position, uid = null) {
     this.repository.location(position);
     const map = this.world.maps[position.map],
+      level = this.world.elevation.level(position, map),
       index = position.y * map.width + position.x;
     return (
       ((map.blocks[index] >> 10) & 3) === 0 &&
+      this.world.elevation.canEnter(level, map.blocks[index] >> 12) &&
       !isWater(map.behavior[index]) &&
-      !this.blockers(position.map, uid).some(
-        (n) =>
-          (n.x === position.x && n.y === position.y) ||
-          n.reserved?.some((p) => p.x === position.x && p.y === position.y),
+      !this.blockers(position.map, uid).some((n) =>
+        this.world.elevation.occupies(map, n, position.x, position.y, level),
       )
     );
   }

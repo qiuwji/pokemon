@@ -199,3 +199,11 @@
 - world-state/field-actions 首轮 27 项，26 通过；新组合夹具走动后未等待/转向岩石，修正实际步骤后仅重跑失败项通过。受影响 Actor/movement/terrain/cutscene/应用/架构/插件 85 项一次通过，公开类型检查通过。
 - 追加恢复/预约/观察顺序/飞行委托检查及受影响飞行共 8 项，7 通过；一项夹具误用不存在的 content.patch 和编译 catalog.dependencies，改为公开 mapExtensions 与宿主依赖服务后仅该项重跑通过。引用恢复检查无需改变生产接口。剧情入口收口后对应 7 项演出/救援/失败用例通过；因模式筛选额外匹配已验证的 in-flight 一项已记入上述 8 项，没有全工程回归。
 - 合同/来源/当前访问保存策略与失效条件见 WORLD_LIFECYCLE.md；原作 TEMP_FLAGS/TEMP_VARS、特殊碎岩剧情、薄冰/裂地板/桥面仍未因此完成。下一项地形机关，之后继续原 C/D/E 和公开插件合同。浏览器/全作系统验收仍留到 E。
+
+### C2 · 网格高度、桥面通行与绘制层（2026-10-03）
+
+- 可选 ElevationPolicy 与 Gen3 政策分开，World 统一通行/对象碰撞/互动，保留连接地图的平面；NPC、FieldDirector、ActorRepository/Application、BFS、视线/感知、目标/预约和保存共用。BFS 以高度区分同格状态；持续 Actor 命令/记忆保存高度，覆盖恢复保护各平面。
+- Renderer 的 fieldPriority 注入和 pack 原作优先级分开；当前逻辑高度/保留表现高度进入快照，低层角色→图块覆盖层→高层角色。没有用动画决定通行，也没有添加整张场景资源。
+- 受影响 terrain/actors/cutscene/world-state/field-actions/应用/plugins/movement 110 项一次：105 通过，5 项为原位置 exact 断言未列新高度字段；更新有效位置合同后仅这 5 项重跑通过。新高度 8 个场景首次 6 通过，2 项夹具分别缺地形 sourceCell 与误把 Actor 的 ok:false 当异常，修正后对应 2 项及整理后的相邻入口 1 项通过。
+- 目标平面传递、视线和场景初始化追加接线后对应 4 项通过；追加实际 Actor 目标不能丢失桥面高度及无效保存断言后，仅该组合场景 1 项通过。类型检查与架构/导入方向 6 项通过；类型后续新增 goal.elevation 再检查通过。没有全工程重复回归。
+- 原作桥面下降/木桥升沉、全地图和遮挡素材、薄冰/裂地板及完整自行车帧时序仍待完成。下一项机关服务，合同/来源/失效条件见 FIELD_ELEVATION.md；最终浏览器和系统验收继续留在 E。

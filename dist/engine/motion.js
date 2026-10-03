@@ -158,6 +158,12 @@ export class GridMotion {
         ? Math.max(0, Math.min(1, (now - this.start) / this.duration))
         : 1;
     return {
+      ...(position.elevation !== undefined
+        ? {
+            elevation: position.elevation,
+            previousElevation: position.previousElevation ?? position.elevation,
+          }
+        : {}),
       x: this.from.x + (end.x - this.from.x) * t,
       y: this.from.y + (end.y - this.from.y) * t,
       zone: end.zone,

@@ -19,6 +19,8 @@ const objectFields = [
   "y",
   "actor",
   "dir",
+  "elevation",
+  "previousElevation",
   "kind",
   "name",
   "text",
@@ -82,6 +84,12 @@ export class WorldStateService {
     if (!identifier(id) || !exact(value, objectFields))
       throw new Error("Invalid world object patch");
     const m = this.db.maps[map];
+    for (const key of ["elevation", "previousElevation"])
+      if (
+        value[key] !== undefined &&
+        (!Number.isInteger(value[key]) || value[key] < 0 || value[key] > 15)
+      )
+        throw new Error("Invalid object elevation");
     for (const key of ["x", "y"])
       if (
         value[key] !== undefined &&

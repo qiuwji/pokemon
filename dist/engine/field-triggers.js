@@ -46,6 +46,7 @@ export function findWatchingTrainer({
   position,
   objects,
   eligible = () => true,
+  elevation = null,
 }) {
   for (const object of objects(position.map)) {
     if (!object.trainerId || !object.sightRange || !eligible(object)) continue;
@@ -68,9 +69,18 @@ export function findWatchingTrainer({
       x: object.x,
       y: object.y,
       dir: object.dir,
+      ...(elevation
+        ? {
+            elevation: elevation.level(object, maps[position.map]),
+            previousElevation:
+              object.previousElevation ??
+              elevation.level(object, maps[position.map]),
+          }
+        : {}),
     };
     const world = new World(maps, from, {
       objects: (map) => objects(map).filter((o) => o.id !== object.id),
+      elevation,
     });
     let clear = true;
     // Player occupies the last cell: check terrain there without moving onto the player.
@@ -83,7 +93,15 @@ export function findWatchingTrainer({
         break;
       }
     }
-    if (clear) return object;
+    if (
+      clear &&
+      (!elevation ||
+        elevation.compatible(
+          from.elevation,
+          elevation.level(position, maps[position.map]),
+        ))
+    )
+      return object;
   }
   return null;
 }

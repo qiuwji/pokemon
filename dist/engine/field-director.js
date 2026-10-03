@@ -64,6 +64,7 @@ export class FieldDirector {
       { map: from.map, ...to },
       {
         objects: (map) => this.objects(map, id, allowVacatedBy),
+        elevation: this.field.world.elevation,
         ...(id === "player" && this.field.movement
           ? {
               passage: (c) =>
@@ -87,13 +88,28 @@ export class FieldDirector {
     await this.ready(id);
     const map = this.field.position.map;
     const n = this.field.npcs.control(id, map);
-    const position = { map, x: n.x, y: n.y, dir: n.dir };
+    const position = {
+      map,
+      x: n.x,
+      y: n.y,
+      dir: n.dir,
+      ...(this.field.world.elevation
+        ? { elevation: n.elevation, previousElevation: n.previousElevation }
+        : {}),
+    };
     const world = new World(this.field.world.maps, position, {
       objects: (idMap) => this.objects(idMap, id),
+      elevation: this.field.world.elevation,
     });
     const result = world.move(dir, { ignoreWarps: true });
     if (!result || position.map !== map)
       throw new Error(`Scripted actor movement blocked: ${id}/${dir}`);
+    n.fromElevation = n.elevation;
+    if (this.field.world.elevation)
+      Object.assign(n, {
+        elevation: position.elevation,
+        previousElevation: position.previousElevation,
+      });
     n.fromX = n.x;
     n.fromY = n.y;
     n.x = n.toX = position.x;

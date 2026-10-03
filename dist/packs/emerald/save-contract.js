@@ -1,3 +1,4 @@
+import { GEN3_ELEVATION } from "../../engine/rules/gen3/elevation.js";
 import { NPCPoseRegistry } from "../../engine/npc-poses.js";
 import {
   ActorRepository,
@@ -47,10 +48,12 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    GEN3_ELEVATION.validate(s.position || {});
     if (s.actors !== undefined)
       new ActorRepository({
         state: s.actors,
         maps: db.maps,
+        elevation: GEN3_ELEVATION,
         registry: new ActorTemplateRegistry(catalog.actorTemplates, {
           actors: db.actors,
           behaviors: new NPCBehaviorRegistry(catalog.npcBehaviors, {

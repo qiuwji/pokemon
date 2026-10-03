@@ -1,3 +1,4 @@
+import { GEN3_ELEVATION } from "../../../engine/rules/gen3/elevation.js";
 import { NPCPoseRegistry } from "../../../engine/npc-poses.js";
 import {
   WorldStateService,
@@ -90,6 +91,9 @@ export class WorldApplication {
       )
     )
       throw new Error("Persistent actors require actor commands");
+    for (const operation of operations)
+      if (operation.kind === "object")
+        GEN3_ELEVATION.validate(operation.changes || {});
     const draft = this.worldState.prepare(operations);
     this.assertOccupants(
       draft,
@@ -117,7 +121,14 @@ export class WorldApplication {
       if (player?.map === id) protectedCells.push({ ...player, player: true });
       for (const cell of protectedCells) {
         const block = map.blocks[cell.y * map.width + cell.x];
-        if (block !== undefined && (block >> 10) & 3)
+        if (
+          block !== undefined &&
+          ((block >> 10) & 3 ||
+            !GEN3_ELEVATION.canEnter(
+              GEN3_ELEVATION.level(cell, map),
+              block >> 12,
+            ))
+        )
           throw new Error(
             `World patch would block ${cell.player ? "the player" : "an actor"}`,
           );
@@ -127,7 +138,11 @@ export class WorldApplication {
               entries[o.id] &&
               o.x === cell.x &&
               o.y === cell.y &&
-              o.id !== cell.id,
+              o.id !== cell.id &&
+              GEN3_ELEVATION.compatible(
+                GEN3_ELEVATION.level(cell, map),
+                GEN3_ELEVATION.level(o, map),
+              ),
           )
         )
           throw new Error(
@@ -170,12 +185,14 @@ export class WorldApplication {
             throw new Error("Invalid map entry direction");
           this.assertOccupants(draft, new Set([map]), position);
           if (
-            objects.some(
-              (o) =>
-                (o.x === position.x && o.y === position.y) ||
-                o.reserved?.some(
-                  (p) => p.x === position.x && p.y === position.y,
-                ),
+            objects.some((o) =>
+              GEN3_ELEVATION.occupies(
+                this.worldState.map(map, draft),
+                o,
+                position.x,
+                position.y,
+                position.elevation,
+              ),
             )
           )
             throw new Error("Map entry is occupied");
@@ -295,6 +312,7 @@ export class WorldApplication {
     this.field = new FieldSession({
       maps: this.worldState.maps,
       prepareEntry: (map) => this.prepareEntry(map),
+      elevation: GEN3_ELEVATION,
       position: this.state.position,
       motion: this.motion,
       transitions: this.transitions,

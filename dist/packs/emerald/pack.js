@@ -304,6 +304,9 @@ export function objectsFor(state, db) {
     if (n.kind === "rival") mode = "look";
     return {
       ...n,
+      ...(source?.elevation !== undefined
+        ? { elevation: source.elevation }
+        : {}),
       id: n.id || `${n.kind}:${n.x},${n.y}`,
       dir: n.kind === "wildObject" ? "left" : direction,
       movement: {

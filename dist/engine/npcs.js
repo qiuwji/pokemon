@@ -10,6 +10,7 @@ export class NPCSystem {
     {
       random = Math.random,
       behaviors = new NPCBehaviorRegistry(),
+      elevation = null,
       onError = () => {},
       context = () => ({}),
       resolveIntent = (map, n, intent) => intent,
@@ -23,6 +24,7 @@ export class NPCSystem {
       definitions,
       random,
       behaviors,
+      elevation,
       onError,
       context,
       resolveIntent,
@@ -52,6 +54,7 @@ export class NPCSystem {
         foot: 0,
         next: this.now + 500 + this.random() * 2000,
       };
+      this.elevation?.initialize(n, this.maps[map]);
       this.states.set(key, n);
     } else {
       Object.assign(n, { text: def.text, name: def.name, kind: def.kind });
@@ -136,6 +139,17 @@ export class NPCSystem {
       next: this.now + 1600,
       movement: base?.movement || { mode: "still" },
     };
+    if (this.elevation) {
+      delete n.elevation;
+      delete n.previousElevation;
+      Object.assign(n, {
+        ...(def.elevation !== undefined ? { elevation: def.elevation } : {}),
+        ...(def.previousElevation !== undefined
+          ? { previousElevation: def.previousElevation }
+          : {}),
+      });
+      this.elevation.initialize(n, this.maps[map]);
+    }
     this.states.set(map + ":" + def.id, n);
     this.scene.pins.set(map + ":" + def.id, n);
     this.scene.hidden.delete(map + ":" + def.id);
@@ -147,8 +161,18 @@ export class NPCSystem {
   reserved(n) {
     return this.moving(n)
       ? [
-          { x: n.x, y: n.y },
-          { x: n.fromX, y: n.fromY },
+          {
+            x: n.x,
+            y: n.y,
+            ...(this.elevation ? { elevation: n.elevation } : {}),
+          },
+          {
+            x: n.fromX,
+            y: n.fromY,
+            ...(this.elevation
+              ? { elevation: n.fromElevation ?? n.elevation }
+              : {}),
+          },
         ]
       : [{ x: n.x, y: n.y }];
   }
@@ -163,7 +187,18 @@ export class NPCSystem {
           id: n.id,
           x: n.crossFrom.x,
           y: n.crossFrom.y,
-          reserved: [{ x: n.crossFrom.x, y: n.crossFrom.y }],
+          reserved: [
+            {
+              x: n.crossFrom.x,
+              y: n.crossFrom.y,
+              ...(this.elevation
+                ? { elevation: n.crossFrom.elevation ?? n.fromElevation }
+                : {}),
+            },
+          ],
+          ...(this.elevation
+            ? { elevation: n.crossFrom.elevation ?? n.fromElevation }
+            : {}),
         });
     return result;
   }
@@ -233,7 +268,16 @@ export class NPCSystem {
             config,
             dir: n.dir,
             now,
-            position: { x: n.x, y: n.y },
+            position: {
+              x: n.x,
+              y: n.y,
+              ...(this.elevation
+                ? {
+                    elevation: n.elevation,
+                    previousElevation: n.previousElevation,
+                  }
+                : {}),
+            },
             origin: { x: n.originX, y: n.originY },
             rolls: [this.random(), this.random()],
           });
@@ -258,7 +302,20 @@ export class NPCSystem {
           }
           const [dx, dy] = DIRECTIONS[dir],
             changedMap = next.map !== map;
-          n.crossFrom = changedMap ? { map, x: n.x, y: n.y } : null;
+          n.crossFrom = changedMap
+            ? {
+                map,
+                x: n.x,
+                y: n.y,
+                ...(this.elevation ? { elevation: n.elevation } : {}),
+              }
+            : null;
+          n.fromElevation = n.elevation;
+          if (this.elevation)
+            Object.assign(n, {
+              elevation: next.elevation,
+              previousElevation: next.previousElevation,
+            });
           n.fromX = changedMap ? next.x - dx : n.x;
           n.fromY = changedMap ? next.y - dy : n.y;
           n.x = n.toX = next.x;
@@ -292,6 +349,8 @@ export class NPCSystem {
         const i = y * m.width + x;
         if (
           ((m.blocks[i] >> 10) & 3) !== 0 ||
+          (this.elevation &&
+            !this.elevation.canEnter(n.elevation, m.blocks[i] >> 12)) ||
           isWater(m.behavior[i]) ||
           ledgeDirection(m.behavior[i]) ||
           m.warps.some((w) => w.x === x && w.y === y)
@@ -301,18 +360,44 @@ export class NPCSystem {
           npcs.some(
             (other) =>
               other !== n &&
-              this.reserved(other).some((p) => p.x === x && p.y === y),
+              this.reserved(other).some(
+                (p) =>
+                  p.x === x &&
+                  p.y === y &&
+                  (!this.elevation ||
+                    this.elevation.compatible(
+                      n.elevation,
+                      p.elevation ?? other.elevation,
+                    )),
+              ),
           )
         )
           continue;
         if (
           map === player.map &&
-          ((player.x === x && player.y === y) ||
+          ((player.x === x &&
+            player.y === y &&
+            (!this.elevation ||
+              this.elevation.compatible(
+                n.elevation,
+                this.elevation.level(player, m),
+              ))) ||
             (playerFrom?.map === map &&
               playerFrom.x === x &&
-              playerFrom.y === y))
+              playerFrom.y === y &&
+              (!this.elevation ||
+                this.elevation.compatible(
+                  n.elevation,
+                  this.elevation.level(playerFrom, m),
+                ))))
         )
           continue;
+        n.fromElevation = n.elevation;
+        this.elevation?.advance(
+          n,
+          m.blocks[n.y * m.width + n.x] >> 12,
+          m.blocks[i] >> 12,
+        );
         n.fromX = n.x;
         n.fromY = n.y;
         n.x = n.toX = x;

@@ -54,6 +54,8 @@ export function registerEmeraldCommands(game, bus) {
       x: { type: "integer", minimum: 0 },
       y: { type: "integer", minimum: 0 },
       dir: { type: "string", enum: ["up", "down", "left", "right"] },
+      elevation: { type: "integer", minimum: 0, maximum: 14 },
+      previousElevation: { type: "integer", minimum: 0, maximum: 14 },
     },
     ["map", "x", "y", "dir"],
   );

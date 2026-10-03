@@ -70,8 +70,12 @@ export class NPCBehaviorRegistry {
           !Number.isInteger(intent.goal.y) ||
           (intent.goal.adjacent !== undefined &&
             typeof intent.goal.adjacent !== "boolean") ||
+          (intent.goal.elevation !== undefined &&
+            (!Number.isInteger(intent.goal.elevation) ||
+              intent.goal.elevation < 0 ||
+              intent.goal.elevation > 14)) ||
           Object.keys(intent.goal).some(
-            (k) => !["map", "x", "y", "adjacent"].includes(k),
+            (k) => !["map", "x", "y", "adjacent", "elevation"].includes(k),
           ))) ||
       !this.poses.definitions.has(intent.pose) ||
       (intent.dir !== undefined &&

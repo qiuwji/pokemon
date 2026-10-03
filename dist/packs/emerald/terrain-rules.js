@@ -30,7 +30,7 @@ const aligned = (axis, direction) =>
   (axis === "vertical" ? ["up", "down"] : ["left", "right"]).includes(
     direction,
   );
-const noBike = (cell) =>
+const noBike = (cell, level = cell.elevation) =>
   [
     BEHAVIOR.NO_RUNNING,
     BEHAVIOR.LONG_GRASS,
@@ -40,7 +40,7 @@ const noBike = (cell) =>
     BEHAVIOR.PACIFIDLOG_LOG_LEFT,
     BEHAVIOR.PACIFIDLOG_LOG_RIGHT,
   ].includes(cell.behavior) ||
-  (cell.behavior === BEHAVIOR.FORTREE_BRIDGE && (cell.elevation & 1) === 0);
+  (cell.behavior === BEHAVIOR.FORTREE_BRIDGE && (level & 1) === 0);
 
 /** Generation III terrain policy; the field executor is independent of these behavior IDs and vehicle names. */
 export const EMERALD_TERRAIN_RULES = {
@@ -91,12 +91,16 @@ export const EMERALD_TERRAIN_RULES = {
   },
   "no-bike": {
     priority: 100,
-    when: (c) => c.mode.endsWith("bike") && noBike(c.cell),
+    when: (c) =>
+      c.mode.endsWith("bike") &&
+      noBike(c.cell, c.actor?.previousElevation ?? c.cell.elevation),
     before: () => ({ allowed: false }),
   },
   "no-run": {
     when: (c) =>
-      c.mode === "run" && (noBike(c.cell) || c.map.allowRunning === false),
+      c.mode === "run" &&
+      (noBike(c.cell, c.actor?.previousElevation ?? c.cell.elevation) ||
+        c.map.allowRunning === false),
     before: () => ({ duration: 160, pose: "walk" }),
   },
   "bumpy-slope": {

@@ -1,3 +1,4 @@
+import { GEN3_ELEVATION } from "../../engine/rules/gen3/elevation.js";
 import { DIRECTIONS } from "../../engine/world.js";
 import { isWater, BEHAVIOR } from "../../engine/terrain.js";
 import { objectSchema } from "../../engine/extensions/values.js";
@@ -19,7 +20,11 @@ const behavior = (c, p) =>
 const removeObject = (kind) => (c) => {
   const p = front(c),
     object = c.objects.find(
-      (o) => o.kind === kind && o.x === p.x && o.y === p.y,
+      (o) =>
+        o.kind === kind &&
+        o.x === p.x &&
+        o.y === p.y &&
+        GEN3_ELEVATION.compatible(c.position.elevation ?? 0, o.elevation ?? 0),
     );
   return object ? { ...p, objectId: object.id } : null;
 };

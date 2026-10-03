@@ -2,9 +2,17 @@ import { DIRECTIONS } from "./world.js";
 import { findRoute } from "./pathfinding.js";
 import { readOnly } from "./extensions/values.js";
 /** Perception is a query; it grants no authority to move or change the observed actor. */
-export function perceive(maps, self, entities, radius = 8) {
+export function perceive(maps, self, entities, radius = 8, elevation = null) {
   const map = maps[self.map];
   const visible = (other) => {
+    if (
+      elevation &&
+      !elevation.compatible(
+        elevation.level(self, map),
+        elevation.level(other, map),
+      )
+    )
+      return false;
     let x = self.x,
       y = self.y;
     const dx = Math.abs(other.x - x),
@@ -50,6 +58,7 @@ export function nextActorDirection(maps, from, goal, options) {
         map: goal.map,
         x: goal.x + dx,
         y: goal.y + dy,
+        ...(goal.elevation !== undefined ? { elevation: goal.elevation } : {}),
       }))
     : [goal];
   const paths = [];

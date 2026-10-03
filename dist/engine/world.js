@@ -21,6 +21,7 @@ export class World {
       onMap = () => {},
       beforeMove = () => {},
       prepareEntry = null,
+      elevation = null,
       deferWarps = false,
       passage = ({ cell, warp }) =>
         !isWater(cell.behavior) && (cell.collision === 0 || !!warp),
@@ -35,10 +36,12 @@ export class World {
       onMap,
       beforeMove,
       prepareEntry,
+      elevation,
       deferWarps,
       passage,
     });
     this.steps = 0;
+    elevation?.initialize(position, this.map);
   }
   get map() {
     return this.maps[this.position.map];
@@ -71,10 +74,14 @@ export class World {
   }
   enter(map, x, y, dir = this.position.dir, preview = this.entryPreview(map)) {
     const target = { map, x, y, dir };
+    this.elevation?.initialize(target, preview.map);
+    return this.commitEntry(target, preview);
+  }
+  commitEntry(target, preview) {
     if (preview.commit && preview.commit(target) === false) return false;
     Object.assign(this.position, target);
     preview.entered?.(target);
-    this.onMap(map);
+    this.onMap(target.map);
     return true;
   }
   move(dir, { ignoreWarps = false, allowVacatedBy = null } = {}) {
@@ -84,6 +91,7 @@ export class World {
     let x = p.x + dx,
       y = p.y + dy,
       m = this.map;
+    const sourceElevation = this.cell(p.x, p.y)?.elevation;
     let cell = this.cell(x, y);
     if (!cell) {
       const c = m.connections.find((c) => c.direction === dir);
@@ -113,6 +121,8 @@ export class World {
           y < 0 ||
           x >= dest.width ||
           y >= dest.height ||
+          (this.elevation &&
+            !this.elevation.canEnter(p.elevation, dest.blocks[i] >> 12)) ||
           !this.passage({
             cell: {
               block: dest.blocks[i],
@@ -126,11 +136,7 @@ export class World {
             from: { ...p },
             warp: null,
           }) ||
-          preview.objects.some(
-            (n) =>
-              (n.x === x && n.y === y) ||
-              n.reserved?.some((p) => p.x === x && p.y === y),
-          )
+          preview.objects.some((n) => this.occupied(dest, n, x, y))
         )
           return false;
         this.beforeMove({
@@ -139,10 +145,13 @@ export class World {
             block: dest.blocks[i],
             behavior: dest.behavior[i],
             collision: (dest.blocks[i] >> 10) & 3,
+            elevation: dest.blocks[i] >> 12,
           },
           dir,
         });
-        if (!this.enter(id, x, y, dir, preview)) return false;
+        const target = { ...p, map: id, x, y, dir };
+        this.elevation?.advance(target, sourceElevation, dest.blocks[i] >> 12);
+        if (!this.commitEntry(target, preview)) return false;
         this.steps++;
         this.onStep(this.cell(x, y));
         return true;
@@ -168,16 +177,15 @@ export class World {
       this.onBlocked("unavailable");
       return false;
     }
-    const obj = this.objects(p.map).find(
-      (n) =>
-        (n.x === x && n.y === y) ||
-        (n.id !== allowVacatedBy &&
-          n.reserved?.some((p) => p.x === x && p.y === y)),
+    const obj = this.objects(p.map).find((n) =>
+      this.occupied(m, n, x, y, { reservations: n.id !== allowVacatedBy }),
     );
     const oneWay = blockedDirection(cell?.behavior);
     if (
       !cell ||
       obj ||
+      (this.elevation &&
+        !this.elevation.canEnter(p.elevation, cell.elevation)) ||
       !this.passage({
         cell,
         map: m,
@@ -194,6 +202,7 @@ export class World {
     this.beforeMove({ map: m, cell, dir });
     p.x = x;
     p.y = y;
+    this.elevation?.advance(p, sourceElevation, cell.elevation);
     this.steps++;
     if (warp && !ignoreWarps) {
       const id = this.resolve(warp.dest_map);
@@ -253,14 +262,34 @@ export class World {
     this.onStep(this.cell(p.x, p.y));
     return { jump };
   }
+  occupied(map, object, x, y, options = {}) {
+    if (this.elevation)
+      return this.elevation.occupies(
+        map,
+        object,
+        x,
+        y,
+        this.position.elevation,
+        options,
+      );
+    return (
+      (object.x === x && object.y === y) ||
+      (options.reservations !== false &&
+        object.reserved?.some((p) => p.x === x && p.y === y))
+    );
+  }
   interact() {
     const [dx, dy] = DIRECTIONS[this.position.dir];
     const x = this.position.x + dx,
       y = this.position.y + dy;
-    let obj = this.objects().find((n) => n.x === x && n.y === y);
+    let obj = this.objects().find((n) =>
+      this.occupied(this.map, n, x, y, { reservations: false }),
+    );
     // Counters keep attendants one extra tile away.
     if (!obj && isCounter(this.cell(x, y)?.behavior))
-      obj = this.objects().find((n) => n.x === x + dx && n.y === y + dy);
+      obj = this.objects().find((n) =>
+        this.occupied(this.map, n, x + dx, y + dy, { reservations: false }),
+      );
     const sign = this.map.signs.find((n) => n.x === x && n.y === y);
     return obj || (sign && { ...sign, kind: "sign" }) || null;
   }
