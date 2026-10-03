@@ -6,9 +6,9 @@
 | --- | --- | --- | --- | --- |
 | 招式与回合 | 席位、阶段管线、常用效果 | 完整原作效果分类；状态作用域/到期；多回合/延迟/历史 | include/constants/battle_move_effects.h；src/data/battle_moves.h；src/battle_script_commands.c；data/battle_scripts_1.s | 结构基线已生成；完整行为未验证 |
 | 训练家/遭遇 | 原固定队伍、陆地/水域遭遇 | 公开 trainer/encounter/strategy 注册和 battle.start | src/data/trainers.h；src/data/trainer_parties.h；src/data/wild_encounters.json；src/battle_ai_script_commands.c | A2 针对性验证通过，见 DEVELOPMENT_LOG.md |
-| 动态世界 | 静态网格、NPC、门/道路 | 持久图块/对象变更、机关、保存恢复 | src/field_control_avatar.c；src/event_object_movement.c；src/scrcmd.c；data/maps/* | A3 针对性验证通过；动作/机关组合待后续 |
+| 动态世界 | 静态网格、NPC、门/道路 | 持久图块/对象变更、机关、保存恢复 | src/field_control_avatar.c；src/event_object_movement.c；src/scrcmd.c；data/maps/* | A3 与访问覆盖/重进恢复已针对性验证，见 WORLD_LIFECYCLE.md；完整机关仍待补 |
 | 剧情 | build、条件标记、一次奖励、演出 | 数据分支/选择/变量查询、区域与视线触发、领域命令组合 | src/scrcmd.c；data/scripts/*；data/maps/*/scripts.inc | A4 数据条件/变量/分支/选择已针对性验证，内容还原待业务阶段 |
-| 野外行动 | 步行/跑步/自行车/冲浪/飞行基础 | 目标与资格协议、砍树/碎岩/潜水/攀瀑/钓鱼 | src/field_effect.c；src/fldeff_*；src/field_player_avatar.c | C1 首轮合同/行动/钓鱼针对性验证；正式鱼竿、恢复政策/草丛居合斩与素材仍待补，见 FIELD_ACTIONS.md |
+| 野外行动 | 步行/跑步/自行车/冲浪/飞行基础 | 目标与资格协议、砍树/碎岩/潜水/攀瀑/钓鱼 | src/field_effect.c；src/fldeff_*；src/field_player_avatar.c | C1 首轮合同/行动/钓鱼针对性验证；普通障碍恢复已接入；正式鱼竿、特殊恢复/草丛居合斩与素材仍待补，见 FIELD_ACTIONS.md |
 | 地形/交通 | 格子通行与基本动量 | 原作自行车技巧、流向/滑动/强制位移 | src/bike.c；src/metatile_behavior.c；src/field_player_avatar.c | C2 首轮已针对性验证；完整按键时序/桥面高度/冰地板机关待补，见 FIELD_TERRAIN.md |
 | 游戏时间 | 外观昼夜、成长小时回调 | 可保存时钟、定时任务、恢复/离线策略 | src/clock.c；src/berry.c；src/field_specials.c | C3 时钟/调度/树果首轮已针对性验证；完整每日业务/潮汐地图与土壤内容待接线，见 WORLD_TIME.md |
 | 精灵形态 | 天气形态投影与类型回调 | 有效属性来源、临时形态/重算/恢复 | src/pokemon.c；src/battle_util.c | C4 基础身份/有效投影/变身与模仿已针对性验证；现代形态扩展见 PLUGIN_EVOLUTION.md，非原作机制 |

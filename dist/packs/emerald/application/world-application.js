@@ -91,54 +91,114 @@ export class WorldApplication {
     )
       throw new Error("Persistent actors require actor commands");
     const draft = this.worldState.prepare(operations);
-    for (const operation of operations) {
-      const map = this.db.maps[operation.map],
-        overlay = draft.maps[operation.map];
-      for (const actor of this.field.npcs
-        .occupants(operation.map)
-        .filter((n) => /^core:actor\.\d+$/.test(n.id))) {
-        const block = overlay?.tiles[actor.y * map.width + actor.x]?.block;
+    this.assertOccupants(
+      draft,
+      new Set(operations.map((o) => o.map)),
+      this.state.position,
+    );
+    return draft;
+  }
+  /** Validate the composed result, including temporary layers and in-flight actor reservations. */
+  assertOccupants(draft, maps, player) {
+    for (const id of maps) {
+      const map = this.worldState.map(id, draft),
+        entries = {
+          ...this.worldState.record(id).objects,
+          ...this.worldState.record(id, draft).objects,
+        },
+        objects = this.worldState.projectObjects(id, undefined, draft),
+        actors = this.field.npcs
+          .occupants(id)
+          .filter((n) => /^core:actor\.\d+$/.test(n.id));
+      const protectedCells = actors.flatMap((a) => [
+        a,
+        ...(a.reserved || []).map((p) => ({ ...p, id: a.id })),
+      ]);
+      if (player?.map === id) protectedCells.push({ ...player, player: true });
+      for (const cell of protectedCells) {
+        const block = map.blocks[cell.y * map.width + cell.x];
         if (block !== undefined && (block >> 10) & 3)
-          throw new Error("World patch would block an actor");
-        if (operation.kind === "object") {
-          const entry = overlay?.objects[operation.id],
-            base = this.baseWorldObjects(operation.map).find(
-              (n) => n.id === operation.id,
-            );
-          const position = { ...base, ...entry?.changes };
-          if (
-            !entry?.hidden &&
-            (entry?.spawn || base) &&
-            position.x === actor.x &&
-            position.y === actor.y
+          throw new Error(
+            `World patch would block ${cell.player ? "the player" : "an actor"}`,
+          );
+        if (
+          objects.some(
+            (o) =>
+              entries[o.id] &&
+              o.x === cell.x &&
+              o.y === cell.y &&
+              o.id !== cell.id,
           )
-            throw new Error("World object would overlap an actor");
-        }
+        )
+          throw new Error(
+            `World object would overlap ${cell.player ? "the player" : "an actor"}`,
+          );
       }
     }
-    const current = this.state.position;
-    const record = draft.maps[current.map];
-    const tile =
-      record?.tiles[current.y * this.db.maps[current.map].width + current.x];
-    if (tile?.block !== undefined && (tile.block >> 10) & 3)
-      throw new Error("World patch would block the player");
-    for (const [id, entry] of Object.entries(record?.objects || {})) {
-      const base = this.baseWorldObjects(current.map).find((o) => o.id === id);
-      const position = { ...base, ...entry.changes };
-      if (
-        !entry.hidden &&
-        (entry.spawn || base) &&
-        position.x === current.x &&
-        position.y === current.y
+  }
+  prepareEntry(map) {
+    const draft = this.worldState.prepareVisit(map),
+      projected = this.worldState.projectObjects(map, undefined, draft),
+      runtime = new Map(this.field.npcs.occupants(map).map((o) => [o.id, o]));
+    const objects = projected
+      .filter((e) =>
+        matchesCondition(e.requires, this.state, this.conditionQueries),
       )
-        throw new Error("World object would overlap the player");
-    }
-    return draft;
+      .map((o) => {
+        const live = runtime.get(o.id);
+        return live && live._worldVersion === o._worldVersion ? live : o;
+      });
+    for (const [id, live] of runtime)
+      if (/^core:actor\.\d+$/.test(id) && !objects.some((o) => o.id === id))
+        objects.push(live);
+    const changed = Object.keys(
+      this.state.worldState.visits?.[map]?.objects || {},
+    );
+    return {
+      map: this.worldState.map(map, draft),
+      entered: () =>
+        this.plugins?.events.emit("core:world-visit", {
+          map,
+          revision: draft.revision,
+          restoredObjects: changed,
+        }),
+      objects,
+      commit: (position) => {
+        try {
+          this.worldState.cell(map, position.x, position.y);
+          if (!DIRECTIONS[position.dir])
+            throw new Error("Invalid map entry direction");
+          this.assertOccupants(draft, new Set([map]), position);
+          if (
+            objects.some(
+              (o) =>
+                (o.x === position.x && o.y === position.y) ||
+                o.reserved?.some(
+                  (p) => p.x === position.x && p.y === position.y,
+                ),
+            )
+          )
+            throw new Error("Map entry is occupied");
+          this.worldState.commit(draft);
+          for (const id of changed) this.field.npcs.invalidate(map, id);
+          return true;
+        } catch (error) {
+          this.ui?.toast(error.message);
+          return false;
+        }
+      },
+    };
   }
   enter(position) {
     this.field.cancelForced("travel");
-    this.world.enter(position.map, position.x, position.y, position.dir);
-    this.motion.snap(this.state.position);
+    const entered = this.world.enter(
+      position.map,
+      position.x,
+      position.y,
+      position.dir,
+    );
+    if (entered) this.motion.snap(this.state.position);
+    return entered;
   }
   move(dir, { running = false } = {}) {
     if (this.battle || this.storyBusy || this.ui?.blocked || this.busy)
@@ -226,10 +286,15 @@ export class WorldApplication {
       state: this.state.worldState,
       objects: (map) => this.baseWorldObjects(map),
     });
+    const visit = this.worldState.prepareVisit(this.state.position.map, {
+      resume: true,
+    });
+    if (visit) this.worldState.commit(visit);
     this.resetTriggers();
     this.bindMovement();
     this.field = new FieldSession({
       maps: this.worldState.maps,
+      prepareEntry: (map) => this.prepareEntry(map),
       position: this.state.position,
       motion: this.motion,
       transitions: this.transitions,

@@ -25,7 +25,15 @@ const removeObject = (kind) => (c) => {
 };
 const hide = (c, t) => ({
   kind: "world",
-  operations: [{ kind: "object", map: t.map, id: t.objectId, hidden: true }],
+  operations: [
+    {
+      kind: "object",
+      map: t.map,
+      id: t.objectId,
+      hidden: true,
+      scope: "visit",
+    },
+  ],
 });
 const diveTarget = (action) => (c) =>
   c.links.find(

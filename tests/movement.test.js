@@ -360,3 +360,31 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
   state.movement.visited.push("invented");
   assert.equal(validateSave(state, db), false);
 });
+
+test("Flight uses a destination preview and delegates entry without changing position on rejection", () => {
+  const maps = {
+      a: {
+        width: 2,
+        height: 2,
+        blocks: [0, 0, 0, 0],
+        behavior: [0, 0, 0, 0],
+        warps: [],
+      },
+    },
+    position = { map: "a", x: 0, y: 0, dir: "down" },
+    target = { map: "a", x: 1, y: 1, dir: "down" };
+  let blocked = true;
+  const travel = new TravelService({
+    maps,
+    position,
+    destinations: { home: { name: "Home", position: target } },
+    context: () => ({ capabilities: { fly: true }, visited: ["home"] }),
+    preview: () => ({ map: maps.a, objects: blocked ? [{ x: 1, y: 1 }] : [] }),
+    enter: () => false,
+  });
+  assert.equal(travel.prepare("home").ok, false);
+  blocked = false;
+  const plan = travel.prepare("home").plan;
+  assert.equal(travel.commit(plan).ok, false);
+  assert.deepEqual(position, { map: "a", x: 0, y: 0, dir: "down" });
+});

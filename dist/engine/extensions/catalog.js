@@ -126,7 +126,11 @@ export class ExtensionCatalog {
       ),
       ...Object.values(state.forms || {}).map((r) => r.id),
       ...Object.keys(state.worldState?.maps || {}),
-      ...Object.values(state.worldState?.maps || {}).flatMap((record) =>
+      ...Object.keys(state.worldState?.visits || {}),
+      ...[
+        ...Object.values(state.worldState?.maps || {}),
+        ...Object.values(state.worldState?.visits || {}),
+      ].flatMap((record) =>
         Object.entries(record.objects || {}).flatMap(([id, e]) => [
           id,
           e.changes.actor,

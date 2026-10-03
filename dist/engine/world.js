@@ -20,6 +20,7 @@ export class World {
       onBlocked = () => {},
       onMap = () => {},
       beforeMove = () => {},
+      prepareEntry = null,
       deferWarps = false,
       passage = ({ cell, warp }) =>
         !isWater(cell.behavior) && (cell.collision === 0 || !!warp),
@@ -33,6 +34,7 @@ export class World {
       onBlocked,
       onMap,
       beforeMove,
+      prepareEntry,
       deferWarps,
       passage,
     });
@@ -59,9 +61,21 @@ export class World {
       elevation: m.blocks[i] >> 12,
     };
   }
-  enter(map, x, y, dir = this.position.dir) {
-    Object.assign(this.position, { map, x, y, dir });
+  entryPreview(map) {
+    return (
+      this.prepareEntry?.(map) || {
+        map: this.maps[map],
+        objects: this.objects(map),
+      }
+    );
+  }
+  enter(map, x, y, dir = this.position.dir, preview = this.entryPreview(map)) {
+    const target = { map, x, y, dir };
+    if (preview.commit && preview.commit(target) === false) return false;
+    Object.assign(this.position, target);
+    preview.entered?.(target);
     this.onMap(map);
+    return true;
   }
   move(dir, { ignoreWarps = false, allowVacatedBy = null } = {}) {
     const [dx, dy] = DIRECTIONS[dir];
@@ -75,7 +89,8 @@ export class World {
       const c = m.connections.find((c) => c.direction === dir);
       const id = c && this.resolve(c.map);
       if (id) {
-        const dest = this.maps[id];
+        const preview = this.entryPreview(id),
+          dest = preview.map;
         if (dir === "up") {
           x = p.x - c.offset;
           y = dest.height - 1;
@@ -111,7 +126,7 @@ export class World {
             from: { ...p },
             warp: null,
           }) ||
-          this.objects(id).some(
+          preview.objects.some(
             (n) =>
               (n.x === x && n.y === y) ||
               n.reserved?.some((p) => p.x === x && p.y === y),
@@ -127,8 +142,8 @@ export class World {
           },
           dir,
         });
+        if (!this.enter(id, x, y, dir, preview)) return false;
         this.steps++;
-        this.enter(id, x, y, dir);
         this.onStep(this.cell(x, y));
         return true;
       }
@@ -183,9 +198,10 @@ export class World {
     if (warp && !ignoreWarps) {
       const id = this.resolve(warp.dest_map);
       if (id) {
-        const destination = this.maps[id].warps[Number(warp.dest_warp_id)];
+        const preview = this.entryPreview(id),
+          destination = preview.map.warps[Number(warp.dest_warp_id)];
         if (destination) {
-          const interior = !!this.maps[id].indoor;
+          const interior = !!preview.map.indoor;
           const candidates = interior
             ? [
                 [0, -1],
@@ -204,14 +220,19 @@ export class World {
           for (const [ox, oy] of candidates) {
             const nx = destination.x + ox,
               ny = destination.y + oy;
-            const dm = this.maps[id];
+            const dm = preview.map;
             if (
               nx >= 0 &&
               ny >= 0 &&
               nx < dm.width &&
               ny < dm.height &&
               ((dm.blocks[ny * dm.width + nx] >> 10) & 3) === 0 &&
-              !dm.warps.some((w) => w.x === nx && w.y === ny)
+              !dm.warps.some((w) => w.x === nx && w.y === ny) &&
+              !preview.objects.some(
+                (n) =>
+                  (n.x === nx && n.y === ny) ||
+                  n.reserved?.some((p) => p.x === nx && p.y === ny),
+              )
             ) {
               tx = nx;
               ty = ny;
@@ -225,7 +246,7 @@ export class World {
             dir: interior ? "up" : "down",
           };
           if (this.deferWarps) return { jump, warp: target };
-          this.enter(id, tx, ty, target.dir);
+          this.enter(id, tx, ty, target.dir, preview);
         }
       }
     }

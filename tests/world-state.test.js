@@ -189,3 +189,169 @@ test("Public world command and story worldPatch persist a created actor and grid
   bad.worldState.maps[map].objects["test:visitor"].changes.actor = "missing";
   assert.equal(validateSave(bad, db, catalog, host), false);
 });
+
+test("Visit overlays compose field by field, survive active-visit serialization and expire only on entry", () => {
+  const s = service();
+  s.commit(s.prepareVisit("Meadow"));
+  s.apply([
+    { kind: "tile", map: "Meadow", x: 1, y: 1, block: 1, behavior: 2 },
+    {
+      kind: "object",
+      map: "Meadow",
+      id: "rock",
+      changes: { name: "Permanent", x: 3 },
+    },
+    { kind: "tile", map: "Meadow", x: 1, y: 1, behavior: 4, scope: "visit" },
+    { kind: "object", map: "Meadow", id: "rock", hidden: true, scope: "visit" },
+  ]);
+  assert.equal(s.maps.Meadow.blocks[5], 1);
+  assert.equal(s.maps.Meadow.behavior[5], 4);
+  assert.equal(s.projectObjects("Meadow").length, 0);
+  s.apply([
+    {
+      kind: "object",
+      map: "Meadow",
+      id: "rock",
+      changes: { name: "New permanent" },
+    },
+  ]);
+  const restored = service(JSON.parse(JSON.stringify(s.state)));
+  assert.equal(restored.prepareVisit("Meadow", { resume: true }), null);
+  assert.equal(restored.projectObjects("Meadow").length, 0);
+  const entry = restored.prepareVisit("Meadow");
+  assert.equal(
+    restored.projectObjects("Meadow", undefined, entry)[0].name,
+    "New permanent",
+  );
+  assert.equal(
+    restored.maps.Meadow.behavior[5],
+    4,
+    "Preview must not alter the live map",
+  );
+  restored.commit(entry);
+  assert.equal(restored.maps.Meadow.behavior[5], 2);
+  assert.equal(restored.projectObjects("Meadow")[0].x, 3);
+  assert.equal(restored.state.visits.Meadow, undefined);
+});
+test("Temporary object edits inherit permanent visibility, expire spawned objects, and reject invalid scopes atomically", () => {
+  const s = service();
+  assert.throws(
+    () =>
+      s.apply([
+        {
+          kind: "object",
+          map: "Meadow",
+          id: "rock",
+          hidden: true,
+          scope: "visit",
+        },
+      ]),
+    /active map/,
+  );
+  s.commit(s.prepareVisit("Meadow"));
+  s.apply([
+    { kind: "object", map: "Meadow", id: "rock", hidden: true },
+    {
+      kind: "object",
+      map: "Meadow",
+      id: "rock",
+      changes: { name: "Temporary" },
+      scope: "visit",
+    },
+    {
+      kind: "object",
+      map: "Meadow",
+      id: "guest",
+      spawn: true,
+      changes: { actor: "Pet", x: 0, y: 3 },
+      scope: "visit",
+    },
+    {
+      kind: "object",
+      map: "Meadow",
+      id: "guest",
+      changes: { dir: "left" },
+      scope: "visit",
+    },
+  ]);
+  assert.deepEqual(
+    s.projectObjects("Meadow").map((o) => o.id),
+    ["guest"],
+  );
+  const before = structuredClone(s.state);
+  assert.throws(
+    () =>
+      s.apply([
+        { kind: "tile", map: "Meadow", x: 0, y: 0, behavior: 2 },
+        {
+          kind: "object",
+          map: "Meadow",
+          id: "guest",
+          changes: { name: "Wrong owner" },
+        },
+      ]),
+    /Unknown/,
+  );
+  assert.deepEqual(s.state, before);
+  assert.throws(
+    () =>
+      s.apply([
+        {
+          kind: "tile",
+          map: "Meadow",
+          x: 0,
+          y: 0,
+          behavior: 2,
+          scope: "forever",
+        },
+      ]),
+    /scope/,
+  );
+  const corrupt = structuredClone(s.state);
+  corrupt.maps.Meadow.objects.rock.changes.actor = "missing";
+  assert.throws(
+    () => service(corrupt),
+    /Unknown object actor/,
+    "Both layers are validated even when map keys overlap",
+  );
+  s.commit(s.prepareVisit("Meadow"));
+  assert.deepEqual(s.projectObjects("Meadow"), []);
+});
+test("A map-entry preview restores connected collision and invalidates patch plans", () => {
+  const map = {
+      ...db.maps.Meadow,
+      connections: [{ direction: "right", map: "Other", offset: 0 }],
+    },
+    other = { ...map, id: "Other", connections: [] },
+    state = emptyWorldState(),
+    s = new WorldStateService({
+      db: { ...db, maps: { Meadow: map, Other: other } },
+      state,
+    });
+  s.commit(s.prepareVisit("Other"));
+  s.apply([
+    { kind: "tile", map: "Other", x: 0, y: 1, block: 1024, scope: "visit" },
+  ]);
+  s.commit(s.prepareVisit("Meadow"));
+  const position = { map: "Meadow", x: 3, y: 1, dir: "right" },
+    w = new World(s.maps, position, {
+      prepareEntry(id) {
+        const draft = s.prepareVisit(id);
+        return {
+          map: s.map(id, draft),
+          objects: [],
+          commit: () => s.commit(draft),
+        };
+      },
+    });
+  const oldPlan = s.prepare([
+    { kind: "tile", map: "Meadow", x: 0, y: 0, behavior: 2 },
+  ]);
+  assert(
+    w.move("right"),
+    "Collision reads restored destination, not its old temporary block",
+  );
+  assert.equal(position.map, "Other");
+  assert.equal(s.state.visits.Other, undefined);
+  assert.throws(() => s.commit(oldPlan), /Stale/);
+});

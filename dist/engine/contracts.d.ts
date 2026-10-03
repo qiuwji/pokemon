@@ -661,8 +661,28 @@ export interface MovementDefinition {
   traverse?: (context: Readonly<Json>) => boolean;
   afterStep?: (context: Readonly<Json>) => Json;
 }
+export type WorldPatchScope = "permanent" | "visit";
+export type WorldOperation =
+  | {
+      kind: "tile";
+      map: string;
+      x: number;
+      y: number;
+      block?: number;
+      behavior?: number;
+      scope?: WorldPatchScope;
+    }
+  | {
+      kind: "object";
+      map: string;
+      id: string;
+      changes?: Record<string, Json>;
+      hidden?: boolean;
+      spawn?: boolean;
+      scope?: WorldPatchScope;
+    };
 export type FieldOperation =
-  | { kind: "world"; operations: Json[]; encounter?: "rock" }
+  | { kind: "world"; operations: WorldOperation[]; encounter?: "rock" }
   | {
       kind: "travel";
       position: { map: string; x: number; y: number; dir: string };

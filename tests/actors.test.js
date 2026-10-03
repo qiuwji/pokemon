@@ -497,3 +497,87 @@ test("Memory and pose commands do not restart an in-flight actor interpolation",
   assert.equal(after.pose, "hop");
   assert.equal(s.game.actors.view(actor.uid).data.ticks, 999);
 });
+
+test("Map restoration cannot cover persistent actors and world patches protect both cells of an in-flight step", async () => {
+  const s = fixture(),
+    g = s.game;
+  g.patchWorld([{ kind: "tile", map: "people:a", x: 1, y: 1, block: 1024 }]);
+  g.patchWorld([
+    { kind: "tile", map: "people:a", x: 1, y: 1, block: 0, scope: "visit" },
+  ]);
+  const { actor } = await s.bus.execute("core.actor.spawn", {
+    template: "people:worker",
+    position: { map: "people:a", x: 1, y: 1, dir: "right" },
+  });
+  const before = structuredClone(g.state.worldState);
+  assert.equal(g.enter({ map: "people:a", x: 0, y: 3, dir: "up" }), false);
+  assert.deepEqual(g.state.worldState, before);
+  g.field.npcs.objects("people:a");
+  s.tick(5000);
+  assert.equal(g.actors.view(actor.uid).x, 2);
+  assert.throws(
+    () =>
+      g.patchWorld([
+        {
+          kind: "tile",
+          map: "people:a",
+          x: 1,
+          y: 1,
+          block: 1024,
+          scope: "visit",
+        },
+      ]),
+    /block an actor/,
+  );
+  assert.equal(g.enter({ map: "people:a", x: 0, y: 3, dir: "up" }), false);
+  assert.deepEqual(g.state.worldState, before);
+  s.tick(5200, []);
+  assert.equal(g.enter({ map: "people:a", x: 0, y: 3, dir: "up" }), true);
+  assert.equal(g.world.map.blocks[6], 1024);
+});
+test("A restored static object cannot cover an actor, and temporary overlays cannot become a second saved actor owner", async () => {
+  const plugin = actorPlugin(),
+    setup = plugin.setup;
+  plugin.setup = (api) => {
+    setup(api);
+    api.content.register("mapExtensions", "tree", {
+      map: "people:a",
+      elements: [
+        {
+          id: "people:tree",
+          actor: "ProfBirch",
+          kind: "cutTree",
+          x: 2,
+          y: 1,
+          dir: "down",
+        },
+      ],
+    });
+  };
+  const s = fixture(plugin),
+    g = s.game;
+  g.patchWorld([
+    {
+      kind: "object",
+      map: "people:a",
+      id: "people:tree",
+      hidden: true,
+      scope: "visit",
+    },
+  ]);
+  const { actor } = await s.bus.execute("core.actor.spawn", {
+    template: "people:worker",
+    position: { map: "people:a", x: 2, y: 1, dir: "up" },
+  });
+  const before = structuredClone(g.state.worldState);
+  assert.equal(g.enter({ map: "people:a", x: 0, y: 3, dir: "up" }), false);
+  assert.deepEqual(g.state.worldState, before);
+  const corrupt = structuredClone(g.state);
+  corrupt.worldState.visits["people:a"].objects[actor.uid] = {
+    hidden: true,
+    changes: {},
+  };
+  assert.equal(validateSave(corrupt, s.db, s.catalog, s.host), false);
+  const used = s.host.catalog.dependencies({ worldState: g.state.worldState });
+  assert(used.includes("people"));
+});

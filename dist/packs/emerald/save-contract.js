@@ -96,7 +96,10 @@ export function validateSave(
         ],
       });
     if (
-      Object.values(s.worldState?.maps || {}).some((m) =>
+      [
+        ...Object.values(s.worldState?.maps || {}),
+        ...Object.values(s.worldState?.visits || {}),
+      ].some((m) =>
         Object.keys(m.objects || {}).some((id) => /^core:actor\.\d+$/.test(id)),
       )
     )

@@ -135,7 +135,6 @@ export class MovementApplication {
         const changed = this.travel.commit(result.plan);
         if (!changed.ok) throw new Error(changed.reason);
         this.movement.set("walk", this.world.map);
-        this.enter(changed.position);
       });
       return { ok: completed };
     } catch (error) {
@@ -175,10 +174,8 @@ export class MovementApplication {
         capabilities: this.fieldCapabilities(),
         visited: this.state.movement.visited,
       }),
-      objects: (map) =>
-        this.field.npcs
-          .objects(map)
-          .map((n) => ({ ...n, reserved: this.field.npcs.reserved(n) })),
+      preview: (map) => this.world.entryPreview(map),
+      enter: (position) => this.enter(position),
     });
     this.travelDirector = new TravelDirector({
       timeline: this.timeline,

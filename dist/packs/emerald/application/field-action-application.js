@@ -107,7 +107,10 @@ export class FieldActionApplication {
       this.prepareWorldPatch(operation.operations);
     } else if (operation.kind === "travel") {
       const p = operation.position,
-        map = this.worldState.maps[p?.map];
+        preview = Object.hasOwn(this.worldState.maps, p?.map)
+          ? this.world.entryPreview(p.map)
+          : null,
+        map = preview?.map;
       if (
         !map ||
         !Number.isInteger(p.x) ||
@@ -133,15 +136,11 @@ export class FieldActionApplication {
             collision: (map.blocks[index] >> 10) & 3,
           },
         }) ||
-        this.field.npcs
-          .objects(p.map)
-          .some(
-            (o) =>
-              (o.x === p.x && o.y === p.y) ||
-              this.field.npcs
-                .reserved(o)
-                .some((r) => r.x === p.x && r.y === p.y),
-          )
+        preview.objects.some(
+          (o) =>
+            (o.x === p.x && o.y === p.y) ||
+            o.reserved?.some((r) => r.x === p.x && r.y === p.y),
+        )
       )
         throw new Error("Field travel destination is blocked");
     } else if (operation.kind === "fishing") {
@@ -157,10 +156,7 @@ export class FieldActionApplication {
         throw new Error("Invalid field route");
       const position = { ...this.state.position },
         world = new World(this.worldState.maps, position, {
-          objects: (map) =>
-            this.field.npcs
-              .objects(map)
-              .map((o) => ({ ...o, reserved: this.field.npcs.reserved(o) })),
+          objects: (map) => this.field.npcs.occupants(map),
           passage: (c) => this.movement.traversal(operation.mode, c),
         });
       for (const direction of operation.directions)
@@ -177,7 +173,8 @@ export class FieldActionApplication {
       return this.patchWorld(operation.operations);
     if (operation.kind === "travel") {
       // This call runs only behind an opaque transition; normal map lifecycle remains authoritative.
-      this.enter(operation.position);
+      if (!this.enter(operation.position))
+        throw new Error("Field travel destination changed");
       const result = this.movement.set(operation.mode, this.world.map);
       if (!result.ok) throw new Error("Field travel mode unavailable");
     }

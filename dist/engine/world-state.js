@@ -3,7 +3,12 @@ import { ConditionQueries } from "./condition-queries.js";
 import { jsonValue, readOnly } from "./extensions/values.js";
 import { validateCondition } from "./conditions.js";
 
-export const emptyWorldState = () => ({ revision: 0, maps: {} });
+export const emptyWorldState = () => ({
+  revision: 0,
+  maps: {},
+  visits: {},
+  activeMap: null,
+});
 const identifier = (value) =>
   typeof value === "string" &&
   /^[a-zA-Z0-9_.:-]{1,128}$/.test(value) &&
@@ -132,13 +137,19 @@ export class WorldStateService {
   validateState(state) {
     jsonValue(state, 512 * 1024);
     if (
-      !exact(state, ["revision", "maps"]) ||
+      !exact(state, ["revision", "maps", "visits", "activeMap"]) ||
       !Number.isSafeInteger(state.revision) ||
       state.revision < 0 ||
-      !exact(state.maps, Object.keys(this.db.maps))
+      !exact(state.maps, Object.keys(this.db.maps)) ||
+      (state.visits !== undefined &&
+        !exact(state.visits, Object.keys(this.db.maps))) ||
+      (state.activeMap != null && !this.db.maps[state.activeMap])
     )
       throw new Error("Invalid persistent world state");
-    for (const [map, record] of Object.entries(state.maps)) {
+    for (const [map, record] of [
+      ...Object.entries(state.maps),
+      ...Object.entries(state.visits || {}),
+    ]) {
       if (
         !exact(record, ["tiles", "objects"]) ||
         !record.tiles ||
@@ -160,9 +171,9 @@ export class WorldStateService {
       for (const [id, entry] of Object.entries(record.objects)) {
         if (
           !exact(entry, ["hidden", "spawn", "changes"]) ||
-          typeof entry.hidden !== "boolean" ||
+          (entry.hidden !== undefined && typeof entry.hidden !== "boolean") ||
           !entry.changes ||
-          typeof entry.spawn !== "boolean"
+          (entry.spawn !== undefined && typeof entry.spawn !== "boolean")
         )
           throw new Error("Invalid world object state");
         this.object(map, id, entry.changes, { full: entry.spawn });
@@ -170,35 +181,64 @@ export class WorldStateService {
     }
     return true;
   }
-  map(id) {
+  /** Persistent fields compose below temporary fields; neither layer mutates the other. */
+  record(map, state = this.state) {
+    const persistent = state.maps[map],
+      temporary = state.visits?.[map];
+    const output = { tiles: {}, objects: {} };
+    for (const layer of [persistent, temporary]) {
+      for (const [index, tile] of Object.entries(layer?.tiles || {}))
+        output.tiles[index] = { ...output.tiles[index], ...tile };
+      for (const [id, entry] of Object.entries(layer?.objects || {})) {
+        const previous = output.objects[id];
+        output.objects[id] = {
+          ...previous,
+          ...entry,
+          changes: { ...previous?.changes, ...entry.changes },
+        };
+      }
+    }
+    return output;
+  }
+  /** Prepare before collision checks. Reloading a save resumes its current visit. */
+  prepareVisit(map, { resume = false } = {}) {
+    if (!this.db.maps[map]) throw new Error("Unknown world map");
+    if (resume && this.state.activeMap === map) return null;
+    const draft = structuredClone(this.state);
+    draft.visits ||= {};
+    delete draft.visits[map];
+    draft.activeMap = map;
+    draft.revision++;
+    return draft;
+  }
+  map(id, state = this.state) {
     const base = this.db.maps[id];
     if (!base) throw new Error("Unknown world map");
     if (this.cacheRevision !== this.state.revision) {
       this.cache.clear();
       this.cacheRevision = this.state.revision;
     }
-    if (!this.cache.has(id)) {
+    if (state !== this.state || !this.cache.has(id)) {
       const blocks = [...base.blocks],
         behavior = [...base.behavior];
       for (const [index, tile] of Object.entries(
-        this.state.maps[id]?.tiles || {},
+        this.record(id, state).tiles,
       )) {
         if (tile.block !== undefined) blocks[index] = tile.block;
         if (tile.behavior !== undefined) behavior[index] = tile.behavior;
       }
-      this.cache.set(
-        id,
-        Object.freeze({
-          ...base,
-          blocks: Object.freeze(blocks),
-          behavior: Object.freeze(behavior),
-        }),
-      );
+      const projected = Object.freeze({
+        ...base,
+        blocks: Object.freeze(blocks),
+        behavior: Object.freeze(behavior),
+      });
+      if (state !== this.state) return projected;
+      this.cache.set(id, projected);
     }
     return this.cache.get(id);
   }
-  projectObjects(map, definitions = this.objects(map)) {
-    const entries = this.state.maps[map]?.objects || {},
+  projectObjects(map, definitions = this.objects(map), state = this.state) {
+    const entries = this.record(map, state).objects,
       output = new Map(definitions.map((d) => [d.id, d]));
     for (const [id, entry] of Object.entries(entries)) {
       if (entry.hidden) {
@@ -222,8 +262,12 @@ export class WorldStateService {
       throw new Error("Invalid world patch batch");
     for (const op of batch) {
       if (!this.db.maps[op.map]) throw new Error("Unknown world map");
+      if (op.scope !== undefined && !["permanent", "visit"].includes(op.scope))
+        throw new Error("Invalid world patch scope");
+      if (op.scope === "visit" && op.map !== this.state.activeMap)
+        throw new Error("Temporary patches require the active map visit");
       if (op.kind === "tile") {
-        if (!exact(op, ["kind", "map", "x", "y", "block", "behavior"]))
+        if (!exact(op, ["kind", "map", "x", "y", "block", "behavior", "scope"]))
           throw new Error("Invalid tile operation");
         this.cell(op.map, op.x, op.y);
         this.tile(op.map, {
@@ -232,7 +276,15 @@ export class WorldStateService {
         });
       } else if (op.kind === "object") {
         if (
-          !exact(op, ["kind", "map", "id", "changes", "hidden", "spawn"]) ||
+          !exact(op, [
+            "kind",
+            "map",
+            "id",
+            "changes",
+            "hidden",
+            "spawn",
+            "scope",
+          ]) ||
           !identifier(op.id) ||
           (op.hidden !== undefined && typeof op.hidden !== "boolean") ||
           (op.spawn !== undefined && typeof op.spawn !== "boolean")
@@ -250,9 +302,10 @@ export class WorldStateService {
     const draft = structuredClone(this.state);
     for (const op of batch) {
       if (!this.db.maps[op.map]) throw new Error("Unknown world map");
-      const record = (draft.maps[op.map] ||= { tiles: {}, objects: {} });
+      const layer = op.scope === "visit" ? (draft.visits ||= {}) : draft.maps;
+      const record = (layer[op.map] ||= { tiles: {}, objects: {} });
       if (op.kind === "tile") {
-        if (!exact(op, ["kind", "map", "x", "y", "block", "behavior"]))
+        if (!exact(op, ["kind", "map", "x", "y", "block", "behavior", "scope"]))
           throw new Error("Invalid tile operation");
         const index = this.cell(op.map, op.x, op.y),
           values = {
@@ -263,25 +316,43 @@ export class WorldStateService {
         record.tiles[index] = { ...record.tiles[index], ...values };
       } else if (op.kind === "object") {
         if (
-          !exact(op, ["kind", "map", "id", "changes", "hidden", "spawn"]) ||
+          !exact(op, [
+            "kind",
+            "map",
+            "id",
+            "changes",
+            "hidden",
+            "spawn",
+            "scope",
+          ]) ||
           !identifier(op.id) ||
           (op.hidden !== undefined && typeof op.hidden !== "boolean") ||
           (op.spawn !== undefined && typeof op.spawn !== "boolean")
         )
           throw new Error("Invalid object operation");
         const existing = record.objects[op.id];
+        const effective = this.record(op.map, draft).objects[op.id];
         const current = this.objects(op.map).find((o) => o.id === op.id);
-        if (!existing && !current && !op.spawn)
+        if (
+          !(op.scope === "visit" ? effective : existing) &&
+          !current &&
+          !op.spawn
+        )
           throw new Error("Unknown world object");
-        if (op.spawn && (current || existing?.spawn))
+        if (op.spawn && (current || effective?.spawn))
           throw new Error("Duplicate world object");
         const entry = {
-          hidden: op.hidden ?? existing?.hidden ?? false,
-          spawn: op.spawn ?? existing?.spawn ?? false,
+          ...existing,
+          ...(op.hidden !== undefined ? { hidden: op.hidden } : {}),
+          ...(op.spawn !== undefined ? { spawn: op.spawn } : {}),
           changes: { ...existing?.changes, ...(op.changes || {}) },
         };
         this.object(op.map, op.id, entry.changes, { full: entry.spawn });
-        validateTrainerSight({ ...current, ...entry.changes });
+        validateTrainerSight({
+          ...current,
+          ...effective?.changes,
+          ...entry.changes,
+        });
         record.objects[op.id] = entry;
       } else throw new Error("Unknown world operation");
     }
@@ -295,6 +366,8 @@ export class WorldStateService {
       throw new Error("Stale world patch");
     this.state.revision = draft.revision;
     this.state.maps = draft.maps;
+    this.state.visits = draft.visits || {};
+    this.state.activeMap = draft.activeMap ?? null;
     return { ok: true, revision: this.state.revision };
   }
   apply(operations) {

@@ -3,8 +3,22 @@ import { isWater } from "./terrain.js";
 
 /** Validated destination plans; timing and rendering belong to the presentation port. */
 export class TravelService {
-  constructor({ maps, destinations, position, context, objects = () => [] }) {
-    Object.assign(this, { maps, position, context, objects });
+  constructor({
+    maps,
+    destinations,
+    position,
+    context,
+    objects = () => [],
+    preview = null,
+    enter = null,
+  }) {
+    Object.assign(this, { maps, position, context, objects, preview });
+    this.enter =
+      enter ||
+      ((target) => {
+        Object.assign(this.position, target);
+        return true;
+      });
     this.destinations = new Map();
     this.plans = new WeakMap();
     for (const [id, definition] of Object.entries(destinations)) {
@@ -40,13 +54,14 @@ export class TravelService {
     if (this.maps[this.position.map].indoor)
       return { ok: false, reason: "请先走到室外。" };
     const p = definition.position,
-      map = this.maps[p.map],
+      view = this.preview?.(p.map),
+      map = view?.map || this.maps[p.map],
       i = p.y * map.width + p.x;
     if (
       ((map.blocks[i] >> 10) & 3) !== 0 ||
       isWater(map.behavior[i]) ||
       map.warps.some((w) => w.x === p.x && w.y === p.y) ||
-      this.objects(p.map).some(
+      (view?.objects || this.objects(p.map)).some(
         (n) =>
           (n.x === p.x && n.y === p.y) ||
           n.reserved?.some((v) => v.x === p.x && v.y === p.y),
@@ -77,7 +92,8 @@ export class TravelService {
       return { ok: false, reason: "飞行计划已失效。" };
     const result = this.check(plan.id);
     if (!result.ok) return result;
-    Object.assign(this.position, plan.position);
+    if (!this.enter(plan.position))
+      return { ok: false, reason: "降落的位置现在无法进入。" };
     this.plans.delete(plan);
     return { ok: true, position: { ...this.position } };
   }

@@ -14,6 +14,7 @@ export class FieldSession {
     onStep = () => {},
     onProgress = () => {},
     onMap = () => {},
+    prepareEntry,
     onBlocked = () => {},
     movement = null,
     npcBehaviors,
@@ -61,6 +62,7 @@ export class FieldSession {
     });
     this.world = new World(maps, position, {
       deferWarps: true,
+      prepareEntry,
       objects: (map = position.map) => this.npcs.occupants(map),
       onMap: (map) => {
         movement?.normalize(maps[map]);

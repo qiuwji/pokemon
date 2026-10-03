@@ -211,7 +211,7 @@ test("Cut runs through a public command, saves an object overlay, and a repeated
     (await s.bus.execute("core.field.action", { id: "cut" })).ok,
     true,
   );
-  assert.equal(g.worldState.state.maps.Lab.objects.tree.hidden, true);
+  assert.equal(g.worldState.state.visits.Lab.objects.tree.hidden, true);
   assert.equal(g.field.npcs.objects("Lab").length, 0);
   assert.equal(
     g.state.party[0].moves[0].pp,
@@ -296,7 +296,8 @@ test("A content-only plugin defines an action and receives read-only state; host
       });
     },
   };
-  const s = adventure({ plugins: [plugin] });
+  const s = adventure({ plugins: [plugin] }),
+    revision = s.game.worldState.state.revision;
   assert.equal(
     (await s.bus.execute("core.field.action", { id: "fieldlab:paint" })).ok,
     true,
@@ -306,7 +307,7 @@ test("A content-only plugin defines an action and receives read-only state; host
   const blocked = await s.game.performFieldAction("fieldlab:block");
   assert.equal(blocked.ok, false);
   assert.match(blocked.reason, /block the player/);
-  assert.equal(s.game.worldState.state.revision, 1);
+  assert.equal(s.game.worldState.state.revision, revision + 1);
 });
 test("Changes during action animation invalidate the old target and release locks", async () => {
   let changed = false;
@@ -719,4 +720,139 @@ test("Plugins register a field action visual through the shared presentation reg
       ]),
     /wrong environment/,
   );
+});
+
+test("Cut and rock reset on connected entry without losing permanent changes or active-save progress", async () => {
+  const s = adventure({
+      maps: {
+        Lab: fieldMap({
+          connections: [{ direction: "right", map: "Next", offset: 0 }],
+          elements: [
+            {
+              id: "tree",
+              kind: "cutTree",
+              actor: "BrendanNormal",
+              x: 2,
+              y: 3,
+              dir: "down",
+            },
+            {
+              id: "rock",
+              kind: "breakableRock",
+              actor: "BrendanNormal",
+              x: 3,
+              y: 3,
+              dir: "down",
+            },
+          ],
+        }),
+        Next: fieldMap({
+          id: "Next",
+          connections: [{ direction: "left", map: "Lab", offset: 0 }],
+        }),
+      },
+    }),
+    g = s.game;
+  g.state.flags.badgeStone = g.state.flags.badgeDynamo = true;
+  g.state.party[0].moves = [
+    { id: "cut", pp: 1, maxPP: 30 },
+    { id: "rock_smash", pp: 1, maxPP: 15 },
+  ];
+  assert((await g.performFieldAction("cut")).ok);
+  g.loadDocument(g.exportDocument());
+  assert.equal(
+    g.field.npcs.objects("Lab").some((n) => n.id === "tree"),
+    false,
+  );
+  assert(g.move("right"));
+  await g.timeline.wait(1000);
+  g.field.tick(g.timeline.now());
+  assert.equal(g.move("up"), false);
+  assert((await g.performFieldAction("rock-smash")).ok);
+  g.patchWorld([{ kind: "tile", map: "Lab", x: 0, y: 0, behavior: 2 }]);
+  g.enter({ map: "Lab", x: 4, y: 4, dir: "right" });
+  // Explicit entry already restores the visit; cut again to verify seamless connected re-entry.
+  g.patchWorld([
+    { kind: "object", map: "Lab", id: "tree", hidden: true, scope: "visit" },
+  ]);
+  assert(g.move("right"));
+  await g.timeline.wait(1000);
+  g.field.tick(g.timeline.now());
+  assert.equal(g.state.position.map, "Next");
+  assert(g.move("left"));
+  await g.timeline.wait(1000);
+  g.field.tick(g.timeline.now());
+  assert.equal(g.state.position.map, "Lab");
+  assert.deepEqual(
+    g.field.npcs
+      .objects("Lab")
+      .map((n) => n.id)
+      .sort(),
+    ["rock", "tree"],
+  );
+  assert.equal(g.world.map.behavior[0], 2);
+  assert.equal(g.transitions.busy, false);
+});
+test("Restored obstacles cannot occupy the landing cell; rejected entry leaves position and overlays unchanged", () => {
+  const s = adventure({
+      maps: {
+        Lab: fieldMap({
+          elements: [
+            {
+              id: "tree",
+              kind: "cutTree",
+              actor: "BrendanNormal",
+              x: 2,
+              y: 3,
+              dir: "down",
+            },
+          ],
+        }),
+      },
+    }),
+    g = s.game;
+  g.patchWorld([
+    { kind: "object", map: "Lab", id: "tree", hidden: true, scope: "visit" },
+  ]);
+  const before = structuredClone(g.state.worldState),
+    position = { ...g.state.position };
+  assert.equal(g.enter({ map: "Lab", x: 2, y: 3, dir: "up" }), false);
+  assert.deepEqual(g.state.position, position);
+  assert.deepEqual(g.state.worldState, before);
+  assert.equal(g.enter({ map: "Lab", x: 2, y: 4, dir: "up" }), true);
+  assert.equal(g.field.npcs.objects("Lab")[0].id, "tree");
+});
+
+test("Map-visit observers see committed player location; blocked story entry stops subsequent rewards", async () => {
+  const s = adventure(),
+    g = s.game,
+    events = [];
+  s.host.events.on("core:world-visit", (e) =>
+    events.push({ map: e.payload.map, position: { ...g.state.position } }),
+  );
+  assert(g.enter({ map: "Lab", x: 1, y: 2, dir: "right" }));
+  assert.deepEqual(events[0].position, {
+    map: "Lab",
+    x: 1,
+    y: 2,
+    dir: "right",
+  });
+  g.patchWorld([
+    {
+      kind: "object",
+      map: "Lab",
+      id: "obstacle",
+      spawn: true,
+      changes: { x: 2, y: 2, actor: "ProfBirch" },
+    },
+  ]);
+  await assert.rejects(
+    g.runStory([
+      { type: "teleport", position: { map: "Lab", x: 2, y: 2, dir: "down" } },
+      { type: "flag", key: "afterBlockedEntry", value: true },
+    ]),
+    /destination cannot/,
+  );
+  assert.equal(g.state.flags.afterBlockedEntry, undefined);
+  assert.equal(events.length, 1);
 });

@@ -65,10 +65,14 @@ export class StoryApplication {
           );
         },
         teleport: (c) =>
-          this.transitions.run("door", () => this.enter(c.position)),
+          this.transitions.run("door", () => {
+            if (!this.enter(c.position))
+              throw new Error("Story destination cannot be entered");
+          }),
         scene: (c) =>
           this.transitions.run(c.kind || "door", () => {
-            this.enter(c.position);
+            if (!this.enter(c.position))
+              throw new Error("Story destination cannot be entered");
             this.camera.reset();
             this.fieldDirector.stage(c.actors);
           }),

@@ -16,7 +16,7 @@
 | growth | 进化、寄养、领取/孵化、交换及相关演出 | GrowthSession、GrowthDirector、TradeService、育成锁 |
 | battle | 训练家/野生战斗创建、行动协调、结果与奖励剧情 | BattleSession |
 | story | 剧情指令端口、静态验证、输入锁、执行与失败收尾 | CommandRunner、剧情锁 |
-| world | 地图/动态世界绑定、碰撞保护、行走与对象交互 | WorldStateService、FieldSession、FieldDirector |
+| world | 地图/动态世界绑定、永久/访问覆盖与入口恢复预检、碰撞保护、行走与对象交互 | WorldStateService、FieldSession、FieldDirector |
 | fieldActions | 野外资格/目标、操作预检、演出与世界提交、钓鱼会话协调 | FieldActionService、FieldActionDirector、FishingSession、actionBusy |
 | movement | 移动资格、交通模式、冲浪与飞行协调、访问目的地 | MovementService、TravelService、TravelDirector |
 | triggers | 步进时钟、剧情/训练家视线/遭遇优先级 | 遭遇间隔记录 |
@@ -43,3 +43,5 @@
 新用例放入拥有该领域的服务；跨域用例声明所需命令/查询端口。不要在 adventure.js 增加招式结算、库存写入、剧情分支或大型指令表；不要把整个门面转交给新服务。只有真实新增共享职责才扩展公共引擎合同。
 
 验证记录见 DEVELOPMENT_LOG.md。application-services.test.js 守卫门面职责与文件规模、单一状态所有者、读档后的实时依赖、依赖不可拓宽/覆盖以及应用服务的导入方向。各领域组合回归不每次重复，修改涉及它们的合同或生命周期时再失效重查。
+
+地图访问生命周期见 docs/engine/WORLD_LIFECYCLE.md。门/相邻地图/飞行/野外行动/剧情共用入口；TravelService 通过受控 enter 端口提交，不再提前修改玩家位置。读取存档恢复当前访问，不清除当前临时状态。
