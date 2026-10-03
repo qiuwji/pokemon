@@ -1,0 +1,21 @@
+
+> emerald-web-engine@0.17.0 test:examples
+> node --test examples/*.test.js
+
+✔ plugin actor identity and memory survive save restore (76.326292ms)
+✔ registered move effect runs in a real trainer turn (60.110208ms)
+✔ non-battle facility progresses and settles once (48.258042ms)
+✔ plugin field plan commits through the public command (80.628333ms)
+✔ first plugin uses registered content and public reward transaction (60.7705ms)
+✔ detail entry renders a clickable action with persistent memory (70.895708ms)
+✔ data story arrival chooses a branch and persists its variable (93.261667ms)
+✔ late invalid intent rolls back plugin memory and world money (85.101583ms)
+✔ registered NPC triggers a once-only data story (84.679ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 284.926

@@ -1,0 +1,20 @@
+✔ Facility activity registration rejects missing references, asynchronous rules and invalid state schemas (34.711042ms)
+✔ Non-battle plugin activity controls independent appeal state, public inputs, reward and saved result (20.643041ms)
+✔ Two registered trainer rounds use isolated selected team, suppress normal prizes, and settle once (23.512084ms)
+✔ Facility admission and active-session boundaries reject party changes, field motion, saving and importing (17.075083ms)
+✔ Failed facility action restores RNG/economy/session; slot plugin runs without any combat (12.674042ms)
+✔ Unauthorized plugin cannot drive facilities and invalid transitions leave state intact (20.064459ms)
+✔ Facility transition stamps and battle tickets reject repeated or foreign results (0.200916ms)
+✔ Reward capacity rejection keeps an earned facility claim pending without partially awarding (12.373833ms)
+✔ UI facade routes facilities through the shared bus and save validation rejects forged ledgers (12.667709ms)
+✔ Presentation failure after a non-battle commit preserves its economy, progress and consumed RNG (11.103542ms)
+✔ Losing an isolated facility battle releases the session without blackout, party damage or normal settlement (20.681875ms)
+✔ Completed activity results reload with their plugin, while a missing activity plugin protects the original save (39.399875ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 355.16225

@@ -1,0 +1,104 @@
+---
+name: emerald-world-content
+description: 给现有绿宝石工程添加网格地图、连接、动态对象、机关、分支剧情和时间业务，复用世界及剧情注册接口。
+---
+
+# 世界、地图与剧情内容接手
+
+## 本领域核心名词
+
+- **metatile**：组合小图块的地图格子；blocks、behavior、碰撞和高度共同定义规则及外观。
+- **connection / warp**：connection把相邻区域连接为连续世界；warp把入口传送至另一个落点。
+- **visit / permanent**：visit覆盖在本次访问结束时清理；permanent覆盖跨访问、保存保留。
+- **事件完成 / reward账本**：completed记录事件已执行；rewards用稳定奖励ID去重，领取失败不能记账。
+- **where / after**：where限定触发矩形；after要求前置事件已完成，引用完整事件ID。
+
+
+先读[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)。本任务默认只编辑内容/插件、资源和相应测试，不在World或adventure按地图ID加业务。
+
+## 按任务读取
+
+地图/对象读[WORLD_STATE](../../docs/engine/world/STATE_AND_LIFECYCLE.md)和[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)；剧情读[STORY_LANGUAGE](../../docs/engine/story/STORY_LANGUAGE.md)；机关读[FIELD_DEVICES](../../docs/engine/field/FIELD_DEVICES.md)；时间/天气读[WORLD_TIME](../../docs/engine/world/WORLD_TIME.md)、[WEATHER](../../docs/engine/world/WEATHER.md)。高度或交通另读对应规格，不默认加载全部。
+
+实际参考：[field-journal插件](../../dist/plugins/field-journal.js)新增房间、warp、NPC、奖励、菜单/HUD。验证：[world-state](../../tests/world-state.test.js)、[story-language](../../tests/story-language.test.js)、[field-devices](../../tests/field-devices.test.js)。
+
+## 内容编写
+
+地图用metatile网格、行为/碰撞/高度、共享tileset和明确对象定义，区分地图目录键与map.id。connections用于连续道路，warps用于入口；不要把连续道路强制切整张背景图。所有入口/引用在编译目录校验。
+
+世界变化用批量world操作及明确visit/permanent作用域；玩家、Actor和移动预约使用同一投影和高度，图块appearance不偷偷改变通行。入图先检查恢复后的落点再提交；保存当前访问与重新入图不同。
+
+剧情用事件ID、条件/after、变量、choice/if、领域命令、完成及reward账本关联。稳定reward ID防重复，容量失败不标领取。编排走路/朝向/镜头/遮盖，不用teleport代替应有演出；并行不争抢角色/世界资源。
+
+时间业务用保存的本地游戏时钟与调度/业务所有者，不从浏览器设备时区重新推断，也不在render里随机刷新。明确离线、暂停、到期和重载政策。天气、潮汐、机关、Actor日程有独立状态职责，不能混成一个万能定时器。
+
+## 代表性验收
+
+完成“进入新区域→触发一个机关/分支→挑战注册训练家→领取一次奖励→保存重载”。只新增本次需要的内容，走实际公开入口；验证连接/碰撞/条件/失败不写/重载一致。原作完整地理和剧情还原另按参考验收，框架可运行不能算全作完成。
+
+交接更新STATUS、模块规格与证据。只读参考和生成输出分离，保留资源来源；未变领域证据复用。
+
+## 最小完整示例
+
+接口锚点：插件 API 1；此示例与仓库可执行文件同步。当前工程版本查 package.json，完成度查 STATUS，不能据本段推断全作已完成。
+
+文件：[examples/world-story.test.js](../../examples/world-story.test.js)。在项目根执行 `node --test examples/world-story.test.js`。示例为项目测试行为；不声称是原作完整内容。
+
+[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+
+<!-- runnable-example: examples/world-story.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session } from "./helpers/session.js";
+test("registered NPC triggers a once-only data story", async () => {
+  const plugin = manifest("story-demo", api => {
+    api.content.register("mapExtensions", "guide", {
+      map: "LittlerootTown", elements: [{ id: "story-demo:guide",
+        x: 8, y: 9, actor: "Boy1", dir: "down", kind: "talk",
+        name: "向导", text: "欢迎。", movement: { mode: "still", rangeX: 0, rangeY: 0 } }],
+    });
+    api.story.register("gift", {
+      trigger: "interact", once: true,
+      match: ({ object }) => object?.id === "story-demo:guide",
+      commands: [
+        { type: "dialog", name: "向导", lines: ["这是一份项目示例礼物。"] },
+        { type: "reward", id: "story-demo:gift", money: 20 },
+      ],
+    });
+  });
+  const s = session([plugin]), before = s.game.state.money;
+  assert(s.game.enter({ map: "LittlerootTown", x: 8, y: 10, dir: "up" }));
+  await s.bus.execute("core.field.interact", {});
+  await s.settle();
+  assert.equal(s.dialogs[0].name, "向导");
+  assert.equal(s.game.state.money, before + 20);
+  assert(s.game.state.story.completed.includes("story-demo:gift"));
+  await s.bus.execute("core.field.interact", {});
+  await s.settle();
+  assert.equal(s.game.state.money, before + 20);
+});
+```
+
+## 常见错误与排查
+
+报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。
+
+| 报错或关键部分 | 原因与处理 |
+| --- | --- |
+| `Story region outside map:` | where越界或map目录键不存在；按注册地图width/height修正，不用截图坐标。 |
+| `events.<id>: unknown prerequisite` | after引用未注册或漏命名空间的事件；<id>是实际报错中的事件ID。 |
+| `Parallel story conflict:` | 并行命令占用了同一角色/镜头/资源；改为串行或拆开资源。 |
+| `Expected finite JSON data` | 冻结上下文带undefined、NaN或函数；对象填写name/text等实际必要字段，不要用undefined占位。 |
+
+## 文件变动时如何定位
+
+先确认收到完整仓库；链接失效时在项目根使用以下关键词检索，不新建同名假接口：
+
+| 优先文件 | 兜底搜索词 |
+| --- | --- |
+| [dist/engine/story.js](../../dist/engine/story.js) | `rg -n "class StoryEngine" dist tests docs package.json` |
+| [dist/engine/world-state.js](../../dist/engine/world-state.js) | `rg -n "validateOperations" dist tests docs package.json` |
+| [tests/story-language.test.js](../../tests/story-language.test.js) | `rg -n "Data-only plugin story" dist tests docs package.json` |
+
+接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

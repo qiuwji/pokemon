@@ -13,8 +13,9 @@ const exact = (o, keys) =>
 const integer = (n) => Number.isSafeInteger(n) && n >= 0;
 export const emptyActors = () => ({ sequence: 0, records: {} });
 export class ActorTemplateRegistry {
-  constructor(definitions = {}, { actors, behaviors }) {
+  constructor(definitions = {}, { actors, behaviors, schedules = null }) {
     this.behaviors = behaviors;
+    this.schedules = schedules;
     this.definitions = new Map();
     for (const [key, d] of Object.entries(definitions)) {
       if (
@@ -27,6 +28,7 @@ export class ActorTemplateRegistry {
           "schema",
           "initialState",
           "perceptionRadius",
+          "schedule",
         ]) ||
         typeof d.name !== "string" ||
         !d.name ||
@@ -36,6 +38,10 @@ export class ActorTemplateRegistry {
           (!integer(d.perceptionRadius) || d.perceptionRadius > 32))
       )
         throw new Error(`Invalid actor template ${key}`);
+      if (d.schedule !== undefined) {
+        if (!schedules) throw new Error(`Unknown actor schedule ${d.schedule}`);
+        schedules.get(d.schedule);
+      }
       const schema = validateSchema(d.schema || objectSchema()),
         initialState = readOnly(d.initialState || {}, 8192);
       validateValue(schema, initialState);

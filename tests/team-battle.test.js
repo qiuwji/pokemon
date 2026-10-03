@@ -423,6 +423,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
     caught: [],
     story: emptyStoryProgress(),
   };
+  state.facilities = { nextId: 1, results: [] };
   state.weather = emptyWeather();
   state.registeredItem = null;
   assert(validateSave(state, db));

@@ -1285,3 +1285,21 @@ button {
 .modal { animation: pixel-menu-in 100ms steps(3,end); }
 @keyframes pixel-menu-in { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
 @media (prefers-reduced-motion:reduce) { .modal { animation:none; } }
+
+/* Native extension primitives keep the same pixel palette and keyboard controls. */
+.extension-slot {display:flex;flex-direction:column;gap:8px;grid-column:1/-1;}
+.extension-panel,.extension-form {font-size:var(--extension-fontSize,inherit);padding:var(--extension-spacing,8px);border:var(--extension-borderWidth,2px) solid var(--extension-border,#788875);}
+.extension-grid,.extension-row {gap:var(--extension-spacing,8px);}
+.extension-field {display:flex;flex-direction:column;gap:4px;margin:8px 0;text-align:left;}
+.extension-input,.extension-select,.extension-slider,.extension-radio {font:inherit;color:var(--extension-foreground,#394b38);background:var(--extension-background,#e4ebce);border:var(--extension-borderWidth,2px) solid var(--extension-border,#788875);padding:4px;max-width:100%;}
+.extension-checkbox,.extension-slider {accent-color:var(--extension-accent,#769d68);}
+.extension-radio label {display:inline-flex;gap:4px;margin:4px;}
+.extension-tabs [role=tablist] {display:flex;gap:4px;flex-wrap:wrap;}
+.extension-tabs [role=tab] {font:inherit;background:#e4ebce;color:#394b38;border:2px solid #788875;padding:6px;}
+.extension-tabs [aria-selected=true] {background:#bad196;}
+.extension-tabs [role=tabpanel][hidden] {display:none;}
+.extension-table {border-collapse:collapse;width:100%;text-align:left;}
+.extension-table th,.extension-table td {border:2px solid var(--extension-border,#788875);padding:4px;}
+.extension-list {padding-left:24px;text-align:left;}
+.extension-divider {border:0;border-top:2px solid var(--extension-border,#788875);}
+.extension-form[aria-busy=true] {opacity:.6;}

@@ -1,0 +1,48 @@
+✖ Facility activity registration rejects missing references, asynchronous rules and invalid state schemas (3.555042ms)
+✔ Non-battle plugin activity controls independent appeal state, public inputs, reward and saved result (32.1285ms)
+✔ Two registered trainer rounds use isolated selected team, suppress normal prizes, and settle once (25.515208ms)
+✔ Facility admission and active-session boundaries reject party changes, field motion, saving and importing (18.5505ms)
+✔ Failed facility action restores RNG/economy/session; slot plugin runs without any combat (13.186667ms)
+✔ Unauthorized plugin cannot drive facilities and invalid transitions leave state intact (20.383709ms)
+✔ Facility transition stamps and battle tickets reject repeated or foreign results (0.217083ms)
+✔ Reward capacity rejection keeps an earned facility claim pending without partially awarding (12.125417ms)
+✔ UI facade routes facilities through the shared bus and save validation rejects forged ledgers (12.464125ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 262.567042
+
+✖ failing tests:
+
+test at tests/facilities.test.js:50:1
+✖ Facility activity registration rejects missing references, asynchronous rules and invalid state schemas (3.555042ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /facility/i. Input:
+  
+  'Error: Invalid plugin manifest'
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/facilities.test.js:51:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Invalid plugin manifest
+        at PluginHost.load (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/plugin-host.js:61:15)
+        at createEmeraldPlugins (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/extensions.js:93:8)
+        at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/facilities.test.js:51:23
+        at getActual (node:assert:580:5)
+        at strict.throws (node:assert:728:24)
+        at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/facilities.test.js:51:10)
+        at Test.runInAsyncScope (node:async_hooks:226:14)
+        at Test.run (node:internal/test_runner/test:1201:25)
+        at Test.start (node:internal/test_runner/test:1096:17)
+        at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17),
+    expected: /facility/i,
+    operator: 'throws',
+    diff: 'simple'
+  }

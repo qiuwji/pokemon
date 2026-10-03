@@ -1,3 +1,10 @@
+import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
+import { BattleAugmentRegistry } from "../../engine/battle/augments.js";
+import { FacilityRegistry } from "../../engine/facilities.js";
+import {
+  EMERALD_FACILITIES,
+  EMERALD_FACILITY_ACTIVITIES,
+} from "./facilities.js";
 import { validateItemActions } from "../../engine/item-actions.js";
 import { GEN3_INVENTORY_POCKETS } from "../../engine/rules/gen3/inventory.js";
 import { createEmeraldInventory } from "./inventory.js";
@@ -72,6 +79,8 @@ export function createEmeraldPlugins(db, plugins, onError) {
       battleWeather: GEN3_BATTLE_WEATHER,
       learningMethods: EMERALD_LEARNING_METHODS,
       trainers: TRAINERS,
+      facilities: EMERALD_FACILITIES,
+      facilityActivities: EMERALD_FACILITY_ACTIVITIES,
       items: ITEMS,
       inventoryPockets: GEN3_INVENTORY_POCKETS,
       crops: EMERALD_CROPS,
@@ -102,6 +111,17 @@ export function createEmeraldPlugins(db, plugins, onError) {
     );
     const strategies = new BattleStrategyRegistry(c.battleStrategies);
     validateTrainers(c.trainers, c, strategies, inventory);
+    new FacilityRegistry({
+      definitions: c.facilities,
+      activities: c.facilityActivities,
+      references: {
+        trainers: c.trainers,
+        species: c.species,
+        items: c.items,
+        battleWeather: c.battleWeather,
+      },
+      queries: new ConditionQueries(c.conditionQueries),
+    });
     new EncounterTableRegistry(c.encounters, c);
     validateWorldExtensions(c, host.catalog.entries.values());
     const battleStates = new BattleStateRegistry({
@@ -124,6 +144,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
         throw new Error("Unknown battle weather visual");
     const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
     effects.validateMoves(c.moves);
+    new BattleAugmentRegistry(c.battleAugments, c, effects);
     battleWeather.validateEffects(effects, [
       ...Object.values(c.abilities),
       ...Object.values(c.heldItems),
@@ -166,6 +187,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     new ActorTemplateRegistry(c.actorTemplates, {
       actors: c.actors,
       behaviors: npcBehaviors,
+      schedules:new ActorScheduleRegistry(c.actorSchedules,{maps:c.maps,behaviors:npcBehaviors}),
     });
     new EvolutionService({
       inventory,

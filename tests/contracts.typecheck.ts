@@ -284,6 +284,27 @@ const storm: import("../dist/engine/contracts.js").WeatherDefinition = {
   visual: "garden:storm",
   battle: "garden:storm",
 };
+const workerSchedule: import("../dist/engine/contracts.js").ActorScheduleDefinition =
+  {
+    offscreen: "hold",
+    entries: [
+      {
+        id: "work",
+        start: 0,
+        days: [0, 1, 2, 3, 4, 5, 6],
+        position: { map: "garden:work", x: 2, y: 3, dir: "up" },
+        behavior: "still",
+        radius: 1,
+      },
+    ],
+  };
+const workerTemplate: import("../dist/engine/contracts.js").ActorTemplateDefinition =
+  {
+    name: "Worker",
+    actor: "ProfBirch",
+    behavior: "still",
+    schedule: "garden:worker",
+  };
 const stormBattle: import("../dist/engine/contracts.js").BattleWeatherDefinition =
   { residual: { divisor: 16, immuneTypes: ["steel"] } };
 const regionWeather: import("../dist/engine/contracts.js").MapWeatherDefinition =
@@ -317,3 +338,40 @@ function inventoryReader(view: InventoryView, failure: InventoryFailure) {
   return { count, code };
 }
 void inventoryReader;
+
+const augment: import("../dist/engine/contracts.js").BattleAugmentDefinition = {
+  name: "Burst",
+  moves: ["demo:burst"],
+  select: () => "demo:burst",
+  requires: (context) => context.sourceMove.power > 0 && context.actor.hp > 0,
+  limit: { scope: "controller", max: 1 },
+  cost: { pp: 1 },
+};
+const augmentedAction: import("../dist/engine/contracts.js").BattleAction = {
+  kind: "move",
+  index: 0,
+  augment: "demo:burst",
+};
+void augment;
+void augmentedAction;
+
+const region: import("../dist/engine/contracts.js").UIRegionDefinition = {
+  slot: "bag.content",
+  when: (view) => view.context.inBattle === false,
+  render: () => ({
+    kind: "form",
+    action: "demo:note",
+    children: [
+      {
+        kind: "input",
+        name: "title",
+        label: "Title",
+        value: "Trip",
+        maxLength: 40,
+      },
+      { kind: "checkbox", name: "pinned", value: false },
+      { kind: "button", text: "Save", submit: true },
+    ],
+  }),
+};
+void region;

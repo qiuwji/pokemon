@@ -40,12 +40,13 @@ function setup() {
       npcs: [],
       signs: [],
       indoor: false,
+      allowBike: true,
     },
     state = { position, movement: { mode: "acro-bike", visited: ["Field"] } },
     movement = new MovementService({
       registry,
       state: state.movement,
-      context: () => ({ capabilities: { bike: true } }),
+      context: () => ({ capabilities: { "acro-bike": true } }),
     }),
     steps = [],
     field = new FieldSession({

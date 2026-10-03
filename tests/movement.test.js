@@ -1,6 +1,7 @@
 import { createBag } from "./helpers/inventory-fixture.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { emptyWeather } from "../dist/engine/weather.js";
+import { emptyFacilities } from "../dist/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -359,6 +360,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
     movement: { mode: "surf", visited: ["OldaleTown"] },
   };
   state.weather = emptyWeather();
+  state.facilities = emptyFacilities();
   state.registeredItem = null;
   state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(validateSave(state, db));

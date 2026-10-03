@@ -17,9 +17,11 @@ export function attachEmeraldExtensions(game, host) {
   const query = () => ({
     busy: !!game.busy || !!game.commandBus?.active,
     battle: game.battle ? game.battle.snapshot() : null,
+    facilities: game.facilityView(),
     time: game.timeView(),
     weather: game.weatherView(),
     actors: game.actors.list(),
+    actorRoutines: game.actors.routines(),
     schedule: game.schedule.view(),
     crops: Object.fromEntries(
       Object.keys(game.catalog.berryPlots || {}).map((id) => [
@@ -76,7 +78,10 @@ export function attachEmeraldExtensions(game, host) {
     ready: (command, source, args) =>
       command.ready
         ? command.ready(source, args)
-        : !game.busy && !game.battle && !game.ui?.dialog,
+        : !game.facilityActive &&
+          !game.busy &&
+          !game.battle &&
+          !game.ui?.dialog,
     onComplete: (id, args, result) =>
       host.events.emit("core:command-complete", {
         id,
@@ -104,7 +109,8 @@ export function attachEmeraldExtensions(game, host) {
     plugin: true,
     network: true,
     permission: "movement",
-    ready: () => !game.busy && !game.battle && !game.ui?.blocked,
+    ready: () =>
+      !game.facilityActive && !game.busy && !game.battle && !game.ui?.blocked,
     run: ({ direction, running = false }) => game.move(direction, { running }),
   });
   bus.register("core.party.lead", {
@@ -120,7 +126,8 @@ export function attachEmeraldExtensions(game, host) {
     bus,
     ports: {
       state: () => game.state,
-      ready: () => !game.busy && !game.battle && !game.ui?.dialog,
+      ready: () =>
+        !game.facilityActive && !game.busy && !game.battle && !game.ui?.dialog,
       random: () => game.rng,
       query,
       hasUid: (uid) => owned().some((m) => m.uid === uid),

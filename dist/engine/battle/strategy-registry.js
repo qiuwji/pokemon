@@ -33,24 +33,36 @@ export class BattleStrategyRegistry {
       .map((_, index) => index)
       .filter((index) => battle.moveAvailable(seat, index));
     for (const index of slots.length ? slots : [-1]) {
-      const move =
-        index < 0
-          ? { effect: "recoil", target: "selected" }
-          : battle.db.moves[battle.movesFor(seat)[index].id];
-      const mode = battle.targeting.mode(move);
-      const targets = ["selected", "user-or-selected"].includes(mode)
-        ? battle.targeting
-            .candidates(seat, move)
-            .map((target) => ({ kind: "seat", id: target.id }))
-        : [undefined];
-      for (const target of targets)
-        candidates.push({
-          kind: "move",
-          seat,
-          actor: mon.uid,
-          index,
-          ...(target ? { target } : {}),
-        });
+      const variants = [
+        {
+          augment: null,
+          moveId: index < 0 ? null : battle.movesFor(seat)[index].id,
+        },
+        ...battle.augments
+          .options(seat, index)
+          .map((o) => ({ augment: o.id, moveId: o.moveId })),
+      ];
+      for (const variant of variants) {
+        const move = variant.moveId
+          ? battle.db.moves[variant.moveId]
+          : { effect: "recoil", target: "selected" };
+        const targets = ["selected", "user-or-selected"].includes(
+          battle.targeting.mode(move),
+        )
+          ? battle.targeting
+              .candidates(seat, move)
+              .map((s) => ({ kind: "seat", id: s.id }))
+          : [undefined];
+        for (const target of targets)
+          candidates.push({
+            kind: "move",
+            seat,
+            actor: mon.uid,
+            index,
+            ...(variant.augment ? { augment: variant.augment } : {}),
+            ...(target ? { target } : {}),
+          });
+      }
     }
     for (const { index } of battle.roster.bench(seat)) {
       const action = { kind: "switch", seat, actor: mon.uid, index };

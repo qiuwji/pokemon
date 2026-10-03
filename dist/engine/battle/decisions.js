@@ -51,8 +51,17 @@ export class BattleDecisions {
       return "这位伙伴已经安排在另一席位上场。";
     if (
       action.kind === "item" &&
-      queued.filter((a) => a.kind === "item" && a.item === action.item)
-        .length >= inventoryQuantity(owner.bag, action.item)
+      queued.reduce((sum, a) => {
+        const cost = a.augment ? b.augments.registry.get(a.augment).cost : null;
+        return (
+          sum +
+          (a.kind === "item" && a.item === action.item
+            ? 1
+            : cost?.item === action.item
+              ? cost.count || 1
+              : 0)
+        );
+      }, 0) >= inventoryQuantity(owner.bag, action.item)
     )
       return "这件道具已被另一行动预留。";
     return null;

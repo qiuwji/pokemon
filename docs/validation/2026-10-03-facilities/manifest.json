@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-03",
+  "baseline": "43862f773fc259fc530b8e8c8e88e20939a15480",
+  "workingTree": true,
+  "packageVersion": "0.17.0",
+  "saveVersion": 11,
+  "scope": "Generic extensible facility/activity framework, representative battle and non-battle activities; not full original facility content",
+  "checks": [
+    {
+      "command": "node --test tests/facilities.test.js",
+      "pass": 12,
+      "fail": 0,
+      "log": "current-facilities.log"
+    },
+    {
+      "command": "node --test tests/architecture.test.js tests/application-services.test.js tests/ui-composition.test.js tests/encounter-content.test.js tests/plugins.test.js tests/engine.test.js tests/creature-contract.test.js tests/inventory-integration.test.js tests/weather.test.js tests/item-shortcut.test.js",
+      "pass": 101,
+      "fail": 0,
+      "log": "integration.log"
+    },
+    {
+      "command": "npm run check",
+      "exitCode": 0,
+      "modules": 260,
+      "log": "check.log",
+      "note": "Ran at metadata 0.16.0; subsequent version bump to 0.17.0 and documentation/package script changes did not change this tested runtime implementation."
+    }
+  ],
+  "initialFailures": [
+    {
+      "cause": "Invalid semver fixture version 1",
+      "repair": "Use manifest version 1.0.0; retain real validation",
+      "log": "initial.log"
+    }
+  ],
+  "references": {
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "examples": "practice-series, reels and showcase are project examples, not original algorithms"
+  },
+  "unverified": [
+    "Current full game suite",
+    "Browser controls and visual facility play",
+    "Full original Frontier/contest/slot rules and assets"
+  ],
+  "policies": [
+    "Active facility sessions are transient: save/export/load/reset blocked until exit or settlement",
+    "Local rule/cost failure rolls back relevant session/economy/RNG; notification failure after commit does not undo committed progression"
+  ],
+  "invalidatedBy": "Changes to relevant registry/schema/session, facility or battle application settlement, public command permissions, save contract, inventory integration or UI wiring; unaffected domain evidence remains reusable",
+  "sourceHashes": {
+    "dist/app.js": "f3262e4afcd49b36aa2bd9e7bc6e81507f64a647eb256b16c43c855df0ac29ca",
+    "dist/engine/contracts.d.ts": "277394e0a7d085d209e240ba8d7c0bf83df82cfb2f653b675b6aef1505f21201",
+    "dist/engine/extensions/catalog.js": "73176f6e0cebadf79af942b073094d2f5d3d433340470db25aab8ca8c9919a40",
+    "dist/engine/extensions/plugin-host.js": "eb2c8c960d4489122b04284f35e5d26ddb0840de4a4fe2a9cdab5e034dcba85e",
+    "dist/engine/facilities.js": "355dbab13d7c05399268cc695a420fa2129d07c089ab67e5217ed24a928a660d",
+    "dist/packs/emerald/adventure.js": "3169491ec35439b07a5ea61c583d2aa14f20ae74682a1f00aa92639d36763975",
+    "dist/packs/emerald/application/battle-application.js": "fe78f756ec52852ce1159c73bcb12ce20bd9abb47edbe20a03ea29539b3e5c8b",
+    "dist/packs/emerald/application/composition.js": "9ae4b73c21b856583bad7a3101462e80f955455dc5abf30ae30f8351ba74b27f",
+    "dist/packs/emerald/application/facility-application.js": "ceea5e2fd9ad919438c0cc3b8281b3ec588377eef14ff0194fd55354c6a494cc",
+    "dist/packs/emerald/application/frame-application.js": "7cb5d83f32668742e4a0939a115ee88d21fc41ec78a9272ebe7d914a8fac49e2",
+    "dist/packs/emerald/application/party-application.js": "cfdfde2a7f732072dc84683c373b793567675f663d52a970e7fa24ea2614b9fc",
+    "dist/packs/emerald/application/public-ports.js": "1b7f44207b3f3dc73653eb74500895c4e7dce69e4438c2dc196a90aefff3f74b",
+    "dist/packs/emerald/application/save-application.js": "a8687cf776c7663647894f4b244838b3722ba0bb29e0a5a8aae4eff0d4585385",
+    "dist/packs/emerald/application/world-application.js": "c199922308376dab7dd18e47366c96320f20b044b22e92b2b9e5f50e47b4b2da",
+    "dist/packs/emerald/application-commands.js": "9a6f5299373195b98722540cda0cc9f2e020fb3a66d22512e9372915ab60fd29",
+    "dist/packs/emerald/command-facade.js": "c55a4a8c1fae43aa4fcfea171eeecd3fb94c59bf1ad2a1370ce634eb0f405758",
+    "dist/packs/emerald/extension-intents.js": "44a61c7fc38ccfc8a5eecf7ef5552d8ca034f1bf192b652bb3d781fbf697e8a3",
+    "dist/packs/emerald/extension-ports.js": "e6525602095adac1781aa1c041b05b14ddcc285d2f86ee507151e980fb4f8019",
+    "dist/packs/emerald/extensions.js": "d639e898e37dcd6c1e17035a3a6ee697227e4d65ae0589090d5ff25d91f1000d",
+    "dist/packs/emerald/facilities.js": "98a9634d943c27e9e5706df5569cc7d19e30d5a45babf50af65794f3866502d9",
+    "dist/packs/emerald/facility-interface.js": "acaa8a7a6ad802283bf3b34e69da85b4a7ae6508fb8596c37f7bac5ede5fb758",
+    "dist/packs/emerald/interface.js": "4a9c7ac976538bc7a37dfa957997e1df34fb1cddb2b5a582c8adc4b543e4ab6a",
+    "dist/packs/emerald/pack.js": "e37b33372577560f8aff8ef6846388265e048bc6ab3eab91dfe2343599cf63f7",
+    "dist/packs/emerald/save-contract.js": "6e11e0239b620e16190277f6c30bf0eefdbc85c60e2ceadf400316d4ba4bc6fa",
+    "dist/plugins/facility-games.js": "94c7f6001d5ee74bf7b8f320a1c6c83e14bc9027da00d2a554f2c9e50bb22e16",
+    "tests/creature-contract.test.js": "2b454f5179d57745d9338e342be6567a5aa7b71ed1f64b0bbe2d90c9cacc9d67",
+    "tests/engine.test.js": "d3564cd3c92d5cc922ba4def71a9dce086e4e809748078eb1b07dbd1c611c7fa",
+    "tests/facilities.test.js": "ee25c7aed2656af4e0764d45681e804483233327011e3dbf9d52ce747f64d9f4",
+    "tests/inventory-integration.test.js": "967aa390431d84128b1ff571d54b155ebe9a9779cd0a56d5d7755d8f642773ba",
+    "tests/item-shortcut.test.js": "a771848f1f9eaba5a13be89e956fb23383c0b5d03d23a911708a07f549bf410e",
+    "tests/ui-composition.test.js": "68a8bb7906620f8a7dc41cb51719719645954b03809744aa7ffe76a7a627a322",
+    "tests/weather.test.js": "e4708b2373d010fb952bb3e30ecdfd04d9b21ab070367f444432713161a510de"
+  }
+}

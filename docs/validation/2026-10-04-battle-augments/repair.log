@@ -1,0 +1,13 @@
+✔ Registered plugin augment uses public battle command, source PP, one controller use and registered presentation (33.048166ms)
+✔ Choice reserves shared uses in doubles; cancellation releases without PP, cost or RNG (14.070708ms)
+✔ Inventory fees share reservation with ordinary item actions in both directions (12.074333ms)
+✔ A late rule fault rolls back source PP, payment, random stream and augment usage (12.904333ms)
+✔ Replacement target mode governs validation and costs consume once even on protection (11.217791ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 210.757625

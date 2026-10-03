@@ -1,0 +1,12 @@
+✔ Facility activity registration rejects missing references, asynchronous rules and invalid state schemas (34.942916ms)
+✔ Presentation failure after a non-battle commit preserves its economy, progress and consumed RNG (13.637167ms)
+✔ Losing an isolated facility battle releases the session without blackout, party damage or normal settlement (25.004042ms)
+✔ Completed activity results reload with their plugin, while a missing activity plugin protects the original save (37.657042ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 231.982541

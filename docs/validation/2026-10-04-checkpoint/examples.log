@@ -1,0 +1,17 @@
+✔ plugin actor identity and memory survive save restore (68.496625ms)
+✔ registered move effect runs in a real trainer turn (79.617166ms)
+✔ non-battle facility progresses and settles once (96.268917ms)
+✔ plugin field plan commits through the public command (97.445416ms)
+✔ first plugin uses registered content and public reward transaction (72.089959ms)
+✔ detail entry renders a clickable action with persistent memory (63.053667ms)
+✔ data story arrival chooses a branch and persists its variable (71.841916ms)
+✔ late invalid intent rolls back plugin memory and world money (76.475333ms)
+✔ registered NPC triggers a once-only data story (85.070334ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 246.658958

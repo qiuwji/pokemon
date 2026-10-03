@@ -153,6 +153,7 @@ test("Browser maps held and released logical input, preserves field/menu paths a
         listeners[type] = fn;
       },
       querySelectorAll: () => [],
+      querySelector: () => null,
     },
     win = {
       addEventListener(type, fn) {

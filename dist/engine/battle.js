@@ -1,3 +1,4 @@
+import { BattleAugmentRegistry, BattleAugments } from "./battle/augments.js";
 import { BattleWeatherRegistry } from "./battle/weather.js";
 import { GEN3_BATTLE_WEATHER } from "./rules/gen3/weather.js";
 import { BattleHeldItems } from "./battle/held-items.js";
@@ -53,6 +54,7 @@ export class Battle {
     environment = {},
     weatherDefinitions = GEN3_BATTLE_WEATHER,
     states = {},
+    augmentDefinitions = {},
     formDefinitions = {},
     formRecords = {},
     traits = {
@@ -167,6 +169,10 @@ export class Battle {
     this.targeting = new BattleTargeting(this);
     this.replacements = new BattleReplacementRequests(this);
     this.decisions = new BattleDecisions(this);
+    this.augments = new BattleAugments(
+      this,
+      new BattleAugmentRegistry(augmentDefinitions, db, this.moveEffects),
+    );
     this.actionSequence = 0;
     this.actionId = null;
     this.phase = "entry";
@@ -257,6 +263,7 @@ export class Battle {
   decisionView() {
     const weather = this.traits?.weather() || null;
     return {
+      augmentUsage: this.augments?.view() || [],
       homeAlliance: this.homeAlliance,
       environment: {
         ...this.environment,

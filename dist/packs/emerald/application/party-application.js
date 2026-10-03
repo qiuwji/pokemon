@@ -4,6 +4,7 @@ import { createMonster } from "../../../engine/model.js";
 import { PACK } from "../pack.js";
 import { bindApplicationPorts } from "./ports.js";
 export const PARTY_PORTS = Object.freeze([
+  "facilityActive",
   "battle",
   "catalog",
   "inventory",
@@ -55,7 +56,9 @@ export class PartyApplication {
     });
   }
   canManageParty() {
-    return !this.battle && !this.busy && !this.storyBusy;
+    return (
+      !this.facilityActive && !this.battle && !this.busy && !this.storyBusy
+    );
   }
   learningView(method, uid, slot) {
     if (!this.canManageParty())

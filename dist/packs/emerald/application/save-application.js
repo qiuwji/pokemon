@@ -1,3 +1,4 @@
+import { emptyFacilities } from "../../../engine/facilities.js";
 import { emptyWeather } from "../../../engine/weather.js";
 import { emptyInventory } from "../../../engine/inventory.js";
 import { emptyFieldDevices } from "../../../engine/field-devices.js";
@@ -12,6 +13,7 @@ import { PACK, validateSave } from "../pack.js";
 import { emptyStoryProgress } from "../../../engine/story.js";
 import { bindApplicationPorts } from "./ports.js";
 export const SAVE_PORTS = Object.freeze([
+  "facilityActive",
   "syncTime",
   "battle",
   "bindField",
@@ -67,6 +69,7 @@ export class SaveApplication {
   }
   newState() {
     return {
+      facilities: emptyFacilities(),
       position: { ...PACK.start },
       party: [],
       box: [],
@@ -94,6 +97,10 @@ export class SaveApplication {
     };
   }
   save(show = false) {
+    if (this.facilityActive) {
+      if (show) this.ui?.toast("请先完成或退出设施，再保存。");
+      return false;
+    }
     this.forms?.reconcile();
     if (this.saveProtected) {
       if (show) this.ui?.toast(this.saveWarning);
@@ -146,6 +153,8 @@ export class SaveApplication {
     this.bindField();
   }
   exportDocument() {
+    if (this.facilityActive)
+      throw new Error("请先完成或退出设施，再导出存档。");
     if (this.saveProtected && !this.saveConflict) {
       const raw = this.saveStore.raw();
       if (raw) {

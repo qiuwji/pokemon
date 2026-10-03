@@ -105,6 +105,11 @@ function fixture() {
       playSeconds: 0,
       tide: "high",
     }),
+    facilityView: () => ({ active: null, results: [], definitions: { demo: { name: "设施示例", activity: "demo", parameters: {} } } }),
+    enterFacility: (id, team) => { calls.push([id, team]); return { ok: true }; },
+    facilityAction: (id) => { calls.push(id); return { ok: true }; },
+    claimFacility: () => ({ ok: true }),
+    quitFacility: () => ({ ok: true }),
     movementOptions: () => [],
     movementTechniqueOptions: () => [{ id: "normal", name: "普通" }],
     fieldActionOptions: () => [],
@@ -257,4 +262,24 @@ test("Clock page submits setup through a command and renders live saved time", (
   );
   assert.equal(doc.getElementById("[data-play-time]").textContent, "1:01:01");
   assert.match(doc.getElementById("weather").textContent, /09:04/);
+});
+
+
+test("Facility page renders frozen plugin data and submits entry/action through application commands", async () => {
+  const { game, doc, ui, calls } = fixture();
+  ui.showFacility();
+  assert.equal(ui.modalType, "facility");
+  assert.match(doc.getElementById("modal-root").innerHTML, /设施示例/);
+  ui.showFacility("demo");
+  doc.getElementById("[data-enter-facility]").onclick();
+  assert.deepEqual(calls[0], ["demo", []]);
+  game.facilityView = () => readOnly({ active: { facility: "demo", phase: "ready", data: { score: 12 } }, actions: [{ id: "appeal", label: "表演" }], definitions: { demo: { name: "设施示例" } }, results: [] });
+  const actionButton = { dataset: { facilityAction: "appeal" } };
+  const root = doc.getElementById("modal-root");
+  root.querySelectorAll = (selector) => selector === "[data-facility-action]" ? [actionButton] : [];
+  ui.showFacility();
+  await actionButton.onclick();
+  await new Promise(setImmediate);
+  assert(calls.includes("appeal"));
+  assert.match(root.innerHTML, /score：12/);
 });

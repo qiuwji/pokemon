@@ -20,6 +20,7 @@ function config() {
     db,
     rng,
     bag: createBag({}),
+    inventory: fixtureInventory(),
   };
 }
 test("Invalid custom AI requests fail explicitly before PP or turn settlement", () => {

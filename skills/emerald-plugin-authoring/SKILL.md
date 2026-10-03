@@ -1,0 +1,107 @@
+---
+name: emerald-plugin-authoring
+description: 通过现有插件公开API扩展绿宝石的内容、规则、状态、页面交互、持久化和表现，或用代表例定位真实接口缺口。
+---
+
+# 插件玩法与界面接手
+
+## 本领域核心名词
+
+- **命名空间**：注册局部ID返回owner:localID；跨内容引用应保存返回值，而非拼错字符串。
+- **action / intent**：action接收输入并提交一组事务意图；intent请求既有领域写入，须有对应权限。
+- **store / states**：store保存插件自有记忆；states保存附着对象、可到期的状态；不复制核心队伍/库存。
+- **slot / page / layout**：slot是宿主提供的位置；page注册页面；layout是渲染端接受的声明式控件树。
+- **事务 / 事实事件**：事务失败恢复领域及插件数据；事件和视觉反馈在成功提交后才发出。
+
+
+先读[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)、[PLUGIN_ARCHITECTURE](../../docs/architecture/PLUGINS.md)。现代能力/复杂UI缺口读[PLUGIN_EVOLUTION](../../docs/project/PLUGIN_ROADMAP.md)，但先核对实际代码；历史外部评审不能当当前状态。
+
+## 最小真实锚点
+
+[companion-care](../../dist/plugins/companion-care.js)是详情页点击→action→受控intent→状态/记忆→反馈的实际组合；[plugins.test.js](../../tests/plugins.test.js)验证互动、保存及失败回滚。[field-journal](../../dist/plugins/field-journal.js)示例内容/世界。[ANIMATION_CONTRACT](../../docs/engine/presentation/ANIMATION_CONTRACT.md)描述注册演出和纯取样。
+
+## 编写插件
+
+manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。setup只注册，不在注册时开始行动/发网络/写存档。保留目录引用、重复/未知ID启动拒绝；插件数据严格当前schema，不引入历史迁移旁路。
+
+页面/入口/HUD通过ui注册，点击控件调用action；context携带UID，schema明确允许输入。查询深冻结；写入通过commands或事务intent，不能抓全局game、DOM、localStorage或直接写队伍。ctx.store自有记录和通用states表示插件记忆/状态，既有领域值仍由原所有者修改。
+
+事件是提交后事实，事务失败恢复领域和插件数据；只读规则回调不能发命令，异步表现不参与规则结果。注册视觉/招式/语义事件编排，复用纯时序、时钟和reducedMotion；音频注册真实资源，不能退回合成提示音。
+
+当前宿主区域/布局节点/主题能力以代码和规格为准；不能给未知slot/节点编造支持。大型现代机制同时核对资格、行动增强、资源/PP、限次、清理和事件；不能把形态变换当整个Mega/Z系统。一次招式增强可用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)和[battle-burst插件](../../dist/plugins/battle-burst.js)，搜索`core.battle.augments`定位查询；替换范围、消费点及不支持项按该规格。实际公开合同缺口归框架任务，不让插件导入核心绕过。
+
+## 既有页面与复杂交互
+
+使用 `api.ui.region(id,{slot,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。真实锚点是[bag-notebook](../../dist/plugins/bag-notebook.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。
+
+只提供已有区域的追加；不要假定已能替换原生HUD、注册任意DOM控件、热卸载，或让普通插件事务在战斗/设施期间执行。真正缺口按领域合同补，不通过页面回调绕过规则。
+
+## 验收
+
+一个插件通过已有页面入口完成点击→真实行为→状态/反馈→保存重载。验证无权限拒绝、重复/坏引用、事务后段失败回滚、缺插件保护原档、相应表现释放。新UI控件需真实浏览器焦点/取消/输入观察；代码结构通过不能代替可用性。
+
+更新STATUS和领域规格，明确实现能力与后续内容。网络控制复用[NETWORK_ARCHITECTURE](../../docs/architecture/NETWORK.md)的命令协议，不另造任意脚本注入或承诺多人同步。
+
+## 最小完整示例
+
+接口锚点：插件 API 1；此示例与仓库可执行文件同步。当前工程版本查 package.json，完成度查 STATUS，不能据本段推断全作已完成。
+
+文件：[examples/plugin-page.test.js](../../examples/plugin-page.test.js)。在项目根执行 `node --test examples/plugin-page.test.js`。示例为项目测试行为；不声称是原作完整内容。
+
+[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+
+<!-- runnable-example: examples/plugin-page.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session, objectSchema } from "./helpers/session.js";
+import { validateLayout } from "../dist/engine/extensions/ui-registry.js";
+test("detail entry renders a clickable action with persistent memory", async () => {
+  let api;
+  const plugin = manifest("page-demo", value => {
+    api = value;
+    const action = api.actions.register("pet", { schema: objectSchema(),
+      run: ctx => ctx.store.set("pets", (ctx.store.get("pets") || 0) + 1),
+    });
+    const page = api.ui.page("care", { title: "互动示例",
+      render: () => ({ kind: "button", text: "抚摸", action }),
+    });
+    api.ui.entry("care", { slot: "monster.detail", label: "互动", page });
+  });
+  const { game, host } = session([plugin]);
+  const entry = host.ui.inSlot("monster.detail").find(e => e.owner === "page-demo");
+  const page = host.ui.pages.get(entry.page);
+  const layout = page.render(host.runtime.view("page-demo", { uid: game.state.party[0].uid }));
+  validateLayout(layout, { actions: host.actions, resources: {}, themes: host.ui.themes });
+  await api.commands.dispatch(layout.action, {});
+  assert.equal(api.store.get("pets"), 1);
+  game.loadDocument(game.exportDocument());
+  assert.equal(api.store.get("pets"), 1);
+});
+```
+
+此例验证详情页入口、合法控件、与点击相同的action提交和保存；真实鼠标/焦点/返回键须按浏览器清单另验，不能把dispatch写成已验点击。
+
+## 常见错误与排查
+
+报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。
+
+| 报错或关键部分 | 原因与处理 |
+| --- | --- |
+| `Core command permission denied` | 插件没有命令要求的权限，或该命令不对插件开放；核对注册permission。 |
+| `Undeclared core permission` | ctx.intent的kind未在manifest.permissions声明；只增加实际使用的权限。 |
+| `Invalid UI definition` | slot不存在或page/render/title/label缺失；先核对UI_SLOTS和宿主表，不凭页面名称猜slot。 |
+| `Unknown layout action` | 控件action不是已注册完整ID；使用actions.register返回值。 |
+| `Expired` | 保留了上次事务ctx；每次在run中新获取context，不闭包缓存store写端口。 |
+
+## 文件变动时如何定位
+
+先确认收到完整仓库；链接失效时在项目根使用以下关键词检索，不新建同名假接口：
+
+| 优先文件 | 兜底搜索词 |
+| --- | --- |
+| [dist/engine/extensions/plugin-host.js](../../dist/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" dist tests docs package.json` |
+| [dist/engine/extensions/ui-registry.js](../../dist/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" dist tests docs package.json` |
+| [dist/plugins/companion-care.js](../../dist/plugins/companion-care.js) | `rg -n "monster.detail" dist tests docs package.json` |
+
+接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

@@ -1,0 +1,47 @@
+✖ plugin actor identity and memory survive save restore (58.607666ms)
+✔ registered move effect runs in a real trainer turn (52.110166ms)
+✔ plugin field plan commits through the public command (58.614166ms)
+✔ first plugin uses registered content and public reward transaction (63.964583ms)
+✔ data story arrival chooses a branch and persists its variable (62.277333ms)
+✖ registered NPC triggers a once-only data story (44.901083ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 4
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 207.404917
+
+✖ failing tests:
+
+test at examples/actor.test.js:4:1
+✖ plugin actor identity and memory survive save restore (58.607666ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 0
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/actor.test.js:23:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at examples/world-story.test.js:4:1
+✖ registered NPC triggers a once-only data story (44.901083ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:38:10)
+      at Object.match (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/plugin-host.js:329:25)
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/story.js:68:24
+      at Array.find (<anonymous>)
+      at StoryEngine.resolve (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/story.js:60:31)
+      at WorldApplication.interact (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/world-application.js:307:33)

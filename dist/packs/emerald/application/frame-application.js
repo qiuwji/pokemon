@@ -3,7 +3,9 @@ export const FRAME_PORTS = Object.freeze([
   "tickTime",
   "tickWeather",
   "tickDevices",
+  "tickActors",
   "playActive",
+  "facilityActive",
   "battle",
   "actionBusy",
   "busy",
@@ -28,6 +30,7 @@ export class FrameApplication {
   }
   get paused() {
     return !!(
+      this.facilityActive ||
       this.battle ||
       this.storyBusy ||
       this.ui?.blocked ||
@@ -46,11 +49,16 @@ export class FrameApplication {
     const paused = this.paused;
     this.tickDevices(now, { paused: paused || !this.playActive() });
     this.field.tick(now);
+    this.tickActors(now, {
+      visibleMaps: visibleMaps || [this.state.position.map],
+      paused: paused || !this.playActive(),
+    });
     if (
       this.ui &&
       !this.ui.blocked &&
       !this.busy &&
       !this.battle &&
+      !this.facilityActive &&
       this.growth.readyEgg()
     )
       void this.hatchReady();
@@ -59,6 +67,7 @@ export class FrameApplication {
       !this.ui.blocked &&
       !this.busy &&
       !this.battle &&
+      !this.facilityActive &&
       this.state.party.some(
         (m) =>
           !m.egg && (m.pendingMoves?.length || m.pendingEvolution === m.level),

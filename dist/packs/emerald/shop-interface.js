@@ -17,9 +17,16 @@ export function createShopInterface(
         )
         .join(
           "",
-        )}${!game.state.flags.pokedex ? '<p class="notice">领取图鉴后即可购买精灵球。</p>' : ""}`,
+        )}${!game.state.flags.pokedex ? '<p class="notice">领取图鉴后即可购买精灵球。</p>' : ""}<div data-extension-slot="shop.actions"></div><div data-extension-slot="shop.content"></div>`,
       { type: "shop" },
     );
+    for (const slot of ["shop.actions", "shop.content"])
+      game.ui?.extensions?.mountSlot(
+        slot,
+        root.querySelector(`[data-extension-slot="${slot}"]`),
+        {},
+        showShop,
+      );
     root.querySelectorAll("[data-buy]").forEach(
       (b) =>
         (b.onclick = () => {

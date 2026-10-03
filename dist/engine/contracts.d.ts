@@ -162,7 +162,8 @@ export type BattleAction = {
   actor?: string;
   target?: TargetRef;
 } & (
-  | { kind: "move" | "switch"; index: number }
+  | { kind: "move"; index: number; augment?: string }
+  | { kind: "switch"; index: number }
   | {
       kind: "item";
       item: string;
@@ -485,12 +486,14 @@ export type ContentKind =
   | "abilities"
   | "heldItems"
   | "moveEffects"
+  | "battleAugments"
   | "movement"
   | "movementInputs"
   | "timeTasks"
   | "crops"
   | "berryPlots"
   | "actorTemplates"
+  | "actorSchedules"
   | "npcPoses"
   | "terrainRules"
   | "fieldActions"
@@ -503,6 +506,8 @@ export type ContentKind =
   | "growthConditions"
   | "npcBehaviors"
   | "trainers"
+  | "facilities"
+  | "facilityActivities"
   | "encounters"
   | "battleStrategies"
   | "conditionQueries"
@@ -548,9 +553,39 @@ export type LayoutKind =
   | "grid"
   | "panel"
   | "meter"
-  | "select";
+  | "select"
+  | "input"
+  | "checkbox"
+  | "radio"
+  | "slider"
+  | "tabs"
+  | "list"
+  | "table"
+  | "divider"
+  | "form"
+  | "component";
 export interface LayoutNode {
   kind: LayoutKind;
+  key?: string;
+  name?: string;
+  submit?: boolean;
+  placeholder?: string;
+  maxLength?: number;
+  min?: number;
+  step?: number;
+  component?: string;
+  props?: Record<string, Json>;
+  columns?: string[];
+  rows?: (string | number)[][];
+  style?: {
+    gap?: number;
+    padding?: number;
+    columns?: number;
+    align?: "start" | "center" | "end" | "stretch";
+    justify?: "start" | "center" | "end" | "between";
+    width?: "auto" | "full";
+    fontSize?: number;
+  };
   text?: string;
   src?: string;
   alt?: string;
@@ -560,9 +595,48 @@ export interface LayoutNode {
   input?: Record<string, Json>;
   disabled?: boolean;
   children?: LayoutNode[];
-  value?: number | string;
+  value?: number | string | boolean;
   max?: number;
   options?: { label: string; value: string }[];
+}
+export type UISlot =
+  | "menu"
+  | "monster.detail"
+  | "monster.content"
+  | "bag.actions"
+  | "bag.content"
+  | "party.actions"
+  | "party.content"
+  | "shop.actions"
+  | "shop.content"
+  | "battle.actions"
+  | "facility.actions"
+  | "facility.content";
+export interface PluginUIView {
+  context: Readonly<Record<string, Json>>;
+  query(): Readonly<Json>;
+  store: { get(key: string): Readonly<Json> };
+  states: { list(uid: string): Readonly<Json> };
+}
+export interface UIRegionDefinition {
+  slot: UISlot;
+  priority?: number;
+  when?: (view: PluginUIView) => boolean;
+  render(view: PluginUIView): LayoutNode;
+}
+export interface UIComponentDefinition {
+  schema: Json;
+  render(props: Readonly<Record<string, Json>>, view: PluginUIView): LayoutNode;
+}
+export interface UITheme {
+  background?: string;
+  foreground?: string;
+  border?: string;
+  accent?: string;
+  fontSize?: number;
+  spacing?: number;
+  borderWidth?: number;
+  duration?: number;
 }
 export type AnimationEasing =
   | "linear"
@@ -660,12 +734,9 @@ export interface PluginAPI {
     page(id: string, definition: unknown): string;
     entry(id: string, definition: unknown): string;
     hud(id: string, definition: unknown): string;
-    theme(
-      id: string,
-      definition: Partial<
-        Record<"background" | "foreground" | "border" | "accent", string>
-      >,
-    ): string;
+    region(id: string, definition: UIRegionDefinition): string;
+    component(id: string, definition: UIComponentDefinition): string;
+    theme(id: string, definition: UITheme): string;
   };
   presentation: {
     register(
@@ -1051,6 +1122,11 @@ export interface BerryPlotDefinition {
   objectId: string;
 }
 
+export interface ActorScheduleDefinition {
+  offscreen?: "hold" | "relocate";
+  entries: {id:string;start:number;days?:number[];position:{map:string;x:number;y:number;dir:Direction;elevation?:number};radius?:number;behavior?:string;config?:Record<string,Json>;pose?:string}[];
+}
+
 export interface ActorTemplateDefinition {
   name: string;
   actor: string;
@@ -1059,6 +1135,7 @@ export interface ActorTemplateDefinition {
   schema?: DataSchema;
   initialState?: Json;
   perceptionRadius?: number;
+  schedule?: string;
 }
 
 export interface NPCPoseDefinition {
@@ -1116,4 +1193,100 @@ export interface WeatherView {
   readonly battle: string | null;
   readonly day: number;
   readonly revision: number;
+}
+
+/** Facility rules return detached plans; RNG samples and economy commits belong to the host. */
+export interface FacilityTransfer {
+  money?: number;
+  items?: Record<string, number>;
+}
+export interface FacilityTransition {
+  data: Json;
+  cost?: FacilityTransfer;
+  reward?: FacilityTransfer;
+  pendingReward?: FacilityTransfer;
+  battle?: { trainerId: string; weather?: string | null };
+  outcome?: "win" | "loss" | "quit";
+}
+export interface FacilityActivityContext {
+  readonly parameters: Json;
+  readonly data: Json;
+  readonly input: Json;
+  readonly rolls: readonly number[];
+  readonly world: Readonly<Json>;
+}
+export interface FacilityActivityDefinition {
+  parameters: DataSchema;
+  state: DataSchema;
+  initial: Json;
+  actions: Record<
+    string,
+    {
+      label: string;
+      schema: DataSchema;
+      draws?: number[];
+      decide(context: Readonly<FacilityActivityContext>): FacilityTransition;
+    }
+  >;
+  onBattle?(
+    context: Readonly<FacilityActivityContext>,
+    result: "win" | "loss",
+  ): FacilityTransition;
+  validate?(
+    definition: Readonly<FacilityDefinition>,
+    references: Readonly<Json>,
+  ): void;
+}
+export interface FacilityDefinition {
+  name: string;
+  activity: string;
+  parameters: Json;
+  requires?: Condition;
+  team?: {
+    min: number;
+    max: number;
+    levelCap?: number;
+    uniqueSpecies?: boolean;
+    uniqueHeldItems?: boolean;
+    bannedSpecies?: string[];
+    heldItems?: boolean;
+    items?: boolean;
+    healBetween?: boolean;
+  };
+}
+
+export interface BattleAugmentDefinition {
+  name: string;
+  moves: readonly string[];
+  select(context: Readonly<BattleAugmentContext>): string;
+  requires?(context: Readonly<BattleAugmentContext>): boolean;
+  limit?: {
+    scope: "battle" | "alliance" | "controller" | "creature";
+    key?: string;
+    max: number;
+  };
+  cost?: { pp?: number; item?: string; count?: number };
+}
+export interface BattleAugmentContext {
+  actor: DeepReadonly<Creature & { types: readonly string[] }>;
+  sourceMove: Readonly<{
+    id: string;
+    name: string;
+    power: number;
+    accuracy: number;
+    pp: number;
+    type: string;
+    effect: string;
+    priority: number;
+    chance?: number;
+    target?: string;
+  }>;
+  seat: string;
+  controller: Readonly<{
+    id: string;
+    alliance: string;
+    bag: Readonly<Record<string, number>>;
+  }>;
+  turn: number;
+  weather: string | null;
 }

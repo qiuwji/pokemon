@@ -1,6 +1,8 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-当前工程版本 **0.16.0**，插件 API / 网络协议版本 **1**，开发存档版本 **10**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+当前工程版本 **0.18.0**，插件 API / 网络协议版本 **1**，开发存档版本 **11**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+
+当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
 ## 运行与验证
 
@@ -12,9 +14,13 @@ npm run dev
 # 打开 http://localhost:5173
 npm test
 npm run check
+npm run test:examples
+npm run check:docs
 ```
 
-`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。最近全量基线（1851e9d）：**556 项测试通过**；之后学习新增 14 项、天气新增 18 项、关键道具新增 13 项、登记/快捷与商店修复新增 13 项、槽位库存核心新增 12 项与应用迁移新增组合证明及相关范围已针对性验证，当前 **255 个 JS 模块**检查通过；范围、基线和证据失效条件见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**687 项测试通过，0 失败、0 跳过**；九个 Skill 入门例通过，当前 **268 个 JS 模块**检查通过。首次回归发现16个过时夹具问题，修正后全量通过；日志与源码范围见 [检查点证据](docs/validation/2026-10-04-checkpoint/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+
+九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前九个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
 ## 已经可玩的内容
 
@@ -25,36 +31,38 @@ npm run check
 - 第三世代规则管线、76 个特性和 66 种持有效果入口与目录实现、装备和自动消耗。范围及差异见规则清单。
 - 注册式野外行动支持自行车、鱼竿、冲浪与飞行：自行车/鱼竿要求实际库存，HM 行动要求徽章与招式。研究装备领取旁路已删除；原作获得剧情尚待地图业务补齐。
 - 研究所育成页面：寄存、产蛋、领取、步数孵化、交换；详情页支持装备、进化石，成长流程支持遗传和复杂进化条件。
-- 两个启动插件：详情互动页可点击伙伴抚摸、玩耍、喂食并保存记录；观察手记扩展新网格房间、NPC、奖励、菜单和 HUD。
+- 三个默认启动插件：详情互动页可点击伙伴抚摸、玩耍、喂食并保存记录；观察手记扩展新网格房间、NPC、奖励、菜单和 HUD；设施转轮插件演示非战斗活动。
+- 可选背包笔记插件：地址加 `?bag-notebook=1`，在原背包加入表单、页签与库存表格；主题、布局及自定义组合组件见[UI合同](docs/engine/presentation/UI_CONTRACT.md)。
+- 可选爆发插件：地址加 `?battle-burst=1`，攻击菜单可选一次招式增强，资格、原槽PP、费用/限次和演出通过公开合同组合；见[AUGMENTS](docs/engine/battle/AUGMENTS.md)。这不是完整Z招式规则包。
 - 扩展连接页面：本地协议验证及可替换 WebSocket 传输。网络消息经过校验进入与 UI 相同的命令系统，控制当前单机。
 - 注册式战斗效果与多轨招式脚本，持续天气/异常状态、升降能力、逐次命中、训练家入场、地形背景；野外影子、昼夜、天气和表情。六类转场及六个独立场景演出示例。声音由用户开启，采用真实 WAV 资源；插件可注册音效/音乐，支持通道、循环和暂停续播。原作完整 BGM 尚未导入。
 
-当前有 44 个具体招式脚本，其中 25 个对应已导入的 87 个招式；其他招式使用通用视觉回退。场景菜单中的徽章、联盟、选美、战斗塔、标题、图鉴是演出能力示例，完整设施玩法尚未开放。
+当前有 44 个具体招式脚本，其中 25 个对应已导入的 87 个招式；其他招式使用通用视觉回退。场景菜单中的徽章、联盟、选美、战斗塔、标题、图鉴是演出能力示例，已有独立设施会话、两场连战和插件转轮，完整原作设施玩法尚未开放。
 
-世界天气、地图/坐标/脚本来源、时间联动、独立战斗映射、可注册天气画师与插件命令见 [WEATHER.md](docs/engine/WEATHER.md)。世界设置不被战斗招式倒写，天气转换通过纯导演平滑混合。
+世界天气、地图/坐标/脚本来源、时间联动、独立战斗映射、可注册天气画师与插件命令见 [WEATHER.md](docs/engine/world/WEATHER.md)。世界设置不被战斗招式倒写，天气转换通过纯导演平滑混合。
 
-背包只有槽位真相：五个原作口袋的容量、重复堆叠、选槽消耗、满包拒绝、插件新口袋与保存重载共用领域。商店不会在满包时扣款，奖励不会在失败时标记领取。合同与公共只读预览见 [INVENTORY.md](docs/engine/INVENTORY.md)。
+背包只有槽位真相：五个原作口袋的容量、重复堆叠、选槽消耗、满包拒绝、插件新口袋与保存重载共用领域。商店不会在满包时扣款，奖励不会在失败时标记领取。合同与公共只读预览见 [INVENTORY.md](docs/engine/items/INVENTORY.md)。
 
-关键道具绑定与内容作者示例见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)；道具只声明入口，资格/计划/动画/提交复用既有领域。背包支持登记到 C / 触屏 SELECT，保存及公共命令见 [ITEM_SHORTCUT.md](docs/engine/ITEM_SHORTCUT.md)。
+关键道具绑定与内容作者示例见 [ITEM_ACTIONS.md](docs/engine/items/FIELD_ITEMS.md)；道具只声明入口，资格/计划/动画/提交复用既有领域。背包支持登记到 C / 触屏 SELECT，保存及公共命令见 [ITEM_SHORTCUT.md](docs/engine/items/FIELD_ITEMS.md)。
 
 ## 当前引擎机制与进度入口
 
 | 子系统 | 已实现的合同 | 尚未收口 |
 | --- | --- | --- |
-| 应用层 | 20 个职责服务、实时有限依赖、显式公共端口、单一状态所有者 | 新业务继续放入对应服务 |
+| 应用层 | 21 个职责服务、实时有限依赖、显式公共端口、单一状态所有者 | 新业务继续放入对应服务 |
 | 剧情/世界 | 数据条件、变量、选择、区域/视线触发；永久与 visit 覆盖；统一地图入口 | 全丰缘剧情与地图导入 |
 | 野外行动/地形 | 资格与目标、砍树/碎岩/潜水/攀瀑/钓鱼；关键道具声明行动、库存/徽章资格；高度、滑动/流向规则 | 完整口袋容量/获得、特殊地图/关键道具 |
 | 招式学习 | 注册导师/机器方式、50 TM/8 HM 兼容、四槽/HM 保护、原子消费、插件事务与背包 | 正式获得剧情、学习演出与遗忘老人 |
 | 机关/交通 | 可注册多格机关、暂停与计时保存、薄冰/裂地板、桥面升沉；Mach/Acro 原帧输入与技巧 | 机关素材、全地形时序与骑行道路业务 |
 | 天气 | 可保存世界选择/坐标/脚本/周期/覆盖、入战映射、注册规则/视觉、平滑混合与插件事务 | 全作天气剧情、原作素材/天气音频 |
 | 世界时间/树果 | 可保存 RTC 与游玩时长分离、离线政策、定时任务、分钟/每日事件；树果生命周期 | 每日业务、潮汐房间、完整树果土壤 |
-| Actor | 全局身份、跨相邻地图、动态注入、保存、只读感知/BFS、邻接互动、可注册姿态 | 完整作息与行为模板；伙伴跟随后续插件化 |
+| Actor | 全局身份、跨相邻地图、感知/BFS、互动、姿态、七日作息和显式离屏交接；独立日程插件 | 原作人物日常内容、门/HM 导航；伙伴跟随后续插件化 |
 | 动画/音频 | 纯关键帧/缓动/片段/分支取样、可注册战斗事件演出；真实资源音频 API | 多渲染宿主生命周期、完整 BGM/SE、原作动画素材 |
-| 战斗/插件 | 多队伍/席位、状态/延迟行动、形态投影、受控规则与界面扩展 | 战斗保真、设施、Mega/Z 所需行动增强及复杂 UI 扩展 |
+| 战斗/插件 | 多队伍/席位、状态/延迟行动、形态投影、受控规则与界面扩展 | 战斗保真、完整设施业务、Mega/Z 所需行动增强及复杂 UI 扩展 |
 
-**接手顺序**：先读 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md) 的当前顺序，再读 [DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md) 和受影响规格，最后核对代码。根文档介绍稳定结构；路线记录待办；日志记录变更与验证，不能把历史阶段验收当作当前完整复刻完成。已通过且未受影响的证据沿用，模块变更使对应证据失效；最终 E 阶段另做系统与浏览器验收。
+**接手顺序**：先读 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md) 的当前顺序，再读 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md) 和受影响规格，最后核对代码。根文档介绍稳定结构；路线记录待办；日志记录变更与验证，不能把历史阶段验收当作当前完整复刻完成。已通过且未受影响的证据沿用，模块变更使对应证据失效；最终 E 阶段另做系统与浏览器验收。
 
-内部模块的可扩展合同已陆续实现，尚未达到“任何上层业务都无需补核心接口”。现有缺口明确保留，见 [机制矩阵](docs/engine/MECHANISM_MATRIX.md) 和 [插件演进](docs/engine/PLUGIN_EVOLUTION.md)。
+内部模块的可扩展合同已陆续实现，尚未达到“任何上层业务都无需补核心接口”。现有缺口明确保留，见 [机制矩阵](docs/engine/battle/MECHANISM_MATRIX.md) 和 [插件演进](docs/project/PLUGIN_ROADMAP.md)。
 
 ## 结构与复用
 
@@ -71,19 +79,19 @@ npm run check
 | 文档 | 内容 |
 | --- | --- |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | 层次、依赖、状态所有权与复用 |
-| [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md) | 学习、TM/HM、库存与插件导师合同 |
-| [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md) | 应用服务、公共端口与重绑生命周期 |
-| [docs/engine/](docs/engine/MECHANISM_MATRIX.md) | 时间、Actor、地形、机关、行动、动画与音频等现行合同索引 |
-| [BATTLE_ARCHITECTURE.md](BATTLE_ARCHITECTURE.md) | 队伍、席位、目标和结算 |
-| [ENGINE_EVOLUTION.md](ENGINE_EVOLUTION.md) / [CUTSCENES.md](CUTSCENES.md) | 道具、效果和剧情编排 |
-| [GEN3_RULE_COVERAGE.md](GEN3_RULE_COVERAGE.md) | 特性/持有物实现范围与差异 |
-| [MOVEMENT_ARCHITECTURE.md](MOVEMENT_ARCHITECTURE.md) | 模式、通行、速度和旅行 |
-| [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md) | 培育、遗传、孵化、复杂进化 |
-| [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md) | 14 项插件能力及实例 |
-| [NETWORK_ARCHITECTURE.md](NETWORK_ARCHITECTURE.md) | 命令、协议、顺序、去重和传输 |
-| [PRESENTATION_ARCHITECTURE.md](PRESENTATION_ARCHITECTURE.md) | 效果、招式脚本、环境、场景和音频 |
-| [FINAL_VALIDATION.md](FINAL_VALIDATION.md) | 当前检查与实机验收证据 |
-| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | 阶段交付和明确边界 |
+| [MOVE_LEARNING.md](docs/engine/items/MOVE_LEARNING.md) | 学习、TM/HM、库存与插件导师合同 |
+| [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md) | 应用服务、公共端口与重绑生命周期 |
+| [docs/engine/](docs/engine/battle/MECHANISM_MATRIX.md) | 时间、Actor、地形、机关、行动、动画与音频等现行合同索引 |
+| [docs/architecture/BATTLE.md](docs/architecture/BATTLE.md) | 队伍、席位、目标和结算 |
+| [docs/history/engine-evolution-v0.4.md](docs/history/engine-evolution-v0.4.md) / [docs/architecture/CUTSCENES.md](docs/architecture/CUTSCENES.md) | 道具、效果和剧情编排 |
+| [docs/engine/battle/GEN3_RULE_COVERAGE.md](docs/engine/battle/GEN3_RULE_COVERAGE.md) | 特性/持有物实现范围与差异 |
+| [docs/architecture/MOVEMENT.md](docs/architecture/MOVEMENT.md) | 模式、通行、速度和旅行 |
+| [docs/architecture/GROWTH.md](docs/architecture/GROWTH.md) | 培育、遗传、孵化、复杂进化 |
+| [docs/architecture/PLUGINS.md](docs/architecture/PLUGINS.md) | 14 项插件能力及实例 |
+| [docs/architecture/NETWORK.md](docs/architecture/NETWORK.md) | 命令、协议、顺序、去重和传输 |
+| [docs/architecture/PRESENTATION.md](docs/architecture/PRESENTATION.md) | 效果、招式脚本、环境、场景和音频 |
+| [docs/project/VALIDATION.md](docs/project/VALIDATION.md) | 当前检查与实机验收证据 |
+| [docs/history/implementation-p0-p7.md](docs/history/implementation-p0-p7.md) | 阶段交付和明确边界 |
 
 ### 如何新增内容
 
@@ -95,7 +103,7 @@ npm run check
 
 转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；重新导入会覆盖生成内容，定制扩展宜放内容包或插件。
 
-#天气合同、插件示例和原作映射见 [WEATHER.md](docs/engine/WEATHER.md)。
+#天气合同、插件示例和原作映射见 [WEATHER.md](docs/engine/world/WEATHER.md)。
 
 ## 存档
 
@@ -114,6 +122,6 @@ npm run check
 
 ## 素材来源
 
-原作图像/地图/数据来自 [pret/pokeemerald](https://github.com/pret/pokeemerald)，导入固定修订 `731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。Pokémon、角色、地图、名称和原图权利属于 Nintendo、Creatures、GAME FREAK；本项目是非官方同人演示，不附带 ROM。新增粒子和演出由代码绘制；音频参考来源与当前临时映射见 docs/engine/AUDIO.md。
+原作图像/地图/数据来自 [pret/pokeemerald](https://github.com/pret/pokeemerald)，导入固定修订 `731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。Pokémon、角色、地图、名称和原图权利属于 Nintendo、Creatures、GAME FREAK；本项目是非官方同人演示，不附带 ROM。新增粒子和演出由代码绘制；音频参考来源与当前临时映射见 docs/engine/presentation/AUDIO.md。
 
 中文界面使用本地 [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)，SIL OFL 1.1；许可在 `dist/assets/licenses/`。制作其他同类游戏可复用引擎和适配器，替换成自有世界、内容、名称和素材。

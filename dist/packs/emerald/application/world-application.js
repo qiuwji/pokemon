@@ -30,6 +30,7 @@ export const WORLD_PORTS = Object.freeze([
   "growthDirector",
   "sceneDirector",
   "travelDirector",
+  "facilityActive",
   "battle",
   "bindMovement",
   "bindFieldActions",
@@ -237,7 +238,8 @@ export class WorldApplication {
       this.storyBusy ||
       this.ui?.blocked ||
       this.busy ||
-      this.devicePending()
+      this.devicePending() ||
+      this.facilityActive
     )
       return false;
     return this.field.move(dir, {
@@ -255,7 +257,7 @@ export class WorldApplication {
       this.ui.confirmBattle();
       return;
     }
-    if (this.ui.blocked) return;
+    if (this.ui.blocked || this.facilityActive) return;
     const object = this.world.interact();
     if (!object) {
       if (this.interactDevice()) return;
@@ -419,6 +421,7 @@ export class WorldApplication {
           ]);
       },
     });
+    this.actorRuntime.reconcile();
     this.fieldDirector = new FieldDirector({
       field: this.field,
       timeline: this.timeline,

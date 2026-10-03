@@ -180,6 +180,7 @@ test("Ordinary consumable use cannot consume an action item; battles have no hid
     party: s.game.state.party,
     enemy: createMonster("zigzagoon", 5, s.db, s.game.rng),
     bag: createBag({ potion: 1, pokeball: 1 }),
+    items: createItemService({}, fixtureInventory()),
   });
   const mon = battle.party[0];
   mon.hp = 1;

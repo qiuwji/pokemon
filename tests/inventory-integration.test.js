@@ -53,7 +53,7 @@ function session(plugins = [], records = new Map()) {
     checkGrowth() {},
     toast() {},
     say: async () => {},
-    extensions: { refresh() {} },
+    extensions: { refresh() {}, mountSlot() {} },
   });
   const ports = attachEmeraldExtensions(game, compiled.host);
   return { ...compiled, ...ports, game, records };
@@ -70,10 +70,10 @@ function fullNormal(g) {
   g.state.bag = g.inventory.create({ potion: 30 * 99 });
 }
 
-test("Inventory save10 persists only slots, keeps fragments across reload, rejects old counts and preserves live query ports", () => {
+test("Inventory current save persists only slots, keeps fragments across reload, rejects old counts and preserves live query ports", () => {
   const s = session(),
     g = s.game;
-  assert.equal(PACK.version, 10);
+  assert.equal(PACK.version, 11);
   assert.deepEqual(g.state.bag, { pockets: {} });
   partner(g);
   assert(g.inventory.apply(g.state.bag, [add("potion", 150)]).ok);
@@ -87,7 +87,7 @@ test("Inventory save10 persists only slots, keeps fragments across reload, rejec
   );
   g.save();
   const document = g.exportDocument();
-  assert.equal(document.version, 10);
+  assert.equal(document.version, 11);
   assert.deepEqual(document.state.bag.pockets.items.slice(0, 2), [
     { item: "potion", count: 99 },
     { item: "potion", count: 49 },

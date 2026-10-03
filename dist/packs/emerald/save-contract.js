@@ -1,3 +1,11 @@
+import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
+import { FacilityRegistry, FacilitySession } from "../../engine/facilities.js";
+import {
+  EMERALD_FACILITIES,
+  EMERALD_FACILITY_ACTIVITIES,
+} from "./facilities.js";
+import { TRAINERS } from "./trainers.js";
+import { ConditionQueries } from "../../engine/condition-queries.js";
 import { validItemShortcut } from "../../engine/item-shortcut.js";
 import { createEmeraldInventory } from "./inventory.js";
 import { WeatherRegistry, WorldWeather } from "../../engine/weather.js";
@@ -65,6 +73,20 @@ export function validateSave(
   try {
     jsonValue(s, 2 * 1024 * 1024);
     createEmeraldInventory(catalog).validate(s.bag);
+    new FacilitySession({
+      state: s.facilities,
+      registry: new FacilityRegistry({
+        definitions: catalog.facilities || EMERALD_FACILITIES,
+        activities: catalog.facilityActivities || EMERALD_FACILITY_ACTIVITIES,
+        references: {
+          trainers: catalog.trainers || TRAINERS,
+          species: db.species,
+          items: catalog.items,
+          battleWeather: catalog.battleWeather || GEN3_BATTLE_WEATHER,
+        },
+        queries: new ConditionQueries(catalog.conditionQueries),
+      }),
+    });
     if (!validItemShortcut(s.registeredItem, catalog.items)) return false;
     db = emeraldDatabase(db);
     new WorldWeather({
@@ -90,18 +112,24 @@ export function validateSave(
           ),
         }),
       });
-    if (s.actors !== undefined)
+    if (s.actors !== undefined) {
+      const behaviors = new NPCBehaviorRegistry(catalog.npcBehaviors, {
+        poses: new NPCPoseRegistry(catalog.npcPoses, { actors: db.actors }),
+      });
       new ActorRepository({
         state: s.actors,
         maps: db.maps,
         elevation: GEN3_ELEVATION,
         registry: new ActorTemplateRegistry(catalog.actorTemplates, {
           actors: db.actors,
-          behaviors: new NPCBehaviorRegistry(catalog.npcBehaviors, {
-            poses: new NPCPoseRegistry(catalog.npcPoses, { actors: db.actors }),
+          behaviors,
+          schedules: new ActorScheduleRegistry(catalog.actorSchedules, {
+            maps: db.maps,
+            behaviors,
           }),
         }),
       });
+    }
     if (s.clock !== undefined) {
       validateWorldClock(s.clock);
       if (s.playSeconds !== Math.floor(s.clock.playMs / 1000)) return false;

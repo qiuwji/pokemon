@@ -5,6 +5,7 @@ import {
   setQuantity,
 } from "./helpers/inventory-fixture.js";
 import { emptyWeather } from "../dist/engine/weather.js";
+import { emptyFacilities } from "../dist/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -452,6 +453,7 @@ test("Growth presentation commits once under its white cover and clears locks wh
 
 test("Save owns daycare and trade identities, keeps egg clocks, and rejects duplicated custody or invalid eggs", () => {
   const s = state([mon()]);
+  s.facilities = emptyFacilities();
   s.daycare.slots = [{ mon: mon("mudkip"), steps: 254, initialLevel: 5 }];
   const egg = mon();
   egg.egg = {

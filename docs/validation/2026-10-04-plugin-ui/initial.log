@@ -1,0 +1,15 @@
+✔ Declarative layouts reject bad field types, duplicate names, nested forms and unbounded style before any command (26.375459ms)
+✔ Component schemas and recursive expansion are bounded; primitive factories cover every resolved kind (12.967084ms)
+✔ Bad region slots, component schemas and theme values fail during production plugin assembly (3.476167ms)
+✔ Real bag page mounts a plugin form; typed submit saves plugin memory without changing inventory and reloads (25.674583ms)
+✔ Region refresh preserves unsaved text, focus and tab choice, while unmount removes its drafts (15.025667ms)
+✔ Form duplicate submission is locked; closing before completion cannot remount a removed region (11.215166ms)
+✔ Native editable controls retain game keys, Escape returns, and widget-handled arrows do not navigate the game (0.685209ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 224.363708

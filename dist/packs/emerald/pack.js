@@ -9,7 +9,7 @@ export const PACK = {
     surf: "BrendanSurf",
   },
   travelActor: "FlyBird",
-  version: 10,
+  version: 11,
   title: "绿宝石 · 丰缘序章",
   start: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   starters: ["treecko", "torchic", "mudkip"],

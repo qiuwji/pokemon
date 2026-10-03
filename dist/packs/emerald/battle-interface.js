@@ -9,7 +9,8 @@ export function createBattleInterface(
     db = game.db;
   let selected = 0,
     page = "main",
-    selectedMove = null;
+    selectedMove = null,
+    selectedAugment = null;
   const buttons = () => [
     ...root.querySelectorAll(".battle-options button:not(:disabled)"),
   ];
@@ -47,22 +48,33 @@ export function createBattleInterface(
       ...(game.battle.player ? { actor: game.battle.player.uid } : {}),
     });
   }
-  function pickMove(index) {
+  function pickMove(index, augment = null) {
     const b = game.battle,
-      mon = b.player,
-      move = index < 0 ? { effect: "recoil" } : db.moves[mon.moves[index].id],
-      mode = b.targeting.mode(move);
+      moveId = augment
+        ? b.augments.options(b.commandSeat, index).find((o) => o.id === augment)
+            ?.moveId
+        : b.movesFor(b.commandSeat)[index]?.id,
+      move = index < 0 ? { effect: "recoil" } : db.moves[moveId];
+    if (!move) {
+      page = "moves";
+      selectedAugment = null;
+      draw();
+      return;
+    }
+    const mode = b.targeting.mode(move);
     if (
       ["selected", "user-or-selected"].includes(mode) &&
       b.targeting.candidates(b.commandSeat, move).length > 1
     ) {
       page = "targets";
       selectedMove = index;
+      selectedAugment = augment;
       selected = 0;
       draw();
-    } else void act({ kind: "move", index });
+    } else void act({ kind: "move", index, ...(augment ? { augment } : {}) });
   }
   function draw(message = null) {
+    game.ui?.extensions?.unmountSlot("battle.actions");
     const b = game.battle;
     if (!b) {
       root.hidden = true;
@@ -93,6 +105,14 @@ export function createBattleInterface(
           return `<button data-move="${i}" ${(!b.moveAvailable(b.commandSeat, i) && b.movesFor(b.commandSeat).some((m, j) => b.moveAvailable(b.commandSeat, j))) || !supported ? "disabled" : ""}>${escapeHTML(move.name)}<small>${supported ? TYPE_NAMES[move.type] + " · PP " + slot.pp : "效果尚未开放"}</small></button>`;
         })
         .join("");
+      options += b
+        .movesFor(b.commandSeat)
+        .flatMap((slot, index) => b.augments.options(b.commandSeat, index))
+        .map(
+          (o) =>
+            `<button data-move="${o.index}" data-augment="${escapeHTML(o.id)}">${escapeHTML(o.name)}<small>${escapeHTML(db.moves[o.moveId].name)} · ${o.remaining ?? "∞"}</small></button>`,
+        )
+        .join("");
       if (
         !b
           .movesFor(b.commandSeat)
@@ -105,7 +125,19 @@ export function createBattleInterface(
       const move =
         selectedMove < 0
           ? { effect: "recoil" }
-          : db.moves[b.movesFor(b.commandSeat)[selectedMove].id];
+          : db.moves[
+              selectedAugment
+                ? b.augments
+                    .options(b.commandSeat, selectedMove)
+                    .find((o) => o.id === selectedAugment)?.moveId
+                : b.movesFor(b.commandSeat)[selectedMove].id
+            ];
+      if (!move) {
+        page = "moves";
+        selectedAugment = null;
+        draw();
+        return;
+      }
       options = b.targeting
         .candidates(b.commandSeat, move)
         .sort(
@@ -157,7 +189,9 @@ export function createBattleInterface(
     root
       .querySelectorAll("[data-move]")
       .forEach(
-        (button) => (button.onclick = () => pickMove(+button.dataset.move)),
+        (button) =>
+          (button.onclick = () =>
+            pickMove(+button.dataset.move, button.dataset.augment || null)),
       );
     root.querySelectorAll("[data-target]").forEach(
       (button) =>
@@ -165,12 +199,20 @@ export function createBattleInterface(
           void act({
             kind: "move",
             index: selectedMove,
+            ...(selectedAugment ? { augment: selectedAugment } : {}),
             target: { kind: "seat", id: button.dataset.target },
           })),
     );
     root
       .querySelector("[data-cancel]")
       ?.addEventListener("click", () => void game.turn({ kind: "cancel" }));
+    if (!game.busy)
+      game.ui?.extensions?.mountSlot(
+        "battle.actions",
+        root.querySelector(".battle-options"),
+        { seat: b.commandSeat },
+        () => draw(),
+      );
     if (selected >= buttons().length) selected = 0;
     buttons()[selected]?.classList.add("selected");
   }
@@ -214,6 +256,7 @@ export function createBattleInterface(
       page = "main";
       selected = 0;
       selectedMove = null;
+      selectedAugment = null;
     },
     confirm() {
       if (!game.busy) buttons()[selected]?.click();

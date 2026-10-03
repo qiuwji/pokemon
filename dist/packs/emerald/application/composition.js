@@ -1,3 +1,4 @@
+import { FacilityApplication, FACILITY_PORTS } from "./facility-application.js";
 import {
   ItemShortcutApplication,
   ITEM_SHORTCUT_PORTS,
@@ -115,6 +116,12 @@ export function composeApplications(applications, read, { storage }) {
   applications.battle = new BattleApplication(
     liveApplicationPorts(read, BATTLE_PORTS, {}),
   );
+  applications.facilities = new FacilityApplication(
+    liveApplicationPorts(read, FACILITY_PORTS, {
+      startFacilityBattle: (...args) =>
+        applications.battle.startIsolatedTrainerBattle(...args),
+    }),
+  );
   applications.story = new StoryApplication(
     liveApplicationPorts(read, STORY_PORTS, {
       validateWeatherCommand: (command) =>
@@ -126,6 +133,7 @@ export function composeApplications(applications, read, { storage }) {
     liveApplicationPorts(read, FRAME_PORTS, {
       tickWeather: (...args) => applications.weather.tick(...args),
       tickDevices: (...args) => applications.devices.tick(...args),
+      tickActors: (...args) => applications.actors.tick(...args),
     }),
   );
   applications.inspection = new InspectionApplication(

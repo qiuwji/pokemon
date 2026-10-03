@@ -50,9 +50,16 @@ export function createBagInterface(
             }</section>`,
         )
         .join("") +
-        `<div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
+        `<div data-extension-slot="bag.actions"></div><div data-extension-slot="bag.content"></div><div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
       { back: inBattle ? closeModal : showMenu, type: "bag" },
     );
+    for (const slot of ["bag.actions", "bag.content"])
+      game.ui?.extensions?.mountSlot(
+        slot,
+        root.querySelector(`[data-extension-slot="${slot}"]`),
+        { inBattle },
+        () => showBag(inBattle),
+      );
     root.querySelectorAll("[data-register-item]").forEach((button) => {
       button.onclick = () =>
         chooseItemRegistration(button.dataset.registerItem);

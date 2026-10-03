@@ -19,6 +19,17 @@ const walking = (c) => ({
   pose: "walk",
 });
 export const NPC_BEHAVIORS = Object.freeze({
+  "routine-travel": (c) => ({
+    move: false,
+    pose: "walk",
+    ...(c.routine
+      ? {
+          goal: Object.fromEntries(
+            Object.entries(c.routine.position).filter(([key]) => key !== "dir"),
+          ),
+        }
+      : {}),
+  }),
   still: () => ({ move: false, pose: "still" }),
   wander: walking,
   horizontal: walking,

@@ -1,4 +1,4 @@
-import { selectedMove } from "./moves.js";
+import { actionMove } from "./moves.js";
 import { effectiveness } from "../model.js";
 /** Conservative decision observations. Pure formulas use a local mean roll, never gameplay RNG. */
 export function analyzeCandidate(b, action) {
@@ -19,10 +19,8 @@ export function analyzeCandidate(b, action) {
       index: action.index,
       hp: b.roster.owner(action.seat).party[action.index]?.hp ?? null,
     };
-  const move = {
-      ...selectedMove(b, action.seat, action.index),
-      id: b.movesFor(action.seat)[action.index]?.id || "struggle",
-    },
+  const prepared = action.augment ? b.augments.prepare(action) : action;
+  const move = actionMove(b, prepared),
     definition = b.moveEffects.get(move.effect),
     mode = b.targeting.mode(move);
   const targets =

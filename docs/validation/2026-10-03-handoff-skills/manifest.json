@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-03",
+  "codeBaseline": "43862f7",
+  "scope": "Skill格式、相对链接与人工任务定位；不代表框架实现或运行验证",
+  "initialIssue": "系统和捆绑Python均缺PyYAML；在临时校验目录安装依赖后运行官方校验器，未修改项目或全局依赖",
+  "validator": "/Users/qiuji/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+  "skills": [
+    {
+      "skill": "emerald-actor-behaviors",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-battle-rules",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-facility-content",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-field-actions",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-plugin-authoring",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-project-handoff",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-release-validation",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    },
+    {
+      "skill": "emerald-world-content",
+      "exitCode": 0,
+      "output": "Skill is valid!"
+    }
+  ],
+  "localLinksChecked": 85,
+  "brokenLinks": [],
+  "manualWalkthrough": [
+    {
+      "task": "首次接手后新增训练家",
+      "route": "总Skill→项目导航→STATUS→战斗Skill→encounter-content.test.js",
+      "result": "可定位实际trainer-pack注册、battle.start和后备/一次奖励案例；未执行游戏测试"
+    },
+    {
+      "task": "新增设施",
+      "route": "总Skill→STATUS→设施Skill→FACILITIES规格",
+      "result": "明确没有领域会话实现，下一步是框架与短连战，不编造API"
+    },
+    {
+      "task": "新增伙伴跟随",
+      "route": "SCOPE→STATUS→Actor Skill",
+      "result": "标明延期，不能由历史路线自动启动"
+    },
+    {
+      "task": "已有证据是否需要重跑",
+      "route": "验收Skill→STATUS→原manifest",
+      "result": "按改动使对应范围失效；本轮只修改文档，不重跑游戏测试"
+    }
+  ],
+  "runtimeTests": "未执行：无运行代码修改",
+  "discovery": "8个本机默认Skill目录符号链接；权威内容在项目skills/，下次会话发现情况未验证",
+  "invalidation": "Skill、导航、规格入口或示例API变动时重新检查相应部分",
+  "sha256": {
+    "skills/emerald-world-content/SKILL.md": "f67a0a63b865fd700c1b1467856731ca8ea96a64f034c7f6d8b6ae8094a042e5",
+    "skills/emerald-actor-behaviors/SKILL.md": "bcb02f45f0b3ee8424c4e5fd79ac3a2ddeac759308ca00477a945d0407508dfc",
+    "skills/emerald-facility-content/SKILL.md": "8ef3f2da6827846e49adb786ef7f71fcaaf46d2a8ab690d90c7f23cf66e8879d",
+    "skills/emerald-field-actions/SKILL.md": "889a8c187f893ec7a56275991b98b93464ad47eb048ab8d210fa6cfcd9cb36a6",
+    "skills/emerald-battle-rules/SKILL.md": "b064eeeb0842f8dced0573f709842c764dc88cc0c3b8e1146b18a2d953958d72",
+    "skills/emerald-release-validation/SKILL.md": "87f0ec0b4bea0363e92138b27494ace34b47667d9176309b81c1d6d53112955b",
+    "skills/emerald-plugin-authoring/SKILL.md": "909a22243da2e54f623c0c221701fb8842d0abe27931d7a271aebc15ce1f4a67",
+    "skills/emerald-project-handoff/SKILL.md": "f2072867895cedb08c22b4d956fb45e95ed33846f152e14780af105cd8aa476c",
+    "skills/emerald-project-handoff/references/project-map.md": "29ff7b405ca35b3a623f46abe698c937a66c650257922b9e8a08024ec1748c84",
+    "docs/project/SCOPE.md": "8c8d104e2cdec0be47595890aa8ba7133657bd54d66e647c0650b70da6259820",
+    "docs/project/STATUS.md": "64fe16142e8d8a274fc9829a26c95dfe321cd55a2079a89a6b7fe9cf75f53c79",
+    "docs/project/SKILLS.md": "b838f5752c9ea044964442b5efdd1c491cb860ecac1a98f89aac6f3fd4a829b5",
+    "docs/engine/FACILITIES.md": "c572495e96ea5d4c455724b984adb3d22fc6a10c177c9507affa387e6980160e"
+  }
+}

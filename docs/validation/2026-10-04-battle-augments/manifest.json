@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-04",
+  "baselineCommit": "43862f7",
+  "revision": "uncommitted working tree; see file hashes",
+  "projectVersion": "0.17.0",
+  "saveVersion": 11,
+  "pluginApiVersion": 1,
+  "scope": "Plugin action augmentation: whitelist move selection, source PP/item payment, shared usage reservation, readiness recheck, rollback, registered semantic presentation, UI/AI command wiring.",
+  "source": "Project-defined extension representative; no claim of generation-specific Z rules. Default Gen3 unchanged.",
+  "testEvidence": [
+    {
+      "log": "initial.log",
+      "command": "node --test tests/battle-augments.test.js",
+      "fileCasesAtExecution": 8,
+      "tests": 8,
+      "pass": 3,
+      "fail": 5,
+      "exitCode": 1
+    },
+    {
+      "log": "repair.log",
+      "file": "tests/battle-augments.test.js",
+      "selection": "Five initially failing cases, exact CLI pattern not retained; executed case names are in log.",
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "exitCode": 0,
+      "fix": "Inventory fixture adds potions; createEmeraldPresentation receives host in correct assembly field."
+    },
+    {
+      "log": "added.log",
+      "file": "tests/battle-augments.test.js",
+      "selection": "Shared limit groups; AI strategy; Forged internal replacement fields",
+      "tests": 3,
+      "pass": 2,
+      "fail": 1,
+      "exitCode": 1
+    },
+    {
+      "log": "added-repair.log",
+      "file": "tests/battle-augments.test.js",
+      "selection": "Shared limit groups",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exitCode": 0,
+      "fix": "Illegal numeric-only local content ID replaced with valid cap-prefixed ID."
+    },
+    {
+      "log": "ui-target.log",
+      "file": "tests/battle-augments.test.js",
+      "selection": "Battle menu adapter; Replacement self-target validation",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "exitCode": 0
+    },
+    {
+      "log": "affected-truncated.log",
+      "command": "node --test tests/multi-battle.test.js tests/team-battle.test.js tests/called-continuous-moves.test.js tests/extended-moves.test.js tests/support-moves.test.js tests/runtime-forms.test.js tests/control-states.test.js tests/battle-states.test.js tests/traits.test.js tests/encounter-content.test.js tests/utility-moves.test.js tests/plugins.test.js tests/ui-composition.test.js tests/architecture.test.js tests/application-services.test.js tests/visual-registry.test.js tests/animation-timing.test.js",
+      "tests": 139,
+      "pass": 138,
+      "fail": 1,
+      "exitCode": 1,
+      "truncated": true,
+      "note": "Tool output retained summary/failure but truncated middle case listings."
+    },
+    {
+      "log": "affected-repair.log",
+      "file": "tests/team-battle.test.js",
+      "selection": "Save validation rejects missing or duplicated creature identities and missing story ledger",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exitCode": 0,
+      "fix": "Manual save fixture adds required facilities:{nextId:1,results:[]}; validator not weakened."
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm run check",
+      "log": "check.log",
+      "exitCode": 0,
+      "modules": 262
+    },
+    {
+      "command": "npm run check:contracts",
+      "log": "contracts-final.log",
+      "exitCode": 0,
+      "note": "Only type consumer simplified after preceding full check; runtime unchanged."
+    },
+    {
+      "command": "npm run check:docs",
+      "log": "documentation-final.log",
+      "exitCode": 0,
+      "markdownFiles": 62,
+      "localLinks": 376,
+      "synchronizedExamples": 9
+    }
+  ],
+  "aggregateMeaning": "13 new cases have passing batch evidence, plus 139 affected cases with one repaired separately; not a single current full-suite run.",
+  "unverified": [
+    "Actual browser input/visual observation",
+    "Full current system regression",
+    "Complete generation-specific Z/Mega/Dynamax rules",
+    "Joint AI planning of contested augmentation resources"
+  ],
+  "invalidation": "Recheck corresponding proofs when augmentation registry/service, move preparation/order/payment, inventory reservation, checkpoint, plugin wrappers, UI/AI/public commands or registered visuals change. Formatting-only edits preserve semantic proofs.",
+  "affectedFiles": [
+    "tests/multi-battle.test.js",
+    "tests/team-battle.test.js",
+    "tests/called-continuous-moves.test.js",
+    "tests/extended-moves.test.js",
+    "tests/support-moves.test.js",
+    "tests/runtime-forms.test.js",
+    "tests/control-states.test.js",
+    "tests/battle-states.test.js",
+    "tests/traits.test.js",
+    "tests/encounter-content.test.js",
+    "tests/utility-moves.test.js",
+    "tests/plugins.test.js",
+    "tests/ui-composition.test.js",
+    "tests/architecture.test.js",
+    "tests/application-services.test.js",
+    "tests/visual-registry.test.js",
+    "tests/animation-timing.test.js"
+  ],
+  "reference": {
+    "path": "work/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readonly": true,
+    "usage": "Extension is a project decision; Gen3 source is not claimed as a modern mechanic specification."
+  },
+  "sha256": {
+    "dist/app.js": "b549cf3d8a4904354362a65853d14e207696888a8b9b3c1f2e23f3e4ca84840b",
+    "dist/engine/battle.js": "be85f20ed1741cdd19cca6c34ed5c360a2685c2ccaf9f977091d125bc367fa8b",
+    "dist/engine/battle/actions.js": "728222416f4b3ab2b1ef0284667fa39dd7783948dfaf199aafcc4051e21395bb",
+    "dist/engine/battle/analysis.js": "229e4bd2ad41eec1bf2c91af21b1fd09f9e6a74fd0e50758db00f2cf4a104cb4",
+    "dist/engine/battle/augments.js": "2f0fca5bfbdc23592125efb05fd2ab30f17f25bd33ca9041506694c075f17c70",
+    "dist/engine/battle/checkpoint.js": "25aefc88431ab46cb02b21f9561fd806912666ffec6001e0ed6c03a9d3e3697d",
+    "dist/engine/battle/decisions.js": "80105a494ad16e2642ee92dea042e32c43db327a1b7f156fe03965e0978a1d4d",
+    "dist/engine/battle/moves.js": "212d886be2a1328c1ba655d957366559f634483c7066eaa4ddb36c8b097f3ee9",
+    "dist/engine/battle/round.js": "c989c9255fabbdf634061ef7a75fe43e218f1ed7a932aa5458ec98356b2d264b",
+    "dist/engine/battle/strategy-registry.js": "7d7be3f9fe8bab10dde85009b9ffde8d2a6262d9598d78087364de6aca057812",
+    "dist/engine/contracts.d.ts": "d91d8e4f167857ffa216293a10df875108ce57f9313582d8a91f664b1fe40d79",
+    "dist/engine/extensions/catalog.js": "18a6d33cea8fb6a59d661d8c340a55cf9f6b4167018c404ffa3ce305434d896b",
+    "dist/engine/extensions/plugin-host.js": "93928308f4f4994bbdef9bcd585dd6ab0e59c87ef0575b6b5b34088bfcf0fd0a",
+    "dist/packs/emerald/application-commands.js": "c4ed3ae5b12fa282cde1cce96ebf9ff3eb5fa54771f6a8b66802a96d7ed682e7",
+    "dist/packs/emerald/application/battle-application.js": "2214d7ac58da359b175fcbce1621537365ee9d806fd18ee4d7e97fae0e4bfb9d",
+    "dist/packs/emerald/battle-interface.js": "ea1f96bc50738217c07cd2c8be44ef0b22e5bd39f83148664254f48fb5647737",
+    "dist/packs/emerald/extensions.js": "a00fee308224c6f14537517cf677ee727238884375bc23a5f2832975ca2d1e81",
+    "dist/plugins/battle-burst.js": "997a9dd7f9720330d3d632cc530ba98a441764623a471baa08a53b744ac6e87d",
+    "docs/engine/battle/AUGMENTS.md": "04c727b83e4431c1fa6d1ed57888a5afa19f046f158d0c04f3ef7875c3963257",
+    "examples/helpers/session.js": "0007d666875891732cffa787ba9addf0917d19a1eeb89f87b76752140ee476c7",
+    "package-lock.json": "34c7c8903c9191143ebbefb819dbe7c838ad2d81a5bf90697b7a9c80c83fd652",
+    "package.json": "730bb015640325e8896d09f8c4d42258a041231dabf36f312308f988b88a30de",
+    "skills/emerald-battle-rules/SKILL.md": "fa26a69ca5a9c3509432f44b3ff987f5d7a74c28a156f160465bc91e57048838",
+    "skills/emerald-plugin-authoring/SKILL.md": "73f188cb6fc1261bd7d0302c00ffb9de73aa00ac800be49c9b35fe7575f0b5ea",
+    "tests/animation-timing.test.js": "df5050c5d6da5cf93df121b0972053e9dc75fb0e87c27a0b1d47dd34d0393aba",
+    "tests/application-services.test.js": "d3a0ca6f7f9fb791f33bf45b6176fd509443e4bbaeff49f7b8c80ddb3edb7c7c",
+    "tests/architecture.test.js": "4636fda09c3574177decb39b43844b2c79219a818cd1d63eaa4c1b76a92a7820",
+    "tests/battle-augments.test.js": "267001692acf59c1a2bbef6bff4767e58e5a2f63d820c65049ddd68751a1ca8e",
+    "tests/battle-states.test.js": "14428a6ea6e112e531a27426c9cc8072a354123dc990df3b7f0158c1f00fd74d",
+    "tests/called-continuous-moves.test.js": "ef154d46a27ef49e033e9a7d32965d218fd1669ab06dec6bce90176d78909fdc",
+    "tests/contracts.typecheck.ts": "c75a843968227358bf926e665d55b208e93b367c785ccc5a114b9eb54aaf6d43",
+    "tests/control-states.test.js": "e59b2b119b7e7756a2aceeace671bf6779bead421175575ce72ab9d23919a5ec",
+    "tests/encounter-content.test.js": "ef3a72169384d985c192e468fcaf68de38bb15919bc80e4f2186db2df25319fb",
+    "tests/extended-moves.test.js": "a97df03cad5e885686838d198c43677f7ba8b4570dfc88d23c83adeb889292f2",
+    "tests/multi-battle.test.js": "78a12256a42f9cf93f98d17f11530c43fe68a1765099d4293bd1d625ca437739",
+    "tests/plugins.test.js": "47e9cc7ff7d69cba740072fd137aaafc08d9b88bbd4974cc0a95d6313552d342",
+    "tests/runtime-forms.test.js": "26f5e2bfa22ec91703a6ec2101667ba3950f7cde00f70be2e53e24bc072f07c1",
+    "tests/support-moves.test.js": "20f7593dec5e8d55d271b66fe32e3c624f7011c07e3ca0f00528fec80896a520",
+    "tests/team-battle.test.js": "9d9e467dee06cc9fd760dd343ced357e64b2b5a8da77973287c5b27b87e2e1d2",
+    "tests/traits.test.js": "17904540bb3be18b511d4d443ec024a52732267a725444cdb144df3c8294a770",
+    "tests/ui-composition.test.js": "68a8bb7906620f8a7dc41cb51719719645954b03809744aa7ffe76a7a627a322",
+    "tests/utility-moves.test.js": "b19d4c9cf9e820222d6e014e5d2beb3f2324418feff68028f16561ea4cc2f75b",
+    "tests/visual-registry.test.js": "e67be1cf0271f67e9c922f21081d33d72489205cdf717082a8837d07d052a6b7"
+  }
+}

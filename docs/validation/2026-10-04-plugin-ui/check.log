@@ -1,0 +1,12 @@
+
+> emerald-web-engine@0.18.0 check
+> node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs
+
+Content valid: 9 maps, 58 species, 87 moves, 310 items, 26 events.
+Explicitly unavailable move mechanics (0): 
+Runtime content valid: 354 moves, 58 learning methods, 310 items.
+
+> emerald-web-engine@0.18.0 check:contracts
+> tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+
+Module syntax valid: 265 files.

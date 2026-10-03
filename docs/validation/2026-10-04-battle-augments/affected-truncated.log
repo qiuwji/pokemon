@@ -1,0 +1,109 @@
+Warning: truncated output (original token count: 4294)
+Total output lines: 166
+
+✔ Pure tracks interpolate segment keyframes with shared named easing and stable boundaries (2.299292ms)
+✔ Reusable fragments keep local keyframe timing when placed in charge, release and impact intervals (1.575792ms)
+✔ Per-target hit and miss branches use committed facts and cannot mutate event or layout (0.710083ms)
+✔ Strict animation contracts reject unknown timing, channel shape, pose, async data and easing (0.2945ms)
+✔ Battle event registration picks specific selectors, rejects duplicates and seals against mutation (0.710125ms)
+✔ A form plugin controls injected-clock choreography while battle snapshots and reduced-motion facts remain intact (4.52325ms)
+✔ Append choreography preserves default movement while adding a reusable effect (0.431125ms)
+✔ A per-move pose track drives visual offsets without adding a new director branch (0.2785ms)
+✔ Field-wide event tracks have a viewport anchor even when the semantic event has no acting seat (0.091542ms)
+✔ Application dependencies are explicit, live across state replacement, and cannot be overwritten or broadened (4.770167ms)
+✔ Application fields forward to one owning service, including the explicitly writable host story lock (0.3615ms)
+✔ Adventure remains a composition facade; application services cannot import it or reach sibling services (1.263167ms)
+✔ Every public method uses its declared owner, preserves receivers/results and follows replacement services (1.35275ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (27.034833ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (4.164833ms)
+✔ Composition root does not own story, inventory or damage rules (0.192875ms)
+✔ Every local ES module import resolves after refactors (23.347666ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.084167ms)
+✔ Example plugins depend only on public extension utilities (0.21775ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (12.781042ms)
+✔ Scoped states distinguish creature, seat, side and field; stacks, exclusions and lifecycles are battle-owned (39.632375ms)
+✔ Substitute costs one quarter HP, absorbs without spillover, blocks status and resets on switching (10.101958ms)
+✔ Reflect protects the side, survives switching, ignores critical hits and expires after five ticks; taunt blocks queued status moves (2.135ms)
+✔ A rule fault restores state instances, source identities, PP and seeded RNG alongside the original battle (4.198667ms)
+✔ Plugin battle states use frozen rule views and registered operations, without adding battle-loop branches (19.413542ms)
+✔ Sleep Talk allows sleep, excludes charge moves, ignores called PP, and applies availability rules without another readiness pass (23.070583ms)
+✔ Snore fails awake with PP payment, works asleep, and thawing moves can act through freeze (7.917166ms)
+✔ Assist considers non-egg party members even when fainted or statused and called charge continues without spending their PP (4.238ms)
+✔ Metronome uses original IDs, excludes forbidden and plugin-only moves and reports called success (6.240375ms)
+✔ A called Mirror Move can delegate again through the common bounded caller without an extra PP or readiness payment (3.994417ms)
+✔ Sketch copies a printed unsuccessful move permanently with full PP, rejects transformed users, and survives battle cleanup (8.015375ms)
+✔ Rollout doubles through five actions, Defense Curl doubles once more, misses release the lock and continuation does not pay PP (5.584041ms)
+✔ Triple Kick checks every hit and uses independent 10/20/30 powers, stopping at the first later miss (20.740542ms)
+✔ Uproar shares its repeated-action timer, wakes sleepers, blocks new sleep, exempts Soundproof and clears at completion (5.228625ms)
+✔ Called moves and permanent Sketch changes roll back with the existing journal; internal call depth cannot be supplied by a player (20.257833ms)
+✔ New move policies are validated and reference metadata keeps all 354 moves, sounds and interception flags (1.278083ms)
+✔ Disable, Encore and Torment share eligibility and queued-action settlement, without history leaking across replacements (16.748083ms)
+✔ Mean Look clears when its source leaves; Wish stays with the seat and heals its current recipient (6.80525ms)
+✔ Yawn respects prevention and two ticks; Leech Seed drains to the source seat and Rapid Spin removes seed and hazards (3.425208ms)
+✔ Spikes applies once before entry traits, scales by layers, survives switching; Perish Song clears on leave and kills after four ticks (7.665333ms)
+✔ Lock On bypasses accuracy and concealment only for the source, but protection still blocks (2.149334ms)
+✔ Plugin trainer, policy and conditional encounter references resolve at startup without changing built-in content (35.8945ms)
+✔ Invalid strategy/party/encounter references …1794 tokens truncated…out changing UID (3.952041ms)
+✔ Topology validation rejects duplicate UIDs, bad targets and double occupation before any external mutation (6.389833ms)
+✔ Enemy replacement animation releases the enemy silhouette and preserves team HUD metadata (7.414041ms)
+✔ Trainer content validates the complete team before creating any creature or consuming RNG (0.528584ms)
+✔ Practice prize is committed once after the full win; rematches do not grant another reward (0.5845ms)
+✔ Invalid battle construction precedes transition, and result plans are not created twice on exit retry (0.339125ms)
+✖ Save validation rejects missing or duplicated creature identities and missing story ledger (12.408375ms)
+✔ Rule pipeline validates IDs, phases, deterministic ordering, removal and non-finite modifiers (1.467958ms)
+✔ Entry intimidate, stage immunity and natural cure use the same seat lifecycle (12.318042ms)
+✔ Absorption heals once without damage, critical immunity overrides critical policy and pressure charges PP (19.261333ms)
+✔ Contact feedback happens per successful hit; immunity produces no contact effects (5.525583ms)
+✔ Status immunity, synchronize and immediately consumed cure berries cannot recurse (4.256334ms)
+✔ Multi-hit HP berries consume exactly once, leftovers stay held and fainted holders never heal (2.737042ms)
+✔ Choice band locks the selected move, replacement resets it, shell bell heals once per action (15.033125ms)
+✔ Rock head blocks ordinary recoil, liquid ooze reverses drains and both use dedicated check phases (8.277792ms)
+✔ Numeric ability and held item rules compose once, and model direct callers use the same ability definitions (2.606708ms)
+✔ Weather entry, suppression and residual exclusions respect living seats (3.169333ms)
+✔ Equipment swaps atomically by UID, supports box members and rejects missing inventory (4.258334ms)
+✔ Canonical metadata covers 76 used Gen III abilities and every 66 held effect type explicitly (0.264208ms)
+✔ A failing extension after damage restores creature identities, PP, HP, inventory, turn and seeded RNG (6.665291ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (39.902208ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (3.870542ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (2.729584ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (2.240625ms)
+✔ Clock page submits setup through a command and renders live saved time (2.53425ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (6.303834ms)
+✔ Type changes preserve creature identity and leave cleanup; Conversion 2 remembers landed type across turns (16.725166ms)
+✔ Role Play and Skill Swap restore original abilities; active form overrides also accept temporary abilities (4.765ms)
+✔ Consumed items are recyclable only within the current battle; Knock Off is temporary while Trick transfers ownership (4.445208ms)
+✔ Magnitude uses one roll for spread targets, Weather Ball changes type, Present can heal even a Ghost target (4.387958ms)
+✔ Fake Out is entry-limited, SmellingSalt cures paralysis, Spite uses the original 2–5 PP range and Ghost Curse costs HP (4.317333ms)
+✔ Animation declarations reject unknown effects and malformed timing, then seal against changes (1.304291ms)
+✔ Per-move tracks select distinct visuals, fan out over seats and keep input snapshots unchanged (1.473667ms)
+✔ All registered pixel effects draw without domain access and isolate a failing external drawing handler (4.012584ms)
+✔ Persistent environment/status/protection visuals consume projections only; all transition patterns fully cover commits (6.602417ms)
+✔ Plugins can override one existing move through public presentation registration without editing the renderer (1.944458ms)
+✔ Battle snapshots carry detached weather, volatile state, actual stage delta and per-hit identity (12.509125ms)
+ℹ tests 139
+ℹ suites 0
+ℹ pass 138
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 965.392417
+
+✖ failing tests:
+
+test at tests/team-battle.test.js:410:1
+✖ Save validation rejects missing or duplicated creature identities and missing story ledger (12.408375ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(validateSave(state, db))
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/team-battle.test.js:428:3)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

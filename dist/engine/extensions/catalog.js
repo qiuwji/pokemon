@@ -15,6 +15,7 @@ export const CONTENT_KINDS = Object.freeze([
   "abilities",
   "heldItems",
   "moveEffects",
+  "battleAugments",
   "movement",
   "movementInputs",
   "fieldActions",
@@ -26,6 +27,7 @@ export const CONTENT_KINDS = Object.freeze([
   "crops",
   "berryPlots",
   "actorTemplates",
+  "actorSchedules",
   "npcPoses",
   "destinations",
   "resources",
@@ -33,6 +35,8 @@ export const CONTENT_KINDS = Object.freeze([
   "growthConditions",
   "npcBehaviors",
   "trainers",
+  "facilities",
+  "facilityActivities",
   "encounters",
   "battleStrategies",
   "conditionQueries",
@@ -120,6 +124,13 @@ export class ExtensionCatalog {
   dependencies(state) {
     const used = [
       state.position?.map,
+      ...Object.values(state.facilities?.results || []).flatMap((r) => [
+        r.facility,
+        (
+          this.entries.get(`facilities/${r.facility}`)?.value ||
+          this.base.facilities?.[r.facility]
+        )?.activity,
+      ]),
       state.weather?.active?.selection,
       state.weather?.active?.kind,
       ...Object.entries(state.weather?.overrides || {}).flatMap(([map, r]) => [
@@ -134,11 +145,26 @@ export class ExtensionCatalog {
           ...Object.values(requests).map((r) => r.action),
         ],
       ),
-      ...Object.values(state.actors?.records || {}).flatMap((r) => [
-        r.template,
-        r.map,
-        r.pose,
-      ]),
+      ...Object.values(state.actors?.records || {}).flatMap((r) => {
+        const schedule = (
+          this.entries.get(`actorTemplates/${r.template}`)?.value ||
+          this.base.actorTemplates?.[r.template]
+        )?.schedule;
+        const definition =
+          this.entries.get(`actorSchedules/${schedule}`)?.value ||
+          this.base.actorSchedules?.[schedule];
+        return [
+          r.template,
+          r.map,
+          r.pose,
+          schedule,
+          ...(definition?.entries || []).flatMap((e) => [
+            e.position.map,
+            e.behavior,
+            e.pose,
+          ]),
+        ];
+      }),
       ...Object.entries(state.crops?.trees || {}).flatMap(([id, tree]) => [
         id,
         tree.kind,

@@ -1,4 +1,4 @@
-import { selectedMove } from "./moves.js";
+import { actionMove } from "./moves.js";
 /** One scheduler for singles, doubles and local multiple alliances. No content or presentation dependencies. */
 export class RoundResolver {
   constructor(battle) {
@@ -41,9 +41,7 @@ export class RoundResolver {
     b.turnOrder = order.map((a) => a.seat);
     for (const action of order) {
       if (action.kind !== "move") continue;
-      const move = action.overrideMove
-        ? b.db.moves[action.overrideMove]
-        : selectedMove(b, action.seat, action.index);
+      const move = actionMove(b, action);
       const preparation = b.moveEffects.get(move.effect).preparation;
       if (preparation)
         b.emit(preparation, "prepare", {
@@ -94,10 +92,7 @@ export class RoundResolver {
       a.kind === "switch"
         ? 7
         : a.kind === "move"
-          ? (a.overrideMove
-              ? b.db.moves[a.overrideMove]
-              : selectedMove(b, a.seat, a.index)
-            ).priority
+          ? actionMove(b, a).priority
           : a.kind === "wait"
             ? 0
             : 6;

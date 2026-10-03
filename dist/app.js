@@ -1,3 +1,6 @@
+import { bagNotebook } from "./plugins/bag-notebook.js";
+import { actorDayCycle } from "./plugins/actor-day-cycle.js";
+import { battleBurst } from "./plugins/battle-burst.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
 import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
@@ -11,8 +14,10 @@ import { createEmeraldSceneDefinitions } from "./packs/emerald/presentation-scen
 import { createEmeraldCommandFacade } from "./packs/emerald/command-facade.js";
 import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "./packs/emerald/extension-ports.js";
+import { facilityGames } from "./plugins/facility-games.js";
 import { companionCare } from "./plugins/companion-care.js";
 import { createFieldJournal } from "./plugins/field-journal.js";
+import { e2eSupport } from "./plugins/e2e-support.js";
 import { PACK } from "./packs/emerald/pack.js";
 import { assertPackContent } from "./packs/emerald/content.js";
 import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
@@ -40,7 +45,18 @@ async function boot() {
       base,
       [
         companionCare,
+        facilityGames,
+        ...(new URLSearchParams(location.search).get("battle-burst") === "1"
+          ? [battleBurst]
+          : []),
+        ...(new URLSearchParams(location.search).get("bag-notebook") === "1"
+          ? [bagNotebook]
+          : []),
+        ...(new URLSearchParams(location.search).get("actor-day-cycle") === "1"
+          ? [actorDayCycle]
+          : []),
         createFieldJournal(base.maps.LittlerootTown_ProfessorBirchsLab),
+        e2eSupport,
       ],
       console.error,
     );

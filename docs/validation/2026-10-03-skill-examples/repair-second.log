@@ -1,0 +1,10 @@
+✔ plugin actor identity and memory survive save restore (35.161416ms)
+✔ registered NPC triggers a once-only data story (36.764084ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 159.887875

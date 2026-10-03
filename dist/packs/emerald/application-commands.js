@@ -8,7 +8,9 @@ const empty = objectSchema();
 const byUid = objectSchema({ uid: id }, ["uid"]);
 /** Public mutations resolve stable identities at execution time; raw domain methods stay private to composition. */
 export function registerEmeraldCommands(game, bus) {
-  const field = () => !game.busy && !game.battle && !game.ui?.dialog;
+  const field = () =>
+    !game.facilityActive && !game.busy && !game.battle && !game.ui?.dialog;
+  const facilityReady = () => !game.busy && !game.battle && !game.ui?.dialog;
   const partyIndex = (uid) => game.state.party.findIndex((m) => m.uid === uid);
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
   bus.register("core.inventory.preview", {
@@ -32,6 +34,7 @@ export function registerEmeraldCommands(game, bus) {
     run: ({ additions }) => game.inventoryPreview(additions),
   });
   const domainPermissions = {
+    facility: "facilities",
     time: "time",
     weather: "weather",
     crop: "crops",
@@ -79,6 +82,29 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register(
+    "facility.enter",
+    objectSchema({ id, team: { type: "array", maxItems: 6, items: id } }, [
+      "id",
+      "team",
+    ]),
+    ({ id, team }) => game.enterFacility(id, team),
+  );
+  register(
+    "facility.action",
+    objectSchema({ action: id, input: { type: "string", maxLength: 8192 } }, [
+      "action",
+    ]),
+    ({ action, input }) =>
+      game.facilityAction(action, input ? JSON.parse(input) : {}),
+    { mode: "async", ready: facilityReady },
+  );
+  register("facility.claim", empty, () => game.claimFacility(), {
+    ready: facilityReady,
+  });
+  register("facility.quit", empty, () => game.quitFacility(), {
+    ready: facilityReady,
+  });
   register(
     "weather.query",
     objectSchema({ map: id }),
@@ -200,7 +226,8 @@ export function registerEmeraldCommands(game, bus) {
   );
   register("field.interact", empty, () => game.interact(), {
     ready: () =>
-      !!game.ui?.dialog || (!game.busy && !game.battle && !game.ui?.blocked),
+      !!game.ui?.dialog ||
+      (!game.facilityActive && !game.busy && !game.battle && !game.ui?.blocked),
   });
   register(
     "starter.choose",
@@ -225,6 +252,16 @@ export function registerEmeraldCommands(game, bus) {
     { mode: "async", ready: field, permission: "battle" },
   );
   register(
+    "battle.augments",
+    objectSchema(
+      { seat: id, index: { type: "integer", minimum: 0, maximum: 3 } },
+      ["index"],
+    ),
+    ({ seat, index }) =>
+      game.battle.augments.options(seat || game.battle.commandSeat, index),
+    { concurrent: true, ready: () => !!game.battle },
+  );
+  register(
     "battle.action",
     objectSchema(
       {
@@ -236,6 +273,7 @@ export function registerEmeraldCommands(game, bus) {
         item: id,
         slot: inventorySlot,
         form: id,
+        augment: id,
         seat: id,
         actor: id,
         target: objectSchema(

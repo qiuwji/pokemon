@@ -1,0 +1,2 @@
+# Preserve captured diagnostics verbatim; source and documentation keep normal whitespace checks.
+docs/validation/**/*.log -whitespace

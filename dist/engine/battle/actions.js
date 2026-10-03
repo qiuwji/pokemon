@@ -7,6 +7,13 @@ export class BattleActions {
     const b = this.battle;
     if (!action || typeof action !== "object")
       return { error: "无效的战斗指令。" };
+    if (
+      action.augment !== undefined &&
+      (typeof action.augment !== "string" || !action.augment)
+    )
+      return { error: "无效的增强标识。" };
+    if (action.augment !== undefined && action.kind !== "move")
+      return { error: "增强只能用于招式行动。" };
     if (action.slot !== undefined && action.kind !== "item")
       return { error: "道具位置只能用于道具行动。" };
     if (action.kind === "cancel" && !automaticSeat)
@@ -30,6 +37,8 @@ export class BattleActions {
     if (!(mon?.hp > 0) && action.kind !== "switch")
       return { error: "请选择一只还能战斗的宝可梦。" };
     const {
+      augmentedMove,
+      sourceMoveId,
       continuation,
       overrideMove,
       skipPP,
@@ -56,11 +65,19 @@ export class BattleActions {
             index < 0
               ? { effect: "recoil", target: "selected" }
               : b.db.moves[slot.id];
-        const definition = b.moveEffects.get(move.effect);
+        if (action.augment && index < 0) return { error: "挣扎不能进行增强。" };
+        const enhanced = action.augment
+          ? b.augments.prepare({ ...base, index })
+          : { ...base, index };
+        if (enhanced.error) return enhanced;
+        const effectiveMove = enhanced.augmentedMove
+          ? b.db.moves[enhanced.augmentedMove]
+          : move;
+        const definition = b.moveEffects.get(effectiveMove.effect);
         if (definition.supported === false) return { error: definition.reason };
-        if (!b.targeting.validate(seat, move, action.target))
+        if (!b.targeting.validate(seat, effectiveMove, action.target))
           return { error: "当前行动的目标无效。" };
-        prepared = { ...base, index };
+        prepared = enhanced;
         break;
       }
       case "form": {

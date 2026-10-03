@@ -1,0 +1,10 @@
+✔ Battle menu adapter forwards the registered augment instead of silently using the base move (29.589041ms)
+✔ Replacement self-target is validated without inheriting the source attack target (15.89575ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.018208

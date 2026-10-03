@@ -252,6 +252,7 @@ test("Battle events expose semantic animation metadata and immutable health snap
     db,
     rng,
     bag: createBag({ potion: 1, pokeball: 1 }),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
   });
   const events = battle.act({ kind: "move", index: 0 }),
     move = events.find((e) => e.kind === "move" && e.actorUid === party[0].uid);

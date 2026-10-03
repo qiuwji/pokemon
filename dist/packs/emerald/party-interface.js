@@ -23,13 +23,21 @@ export function createPartyInterface(
   function showParty(inBattle = false) {
     modal(
       inBattle ? "替换宝可梦" : "我的队伍",
-      game.state.party.length
+      (game.state.party.length
         ? (inBattle ? game.battle.party : game.state.party)
             .map((m, i) => partyCard(m, i))
             .join("")
-        : `<p>还没有宝可梦。到 101 号道路调查博士的背包，选择你的搭档。</p>`,
+        : `<p>还没有宝可梦。到 101 号道路调查博士的背包，选择你的搭档。</p>`) +
+        '<div data-extension-slot="party.actions"></div><div data-extension-slot="party.content"></div>',
       { back: inBattle ? closeModal : showMenu, type: "party" },
     );
+    for (const slot of ["party.actions", "party.content"])
+      game.ui?.extensions?.mountSlot(
+        slot,
+        root.querySelector(`[data-extension-slot="${slot}"]`),
+        { inBattle },
+        () => showParty(inBattle),
+      );
     root
       .querySelectorAll("[data-mon]")
       .forEach(
@@ -79,6 +87,12 @@ export function createPartyInterface(
     game.ui?.extensions?.mountSlot(
       "monster.detail",
       root.querySelector(".inline-actions"),
+      { uid: m.uid },
+      () => showMonster(game.state.party.findIndex((mon) => mon.uid === m.uid)),
+    );
+    game.ui?.extensions?.mountSlot(
+      "monster.content",
+      root.querySelector(".detail-stats"),
       { uid: m.uid },
       () => showMonster(game.state.party.findIndex((mon) => mon.uid === m.uid)),
     );

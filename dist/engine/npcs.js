@@ -58,7 +58,10 @@ export class NPCSystem {
       this.states.set(key, n);
     } else {
       Object.assign(n, { text: def.text, name: def.name, kind: def.kind });
-      if (n._actorUid && !this.scene?.pins.has(key)) n.pose = def.pose;
+      if (n._actorUid && !this.scene?.pins.has(key)) {
+        n.movement = def.movement;
+        n.pose = def.pose;
+      }
     }
     return n;
   }
@@ -157,6 +160,9 @@ export class NPCSystem {
   }
   moving(n, now = this.now) {
     return now - n.start < n.duration;
+  }
+  relocationBlocked(uid, now = this.now) {
+    return [...this.states.entries()].some(([key,n])=>n._actorUid === uid && (this.scene?.pins.has(key) || this.moving(n,now)));
   }
   reserved(n) {
     return this.moving(n)

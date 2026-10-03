@@ -4,6 +4,7 @@ import {
   inventoryQuantity,
 } from "./helpers/inventory-fixture.js";
 import { emptyWeather } from "../dist/engine/weather.js";
+import { emptyFacilities } from "../dist/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -198,6 +199,7 @@ test("A dialogue failure after reward can replay without duplicate money or item
 
 test("Current development save contract rejects older versions without mutating their data", () => {
   const s = state();
+  s.facilities = emptyFacilities();
   s.weather = emptyWeather();
   s.registeredItem = null;
   s.party = [createMonster("mudkip", 5, db, new Random(1))];

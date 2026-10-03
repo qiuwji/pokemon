@@ -194,6 +194,7 @@ export function createUIShell(
     body,
     { back = null, type = "generic", close = true } = {},
   ) {
+    game.ui?.extensions?.unmountRegions();
     if (!root.children.length) modalFocus = doc.activeElement;
     modalBack = back;
     modalType = type;
@@ -209,6 +210,7 @@ export function createUIShell(
   }
 
   function closeModal() {
+    game.ui?.extensions?.unmountRegions();
     root.innerHTML = "";
     modalType = null;
     modalBack = null;

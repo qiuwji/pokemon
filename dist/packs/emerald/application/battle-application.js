@@ -7,6 +7,7 @@ import { isWater } from "../../../engine/terrain.js";
 import { createTrainerEncounter } from "../trainers.js";
 import { bindApplicationPorts } from "./ports.js";
 export const BATTLE_PORTS = Object.freeze([
+  "facilityActive",
   "battleStrategies",
   "busy",
   "catalog",
@@ -46,10 +47,38 @@ export class BattleApplication {
         this.ui?.drawBattleHUD();
         this.ui?.updateSide();
       },
-      onResult: (b) => this.resultPlan(b),
+      onResult: (b) => {
+        const plan = this.resultOwner
+          ? this.resultOwner(b)
+          : this.resultPlan(b);
+        this.resultOwner = null;
+        return plan;
+      },
     });
   }
+  async startIsolatedTrainerBattle(id, context) {
+    const trainer = this.trainerDefinitions[id];
+    if (!trainer) throw new Error("Unknown trainer encounter");
+    const encounter = createTrainerEncounter(trainer, {
+      party: context.party,
+      bag: context.bag,
+      db: this.db,
+      rng: this.rng,
+      strategies: this.battleStrategies,
+      inventory: this.inventory,
+    });
+    return this.startBattle(
+      encounter.enemyParty,
+      {
+        ...encounter,
+        trainerId: id,
+        rules: { experienceFinal: () => 0, grantExperience: () => [] },
+      },
+      context,
+    );
+  }
   async startTrainerBattle(id) {
+    if (this.facilityActive) return false;
     const trainer = this.trainerDefinitions[id];
     if (!trainer) throw new Error("Unknown trainer encounter");
     const encounter = createTrainerEncounter(trainer, {
@@ -65,12 +94,15 @@ export class BattleApplication {
       trainerId: id,
     });
   }
-  async startBattle(enemy, options = {}) {
-    if (!this.state.party.some((m) => !m.egg)) return false;
+  async startBattle(enemy, options = {}, context = null) {
+    if (this.facilityActive && !context) return false;
+    const party = context?.party || this.state.party,
+      bag = context?.bag || this.state.bag;
+    if (!party.some((m) => !m.egg)) return false;
     if (this.combat.battle || this.combat.busy || this.transitions.busy)
       return false;
-    if (!this.state.party.some((m) => m.hp > 0 && !m.egg))
-      this.state.party.forEach((m) => healMonster(m, this.db));
+    if (!party.some((m) => m.hp > 0 && !m.egg))
+      party.forEach((m) => healMonster(m, this.db));
     const enemies = Array.isArray(enemy) ? enemy : [enemy];
     const opponents = options.topology
       ? options.topology.sides.flatMap((side) =>
@@ -79,24 +111,28 @@ export class BattleApplication {
             .flatMap((c) => c.party),
         )
       : enemies;
-    for (const mon of opponents) this.seen(mon.species);
+    if (!context) for (const mon of opponents) this.seen(mon.species);
     this.clearInput();
     this.ui.closeModal();
+    this.resultOwner = context?.resultPlan || null;
     return this.combat.start({
-      party: this.state.party,
+      party,
       enemyParty: enemies,
       db: this.db,
       rng: this.rng,
-      bag: this.state.bag,
+      bag,
       items: this.items,
       effects: this.moveEffects,
       states: this.catalog.battleStates,
+      augmentDefinitions: this.catalog.battleAugments,
       formDefinitions: this.catalog.forms,
-      formRecords: Object.fromEntries(
-        [...this.state.party, ...enemies]
-          .filter((m) => this.state.forms[m.uid])
-          .map((m) => [m.uid, this.state.forms[m.uid]]),
-      ),
+      formRecords: context
+        ? {}
+        : Object.fromEntries(
+            [...this.state.party, ...enemies]
+              .filter((m) => this.state.forms[m.uid])
+              .map((m) => [m.uid, this.state.forms[m.uid]]),
+          ),
       weatherDefinitions: this.catalog.battleWeather,
       environment: {
         weather: this.weatherView().battle,
@@ -108,6 +144,7 @@ export class BattleApplication {
               )
             ? "water"
             : this.world.map.presentation?.terrain || "grass",
+        ...context?.environment,
       },
       presentation: options.trainer
         ? {

@@ -1,0 +1,85 @@
+✖ Registered plugin augment uses public battle command, source PP, one controller use and registered presentation (32.724916ms)
+✔ Unknown references, charge replacements and malformed limits/costs fail registration (21.014708ms)
+✖ Choice reserves shared uses in doubles; cancellation releases without PP, cost or RNG (13.871667ms)
+✖ Inventory fees share reservation with ordinary item actions in both directions (10.912125ms)
+✖ A late rule fault rolls back source PP, payment, random stream and augment usage (10.114959ms)
+✔ Execution rechecks selected source/qualification; sleep never consumes augmentation (12.0435ms)
+✖ Replacement target mode governs validation and costs consume once even on protection (9.920875ms)
+✔ Rule callbacks are frozen, synchronous and cannot select undeclared moves (38.960083ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 3
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 279.278916
+
+✖ failing tests:
+
+test at tests/battle-augments.test.js:28:1
+✖ Registered plugin augment uses public battle command, source PP, one controller use and registered presentation (32.724916ms)
+  TypeError: Cannot read properties of null (reading 'animation')
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/battle-augments.test.js:40:46)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+
+test at tests/battle-augments.test.js:47:1
+✖ Choice reserves shared uses in doubles; cancellation releases without PP, cost or RNG (13.871667ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/battle-augments.test.js:57:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/battle-augments.test.js:59:1
+✖ Inventory fees share reservation with ordinary item actions in both directions (10.912125ms)
+  Error: Invalid inventory operation
+      at InventoryService.validateOperation (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:120:13)
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:140:35
+      at Array.forEach (<anonymous>)
+      at InventoryService.prepare (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:140:14)
+      at InventoryService.apply (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:220:23)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/battle-augments.test.js:62:18)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/battle-augments.test.js:70:1
+✖ A late rule fault rolls back source PP, payment, random stream and augment usage (10.114959ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/battle-augments.test.js:74:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /injected/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests/battle-augments.test.js:95:1
+✖ Replacement target mode governs validation and costs consume once even on protection (9.920875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  20 !== 18
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/battle-augments.test.js:103:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 20,
+    expected: 18,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

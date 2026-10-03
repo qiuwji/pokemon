@@ -85,9 +85,14 @@ export class BrowserInput {
     if (!result.ok) this.ui.toast(result.reason);
   }
   keydown(e) {
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key.toLowerCase() === "tab") {
       this.ui.focusTrap(e);
+      return;
+    }
+    if (e.key === "Escape" && this.ui.modalType) {
+      e.preventDefault();
+      this.ui.back();
       return;
     }
     if (e.target.closest("input,select,textarea")) return;

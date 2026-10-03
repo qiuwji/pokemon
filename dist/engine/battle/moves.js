@@ -17,6 +17,14 @@ export function selectedMove(b, seat, index) {
   const mon = b.monster(seat);
   return index < 0 ? STRUGGLE : b.db.moves[b.movesFor(seat)[index].id];
 }
+/** Already prepared augmentation keeps source PP while ordering/targets use the replacement. */
+export function actionMove(b, action) {
+  const id = action.overrideMove || action.augmentedMove;
+  return {
+    ...(id ? b.db.moves[id] : selectedMove(b, action.seat, action.index)),
+    id: id || b.movesFor(action.seat)[action.index]?.id || "struggle",
+  };
+}
 /** Executes one action across live targets; PP/readiness and actor effects occur once per action. */
 export class MoveExecutor {
   constructor(battle) {
@@ -69,15 +77,16 @@ export class MoveExecutor {
         throw new Error("Invalid selected move index");
       action = { ...action, index };
     }
-    const move = {
-        ...(action.overrideMove
-          ? b.db.moves[action.overrideMove]
-          : selectedMove(b, action.seat, action.index)),
-        id:
-          action.overrideMove ||
-          b.movesFor(action.seat)[action.index]?.id ||
-          "struggle",
-      },
+    const augmentation =
+      action.augment && !action.replacement && !action.continuation
+        ? b.augments.check(action)
+        : null;
+    if (augmentation && !augmentation.ok) {
+      b.emit(augmentation.reason, "failed", { actorSeat: action.seat });
+      b.actionLifecycle.clear(action.seat);
+      return false;
+    }
+    const move = actionMove(b, action),
       definition = b.moveEffects.get(move.effect);
     const retaliation =
       definition.retaliation &&
@@ -115,9 +124,10 @@ export class MoveExecutor {
       return false;
     }
     initial.action = action;
+    if (augmentation) b.augments.commit(action, augmentation);
     const lifecycle = b.actionLifecycle.begin(action, initial);
     const slot = b.movesFor(action.seat)[action.index];
-    let ppCost = 1;
+    let ppCost = augmentation?.cost.pp || 1;
     for (const target of targets)
       if (target.id !== action.seat)
         ppCost =

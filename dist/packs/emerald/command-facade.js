@@ -13,6 +13,13 @@ export function createEmeraldCommandFacade(
     to: plan.to,
   });
   const routes = {
+    enterFacility: (id, team) => ["facility.enter", { id, team }],
+    facilityAction: (action, input = {}) => [
+      "facility.action",
+      { action, input: JSON.stringify(input) },
+    ],
+    claimFacility: () => ["facility.claim", {}],
+    quitFacility: () => ["facility.quit", {}],
     setWeather: (map, weather, durationMs = null) => [
       "weather.set",
       { map, weather, ...(durationMs !== null ? { durationMs } : {}) },
@@ -110,6 +117,10 @@ export function createEmeraldCommandFacade(
     advancePlayTime: () => ["session.play-time", {}],
   };
   const objectFailures = new Set([
+    "enterFacility",
+    "facilityAction",
+    "claimFacility",
+    "quitFacility",
     "startClock",
     "cropAction",
     "playPresentation",

@@ -145,5 +145,6 @@ export class EmeraldAdventure {
     this.applications.crops.bind();
     this.applications.actors.bind();
     this.applications.world.bind();
+    this.applications.facilities.bind();
   }
 }

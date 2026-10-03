@@ -1,5 +1,6 @@
-import { validateLayout } from "../engine/extensions/ui-registry.js";
+import { resolveLayout } from "../engine/extensions/ui-registry.js";
 import { readOnly } from "../engine/extensions/values.js";
+import { LayoutDOM } from "./layout-dom.js";
 import { ExtensionFeedback } from "../presentation/extension-feedback.js";
 /** Declarative extension pages. No plugin receives DOM nodes, modal internals or the application object. */
 export class ExtensionDOM {
@@ -14,6 +15,20 @@ export class ExtensionDOM {
   }) {
     Object.assign(this, { host, shell, doc, resources, assets, onError });
     this.active = null;
+    this.mounts = new Set();
+    this.layout = new LayoutDOM({
+      document: doc,
+      resources,
+      themes: host.ui.themes,
+      dispatch: (id, input) => host.runtime.bus.execute(id, input, "ui"),
+      onResult: (result) => {
+        if (result?.message) shell.toast(result.message);
+      },
+      onError: (error) =>
+        shell.toast(
+          error.code === "busy" ? "请先结束当前行动。" : error.message,
+        ),
+    });
     const visualDefinitions = new Map(
       [...host.presentation].map(([id, definition]) => [
         id,
@@ -60,9 +75,37 @@ export class ExtensionDOM {
     context = {},
     back = () => this.shell.closeModal(),
   ) {
-    for (const entry of this.host.ui.inSlot(slot)) {
+    if (!container) return;
+    const mount = { slot, container, context: readOnly(context), back };
+    const root = this.doc.createElement("div");
+    root.className = "extension-slot";
+    container.append(root);
+    mount.root = root;
+    this.mounts.add(mount);
+    this.refreshMount(mount);
+  }
+  resolve(tree, context) {
+    return resolveLayout(
+      tree,
+      {
+        actions: this.host.actions,
+        resources: this.resources,
+        themes: this.host.ui.themes,
+        components: this.host.ui.components,
+      },
+      (definition, props) =>
+        this.host.runtime.evaluate(
+          definition.render,
+          props,
+          this.view(definition.owner, context),
+        ),
+    );
+  }
+  refreshMount(mount) {
+    mount.root.replaceChildren();
+    for (const entry of this.host.ui.inSlot(mount.slot))
       try {
-        const view = this.view(entry.owner, context);
+        const view = this.view(entry.owner, mount.context);
         if (entry.when && !this.invoke(entry.when, view)) continue;
         const button = this.doc.createElement("button");
         button.className = "secondary-button";
@@ -70,16 +113,72 @@ export class ExtensionDOM {
           typeof entry.label === "function"
             ? this.invoke(entry.label, view)
             : entry.label;
-        button.onclick = () => this.showPage(entry.page, context, back);
-        container.append(button);
+        button.onclick = () =>
+          this.showPage(entry.page, mount.context, mount.back);
+        mount.root.append(button);
       } catch (error) {
         this.onError(error);
       }
-    }
+    for (const region of this.host.ui.inSlot(mount.slot, "regions"))
+      try {
+        const view = this.view(region.owner, mount.context);
+        if (region.when && !this.invoke(region.when, view)) continue;
+        const tree = this.resolve(
+          this.invoke(region.render, view),
+          mount.context,
+        );
+        mount.root.append(
+          this.node(tree, mount.context, {
+            scope: "region:" + region.id,
+            refresh: () => {
+              if (this.mounts.has(mount))
+                this.withFocus(() => this.refreshMount(mount));
+            },
+          }),
+        );
+      } catch (error) {
+        this.onError(error);
+      }
+  }
+  unmountSlot(slot) {
+    for (const mount of [...this.mounts])
+      if (mount.slot === slot) {
+        for (const region of this.host.ui.inSlot(slot, "regions"))
+          this.layout.clearScope("region:" + region.id);
+        this.mounts.delete(mount);
+      }
+  }
+  unmountRegions() {
+    for (const mount of this.mounts)
+      for (const region of this.host.ui.inSlot(mount.slot, "regions"))
+        this.layout.clearScope("region:" + region.id);
+    this.mounts.clear();
+  }
+  withFocus(render) {
+    const active = this.doc.activeElement,
+      key = active?.getAttribute?.("data-extension-key"),
+      selection =
+        typeof active?.selectionStart === "number"
+          ? [active.selectionStart, active.selectionEnd]
+          : null;
+    render();
+    if (!key) return;
+    const restore = () => {
+      const node = [
+        ...this.shell.root.querySelectorAll("[data-extension-key]"),
+        ...(this.hud?.querySelectorAll("[data-extension-key]") || []),
+      ].find((n) => n.getAttribute("data-extension-key") === key);
+      node?.focus();
+      if (selection && typeof node?.setSelectionRange === "function")
+        node.setSelectionRange(...selection);
+    };
+    restore();
+    this.doc.defaultView?.requestAnimationFrame?.(restore);
   }
   showPage(id, context = {}, back = () => this.shell.closeModal()) {
     const page = this.host.ui.pages.get(id);
     if (!page) throw new Error("Unknown plugin page");
+    this.layout.clear();
     this.active = { id, context: readOnly(context), back };
     this.rendered = false;
     this.feedback.clear();
@@ -92,11 +191,7 @@ export class ExtensionDOM {
       page = this.host.ui.pages.get(id),
       view = this.view(page.owner, context);
     try {
-      const tree = validateLayout(this.invoke(page.render, view), {
-        actions: this.host.actions,
-        resources: this.resources,
-        themes: this.host.ui.themes,
-      });
+      const tree = this.resolve(this.invoke(page.render, view), context);
       this.shell.modal(
         typeof page.title === "function"
           ? this.invoke(page.title, view)
@@ -108,6 +203,7 @@ export class ExtensionDOM {
             this.active = null;
             this.rendered = false;
             this.feedback.clear();
+            this.layout.clear();
             back();
           },
         },
@@ -130,84 +226,24 @@ export class ExtensionDOM {
       back();
     }
   }
-  node(tree, context) {
-    const tag = {
-      text: "p",
-      heading: "h3",
-      image: "img",
-      button: "button",
-      row: "div",
-      grid: "div",
-      panel: "section",
-      meter: "progress",
-      select: "select",
-    }[tree.kind];
-    let element = this.doc.createElement(tag);
-    element.className = `extension-${tree.kind}`;
-    if (tree.theme)
-      for (const [key, value] of Object.entries(
-        this.host.ui.themes.get(tree.theme),
-      ))
-        if (["background", "foreground", "border", "accent"].includes(key))
-          element.style.setProperty("--extension-" + key, value);
-    if (tree.text) element.textContent = tree.text;
-    if (tree.kind === "image") {
-      element.src = this.resources[tree.src];
-      element.alt = tree.alt || "";
-    }
-    if (tree.kind === "meter") {
-      element.value = tree.value;
-      element.max = tree.max;
-      element.setAttribute("aria-label", tree.label || "");
-    }
-    if (tree.kind === "select")
-      for (const option of tree.options || []) {
-        const child = this.doc.createElement("option");
-        child.value = option.value;
-        child.textContent = option.label;
-        element.append(child);
-      }
-    for (const child of tree.children || [])
-      element.append(this.node(child, context));
-    if (tree.action) {
-      if (tree.kind === "image") {
-        const button = this.doc.createElement("button");
-        button.className = "extension-sprite";
-        button.setAttribute("aria-label", tree.alt || "互动");
-        button.append(element);
-        element = button;
-      }
-      element.disabled = !!tree.disabled;
-      const act = async () => {
-        element.disabled = true;
-        try {
-          const input = {
-            ...context,
-            ...(tree.input || {}),
-            ...(tree.kind === "select" ? { value: element.value } : {}),
-          };
-          const result = await this.host.runtime.bus.execute(
-            tree.action,
-            input,
-            "ui",
-          );
-          if (result?.message) this.shell.toast(result.message);
-        } catch (error) {
-          this.shell.toast(
-            error.code === "busy" ? "请先结束当前行动。" : error.message,
-          );
-        } finally {
-          if (this.shell.modalType === "extension") this.refreshPage();
-        }
-      };
-      if (tree.kind === "select") element.onchange = act;
-      else element.onclick = act;
-    }
-    return element;
+  node(tree, context, options = {}) {
+    const active = this.active;
+    return this.layout.create(tree, {
+      context,
+      scope: active ? "page:" + active.id : "layout",
+      refresh: () => {
+        if (this.active === active) this.withFocus(() => this.refreshPage());
+      },
+      ...options,
+    });
   }
   refresh() {
     this.refreshHUD();
-    if (this.shell.modalType === "extension") this.refreshPage();
+    if (this.shell.modalType === "extension")
+      this.withFocus(() => this.refreshPage());
+    else
+      for (const mount of this.mounts)
+        this.withFocus(() => this.refreshMount(mount));
   }
   refreshHUD() {
     if (!this.hud) return;
@@ -216,12 +252,17 @@ export class ExtensionDOM {
       try {
         const view = this.view(definition.owner, {});
         if (definition.when && !this.invoke(definition.when, view)) continue;
-        const tree = validateLayout(this.invoke(definition.render, view), {
-          actions: this.host.actions,
-          resources: this.resources,
-          themes: this.host.ui.themes,
-        });
-        this.hud.append(this.node(tree, {}));
+        const tree = this.resolve(this.invoke(definition.render, view), {});
+        this.hud.append(
+          this.node(
+            tree,
+            {},
+            {
+              scope: "hud:" + definition.id,
+              refresh: () => this.withFocus(() => this.refreshHUD()),
+            },
+          ),
+        );
       } catch (error) {
         this.onError(error);
       }

@@ -1,0 +1,126 @@
+{
+  "date": "2026-10-04",
+  "baselineCommit": "43862f7",
+  "revision": "uncommitted working tree; final scope hashes below",
+  "projectVersion": "0.18.0",
+  "saveVersion": 11,
+  "pluginApiVersion": 1,
+  "scope": "Declarative layout primitive contracts and DOM factory split; typed forms/tabs/lists/tables, schema components, bounded style/theme tokens, named append-only regions, representative native bag plugin and lifecycle/input wiring.",
+  "source": "Project extension contracts; original Emerald content unchanged.",
+  "tests": [
+    {
+      "command": "node --test tests/plugin-ui.test.js",
+      "log": "initial.log",
+      "fileCasesAtExecution": 7,
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "node --test --test-name-pattern='late old-page' tests/plugin-ui.test.js",
+      "log": "late-page.log",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "node --test --test-name-pattern='Disabled forms' tests/plugin-ui.test.js",
+      "log": "disabled.log",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "node --test tests/plugins.test.js tests/ui-composition.test.js tests/architecture.test.js tests/item-shortcut.test.js tests/battle-augments.test.js tests/facilities.test.js",
+      "log": "affected.log",
+      "tests": 71,
+      "pass": 71,
+      "fail": 0,
+      "exitCode": 0,
+      "note": "Same captured process then ran npm run check:contracts, also exit 0; package prefix at that time 0.17.0."
+    },
+    {
+      "command": "node --test examples/plugin-page.test.js",
+      "log": "example.log",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "node --test --test-name-pattern='Successful standalone|Real bag page|Disabled forms' tests/plugin-ui.test.js",
+      "log": "committed-input.log",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "exitCode": 0,
+      "note": "Final draft reset change: standalone success shows normalized committed value; form success and rejection still correct."
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm run check",
+      "log": "check.log",
+      "exitCode": 0,
+      "modules": 265,
+      "note": "Full check before final standalone-draft reset; changed adapter parsed and exercised by committed-input tests. Public types/content unchanged afterwards."
+    },
+    {
+      "command": "npm run check:docs",
+      "log": "documentation.log",
+      "exitCode": 0,
+      "markdownFiles": 63,
+      "localLinks": 390,
+      "synchronizedExamples": 9
+    }
+  ],
+  "aggregateMeaning": "10 new cases have passing batch evidence; 71 affected cases and 1 existing Skill example passed. Not a current full-suite run.",
+  "unverified": [
+    "Actual browser editing/focus/tab layout/visual observation",
+    "Full current system regression"
+  ],
+  "unsupported": [
+    "Arbitrary DOM/Canvas component renderer injection",
+    "Native HUD hiding/replacement",
+    "Hot install/unload",
+    "Plugin transaction bypass during battles/facility sessions",
+    "Replacing native page regions"
+  ],
+  "invalidation": "Recheck relevant proofs when layout/schema/style/component resolution, UI registration, native mounting/navigation, draft/focus/input handling, command/save integration or rendered resources change. Reuse unaffected domain proofs.",
+  "reference": {
+    "path": "work/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readonly": true,
+    "usage": "Project UI contracts; no claim of original-game UI behavior parity."
+  },
+  "sha256": {
+    "dist/engine/extensions/ui-registry.js": "2fd183d1dc2bbf759190b3aa27c0d40f20555bee997fcc71216d8a59775e2699",
+    "dist/engine/extensions/layout-contracts.js": "3bbe4b7dd2fc095387c740dad4b8a5163ed28290baebf4690877e7daf185943f",
+    "dist/engine/extensions/plugin-host.js": "7a915ba27c39e5e3277ae47bc7c509777dfbb155e8a7eb2269f1ed61f3b93e4d",
+    "dist/engine/contracts.d.ts": "680ba48968116af270f862980ba1e1048cf0782a1fbd9ea5583cd46f10e95241",
+    "dist/adapters/layout-dom.js": "22a132e642b59e9e0cd4a76159bcd71413a5c93acd870e43d5b0ac516b4120ce",
+    "dist/adapters/extension-dom.js": "6c7121d035ddaef4d6c299914911c228ccdd1dead790f4441b92c47260904396",
+    "dist/adapters/browser-input.js": "6fa26d005c5496e823d1c287fcf1fe16dd0461fcb2fc7d585454b7c61358aaf9",
+    "dist/plugins/bag-notebook.js": "70d93a7e17c5973406fd1ab504689978a0b5c2c67b700f2ab44d087cd70f1493",
+    "dist/app.js": "e179555ac2880b74497532687e7a57796b49c29130ada281178cd250820612fe",
+    "dist/style.css": "6fb4169286289d027637e3fee7d1fd9dadebbbf7bc226d61aab1bb7bec32d57d",
+    "dist/packs/emerald/ui-shell.js": "a07166ef0ecaa6ac13e17d4454526c5e8c792b2e3241b7eb26718d297a43c2fd",
+    "dist/packs/emerald/bag-interface.js": "d6ec7d18061f80e1527297bac16b590005414d674349671675f92eceb0e7b18f",
+    "dist/packs/emerald/party-interface.js": "b36ef2b41f0b46534e2dbc8088507d67922efe3a67ca15c0c0d03784cb412356",
+    "dist/packs/emerald/shop-interface.js": "3fb2139a05619b05367e80afeb9294417a477011e616f99c8395528c652374df",
+    "dist/packs/emerald/battle-interface.js": "6909066024914208110315ea3d75f1c929670d00ca3ba83274bd994bfab528de",
+    "dist/packs/emerald/facility-interface.js": "51392e9880169535289f67cd336c5827568f7d69efe1bfc500eabef29624f903",
+    "tests/plugin-ui.test.js": "6c925ee3bc1edc5c5fc6c9942b9e26dbcf28fef6d894bf7e052ddf448f537dba",
+    "tests/helpers/layout-document.js": "e3e4fc1e2726c367a62f42b1b7f7b1b454a3c1622dc24abbc4e0a1943c645cc7",
+    "tests/contracts.typecheck.ts": "4aa366f89664b39eee6405a6bbab0efc9d93a12f4ccd640c40b27ee7e35ebb7c",
+    "examples/plugin-page.test.js": "4162e03a9c5b7ca43c878b0c9ae879e4f3f9e36d6c998c5d1d04620dc56f2378",
+    "examples/helpers/session.js": "0007d666875891732cffa787ba9addf0917d19a1eeb89f87b76752140ee476c7",
+    "skills/emerald-plugin-authoring/SKILL.md": "b92b073eb8d3e2d9846532659af5c39fe9988def9593a5713ca45db029c47059",
+    "docs/engine/presentation/UI_CONTRACT.md": "6b4e8ffdf6e35d22c02bd5fc671faf7d362627e7d7c56cc55895d6b4410b1f90",
+    "package.json": "fb38ff0a2f26a1ae296983b9c4445426ab85aaf011b0afd7d97c6babe1bdc72f",
+    "package-lock.json": "c1ed3cd34e892c6cc8c3cf579a6df00e623758c8cd5caa99bbb2309d1e998116"
+  }
+}

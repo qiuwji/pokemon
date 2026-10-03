@@ -7,6 +7,10 @@ import {
 } from "../../../engine/actor-repository.js";
 import { NPCBehaviorRegistry } from "../../../engine/npc-behaviors.js";
 import {
+  ActorScheduleRegistry,
+  actorAtRoutine,
+} from "../../../engine/actor-schedules.js";
+import {
   perceive,
   nextActorDirection,
 } from "../../../engine/actor-navigation.js";
@@ -22,6 +26,7 @@ export const ACTOR_PORTS = Object.freeze([
   "world",
   "canManageParty",
   "plugins",
+  "timeView",
 ]);
 /** Persistent actors use the existing field motion/collision. No second simulation or battle RNG stream. */
 export class ActorApplication {
@@ -29,10 +34,9 @@ export class ActorApplication {
     bindApplicationPorts(this, ports, ACTOR_PORTS);
     this.runtime = Object.freeze(
       Object.fromEntries(
-        ["context", "resolve", "intent", "step", "commit"].map((name) => [
-          name,
-          this[name].bind(this),
-        ]),
+        ["context", "resolve", "intent", "step", "commit", "reconcile"].map(
+          (name) => [name, this[name].bind(this)],
+        ),
       ),
     );
     this.api = Object.freeze({
@@ -41,26 +45,115 @@ export class ActorApplication {
       spawn: (template, position) => this.spawn(template, position),
       update: (uid, changes) => this.update(uid, changes),
       remove: (uid) => this.remove(uid),
+      routines: () =>
+        readOnly(
+          Object.fromEntries(
+            Object.entries(this.repository.state.records)
+              .map(([uid, r]) => [uid, this.routine(r)])
+              .filter(([, entry]) => entry),
+          ),
+        ),
     });
   }
   bind() {
     this.state.actors ||= emptyActors();
+    const behaviors = new NPCBehaviorRegistry(this.catalog.npcBehaviors, {
+      poses: new NPCPoseRegistry(this.catalog.npcPoses, {
+        actors: this.db.actors,
+      }),
+    });
+    const schedules = new ActorScheduleRegistry(this.catalog.actorSchedules, {
+      maps: this.db.maps,
+      behaviors,
+    });
     this.repository = new ActorRepository({
       state: this.state.actors,
       maps: this.db.maps,
       elevation: GEN3_ELEVATION,
       registry: new ActorTemplateRegistry(this.catalog.actorTemplates, {
         actors: this.db.actors,
-        behaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors, {
-          poses: new NPCPoseRegistry(this.catalog.npcPoses, {
-            actors: this.db.actors,
-          }),
-        }),
+        behaviors,
+        schedules,
       }),
     });
   }
   objects(map) {
-    return this.repository.objects(map);
+    return this.repository.objects(map).map((n) => {
+      const r = this.repository.record(n.id),
+        d = this.repository.registry.get(r.template),
+        entry = this.routine(r);
+      if (!entry) return n;
+      return {
+        ...n,
+        movement: {
+          ...d.config,
+          ...(entry.arrived ? entry.config || {} : {}),
+          mode: entry.arrived ? entry.behavior || d.behavior : "routine-travel",
+        },
+      };
+    });
+  }
+  routine(record) {
+    const id = this.repository.registry.get(record.template).schedule;
+    if (!id) return null;
+    const entry = this.repository.registry.schedules.select(
+      id,
+      this.timeView(),
+    );
+    return entry
+      ? readOnly({
+          ...entry,
+          arrived: actorAtRoutine(record, entry, GEN3_ELEVATION, this.db.maps),
+        })
+      : null;
+  }
+  /** Only unseen endpoints may catch up. Visible actors still use navigation and two-end reservations. */
+  reconcile({ now = 0, visibleMaps = [], paused = false } = {}) {
+    if (paused || this.field.npcs.scene) return;
+    for (const [uid, r] of Object.entries(this.repository.state.records)) {
+      const entry = this.routine(r);
+      if (
+        !entry ||
+        r.hidden ||
+        entry.offscreen !== "relocate" ||
+        visibleMaps.includes(r.map) ||
+        visibleMaps.includes(entry.position.map) ||
+        this.field.npcs.relocationBlocked(uid, now)
+      )
+        continue;
+      const p = entry.position,
+        pose = entry.pose || "still";
+      if (
+        r.map === p.map &&
+        r.x === p.x &&
+        r.y === p.y &&
+        r.dir === p.dir &&
+        (p.elevation === undefined || r.elevation === p.elevation) &&
+        r.pose === pose
+      )
+        continue;
+      if (
+        !this.free(p, uid) ||
+        this.world.maps[p.map].warps.some((w) => w.x === p.x && w.y === p.y)
+      )
+        continue;
+      const before = this.repository.view(uid),
+        after = this.repository.update(uid, { position: p, pose });
+      this.field.npcs.invalidate(before.map, uid);
+      this.field.npcs.invalidate(after.map, uid);
+      this.plugins?.events.emit("core:actor-relocated", {
+        before,
+        after,
+        routine: { schedule: entry.schedule, id: entry.id, day: entry.day },
+      });
+    }
+  }
+  tick(now, { visibleMaps, paused }) {
+    this.reconcile({
+      now,
+      visibleMaps,
+      paused: paused || !this.canManageParty(),
+    });
   }
   entities(map) {
     const result = this.field.npcs.objects(map).map((n) => ({
@@ -83,6 +176,7 @@ export class ActorApplication {
     return {
       identity: { uid: r.uid, template: r.template },
       state: r.data,
+      routine: this.routine(r),
       perception: perceive(
         this.world.maps,
         r,
@@ -104,6 +198,13 @@ export class ActorApplication {
     if (!n._actorUid) return intent;
     const record = this.repository.record(n._actorUid),
       d = this.repository.registry.get(record.template);
+    const routine = this.routine(record);
+    if (routine?.arrived && !intent.move && !intent.goal)
+      intent = {
+        ...intent,
+        dir: intent.dir || routine.position.dir,
+        pose: routine.pose || intent.pose,
+      };
     if (intent.state !== undefined)
       validateValue(d.schema, readOnly(intent.state, 8192));
     if (!intent.goal) return intent;

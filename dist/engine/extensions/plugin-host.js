@@ -115,6 +115,38 @@ export class PluginHost {
         id: owner,
         content: Object.freeze({
           register: (kind, id, value) => {
+            if (kind === "facilityActivities") {
+              const original = value;
+              value = {
+                ...value,
+                actions: Object.fromEntries(
+                  Object.entries(value.actions || {}).map(([id, action]) => [
+                    id,
+                    {
+                      ...action,
+                      decide: (context) =>
+                        evaluate(action.decide, readOnly(context)),
+                    },
+                  ]),
+                ),
+                ...(original.onBattle
+                  ? {
+                      onBattle: (context, result) =>
+                        evaluate(original.onBattle, readOnly(context), result),
+                    }
+                  : {}),
+                ...(original.validate
+                  ? {
+                      validate: (definition, references) =>
+                        evaluate(
+                          original.validate,
+                          readOnly(definition),
+                          readOnly(references),
+                        ),
+                    }
+                  : {}),
+              };
+            }
             if (kind === "conditionQueries") {
               const original = value;
               if (typeof original.read !== "function")
@@ -124,6 +156,26 @@ export class PluginHost {
                 schema: validateSchema(value.schema),
                 read: (state, input) =>
                   evaluate(original.read, readOnly(state), readOnly(input)),
+              };
+            }
+            if (kind === "battleAugments") {
+              const original = value;
+              if (
+                typeof original.select !== "function" ||
+                (original.requires !== undefined &&
+                  typeof original.requires !== "function")
+              )
+                throw new Error(
+                  "Battle augment requires synchronous selection/eligibility callbacks",
+                );
+              value = {
+                ...value,
+                select: (c) => evaluate(original.select, readOnly(c)),
+                ...(original.requires
+                  ? {
+                      requires: (c) => evaluate(original.requires, readOnly(c)),
+                    }
+                  : {}),
               };
             }
             if (kind === "battleStrategies") {
@@ -315,6 +367,9 @@ export class PluginHost {
           entry: (id, def) => staged.ui.register(owner, "entries", id, def),
           hud: (id, def) => staged.ui.register(owner, "hud", id, def),
           theme: (id, def) => staged.ui.register(owner, "themes", id, def),
+          region: (id, def) => staged.ui.register(owner, "regions", id, def),
+          component: (id, def) =>
+            staged.ui.register(owner, "components", id, def),
         }),
         presentation: Object.freeze({
           transition: (id, definition) => {

@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-04",
+  "baselineCommit": "43862f7",
+  "revision": "Working tree before checkpoint commit; recorded file hashes identify tested sources.",
+  "projectVersion": "0.18.0",
+  "saveVersion": 11,
+  "pluginApiVersion": 1,
+  "node": "v26.0.0",
+  "scope": "Actor calendar registration, visible navigation, explicit unseen relocation, derived query, save references, independent schedule plugin; current full regression and Skill examples.",
+  "reference": {
+    "path": "work/pokeemerald",
+    "sha": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "status": "clean, read-only reference",
+    "policy": "Actor schedule is a project extension, not a claim about original NPC routines."
+  },
+  "tests": [
+    {
+      "command": "node --test tests/actor-schedules.test.js",
+      "tests": 8,
+      "pass": 6,
+      "fail": 2,
+      "log": "Tool transcript; not saved as a raw log",
+      "note": "Fixture fixes: relocation listener must filter the tested UID; wall-clock rollback must retain a nonnegative sample. The two failures passed separately, all eight covered by final full suite."
+    },
+    {
+      "command": "node --test tests/actors.test.js tests/npc-behaviors.test.js tests/cutscene.test.js tests/world-state.test.js tests/world-time.test.js tests/application-services.test.js tests/architecture.test.js tests/plugins.test.js",
+      "tests": 85,
+      "pass": 85,
+      "fail": 0,
+      "log": "Tool transcript; not saved as a raw log"
+    },
+    {
+      "command": "node --test tests/*.test.js",
+      "tests": 687,
+      "pass": 671,
+      "fail": 16,
+      "exitCode": 1,
+      "log": "full-initial.log"
+    },
+    {
+      "command": "node --test tests/acro-input.test.js tests/evolution.test.js tests/growth-integration.test.js tests/inventory-integration.test.js tests/item-actions.test.js tests/movement-input.test.js tests/movement.test.js tests/p2-validation.test.js tests/presentation.test.js",
+      "tests": 101,
+      "pass": 101,
+      "fail": 0,
+      "exitCode": 0,
+      "log": "repairs.log",
+      "note": "Updated test arrangements to current bike permission, mandatory facility state, explicit inventory/item service and UI/document ports. No production compatibility fallback or removed assertions."
+    },
+    {
+      "command": "node --test tests/*.test.js",
+      "tests": 687,
+      "pass": 687,
+      "fail": 0,
+      "skip": 0,
+      "exitCode": 0,
+      "log": "full-final.log"
+    },
+    {
+      "command": "node --test examples/*.test.js",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "exitCode": 0,
+      "log": "examples.log"
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm run check",
+      "exitCode": 0,
+      "modules": 268,
+      "note": "Content references, strict public contract consumer and syntax. Result captured in tool transcript; raw log not saved."
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "markdownFiles": 63,
+      "localLinks": 400,
+      "synchronizedExamples": 9
+    },
+    {
+      "command": "python3 /Users/qiuji/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/emerald-actor-behaviors",
+      "exitCode": 1,
+      "note": "Validator unavailable in current Python: ModuleNotFoundError yaml. Actor Skill frontmatter unchanged from previous metadata proof; current links and executable example checked by check:docs. No package installed."
+    },
+    {
+      "command": "git diff --cached --check",
+      "exitCode": 0,
+      "note": "Captured validation logs keep their original whitespace through .gitattributes; source and docs retain whitespace checks."
+    }
+  ],
+  "notValidated": [
+    "Current browser composition/Actor routine observation/audio and complete original game content.",
+    "Strength/Flash and added presentation capabilities remain queued in STATUS."
+  ],
+  "invalidation": "Actor calendar schema/selection, clock semantics, NPC projection/control/reservations, map availability or save references invalidate relevant proofs. Full regression applies to this checkpoint; subsequent semantic changes require affected tests.",
+  "hashes": {
+    "dist/engine/actor-schedules.js": "7fdc9ef6829bf00b3ec6cf33620e3826b428c605e0c770afaa9aae412d70c8e3",
+    "dist/engine/actor-repository.js": "3a7d8f0e1253f9d75cf90fcd8cea6d8efc710c1ac2b338f1369e31836ea466b4",
+    "dist/engine/npcs.js": "514faaa6d274e4db3576b874f0ea1d94384d666b1ea226c9484298655c58e89a",
+    "dist/engine/npc-behaviors.js": "84cb4cc4c3753afffc430aff5fd3d880897d94adec08386887698f572016bbf2",
+    "dist/engine/extensions/catalog.js": "4a951490606d1a7db2b1cb6308e0a6bb8ca4eabbd4baf25a4102a626fc6a2c96",
+    "dist/engine/contracts.d.ts": "122a51715f2eb0a9ae42e4c951b966d9d8d2b2d2b7667d39729e8e6a16eff6e1",
+    "dist/packs/emerald/application/actor-application.js": "243b66f5d422cc6936d7a8fea2e4b3a941180578e68ba8c09bd067b07134b938",
+    "dist/packs/emerald/application/frame-application.js": "73a7de1de38be7a76213f79b6353e70524756dc8afde9b2ee943730886fa0cc8",
+    "dist/packs/emerald/application/composition.js": "494811a43eaaeb9a9f9cea9b14c864dd14939c56f3e5d67c5433f306e5be1a4f",
+    "dist/packs/emerald/application/world-application.js": "229eb9d1edcbe2479919fcd9f5822938f7d05f02e1b5b0f800533d6fdb631962",
+    "dist/packs/emerald/save-contract.js": "c97676f2704fcad19b5a5c35569ddf650224ff35fd6050c143f51b13d0375f61",
+    "dist/packs/emerald/extensions.js": "295668b6b2cf70f54156d9849e029af806bb33875d60b49ae00cbfaabf898bf2",
+    "dist/packs/emerald/extension-ports.js": "793c3bd96728ea9858df7e5e08790e9e4813545181e8070d63bff887fa12bd2a",
+    "dist/app.js": "69b474370d962b177934864ebbc5c22003b3ee91af2f1da70620bafdec0f72b0",
+    "dist/plugins/actor-day-cycle.js": "83aa8f1cede5079812f3785e9d965efe3a95dc3f5792c747717914cee1cfb81d",
+    "tests/actor-schedules.test.js": "091d02323d1c2626b4665e96d8672b5686c9f8e120afa62307e6a3215e944fe1",
+    "tests/acro-input.test.js": "d8ccd23164fae0b169b78f952a0d8262fa57dc1dd7f08b8ccf9284d414a237ec",
+    "tests/evolution.test.js": "ed10d7b4451c45463cb480500689948b286c3d39b5c88cc1c5af47450485c12a",
+    "tests/growth-integration.test.js": "65a7e166e0d0aff088beedc1218400cfdccbfb88f0f6baed936290afb81be329",
+    "tests/inventory-integration.test.js": "4321691d19304b770c14e1ead264ef08331f6a71d6c29b404082890a087d574d",
+    "tests/item-actions.test.js": "85e6e5cdcd97e384d8173d0979fb2d13e7671a7a65ff0dd2cc15f5c68f140fe0",
+    "tests/movement-input.test.js": "23aedf7001a0098cf798d0e44db5150c9c9ebaa1e7c59928f4ed1a79633d83eb",
+    "tests/movement.test.js": "1d6d154bcc5e0adee81288440f42ff7c0018358d7f64381a78502621a0e18939",
+    "tests/p2-validation.test.js": "c1adf66a25794eea628905c2c4ba64d0eb6fd7ecc1396b78f1b0938fc3d096a3",
+    "tests/presentation.test.js": "f969940d3b46825478ba0b754c32b672b6376248ad3570b353ae8290c5720022",
+    "tests/contracts.typecheck.ts": "e511c916fa9685e41e5426db0e23c9c1a64ef80ee00ac9c3cc462060f0599399"
+  },
+  "sourceSnapshot": {
+    "files": 372,
+    "algorithm": "sha256(sorted path + NUL + file SHA256, joined with LF)",
+    "digest": "ad29e3bcafdaf874b88a2c72751b4b46fff94e9c747beb1762b44f9cf3818b99",
+    "scope": "JS/MJS/TS/JSON/CSS/HTML/Python under dist/tests/examples/tools plus package metadata; excludes docs, raw logs, and the untracked .bak file."
+  }
+}
