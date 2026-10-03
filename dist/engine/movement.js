@@ -33,6 +33,24 @@ export class MovementRegistry {
         !/^[a-zA-Z0-9_.:-]{1,128}$/.test(definition.inputRule))
     )
       throw new Error("Invalid movement input rule reference");
+    if (
+      definition.ledge !== undefined &&
+      (!definition.ledge ||
+        !Number.isFinite(definition.ledge.durationMs) ||
+        definition.ledge.durationMs <= 0 ||
+        definition.ledge.durationMs > 60000 ||
+        !Array.isArray(definition.ledge.liftFrames) ||
+        definition.ledge.liftFrames.length < 2 ||
+        definition.ledge.liftFrames.length > 128 ||
+        definition.ledge.liftFrames.some(
+          (n) => !Number.isFinite(n) || n < 0 || n > 64,
+        ) ||
+        Object.keys(definition.ledge).some(
+          (k) => !["durationMs", "liftFrames"].includes(k),
+        ))
+    )
+      throw new Error("Invalid movement ledge profile");
+    const ledge = definition.ledge ? readOnly(definition.ledge) : undefined;
     const mapRequires =
       definition.mapRequires === undefined
         ? {}
@@ -68,18 +86,32 @@ export class MovementRegistry {
           (k) =>
             ![
               "name",
+              "menu",
               "pose",
               "jump",
               "keepFacing",
               "freezeAnimation",
               "oneStep",
+              "turnAt",
+              "liftFrames",
             ].includes(k),
         ) ||
         !value.name ||
         typeof value.name !== "string" ||
         typeof value.pose !== "string" ||
         !/^[a-zA-Z0-9_.:-]{1,128}$/.test(value.pose) ||
-        ["jump", "keepFacing", "freezeAnimation", "oneStep"].some(
+        (value.liftFrames !== undefined &&
+          (!Array.isArray(value.liftFrames) ||
+            value.liftFrames.length < 2 ||
+            value.liftFrames.length > 128 ||
+            value.liftFrames.some(
+              (n) => !Number.isFinite(n) || n < 0 || n > 64,
+            ))) ||
+        (value.turnAt !== undefined &&
+          (!Number.isFinite(value.turnAt) ||
+            value.turnAt < 0 ||
+            value.turnAt > 1)) ||
+        ["jump", "keepFacing", "freezeAnimation", "oneStep", "menu"].some(
           (k) => value[k] !== undefined && typeof value[k] !== "boolean",
         )
       )
@@ -89,6 +121,7 @@ export class MovementRegistry {
       id,
       Object.freeze({
         ...definition,
+        ledge,
         durations: Object.freeze([...definition.durations]),
         mapRequires,
         techniques,
@@ -148,6 +181,7 @@ export class MovementService {
       (id !== "normal" && !definition.techniques[id])
     )
       return { ok: false, reason: "Movement technique is unavailable" };
+    if (this.technique === id) return { ok: true, technique: id };
     this.technique = id;
     this.onChange(this.state.mode);
     return { ok: true, technique: id };

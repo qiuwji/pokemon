@@ -1,21 +1,18 @@
 import { objectSchema } from "../../extensions/values.js";
-import { BEHAVIOR as B } from "../../terrain.js";
-const frames = (n) => (n * 1000) / 60;
+import {
+  bikeFrames as frames,
+  canBikeFace as canFace,
+} from "./bike-input-helpers.js";
+import { GEN3_ACRO_INPUT } from "./acro-input.js";
 export const GEN3_MACH_DURATIONS = Object.freeze([
   frames(16),
   frames(8),
   frames(4),
 ]);
 const standing = () => ({ counter: 0, speed: 0, running: false });
-const canFace = (behavior, direction) => {
-  if ([B.ISOLATED_VERTICAL_RAIL, B.VERTICAL_RAIL].includes(behavior))
-    return ["up", "down"].includes(direction);
-  if ([B.ISOLATED_HORIZONTAL_RAIL, B.HORIZONTAL_RAIL].includes(behavior))
-    return ["left", "right"].includes(direction);
-  return true;
-};
 /** bike.c: Mach transitions retain speed during turns and coast through 4/8/16-frame steps. */
 export const GEN3_MOVEMENT_INPUTS = {
+  "acro-bike": GEN3_ACRO_INPUT,
   "mach-bike": {
     schema: objectSchema(
       {

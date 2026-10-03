@@ -210,7 +210,14 @@ export class FieldSession {
       });
     }
   }
-  face(direction, { duration = 0 } = {}) {
+  pose(direction, visual = {}) {
+    if (!DIRECTIONS[direction]) throw new Error("Invalid pose direction");
+    if (this.busy || this.disposed) return false;
+    this.position.dir = direction;
+    this.motion.idle(visual.pose || "normal", this.now(), direction);
+    return true;
+  }
+  face(direction, { duration = 0, visual = {} } = {}) {
     if (
       !DIRECTIONS[direction] ||
       !Number.isFinite(duration) ||
@@ -226,6 +233,7 @@ export class FieldSession {
         duration,
         mode: this.movement?.state.mode || "walk",
         freezeAnimation: true,
+        ...visual,
       });
     else this.motion.snap(this.position);
     this.movement?.reset();
@@ -275,6 +283,9 @@ export class FieldSession {
     }
     if (duration !== undefined && this.movementPlan)
       this.movementPlan.duration = duration;
+    const ledge = result.jump
+      ? this.movement?.registry.get(this.stepMode).ledge
+      : null;
     this.motion.begin(from, this.position, this.now(), {
       running,
       ...(this.movementPlan
@@ -284,6 +295,11 @@ export class FieldSession {
       jump: !!result.jump || !!visual.jump,
       freezeAnimation: !!visual.freezeAnimation,
       pose: visual.pose || this.movement?.technique || "normal",
+      turnAt: visual.turnAt,
+      liftFrames: visual.liftFrames,
+      ...(result.jump
+        ? { duration: ledge?.durationMs, liftFrames: ledge?.liftFrames }
+        : {}),
     });
     this.lastDirection = direction;
     this.lastStep = {

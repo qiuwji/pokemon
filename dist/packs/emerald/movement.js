@@ -4,6 +4,8 @@ import { isWater, BEHAVIOR } from "../../engine/terrain.js";
 const land = ({ cell, warp }) =>
   !isWater(cell.behavior) && (cell.collision === 0 || !!warp);
 const field = ({ map }) => !map.indoor;
+const lowJump = [0, 2, 3, 4, 5, 6, 6, 6, 5, 5, 4, 3, 2, 0, 0, 0];
+const normalJump = [2, 4, 6, 8, 9, 10, 10, 10, 9, 8, 6, 5, 3, 2, 0, 0];
 const capability = (id, c) => c.scripted || !!c.capabilities?.[id];
 export const MOVEMENT_MODES = {
   walk: {
@@ -32,15 +34,32 @@ export const MOVEMENT_MODES = {
   "acro-bike": {
     name: "越野自行车",
     actor: "BrendanAcroBike",
-    durations: [96],
+    durations: [6000 / 60],
+    inputRule: "acro-bike",
+    ledge: {
+      durationMs: 32000 / 60,
+      liftFrames: [4, 6, 8, 10, 11, 12, 12, 12, 11, 10, 9, 8, 6, 4, 0, 0],
+    },
     techniques: {
+      "wheelie-rise": { name: "抬轮", menu: false, pose: "wheelie-rise" },
+      "wheelie-lower": { name: "收轮", menu: false, pose: "wheelie-lower" },
+      "turn-jump": {
+        name: "转向跳",
+        menu: false,
+        pose: "turn-jump",
+        jump: true,
+        oneStep: true,
+        turnAt: 0.5,
+        liftFrames: normalJump,
+      },
       wheelie: { name: "抬起前轮", pose: "wheelie" },
-      hop: { name: "连续跳跃", pose: "hop", jump: true },
+      hop: { name: "连续跳跃", pose: "hop", jump: true, liftFrames: lowJump },
       "side-hop": {
         name: "侧向跳跃",
         pose: "side-hop",
         jump: true,
         keepFacing: true,
+        liftFrames: normalJump,
         oneStep: true,
       },
     },

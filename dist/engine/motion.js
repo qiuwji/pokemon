@@ -103,11 +103,19 @@ export class GridMotion {
     this.running = false;
     this.jump = false;
   }
+  idle(pose, now, direction) {
+    if (this.idlePose !== pose || this.idleDirection !== direction)
+      this.idleStart = now;
+    this.idlePose = pose;
+    this.idleDirection = direction;
+  }
   snap(position) {
     this.from = this.graph.point(position);
     this.to = { ...position };
     this.duration = 0;
     this.dir = position.dir;
+    this.idlePose = "normal";
+    this.idleStart = 0;
   }
   moving(now) {
     return this.to !== null && now < this.start + this.duration;
@@ -123,6 +131,8 @@ export class GridMotion {
       mode = running ? "run" : "walk",
       freezeAnimation = false,
       pose = "normal",
+      turnAt = 0,
+      liftFrames = null,
     } = {},
   ) {
     const a = this.graph.point(from),
@@ -133,6 +143,8 @@ export class GridMotion {
     this.jump = jump;
     this.freezeAnimation = freezeAnimation;
     this.pose = pose;
+    this.turnAt = turnAt || 0;
+    this.liftFrames = liftFrames;
     if (a.zone !== b.zone || Math.abs(a.x - b.x) + Math.abs(a.y - b.y) > 32) {
       this.snap(to);
       return false;
@@ -141,11 +153,11 @@ export class GridMotion {
     this.from = a;
     this.to = { ...to };
     this.start = now;
-    this.duration = jump ? 256 : (duration ?? (running ? 96 : 160));
+    this.duration = duration ?? (jump ? 256 : running ? 96 : 160);
     this.foot = (this.foot + 1) % 2;
     return true;
   }
-  sample(position, now) {
+  sample(position, now, { reducedMotion = false } = {}) {
     if (
       !this.to ||
       this.to.map !== position.map ||
@@ -171,13 +183,32 @@ export class GridMotion {
       zone: end.zone,
       progress: t,
       moving: t < 1,
-      dir: t < 1 ? this.dir : position.dir,
+      dir:
+        t < this.turnAt
+          ? this.sourcePosition.dir
+          : t < 1
+            ? this.dir
+            : position.dir,
       running: t < 1 && this.running,
       mode: this.mode || "walk",
       foot: this.foot,
       freezeAnimation: t < 1 && !!this.freezeAnimation,
-      pose: t < 1 ? this.pose : "normal",
-      lift: this.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0,
+      pose: t < 1 ? this.pose : this.idlePose || "normal",
+      animationTimeMs:
+        t < 1
+          ? Math.max(0, now - this.start)
+          : Math.max(0, now - (this.idleStart || 0)),
+      lift:
+        !reducedMotion && this.jump && t < 1
+          ? this.liftFrames
+            ? this.liftFrames[
+                Math.min(
+                  this.liftFrames.length - 1,
+                  Math.floor(t * this.liftFrames.length),
+                )
+              ]
+            : Math.sin(t * Math.PI) * 8
+          : 0,
     };
   }
 }

@@ -35,7 +35,7 @@ api.content.register("movement", "hover", {
 
 `objectSchema` 使用公开 extensions/values.js，actor 必须已注册。没有 inputRule 时使用普通方向步进，running 仍经 MovementService 的资格和模式选择。引用缺失在内容装配时失败。
 
-策略上下文深度只读：mode、state、timeMs、input、previousInput、busy、blocked、position、cell、momentum。回调必须同步，插件评价期间不能重入宿主命令。返回 `{state, action?}`，state 通过策略 schema；action 为 step 或 turn，含 direction、可选 durationMs 与已注册 technique。busy 时不能返回动作。时长须为有限正数且不超过 60 秒；World/地形仍能拒绝通行或指定更优先的动作表现，不会因为输入策略绕过碰撞。
+策略上下文深度只读：mode、state、timeMs、input、previousInput、busy、blocked、position、cell、momentum。回调必须同步，插件评价期间不能重入宿主命令。返回 `{state, action?}`，state 通过策略 schema；action 为 step、turn 或不推进格子的 pose，含 direction、可选 durationMs 与已注册 technique。busy 时不能返回动作。时长须为有限正数且不超过 60 秒；World/地形仍能拒绝通行或指定更优先的动作表现，不会因为输入策略绕过碰撞。
 
 `core.field.input {direction?, secondary?, running?}` 要求 movement 权限；省略 direction 表示松开方向。公开消息可在其他命令执行时采样，但应用锁决定是否允许行为。`core.field.input-reset {}` 清控制记忆。宿主按自己的时钟采样，客户端不能注入 now、速度、位置或领域结果。网络客户端如需持续操控，应持续发送逻辑快照；单条消息不是永久遥控托管。
 
@@ -51,7 +51,7 @@ api.content.register("movement", "hover", {
 - 碰撞反馈清速度；轨道朝向约束阻止非法转身，移动中对应减速处理。转向不增加行走步数、遭遇或成长时钟。
 - GridMotion 以完整截止时间比较完成，避免小数帧相加/相减误差造成到期后多锁一帧；sample 与 moving 一致。
 
-本模块不是全原作输入状态机完成。Acro 的 6 帧转向等待、4 帧方向+B历史、40 帧蓄跳、原地跳、侧跳/转向跳、原作图像帧仍待下一项。骑行道路强制下行/成绩、完整水陆步长和全部强制地形的原帧时序也未核对。禁止把当前 Mach 证据扩大成整个移动系统逐帧复刻。
+Acro 的输入与帧序列现已补充，具体范围见下节。骑行道路强制下行/成绩、完整水陆步长和全部强制地形的原帧时序也未核对。禁止把当前 Mach 证据扩大成整个移动系统逐帧复刻。
 
 ## 裂地板的行动优先级
 
@@ -68,3 +68,17 @@ api.content.register("movement", "hover", {
 受影响 movement/terrain/application/architecture 首次 37 项中 36 通过；旧速度断言更新后，只重查该项通过，小数截止检查在此时修正。后续机关/野外行动/剧情/应用/架构 63 项中 62 通过；保存计时夹具此前只把 field.tick 推到未来而没有推进共享时钟，统一其暂停/时钟后只重查该项通过。公开类型检查通过。未重复全工程检查或浏览器系统验收。
 
 改动输入边沿/策略记忆、暂停/清输入、field busy/转向、步长/截止时间、机关请求优先级或其插件边界时重查受影响用例。其他已经验证且未改变模块沿用记录；最终 E 做统一回归与真实浏览器检查。
+
+## Acro 输入与 Actor 帧序列（2026-10-03）
+
+`rules/gen3/acro-input.js` 处理逻辑输入、短期记忆与动作计划；FieldSession 执行占位/碰撞/计步，GridMotion 采样位移、跳跃高度、半程转向。站立动作和 pose 不增加遭遇或行走计数。普通骑行 6 帧、抬轮/收轮/抬轮移动 8 帧、原地/侧向/转向跳 16 帧；两格跳崖使用独立可配置 ledge profile（32 帧、高度 12）。内部阶段 menu:false。暂停/模式切换清控制记忆与待机姿态，已开始的位移正常完成。
+
+方向与 B 近邻历史支持侧跳；反方向原地跳在中点改变呈现朝向。侧跳保留面向，轨道只允许垂直于目标轴的侧向跳入；受阻改普通转向。抬轮受阻原地踩踏，颠簸坡保持抬轮。40 帧站立蓄跳后连续原地跳。帧边界只修正浮点残差，不将真实亚帧延迟提前取整。
+
+资料：固定参考 src/bike.c、field_player_avatar.c、event_object_movement.c（Acro handlers、跳跃高度、JumpInPlaceTurnAround），及 src/data/object_events/object_event_anims.h。`tools/import-actor-animations.py work/pokeemerald` 导入只读 C 序列与已存在 PNG 的帧数，不更改像素/参考；重新运行 import-movement.py 后再运行此元数据导入。
+
+Actor 可配置 animations[pose]={idle,move?}，序列含 loop 与四方向 {index,durationMs}[]，frameCount 校验边界。presentation/sprite-animation.js 无浏览器/RNG，按时钟采样、统一 reducedMotion；Canvas 只选纹理和绘制。原 Acro 27 帧中的抬轮、收轮、抬轮移动已接线，其他 pose 使用既有方向帧。其他游戏可注册自己的序列。
+
+新增 Acro 9 项分别通过：真实 FieldSession 输入/普通骑行、历史侧跳、半程转向跳、蓄跳、颠簸坡/受阻、轨道拒绝/接受、暂停/模式与位移、原序列/校验/减动效、跳崖。初始夹具缺 transitions 已修；截止浮点残差和轨道分支绕过在失败用例修正，只重查失败。相关 65 项首次 64 通过，独立策略测试误带另一模式 inputRule 后修正，只重查失败项通过。后加 ledge 新证明通过。公开类型检查通过，新增 ledge 字段在音频阶段合并检查。全工程/浏览器回归留 E。
+
+不宣称逐位重放 GBA 帧任务、全部碰撞回调、骑行道路成绩或全部地图素材。原 C/D/E 继续。输入/碰撞/位移/采样/资源字段改动使对应证据失效，未变化模块沿用记录。

@@ -609,6 +609,9 @@ export interface MovementTechnique {
   keepFacing?: boolean;
   freezeAnimation?: boolean;
   oneStep?: boolean;
+  menu?: boolean;
+  turnAt?: number;
+  liftFrames?: number[];
 }
 export interface TerrainContext {
   readonly actor?: Readonly<{
@@ -673,6 +676,7 @@ export interface MovementDefinition {
   mapRequires?: Record<string, string | number | boolean>;
   techniques?: Record<string, MovementTechnique>;
   inputRule?: string;
+  ledge?: { durationMs: number; liftFrames: number[] };
   durations: number[];
   allowed?: (context: Readonly<Json>) => boolean;
   traverse?: (context: Readonly<Json>) => boolean;
@@ -684,7 +688,7 @@ export interface LogicalMovementInput {
   running: boolean;
 }
 export interface MovementInputAction {
-  kind: "step" | "turn";
+  kind: "step" | "turn" | "pose";
   direction: Direction;
   durationMs?: number;
   technique?: string;
@@ -935,4 +939,17 @@ export interface NPCPoseDefinition {
   periodMs?: number;
   stepPeriodMs?: number;
   actor?: string;
+}
+
+/** Sprite frames are presentation data, independent of movement and gameplay. */
+export interface SpriteFrame {
+  index: number;
+  durationMs: number;
+}
+export interface SpriteSequence {
+  loop: boolean;
+  directions: Record<Direction, SpriteFrame[]>;
+}
+export interface SpriteAnimationCatalog {
+  [pose: string]: { idle: SpriteSequence; move?: SpriteSequence };
 }

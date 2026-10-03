@@ -1,3 +1,4 @@
+import { sampleSpriteAnimation } from "../presentation/sprite-animation.js";
 import {
   drawWeather,
   drawDaylight,
@@ -50,7 +51,16 @@ export class Renderer {
       jump,
     });
   }
-  actor(name, x, y, dir = "down", progress = 1, foot = 0, moving = false) {
+  actor(
+    name,
+    x,
+    y,
+    dir = "down",
+    progress = 1,
+    foot = 0,
+    moving = false,
+    animation = {},
+  ) {
     const image = this.assets[`actor-${name}`],
       def = this.db.actors[name];
     if (!image || !def) return;
@@ -64,7 +74,15 @@ export class Renderer {
         foot,
         moving,
       );
-    let frame = actorFrame(dir, progress, foot, moving, def.frames);
+    let frame =
+      sampleSpriteAnimation(
+        def.animations,
+        animation.pose,
+        dir,
+        animation.timeMs || 0,
+        moving,
+        { reducedMotion: this.reducedMotion() },
+      ) || actorFrame(dir, progress, foot, moving, def.frames);
     if (frame.index * def.w >= image.width) frame = { index: 0, flip: false };
     const c = this.ctx,
       dx = Math.round(x + (def.offsetX || 0)),
@@ -177,7 +195,9 @@ export class Renderer {
     this.mapProvider = (id) => world.maps[id];
     const p = world.position,
       m = world.map,
-      player = this.motion.sample(p, now),
+      player = this.motion.sample(p, now, {
+        reducedMotion: this.reducedMotion(),
+      }),
       c = this.ctx;
     this.camera = this.cameraAt(p, now);
     const ids = this.graph.visible(p.map, this.camera),
@@ -270,6 +290,7 @@ export class Renderer {
             n.progress,
             n.foot,
             n.moving && !n.freezeAnimation,
+            { pose: n.pose, timeMs: n.animationTimeMs },
           );
         } else if (n.species) {
           const image = this.assets[n.species + "-front"];
@@ -297,6 +318,7 @@ export class Renderer {
             n.progress,
             n.foot,
             n.moving,
+            { pose: n.pose, timeMs: now },
           );
         c.restore();
       }

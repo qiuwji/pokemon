@@ -109,7 +109,9 @@ export const EMERALD_TERRAIN_RULES = {
     before: (c) => ({
       allowed:
         c.mode === "acro-bike" &&
-        ["wheelie", "hop"].includes(c.technique) &&
+        ["wheelie", "wheelie-rise", "wheelie-lower", "hop"].includes(
+          c.technique,
+        ) &&
         c.cell.collision === 0,
       jump: c.technique === "hop",
       pose: c.technique,
@@ -123,8 +125,11 @@ export const EMERALD_TERRAIN_RULES = {
       allowed:
         c.mode === "acro-bike" &&
         c.cell.collision === 0 &&
-        (c.technique === "side-hop" ||
-          (aligned(railAxis(c.cell.behavior), c.dir) &&
+        ((c.technique === "side-hop" &&
+          (!railAxis(c.cell.behavior) ||
+            !aligned(railAxis(c.cell.behavior), c.dir))) ||
+          (c.technique !== "side-hop" &&
+            aligned(railAxis(c.cell.behavior), c.dir) &&
             aligned(railAxis(c.sourceCell.behavior), c.dir))),
       jump: c.technique === "side-hop",
       keepFacing: c.technique === "side-hop",

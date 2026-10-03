@@ -90,7 +90,6 @@ test("Rail-facing constraints prevent illegal idle turns and respect moving dece
 });
 test("Control policies must be synchronous and read-only; invalid actions cannot commit memory", () => {
   const d = {
-    ...MOVEMENT_MODES,
     "mach-bike": { ...MOVEMENT_MODES["mach-bike"], inputRule: "test" },
   };
   for (const decide of [

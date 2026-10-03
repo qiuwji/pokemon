@@ -38,6 +38,12 @@ export class MovementApplication {
   }
   resetFieldInput() {
     this.input?.reset();
+    this.movement?.setTechnique("normal", this.world.map);
+    this.field?.motion.idle(
+      "normal",
+      this.timeline.now(),
+      this.state.position.dir,
+    );
   }
   handleFieldInput(input) {
     const paused = !!(
@@ -63,18 +69,23 @@ export class MovementApplication {
           momentum: { ...this.movement.momentum },
         },
       });
+    if (paused) this.resetFieldInput();
     if (!action) return false;
     if (action.technique !== undefined)
       this.movement.setTechnique(action.technique, this.world.map);
+    const visual = this.movement.techniqueVisual();
     const result =
-      action.kind === "turn"
-        ? this.field.face(action.direction, {
-            duration: action.durationMs || 0,
-          })
-        : this.stepField(action.direction, {
-            running: input.running,
-            ...(action.durationMs ? { duration: action.durationMs } : {}),
-          });
+      action.kind === "pose"
+        ? this.field.pose(action.direction, visual)
+        : action.kind === "turn"
+          ? this.field.face(action.direction, {
+              duration: action.durationMs || 0,
+              visual,
+            })
+          : this.stepField(action.direction, {
+              running: input.running,
+              ...(action.durationMs ? { duration: action.durationMs } : {}),
+            });
     this.input.feedback(result);
     return result;
   }
@@ -139,7 +150,7 @@ export class MovementApplication {
     )
       return { ok: false, reason: "请先上岸。" };
     const result = this.movement.set(mode, this.world.map);
-    if (result.ok) this.input.reset();
+    if (result.ok) this.resetFieldInput();
     if (!result.ok) result.reason = "这里不能使用这辆自行车。";
     return result;
   }
@@ -147,10 +158,12 @@ export class MovementApplication {
     const definition = this.movement.registry.get(this.state.movement.mode);
     return [
       { id: "normal", name: "普通骑行" },
-      ...Object.entries(definition.techniques).map(([id, t]) => ({
-        id,
-        name: t.name,
-      })),
+      ...Object.entries(definition.techniques)
+        .filter(([, t]) => t.menu !== false)
+        .map(([id, t]) => ({
+          id,
+          name: t.name,
+        })),
     ];
   }
   setMovementTechnique(id) {

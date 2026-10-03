@@ -1,3 +1,4 @@
+import { validateSpriteAnimations } from "../../engine/extensions/sprite-contracts.js";
 import { MovementInputRegistry } from "../../engine/movement-input.js";
 import { GEN3_MOVEMENT_INPUTS } from "../../engine/rules/gen3/bike-input.js";
 import { FieldDeviceCatalog } from "../../engine/field-devices.js";
@@ -99,6 +100,8 @@ export function createEmeraldPlugins(db, plugins, onError) {
     battleStates.validateEffects(effects);
     forms.validateEffects(effects);
     createItemService(c.items);
+    for (const actor of Object.values(c.actors))
+      validateSpriteAnimations(actor);
     new MovementInputRegistry(c.movementInputs).validateMovement(
       new MovementRegistry(c.movement),
     );

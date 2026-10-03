@@ -98,7 +98,7 @@ export class MovementInputSession {
     if (
       a != null &&
       (!exact(a, ["kind", "direction", "durationMs", "technique"]) ||
-        !["step", "turn"].includes(a.kind) ||
+        !["step", "turn", "pose"].includes(a.kind) ||
         !directions.includes(a.direction) ||
         (a.durationMs !== undefined &&
           (!Number.isFinite(a.durationMs) ||
