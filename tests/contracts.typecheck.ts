@@ -268,3 +268,14 @@ const readonlyLearning: LearningMethodDefinition = {
     return true;
   },
 };
+
+const storm: import("../dist/engine/contracts.js").WeatherDefinition = {
+  label: "自定义风暴",
+  visual: "garden:storm",
+  battle: "garden:storm",
+};
+const stormBattle: import("../dist/engine/contracts.js").BattleWeatherDefinition =
+  { residual: { divisor: 16, immuneTypes: ["steel"] } };
+const regionWeather: import("../dist/engine/contracts.js").MapWeatherDefinition =
+  { default: "clear", regions: [{ x: 1, y: 1, weather: "garden:storm" }] };
+void [storm, stormBattle, regionWeather];

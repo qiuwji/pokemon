@@ -59,7 +59,11 @@ const view = {
       },
     },
   ],
-  environment: { weather: "rain", terrain: "water" },
+  environment: {
+    weather: "rain",
+    weatherVisual: "weather.rain",
+    terrain: "water",
+  },
 };
 test("Animation declarations reject unknown effects and malformed timing, then seal against changes", () => {
   const registry = new PresentationRegistry().effect("test", () => {});

@@ -1,3 +1,5 @@
+import { BattleWeatherRegistry } from "./battle/weather.js";
+import { GEN3_BATTLE_WEATHER } from "./rules/gen3/weather.js";
 import { BattleHeldItems } from "./battle/held-items.js";
 import { BattleSpoils } from "./battle/spoils.js";
 import { BattleReplacementRequests } from "./battle/replacement-requests.js";
@@ -49,6 +51,7 @@ export class Battle {
     format = "singles",
     ai = randomDecision,
     environment = {},
+    weatherDefinitions = GEN3_BATTLE_WEATHER,
     states = {},
     formDefinitions = {},
     formRecords = {},
@@ -61,6 +64,12 @@ export class Battle {
     if (!["singles", "doubles"].includes(format))
       throw new Error("Unknown battle format");
     Object.assign(this, { db, rng, trainer, trainerId, script, items, ai });
+    this.weatherRegistry = new BattleWeatherRegistry(weatherDefinitions);
+    if (environment.weather !== undefined && environment.weather !== null)
+      this.weatherRegistry.get(environment.weather);
+    this.weather = environment.weather
+      ? { kind: environment.weather, turns: null }
+      : null;
     this.environment = { terrain: environment.terrain || "grass" };
     this.turnOrder = [];
     this.rules = { ...BATTLE_RULES, ...rules };
@@ -69,6 +78,11 @@ export class Battle {
         ? effects
         : new MoveEffectRegistry({ definitions: effects });
     this.moveEffects.validateMoves(db.moves);
+    this.weatherRegistry.validateEffects(this.moveEffects, [
+      ...Object.values(traits.abilities),
+      ...Object.values(traits.heldItems),
+      ...Object.values(states),
+    ]);
     // Form reference validation follows roster/form construction.
     this.roster = new BattleRoster(
       topology ||
@@ -235,11 +249,15 @@ export class Battle {
     return this.recorder.snapshot();
   }
   decisionView() {
+    const weather = this.traits?.weather() || null;
     return {
       homeAlliance: this.homeAlliance,
       environment: {
         ...this.environment,
-        weather: this.traits?.weather() || null,
+        weather,
+        weatherVisual: weather
+          ? this.weatherRegistry.get(weather).visual || null
+          : null,
       },
       actionLifecycle: this.actionLifecycle?.view(),
       replacements: this.replacements?.view() || [],

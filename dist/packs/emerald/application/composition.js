@@ -1,3 +1,4 @@
+import { WeatherApplication, WEATHER_PORTS } from "./weather-application.js";
 import { DeviceApplication, DEVICE_PORTS } from "./device-application.js";
 import { ActorApplication, ACTOR_PORTS } from "./actor-application.js";
 import { CropApplication, CROP_PORTS } from "./crop-application.js";
@@ -34,6 +35,9 @@ export function composeApplications(applications, read, { storage }) {
   applications.save = new SaveApplication(
     liveApplicationPorts(read, SAVE_PORTS, { storage }),
   );
+  applications.weather = new WeatherApplication(
+    liveApplicationPorts(read, WEATHER_PORTS),
+  );
   applications.actors = new ActorApplication(
     liveApplicationPorts(read, ACTOR_PORTS),
   );
@@ -41,7 +45,9 @@ export function composeApplications(applications, read, { storage }) {
     liveApplicationPorts(read, CROP_PORTS),
   );
   applications.time = new TimeApplication(
-    liveApplicationPorts(read, TIME_PORTS),
+    liveApplicationPorts(read, TIME_PORTS, {
+      advanceWeatherDays: (days) => applications.weather.days(days),
+    }),
   );
   applications.inventory = new InventoryApplication(
     liveApplicationPorts(read, INVENTORY_PORTS, {}),
@@ -77,6 +83,8 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.world = new WorldApplication(
     liveApplicationPorts(read, WORLD_PORTS, {
+      enterWeather: (map) => applications.weather.enter(map),
+      stepWeather: (position) => applications.weather.step(position),
       bindMovement: () => applications.movement.bind(),
       bindDevices: (options) => applications.devices.bind(options),
       interactDevice: () => applications.devices.interactFront(),
@@ -101,10 +109,15 @@ export function composeApplications(applications, read, { storage }) {
     liveApplicationPorts(read, BATTLE_PORTS, {}),
   );
   applications.story = new StoryApplication(
-    liveApplicationPorts(read, STORY_PORTS, {}),
+    liveApplicationPorts(read, STORY_PORTS, {
+      validateWeatherCommand: (command) =>
+        applications.weather.validateStory(command),
+      performStoryWeather: (command) => applications.weather.story(command),
+    }),
   );
   applications.frame = new FrameApplication(
     liveApplicationPorts(read, FRAME_PORTS, {
+      tickWeather: (...args) => applications.weather.tick(...args),
       tickDevices: (...args) => applications.devices.tick(...args),
     }),
   );

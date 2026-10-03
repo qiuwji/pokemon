@@ -20,6 +20,9 @@ import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "advanceTravelClocks",
   "timeView",
+  "weatherView",
+  "enterWeather",
+  "stepWeather",
   "actorObjects",
   "actorRuntime",
   "actionBusy",
@@ -178,6 +181,7 @@ export class WorldApplication {
     return {
       map: this.worldState.map(map, draft),
       entered: () => {
+        this.enterWeather(map);
         this.deviceEvent("activate", this.state.position);
         this.plugins?.events.emit("core:world-visit", {
           map,
@@ -369,7 +373,10 @@ export class WorldApplication {
       npcContext: (map, n) => ({
         ...this.actorRuntime.context(map, n),
         time: this.timeView(),
-        environment: this.worldState.maps[map].presentation || {},
+        environment: {
+          ...this.worldState.maps[map].presentation,
+          weather: this.weatherView(map).kind,
+        },
       }),
       now: this.timeline.now,
       objects: (map) =>
@@ -378,7 +385,10 @@ export class WorldApplication {
           .filter((e) =>
             matchesCondition(e.requires, this.state, this.conditionQueries),
           ),
-      onStep: (cell) => this.step(cell),
+      onStep: (cell) => {
+        this.stepWeather(this.state.position);
+        this.step(cell);
+      },
       onStart: ({ from, position }) => {
         this.deviceEvent("leave", from, { position });
         const map = this.worldState.maps[from.map],

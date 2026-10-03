@@ -333,7 +333,7 @@ export function validateActionPolicy(policy) {
     throw new Error("Invalid concealed state");
   if (
     policy.skipWeather !== undefined &&
-    !["sun", "rain", "sand", "hail"].includes(policy.skipWeather)
+    (typeof policy.skipWeather !== "string" || !policy.skipWeather)
   )
     throw new Error("Invalid charging weather");
   if (

@@ -1,5 +1,6 @@
 export const EMERALD_PLUGIN_PERMISSIONS = Object.freeze([
   "time",
+  "weather",
   "crops",
   "actors",
   "timeControl",
@@ -32,6 +33,16 @@ import { validateReward } from "../../engine/story.js";
 const id = { type: "string", minLength: 1, maxLength: 128 };
 const schemas = Object.fromEntries(
   Object.entries({
+    weather: objectSchema(
+      {
+        kind: { type: "string", enum: ["weather"] },
+        map: id,
+        weather: id,
+        clear: { type: "boolean" },
+        durationMs: { type: "integer", minimum: 1, maximum: 31536000000 },
+      },
+      ["kind", "map"],
+    ),
     friendship: objectSchema(
       {
         kind: { type: "string", enum: ["friendship"] },
@@ -93,6 +104,13 @@ export function validateEmeraldIntent(intent, owner, items) {
     validateReward(intent.reward, items);
     return;
   }
+  if (
+    intent.kind === "weather" &&
+    (intent.clear === true
+      ? intent.weather !== undefined || intent.durationMs !== undefined
+      : !intent.weather)
+  )
+    throw new Error("Specify a weather selection or clear the override");
   const schema = schemas[intent.kind];
   if (!schema) throw new Error("Unknown core intent");
   validateValue(schema, intent, "intent");

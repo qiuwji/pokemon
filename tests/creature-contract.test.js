@@ -1,3 +1,4 @@
+import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -15,6 +16,7 @@ const db = JSON.parse(
   fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
 );
 const state = () => ({
+  weather: emptyWeather(),
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [createMonster("mudkip", 5, db, new Random(4))],
   box: [],

@@ -412,6 +412,8 @@ export type ContentKind =
   | "evolutions"
   | "items"
   | "learningMethods"
+  | "weather"
+  | "battleWeather"
   | "abilities"
   | "heldItems"
   | "moveEffects"
@@ -1010,4 +1012,40 @@ export interface SpriteSequence {
 }
 export interface SpriteAnimationCatalog {
   [pose: string]: { idle: SpriteSequence; move?: SpriteSequence };
+}
+
+/** A world selection may have a different battle identity or none. Cycles select saved day or foreground phase. */
+export interface WeatherDefinition {
+  label: string;
+  visual?: string;
+  battle?: string;
+  cycle?: readonly string[];
+  periodMs?: number;
+}
+export interface BattleWeatherDefinition {
+  visual?: string;
+  weatherBall?: string;
+  residual?: { divisor: number; immuneTypes: readonly string[] };
+}
+export interface MapWeatherDefinition {
+  default: string;
+  regions?: readonly {
+    x: number;
+    y: number;
+    width?: number;
+    height?: number;
+    elevation?: number;
+    weather: string;
+  }[];
+}
+export interface WeatherView {
+  readonly map: string;
+  readonly kind: string;
+  readonly selection: string;
+  readonly source: "map" | "override" | "coordinate" | "script";
+  readonly label: string;
+  readonly visual: string | null;
+  readonly battle: string | null;
+  readonly day: number;
+  readonly revision: number;
 }

@@ -13,6 +13,11 @@ export function createEmeraldCommandFacade(
     to: plan.to,
   });
   const routes = {
+    setWeather: (map, weather, durationMs = null) => [
+      "weather.set",
+      { map, weather, ...(durationMs !== null ? { durationMs } : {}) },
+    ],
+    clearWeather: (map) => ["weather.clear", { map }],
     teachMove: (method, uid, index) => [
       "learning.teach",
       { method, uid, ...(index !== undefined ? { index } : {}) },

@@ -1,3 +1,10 @@
+import { WeatherRegistry } from "../../engine/weather.js";
+import { BattleWeatherRegistry } from "../../engine/battle/weather.js";
+import {
+  GEN3_WORLD_WEATHER,
+  GEN3_BATTLE_WEATHER,
+} from "../../engine/rules/gen3/weather.js";
+import { WEATHER_EFFECTS } from "../../presentation/weather-effects.js";
 import { validateSpriteAnimations } from "../../engine/extensions/sprite-contracts.js";
 import { MovementInputRegistry } from "../../engine/movement-input.js";
 import { GEN3_MOVEMENT_INPUTS } from "../../engine/rules/gen3/bike-input.js";
@@ -46,6 +53,7 @@ import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
 import { ITEMS } from "./items.js";
 /** Content-pack adapter validates extension content using the same domain contracts as built-ins. */
 export function createEmeraldPlugins(db, plugins, onError) {
+  db = emeraldDatabase(db);
   const resources = Object.fromEntries(
     Object.keys(db.species).map((id) => [
       id + "-front",
@@ -57,8 +65,8 @@ export function createEmeraldPlugins(db, plugins, onError) {
     base: {
       ...db,
       resources,
-      moves: emeraldDatabase(db).moves,
-      species: emeraldDatabase(db).species,
+      weather: GEN3_WORLD_WEATHER,
+      battleWeather: GEN3_BATTLE_WEATHER,
       learningMethods: EMERALD_LEARNING_METHODS,
       trainers: TRAINERS,
       items: ITEMS,
@@ -95,8 +103,27 @@ export function createEmeraldPlugins(db, plugins, onError) {
       ...GEN3_BATTLE_STATES,
       ...c.battleStates,
     });
+    const visualIds = new Set([
+      ...Object.keys(WEATHER_EFFECTS),
+      ...host.visualEffects.keys(),
+    ]);
+    const weather = new WeatherRegistry(c.weather, {
+      defaultWeather: "clear",
+      battleKinds: c.battleWeather,
+      effects: visualIds,
+    });
+    weather.validateMaps(c.maps);
+    const battleWeather = new BattleWeatherRegistry(c.battleWeather);
+    for (const d of Object.values(battleWeather.definitions))
+      if (d.visual && !visualIds.has(d.visual))
+        throw new Error("Unknown battle weather visual");
     const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
     effects.validateMoves(c.moves);
+    battleWeather.validateEffects(effects, [
+      ...Object.values(c.abilities),
+      ...Object.values(c.heldItems),
+      ...Object.values(c.battleStates),
+    ]);
     battleStates.validateEffects(effects);
     forms.validateEffects(effects);
     createItemService(c.items);
@@ -173,11 +200,6 @@ export function createEmeraldPlugins(db, plugins, onError) {
         )
           throw new Error("Unknown NPC behavior");
       }
-      if (
-        map.presentation?.weather &&
-        !["rain", "sun", "sand", "hail"].includes(map.presentation.weather)
-      )
-        throw new Error("Unknown field weather");
       if (
         (map.elements || []).some(
           (e) =>

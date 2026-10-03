@@ -18,6 +18,7 @@ export function attachEmeraldExtensions(game, host) {
     busy: !!game.busy || !!game.commandBus?.active,
     battle: game.battle ? game.battle.snapshot() : null,
     time: game.timeView(),
+    weather: game.weatherView(),
     actors: game.actors.list(),
     schedule: game.schedule.view(),
     crops: Object.fromEntries(
@@ -139,6 +140,14 @@ export function attachEmeraldExtensions(game, host) {
               party: game.state.party,
               amount: intent.amount,
             });
+          case "weather":
+            return intent.clear
+              ? game.clearWeather(intent.map)
+              : game.setWeather(
+                  intent.map,
+                  intent.weather,
+                  intent.durationMs ?? null,
+                );
           case "learnMove":
             return game.teachMove(intent.method, intent.uid, intent.index);
           case "useItem":

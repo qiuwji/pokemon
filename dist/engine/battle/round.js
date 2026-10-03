@@ -155,26 +155,22 @@ export class RoundResolver {
       if (b.ended) break;
       if (mon.hp > 0) {
         const weather = b.traits?.weather();
-        const immune =
-          (weather === "sand" &&
-            b.traits
-              .types(seat.id)
-              .some((t) => ["rock", "ground", "steel"].includes(t))) ||
-          (weather === "hail" && b.traits.types(seat.id).includes("ice"));
+        const residual = weather
+          ? b.weatherRegistry.get(weather).residual
+          : null;
+        const immune = residual?.immuneTypes.some((t) =>
+          b.traits.types(seat.id).includes(t),
+        );
         const weatherPermission = {
           actorSeat: seat.id,
           weather,
           allowed: true,
         };
         b.traits?.run("weather-immunity", weatherPermission);
-        if (
-          ["sand", "hail"].includes(weather) &&
-          !immune &&
-          weatherPermission.allowed
-        ) {
+        if (residual && !immune && weatherPermission.allowed) {
           mon.hp = Math.max(
             0,
-            mon.hp - Math.max(1, Math.floor(mon.stats.hp / 16)),
+            mon.hp - Math.max(1, Math.floor(mon.stats.hp / residual.divisor)),
           );
           b.emit("受到了天气伤害！", "hurt", { targetSeat: seat.id });
           b.outcomes.observe();

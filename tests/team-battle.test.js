@@ -1,3 +1,4 @@
+import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -48,7 +49,7 @@ function setup(overrides = {}) {
         critical: false,
       }),
       experienceAward: () => 100,
-      experienceFinal: ({amount}) => amount, // Fixed reward policy isolates participation from trainer bonuses.
+      experienceFinal: ({ amount }) => amount, // Fixed reward policy isolates participation from trainer bonuses.
       grantExperience: (mon, amount) => {
         mon.exp += amount;
         awards.push({ uid: mon.uid, amount });
@@ -413,6 +414,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
     caught: [],
     story: emptyStoryProgress(),
   };
+  state.weather = emptyWeather();
   assert(validateSave(state, db));
   state.box.push(structuredClone(party[0]));
   assert.equal(validateSave(state, db), false);

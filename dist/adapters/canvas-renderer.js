@@ -1,3 +1,4 @@
+import { WeatherDirector } from "../presentation/weather-director.js";
 import { sampleSpriteAnimation } from "../presentation/sprite-animation.js";
 import {
   drawWeather,
@@ -41,6 +42,7 @@ export class Renderer {
     this.graph = new SceneGraph(db.maps);
     this.motion = new GridMotion(this.graph);
     this.camera = { x: 0, y: 0 };
+    this.weatherDirector = new WeatherDirector();
   }
   moving(now = performance.now()) {
     return this.motion.moving(now);
@@ -338,12 +340,17 @@ export class Renderer {
         this.presentation,
       );
     }
-    const environment = this.environment(m, now);
+    const environment = this.environment(m, now, p.map);
     drawDaylight(c, environment.hour, { indoor: m.indoor });
-    drawWeather(c, m.indoor ? null : environment.weather, now, {
-      height: 224,
+    for (const layer of this.weatherDirector.sample(now, environment.weather, {
       reducedMotion: this.reducedMotion(),
-    });
+    }))
+      drawWeather(c, layer.visual, now, {
+        height: 224,
+        opacity: layer.opacity,
+        reducedMotion: this.reducedMotion(),
+        registry: this.presentation,
+      });
     for (const cue of emotes) {
       const n = all.find((n) => n.id === cue.actor && n.map === cue.map);
       if (!n) continue;

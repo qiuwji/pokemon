@@ -1,3 +1,4 @@
+import { emptyWeather } from "../../../engine/weather.js";
 import { emptyFieldDevices } from "../../../engine/field-devices.js";
 import { emptyActors } from "../../../engine/actor-repository.js";
 import { emptyCrops } from "../../../engine/crop-growth.js";
@@ -80,6 +81,7 @@ export class SaveApplication {
       caught: [],
       playSeconds: 0,
       clock: emptyWorldClock(),
+      weather: emptyWeather(),
       schedule: emptyWorldSchedule(),
       crops: emptyCrops(),
       actors: emptyActors(),

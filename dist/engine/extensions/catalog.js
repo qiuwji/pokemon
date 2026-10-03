@@ -8,6 +8,8 @@ export const CONTENT_KINDS = Object.freeze([
   "evolutions",
   "items",
   "learningMethods",
+  "weather",
+  "battleWeather",
   "abilities",
   "heldItems",
   "moveEffects",
@@ -116,6 +118,12 @@ export class ExtensionCatalog {
   dependencies(state) {
     const used = [
       state.position?.map,
+      state.weather?.active?.selection,
+      state.weather?.active?.kind,
+      ...Object.entries(state.weather?.overrides || {}).flatMap(([map, r]) => [
+        map,
+        r.weather,
+      ]),
       ...Object.keys(state.devices?.records || {}),
       ...Object.keys(state.devices?.timers || {}),
       ...Object.entries(state.devices?.requests || {}).flatMap(

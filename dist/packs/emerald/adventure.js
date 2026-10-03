@@ -1,3 +1,7 @@
+import {
+  GEN3_WORLD_WEATHER,
+  GEN3_BATTLE_WEATHER,
+} from "../../engine/rules/gen3/weather.js";
 import { emeraldDatabase } from "./database.js";
 import { EMERALD_LEARNING_METHODS } from "./machine-learning.js";
 import { composeApplications } from "./application/composition.js";
@@ -35,6 +39,8 @@ export class EmeraldAdventure {
     plugins = null,
     catalog = {
       items: ITEMS,
+      weather: GEN3_WORLD_WEATHER,
+      battleWeather: GEN3_BATTLE_WEATHER,
       learningMethods: EMERALD_LEARNING_METHODS,
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
@@ -133,6 +139,7 @@ export class EmeraldAdventure {
     this.applications.forms.bind();
     this.applications.growth.bind();
     this.applications.time.bind();
+    this.applications.weather.bind();
     this.applications.crops.bind();
     this.applications.actors.bind();
     this.applications.world.bind();

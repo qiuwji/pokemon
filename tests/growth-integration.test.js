@@ -1,3 +1,4 @@
+import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -436,6 +437,7 @@ test("Save owns daycare and trade identities, keeps egg clocks, and rejects dupl
   s.daycare.egg = egg;
   s.tradePartner.push(mon("eevee"));
   s.growth.hatchTick = 255;
+  s.weather = emptyWeather();
   assert(validateSave(s, db));
   s.box.push(s.daycare.slots[0].mon);
   assert.equal(validateSave(s, db), false);

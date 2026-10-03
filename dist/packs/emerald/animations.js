@@ -1,3 +1,4 @@
+import { WEATHER_EFFECTS } from "../../presentation/weather-effects.js";
 import { PresentationRegistry } from "../../presentation/effect-registry.js";
 import { PIXEL_EFFECTS } from "../../presentation/pixel-effects.js";
 import { FIELD_ACTION_EFFECTS } from "../../presentation/field-action-canvas.js";
@@ -89,6 +90,7 @@ export function createEmeraldPresentation({
 } = {}) {
   const registry = new PresentationRegistry({ onError });
   for (const [id, draw] of Object.entries({
+    ...WEATHER_EFFECTS,
     ...PIXEL_EFFECTS,
     ...FIELD_ACTION_EFFECTS,
   }))

@@ -4,8 +4,20 @@ export const TRAIT_OPERATIONS = {
     return c.consume?.();
   },
   setWeather(c, s) {
+    c.battle.weatherRegistry.get(s.weather);
+    if (
+      c.battle.weather?.kind === s.weather &&
+      (s.turns !== undefined || c.battle.weather.turns === null)
+    ) {
+      if (c.move && c.definition) {
+        c.successful = false;
+        c.emit("天气已经是这个状态。", "failed");
+      }
+      return false;
+    }
     c.battle.weather = { kind: s.weather, turns: s.turns ?? null };
     c.emit("天气发生变化！", "weather", { weather: s.weather });
+    return true;
   },
   traitHeal(c, s) {
     const m = c.owner;
@@ -51,7 +63,8 @@ export const TRAIT_OPERATIONS = {
 };
 TRAIT_OPERATIONS.setWeather.validate = (s) => {
   if (
-    !["rain", "sun", "sand", "hail"].includes(s.weather) ||
+    typeof s.weather !== "string" ||
+    !s.weather ||
     (s.turns !== undefined && (!Number.isInteger(s.turns) || s.turns < 1))
   )
     throw new Error("Invalid weather");
@@ -77,6 +90,10 @@ for (const op of ["traitHeal", "traitHurt"])
       throw new Error("Invalid trait health amount");
   };
 TRAIT_OPERATIONS.traitStatus.validate = (s) => {
-  if (!["poison", "toxic", "burn", "paralysis", "sleep", "freeze"].includes(s.status))
+  if (
+    !["poison", "toxic", "burn", "paralysis", "sleep", "freeze"].includes(
+      s.status,
+    )
+  )
     throw new Error("Invalid trait status");
 };

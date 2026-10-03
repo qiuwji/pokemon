@@ -32,7 +32,7 @@ dist/
   adapters/                      浏览器输入、Canvas/DOM、存储与真实资源音频
   packs/emerald/                 原作规则配置、剧情、地图业务与页面
     adventure.js                 内容配置、应用装配、生命周期和忙碌聚合
-    application/composition.js   18 个应用服务的有限依赖装配
+    application/composition.js   19 个应用服务的有限依赖装配
     application/public-ports.js  当前宿主 API 的显式字段/方法所有权表
     application/*-application.js 按领域拥有会话、协调用例
     extensions.js                通用插件合同的本作校验/默认注册
@@ -58,7 +58,7 @@ flowchart TD
 
 ## 应用服务与状态所有权
 
-`adventure.js` 当前 140 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
+`adventure.js` 当前 147 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
 
 - SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
 - 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。
@@ -77,6 +77,8 @@ FieldActionService 拥有资格、目标和可校验行动计划；应用层协�
 MovementRegistry / MovementInputRegistry 分别描述模式和输入策略。Mach/Acro 原作控制在 Gen3 政策中，浏览器只映射逻辑输入。GridMotion / Sprite 序列负责插值和姿态帧，不决定规则。见 [MOVEMENT_INPUT.md](docs/engine/MOVEMENT_INPUT.md)。
 
 WorldClock 保存本地游戏 RTC，并单独累计前台游玩时长；宿主注入 wallNow/playActive。恢复、设备时钟回退和离线策略显式处理。WorldSchedule 保存持久任务，事实/业务提交遵循应用可用时机；CropService 单独负责树果成长和浇水/收获。见 [WORLD_TIME.md](docs/engine/WORLD_TIME.md)。每日事件入口不代表全部每日原作业务已经完成。
+
+WeatherRegistry / WorldWeather 管世界选择、坐标/脚本/地图来源、每日/前台周期及覆盖期限；BattleWeatherRegistry 管独立的战斗天气政策，入战复制身份。WeatherApplication 是唯一应用所有者，WeatherDirector 与注册画师只消费投影。见 [WEATHER.md](docs/engine/WEATHER.md)。
 
 ActorRepository 保存全局身份与模板状态；ActorApplication 提供动态生成、相邻地图交通、只读感知/BFS、邻接互动、姿态和记忆协调。帧插值不写进存档。完整日程/行为模板待补；伙伴跟随按用户要求以后由插件实现。见 [ACTORS.md](docs/engine/ACTORS.md)。
 
@@ -98,8 +100,8 @@ interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，�
 
 ## 存档、复用与验证
 
-SaveStore 只接受开发存档版本 7；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
+SaveStore 只接受开发存档版本 8；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项和受影响范围针对性验证，当前 **239 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项、天气新增 18 项和受影响范围针对性验证，当前 **246 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。

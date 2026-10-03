@@ -1,3 +1,9 @@
+import { WeatherRegistry, WorldWeather } from "../../engine/weather.js";
+import {
+  GEN3_WORLD_WEATHER,
+  GEN3_BATTLE_WEATHER,
+} from "../../engine/rules/gen3/weather.js";
+import { emeraldDatabase } from "./database.js";
 import {
   FieldDeviceCatalog,
   FieldDevices,
@@ -55,6 +61,17 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    db = emeraldDatabase(db);
+    new WorldWeather({
+      state: s.weather,
+      maps: db.maps,
+      registry: new WeatherRegistry(catalog.weather || GEN3_WORLD_WEATHER, {
+        defaultWeather: "clear",
+        battleKinds: catalog.battleWeather || GEN3_BATTLE_WEATHER,
+      }),
+    });
+    if (s.weather.active && s.weather.active.map !== s.position?.map)
+      return false;
     GEN3_ELEVATION.validate(s.position || {});
     if (s.devices !== undefined)
       new FieldDevices({

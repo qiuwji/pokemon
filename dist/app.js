@@ -59,8 +59,8 @@ async function boot() {
         fieldPriority: emeraldFieldPriority,
         travelActor: PACK.travelActor,
         cameraRig: camera,
-        environment: (map) => ({
-          weather: map.presentation?.weather || null,
+        environment: (map, now, mapId) => ({
+          weather: game?.weatherView(mapId).visual || null,
           hour: game?.timeView().initialized ? game.timeView().hour : 12,
         }),
         reducedMotion,
@@ -137,11 +137,7 @@ async function boot() {
           : "尚未存档"),
       onMap: (title, id) => {
         $("location").textContent = title;
-        $("weather").textContent = db.maps[id].indoor
-          ? "室内"
-          : { rain: "雨天", sun: "晴朗", sand: "沙尘", hail: "冰雹" }[
-              db.maps[id].presentation?.weather
-            ] || "晴朗";
+        game?.ui?.updateWeather(game.weatherView(id));
         game?.ui?.updateTime(game.timeView());
         $("scene-name").textContent = title;
         $("scene-name").classList.add("show");

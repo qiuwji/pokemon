@@ -1,3 +1,4 @@
+import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -349,6 +350,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
     caught: [],
     movement: { mode: "surf", visited: ["OldaleTown"] },
   };
+  state.weather = emptyWeather();
   assert(validateSave(state, db));
   state.movement.mode = "mach-bike";
   assert.equal(validateSave(state, db), false);

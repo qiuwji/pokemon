@@ -15,7 +15,7 @@ export const RANDOM_POWER_OPERATIONS = {
   },
   weatherBall(c) {
     const weather = c.battle.traits.weather(),
-      type = { rain: "water", sand: "rock", sun: "fire", hail: "ice" }[weather];
+      type = weather ? c.battle.weatherRegistry.get(weather).weatherBall : null;
     if (type) {
       c.move.type = type;
       c.baseMultiplier = 2;

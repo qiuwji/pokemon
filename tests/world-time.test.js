@@ -395,7 +395,7 @@ test("Registered actor behavior observes saved world time and map environment th
           warps: [],
           npcs: [],
           signs: [],
-          presentation: { weather: "rain" },
+          weather: { default: "rain" },
           elements: [
             {
               id: "worker",

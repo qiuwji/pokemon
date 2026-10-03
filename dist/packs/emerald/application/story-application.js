@@ -20,6 +20,8 @@ import {
 import { bindApplicationPorts } from "./ports.js";
 export const STORY_PORTS = Object.freeze([
   "battle",
+  "validateWeatherCommand",
+  "performStoryWeather",
   "camera",
   "clearInput",
   "conditionQueries",
@@ -77,6 +79,7 @@ export class StoryApplication {
             this.fieldDirector.stage(c.actors);
           }),
         wait: (c) => this.timeline.wait(c.ms),
+        weather: (c) => this.performStoryWeather(c),
         worldPatch: (c) => this.patchWorld(c.operations),
         fieldAction: async (c) => {
           const result = await this.performStoryFieldAction(
@@ -144,7 +147,8 @@ export class StoryApplication {
         },
       },
       {
-        resources: storyResources,
+        resources: (c) =>
+          c.type === "weather" ? ["weather"] : storyResources(c),
         testCondition: (c) =>
           matchesCondition(c, this.state, this.conditionQueries),
         choose: async (c) => {
@@ -169,6 +173,7 @@ export class StoryApplication {
               "story.if",
               this.conditionQueries,
             );
+          if (c.type === "weather") this.validateWeatherCommand(c);
           if (c.type === "setVariable") validateVariableCommand(c);
           if (c.type === "choice" && c.variable)
             validateVariableCommand({ name: c.variable, value: "" });

@@ -24,7 +24,7 @@ registry.move('water_gun', {
 
 ## 野外与转场
 
-共用 environment-canvas 绘制天气；环境时间只改变视觉，不消耗游戏 PRNG。角色影子按当前插值位置绘制；昼夜色调对室外应用，室内保持正常。原有图集逐帧动画继续以 8×8 图块、16×16 metatile 绘制，当前户外图集包含 48 个动画 tile 配置，无整景图片。情绪气泡增至 10 类，剧情合同与绘制共享语义词汇。
+environment-canvas 仅分发注册天气画师；WeatherDirector 按注入时钟混合当前/下一层，跨域状态由引擎决定。视觉时间不消耗游戏 PRNG。世界 RTC/前台周期见 [WEATHER.md](docs/engine/WEATHER.md)。角色影子按当前插值位置绘制；昼夜色调对室外应用，室内保持正常。原有图集逐帧动画继续以 8×8 图块、16×16 metatile 绘制，当前户外图集包含 48 个动画 tile 配置，无整景图片。情绪气泡增至 10 类，剧情合同与绘制共享语义词汇。
 
 `NPCBehaviorRegistry` 提出方向、移动与姿态意图；NPCSystem 统一验证格子、范围、玩家与角色的占位。新增行为通过 content 的 npcBehaviors 注册，回调拿冻结的上下文，不拿 NPCSystem；故障仅暂停该次行为。内置 still/wander/horizontal/vertical/patrol/look/jog/hop/spin/sleep/cheer。会话销毁清除 NPC 缓存。
 

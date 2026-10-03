@@ -40,8 +40,18 @@ export function createUIShell(
     $("announcer").textContent = text;
   }
 
+  function updateWeather(weather) {
+    const node = doc.getElementById("weather");
+    if (node)
+      node.textContent = game.db.maps[weather.map].indoor
+        ? ["none", "clear"].includes(weather.kind)
+          ? "室内"
+          : "室内 · " + weather.label
+        : weather.label;
+  }
   function updateSide() {
     game.ui?.updateTime?.(game.timeView());
+    updateWeather(game.weatherView());
     game.ui?.extensions?.refreshHUD();
     const q = questFor(game.state);
     $("quest-title").textContent = q.title;
@@ -236,6 +246,7 @@ export function createUIShell(
     announce,
     escapeHTML,
     updateSide,
+    updateWeather,
     partyCard,
     spriteURL,
     hpTrack,

@@ -9,6 +9,7 @@ export function registerEmeraldCommands(game, bus) {
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
   const domainPermissions = {
     time: "time",
+    weather: "weather",
     crop: "crops",
     actor: "actors",
     field: "movement",
@@ -50,6 +51,28 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register(
+    "weather.query",
+    objectSchema({ map: id }),
+    ({ map }) => game.weatherView(map),
+    { concurrent: true, ready: () => true, permission: undefined },
+  );
+  register(
+    "weather.set",
+    objectSchema(
+      {
+        map: id,
+        weather: id,
+        durationMs: { type: "integer", minimum: 1, maximum: 31536000000 },
+      },
+      ["map", "weather"],
+    ),
+    ({ map, weather, durationMs }) =>
+      game.setWeather(map, weather, durationMs ?? null),
+  );
+  register("weather.clear", objectSchema({ map: id }, ["map"]), ({ map }) =>
+    game.clearWeather(map),
+  );
   register(
     "field.input",
     objectSchema({

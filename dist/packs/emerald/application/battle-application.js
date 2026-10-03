@@ -27,6 +27,7 @@ export const BATTLE_PORTS = Object.freeze([
   "transitions",
   "ui",
   "world",
+  "weatherView",
 ]);
 /** battle use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
 export class BattleApplication {
@@ -94,7 +95,9 @@ export class BattleApplication {
           .filter((m) => this.state.forms[m.uid])
           .map((m) => [m.uid, this.state.forms[m.uid]]),
       ),
+      weatherDefinitions: this.catalog.battleWeather,
       environment: {
+        weather: this.weatherView().battle,
         terrain: this.world.map.indoor
           ? "indoor"
           : isWater(

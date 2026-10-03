@@ -91,8 +91,9 @@ export function drawBattle(ctx, assets, frame) {
         t: 0.5,
       });
   }
-  drawWeather(ctx, view.environment?.weather, frame.now || 0, {
+  drawWeather(ctx, view.environment?.weatherVisual, frame.now || 0, {
     reducedMotion: frame.reducedMotion,
+    registry,
   });
   if (ball) drawBall(ctx, ball);
 }

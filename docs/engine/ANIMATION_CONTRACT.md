@@ -68,6 +68,8 @@ replace 取代默认事件的姿态/特效编排；append 在默认编排上增�
 
 一次受影响 animation-timing/visual-registry/presentation/plugins/architecture/field-actions 73 项，72 首次通过。插件事件定义附带宿主 id/owner，触发严格合同拒绝；在装配边界剥离宿主元信息后只重跑失败项通过。新增全屏锚点 1 项及受影响逐目标取样通过；模式分发整理后只重查替换/附加 2 项。新增表现无 Math.random 守卫单项通过，公开类型检查通过。
 
-尚未完成：把全部默认导演阶段改为独立处理器、环境注册、DOM/SVG 宿主生命周期、完整逐招式原作脚本、原创/参考素材浏览器对比。既有 Scene/Transition 已可注册 draw，不重复建设接口。
+尚未完成：把全部默认导演阶段改为独立处理器、DOM/SVG 宿主生命周期、完整逐招式原作脚本、原创/参考素材浏览器对比。既有 Scene/Transition 已可注册 draw，不重复建设接口。
 
 失效条件：轨迹字段/缓动/插值、事件选择/注册冲突、reduceMotion、领域事件投影、座位布局、装配或绘制副本合同变化，重查对应范围。全系统与肉眼验收仍留到 E。
+
+天气环境的声明/注册画师与纯 crossfade 已接入并专项验证，见 WEATHER.md；DOM/SVG 多宿主生命周期仍未完成。

@@ -79,6 +79,11 @@ function fixture() {
     itemPlan: () => ({ ok: false }),
     evolutionPlan: () => null,
     daycareView: () => ({ slots: [], compatibility: 0, egg: false }),
+    weatherView: () => ({
+      map: "LittlerootTown",
+      kind: "clear",
+      label: "晴朗",
+    }),
     timeView: () => ({
       initialized: false,
       day: 0,

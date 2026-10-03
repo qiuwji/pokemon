@@ -1,6 +1,6 @@
 # 插件 API 1：启动注册、受限事务和声明式界面
 
-当前工程版本 v0.14.0，插件 API 1，开发存档 envelope 7。插件是项目内受信任 ES 模块，在启动时装配。它不是第三方代码沙箱，不支持运行中的安装/热卸载。项目内插件也须遵守接口边界，不能自行访问 DOM、全局游戏实例或存储。
+当前工程版本 v0.15.0，插件 API 1，开发存档 envelope 8。插件是项目内受信任 ES 模块，在启动时装配。它不是第三方代码沙箱，不支持运行中的安装/热卸载。项目内插件也须遵守接口边界，不能自行访问 DOM、全局游戏实例或存储。
 
 ## 依赖方向与生命周期
 
@@ -14,7 +14,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 | 能力 | 提供的入口 | 使用范围 |
 | --- | --- | --- |
-| 内容注册 | `api.content.register(kind,id,definition)` | species/moves/items/abilities/heldItems/moveEffects/actors/resources/tilesets 等 |
+| 内容注册 | `api.content.register(kind,id,definition)` | species/moves/items/learningMethods/weather/battleWeather/abilities/heldItems/moveEffects/actors/resources/tilesets 等 |
 | 世界扩展 | maps/mapExtensions/movement/destinations | 网格地图、NPC 元素、门和连接；已有地图仅追加元素/门/连接 |
 | 状态定义 | `api.states.register`，`ctx.states` | 按精灵 UID 保存，自定义 schema，step/round/manual/permanent 生命周期 |
 | 行为注入 | `api.actions.register`，`api.rules.register`，`api.story.register` | 事务行动、标准规则阶段、剧情命令构建 |
@@ -35,9 +35,9 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 所有状态写入由同步事务执行：读取冻结输入 → 修改自有数据草稿 → 暂存状态/核心意图 → 校验 → 一起提交 → 发事件/反馈/刷新/保存。失败时用 StateCheckpoint 恢复原对象身份、核心数据与规则随机数。自定义数据是有界 JSON，禁止函数、原型键、循环、无限数值和超大嵌套。
 
-插件不能直接修改核心亲密度、库存或装备。权限词汇由内容包注入通用宿主。manifest 先声明权限，再通过 `ctx.intent` 请求 friendship/useItem/equip/setLead/reward/createMonster。绿宝石适配器逐项校验形状、范围、UID、库存及容量，调用原领域服务。权限不是操作系统沙箱，只是受信任插件协作合同。
+插件不能直接修改核心亲密度、库存或装备。权限词汇由内容包注入通用宿主。manifest 先声明权限，再通过 `ctx.intent` 请求 friendship/useItem/equip/setLead/reward/createMonster/learnMove/weather。绿宝石适配器逐项校验形状、范围、UID、库存及容量，调用原领域服务。权限不是操作系统沙箱，只是受信任插件协作合同。
 
-规则修饰、页面 render、when、数据校验、迁移、状态生命周期均要求同步。规则/界面读取回调内禁止发命令；过期事务上下文不能继续写。事务期间禁止嵌套命令。事件监听如需写状态，提交后发起下一条命令。事件链有界，监听器和界面/绘制故障被隔离；已经提交的领域结果不会因渲染故障回滚。
+规则修饰、页面 render、when、数据校验、状态生命周期均要求同步。规则/界面读取回调内禁止发命令；过期事务上下文不能继续写。事务期间禁止嵌套命令。事件监听如需写状态，提交后发起下一条命令。事件链有界，监听器和界面/绘制故障被隔离；已经提交的领域结果不会因渲染故障回滚。
 
 插件状态附在 UID 上，换位、寄存、交换不会变成槽位索引。移除只提供自有记忆的插件后保留其数据；恢复插件可继续读。存档引用插件地图/精灵/道具等核心内容时记录 contentDependencies，缺失依赖时保护原存档并明确提示，禁止用空白新档覆盖。坏格式/错误内容也保护原文，可导出恢复。多个页面的普通过期写入用存储基线比较拒绝；这是乐观冲突检测，不承诺跨进程原子事务。
 
@@ -83,3 +83,5 @@ const plugin = {
 公共类型消费检查和最终数据保护验收见 FINAL_VALIDATION.md；282 是 P6 阶段检查点，不是当前全量数量。
 
 音频仅接受资源文件，插件 sound 只能请求自有已注册音效，规则评价/未提交事务拒绝。完整合同见 docs/engine/AUDIO.md。插件数据旧版本不再自动迁移。
+
+天气注册/只读查询/受权限命令与事务/独立战斗政策及视觉详见 [WEATHER.md](docs/engine/WEATHER.md)。开发版本只接受当前 envelope/dataVersion，旧迁移路径已移除；天气依赖不能静默回退。

@@ -1,3 +1,4 @@
+import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -182,6 +183,7 @@ test("A dialogue failure after reward can replay without duplicate money or item
 
 test("Current development save contract rejects older versions without mutating their data", () => {
   const s = state();
+  s.weather = emptyWeather();
   s.party = [createMonster("mudkip", 5, db, new Random(1))];
   const old = { version: 2, savedAt: 1, state: s };
   const before = structuredClone(old);

@@ -1,41 +1,32 @@
-import { pixel } from "./pixel-effects.js";
-/** Clock-driven deterministic weather particles, shared by field and battle; no game RNG. */
+import { createDefaultPresentation } from "./default-presentation.js";
+const DEFAULT_REGISTRY = createDefaultPresentation();
+/** Only dispatches registered drawing; weather state and battle effects belong to the engine. */
 export function drawWeather(
   ctx,
-  kind,
+  visual,
   now,
-  { width = 320, height = 170, reducedMotion = false } = {},
+  {
+    width = 320,
+    height = 170,
+    reducedMotion = false,
+    opacity = 1,
+    registry = DEFAULT_REGISTRY,
+  } = {},
 ) {
-  if (!kind) return;
+  if (!visual || opacity <= 0) return;
   ctx.save();
-  if (kind === "sun") {
-    ctx.fillStyle = "#f8d858";
-    ctx.globalAlpha = 0.1;
-    ctx.fillRect(0, 0, width, height);
-  } else if (!reducedMotion) {
-    ctx.globalAlpha = kind === "sand" ? 0.3 : 0.6;
-    for (let i = 0; i < 48; i++) {
-      const speed = kind === "rain" ? 0.22 : 0.06,
-        x = (i * 73 + now * (kind === "sand" ? 0.09 : 0.025)) % width,
-        y = (i * 47 + now * speed) % height;
-      pixel(
-        ctx,
-        x,
-        y,
-        kind === "rain" ? "#a8d8f8" : kind === "sand" ? "#c8a060" : "#e8f8ff",
-        kind === "rain" ? 1 : 2,
-      );
-      if (kind === "rain") {
-        ctx.fillStyle = "#a8d8f8";
-        ctx.fillRect(Math.round(x - 1), Math.round(y - 5), 1, 5);
-      }
-    }
-  } else {
-    ctx.fillStyle = kind === "rain" ? "#4880a8" : "#c8b898";
-    ctx.globalAlpha = 0.08;
-    ctx.fillRect(0, 0, width, height);
+  try {
+    if (opacity < 1) ctx.globalAlpha *= opacity;
+    registry.draw(ctx, {
+      kind: visual,
+      now: reducedMotion ? 0 : now,
+      width,
+      height,
+      reducedMotion,
+    });
+  } finally {
+    ctx.restore();
   }
-  ctx.restore();
 }
 export function drawDaylight(
   ctx,

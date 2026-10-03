@@ -1,12 +1,13 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0 将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，随后学习数据装配为 140 行；用例由 18 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
+`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0 将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，随后学习/天气装配为 147 行；用例由 19 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
 
 ## 职责与状态所有权
 
 | 服务 | 职责 | 自己持有的会话对象/状态 |
 | --- | --- | --- |
 | save | 默认进度、加载/导入/导出/重开、保存保护、随机数重绑 | state、rng、SaveStore、保存时间与保护信息 |
+| weather | 世界天气生命周期、地图/时间/命令/剧情协调与事实 | WorldWeather、WeatherRegistry |
 | time | 世界 RTC、实际游玩时长、时间边界与持久任务协调 | WorldClock、WorldSchedule |
 | actors | 持续身份、感知导航、角色命令与 NPC 投影协调 | ActorRepository、有限 runtime 端口 |
 | devices | 格子机关、局部延迟任务与领域行动请求协调 | FieldDeviceCatalog、FieldDevices、执行锁 |
@@ -39,7 +40,7 @@
 
 ## 重载生命周期
 
-加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 时间 → 树果 → Actor → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑机关与野外行动服务，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
+加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 时间 → 天气 → 树果 → Actor → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑机关与野外行动服务，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
 
 ## 继续开发约束
 
@@ -50,3 +51,5 @@
 地图访问生命周期见 docs/engine/WORLD_LIFECYCLE.md。门/相邻地图/飞行/野外行动/剧情共用入口；TravelService 通过受控 enter 端口提交，不再提前修改玩家位置。读取存档恢复当前访问，不清除当前临时状态。
 
 学习领域/公共命令/事务与背包协作见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。当前 registry 资格和手动等级学习共享保护集合；ItemService 不允许通过道具效果改 moves。
+
+天气命令与剧情经 WeatherApplication 的独立有限端口；世界/时间/帧通过 composition 调用 enter/step/days/tick，业务不导入兄弟服务。见 [WEATHER.md](docs/engine/WEATHER.md)。

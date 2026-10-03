@@ -1,6 +1,7 @@
 import { bindApplicationPorts } from "./ports.js";
 export const FRAME_PORTS = Object.freeze([
   "tickTime",
+  "tickWeather",
   "tickDevices",
   "playActive",
   "battle",
@@ -41,6 +42,7 @@ export class FrameApplication {
   }
   tick(now, visibleMaps) {
     this.tickTime(now, this.playActive());
+    this.tickWeather(now, this.playActive() && !this.battle);
     const paused = this.paused;
     this.tickDevices(now, { paused: paused || !this.playActive() });
     this.field.tick(now);
