@@ -49,6 +49,26 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register(
+    "field.input",
+    objectSchema({
+      direction: { type: "string", enum: ["up", "down", "left", "right"] },
+      secondary: { type: "boolean" },
+      running: { type: "boolean" },
+    }),
+    ({ direction = null, secondary = false, running = false }) =>
+      game.handleFieldInput({ direction, secondary, running }),
+    { concurrent: true, ready: () => true },
+  );
+  register(
+    "field.input-reset",
+    empty,
+    () => {
+      game.resetFieldInput();
+      return true;
+    },
+    { concurrent: true, ready: () => true },
+  );
   const actorPosition = objectSchema(
     {
       map: id,

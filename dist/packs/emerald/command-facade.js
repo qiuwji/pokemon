@@ -21,6 +21,11 @@ export function createEmeraldCommandFacade(
       "presentation.play",
       { id, payload: JSON.stringify(payload) },
     ],
+    handleFieldInput: ({ direction, secondary, running }) => [
+      "field.input",
+      { ...(direction ? { direction } : {}), secondary, running },
+    ],
+    resetFieldInput: () => ["field.input-reset", {}],
     move: (direction, { running = false } = {}) => [
       "field.move",
       { direction, running },

@@ -19,7 +19,7 @@
 | story | 剧情指令端口、静态验证、输入锁、执行与失败收尾 | CommandRunner、剧情锁 |
 | world | 地图/动态世界绑定、永久/访问覆盖与入口恢复预检、碰撞保护、行走与对象交互 | WorldStateService、FieldSession、FieldDirector |
 | fieldActions | 野外资格/目标、操作预检、演出与世界提交、钓鱼会话协调 | FieldActionService、FieldActionDirector、FishingSession、actionBusy |
-| movement | 移动资格、交通模式、冲浪与飞行协调、访问目的地 | MovementService、TravelService、TravelDirector |
+| movement | 移动资格、交通模式、冲浪与飞行协调、访问目的地 | MovementService、MovementInputSession、TravelService、TravelDirector |
 | triggers | 步进时钟、剧情/训练家视线/遭遇优先级 | 遭遇间隔记录 |
 | frame | 每帧的领域更新与 NPC 暂停/育成提醒协调 | 无复制状态 |
 | inspection | 将会话和地图投影成诊断视图 | 无领域规则 |

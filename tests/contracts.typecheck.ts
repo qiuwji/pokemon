@@ -6,6 +6,7 @@ import type {
   Creature,
   FieldActionDefinition,
   TerrainRuleDefinition,
+  MovementInputDefinition,
   FieldMechanismDefinition,
   FieldDeviceDefinition,
 } from "../dist/engine/contracts.js";
@@ -190,3 +191,20 @@ const device: FieldDeviceDefinition = {
 };
 void devicePolicy;
 void device;
+
+const movementInput: MovementInputDefinition = {
+  decide(context) {
+    return {
+      state: {},
+      action:
+        context.busy || !context.input.direction
+          ? null
+          : {
+              kind: "step",
+              direction: context.input.direction,
+              durationMs: 70,
+            },
+    };
+  },
+};
+void movementInput;

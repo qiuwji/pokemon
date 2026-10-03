@@ -33,6 +33,7 @@ export const WORLD_PORTS = Object.freeze([
   "bindDevices",
   "deviceEvent",
   "deviceVisit",
+  "devicePending",
   "interactDevice",
   "busy",
   "camera",
@@ -224,11 +225,18 @@ export class WorldApplication {
     if (entered) this.motion.snap(this.state.position);
     return entered;
   }
-  move(dir, { running = false } = {}) {
-    if (this.battle || this.storyBusy || this.ui?.blocked || this.busy)
+  move(dir, { running = false, duration } = {}) {
+    if (
+      this.battle ||
+      this.storyBusy ||
+      this.ui?.blocked ||
+      this.busy ||
+      this.devicePending()
+    )
       return false;
     return this.field.move(dir, {
       running: running && !this.world.map.indoor,
+      ...(duration !== undefined ? { duration } : {}),
     });
   }
   interact() {

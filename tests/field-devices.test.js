@@ -276,6 +276,11 @@ function fixture(
   return {
     game,
     bus,
+    frame(ms, input) {
+      now += ms;
+      game.handleFieldInput(input);
+      game.tick(now, ["Lab"]);
+    },
     advance(ms) {
       now += ms;
       game.tick(now, ["Lab"]);
@@ -320,7 +325,9 @@ test("Device timers pause during menus and restore remaining delay from saves", 
     g = s.game;
   g.move("right");
   s.advance(30);
-  g.field.tick(g.timeline.now() + 200);
+  g.ui.blocked = true;
+  s.advance(200);
+  g.ui.blocked = false;
   const doc = g.exportDocument();
   g.loadDocument(doc);
   g.ui.blocked = true;
@@ -508,4 +515,109 @@ test("Field action avatar registration freezes descriptions, rejects non-player 
     EMERALD_FIELD_ACTIONS.fall.allowed(context, { device: "tile" }),
     false,
   );
+});
+
+test("Actual Mach input passes a cracked floor; held walking cannot bypass queued fall", async () => {
+  const held = { direction: "right", secondary: false, running: false };
+  const fast = fixture("cracked-floor", { cell: 5 });
+  fast.game.state.flags.bike = true;
+  assert(fast.game.setMovementMode("mach-bike").ok);
+  fast.frame(0, held);
+  for (let i = 0; i < 70 && fast.game.state.position.x < 6; i++)
+    fast.frame(1000 / 60, held);
+  assert.equal(fast.game.state.position.map, "Lab");
+  assert.equal(fast.game.state.position.x, 6);
+  assert.equal(
+    fast.game.worldState.maps.Lab.behavior[13],
+    B.CRACKED_FLOOR_HOLE,
+  );
+  assert.equal(
+    fast.game.state.devices.requests["devices:tile"]?.fall,
+    undefined,
+  );
+  const walk = fixture("cracked-floor");
+  walk.frame(0, held);
+  for (let i = 0; i < 15 && !walk.game.actionBusy; i++)
+    walk.frame(1000 / 60, held);
+  await walk.flush();
+  assert.equal(walk.game.state.position.map, "Landing");
+});
+test("Releasing fast Mach input over an opened floor requests fall instead of indefinite hovering", async () => {
+  const s = fixture("cracked-floor", { cell: 5 }),
+    held = { direction: "right", secondary: false, running: false };
+  s.game.state.flags.bike = true;
+  s.game.setMovementMode("mach-bike");
+  s.frame(0, held);
+  for (let i = 0; i < 60 && s.game.state.position.x < 5; i++)
+    s.frame(1000 / 60, held);
+  for (let i = 0; i < 8 && !s.game.actionBusy; i++)
+    s.frame(1000 / 60, { ...held, direction: null });
+  await s.flush();
+  assert.equal(s.game.state.position.map, "Landing");
+});
+
+test("Plugin input rules can select a technique and control movement through public input command without editing the engine", async () => {
+  const s = fixture("thin-ice", {
+    plugin(api) {
+      const inputRule = api.content.register("movementInputs", "step", {
+        schema: objectSchema({ calls: { type: "integer" } }, ["calls"]),
+        initialState: { calls: 0 },
+        decide: (c) => ({
+          state: { calls: c.state.calls + 1 },
+          action:
+            c.busy || !c.input.direction
+              ? null
+              : {
+                  kind: "step",
+                  direction: c.input.direction,
+                  durationMs: 73,
+                  technique: "float",
+                },
+        }),
+      });
+      api.content.register("movement", "hover", {
+        name: "hover",
+        actor: "BrendanMachBike",
+        durations: [90],
+        inputRule,
+        techniques: { float: { name: "float", pose: "hover" } },
+        allowed: () => true,
+        traverse: (c) => c.cell.collision === 0,
+      });
+    },
+  });
+  assert(s.game.setMovementMode("devices:hover").ok);
+  assert.equal(
+    await s.bus.execute("core.field.input", { direction: "right" }),
+    true,
+  );
+  assert.equal(s.game.motion.duration, 73);
+  assert.equal(s.game.movement.technique, "float");
+  assert.equal(s.game.applications.movement.input.state.calls, 1);
+  assert.equal(
+    await s.bus.execute("core.field.input", { direction: "left" }),
+    false,
+  );
+  assert.equal(
+    s.game.motion.dir,
+    "right",
+    "busy input cannot jitter actor facing",
+  );
+  assert.equal(s.game.applications.movement.input.state.calls, 2);
+  assert.equal(await s.bus.execute("core.field.input-reset", {}), true);
+  assert.equal(s.game.applications.movement.input.state, null);
+});
+
+test("A blocked fast departure cannot keep the rider hovering over an opened cracked floor", async () => {
+  const s = fixture("cracked-floor", { cell: 5 }),
+    held = { direction: "right", secondary: false, running: false };
+  s.game.state.flags.bike = true;
+  s.game.setMovementMode("mach-bike");
+  s.frame(0, held);
+  for (let i = 0; i < 60 && s.game.state.position.x < 5; i++)
+    s.frame(1000 / 60, held);
+  s.game.patchWorld([{ kind: "tile", map: "Lab", x: 6, y: 1, block: 1024 }]);
+  for (let i = 0; i < 15 && !s.game.actionBusy; i++) s.frame(1000 / 60, held);
+  await s.flush();
+  assert.equal(s.game.state.position.map, "Landing");
 });

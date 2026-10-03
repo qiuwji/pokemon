@@ -286,6 +286,12 @@ export class EmeraldAdventure {
   claimFieldEquipment(...args) {
     return this.applications.movement.claimFieldEquipment(...args);
   }
+  handleFieldInput(...args) {
+    return this.applications.movement.handleFieldInput(...args);
+  }
+  resetFieldInput(...args) {
+    return this.applications.movement.resetFieldInput(...args);
+  }
   movementOptions(...args) {
     return this.applications.movement.movementOptions(...args);
   }

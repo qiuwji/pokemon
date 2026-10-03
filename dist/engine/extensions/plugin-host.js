@@ -165,6 +165,15 @@ export class PluginHost {
             }
             if (["abilities", "heldItems", "battleStates"].includes(kind))
               value = safeTrait(value, evaluate);
+            if (kind === "movementInputs") {
+              const original = value;
+              if (typeof original.decide !== "function")
+                throw new Error("Movement input requires decide");
+              value = {
+                ...value,
+                decide: (c) => evaluate(original.decide, readOnly(c)),
+              };
+            }
             if (kind === "movement") {
               const original = value;
               value = {

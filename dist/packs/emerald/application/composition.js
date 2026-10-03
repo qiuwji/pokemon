@@ -56,7 +56,9 @@ export function composeApplications(applications, read, { storage }) {
     liveApplicationPorts(read, GROWTH_PORTS, {}),
   );
   applications.movement = new MovementApplication(
-    liveApplicationPorts(read, MOVEMENT_PORTS, {}),
+    liveApplicationPorts(read, MOVEMENT_PORTS, {
+      stepField: (...args) => applications.world.move(...args),
+    }),
   );
   applications.fieldActions = new FieldActionApplication(
     liveApplicationPorts(read, FIELD_ACTION_PORTS, {
@@ -64,13 +66,19 @@ export function composeApplications(applications, read, { storage }) {
     }),
   );
   applications.devices = new DeviceApplication(
-    liveApplicationPorts(read, DEVICE_PORTS),
+    liveApplicationPorts(read, DEVICE_PORTS, {
+      fieldInputView: () => ({
+        ...applications.movement.input.previousInput,
+        blocked: applications.movement.input.blocked,
+      }),
+    }),
   );
   applications.world = new WorldApplication(
     liveApplicationPorts(read, WORLD_PORTS, {
       bindMovement: () => applications.movement.bind(),
       bindDevices: (options) => applications.devices.bind(options),
       interactDevice: () => applications.devices.interactFront(),
+      devicePending: () => !!applications.devices.service.nextRequest(),
       deviceEvent: (...args) => applications.devices.event(...args),
       deviceVisit: (map) => {
         const service = applications.devices.service,

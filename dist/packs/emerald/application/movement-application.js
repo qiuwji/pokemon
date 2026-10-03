@@ -1,3 +1,8 @@
+import {
+  MovementInputRegistry,
+  MovementInputSession,
+} from "../../../engine/movement-input.js";
+import { GEN3_MOVEMENT_INPUTS } from "../../../engine/rules/gen3/bike-input.js";
 import { MovementRegistry, MovementService } from "../../../engine/movement.js";
 import { TravelService } from "../../../engine/travel.js";
 import { TravelDirector } from "../../../presentation/travel-director.js";
@@ -6,11 +11,16 @@ import { isWater } from "../../../engine/terrain.js";
 import { bindApplicationPorts } from "./ports.js";
 export const MOVEMENT_PORTS = Object.freeze([
   "battle",
+  "actionBusy",
+  "growthBusy",
+  "growthDirector",
+  "sceneDirector",
   "canManageParty",
   "catalog",
   "clearInput",
   "enter",
   "field",
+  "stepField",
   "reducedMotion",
   "save",
   "state",
@@ -25,6 +35,48 @@ export const MOVEMENT_PORTS = Object.freeze([
 export class MovementApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, MOVEMENT_PORTS);
+  }
+  resetFieldInput() {
+    this.input?.reset();
+  }
+  handleFieldInput(input) {
+    const paused = !!(
+        this.battle ||
+        this.storyBusy ||
+        this.ui?.blocked ||
+        this.actionBusy ||
+        this.growthBusy ||
+        this.growthDirector.busy ||
+        this.sceneDirector?.busy ||
+        this.transitions.busy ||
+        this.travelDirector?.busy ||
+        (!this.canManageParty() && !this.field.busy)
+      ),
+      action = this.input.sample(input, {
+        now: this.timeline.now(),
+        mode: this.state.movement.mode,
+        busy: this.field.busy,
+        paused,
+        context: {
+          position: { ...this.state.position },
+          cell: this.world.cell(this.state.position.x, this.state.position.y),
+          momentum: { ...this.movement.momentum },
+        },
+      });
+    if (!action) return false;
+    if (action.technique !== undefined)
+      this.movement.setTechnique(action.technique, this.world.map);
+    const result =
+      action.kind === "turn"
+        ? this.field.face(action.direction, {
+            duration: action.durationMs || 0,
+          })
+        : this.stepField(action.direction, {
+            running: input.running,
+            ...(action.durationMs ? { duration: action.durationMs } : {}),
+          });
+    this.input.feedback(result);
+    return result;
   }
   visitMap() {
     const id = this.state.position.map;
@@ -87,6 +139,7 @@ export class MovementApplication {
     )
       return { ok: false, reason: "请先上岸。" };
     const result = this.movement.set(mode, this.world.map);
+    if (result.ok) this.input.reset();
     if (!result.ok) result.reason = "这里不能使用这辆自行车。";
     return result;
   }
@@ -165,6 +218,12 @@ export class MovementApplication {
       state: this.state.movement,
       context: () => ({ capabilities: this.fieldCapabilities() }),
       onChange: () => this.ui?.updateSide(),
+    });
+    this.input = new MovementInputSession({
+      registry: new MovementInputRegistry(
+        this.catalog.movementInputs || GEN3_MOVEMENT_INPUTS,
+      ),
+      movement: this.movement.registry,
     });
     this.travel = new TravelService({
       maps: this.worldState.maps,

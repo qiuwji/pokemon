@@ -371,6 +371,7 @@ export type ContentKind =
   | "heldItems"
   | "moveEffects"
   | "movement"
+  | "movementInputs"
   | "timeTasks"
   | "crops"
   | "berryPlots"
@@ -671,10 +672,49 @@ export interface MovementDefinition {
   surface?: "land" | "water" | "both";
   mapRequires?: Record<string, string | number | boolean>;
   techniques?: Record<string, MovementTechnique>;
+  inputRule?: string;
   durations: number[];
   allowed?: (context: Readonly<Json>) => boolean;
   traverse?: (context: Readonly<Json>) => boolean;
   afterStep?: (context: Readonly<Json>) => Json;
+}
+export interface LogicalMovementInput {
+  direction: Direction | null;
+  secondary: boolean;
+  running: boolean;
+}
+export interface MovementInputAction {
+  kind: "step" | "turn";
+  direction: Direction;
+  durationMs?: number;
+  technique?: string;
+}
+export interface MovementInputDefinition {
+  schema?: DataSchema;
+  initialState?: Json;
+  decide(
+    context: Readonly<{
+      mode: string;
+      state: Readonly<Json>;
+      timeMs: number;
+      input: Readonly<LogicalMovementInput>;
+      previousInput: Readonly<LogicalMovementInput>;
+      busy: boolean;
+      blocked: boolean;
+      position: Readonly<Position>;
+      cell: Readonly<{
+        block: number;
+        behavior: number;
+        collision: number;
+        elevation: number;
+      }>;
+      momentum: Readonly<{
+        mode: string | null;
+        direction: Direction | null;
+        steps: number;
+      }>;
+    }>,
+  ): { state: Json; action?: MovementInputAction | null };
 }
 export type WorldPatchScope = "permanent" | "visit";
 export type WorldOperation =
@@ -826,6 +866,7 @@ export interface FieldDeviceContext {
   readonly tile: Readonly<{ block: number; behavior: number }>;
   readonly mode: string;
   readonly durationMs: number;
+  readonly input: Readonly<LogicalMovementInput & { blocked: boolean }>;
 }
 export interface FieldDeviceDecision {
   state?: Json;

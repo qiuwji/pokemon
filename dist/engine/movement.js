@@ -27,6 +27,12 @@ export class MovementRegistry {
       typeof definition.afterStep !== "function"
     )
       throw new Error("Invalid movement post-step rule");
+    if (
+      definition.inputRule !== undefined &&
+      (typeof definition.inputRule !== "string" ||
+        !/^[a-zA-Z0-9_.:-]{1,128}$/.test(definition.inputRule))
+    )
+      throw new Error("Invalid movement input rule reference");
     const mapRequires =
       definition.mapRequires === undefined
         ? {}

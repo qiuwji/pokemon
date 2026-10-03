@@ -75,17 +75,17 @@ function setup({
 
 test("Mach bike accelerates on consecutive steps, turns and blocked steps reset momentum, ordinary grass remains passable", () => {
   const s = setup({ mode: "mach-bike" });
-  for (const duration of [128, 96, 64]) {
+  for (const duration of [16000 / 60, 8000 / 60, 4000 / 60]) {
     assert(s.field.move("right"));
     assert.equal(s.field.motion.duration, duration);
     s.finish();
   }
   assert(s.field.move("down"));
-  assert.equal(s.field.motion.duration, 128);
+  assert.equal(s.field.motion.duration, 16000 / 60);
   s.finish();
   assert.equal(s.field.move("down"), false);
   assert(s.field.move("up"));
-  assert.equal(s.field.motion.duration, 128);
+  assert.equal(s.field.motion.duration, 16000 / 60);
   s.finish();
   s.field.world.map.behavior[s.position.y * 5 + 4] = 2;
   assert(s.field.move("right"));

@@ -14,6 +14,7 @@ export const DEVICE_PORTS = Object.freeze([
   "worldState",
   "world",
   "field",
+  "fieldInputView",
   "motion",
   "timeline",
   "prepareWorldPatch",
@@ -46,6 +47,7 @@ export class DeviceApplication {
           index = device.y * map.width + device.x;
         return {
           position: { ...this.state.position },
+          input: this.fieldInputView(),
           tile: { block: map.blocks[index], behavior: map.behavior[index] },
           mode: this.state.movement.mode,
           durationMs: this.motion.duration,

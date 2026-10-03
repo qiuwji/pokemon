@@ -1,3 +1,5 @@
+import { MovementInputRegistry } from "../../engine/movement-input.js";
+import { GEN3_MOVEMENT_INPUTS } from "../../engine/rules/gen3/bike-input.js";
 import { FieldDeviceCatalog } from "../../engine/field-devices.js";
 import {
   EMERALD_FIELD_MECHANISMS,
@@ -63,6 +65,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
       movement: MOVEMENT_MODES,
+      movementInputs: GEN3_MOVEMENT_INPUTS,
       fieldActions: EMERALD_FIELD_ACTIONS,
       terrainRules: EMERALD_TERRAIN_RULES,
       fieldMechanisms: EMERALD_FIELD_MECHANISMS,
@@ -96,7 +99,9 @@ export function createEmeraldPlugins(db, plugins, onError) {
     battleStates.validateEffects(effects);
     forms.validateEffects(effects);
     createItemService(c.items);
-    new MovementRegistry(c.movement);
+    new MovementInputRegistry(c.movementInputs).validateMovement(
+      new MovementRegistry(c.movement),
+    );
     new FieldActionRegistry(c.fieldActions);
     new FieldTerrainRegistry(c.terrainRules);
     for (const action of Object.values(c.fieldActions))

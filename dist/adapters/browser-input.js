@@ -10,8 +10,8 @@ const DIRECTIONS = {
 };
 /** Input mapping is replaceable; field and battle services don't inspect keys. */
 export class BrowserInput {
-  constructor({ document: doc = document, game, ui }) {
-    Object.assign(this, { doc, game, ui });
+  constructor({ document: doc = document, window: win = window, game, ui }) {
+    Object.assign(this, { doc, win, game, ui });
     this.keys = new Set();
     this.held = null;
     this.running = false;
@@ -27,7 +27,7 @@ export class BrowserInput {
       },
       options,
     );
-    window.addEventListener("blur", () => this.clear(), options);
+    win.addEventListener("blur", () => this.clear(), options);
     doc.addEventListener(
       "visibilitychange",
       () => {
@@ -49,7 +49,7 @@ export class BrowserInput {
           else if (game.battle) ui.navigateBattle(dir);
           else {
             this.held = dir;
-            game.move(dir);
+            this.tick();
           }
         },
         options,
@@ -62,9 +62,14 @@ export class BrowserInput {
     this.keys.clear();
     this.held = null;
     this.running = false;
+    this.game.resetFieldInput();
   }
   tick() {
-    if (this.held) this.game.move(this.held, { running: this.running });
+    this.game.handleFieldInput({
+      direction: this.held,
+      secondary: this.running,
+      running: this.running,
+    });
   }
   keydown(e) {
     if (e.key.toLowerCase() === "tab") {
@@ -88,6 +93,7 @@ export class BrowserInput {
     if (e.repeat) return;
     if (key === "shift") {
       this.running = true;
+      this.tick();
       return;
     }
     if (dir) {
@@ -96,7 +102,7 @@ export class BrowserInput {
       else {
         this.keys.add(key);
         this.held = dir;
-        this.game.move(dir, { running: this.running });
+        this.tick();
       }
       return;
     }

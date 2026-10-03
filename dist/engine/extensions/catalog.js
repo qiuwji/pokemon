@@ -11,6 +11,7 @@ export const CONTENT_KINDS = Object.freeze([
   "heldItems",
   "moveEffects",
   "movement",
+  "movementInputs",
   "fieldActions",
   "fieldLinks",
   "terrainRules",

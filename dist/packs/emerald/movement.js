@@ -1,3 +1,4 @@
+import { GEN3_MACH_DURATIONS } from "../../engine/rules/gen3/bike-input.js";
 import { isWater, BEHAVIOR } from "../../engine/terrain.js";
 /** Emerald-specific permissions. Another game can supply a different registry to the same field session. */
 const land = ({ cell, warp }) =>
@@ -22,7 +23,8 @@ export const MOVEMENT_MODES = {
   "mach-bike": {
     name: "音速自行车",
     actor: "BrendanMachBike",
-    durations: [128, 96, 64],
+    durations: GEN3_MACH_DURATIONS,
+    inputRule: "mach-bike",
     allowed: (c) =>
       field(c) && c.map.allowBike !== false && capability("bike", c),
     traverse: (c) => land(c) && c.cell.behavior !== BEHAVIOR.LONG_GRASS,
@@ -34,7 +36,13 @@ export const MOVEMENT_MODES = {
     techniques: {
       wheelie: { name: "抬起前轮", pose: "wheelie" },
       hop: { name: "连续跳跃", pose: "hop", jump: true },
-      "side-hop": { name: "侧向跳跃", pose: "side-hop", jump: true, keepFacing: true, oneStep: true },
+      "side-hop": {
+        name: "侧向跳跃",
+        pose: "side-hop",
+        jump: true,
+        keepFacing: true,
+        oneStep: true,
+      },
     },
     allowed: (c) =>
       field(c) && c.map.allowBike !== false && capability("bike", c),

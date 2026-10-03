@@ -40,7 +40,7 @@ const tile = (c, metatile, behavior) => ({
   behavior,
   scope: "visit",
 });
-const leave = () => ({ cancelRequests: ["fall"] });
+const leave = () => ({ cancelRequests: ["fall"], cancelTimers: ["watch"] });
 const settle = (c) =>
   c.tile.behavior === BEHAVIOR.CRACKED_FLOOR_HOLE ? { requests: fall(c) } : {};
 /** field_tasks.c: temporary gym ice masks and delayed cracked-floor opening. */
@@ -96,28 +96,58 @@ export const EMERALD_FIELD_MECHANISMS = {
   },
   "cracked-floor": {
     scope: "visit",
+    schema: objectSchema({ fastPass: { type: "boolean" } }, ["fastPass"]),
+    initialState: { fastPass: false },
     configSchema: config(false),
     leave,
-    settle,
+    settle(c) {
+      return c.state.fastPass &&
+        c.mode === "mach-bike" &&
+        c.input.direction &&
+        !c.input.blocked
+        ? {}
+        : settle(c);
+    },
     enter(c) {
       return c.tile.behavior === BEHAVIOR.CRACKED_FLOOR
         ? {
+            state: {
+              fastPass: c.mode === "mach-bike" && c.durationMs <= 4000 / 60,
+            },
             timers: [{ key: "open", delayMs: 50 }],
             facts: [
               {
                 kind: "floor-entered",
-                data: { fastest: c.mode === "mach-bike" && c.durationMs <= 50 },
+                data: {
+                  fastest: c.mode === "mach-bike" && c.durationMs <= 4000 / 60,
+                },
               },
             ],
           }
         : settle(c);
     },
     timer(c) {
+      if (c.event.payload.key === "watch")
+        return !here(c)
+          ? {}
+          : c.state.fastPass &&
+              c.mode === "mach-bike" &&
+              c.input.direction &&
+              !c.input.blocked
+            ? { timers: [{ key: "watch", delayMs: 1000 / 60 }] }
+            : { requests: fall(c) };
+      const passing =
+        c.state.fastPass &&
+        c.mode === "mach-bike" &&
+        c.input.direction &&
+        !c.input.blocked;
       return {
+        timers:
+          passing && here(c) ? [{ key: "watch", delayMs: 1000 / 60 }] : [],
         operations: [
           tile(c, c.device.config.holeMetatile, BEHAVIOR.CRACKED_FLOOR_HOLE),
         ],
-        requests: fall(c),
+        requests: passing ? [] : fall(c),
         facts: [{ kind: "floor-opened" }],
       };
     },

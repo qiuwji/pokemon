@@ -17,7 +17,7 @@
 `api.content.register("fieldMechanisms", id, definition)` 返回限定名称。定义包含：
 
 - `scope: "visit" | "permanent"`；`schema`、`initialState` 和 `configSchema`。
-- 可选 `enter / leave / settle / timer / interact` 同步回调，至少一项。回调接收深度只读 `{ device, state, event, position, tile, mode, durationMs }`，不能通过策略评价调用宿主命令。
+- 可选 `enter / leave / settle / timer / interact` 同步回调，至少一项。回调接收深度只读 `{ device, state, event, position, tile, mode, durationMs, input }`，不能通过策略评价调用宿主命令。
 - 回调返回 `{ state?, operations?, timers?, cancelTimers?, requests?, cancelRequests?, facts? }`。不修改传入快照，也不直接渲染。
 
 `api.content.register("fieldDevices", id, { map, x, y, elevation?, mechanism, config? })` 只负责摆放。0 高度为通用平面，指定高度的机关不影响另一桥面。
@@ -56,7 +56,7 @@ api.content.register("fieldDevices", "lever", {
 参考只读 `work/pokeemerald`，SHA `731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`：`src/field_tasks.c` 的 SootopolisGymIcePerStepCallback / CrackedFloorPerStepCallback、对应 Gym/洞穴掉落脚本，以及 metatile 行为定义与属性文件。
 
 - 薄冰第一次裂、裂冰再次破；5 次任务等待折算约 83.33ms。自身 visited 为 visit 状态，图块变化也为 visit 覆盖；当前访问加载保持，重新进入恢复。
-- 裂地板延迟 3 帧折算 50ms。离开前未到期限时，后续在旧格开洞；玩家仍在格上则请求 fall。快速度通过/普通步行掉落已验证。**当前默认 Mach Bike 最大步长仍为 64ms，原作按键、速度及任务观察相位尚待下一项统一校准；本次快速通过证明使用注册的 48ms 移动方式，不能据此宣称原作自行车裂地板完全还原。**
+- 裂地板延迟 3 帧折算 50ms。离开前未到期限时，后续在旧格开洞；玩家仍在格上则请求 fall。快速度通过/普通步行掉落已验证。**后续 Mach 输入模块已将步长按原作 16/8/4 帧校准，补实际最快持键通过、普通步行禁止绕过掉落、最快松键停洞落下的领域接线，见 MOVEMENT_INPUT.md。仍不宣称逐 GBA 回调相位相同。**
 - 地图配置 holeMetatile、薄冰额外 crackedMetatile，以及目标 `{map,x,y,dir}`；保留原 block 的碰撞/高度高位。目标地图/坐标与当前 tileset 图块须有效，运行时另外检查落点通行和占用。
 - fall 是隐藏菜单的正常 FieldAction。80 帧名义时间折算约 1333.33ms；玩家逐渐下降/消失，在不透明转场内提交目的地，落地恢复姿态。reducedMotion 缩短等待并取消装饰位移。不是将原作每帧 OAM 与声音时序逐位复现。
 
@@ -64,8 +64,8 @@ api.content.register("fieldDevices", "lever", {
 
 ## 验证证据与失效条件
 
-`tests/field-devices.test.js` 13 项各有通过证据：定义/同步只读边界、世界失败原子性、取消/替换到期任务、失败计时回滚、访问与永久保存、引用/平面、薄冰两次踩踏与读档/重进、暂停与剩余期限、快速通过及步行落下、插件开关公共命令/保存、落下时序/覆盖/reducedMotion、失败落点与普通确认交互、不可变姿态描述。
+`tests/field-devices.test.js` 首轮 13 项各有通过证据：定义/同步只读边界、世界失败原子性、取消/替换到期任务、失败计时回滚、访问与永久保存、引用/平面、薄冰两次踩踏与读档/重进、暂停与剩余期限、快速通过及步行落下、插件开关公共命令/保存、落下时序/覆盖/reducedMotion、失败落点与普通确认交互、不可变姿态描述。
 
-相关原有 94 项一次通过；普通交互端口及空 warp 快照补齐后 movement/architecture/application 22 项通过。类型检查通过。新样例发现的空 warp 使用 null，避免插件同步策略只读 JSON 收到 undefined；这项修正由真实注册移动的通过测试覆盖。未全工程回归或浏览器画面验收。
+相关原有 94 项一次通过；普通交互端口及空 warp 快照补齐后 movement/architecture/application 22 项通过。类型检查通过。新样例发现的空 warp 使用 null，避免插件同步策略只读 JSON 收到 undefined；这项修正由真实注册移动的通过测试覆盖。后续输入规则新增 4 个组合用例及影响复查，见 MOVEMENT_INPUT.md。未全工程回归或浏览器画面验收。
 
 修改回调/任务顺序、WorldState 保护、格子事件相位、暂停条件、存档合同、FieldAction 或姿态采样时按影响重查相应用例；其他有效证据沿用。最终系统与真实浏览器检查留到 E。

@@ -110,7 +110,7 @@ export class GridMotion {
     this.dir = position.dir;
   }
   moving(now) {
-    return this.to !== null && now - this.start < this.duration;
+    return this.to !== null && now < this.start + this.duration;
   }
   begin(
     from,
@@ -155,7 +155,9 @@ export class GridMotion {
       this.snap(position);
     const end = this.graph.point(this.to),
       t = this.duration
-        ? Math.max(0, Math.min(1, (now - this.start) / this.duration))
+        ? now >= this.start + this.duration
+          ? 1
+          : Math.max(0, Math.min(1, (now - this.start) / this.duration))
         : 1;
     return {
       ...(position.elevation !== undefined

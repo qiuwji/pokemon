@@ -1,4 +1,4 @@
-import { World } from "./world.js";
+import { World, DIRECTIONS } from "./world.js";
 import { NPCSystem } from "./npcs.js";
 import { isWater } from "./terrain.js";
 
@@ -102,7 +102,12 @@ export class FieldSession {
     this.disposed = true;
   }
   get busy() {
-    return !!this.pending || !!this.force || this.transitions.busy;
+    return (
+      !!this.pending ||
+      !!this.force ||
+      this.transitions.busy ||
+      this.motion.moving(this.now())
+    );
   }
   terrainContext(c, mode) {
     const from = c.from || this.position,
@@ -205,6 +210,27 @@ export class FieldSession {
       });
     }
   }
+  face(direction, { duration = 0 } = {}) {
+    if (
+      !DIRECTIONS[direction] ||
+      !Number.isFinite(duration) ||
+      duration < 0 ||
+      duration > 60000
+    )
+      throw new Error("Invalid facing plan");
+    if (this.busy || this.disposed) return false;
+    const from = { ...this.position };
+    this.position.dir = direction;
+    if (duration)
+      this.motion.begin(from, this.position, this.now(), {
+        duration,
+        mode: this.movement?.state.mode || "walk",
+        freezeAnimation: true,
+      });
+    else this.motion.snap(this.position);
+    this.movement?.reset();
+    return true;
+  }
   move(
     direction,
     {
@@ -213,8 +239,14 @@ export class FieldSession {
       allowVacatedBy = null,
       mode,
       forced = null,
+      duration,
     } = {},
   ) {
+    if (
+      duration !== undefined &&
+      (!Number.isFinite(duration) || duration <= 0 || duration > 60000)
+    )
+      throw new Error("Invalid movement duration");
     if (scripted && !this.pending) this.cancelForced("scripted");
     if (this.disposed || this.busy || this.motion.moving(this.now()))
       return false;
@@ -241,6 +273,8 @@ export class FieldSession {
       this.movement?.reset();
       return false;
     }
+    if (duration !== undefined && this.movementPlan)
+      this.movementPlan.duration = duration;
     this.motion.begin(from, this.position, this.now(), {
       running,
       ...(this.movementPlan
