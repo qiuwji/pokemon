@@ -25,9 +25,8 @@ export class FrameApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, FRAME_PORTS);
   }
-  tick(now, visibleMaps) {
-    this.tickTime(now, this.playActive());
-    const paused = !!(
+  get paused() {
+    return !!(
       this.battle ||
       this.storyBusy ||
       this.ui?.blocked ||
@@ -39,6 +38,10 @@ export class FrameApplication {
       this.actionBusy ||
       this.sceneDirector?.busy
     );
+  }
+  tick(now, visibleMaps) {
+    this.tickTime(now, this.playActive());
+    const paused = this.paused;
     this.tickDevices(now, { paused: paused || !this.playActive() });
     this.field.tick(now);
     if (

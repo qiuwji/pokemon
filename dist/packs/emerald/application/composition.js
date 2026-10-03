@@ -67,6 +67,8 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.devices = new DeviceApplication(
     liveApplicationPorts(read, DEVICE_PORTS, {
+      simulationActive: () =>
+        !applications.frame.paused && applications.frame.playActive(),
       fieldInputView: () => ({
         ...applications.movement.input.previousInput,
         blocked: applications.movement.input.blocked,

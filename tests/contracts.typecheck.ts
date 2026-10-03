@@ -39,6 +39,22 @@ const plugin: PluginManifest = {
       fadeInMs: 200,
       fadeOutMs: 200,
     });
+    api.content.register("fieldDevices", "paired", {
+      map: "MyMap",
+      x: 2,
+      y: 3,
+      footprint: [
+        { dx: 0, dy: 0 },
+        { dx: 1, dy: 0 },
+      ],
+      mechanism: "log-bridge",
+      config: {
+        tiles: [
+          { floating: 0, half: 1, submerged: 2 },
+          { floating: 3, half: 4, submerged: 5 },
+        ],
+      },
+    });
     const effect = api.presentation.effect("trail", { draw: () => {} });
     api.presentation.move("water", {
       moveId: "water_gun",

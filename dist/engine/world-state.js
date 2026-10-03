@@ -68,13 +68,19 @@ export class WorldStateService {
     return y * m.width + x;
   }
   tile(map, value) {
-    if (!exact(value, ["block", "behavior"]) || !Object.keys(value).length)
+    if (
+      !exact(value, ["block", "behavior", "appearance"]) ||
+      !Object.keys(value).length
+    )
       throw new Error("Invalid world tile patch");
     for (const [key, n] of Object.entries(value)) {
+      if (key === "appearance" && n === null) continue;
       if (!Number.isInteger(n) || n < 0 || n > 65535)
         throw new Error("Invalid world tile value");
+      if (key === "appearance" && n > 1023)
+        throw new Error("Invalid metatile appearance");
       if (
-        key === "block" &&
+        ["block", "appearance"].includes(key) &&
         !this.db.tilesets[this.db.maps[map].tileset].metatiles[n & 1023]
       )
         throw new Error("Unknown world metatile");
@@ -228,17 +234,20 @@ export class WorldStateService {
     }
     if (state !== this.state || !this.cache.has(id)) {
       const blocks = [...base.blocks],
-        behavior = [...base.behavior];
+        behavior = [...base.behavior],
+        appearances = {};
       for (const [index, tile] of Object.entries(
         this.record(id, state).tiles,
       )) {
         if (tile.block !== undefined) blocks[index] = tile.block;
         if (tile.behavior !== undefined) behavior[index] = tile.behavior;
+        if (tile.appearance != null) appearances[index] = tile.appearance;
       }
       const projected = Object.freeze({
         ...base,
         blocks: Object.freeze(blocks),
         behavior: Object.freeze(behavior),
+        appearances: Object.freeze(appearances),
       });
       if (state !== this.state) return projected;
       this.cache.set(id, projected);
@@ -275,12 +284,24 @@ export class WorldStateService {
       if (op.scope === "visit" && op.map !== this.state.activeMap)
         throw new Error("Temporary patches require the active map visit");
       if (op.kind === "tile") {
-        if (!exact(op, ["kind", "map", "x", "y", "block", "behavior", "scope"]))
+        if (
+          !exact(op, [
+            "kind",
+            "map",
+            "x",
+            "y",
+            "block",
+            "behavior",
+            "appearance",
+            "scope",
+          ])
+        )
           throw new Error("Invalid tile operation");
         this.cell(op.map, op.x, op.y);
         this.tile(op.map, {
           ...("block" in op ? { block: op.block } : {}),
           ...("behavior" in op ? { behavior: op.behavior } : {}),
+          ...("appearance" in op ? { appearance: op.appearance } : {}),
         });
       } else if (op.kind === "object") {
         if (
@@ -313,12 +334,24 @@ export class WorldStateService {
       const layer = op.scope === "visit" ? (draft.visits ||= {}) : draft.maps;
       const record = (layer[op.map] ||= { tiles: {}, objects: {} });
       if (op.kind === "tile") {
-        if (!exact(op, ["kind", "map", "x", "y", "block", "behavior", "scope"]))
+        if (
+          !exact(op, [
+            "kind",
+            "map",
+            "x",
+            "y",
+            "block",
+            "behavior",
+            "appearance",
+            "scope",
+          ])
+        )
           throw new Error("Invalid tile operation");
         const index = this.cell(op.map, op.x, op.y),
           values = {
             ...("block" in op ? { block: op.block } : {}),
             ...("behavior" in op ? { behavior: op.behavior } : {}),
+            ...("appearance" in op ? { appearance: op.appearance } : {}),
           };
         this.tile(op.map, values);
         record.tiles[index] = { ...record.tiles[index], ...values };

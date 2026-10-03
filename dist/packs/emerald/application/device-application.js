@@ -17,6 +17,7 @@ export const DEVICE_PORTS = Object.freeze([
   "fieldInputView",
   "motion",
   "timeline",
+  "simulationActive",
   "prepareWorldPatch",
   "canManageParty",
   "performFieldAction",
@@ -49,6 +50,17 @@ export class DeviceApplication {
           position: { ...this.state.position },
           input: this.fieldInputView(),
           tile: { block: map.blocks[index], behavior: map.behavior[index] },
+          tiles: device.footprint.map(({ dx, dy }) => {
+            const x = device.x + dx,
+              y = device.y + dy,
+              index = y * map.width + x;
+            return {
+              x,
+              y,
+              block: map.blocks[index],
+              behavior: map.behavior[index],
+            };
+          }),
           mode: this.state.movement.mode,
           durationMs: this.motion.duration,
         };
@@ -64,6 +76,7 @@ export class DeviceApplication {
       this.service.prepareVisit(this.state.position.map, { resume }),
     );
     this.lastFrame = this.timeline.now();
+    if (!resume) this.event("activate", this.state.position);
   }
   view() {
     return this.service.view();
@@ -81,6 +94,7 @@ export class DeviceApplication {
   }
   event(phase, position, payload) {
     try {
+      this.syncClock(this.timeline.now(), !this.simulationActive());
       this.publish(this.service.event(phase, position, payload));
     } catch (error) {
       this.fault(error);
@@ -118,15 +132,18 @@ export class DeviceApplication {
     this.save();
     return { ok: true };
   }
-  tick(now, { paused = false } = {}) {
+  syncClock(now, paused) {
     const delta = Math.max(0, now - this.lastFrame);
     this.lastFrame = now;
-    if (paused) return;
+    if (!paused) this.publish(this.service.advance(delta));
+  }
+  tick(now, { paused = false } = {}) {
     try {
-      this.publish(this.service.advance(delta));
+      this.syncClock(now, paused);
     } catch (error) {
       this.fault(error);
     }
+    if (paused) return;
     if (this.processing || !this.canManageParty()) return;
     const request = this.service.nextRequest();
     if (!request) return;

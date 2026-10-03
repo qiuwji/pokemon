@@ -174,7 +174,7 @@ export class Renderer {
       for (let x = minX; x < maxX; x++)
         this.grid(
           pack,
-          m.blocks[y * m.width + x],
+          m.appearances?.[y * m.width + x] ?? m.blocks[y * m.width + x],
           Math.round((origin.x + x) * 16 - this.camera.x),
           Math.round((origin.y + y) * 16 - this.camera.y),
           overlay,

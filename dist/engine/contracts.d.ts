@@ -733,6 +733,7 @@ export type WorldOperation =
       y: number;
       block?: number;
       behavior?: number;
+      appearance?: number | null;
       scope?: WorldPatchScope;
     }
   | {
@@ -847,6 +848,7 @@ export interface FieldDeviceState {
   >;
 }
 export interface FieldDeviceDefinition {
+  footprint?: { dx: number; dy: number }[];
   map: string;
   x: number;
   y: number;
@@ -867,11 +869,17 @@ export interface FieldDeviceContext {
   >;
   readonly state: Readonly<Json>;
   readonly event: Readonly<{
-    phase: "enter" | "leave" | "settle" | "timer" | "interact";
+    phase: "activate" | "enter" | "leave" | "settle" | "timer" | "interact";
     payload: Json;
   }>;
   readonly position: Readonly<Position>;
   readonly tile: Readonly<{ block: number; behavior: number }>;
+  readonly tiles: readonly Readonly<{
+    x: number;
+    y: number;
+    block: number;
+    behavior: number;
+  }>[];
   readonly mode: string;
   readonly durationMs: number;
   readonly input: Readonly<LogicalMovementInput & { blocked: boolean }>;
@@ -890,6 +898,7 @@ export interface FieldMechanismDefinition {
   schema?: DataSchema;
   initialState?: Json;
   configSchema?: DataSchema;
+  activate?: (context: FieldDeviceContext) => FieldDeviceDecision;
   enter?: (context: FieldDeviceContext) => FieldDeviceDecision;
   leave?: (context: FieldDeviceContext) => FieldDeviceDecision;
   settle?: (context: FieldDeviceContext) => FieldDeviceDecision;

@@ -1,3 +1,7 @@
+import {
+  EMERALD_BRIDGE_MECHANISMS,
+  validateBridgeDeviceContent,
+} from "./bridge-mechanisms.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 import { BEHAVIOR } from "../../engine/terrain.js";
 const metatile = { type: "integer", minimum: 0, maximum: 1023 };
@@ -45,6 +49,7 @@ const settle = (c) =>
   c.tile.behavior === BEHAVIOR.CRACKED_FLOOR_HOLE ? { requests: fall(c) } : {};
 /** field_tasks.c: temporary gym ice masks and delayed cracked-floor opening. */
 export const EMERALD_FIELD_MECHANISMS = {
+  ...EMERALD_BRIDGE_MECHANISMS,
   "thin-ice": {
     scope: "visit",
     schema: objectSchema({ visited: { type: "boolean" } }, ["visited"]),
@@ -154,6 +159,7 @@ export const EMERALD_FIELD_MECHANISMS = {
   },
 };
 export function validateEmeraldDeviceContent(catalog) {
+  validateBridgeDeviceContent(catalog);
   for (const d of Object.values(catalog.fieldDevices || {})) {
     if (!["thin-ice", "cracked-floor"].includes(d.mechanism)) continue;
     const to = d.config.to,

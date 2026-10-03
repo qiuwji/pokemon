@@ -177,12 +177,14 @@ export class WorldApplication {
     );
     return {
       map: this.worldState.map(map, draft),
-      entered: () =>
+      entered: () => {
+        this.deviceEvent("activate", this.state.position);
         this.plugins?.events.emit("core:world-visit", {
           map,
-          revision: draft.revision,
+          revision: this.worldState.state.revision,
           restoredObjects: changed,
-        }),
+        });
+      },
       objects,
       commit: (position) => {
         try {
@@ -379,7 +381,12 @@ export class WorldApplication {
       onStep: (cell) => this.step(cell),
       onStart: ({ from, position }) => {
         this.deviceEvent("leave", from, { position });
-        this.deviceEvent("enter", position, { from });
+        const map = this.worldState.maps[from.map],
+          index = from.y * map.width + from.x;
+        this.deviceEvent("enter", position, {
+          from,
+          fromTile: { block: map.blocks[index], behavior: map.behavior[index] },
+        });
       },
       onProgress: () => {
         this.deviceEvent("settle", this.state.position);

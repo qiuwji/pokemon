@@ -16,7 +16,7 @@ const id = (s) =>
   !["__proto__", "constructor", "prototype"].includes(s);
 const time = (n) =>
   Number.isFinite(n) && n >= 0 && n <= Number.MAX_SAFE_INTEGER;
-const phases = ["enter", "leave", "settle", "timer", "interact"];
+const phases = ["activate", "enter", "leave", "settle", "timer", "interact"];
 export const emptyFieldDevices = () => ({
   revision: 0,
   elapsedMs: 0,
@@ -60,7 +60,15 @@ export class FieldDeviceCatalog {
         policy = this.mechanisms.get(d.mechanism);
       if (
         !id(key) ||
-        !exact(d, ["map", "x", "y", "elevation", "mechanism", "config"]) ||
+        !exact(d, [
+          "map",
+          "x",
+          "y",
+          "elevation",
+          "mechanism",
+          "config",
+          "footprint",
+        ]) ||
         !m ||
         !Number.isInteger(d.x) ||
         !Number.isInteger(d.y) ||
@@ -75,10 +83,31 @@ export class FieldDeviceCatalog {
             d.elevation > 14))
       )
         throw new Error("Invalid field device placement");
+      const footprint =
+        d.footprint === undefined ? [{ dx: 0, dy: 0 }] : d.footprint;
+      if (
+        !Array.isArray(footprint) ||
+        !footprint.length ||
+        footprint.length > 16 ||
+        footprint.some(
+          (p) =>
+            !exact(p, ["dx", "dy"]) ||
+            !Number.isInteger(p.dx) ||
+            !Number.isInteger(p.dy) ||
+            d.x + p.dx < 0 ||
+            d.x + p.dx >= m.width ||
+            d.y + p.dy < 0 ||
+            d.y + p.dy >= m.height,
+        ) ||
+        !footprint.some((p) => p.dx === 0 && p.dy === 0) ||
+        new Set(footprint.map((p) => `${p.dx}:${p.dy}`)).size !==
+          footprint.length
+      )
+        throw new Error("Invalid device footprint");
       validateValue(policy.configSchema, d.config || {});
       this.devices.set(
         key,
-        readOnly({ ...d, id: key, config: d.config || {} }),
+        readOnly({ ...d, footprint, id: key, config: d.config || {} }),
       );
     }
     this.ordered = [...this.devices.values()].sort((a, b) =>
@@ -171,8 +200,9 @@ export class FieldDevices {
   matches(d, p) {
     return (
       d.map === p.map &&
-      d.x === p.x &&
-      d.y === p.y &&
+      d.footprint.some(
+        (cell) => d.x + cell.dx === p.x && d.y + cell.dy === p.y,
+      ) &&
       (d.elevation === undefined ||
         d.elevation === 0 ||
         p.elevation === 0 ||

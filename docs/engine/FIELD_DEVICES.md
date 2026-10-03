@@ -17,10 +17,10 @@
 `api.content.register("fieldMechanisms", id, definition)` 返回限定名称。定义包含：
 
 - `scope: "visit" | "permanent"`；`schema`、`initialState` 和 `configSchema`。
-- 可选 `enter / leave / settle / timer / interact` 同步回调，至少一项。回调接收深度只读 `{ device, state, event, position, tile, mode, durationMs, input }`，不能通过策略评价调用宿主命令。
+- 可选 `activate / enter / leave / settle / timer / interact` 同步回调，至少一项。回调接收深度只读 `{ device, state, event, position, tile, tiles, mode, durationMs, input }`，不能通过策略评价调用宿主命令。
 - 回调返回 `{ state?, operations?, timers?, cancelTimers?, requests?, cancelRequests?, facts? }`。不修改传入快照，也不直接渲染。
 
-`api.content.register("fieldDevices", id, { map, x, y, elevation?, mechanism, config? })` 只负责摆放。0 高度为通用平面，指定高度的机关不影响另一桥面。
+`api.content.register("fieldDevices", id, { map, x, y, elevation?, footprint?, mechanism, config? })` 只负责摆放。0 高度为通用平面，指定高度的机关不影响另一桥面。
 
 示例：
 
@@ -60,7 +60,7 @@ api.content.register("fieldDevices", "lever", {
 - 地图配置 holeMetatile、薄冰额外 crackedMetatile，以及目标 `{map,x,y,dir}`；保留原 block 的碰撞/高度高位。目标地图/坐标与当前 tileset 图块须有效，运行时另外检查落点通行和占用。
 - fall 是隐藏菜单的正常 FieldAction。80 帧名义时间折算约 1333.33ms；玩家逐渐下降/消失，在不透明转场内提交目的地，落地恢复姿态。reducedMotion 缩短等待并取消装饰位移。不是将原作每帧 OAM 与声音时序逐位复现。
 
-默认地图还未摆放完整琉璃道馆和天空之柱机关。道馆阶梯的 8/28/67 计步条件、全房间图块、木桥/吊桥形变与正式音频继续属于未完成事项，不以注册表或测试夹具代替内容还原。
+默认地图还未摆放完整琉璃道馆和天空之柱机关。桥面形变的双格/外观/时序合同已经补充（见 BRIDGES.md）；道馆阶梯的 8/28/67 计步条件、全房间图块和原作音效编曲仍未完成，不以注册表或测试夹具代替内容还原。
 
 ## 验证证据与失效条件
 
@@ -69,3 +69,5 @@ api.content.register("fieldDevices", "lever", {
 相关原有 94 项一次通过；普通交互端口及空 warp 快照补齐后 movement/architecture/application 22 项通过。类型检查通过。新样例发现的空 warp 使用 null，避免插件同步策略只读 JSON 收到 undefined；这项修正由真实注册移动的通过测试覆盖。后续输入规则新增 4 个组合用例及影响复查，见 MOVEMENT_INPUT.md。未全工程回归或浏览器画面验收。
 
 修改回调/任务顺序、WorldState 保护、格子事件相位、暂停条件、存档合同、FieldAction 或姿态采样时按影响重查相应用例；其他有效证据沿用。最终系统与真实浏览器检查留到 E。
+
+2026-10-03：新增 footprint/activate/只读 tiles，支持双格桥共同状态；事件前同步局部时钟避免新任务提前。具体桥政策、外观覆盖、验证与差异见 BRIDGES.md。

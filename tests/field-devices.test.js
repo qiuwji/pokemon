@@ -178,14 +178,14 @@ test("Device saves validate content references and elevation matching avoids oth
   );
   assert.equal(
     s.service.matches(
-      { ...position, elevation: 3 },
+      { ...s.catalog.get("device"), elevation: 3 },
       { ...position, elevation: 4 },
     ),
     false,
   );
   assert.equal(
     s.service.matches(
-      { ...position, elevation: 0 },
+      { ...s.catalog.get("device"), elevation: 0 },
       { ...position, elevation: 4 },
     ),
     true,
