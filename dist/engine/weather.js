@@ -287,7 +287,7 @@ export class WorldWeather {
       active?.selection ||
       this.state.overrides[map]?.weather ||
       this.map(map).weather?.default ||
-      "clear";
+      this.registry.defaultWeather;
     const kind =
       active?.kind || this.registry.resolve(selection, this.state.day);
     const d = this.registry.get(kind);

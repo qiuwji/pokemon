@@ -267,6 +267,7 @@ test("Registries reject missing references, cycles, map regions and invalid resi
     registry: dry,
     maps: { A: { width: 1, height: 1 } },
   });
+  assert.equal(generic.view("A").kind, "dry");
   generic.enter("A", 0);
   assert.equal(generic.view().kind, "dry");
   const w = world();
