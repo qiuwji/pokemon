@@ -12,6 +12,10 @@ export class NPCSystem {
       behaviors = new NPCBehaviorRegistry(),
       onError = () => {},
       context = () => ({}),
+      resolveIntent = (map, n, intent) => intent,
+      onIntent = () => {},
+      actorStep = null,
+      onChange = () => {},
     } = {},
   ) {
     Object.assign(this, {
@@ -21,6 +25,10 @@ export class NPCSystem {
       behaviors,
       onError,
       context,
+      resolveIntent,
+      onIntent,
+      actorStep,
+      onChange,
     });
     this.states = new Map();
     this.now = 0;
@@ -45,7 +53,10 @@ export class NPCSystem {
         next: this.now + 500 + this.random() * 2000,
       };
       this.states.set(key, n);
-    } else Object.assign(n, { text: def.text, name: def.name, kind: def.kind });
+    } else {
+      Object.assign(n, { text: def.text, name: def.name, kind: def.kind });
+      if (n._actorUid && !this.scene?.pins.has(key)) n.pose = def.pose;
+    }
     return n;
   }
   objects(map) {
@@ -92,6 +103,7 @@ export class NPCSystem {
         n.fromY = n.toY = n.y;
         n.duration = 0;
         n.next = this.now + 1600;
+        this.onChange(n.map, n);
       }
     this.scene = null;
   }
@@ -140,22 +152,44 @@ export class NPCSystem {
         ]
       : [{ x: n.x, y: n.y }];
   }
-  view(map, now = this.now) {
+  occupants(map) {
+    const result = this.objects(map).map((n) => ({
+      ...n,
+      reserved: this.reserved(n),
+    }));
+    for (const n of this.states.values())
+      if (n.crossFrom?.map === map && this.moving(n))
+        result.push({
+          id: n.id,
+          x: n.crossFrom.x,
+          y: n.crossFrom.y,
+          reserved: [{ x: n.crossFrom.x, y: n.crossFrom.y }],
+        });
+    return result;
+  }
+  view(map, now = this.now, { reducedMotion = false } = {}) {
     return this.objects(map).map((n) => {
       const t = n.duration
         ? Math.min(1, Math.max(0, (now - n.start) / n.duration))
         : 1;
-      const inPlace = ["jog", "cheer"].includes(n.pose || n.movement?.mode);
-      const bounce = ["hop", "cheer"].includes(n.pose)
-        ? Math.max(0, Math.sin(now / 130)) * 4
-        : 0;
+      const pose = this.behaviors.poses.sample(
+        n.pose ||
+          (["jog", "cheer"].includes(n.movement?.mode)
+            ? n.movement.mode
+            : "still"),
+        now,
+        t,
+        this.moving(n, now),
+        { reducedMotion },
+      );
       return {
         ...n,
         px: (n.fromX + (n.toX - n.fromX) * t) * 16,
         py: (n.fromY + (n.toY - n.fromY) * t) * 16,
-        progress: inPlace ? (now % 160) / 160 : t,
-        moving: this.moving(n, now) || inPlace,
-        lift: (n.jump && t < 1 ? Math.sin(t * Math.PI) * 8 : 0) + bounce,
+        ...pose,
+        lift:
+          (n.jump && t < 1 && !reducedMotion ? Math.sin(t * Math.PI) * 8 : 0) +
+          pose.lift,
       };
     });
   }
@@ -167,6 +201,7 @@ export class NPCSystem {
       n.fromY = n.toY = n.y;
       n.duration = 0;
       n.next = this.now + 1600;
+      this.onChange(map, n);
     }
   }
   tick(
@@ -194,7 +229,7 @@ export class NPCSystem {
         let intent;
         try {
           intent = this.behaviors.decide(config.mode, {
-            ...callSync(this.context, [map]),
+            ...callSync(this.context, [map, n]),
             config,
             dir: n.dir,
             now,
@@ -202,6 +237,8 @@ export class NPCSystem {
             origin: { x: n.originX, y: n.originY },
             rolls: [this.random(), this.random()],
           });
+          intent = this.resolveIntent(map, n, intent);
+          this.onIntent(map, n, intent);
         } catch (error) {
           this.onError(error);
           continue;
@@ -209,7 +246,35 @@ export class NPCSystem {
         n.pose = intent.pose;
         const dir = intent.dir || n.dir;
         n.dir = dir;
-        if (!intent.move) continue;
+        if (!intent.move) {
+          this.onChange(map, n, intent);
+          continue;
+        }
+        if (n._actorUid && this.actorStep) {
+          const next = this.actorStep(map, n, dir, playerFrom);
+          if (!next) {
+            this.onChange(map, n, intent);
+            continue;
+          }
+          const [dx, dy] = DIRECTIONS[dir],
+            changedMap = next.map !== map;
+          n.crossFrom = changedMap ? { map, x: n.x, y: n.y } : null;
+          n.fromX = changedMap ? next.x - dx : n.x;
+          n.fromY = changedMap ? next.y - dy : n.y;
+          n.x = n.toX = next.x;
+          n.y = n.toY = next.y;
+          n.map = next.map;
+          n.jump = !!next.jump;
+          n.start = now;
+          n.duration = intent.duration || 256;
+          n.foot = (n.foot + 1) % 2;
+          if (changedMap) {
+            this.states.delete(map + ":" + n.id);
+            this.states.set(next.map + ":" + n.id, n);
+          }
+          this.onChange(next.map, n, intent);
+          continue;
+        }
         const [dx, dy] = DIRECTIONS[dir],
           x = n.x + dx,
           y = n.y + dy;

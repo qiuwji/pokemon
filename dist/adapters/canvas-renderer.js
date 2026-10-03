@@ -200,12 +200,14 @@ export class Renderer {
     for (const id of ids) this.drawMap(id, false, now);
     const all = ids.flatMap((id) => {
       const o = this.graph.placements[id];
-      return npcs.view(id, now).map((n) => ({
-        ...n,
-        map: id,
-        px: n.px + o.x * 16,
-        py: n.py + o.y * 16,
-      }));
+      return npcs
+        .view(id, now, { reducedMotion: this.reducedMotion() })
+        .map((n) => ({
+          ...n,
+          map: id,
+          px: n.px + o.x * 16,
+          py: n.py + o.y * 16,
+        }));
     });
     all.push({
       ...player,

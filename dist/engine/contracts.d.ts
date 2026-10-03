@@ -371,6 +371,8 @@ export type ContentKind =
   | "timeTasks"
   | "crops"
   | "berryPlots"
+  | "actorTemplates"
+  | "npcPoses"
   | "terrainRules"
   | "fieldActions"
   | "fieldLinks"
@@ -490,9 +492,12 @@ export interface AudioCue {
   notes?: [number, number][];
 }
 export interface NPCIntent {
+  interaction?: { target: string; kind: string };
+  goal?: { map: string; x: number; y: number; adjacent?: boolean };
+  state?: Json;
   dir?: Direction;
   move: boolean;
-  pose: "still" | "walk" | "jog" | "hop" | "spin" | "sleep" | "cheer";
+  pose: string;
   duration?: number;
 }
 export interface PluginAPI {
@@ -769,4 +774,22 @@ export interface CropDefinition {
 export interface BerryPlotDefinition {
   map: string;
   objectId: string;
+}
+
+export interface ActorTemplateDefinition {
+  name: string;
+  actor: string;
+  behavior: string;
+  config?: Record<string, Json>;
+  schema?: DataSchema;
+  initialState?: Json;
+  perceptionRadius?: number;
+}
+
+export interface NPCPoseDefinition {
+  inPlace?: boolean;
+  height?: number;
+  periodMs?: number;
+  stepPeriodMs?: number;
+  actor?: string;
 }

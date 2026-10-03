@@ -63,6 +63,8 @@ export function validateWorldExtensions(catalog, entries) {
   }
   for (const map of Object.values(catalog.maps)) {
     const ids = (map.elements || []).map((e) => e.id);
+    if (ids.some((id) => /^core:actor\.\d+$/.test(id)))
+      throw new Error("Reserved persistent actor identity");
     if (new Set(ids).size !== ids.length)
       throw new Error("Duplicate map element identity");
   }

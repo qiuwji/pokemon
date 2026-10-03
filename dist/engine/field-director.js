@@ -46,11 +46,11 @@ export class FieldDirector {
   }
   objects(map, actor, allowVacatedBy = null) {
     const objects = this.field.npcs
-      .objects(map)
+      .occupants(map)
       .filter((n) => n.id !== actor)
       .map((n) => ({
         ...n,
-        reserved: n.id === allowVacatedBy ? [] : this.field.npcs.reserved(n),
+        reserved: n.id === allowVacatedBy ? [] : n.reserved,
       }));
     if (actor !== "player" && this.field.position.map === map)
       objects.push({ ...this.field.position, id: "player" });

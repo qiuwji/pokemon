@@ -18,6 +18,7 @@ export function attachEmeraldExtensions(game, host) {
     busy: !!game.busy || !!game.commandBus?.active,
     battle: game.battle ? game.battle.snapshot() : null,
     time: game.timeView(),
+    actors: game.actors.list(),
     schedule: game.schedule.view(),
     crops: Object.fromEntries(
       Object.keys(game.catalog.berryPlots || {}).map((id) => [

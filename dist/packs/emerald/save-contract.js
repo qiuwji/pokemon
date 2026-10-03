@@ -1,3 +1,9 @@
+import { NPCPoseRegistry } from "../../engine/npc-poses.js";
+import {
+  ActorRepository,
+  ActorTemplateRegistry,
+} from "../../engine/actor-repository.js";
+import { NPCBehaviorRegistry } from "../../engine/npc-behaviors.js";
 import { CropRegistry, CropService } from "../../engine/crop-growth.js";
 import {
   EMERALD_CROPS,
@@ -41,6 +47,17 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (s.actors !== undefined)
+      new ActorRepository({
+        state: s.actors,
+        maps: db.maps,
+        registry: new ActorTemplateRegistry(catalog.actorTemplates, {
+          actors: db.actors,
+          behaviors: new NPCBehaviorRegistry(catalog.npcBehaviors, {
+            poses: new NPCPoseRegistry(catalog.npcPoses, { actors: db.actors }),
+          }),
+        }),
+      });
     if (s.clock !== undefined) {
       validateWorldClock(s.clock);
       if (s.playSeconds !== Math.floor(s.clock.playMs / 1000)) return false;
@@ -78,6 +95,12 @@ export function validateSave(
           ...(s.daycare?.egg ? [s.daycare.egg] : []),
         ],
       });
+    if (
+      Object.values(s.worldState?.maps || {}).some((m) =>
+        Object.keys(m.objects || {}).some((id) => /^core:actor\.\d+$/.test(id)),
+      )
+    )
+      return false;
     if (s.worldState !== undefined)
       new WorldStateService({ db, state: s.worldState });
   } catch {

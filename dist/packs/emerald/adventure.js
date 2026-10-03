@@ -130,7 +130,17 @@ export class EmeraldAdventure {
     this.applications.growth.bind();
     this.applications.time.bind();
     this.applications.crops.bind();
+    this.applications.actors.bind();
     this.applications.world.bind();
+  }
+  get actors() {
+    return this.applications.actors.api;
+  }
+  get actorRuntime() {
+    return this.applications.actors.runtime;
+  }
+  actorObjects(map) {
+    return this.applications.actors.objects(map);
   }
   cropView(...args) {
     return this.applications.crops.cropView(...args);

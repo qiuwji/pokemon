@@ -1,3 +1,5 @@
+import { NPCPoseRegistry } from "../../engine/npc-poses.js";
+import { ActorTemplateRegistry } from "../../engine/actor-repository.js";
 import { CropRegistry } from "../../engine/crop-growth.js";
 import { EMERALD_CROPS, validateBerryPlots } from "./berries.js";
 import { TimeTaskRegistry } from "../../engine/world-schedule.js";
@@ -99,7 +101,13 @@ export function createEmeraldPlugins(db, plugins, onError) {
       )
         throw new Error(`Unknown field action cue ${action.cue}`);
     validateFieldLinks(c.fieldLinks, c);
-    const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors);
+    const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors, {
+      poses: new NPCPoseRegistry(c.npcPoses, { actors: c.actors }),
+    });
+    new ActorTemplateRegistry(c.actorTemplates, {
+      actors: c.actors,
+      behaviors: npcBehaviors,
+    });
     new EvolutionService({
       db: { ...db, ...c },
       abilities: c.abilities,

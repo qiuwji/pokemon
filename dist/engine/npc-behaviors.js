@@ -1,3 +1,4 @@
+import { NPCPoseRegistry } from "./npc-poses.js";
 import { readOnly, callSync } from "./extensions/values.js";
 const choose = (directions, roll) =>
   directions[
@@ -36,7 +37,8 @@ export const NPC_BEHAVIORS = Object.freeze({
 });
 /** Behavior proposes an intent; shared grid collision, reservations and lifecycle remain authoritative. */
 export class NPCBehaviorRegistry {
-  constructor(definitions = {}) {
+  constructor(definitions = {}, { poses = new NPCPoseRegistry() } = {}) {
+    this.poses = poses;
     this.definitions = new Map(
       Object.entries({ ...NPC_BEHAVIORS, ...definitions }),
     );
@@ -52,9 +54,26 @@ export class NPCBehaviorRegistry {
     );
     if (
       typeof intent.move !== "boolean" ||
-      !["still", "walk", "jog", "hop", "spin", "sleep", "cheer"].includes(
-        intent.pose,
-      ) ||
+      (intent.interaction !== undefined &&
+        (!intent.interaction ||
+          typeof intent.interaction.target !== "string" ||
+          !intent.interaction.target ||
+          typeof intent.interaction.kind !== "string" ||
+          !/^[a-zA-Z0-9_.:-]{1,128}$/.test(intent.interaction.kind) ||
+          Object.keys(intent.interaction).some(
+            (k) => !["target", "kind"].includes(k),
+          ))) ||
+      (intent.goal !== undefined &&
+        (!intent.goal ||
+          typeof intent.goal.map !== "string" ||
+          !Number.isInteger(intent.goal.x) ||
+          !Number.isInteger(intent.goal.y) ||
+          (intent.goal.adjacent !== undefined &&
+            typeof intent.goal.adjacent !== "boolean") ||
+          Object.keys(intent.goal).some(
+            (k) => !["map", "x", "y", "adjacent"].includes(k),
+          ))) ||
+      !this.poses.definitions.has(intent.pose) ||
       (intent.dir !== undefined &&
         !["up", "down", "left", "right"].includes(intent.dir)) ||
       (intent.duration !== undefined &&

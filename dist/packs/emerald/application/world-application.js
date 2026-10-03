@@ -1,3 +1,4 @@
+import { NPCPoseRegistry } from "../../../engine/npc-poses.js";
 import {
   WorldStateService,
   emptyWorldState,
@@ -18,6 +19,8 @@ import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "advanceTravelClocks",
   "timeView",
+  "actorObjects",
+  "actorRuntime",
   "actionBusy",
   "growthBusy",
   "growthDirector",
@@ -63,6 +66,7 @@ export class WorldApplication {
         this.db,
       ),
       ...(this.db.maps[map].elements || []),
+      ...this.actorObjects(map),
     ];
   }
   patchWorld(operations) {
@@ -80,7 +84,38 @@ export class WorldApplication {
     return result;
   }
   prepareWorldPatch(operations) {
+    if (
+      operations.some(
+        (o) => o.kind === "object" && /^core:actor\.\d+$/.test(o.id),
+      )
+    )
+      throw new Error("Persistent actors require actor commands");
     const draft = this.worldState.prepare(operations);
+    for (const operation of operations) {
+      const map = this.db.maps[operation.map],
+        overlay = draft.maps[operation.map];
+      for (const actor of this.field.npcs
+        .occupants(operation.map)
+        .filter((n) => /^core:actor\.\d+$/.test(n.id))) {
+        const block = overlay?.tiles[actor.y * map.width + actor.x]?.block;
+        if (block !== undefined && (block >> 10) & 3)
+          throw new Error("World patch would block an actor");
+        if (operation.kind === "object") {
+          const entry = overlay?.objects[operation.id],
+            base = this.baseWorldObjects(operation.map).find(
+              (n) => n.id === operation.id,
+            );
+          const position = { ...base, ...entry?.changes };
+          if (
+            !entry?.hidden &&
+            (entry?.spawn || base) &&
+            position.x === actor.x &&
+            position.y === actor.y
+          )
+            throw new Error("World object would overlap an actor");
+        }
+      }
+    }
     const current = this.state.position;
     const record = draft.maps[current.map];
     const tile =
@@ -218,8 +253,18 @@ export class WorldApplication {
         if (event.kind === "fault")
           this.ui?.toast("地形规则发生错误：" + event.reason);
       },
-      npcBehaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors),
-      npcContext: (map) => ({
+      npcBehaviors: new NPCBehaviorRegistry(this.catalog.npcBehaviors, {
+        poses: new NPCPoseRegistry(this.catalog.npcPoses, {
+          actors: this.db.actors,
+        }),
+      }),
+      npcResolveIntent: (...args) => this.actorRuntime.resolve(...args),
+      npcOnIntent: (...args) => this.actorRuntime.intent(...args),
+      npcActorStep: (...args) => this.actorRuntime.step(...args),
+      npcOnChange: (...args) => this.actorRuntime.commit(...args),
+      npcOnError: (error) => this.plugins?.onError(error),
+      npcContext: (map, n) => ({
+        ...this.actorRuntime.context(map, n),
         time: this.timeView(),
         environment: this.worldState.maps[map].presentation || {},
       }),

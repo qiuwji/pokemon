@@ -10,6 +10,7 @@ export function registerEmeraldCommands(game, bus) {
   const domainPermissions = {
     time: "time",
     crop: "crops",
+    actor: "actors",
     field: "movement",
     world: "world",
     movement: "movement",
@@ -47,6 +48,42 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  const actorPosition = objectSchema(
+    {
+      map: id,
+      x: { type: "integer", minimum: 0 },
+      y: { type: "integer", minimum: 0 },
+      dir: { type: "string", enum: ["up", "down", "left", "right"] },
+    },
+    ["map", "x", "y", "dir"],
+  );
+  register(
+    "actor.spawn",
+    objectSchema({ template: id, position: actorPosition }, [
+      "template",
+      "position",
+    ]),
+    ({ template, position }) => game.actors.spawn(template, position),
+  );
+  register(
+    "actor.update",
+    objectSchema(
+      {
+        uid: id,
+        position: actorPosition,
+        data: { type: "string", maxLength: 8192 },
+        pose: id,
+        hidden: { type: "boolean" },
+      },
+      ["uid"],
+    ),
+    ({ uid, data, ...changes }) =>
+      game.actors.update(uid, {
+        ...changes,
+        ...(data !== undefined ? { data: JSON.parse(data) } : {}),
+      }),
+  );
+  register("actor.remove", byUid, ({ uid }) => game.actors.remove(uid));
   register(
     "crop.action",
     objectSchema(

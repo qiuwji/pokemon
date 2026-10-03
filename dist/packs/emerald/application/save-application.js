@@ -1,3 +1,4 @@
+import { emptyActors } from "../../../engine/actor-repository.js";
 import { emptyCrops } from "../../../engine/crop-growth.js";
 import { emptyWorldClock } from "../../../engine/world-clock.js";
 import { emptyWorldSchedule } from "../../../engine/world-schedule.js";
@@ -79,6 +80,7 @@ export class SaveApplication {
       clock: emptyWorldClock(),
       schedule: emptyWorldSchedule(),
       crops: emptyCrops(),
+      actors: emptyActors(),
       friendshipSteps: 0,
       movement: { mode: "walk", visited: [PACK.start.map] },
       growth: { hatchTick: 0 },

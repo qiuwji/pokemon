@@ -1,3 +1,4 @@
+import { ActorApplication, ACTOR_PORTS } from "./actor-application.js";
 import { CropApplication, CROP_PORTS } from "./crop-application.js";
 import { TimeApplication, TIME_PORTS } from "./time-application.js";
 import { liveApplicationPorts } from "./ports.js";
@@ -31,6 +32,9 @@ import {
 export function composeApplications(applications, read, { storage }) {
   applications.save = new SaveApplication(
     liveApplicationPorts(read, SAVE_PORTS, { storage }),
+  );
+  applications.actors = new ActorApplication(
+    liveApplicationPorts(read, ACTOR_PORTS),
   );
   applications.crops = new CropApplication(
     liveApplicationPorts(read, CROP_PORTS),

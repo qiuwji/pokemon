@@ -147,3 +147,23 @@ const plot: import("../dist/engine/contracts.js").BerryPlotDefinition = {
   objectId: "soil",
 };
 void [crop, plot];
+
+const worker: import("../dist/engine/contracts.js").ActorTemplateDefinition = {
+  name: "Worker",
+  actor: "ProfBirch",
+  behavior: "still",
+};
+const navigationIntent: import("../dist/engine/contracts.js").NPCIntent = {
+  move: false,
+  pose: "walk",
+  goal: { map: "meadow", x: 1, y: 2, adjacent: true },
+  state: { phase: "work" },
+};
+void [worker, navigationIntent];
+
+const actorPose: import("../dist/engine/contracts.js").NPCPoseDefinition = {
+  height: 4,
+  periodMs: 400,
+  actor: "Boy1",
+};
+void actorPose;
