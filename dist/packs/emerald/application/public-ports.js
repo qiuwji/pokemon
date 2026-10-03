@@ -68,6 +68,7 @@ export const APPLICATION_METHODS = Object.freeze({
   inventoryPreview: Object.freeze(["inventory", "inventoryPreview"]),
   itemQuantity: Object.freeze(["inventory", "itemQuantity"]),
   registeredItemView: Object.freeze(["itemShortcut", "view"]),
+  fieldEffectView: Object.freeze(["fieldActions", "viewEffects"]),
   registerItem: Object.freeze(["itemShortcut", "register"]),
   unregisterItem: Object.freeze(["itemShortcut", "unregister"]),
   useRegisteredItem: Object.freeze(["itemShortcut", "use"]),

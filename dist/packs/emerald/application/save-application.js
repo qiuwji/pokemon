@@ -1,4 +1,5 @@
 import { emptyFacilities } from "../../../engine/facilities.js";
+import { emptyFieldEffects } from "../../../engine/field-effects.js";
 import { emptyWeather } from "../../../engine/weather.js";
 import { emptyInventory } from "../../../engine/inventory.js";
 import { emptyFieldDevices } from "../../../engine/field-devices.js";
@@ -70,6 +71,7 @@ export class SaveApplication {
   newState() {
     return {
       facilities: emptyFacilities(),
+      fieldEffects: emptyFieldEffects(),
       position: { ...PACK.start },
       party: [],
       box: [],

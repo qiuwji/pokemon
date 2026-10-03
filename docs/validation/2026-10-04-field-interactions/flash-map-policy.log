@@ -1,0 +1,43 @@
+✔ Field plans validate before changes, expose immutable data and cannot be forged, reused or committed by a different issuer (0.9865ms)
+✔ Changed conditions, coordinates and cancelled plans reject without side effects (0.145084ms)
+✔ Registration rejects duplicate actions, missing rules, invalid durations and invalid schemas (0.091791ms)
+✔ Action transitions commit only under cover and release presentation on exceptions (0.279375ms)
+✔ Cut runs through a public command, saves an object overlay, and a repeated action cannot remove a different object (35.60675ms)
+✔ Rock smash requires the correct badge and move; normal field actions do not honor research equipment bypass (15.308375ms)
+✔ A content-only plugin defines an action and receives read-only state; host validation rejects an illegal player-blocking plan (15.13ms)
+✔ Changes during action animation invalidate the old target and release locks (11.739042ms)
+✔ Dive and surface use content-registered links, cover map changes, retain party and restore movement modes (19.543458ms)
+✔ Waterfall climbs as grid steps, blocks ordinary surf ascent and checks the full route before animation (17.823875ms)
+✔ Fishing has waiting, early-input failure, bite windows, no-table failure and exact timeout precedence (0.245583ms)
+✔ Fishing rod rules require repeated rounds and lead suction cups changes bite odds without treating eggs as an ability owner (0.070459ms)
+✔ Fishing encounter tables select the correct rod and reject rod filters on other encounter areas (0.126084ms)
+✔ Successful fishing bypasses a second encounter probability roll and intimidation while preserving wild creation rules (1.966208ms)
+✔ The public fishing command accepts concurrent reel input, launches one encounter after cleanup, and keeps the rod (12.032042ms)
+✔ Public fishing can cancel without generating a monster, and map requirements prevent a land save with a diving mode (14.9565ms)
+✔ Data-driven stories reuse their field scene, record action results and reject unsafe parallel actions before any flag write (11.619333ms)
+✔ Plugins register a field action visual through the shared presentation registry; unknown cues and malformed links fail at startup (12.521834ms)
+✔ Cut and rock reset on connected entry without losing permanent changes or active-save progress (24.077625ms)
+✔ Restored obstacles cannot occupy the landing cell; rejected entry leaves position and overlays unchanged (10.354708ms)
+✔ Map-visit observers see committed player location; blocked story entry stops subsequent rewards (9.970541ms)
+✔ Effect scopes preserve active saves, reset visit effects and apply registered retention on ordinary entry versus travel (1.557208ms)
+✔ Effect data, ownership, one-shot plans and retention contracts fail before mutation (0.403084ms)
+✔ Strength activation owns no PP or encounter rolls; ordinary blocked movement displaces and follows through registered plans (41.962792ms)
+✔ A custom crate triggers without story; its final occupancy drives an independently registered sensor (16.032459ms)
+✔ Object destinations reject walls, water, other objects, warps and incompatible elevations without moving either participant (75.730916ms)
+✔ Motion rechecks occupancy after presentation and a failed follower restores the object overlay (14.810292ms)
+✔ Displacement respects both-end reservations and can move independently without moving the player (10.1615ms)
+✔ Object and follower interpolation share one duration and settle before field action unlock (13.598334ms)
+✔ Registered interaction priority selects a qualified action consistently and saved effect references declare their plugin dependency (24.578834ms)
+✔ A terrain interaction is routed into the same action API; item ownership gates the same effect lifecycle (20.825125ms)
+✔ Flash uses its badge and registered darkness; strict saves reject removed effects and missing current-format state (25.087458ms)
+✔ Automatic interaction schemas and priorities validate at registration; pure effect callbacks cannot dispatch writes (11.769208ms)
+✔ Lighting metadata validates; pure sampling expands smoothly and reduced motion does not change rule state (3.422083ms)
+✔ Lighting masks preserve world pixels inside the union of lights and draw only outside rows (0.186667ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 353.779792

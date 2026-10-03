@@ -32,6 +32,20 @@ export class FieldActionRegistry {
       throw new Error(`Invalid field action ${id}`);
     if (definition.menu !== undefined && typeof definition.menu !== "boolean")
       throw new Error("Invalid field action menu visibility");
+    if (
+      definition.triggers !== undefined &&
+      (!Array.isArray(definition.triggers) ||
+        !definition.triggers.length ||
+        new Set(definition.triggers).size !== definition.triggers.length ||
+        definition.triggers.some((t) => !["interact", "blocked"].includes(t)))
+    )
+      throw new Error("Invalid field action triggers");
+    if (
+      definition.priority !== undefined &&
+      (!Number.isInteger(definition.priority) ||
+        Math.abs(definition.priority) > 10000)
+    )
+      throw new Error("Invalid field action priority");
     if (definition.avatar) {
       validateMoveAnimation({
         duration: Math.max(1, definition.duration),
@@ -44,6 +58,7 @@ export class FieldActionRegistry {
     const schema = validateSchema(definition.schema || objectSchema());
     if (schema.type !== "object")
       throw new Error("Field action inputs must be objects");
+    if (definition.triggers?.length) validateValue(schema, {});
     this.definitions.set(
       id,
       Object.freeze({
@@ -51,6 +66,7 @@ export class FieldActionRegistry {
         ...(definition.avatar ? { avatar: readOnly(definition.avatar) } : {}),
         id,
         schema,
+        triggers: Object.freeze([...(definition.triggers || [])]),
       }),
     );
     return id;
@@ -118,6 +134,24 @@ export class FieldActionService {
           };
         }
       });
+  }
+  /** Objects, items and terrain share action qualification/targeting; routing never knows content kinds. */
+  interaction(event) {
+    if (!["interact", "blocked"].includes(event))
+      throw new Error("Unknown field interaction event");
+    const context = readOnly(this.query());
+    const candidates = [...this.registry.definitions.values()]
+      .filter((d) => d.triggers.includes(event))
+      .sort(
+        (a, b) =>
+          (a.priority || 0) - (b.priority || 0) ||
+          (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
+      );
+    for (const d of candidates) {
+      const result = this.inspect(d.id, {}, context);
+      if (result.ok) return { id: d.id, name: d.name };
+    }
+    return null;
   }
   prepare(id, input = {}) {
     const result = this.inspect(id, input);

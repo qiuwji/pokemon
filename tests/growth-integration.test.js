@@ -1,3 +1,4 @@
+import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
@@ -454,6 +455,7 @@ test("Growth presentation commits once under its white cover and clears locks wh
 test("Save owns daycare and trade identities, keeps egg clocks, and rejects duplicated custody or invalid eggs", () => {
   const s = state([mon()]);
   s.facilities = emptyFacilities();
+  s.fieldEffects = emptyFieldEffects();
   s.daycare.slots = [{ mon: mon("mudkip"), steps: 254, initialLevel: 5 }];
   const egg = mon();
   egg.egg = {

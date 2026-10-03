@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-04",
+  "baselineCommit": "06f67f6",
+  "revision": "Working tree at checkpoint; file hashes identify verified code before commit.",
+  "projectVersion": "0.19.0",
+  "saveVersion": 12,
+  "pluginApiVersion": 1,
+  "node": "v26.0.0",
+  "scope": "Registered object/terrain/item action routing; field effect persistence and retention; generic one-cell displacement and follower, device occupancy feedback; pure local illumination; independent public-only workshop example. Public extension proposals for encounters/contact/appearance/camera/environment are design only.",
+  "reference": {
+    "path": "work/pokeemerald",
+    "sha": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "status": "clean, read-only",
+    "sources": [
+      "data/scripts/field_move_scripts.inc",
+      "src/event_data.c",
+      "src/overworld.c",
+      "src/field_player_avatar.c",
+      "src/event_object_movement.c",
+      "src/party_menu.c",
+      "src/field_screen_effect.c"
+    ],
+    "policy": "HM qualifications and flag lifecycle are referenced. Continuous-time movement, explicit travel clearing and configurable logical-pixel lighting are project contracts; not frame-exact emulation."
+  },
+  "tests": [
+    {
+      "log": "initial.log",
+      "tests": 11,
+      "pass": 7,
+      "fail": 4,
+      "skipped": 0
+    },
+    {
+      "log": "repairs1.log",
+      "tests": 4,
+      "pass": 2,
+      "fail": 2,
+      "skipped": 0
+    },
+    {
+      "log": "repairs2.log",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "additions.log",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "affected.log",
+      "tests": 110,
+      "pass": 109,
+      "fail": 1,
+      "skipped": 0
+    },
+    {
+      "log": "architecture-repair.log",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "full.log",
+      "tests": 701,
+      "pass": 698,
+      "fail": 3,
+      "skipped": 0
+    },
+    {
+      "log": "version-repairs.log",
+      "tests": 45,
+      "pass": 45,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "full-before-map-policy.log",
+      "tests": 701,
+      "pass": 701,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "flash-map-policy.log",
+      "tests": 35,
+      "pass": 35,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "full-final.log",
+      "tests": 701,
+      "pass": 701,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "log": "examples.log",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "repairs": [
+    "Initial implementation: connected missing device event port, projected finite JSON occupants, and corrected movement result/warp/elevation/read-only dispatch arrangements. No assertions removed.",
+    "Affected architecture test required public extension utilities; replaced private World import with public frontCell helper, keeping the guard.",
+    "Full suite failures were three stale version-11 assertions; changed to current format 12, no compatibility fallback.",
+    "After an initially passing full suite, native Flash was changed to save only activation and derive radius from the current map; affected 35 and final full 701 passed."
+  ],
+  "checks": {
+    "content": "passed; 14 startup maps, 354 runtime moves",
+    "types": "passed, including final public field-utils declaration consumer",
+    "modules": 276,
+    "syntaxAfterLastSemanticChange": "node --check passed for both changed pack files",
+    "documentation": {
+      "status": "passed",
+      "files": 63,
+      "localLinks": 414,
+      "synchronizedExamples": 9,
+      "log": "docs.log"
+    }
+  },
+  "notVerified": [
+    "Real browser interaction/lighting/resource fidelity and final combined acceptance",
+    "Original complete maps/story/HM assets",
+    "Planned encounter policy, contact tokens, appearance, viewport and multilayer visibility interfaces"
+  ],
+  "reusePolicy": "Reuse final proofs while their source/contract and dependencies remain unchanged; semantic changes invalidate affected evidence. New conforming business content gets scoped tests. Final system acceptance includes current full regression and browser.",
+  "hashes": {
+    "dist/adapters/canvas-renderer.js": "8cb44f43c8754ff1a4d90bc21fcdc12e680dda77faa0caf2498096cb42234376",
+    "dist/app.js": "8d2ddcec3f785bbc4cd2e5e185342aed2f92091f4bf1724cd83cb9126071a3f9",
+    "dist/engine/content.js": "49ccf27b9a3290cc51cbe0f066d29d8f8282e12fe8ca20009051d52bee461457",
+    "dist/engine/contracts.d.ts": "969330424b99fe5b3268a50d4336026965954b1403475c9baa3060de2218cf9b",
+    "dist/engine/extensions/catalog.js": "76200807f3ccfb3823476a9132b005e34bf72a8f57973fec09dd87dce5519751",
+    "dist/engine/extensions/field-utils.d.ts": "667164e18b4e3449f07a500677a69f2fe608c308d6bc010db9f9382f36383b3e",
+    "dist/engine/extensions/field-utils.js": "ce0a575bed5eaf3fd081d95b0f647e96782e4eb8ede9c1757a6a5383e489eb10",
+    "dist/engine/extensions/plugin-host.js": "0fa31856aa329ce969b77444c9680e2ee1d1d475ae7b4fc71e11034e4e947325",
+    "dist/engine/field-actions.js": "084249ba94fc80c6d5c7d70115abd9f1c0b41b5da75b14fffa767f6ee3fc8777",
+    "dist/engine/field-devices.js": "4611d895f62e39d569c2223bedafa3bb82c7e95f9b33c0091325d564e200705b",
+    "dist/engine/field-effects.js": "692f4d41cdd91f5049ec2a668e177901c8860eec6e881a3d1d96c486fdc29ad4",
+    "dist/engine/map-lighting.js": "7f0e32a55c0cacfee6793e03ab957d2d464f5ab6741addb4ccb1f2b34ac65d88",
+    "dist/engine/object-motion.js": "ad5951d6b68ff7437ceab41732c81bfc3b56183e066def613b5ca711efd963d3",
+    "dist/engine/world.js": "6f2b38e377968a079b999f1e46ead8d77c8b52c5cd45a9adc587dedcad99db3f",
+    "dist/packs/emerald/application/composition.js": "30462f5c641dfe5a6765a2a35459c94bb558cfe30a29d6e8aba8b6deec540bb6",
+    "dist/packs/emerald/application/device-application.js": "ac4136edfa360628baf933cb7f6ae74a406318f83958763fe9f51537feae9c58",
+    "dist/packs/emerald/application/field-action-application.js": "e3649c72dc607be51c9bd70d69192db82db2c3e4e411afd08b5435f62448b329",
+    "dist/packs/emerald/application/movement-application.js": "ff2683007c8a2fd180298951412f43bdce7ada675eadb8e301e43d4344c32645",
+    "dist/packs/emerald/application/public-ports.js": "a1eb903529930401ab633d1034b585766bebbebcc9b3e14ee8fdcbf1edda6839",
+    "dist/packs/emerald/application/save-application.js": "aea8d51f97202e3b5c99d6abecec8dc62906cfe4f685aede7338d8a6f0d94a88",
+    "dist/packs/emerald/application/world-application.js": "969275cc8242b38c0c5ddecd90eec27a662081b272615c86055d3e267757c998",
+    "dist/packs/emerald/application/world-object-operations.js": "9823a39b39a8b582decf4de2716c4f4aa3c2983fa5d291a9bfa58a59d18c65b0",
+    "dist/packs/emerald/extension-ports.js": "3ba93b2ea84d4c4ed8a7bf21890aa6b78375c5fc1e3516766e44b49dea9a385b",
+    "dist/packs/emerald/extensions.js": "babb76152c1ca57053840afd4f8730e663dde53c394d1c6c05cabdcc33922f0c",
+    "dist/packs/emerald/field-actions.js": "9d0197cc200f9d3866890f1622a491ed5604bf8c66fe8eaa8944e9abe709d26c",
+    "dist/packs/emerald/field-effects.js": "05a752f7f4b11f60bbda7c39bb413fe9d0f1b32a573a367b977240d261026f4d",
+    "dist/packs/emerald/pack.js": "6c253f00d3c487167b3972403fcebacc76cd8fb790bf8e78c78db7c05626ab9f",
+    "dist/packs/emerald/save-contract.js": "7b03107380e662d8a6c77df8420ec69179a80698ae457e69711055e870b88f8f",
+    "dist/plugins/interaction-workshop.js": "3ae10d54de8d6f211ce116202534a49f7c390152cf7e6d570d2c0d8fd2eb0209",
+    "dist/presentation/field-action-canvas.js": "c7fd96e10f6c173f5fe83d8b2cb4c33537b214e9ce89aaca0706bad30343e042",
+    "dist/presentation/field-action-director.js": "3dd877dbb5b3f470bc1673004416853ef31af4b220fd4cc3423af670fefb3a93",
+    "dist/presentation/lighting.js": "894010803285ab76f8b982f883d083c12a4621dc8fad49eed4d4ec3c0888b31b",
+    "package-lock.json": "33411c1e0af0d16d12babfa6a420c230892b081487f238e64edb8c04d75eb36d",
+    "package.json": "0e9ec84bb20f69024f9bfa9de625c215d0e2bb61fc32addfbcfb3326618102a7",
+    "tests/contracts.typecheck.ts": "c3e875df255a7d78cf57de5e19fd8972d1c71678a825de4842447c041332b4b7",
+    "tests/creature-contract.test.js": "d6bad6409bca21b48086793e78f154624fbcc384138b61e6de6ea1f7c6db01e7",
+    "tests/engine.test.js": "6e9ec3ac2c6f112465151ad4bf577d11946d5079485fb34eec7e7dd581833ef1",
+    "tests/evolution.test.js": "6faa882600288ffe5844127deb41c500fd90c37dd6d56ade20c7d3648317e2f2",
+    "tests/field-interactions.test.js": "6ed82fa91b300668640708abe37473be860b9ada08d491ba33e38c5c72d6eae0",
+    "tests/growth-integration.test.js": "23b5f9eba0b3a58292fff1ef43d56c91028c8a0c83dc405fa7876325f6f07234",
+    "tests/inventory-integration.test.js": "6972b2534978f05f4477e0a1db4b33060efbe5dd5e26b588bda2c2e4468a9bb5",
+    "tests/item-shortcut.test.js": "b136a53f283014ef65ce1357010f6b8fa0b7b4e76e06759203d33f1128b1e441",
+    "tests/movement.test.js": "1442ac93c336e980b97274355138e699b3c1fdefed6b2578a88153bfe5f2a4ff",
+    "tests/team-battle.test.js": "7d567658a384a08a2b7a38e712664a7e57153e9f7b8e3bc64ee3c796c57c4fd3",
+    "tests/weather.test.js": "79ee64b6cdfd4d92e365201df8db1bcfff974518269f8810eb1b70cc299f2315"
+  },
+  "sourceSnapshot": {
+    "files": 382,
+    "algorithm": "sha256(sorted path + NUL + file SHA256, joined with LF)",
+    "digest": "9f6af4c58bcdaa885d00d88219d4461974488e671e98bcac28df8e6cc0dd5754",
+    "scope": "JS/MJS/TS/JSON/CSS/HTML/Python under dist/tests/examples/tools plus package metadata; excludes docs, logs, resources not changed this batch and preexisting untracked .bak."
+  }
+}

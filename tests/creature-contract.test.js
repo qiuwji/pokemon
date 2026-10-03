@@ -1,3 +1,4 @@
+import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
@@ -22,6 +23,7 @@ const state = () => ({
   weather: emptyWeather(),
   registeredItem: null,
   facilities: { nextId: 1, results: [] },
+  fieldEffects: emptyFieldEffects(),
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [createMonster("mudkip", 5, db, new Random(4))],
   box: [],

@@ -1,4 +1,5 @@
 import { WeatherDirector } from "../presentation/weather-director.js";
+import { LightingDirector, drawLighting } from "../presentation/lighting.js";
 import { sampleSpriteAnimation } from "../presentation/sprite-animation.js";
 import {
   drawWeather,
@@ -43,6 +44,7 @@ export class Renderer {
     this.motion = new GridMotion(this.graph);
     this.camera = { x: 0, y: 0 };
     this.weatherDirector = new WeatherDirector();
+    this.lightingDirector = new LightingDirector();
   }
   moving(now = performance.now()) {
     return this.motion.moving(now);
@@ -226,12 +228,17 @@ export class Renderer {
       const o = this.graph.placements[id];
       return npcs
         .view(id, now, { reducedMotion: this.reducedMotion() })
-        .map((n) => ({
-          ...n,
-          map: id,
-          px: n.px + o.x * 16,
-          py: n.py + o.y * 16,
-        }));
+        .map((n) => {
+          const move = action?.objects?.find(
+            (e) => e.map === id && e.id === n.id,
+          );
+          return {
+            ...n,
+            map: id,
+            px: n.px + o.x * 16 + (move?.x || 0),
+            py: n.py + o.y * 16 + (move?.y || 0),
+          };
+        });
     });
     all.push({
       ...player,
@@ -363,6 +370,28 @@ export class Renderer {
           (n.player ? 16 : (this.db.actors[n.actor]?.h || 32) - 16),
       });
     }
+    const lighting = this.lightingDirector.sample(
+      p.map,
+      now,
+      m.darkness,
+      Object.values(environment.fieldEffects?.records || {}).map(
+        (r) => r.presentation,
+      ),
+      { reducedMotion: this.reducedMotion() },
+    );
+    if (lighting)
+      drawLighting(c, {
+        width: this.canvas.width,
+        height: this.canvas.height,
+        opacity: lighting.opacity,
+        lights: [
+          {
+            x: player.x - this.camera.x + 8,
+            y: player.y - this.camera.y + 8,
+            radius: lighting.radius,
+          },
+        ],
+      });
   }
   battle(frame) {
     drawBattle(this.ctx, this.assets, frame);

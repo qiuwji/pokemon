@@ -213,12 +213,44 @@ export class PluginHost {
               value = {
                 ...value,
                 ...Object.fromEntries(
-                  ["activate", "enter", "leave", "settle", "timer", "interact"]
+                  [
+                    "activate",
+                    "enter",
+                    "leave",
+                    "settle",
+                    "timer",
+                    "interact",
+                    "occupancy",
+                  ]
                     .filter((key) => original[key])
                     .map((key) => [
                       key,
                       (context) => evaluate(original[key], readOnly(context)),
                     ]),
+                ),
+              };
+            }
+            if (kind === "fieldEffects") {
+              const original = value;
+              value = {
+                ...value,
+                ...Object.fromEntries(
+                  ["retain", "presentation"]
+                    .filter((key) => original[key] !== undefined)
+                    .map((key) => {
+                      if (typeof original[key] !== "function")
+                        throw new Error(
+                          "Field effect requires synchronous callbacks",
+                        );
+                      return [
+                        key,
+                        (...args) =>
+                          evaluate(
+                            original[key],
+                            ...args.map((arg) => readOnly(arg)),
+                          ),
+                      ];
+                    }),
                 ),
               };
             }

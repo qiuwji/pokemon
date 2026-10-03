@@ -1,0 +1,11 @@
+✔ Displacement respects both-end reservations and can move independently without moving the player (27.395209ms)
+✔ Object and follower interpolation share one duration and settle before field action unlock (16.807333ms)
+✔ Registered interaction priority selects a qualified action consistently and saved effect references declare their plugin dependency (24.936875ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 186.445083

@@ -22,6 +22,7 @@ export function attachEmeraldExtensions(game, host) {
     weather: game.weatherView(),
     actors: game.actors.list(),
     actorRoutines: game.actors.routines(),
+    fieldEffects: game.fieldEffectView(),
     schedule: game.schedule.view(),
     crops: Object.fromEntries(
       Object.keys(game.catalog.berryPlots || {}).map((id) => [

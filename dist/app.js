@@ -76,6 +76,7 @@ async function boot() {
         travelActor: PACK.travelActor,
         cameraRig: camera,
         environment: (map, now, mapId) => ({
+          fieldEffects: game?.fieldEffectView(),
           weather: game?.weatherView(mapId).visual || null,
           hour: game?.timeView().initialized ? game.timeView().hour : 12,
         }),

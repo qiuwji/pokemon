@@ -75,6 +75,8 @@ WorldStateService 分离永久覆盖与当前访问 visit 覆盖；地图重进�
 
 FieldActionService 拥有资格、目标和可校验行动计划；应用层协调移动/世界提交/钓鱼会话与演出。FieldTerrainRegistry 管通行和强制动作政策。FieldDeviceCatalog/FieldDevices 管多格 footprint、访问激活、逻辑状态与可保存的局部延迟任务；机关计时遵循游戏暂停，不使用 RTC 驱动帧动画。薄冰、裂地板和桥面升沉是内容包政策，核心没有房间 ID 分支。见 [FIELD_ACTIONS.md](docs/engine/field/FIELD_ACTIONS.md)、[FIELD_TERRAIN.md](docs/engine/field/FIELD_TERRAIN.md)、[FIELD_DEVICES.md](docs/engine/field/FIELD_DEVICES.md)、[BRIDGES.md](docs/engine/field/BRIDGES.md)。
 
+物品绑定、对象确认与地形/受阻行动共用注册入口。通用ObjectMotion预检一格位移、跟进和占位，WorldObjectOperations协调现有世界覆盖/玩家移动，纯导演输出偏移；怪力和箱子条件只在内容中。FieldEffects单独拥有持续野外数据，定义visit/world保留政策；地图darkness与light-radius投影经纯LightingDirector形成遮罩。照明不决定可见性规则或遇敌。见同一野外合同与独立interaction-workshop例；未来遇敌政策、接触、外观和相机接口按[插件计划](docs/project/PLUGIN_ROADMAP.md)推进，不能把拟议API当成已实现。
+
 MovementRegistry / MovementInputRegistry 分别描述模式和输入策略。Mach/Acro 原作控制在 Gen3 政策中，浏览器只映射逻辑输入。GridMotion / Sprite 序列负责插值和姿态帧，不决定规则。见 [MOVEMENT_INPUT.md](docs/engine/field/MOVEMENT_INPUT.md)。
 
 WorldClock 保存本地游戏 RTC，并单独累计前台游玩时长；宿主注入 wallNow/playActive。恢复、设备时钟回退和离线策略显式处理。WorldSchedule 保存持久任务，事实/业务提交遵循应用可用时机；CropService 单独负责树果成长和浇水/收获。见 [WORLD_TIME.md](docs/engine/world/WORLD_TIME.md)。每日事件入口不代表全部每日原作业务已经完成。
@@ -89,7 +91,7 @@ Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多
 
 StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/story/STORY_LANGUAGE.md) 和 [docs/architecture/CUTSCENES.md](docs/architecture/CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。
 
-精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT与保存10已接入；槽位库存服务/注册政策及插件启动校验已实现，当前游戏获得/消耗、容量、选槽页面与保存10迁移已完成，见 [INVENTORY.md](docs/engine/items/INVENTORY.md)。见 [ITEM_ACTIONS.md](docs/engine/items/FIELD_ITEMS.md)。见 [MOVE_LEARNING.md](docs/engine/items/MOVE_LEARNING.md)。见 [docs/architecture/GROWTH.md](docs/architecture/GROWTH.md)、[CREATURE_FORMS.md](docs/engine/creatures/FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
+精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT已接入；槽位库存服务/注册政策及插件启动校验已实现，游戏获得/消耗、容量、选槽页面使用当前保存合同，拒绝旧格式，见 [INVENTORY.md](docs/engine/items/INVENTORY.md)。见 [ITEM_ACTIONS.md](docs/engine/items/FIELD_ITEMS.md)。见 [MOVE_LEARNING.md](docs/engine/items/MOVE_LEARNING.md)。见 [docs/architecture/GROWTH.md](docs/architecture/GROWTH.md)、[CREATURE_FORMS.md](docs/engine/creatures/FORMS.md)。现代 Mega/Z 可复用当前形态、行动增强、资格/消费/限次合同；完整世代规则和内容仍需独立业务验证，不能以形态动画宣称完整玩法完成。
 
 ## 表现、音频与界面扩展
 
@@ -101,10 +103,10 @@ interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，�
 
 ## 存档、复用与验证
 
-SaveStore 只接受开发存档版本 10；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
+SaveStore 只接受PACK.version指定的当前开发存档格式（当前12）；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **687 项通过，0 失败、0 跳过**，九个 Skill 入门例通过，内容/严格类型/**268 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-checkpoint/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **701 项通过，0 失败、0 跳过**，九个 Skill 入门例通过，内容/严格类型/**276 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-field-interactions/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
 
 接手材料按职责组织：docs/project持有动态范围/状态/证据索引，docs/architecture解释职责，docs/engine按领域保存合同，docs/development说明业务写法与测试，history保存旧计划。九份Skill链接真实examples；check:docs校验本地链接和片段同步，不替代领域行为检查。

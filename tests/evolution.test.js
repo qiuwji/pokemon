@@ -1,3 +1,4 @@
+import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
@@ -200,6 +201,7 @@ test("A dialogue failure after reward can replay without duplicate money or item
 test("Current development save contract rejects older versions without mutating their data", () => {
   const s = state();
   s.facilities = emptyFacilities();
+  s.fieldEffects = emptyFieldEffects();
   s.weather = emptyWeather();
   s.registeredItem = null;
   s.party = [createMonster("mudkip", 5, db, new Random(1))];

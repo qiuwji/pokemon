@@ -1,4 +1,9 @@
 import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
+import {
+  FieldEffectRegistry,
+  FieldEffects,
+} from "../../engine/field-effects.js";
+import { EMERALD_FIELD_EFFECTS } from "./field-effects.js";
 import { FacilityRegistry, FacilitySession } from "../../engine/facilities.js";
 import {
   EMERALD_FACILITIES,
@@ -73,6 +78,18 @@ export function validateSave(
   try {
     jsonValue(s, 2 * 1024 * 1024);
     createEmeraldInventory(catalog).validate(s.bag);
+    new FieldEffects({
+      state: s.fieldEffects,
+      maps: db.maps,
+      registry: new FieldEffectRegistry(
+        catalog.fieldEffects || EMERALD_FIELD_EFFECTS,
+      ),
+    });
+    if (
+      s.fieldEffects.activeMap !== null &&
+      s.fieldEffects.activeMap !== s.position.map
+    )
+      return false;
     new FacilitySession({
       state: s.facilities,
       registry: new FacilityRegistry({

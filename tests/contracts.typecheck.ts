@@ -1,3 +1,4 @@
+import { frontCell } from "../dist/engine/extensions/field-utils.js";
 import type {
   PluginManifest,
   NetworkCommand,
@@ -5,6 +6,7 @@ import type {
   MovementDefinition,
   Creature,
   FieldActionDefinition,
+  FieldEffectDefinition,
   TerrainRuleDefinition,
   MovementInputDefinition,
   FieldMechanismDefinition,
@@ -24,6 +26,33 @@ const plugin: PluginManifest = {
   dataVersion: 1,
   permissions: [],
   setup(api) {
+    const fieldEffect: FieldEffectDefinition = {
+      scope: "world",
+      schema: {
+        type: "object",
+        properties: { radius: { type: "integer", minimum: 0, maximum: 512 } },
+        required: ["radius"],
+        additionalProperties: false,
+      },
+      retain: (context) => context.reason !== "travel" && context.map.indoor,
+      presentation: (data) => ({ kind: "light-radius", radius: data.radius }),
+    };
+    const fieldEffectId = api.content.register(
+      "fieldEffects",
+      "light",
+      fieldEffect,
+    );
+    const activateLight: FieldActionDefinition = {
+      name: "Light",
+      cue: "field-flash",
+      duration: 240,
+      triggers: ["interact"],
+      priority: 10,
+      allowed: (c) => !!c.map.darkness && !c.effects.records[fieldEffectId],
+      target: (c) => frontCell(c.position),
+      plan: () => ({ kind: "effect", id: fieldEffectId, data: { radius: 80 } }),
+    };
+    api.content.register("fieldActions", "light", activateLight);
     const pocket: import("../dist/engine/contracts.js").InventoryPocketDefinition =
       {
         label: "材料",

@@ -33,6 +33,10 @@ description: 在现有绿宝石工程中新增或演进HM、关键道具及野�
 
 ## 最小验收
 
+对象、道具和地形先尝试同一fieldActions入口：`triggers`选择交互、`items.actions`声明道具绑定、`displace`提交一格对象移动及可选玩家跟进、`fieldEffects`声明持续状态与保留政策。先读[FIELD_ACTIONS](../../docs/engine/field/FIELD_ACTIONS.md)的参数和所有权边界；独立组合是[interaction-workshop](../../dist/plugins/interaction-workshop.js)，对应[测试](../../tests/field-interactions.test.js)。文件移动搜索`Object and follower interpolation`、`fieldEffects`、`occupancy`。不要往World/FieldSession加石块种类、招式、道具或徽章分支，不通过世界覆盖写持久Actor坐标。
+
+局部照明不等于战争迷雾；接触遭遇、外观与相机的未来合同先核对[PLUGIN_ROADMAP](../../docs/project/PLUGIN_ROADMAP.md)，不能把计划API当作已经可用。
+
 新增注册→公开命令→真实世界变化/反馈→保存或重进恢复。验证一个正确执行、一个资格/目标失败、一次计划失效，以及影响到的库存/入口恢复边界；失败不写状态或耗RNG。复杂HM会话状态若尚无接口，登记框架缺口并按明确框架任务补，不能用特殊flag掩盖。
 
 更新STATUS和对应规格，保留草丛/推石/闪光等具体业务的参考差异；一个代表例不等于全部HM完成。

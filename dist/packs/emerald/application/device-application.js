@@ -48,6 +48,14 @@ export class DeviceApplication {
           index = device.y * map.width + device.x;
         return {
           position: { ...this.state.position },
+          objects: this.field.npcs.occupants(device.map).map((o) => ({
+            id: o.id,
+            x: o.x,
+            y: o.y,
+            kind: o.kind || "",
+            elevation: this.world.elevation.level(o, map),
+            reserved: this.field.npcs.reserved(o),
+          })),
           input: this.fieldInputView(),
           tile: { block: map.blocks[index], behavior: map.behavior[index] },
           tiles: device.footprint.map(({ dx, dy }) => {

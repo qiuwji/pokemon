@@ -1,3 +1,4 @@
+import { validDarkness } from "./map-lighting.js";
 /** Structural content contract, checked before loading assets or starting a game. */
 export function validateContent(db) {
   const errors = [];
@@ -17,6 +18,8 @@ export function validateContent(db) {
   if (errors.length) return errors;
   for (const [id, map] of Object.entries(db.maps)) {
     const path = `maps.${id}`;
+    if (map.darkness !== undefined)
+      check(validDarkness(map.darkness), path + ".darkness");
     check(
       Number.isInteger(map.width) &&
         map.width > 0 &&

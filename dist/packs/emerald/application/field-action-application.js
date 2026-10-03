@@ -1,5 +1,11 @@
 import { inventoryCounts } from "../../../engine/inventory.js";
 import {
+  FieldEffectRegistry,
+  FieldEffects,
+} from "../../../engine/field-effects.js";
+import { EMERALD_FIELD_EFFECTS } from "../field-effects.js";
+import { WorldObjectOperations } from "./world-object-operations.js";
+import {
   FieldActionRegistry,
   FieldActionService,
 } from "../../../engine/field-actions.js";
@@ -16,6 +22,7 @@ export const FIELD_ACTION_PORTS = Object.freeze([
   "busy",
   "catalog",
   "deviceView",
+  "deviceEvent",
   "clearInput",
   "encounterService",
   "encounterTables",
@@ -48,6 +55,25 @@ export class FieldActionApplication {
     this.actionBusy = false;
   }
   bind() {
+    this.effects = new FieldEffects({
+      state: this.state.fieldEffects,
+      maps: this.worldState.maps,
+      registry: new FieldEffectRegistry(
+        this.catalog.fieldEffects || EMERALD_FIELD_EFFECTS,
+      ),
+    });
+    const visit = this.effects.prepareVisit(this.state.position.map, {
+      resume: true,
+    });
+    if (visit) this.effects.commit(visit);
+    this.objectOperations = new WorldObjectOperations({
+      field: this.field,
+      movement: this.movement,
+      worldState: this.worldState,
+      prepareWorldPatch: this.prepareWorldPatch,
+      deviceEvent: this.deviceEvent,
+      plugins: this.plugins,
+    });
     this.actions = new FieldActionService({
       registry: new FieldActionRegistry(
         this.catalog.fieldActions || EMERALD_FIELD_ACTIONS,
@@ -75,12 +101,14 @@ export class FieldActionApplication {
         ]),
       ),
       revision: this.worldState.state.revision,
+      effects: this.effects.state,
       map: {
         width: this.world.map.width,
         height: this.world.map.height,
         blocks: this.world.map.blocks,
         behavior: this.world.map.behavior,
         underwater: !!this.world.map.underwater,
+        darkness: this.world.map.darkness || null,
       },
       flags: this.state.flags,
       bag: inventoryCounts(this.state.bag),
@@ -109,13 +137,40 @@ export class FieldActionApplication {
       route: ["kind", "directions", "mode"],
       fishing: ["kind", "rod"],
       movement: ["kind", "mode"],
+      effect: ["kind", "id", "data", "remove"],
+      displace: [
+        "kind",
+        "object",
+        "direction",
+        "follow",
+        "mode",
+        "scope",
+        "duration",
+      ],
     };
     if (
       !allowed[operation.kind] ||
       Object.keys(operation).some((k) => !allowed[operation.kind].includes(k))
     )
       throw new Error("Unsupported field operation");
-    if (operation.kind === "world") {
+    if (operation.kind === "displace")
+      return {
+        kind: "displace",
+        prepared: this.objectOperations.prepare(operation),
+      };
+    if (operation.kind === "effect") {
+      if (
+        operation.remove !== undefined &&
+        typeof operation.remove !== "boolean"
+      )
+        throw new Error("Invalid field effect removal");
+      return {
+        ...operation,
+        prepared: this.effects.prepare(operation.id, operation.data, {
+          remove: operation.remove,
+        }),
+      };
+    } else if (operation.kind === "world") {
       if (operation.encounter !== undefined && operation.encounter !== "rock")
         throw new Error("Invalid field encounter");
       this.prepareWorldPatch(operation.operations);
@@ -187,6 +242,17 @@ export class FieldActionApplication {
     return operation;
   }
   async commitOperation(operation) {
+    if (operation.kind === "displace")
+      return this.objectOperations.commit(operation.prepared);
+    if (operation.kind === "effect") {
+      const result = this.effects.commit(operation.prepared);
+      this.plugins?.events.emit("core:field-effect-changed", {
+        id: operation.id,
+        removed: !!operation.remove,
+        revision: result.revision,
+      });
+      return result;
+    }
     if (operation.kind === "world")
       return this.patchWorld(operation.operations);
     if (operation.kind === "travel") {
@@ -214,6 +280,36 @@ export class FieldActionApplication {
   inspect(id, input = {}) {
     const { ok, reason } = this.actions.inspect(id, input);
     return { ok, ...(reason ? { reason } : {}) };
+  }
+  viewEffects() {
+    return this.effects.view();
+  }
+  prepareVisit(map, options) {
+    const plan = this.effects.prepareVisit(map, options);
+    return {
+      check: () => {
+        if (plan) this.effects.check(plan);
+      },
+      commit: () => {
+        if (plan) this.effects.commit(plan);
+      },
+    };
+  }
+  interaction(event) {
+    return this.actions.interaction(event);
+  }
+  triggerBlocked() {
+    if (
+      this.actionBusy ||
+      this.field.busy ||
+      this.storyBusy ||
+      this.ui?.blocked
+    )
+      return false;
+    const action = this.interaction("blocked");
+    if (!action) return false;
+    this.pendingInteraction = this.perform(action.id);
+    return true;
   }
   options() {
     const entries = this.actions
@@ -334,6 +430,8 @@ export class FieldActionApplication {
         },
         { transitions: this.transitions },
       );
+      this.field.tick(this.timeline.now());
+      if (result?.motion) this.objectOperations.settle(result.motion);
       if (!result?.ok) return result;
       if (plan.operation.encounter) {
         const table = this.encounterTables.select(

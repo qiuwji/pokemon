@@ -64,9 +64,9 @@ export class World {
       elevation: m.blocks[i] >> 12,
     };
   }
-  entryPreview(map) {
+  entryPreview(map, options = {}) {
     return (
-      this.prepareEntry?.(map) || {
+      this.prepareEntry?.(map, options) || {
         map: this.maps[map],
         objects: this.objects(map),
       }

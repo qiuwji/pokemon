@@ -1,0 +1,118 @@
+✔ Effect scopes preserve active saves, reset visit effects and apply registered retention on ordinary entry versus travel (1.809542ms)
+✔ Effect data, ownership, one-shot plans and retention contracts fail before mutation (0.472542ms)
+✖ Strength activation owns no PP or encounter rolls; ordinary blocked movement displaces and follows through registered plans (35.007416ms)
+✖ A custom crate triggers without story; its final occupancy drives an independently registered sensor (12.433958ms)
+✖ Object destinations reject walls, water, other objects, warps and incompatible elevations without moving either participant (59.341ms)
+✔ Motion rechecks occupancy after presentation and a failed follower restores the object overlay (14.391875ms)
+✔ A terrain interaction is routed into the same action API; item ownership gates the same effect lifecycle (19.290292ms)
+✔ Flash uses its badge and registered darkness; strict saves reject removed effects and missing current-format state (23.353125ms)
+✖ Automatic interaction schemas and priorities validate at registration; pure effect callbacks cannot dispatch writes (12.469667ms)
+✔ Lighting metadata validates; pure sampling expands smoothly and reduced motion does not change rule state (3.925833ms)
+✔ Lighting masks preserve world pixels inside the union of lights and draw only outside rows (0.216ms)
+ℹ Error: Test "Automatic interaction schemas and priorities validate at registration; pure effect callbacks cannot dispatch writes" at tests/field-interactions.test.js:169:1 generated asynchronous activity after the test ended. This activity created the error "Error: Commands are forbidden inside a read-only callback or active transaction" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ tests 11
+ℹ suites 0
+ℹ pass 7
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 312.466792
+
+✖ failing tests:
+
+test at tests/field-interactions.test.js:63:1
+✖ Strength activation owns no PP or encounter rolls; ordinary blocked movement displaces and follows through registered plans (35.007416ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/field-interactions.test.js:72:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/field-interactions.test.js:87:1
+✖ A custom crate triggers without story; its final occupancy drives an independently registered sensor (12.433958ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/field-interactions.test.js:90:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/field-interactions.test.js:99:1
+✖ Object destinations reject walls, water, other objects, warps and incompatible elevations without moving either participant (59.341ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    {
+      activeMap: 'interaction-workshop:room',
+      maps: {
+        'interaction-workshop:room': {
+          objects: {},
+  ...
+      },
+  +   revision: 4,
+  +   visits: {
+  +     'interaction-workshop:room': {
+  +       objects: {
+  +         crate: {
+  +           changes: {
+  +             elevation: 2,
+  +             previousElevation: 2,
+  +             x: 3,
+  +             y: 2
+  +           }
+  +         }
+  +       },
+  +       tiles: {}
+  +     }
+  +   }
+  -   revision: 3,
+  -   visits: {}
+    }
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/field-interactions.test.js:110:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { revision: 4, maps: { 'interaction-workshop:room': [Object] }, visits: { 'interaction-workshop:room': [Object] }, activeMap: 'interaction-workshop:room' },
+    expected: { revision: 3, maps: { 'interaction-workshop:room': [Object] }, visits: {}, activeMap: 'interaction-workshop:room' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/field-interactions.test.js:169:1
+✖ Automatic interaction schemas and priorities validate at registration; pure effect callbacks cannot dispatch writes (12.469667ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/field-interactions.test.js:186:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /read-only|read only|rule|query/i,
+    operator: 'throws',
+    diff: 'simple'
+  }

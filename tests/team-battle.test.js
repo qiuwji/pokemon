@@ -1,3 +1,4 @@
+import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
@@ -424,6 +425,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
     story: emptyStoryProgress(),
   };
   state.facilities = { nextId: 1, results: [] };
+  state.fieldEffects = emptyFieldEffects();
   state.weather = emptyWeather();
   state.registeredItem = null;
   assert(validateSave(state, db));

@@ -1,3 +1,4 @@
+import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import { createBag } from "./helpers/inventory-fixture.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { emptyWeather } from "../dist/engine/weather.js";
@@ -361,6 +362,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
   };
   state.weather = emptyWeather();
   state.facilities = emptyFacilities();
+  state.fieldEffects = emptyFieldEffects();
   state.registeredItem = null;
   state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(validateSave(state, db));

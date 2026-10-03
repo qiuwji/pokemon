@@ -17,7 +17,7 @@
 `api.content.register("fieldMechanisms", id, definition)` 返回限定名称。定义包含：
 
 - `scope: "visit" | "permanent"`；`schema`、`initialState` 和 `configSchema`。
-- 可选 `activate / enter / leave / settle / timer / interact` 同步回调，至少一项。回调接收深度只读 `{ device, state, event, position, tile, tiles, mode, durationMs, input }`，不能通过策略评价调用宿主命令。
+- 可选 `activate / enter / leave / settle / timer / interact / occupancy` 同步回调，至少一项。回调接收深度只读 `{ device, state, event, position, objects, tile, tiles, mode, durationMs, input }`，不能通过策略评价调用宿主命令。objects为冻结的当前位置/预约投影；通用对象位移的occupancy三阶段和反馈边界见[FIELD_ACTIONS](FIELD_ACTIONS.md)，重量感应器不需要进入移动核心。
 - 回调返回 `{ state?, operations?, timers?, cancelTimers?, requests?, cancelRequests?, facts? }`。不修改传入快照，也不直接渲染。
 
 `api.content.register("fieldDevices", id, { map, x, y, elevation?, footprint?, mechanism, config? })` 只负责摆放。0 高度为通用平面，指定高度的机关不影响另一桥面。

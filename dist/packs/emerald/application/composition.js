@@ -77,6 +77,7 @@ export function composeApplications(applications, read, { storage }) {
   applications.fieldActions = new FieldActionApplication(
     liveApplicationPorts(read, FIELD_ACTION_PORTS, {
       deviceView: () => applications.devices.view(),
+      deviceEvent: (...args) => applications.devices.event(...args),
     }),
   );
   applications.devices = new DeviceApplication(
@@ -108,6 +109,10 @@ export function composeApplications(applications, read, { storage }) {
       },
       resetTriggers: () => applications.triggers.reset(),
       bindFieldActions: () => applications.fieldActions.bind(),
+      fieldInteraction: (event) => applications.fieldActions.interaction(event),
+      fieldEffectVisit: (map, options) =>
+        applications.fieldActions.prepareVisit(map, options),
+      blockedFieldInteraction: () => applications.fieldActions.triggerBlocked(),
     }),
   );
   applications.triggers = new TriggersApplication(

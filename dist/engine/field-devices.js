@@ -16,7 +16,15 @@ const id = (s) =>
   !["__proto__", "constructor", "prototype"].includes(s);
 const time = (n) =>
   Number.isFinite(n) && n >= 0 && n <= Number.MAX_SAFE_INTEGER;
-const phases = ["activate", "enter", "leave", "settle", "timer", "interact"];
+const phases = [
+  "activate",
+  "enter",
+  "leave",
+  "settle",
+  "timer",
+  "interact",
+  "occupancy",
+];
 export const emptyFieldDevices = () => ({
   revision: 0,
   elapsedMs: 0,

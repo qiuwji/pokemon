@@ -1,4 +1,6 @@
 import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
+import { FieldEffectRegistry } from "../../engine/field-effects.js";
+import { EMERALD_FIELD_EFFECTS } from "./field-effects.js";
 import { BattleAugmentRegistry } from "../../engine/battle/augments.js";
 import { FacilityRegistry } from "../../engine/facilities.js";
 import {
@@ -89,6 +91,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       movement: MOVEMENT_MODES,
       movementInputs: GEN3_MOVEMENT_INPUTS,
       fieldActions: EMERALD_FIELD_ACTIONS,
+      fieldEffects: EMERALD_FIELD_EFFECTS,
       terrainRules: EMERALD_TERRAIN_RULES,
       fieldMechanisms: EMERALD_FIELD_MECHANISMS,
       destinations: TRAVEL_DESTINATIONS,
@@ -165,6 +168,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       new MovementRegistry(c.movement),
     );
     validateItemActions(c.items, new FieldActionRegistry(c.fieldActions));
+    new FieldEffectRegistry(c.fieldEffects);
     new FieldTerrainRegistry(c.terrainRules);
     for (const action of Object.values(c.fieldActions))
       if (

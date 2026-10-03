@@ -19,6 +19,7 @@ export const CONTENT_KINDS = Object.freeze([
   "movement",
   "movementInputs",
   "fieldActions",
+  "fieldEffects",
   "fieldLinks",
   "terrainRules",
   "fieldMechanisms",
@@ -165,6 +166,7 @@ export class ExtensionCatalog {
           ]),
         ];
       }),
+      ...Object.keys(state.fieldEffects?.records || {}),
       ...Object.entries(state.crops?.trees || {}).flatMap(([id, tree]) => [
         id,
         tree.kind,

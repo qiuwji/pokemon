@@ -53,6 +53,50 @@ const diveTarget = (action) => (c) =>
 
 /** Gen III qualifications belong to the rule pack; content supplies objects, dive links and encounter tables. */
 export const EMERALD_FIELD_ACTIONS = {
+  strength: {
+    name: "怪力",
+    cue: "field-impact",
+    duration: 640,
+    triggers: ["interact"],
+    allowed: (c) =>
+      !c.effects.records.strength && permission("strength", "badgeHeat")(c),
+    target: removeObject("boulder"),
+    plan: () => ({ kind: "effect", id: "strength", data: {} }),
+  },
+  "push-object": {
+    name: "推动",
+    cue: "field-impact",
+    duration: 0,
+    menu: false,
+    triggers: ["blocked"],
+    allowed: (c) => c.mode === "walk" && !!c.effects.records.strength,
+    target: removeObject("boulder"),
+    plan: (c, t) => ({
+      kind: "displace",
+      object: t.objectId,
+      direction: c.position.dir,
+      follow: true,
+      mode: "walk",
+      scope: "visit",
+      // Original slow walk advances one pixel every other frame (event_object_movement.c).
+      duration: (32 * 1000) / 60,
+    }),
+  },
+  flash: {
+    name: "闪光",
+    cue: "field-flash",
+    duration: 640,
+    allowed: (c) =>
+      !c.effects.records.flash &&
+      !!c.map.darkness &&
+      permission("flash", "badgeKnuckle")(c),
+    target: (c) => c.position,
+    plan: (c) => ({
+      kind: "effect",
+      id: "flash",
+      data: {},
+    }),
+  },
   fall: {
     name: "落下",
     cue: "field-fall",
@@ -103,6 +147,7 @@ export const EMERALD_FIELD_ACTIONS = {
     name: "居合斩",
     cue: "field-cut",
     duration: 640,
+    triggers: ["interact"],
     allowed: permission("cut", "badgeStone"),
     target: removeObject("cutTree"),
     plan: hide,
@@ -111,6 +156,7 @@ export const EMERALD_FIELD_ACTIONS = {
     name: "碎岩",
     cue: "field-impact",
     duration: 640,
+    triggers: ["interact"],
     allowed: permission("rock_smash", "badgeDynamo"),
     target: removeObject("breakableRock"),
     plan: (c, t) => ({ ...hide(c, t), encounter: "rock" }),
@@ -119,6 +165,7 @@ export const EMERALD_FIELD_ACTIONS = {
     name: "潜水",
     cue: "field-dive",
     duration: 600,
+    triggers: ["interact"],
     allowed: (c) => c.mode === "surf" && permission("dive", "badgeMind")(c),
     target: diveTarget("dive"),
     plan: (c, t) => ({ kind: "travel", position: t.to, mode: "dive" }),
@@ -127,6 +174,7 @@ export const EMERALD_FIELD_ACTIONS = {
     name: "浮出水面",
     cue: "field-dive",
     duration: 600,
+    triggers: ["interact"],
     allowed: (c) => c.mode === "dive" && permission("dive", "badgeMind")(c),
     target: diveTarget("surface"),
     plan: (c, t) => ({ kind: "travel", position: t.to, mode: "surf" }),
@@ -135,6 +183,7 @@ export const EMERALD_FIELD_ACTIONS = {
     name: "攀瀑",
     cue: "field-water",
     duration: 480,
+    triggers: ["interact"],
     allowed: (c) =>
       c.mode === "surf" &&
       c.position.dir === "up" &&

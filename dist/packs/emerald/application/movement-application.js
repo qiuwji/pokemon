@@ -203,7 +203,7 @@ export class MovementApplication {
   async waitForMovement() {
     // Automation returns at a story/UI boundary rather than waiting for player input.
     while (
-      this.field.busy &&
+      (this.field.busy || this.actionBusy) &&
       !this.storyBusy &&
       !this.battle &&
       !this.ui?.blocked

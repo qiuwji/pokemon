@@ -1,0 +1,43 @@
+✔ Strength activation owns no PP or encounter rolls; ordinary blocked movement displaces and follows through registered plans (41.842417ms)
+✖ A custom crate triggers without story; its final occupancy drives an independently registered sensor (16.609125ms)
+✖ Object destinations reject walls, water, other objects, warps and incompatible elevations without moving either participant (71.616958ms)
+✔ Automatic interaction schemas and priorities validate at registration; pure effect callbacks cannot dispatch writes (12.744834ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 260.202666
+
+✖ failing tests:
+
+test at tests/field-interactions.test.js:87:1
+✖ A custom crate triggers without story; its final occupancy drives an independently registered sensor (16.609125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - {
+  -   pressed: true
+  - }
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/field-interactions.test.js:94:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { pressed: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/field-interactions.test.js:99:1
+✖ Object destinations reject walls, water, other objects, warps and incompatible elevations without moving either participant (71.616958ms)
+  TypeError: Cannot add property 0, object is not extensible
+      at Array.push (<anonymous>)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/field-interactions.test.js:119:21)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

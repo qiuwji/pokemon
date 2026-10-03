@@ -497,6 +497,7 @@ export type ContentKind =
   | "npcPoses"
   | "terrainRules"
   | "fieldActions"
+  | "fieldEffects"
   | "fieldLinks"
   | "fieldMechanisms"
   | "fieldDevices"
@@ -932,6 +933,22 @@ export type WorldOperation =
       scope?: WorldPatchScope;
     };
 export type FieldOperation =
+  | { kind: "movement"; mode: string }
+  | {
+      kind: "effect";
+      id: string;
+      data?: Record<string, Json>;
+      remove?: boolean;
+    }
+  | {
+      kind: "displace";
+      object: string;
+      direction: Direction;
+      follow: boolean;
+      mode: string;
+      scope: WorldPatchScope;
+      duration: number;
+    }
   | { kind: "world"; operations: WorldOperation[]; encounter?: "rock" }
   | {
       kind: "travel";
@@ -941,6 +958,16 @@ export type FieldOperation =
   | { kind: "route"; directions: string[]; mode: string }
   | { kind: "fishing"; rod: "old" | "good" | "super" };
 export interface FieldActionContext {
+  readonly effects: Readonly<{
+    revision: number;
+    activeMap: string | null;
+    records: Readonly<
+      Record<
+        string,
+        Readonly<{ data: Record<string, Json>; map: string | null }>
+      >
+    >;
+  }>;
   readonly position: Readonly<{
     map: string;
     x: number;
@@ -954,6 +981,11 @@ export interface FieldActionContext {
   readonly flags: Readonly<Record<string, boolean | number | string>>;
   readonly bag: Readonly<Record<string, number>>;
   readonly map: Readonly<{
+    darkness?: Readonly<{
+      radius: number;
+      illuminatedRadius: number;
+      opacity?: number;
+    }> | null;
     width: number;
     height: number;
     blocks: readonly number[];
@@ -991,6 +1023,8 @@ export interface FieldLinkDefinition {
 }
 export interface FieldActionDefinition<T extends Json = Record<string, Json>> {
   name: string;
+  triggers?: ("interact" | "blocked")[];
+  priority?: number;
   menu?: boolean;
   avatar?: MoveAnimation["poses"];
   cue: string;
@@ -1009,6 +1043,28 @@ export interface FieldActionDefinition<T extends Json = Record<string, Json>> {
     target: Readonly<T>,
     input: Readonly<Record<string, Json>>,
   ): FieldOperation;
+}
+export interface FieldEffectDefinition {
+  scope: "visit" | "world";
+  schema: DataSchema;
+  retain?(
+    context: Readonly<{
+      from: string | null;
+      to: string;
+      reason: string;
+      map: Readonly<{
+        id: string;
+        indoor: boolean;
+        darkness: Json;
+        presentation: Json;
+      }>;
+    }>,
+    data: Readonly<Record<string, Json>>,
+  ): boolean;
+  presentation?(
+    data: Readonly<Record<string, Json>>,
+    context: Readonly<Record<string, Json>> | null,
+  ): Json;
 }
 export type PresentationCommand = {
   type: "presentation";
@@ -1050,12 +1106,31 @@ export interface FieldDeviceView {
   >;
 }
 export interface FieldDeviceContext {
+  readonly objects: readonly Readonly<{
+    id: string;
+    x: number;
+    y: number;
+    elevation?: number;
+    kind?: string;
+    reserved?: readonly Readonly<{
+      x: number;
+      y: number;
+      elevation?: number;
+    }>[];
+  }>[];
   readonly device: Readonly<
     FieldDeviceDefinition & { id: string; config: Record<string, Json> }
   >;
   readonly state: Readonly<Json>;
   readonly event: Readonly<{
-    phase: "activate" | "enter" | "leave" | "settle" | "timer" | "interact";
+    phase:
+      | "activate"
+      | "enter"
+      | "leave"
+      | "settle"
+      | "timer"
+      | "interact"
+      | "occupancy";
     payload: Json;
   }>;
   readonly position: Readonly<Position>;
@@ -1090,6 +1165,7 @@ export interface FieldMechanismDefinition {
   settle?: (context: FieldDeviceContext) => FieldDeviceDecision;
   timer?: (context: FieldDeviceContext) => FieldDeviceDecision;
   interact?: (context: FieldDeviceContext) => FieldDeviceDecision;
+  occupancy?: (context: FieldDeviceContext) => FieldDeviceDecision;
 }
 
 export interface WorldClockState {
@@ -1124,7 +1200,22 @@ export interface BerryPlotDefinition {
 
 export interface ActorScheduleDefinition {
   offscreen?: "hold" | "relocate";
-  entries: {id:string;start:number;days?:number[];position:{map:string;x:number;y:number;dir:Direction;elevation?:number};radius?:number;behavior?:string;config?:Record<string,Json>;pose?:string}[];
+  entries: {
+    id: string;
+    start: number;
+    days?: number[];
+    position: {
+      map: string;
+      x: number;
+      y: number;
+      dir: Direction;
+      elevation?: number;
+    };
+    radius?: number;
+    behavior?: string;
+    config?: Record<string, Json>;
+    pose?: string;
+  }[];
 }
 
 export interface ActorTemplateDefinition {

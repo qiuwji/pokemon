@@ -44,7 +44,9 @@ export const WORLD_PORTS = Object.freeze([
   "catalog",
   "conditionQueries",
   "db",
-  "fieldActionOptions",
+  "fieldInteraction",
+  "fieldEffectVisit",
+  "blockedFieldInteraction",
   "motion",
   "movement",
   "onMap",
@@ -160,8 +162,9 @@ export class WorldApplication {
       }
     }
   }
-  prepareEntry(map) {
+  prepareEntry(map, options = {}) {
     const deviceVisit = this.deviceVisit(map);
+    const effectVisit = this.fieldEffectVisit(map, options);
     const draft = this.worldState.prepareVisit(map),
       projected = this.worldState.projectObjects(map, undefined, draft),
       runtime = new Map(this.field.npcs.occupants(map).map((o) => [o.id, o]));
@@ -210,8 +213,10 @@ export class WorldApplication {
           )
             throw new Error("Map entry is occupied");
           deviceVisit.check();
+          effectVisit.check();
           this.worldState.commit(draft);
           deviceVisit.commit();
+          effectVisit.commit();
           for (const id of changed) this.field.npcs.invalidate(map, id);
           return true;
         } catch (error) {
@@ -228,6 +233,7 @@ export class WorldApplication {
       position.x,
       position.y,
       position.dir,
+      this.world.entryPreview(position.map, { reason: "travel" }),
     );
     if (entered) this.motion.snap(this.state.position);
     return entered;
@@ -242,10 +248,11 @@ export class WorldApplication {
       this.facilityActive
     )
       return false;
-    return this.field.move(dir, {
+    const moved = this.field.move(dir, {
       running: running && !this.world.map.indoor,
       ...(duration !== undefined ? { duration } : {}),
     });
+    return moved || (!this.field.busy && this.blockedFieldInteraction());
   }
   interact() {
     if (this.ui.dialog) {
@@ -258,17 +265,14 @@ export class WorldApplication {
       return;
     }
     if (this.ui.blocked || this.facilityActive) return;
+    const action = this.fieldInteraction("interact");
+    if (action) {
+      this.ui.showFieldAction(action.id);
+      return;
+    }
     const object = this.world.interact();
     if (!object) {
       if (this.interactDevice()) return;
-      const action = this.fieldActionOptions().find(
-        (entry) =>
-          entry.ok && ["dive", "surface", "waterfall"].includes(entry.id),
-      );
-      if (action) {
-        this.ui.showFieldAction(action.id);
-        return;
-      }
       const [dx, dy] = DIRECTIONS[this.state.position.dir];
       const cell = this.world.cell(
         this.state.position.x + dx,
@@ -282,10 +286,6 @@ export class WorldApplication {
       object.script === "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
     ) {
       this.ui.showTime();
-      return;
-    }
-    if (["cutTree", "breakableRock"].includes(object.kind)) {
-      this.ui.showFieldAction(object.kind === "cutTree" ? "cut" : "rock-smash");
       return;
     }
     if (object.kind === "berryPlot") {
@@ -337,7 +337,7 @@ export class WorldApplication {
     this.bindMovement();
     this.field = new FieldSession({
       maps: this.worldState.maps,
-      prepareEntry: (map) => this.prepareEntry(map),
+      prepareEntry: (map, options) => this.prepareEntry(map, options),
       elevation: GEN3_ELEVATION,
       position: this.state.position,
       motion: this.motion,
