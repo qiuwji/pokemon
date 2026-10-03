@@ -1,3 +1,5 @@
+import { gen3CanFish } from "../../engine/rules/gen3/fishing.js";
+import { BIKE_ITEMS, ROD_ITEMS } from "./field-capabilities.js";
 import { GEN3_ELEVATION } from "../../engine/rules/gen3/elevation.js";
 import { DIRECTIONS } from "../../engine/world.js";
 import { isWater, BEHAVIOR } from "../../engine/terrain.js";
@@ -152,6 +154,31 @@ export const EMERALD_FIELD_ACTIONS = {
       mode: "waterfall",
     }),
   },
+  cycling: {
+    name: "骑上 / 收起自行车",
+    cue: "field-bike",
+    menu: false,
+    duration: 160,
+    schema: objectSchema(
+      { mode: { type: "string", enum: Object.keys(BIKE_ITEMS) } },
+      ["mode"],
+    ),
+    allowed(c, input) {
+      if (!(c.bag[BIKE_ITEMS[input.mode]] > 0))
+        return { reason: "尚未获得这辆自行车。" };
+      const mode = Object.hasOwn(BIKE_ITEMS, c.mode) ? "walk" : input.mode;
+      return (
+        c.movementOptions[mode]?.ok === true || {
+          reason: c.movementOptions[mode]?.reason || "这里不能骑车。",
+        }
+      );
+    },
+    target: (c) => c.position,
+    plan: (c, target, input) => ({
+      kind: "movement",
+      mode: Object.hasOwn(BIKE_ITEMS, c.mode) ? "walk" : input.mode,
+    }),
+  },
   fishing: {
     name: "钓鱼",
     cue: "field-fishing",
@@ -161,13 +188,25 @@ export const EMERALD_FIELD_ACTIONS = {
       ["rod"],
     ),
     allowed: (c, input) =>
-      (!!c.flags[input.rod + "Rod"] &&
+      (c.bag[ROD_ITEMS[input.rod]] > 0 &&
         c.party.some((m) => !m.egg && m.hp > 0)) || {
         reason: "需要鱼竿和能够战斗的队伍。",
       },
     target: (c) => {
-      const p = front(c);
-      return isWater(behavior(c, p)) && behavior(c, p) !== BEHAVIOR.WATERFALL
+      const p = front(c),
+        tile = behavior(c, p);
+      if (tile === null) return null;
+      const block = c.map.blocks[p.y * c.map.width + p.x];
+      return gen3CanFish({
+        mode: c.mode,
+        underwater: c.map.underwater,
+        elevation: c.position.elevation ?? 0,
+        cell: {
+          behavior: tile,
+          collision: (block >> 10) & 3,
+          elevation: (block >> 12) & 15,
+        },
+      })
         ? p
         : null;
     },

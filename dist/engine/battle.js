@@ -46,7 +46,7 @@ export class Battle {
     script = null,
     effects = {},
     rules = {},
-    items = createItemService(),
+    items = createItemService({}),
     topology,
     format = "singles",
     ai = randomDecision,

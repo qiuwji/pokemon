@@ -29,6 +29,7 @@ const map = (row) => ({
   npcs: [],
   signs: [],
   indoor: false,
+  allowBike: true,
 });
 function setup({
   maps = { field: map([0, B.ICE, B.ICE, 0, 0]) },
@@ -45,7 +46,14 @@ function setup({
   const movement = new MovementService({
     registry: new MovementRegistry(MOVEMENT_MODES),
     state: { mode },
-    context: () => ({ capabilities: { bike: true, run: true, surf: true } }),
+    context: () => ({
+      capabilities: {
+        "mach-bike": true,
+        "acro-bike": true,
+        run: true,
+        surf: true,
+      },
+    }),
   });
   const timeline = new Timeline({
     now: () => time,
@@ -409,7 +417,7 @@ test("Application commands select techniques; a paused cutscene stops current dr
   });
   game.attachUI({ blocked: false, dialog: null, updateSide() {}, toast() {} });
   game.enter({ map: "Lab", x: 0, y: 1, dir: "right" });
-  game.state.flags.bike = true;
+  game.state.bag.acro_bike = 1;
   const { bus } = attachEmeraldExtensions(game, compiled.host);
   assert((await bus.execute("core.movement.mode", { mode: "acro-bike" })).ok);
   assert(

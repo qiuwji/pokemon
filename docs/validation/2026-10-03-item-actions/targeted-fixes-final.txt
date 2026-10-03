@@ -1,0 +1,12 @@
+✔ The public fishing command accepts concurrent reel input, launches one encounter after cleanup, and keeps the rod (23.210083ms)
+✔ Public fishing can cancel without generating a monster, and map requirements prevent a land save with a diving mode (9.431375ms)
+✔ Gen III fishing distinguishes shore elevations, surfable water and bridge edges without consuming RNG (0.741167ms)
+✔ Saved movement rejects a bike on water, a surf mode on land and unknown visit destinations (6.842916ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 139.553958

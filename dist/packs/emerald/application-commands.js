@@ -26,6 +26,7 @@ export function registerEmeraldCommands(game, bus) {
   };
   const commandPermissions = {
     "item.use": "useItem",
+    "item.action": "useItem",
     "item.equip": "equip",
     "item.buy": "buyItem",
     "growth.learn": "learnMove",
@@ -278,7 +279,12 @@ export function registerEmeraldCommands(game, bus) {
     ({ destination }) => game.flyTo(destination),
     { mode: "async" },
   );
-  register("movement.equipment", empty, () => game.claimFieldEquipment());
+  register(
+    "item.action",
+    objectSchema({ item: id, action: id }, ["item", "action"]),
+    ({ item, action }) => game.performItemAction(item, action),
+    { mode: "async" },
+  );
   register(
     "movement.technique",
     objectSchema({ technique: id }, ["technique"]),

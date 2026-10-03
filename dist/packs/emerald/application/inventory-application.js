@@ -1,3 +1,6 @@
+import { ItemActionService } from "../../../engine/item-actions.js";
+import { FieldActionRegistry } from "../../../engine/field-actions.js";
+import { EMERALD_FIELD_ACTIONS } from "../field-actions.js";
 import { setLead } from "../../../engine/party.js";
 import { createItemService } from "../../../engine/items.js";
 import { matchesCondition } from "../../../engine/conditions.js";
@@ -10,6 +13,8 @@ export const INVENTORY_PORTS = Object.freeze([
   "catalog",
   "conditionQueries",
   "itemDefinitions",
+  "inspectFieldAction",
+  "performFieldAction",
   "learningView",
   "state",
 ]);
@@ -18,14 +23,28 @@ export class InventoryApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, INVENTORY_PORTS);
     this.items = createItemService(this.catalog.items);
+    this.itemActions = new ItemActionService({
+      items: this.catalog.items,
+      registry: new FieldActionRegistry(
+        this.catalog.fieldActions || EMERALD_FIELD_ACTIONS,
+      ),
+      quantity: (id) => this.state.bag[id] || 0,
+      inspect: (...args) => this.inspectFieldAction(...args),
+      perform: (...args) => this.performFieldAction(...args),
+    });
     this.partyStorage = new PartyStorageService();
     this.equipment = new EquipmentService(this.catalog.heldItems);
   }
   setLead(index) {
     return this.canManageParty() && setLead(this.state, index);
   }
-  usePotion(index) {
-    return this.useItem("potion", index).ok;
+  itemActionOptions(id) {
+    return this.itemActions.list(id);
+  }
+  async performItemAction(id, action) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    return this.itemActions.perform(id, action);
   }
   itemPlan(id, index, inBattle = !!this.battle) {
     const method = this.itemDefinitions[id]?.learningMethod;

@@ -91,7 +91,11 @@ export function createPartyInterface(
       showParty();
     };
     $("use-potion").onclick = () => {
-      game.usePotion(index);
+      const result = game.useItem("potion", index);
+      if (!result.ok) {
+        game.ui.toast(result.reason);
+        return;
+      }
       updateSide();
       game.save();
       showMonster(index);

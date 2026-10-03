@@ -26,11 +26,14 @@ export function createBagInterface(
         .map(([id, item]) => {
           const usable =
             item.contexts.includes(inBattle ? "battle" : "field") &&
-            (item.target === "enemy"
-              ? game.itemPlan(id, undefined, inBattle).ok
-              : (inBattle ? game.battle.party : game.state.party).some(
-                  (m, index) => game.itemPlan(id, index, inBattle).ok,
-                ));
+            (item.target === "field"
+              ? !inBattle &&
+                game.itemActionOptions(id).some((action) => action.ok)
+              : item.target === "enemy"
+                ? game.itemPlan(id, undefined, inBattle).ok
+                : (inBattle ? game.battle.party : game.state.party).some(
+                    (m, index) => game.itemPlan(id, index, inBattle).ok,
+                  ));
           return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button></div>`;
         })
         .join("") +
@@ -41,9 +44,39 @@ export function createBagInterface(
       (button) =>
         (button.onclick = () => {
           const id = button.dataset.item;
-          if (ITEMS[id].target === "enemy")
+          if (ITEMS[id].target === "field") chooseItemAction(id);
+          else if (ITEMS[id].target === "enemy")
             void game.turn({ kind: "item", item: id });
           else chooseItemTarget(id, inBattle);
+        }),
+    );
+  }
+  function chooseItemAction(id) {
+    const actions = game.itemActionOptions(id);
+    const perform = async (action) => {
+      closeModal();
+      const result = await game.performItemAction(id, action);
+      if (!result.ok) toast(result.reason);
+      updateSide();
+    };
+    if (actions.length === 1) {
+      void perform(actions[0].id);
+      return;
+    }
+    modal(
+      ITEMS[id].name,
+      actions
+        .map(
+          (action) =>
+            `<button data-item-action="${escapeHTML(action.id)}" ${action.ok ? "" : "disabled"}>${escapeHTML(action.name)}</button>`,
+        )
+        .join(""),
+      { back: () => showBag(false), type: "item-actions" },
+    );
+    root.querySelectorAll("[data-item-action]").forEach(
+      (button) =>
+        (button.onclick = () => {
+          void perform(button.dataset.itemAction);
         }),
     );
   }

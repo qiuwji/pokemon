@@ -1,3 +1,4 @@
+import { createMonster, Random } from "../dist/engine/model.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -25,12 +26,18 @@ const map = (behavior = Array(15).fill(0)) => ({
   signs: [],
   npcs: [],
   indoor: false,
+  allowBike: true,
 });
 function setup({
   definitions = MOVEMENT_MODES,
   maps = { field: map() },
   mode = "walk",
-  capabilities = { run: true, bike: true, surf: true },
+  capabilities = {
+    run: true,
+    "mach-bike": true,
+    "acro-bike": true,
+    surf: true,
+  },
   objects = () => [],
 } = {}) {
   let time = 0,
@@ -340,10 +347,10 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
   );
   const state = {
     position: { map: "Route103", x: 22, y: 9, dir: "right" },
-    party: [],
+    party: [createMonster("mudkip", 10, db, new Random(3))],
     box: [],
-    bag: {},
-    flags: {},
+    bag: { mach_bike: 1 },
+    flags: { badgeBalance: true },
     story: { completed: [], rewards: [] },
     money: 0,
     seen: [],
@@ -351,6 +358,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
     movement: { mode: "surf", visited: ["OldaleTown"] },
   };
   state.weather = emptyWeather();
+  state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(validateSave(state, db));
   state.movement.mode = "mach-bike";
   assert.equal(validateSave(state, db), false);

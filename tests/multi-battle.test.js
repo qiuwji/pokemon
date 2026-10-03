@@ -1,3 +1,5 @@
+import { createItemService } from "../dist/engine/items.js";
+import { ITEMS } from "../dist/packs/emerald/items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -28,6 +30,7 @@ function setup({ reserve = false, rules = {}, effects = {} } = {}) {
     m.stats.spe = 100 - i * 10;
   }
   const b = new Battle({
+    items: createItemService(ITEMS),
     party,
     enemyParty,
     trainer: true,
@@ -234,7 +237,13 @@ test("Two independent human controllers on one alliance share the scheduler and 
     bag: { potion: 1 },
   });
   topology.sides[0].seats.push({ id: "partner:0", controllerId: "partner" });
-  const b = new Battle({ topology, trainer: true, db, rng });
+  const b = new Battle({
+    items: createItemService(ITEMS),
+    topology,
+    trainer: true,
+    db,
+    rng,
+  });
   b.act(move("home:0", "away:0"));
   assert.equal(b.commandSeat, "partner:0");
   assert.equal(b.party[0].uid, party[1].uid);
@@ -253,7 +262,13 @@ test("Three alliances continue after one opposing team is eliminated and settle 
     controllers: [{ id: "third-owner", kind: "ai", party: [third] }],
     seats: [{ id: "third:0", controllerId: "third-owner" }],
   });
-  const b = new Battle({ topology, trainer: true, db, rng });
+  const b = new Battle({
+    items: createItemService(ITEMS),
+    topology,
+    trainer: true,
+    db,
+    rng,
+  });
   enemyParty.forEach((m) => (m.hp = 0));
   b.checkFaint();
   b.outcomes.vacancies();
@@ -300,7 +315,13 @@ test("Doubles and free-for-all content construct valid encounters and reject mis
       db,
       rng,
     });
-    const b = new Battle({ ...encounter, party, db, rng });
+    const b = new Battle({
+      items: createItemService(ITEMS),
+      ...encounter,
+      party,
+      db,
+      rng,
+    });
     assert.equal(b.roster.seats.size, trainer.rivals ? 6 : 4);
   }
 });

@@ -10,7 +10,11 @@ import { CommandRunner } from "../dist/engine/commands.js";
 import { validateContent } from "../dist/engine/content.js";
 import { Battle } from "../dist/engine/battle.js";
 import { Random, createMonster } from "../dist/engine/model.js";
-import { usePotion, evolveMonster } from "../dist/engine/party.js";
+import { createItemService } from "../dist/engine/items.js";
+import { ITEMS } from "../dist/packs/emerald/items.js";
+import { EvolutionService } from "../dist/engine/growth/evolution.js";
+import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
 import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
 const db = JSON.parse(
   fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
@@ -259,9 +263,22 @@ test("Party commands reject invalid use and evolution never revives a fainted me
   const rng = new Random(1),
     mon = createMonster("mudkip", 16, db, rng),
     state = { party: [mon], bag: { potion: 1 } };
-  assert.equal(usePotion(state, 0), false);
+  assert.equal(
+    createItemService(ITEMS).use({
+      id: "potion",
+      ...state,
+      index: 0,
+      context: "field",
+    }).ok,
+    false,
+  );
   mon.hp = 0;
-  assert(evolveMonster(mon, db));
+  const evolutions = new EvolutionService({
+    db,
+    abilities: GEN3_ABILITIES,
+    heldItems: GEN3_HELD_ITEMS,
+  });
+  assert(evolutions.commit(evolutions.prepare(mon)).ok);
   assert.equal(mon.hp, 0);
   assert.equal(state.bag.potion, 1);
 });
@@ -292,7 +309,7 @@ test("Pack application rejects out-of-context inventory commands and preserves c
   assert.equal(game.state.money, 3000);
   assert.notEqual(game.state, doc.state);
   game.combat.battle = {};
-  assert.equal(game.usePotion(0), false);
+  assert.equal(game.useItem("potion", 0).ok, false);
   assert.equal(game.setLead(0), false);
   assert.throws(() => game.loadDocument(doc));
 });
@@ -355,7 +372,7 @@ test("Completed combat returns at dialogue boundary without waiting for the next
     act: () => [],
   };
   director.reset(view());
-  const turn = game.combat.act({ kind: "ball" });
+  const turn = game.combat.act({ kind: "item", item: "pokeball" });
   await clock.advance(220);
   await clock.advance(32);
   await clock.advance(96);

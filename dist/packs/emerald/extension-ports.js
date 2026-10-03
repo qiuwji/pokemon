@@ -32,6 +32,12 @@ export function attachEmeraldExtensions(game, host) {
     movement: { ...game.state.movement },
     movementTechnique: game.movement.technique,
     fieldActions: game.fieldActionOptions(),
+    itemActions: Object.fromEntries(
+      Object.entries(game.state.bag)
+        .filter(([, count]) => count > 0)
+        .map(([id]) => [id, game.itemActionOptions(id)])
+        .filter(([, actions]) => actions.length),
+    ),
     party: game.state.party.map((m) => ({
       ...m,
       name: game.db.species[m.species].name,

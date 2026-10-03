@@ -22,6 +22,8 @@ export const FIELD_ACTION_PORTS = Object.freeze([
   "field",
   "fieldDirector",
   "movement",
+  "inspectMovementMode",
+  "resetFieldInput",
   "patchWorld",
   "plugins",
   "prepareWorldPatch",
@@ -65,12 +67,19 @@ export class FieldActionApplication {
       position: { ...p },
       devices: this.deviceView(),
       mode: this.state.movement.mode,
+      movementOptions: Object.fromEntries(
+        Object.keys(this.catalog.movement).map((mode) => [
+          mode,
+          this.inspectMovementMode(mode),
+        ]),
+      ),
       revision: this.worldState.state.revision,
       map: {
         width: this.world.map.width,
         height: this.world.map.height,
         blocks: this.world.map.blocks,
         behavior: this.world.map.behavior,
+        underwater: !!this.world.map.underwater,
       },
       flags: this.state.flags,
       bag: this.state.bag,
@@ -98,6 +107,7 @@ export class FieldActionApplication {
       travel: ["kind", "position", "mode"],
       route: ["kind", "directions", "mode"],
       fishing: ["kind", "rod"],
+      movement: ["kind", "mode"],
     };
     if (
       !allowed[operation.kind] ||
@@ -146,6 +156,9 @@ export class FieldActionApplication {
         )
       )
         throw new Error("Field travel destination is blocked");
+    } else if (operation.kind === "movement") {
+      const result = this.inspectMovementMode(operation.mode);
+      if (!result.ok) throw new Error(result.reason);
     } else if (operation.kind === "fishing") {
       gen3FishingRules(operation.rod);
     } else {
@@ -187,8 +200,19 @@ export class FieldActionApplication {
         path: operation.directions,
         mode: operation.mode,
       });
+    if (operation.kind === "movement") {
+      const checked = this.inspectMovementMode(operation.mode);
+      if (!checked.ok) throw new Error(checked.reason);
+      const result = this.movement.set(operation.mode, this.world.map);
+      if (!result.ok) throw new Error(result.reason);
+      this.resetFieldInput();
+    }
     if (operation.kind === "fishing") return this.runFishing(operation.rod);
     return { ok: true };
+  }
+  inspect(id, input = {}) {
+    const { ok, reason } = this.actions.inspect(id, input);
+    return { ok, ...(reason ? { reason } : {}) };
   }
   options() {
     const entries = this.actions

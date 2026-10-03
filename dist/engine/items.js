@@ -28,7 +28,7 @@ export class ItemService {
         !Array.isArray(item.contexts) ||
         (!item.contexts.length && item.effects?.length !== 0) ||
         item.contexts.some((v) => !["field", "battle"].includes(v)) ||
-        !["party", "enemy"].includes(item.target) ||
+        !["party", "enemy", "field"].includes(item.target) ||
         (item.requiresAlive !== undefined &&
           typeof item.requiresAlive !== "boolean")
       )
@@ -50,6 +50,20 @@ export class ItemService {
         item.effects.some((s) => s.op === "capture")
       )
         throw new Error(`items.${id}: capture requires an enemy target`);
+      if (
+        item.target === "field" &&
+        (item.contexts.length !== 1 ||
+          item.contexts[0] !== "field" ||
+          item.effects.length ||
+          !Array.isArray(item.actions) ||
+          !item.actions.length ||
+          item.learningMethod)
+      )
+        throw new Error(
+          `items.${id}: field targets require action bindings without consumable effects`,
+        );
+      if (item.actions !== undefined && item.target !== "field")
+        throw new Error(`items.${id}: action bindings require a field target`);
       registry.validate(item.effects, `items.${id}.effects`);
       if (
         item.target === "enemy" &&
@@ -64,6 +78,8 @@ export class ItemService {
       : null;
     if (!item || !item.contexts.includes(context) || !(bag[id] > 0))
       return { ok: false, reason: "现在无法使用这个道具。" };
+    if (item.target === "field")
+      return { ok: false, reason: "请选择道具的野外行动。" };
     if (item.target === "enemy") {
       if (!enemy || enemy.hp <= 0 || !canCapture)
         return { ok: false, reason: "现在不能捕捉对方的宝可梦！" };
@@ -161,7 +177,7 @@ export class ItemService {
     return plan;
   }
 }
-// These are engine compatibility defaults; packs can supply their own definitions.
+// Operations are reusable domain effects; all item content is supplied by a pack.
 const capture = () => true;
 capture.validate = (s, p) => {
   if (!Number.isFinite(s.bonus) || s.bonus <= 0)
@@ -170,21 +186,5 @@ capture.validate = (s, p) => {
 const feed = (c, s) => applyNutrition(c.target, s);
 feed.validate = validateFood;
 export const ITEM_OPERATIONS = { capture, feed };
-export const DEFAULT_ITEMS = {
-  potion: {
-    name: "伤药",
-    price: 300,
-    contexts: ["field", "battle"],
-    target: "party",
-    effects: [{ op: "restoreHP", amount: 20 }],
-  },
-  pokeball: {
-    name: "精灵球",
-    price: 200,
-    contexts: ["battle"],
-    target: "enemy",
-    effects: [{ op: "capture", bonus: 1 }],
-  },
-};
-export const createItemService = (definitions = DEFAULT_ITEMS) =>
+export const createItemService = (definitions) =>
   new ItemService(definitions, new EffectRegistry(ITEM_OPERATIONS));

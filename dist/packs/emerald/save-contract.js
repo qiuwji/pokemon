@@ -39,6 +39,7 @@ import { PluginState } from "../../engine/extensions/plugin-state.js";
 import { readOnly, localId } from "../../engine/extensions/values.js";
 import { jsonValue, callSync } from "../../engine/extensions/values.js";
 import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
+import { emeraldFieldCapabilities } from "./field-capabilities.js";
 import { isWater } from "../../engine/terrain.js";
 import { movementFitsMap } from "../../engine/movement.js";
 import { ITEMS } from "./items.js";
@@ -224,15 +225,25 @@ export function validateSave(
     const water = isWater(
       map.behavior[s.position.y * map.width + s.position.x],
     );
-    if (
-      (catalog.movement[movement.mode].surface === "both"
-        ? false
-        : water !==
-          (catalog.movement[movement.mode].surface === "water" ||
-            movement.mode === "surf")) ||
-      (map.indoor && movement.mode.endsWith("bike"))
-    )
+    try {
+      if (
+        (catalog.movement[movement.mode].surface === "both"
+          ? false
+          : water !==
+            (catalog.movement[movement.mode].surface === "water" ||
+              movement.mode === "surf")) ||
+        callSync(catalog.movement[movement.mode].allowed, [
+          readOnly({
+            map,
+            scripted: false,
+            capabilities: emeraldFieldCapabilities(s),
+          }),
+        ]) !== true
+      )
+        return false;
+    } catch {
       return false;
+    }
     if (!movementFitsMap(catalog.movement[movement.mode], map)) return false;
   }
   if (

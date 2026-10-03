@@ -48,7 +48,8 @@ export interface ItemDefinition {
   holdable?: boolean;
   price: number;
   contexts: ("field" | "battle")[];
-  target: "party" | "enemy";
+  target: "party" | "enemy" | "field";
+  actions?: { id: string; fieldAction: string; input?: Record<string, Json> }[];
   effects: CommonEffect[];
   learningMethod?: string;
   pocket?: string;
@@ -107,8 +108,6 @@ export type BattleAction = {
   | { kind: "item"; item: string; index?: number }
   | { kind: "form"; form: string }
   | { kind: "run" | "cancel" }
-  | { kind: "potion"; index?: number }
-  | { kind: "ball" }
 );
 export interface EffectStep {
   op: string;

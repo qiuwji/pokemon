@@ -97,13 +97,9 @@ export class BattleActions {
         };
         break;
       }
-      case "potion":
-      case "ball":
       case "item": {
-        if (action.kind === "item" && !action.item)
-          return { error: "请选择要使用的道具。" };
-        const item =
-          action.item || (action.kind === "ball" ? "pokeball" : "potion");
+        if (!action.item) return { error: "请选择要使用的道具。" };
+        const item = action.item;
         const index = action.index ?? b.roster.seat(seat).index;
         const targetSeat = b.roster.opposing(seat)[0]?.id;
         const plan = b.items.prepare({

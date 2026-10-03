@@ -7,7 +7,8 @@ import { MovementRegistry, MovementService } from "../../../engine/movement.js";
 import { TravelService } from "../../../engine/travel.js";
 import { TravelDirector } from "../../../presentation/travel-director.js";
 import { DIRECTIONS } from "../../../engine/world.js";
-import { isWater } from "../../../engine/terrain.js";
+import { emeraldFieldCapabilities } from "../field-capabilities.js";
+import { isWater, BEHAVIOR } from "../../../engine/terrain.js";
 import { bindApplicationPorts } from "./ports.js";
 export const MOVEMENT_PORTS = Object.freeze([
   "battle",
@@ -98,29 +99,7 @@ export class MovementApplication {
       this.state.movement.visited.push(id);
   }
   fieldCapabilities() {
-    const flags = this.state.flags,
-      knows = (id) =>
-        this.state.party.some(
-          (m) => !m.egg && m.moves.some((v) => v.id === id),
-        );
-    return {
-      run: true,
-      bike: !!flags.bike || !!flags.fieldTraining,
-      surf: !!flags.fieldTraining || (!!flags.badgeBalance && knows("surf")),
-      fly: !!flags.fieldTraining || (!!flags.badgeFeather && knows("fly")),
-      dive: !!flags.badgeMind && knows("dive"),
-      waterfall: !!flags.badgeRain && knows("waterfall"),
-    };
-  }
-  claimFieldEquipment() {
-    if (
-      !this.canManageParty() ||
-      !this.state.flags.pokedex ||
-      this.state.flags.fieldTraining
-    )
-      return false;
-    this.state.flags.fieldTraining = true;
-    return true;
+    return emeraldFieldCapabilities(this.state);
   }
   movementOptions() {
     return Object.keys(this.catalog.movement)
@@ -128,31 +107,41 @@ export class MovementApplication {
       .map((id) => ({
         id,
         name: this.catalog.movement[id].name,
-        allowed:
-          this.movement.available(id, this.world.map) &&
-          !isWater(
-            this.world.cell(this.state.position.x, this.state.position.y)
-              ?.behavior,
-          ),
+        allowed: this.inspectMovementMode(id).ok,
       }));
   }
-  setMovementMode(mode) {
+  inspectMovementMode(mode) {
     if (
-      !this.canManageParty() ||
       !Object.hasOwn(this.catalog.movement, mode) ||
       ["run", "surf", "dive", "waterfall"].includes(mode)
     )
       return { ok: false, reason: "现在不能更换移动方式。" };
+    const cell = this.world.cell(this.state.position.x, this.state.position.y);
+    if (isWater(cell?.behavior)) return { ok: false, reason: "请先上岸。" };
     if (
-      isWater(
-        this.world.cell(this.state.position.x, this.state.position.y)?.behavior,
-      )
+      ["mach-bike", "acro-bike"].includes(this.state.movement.mode) &&
+      mode !== this.state.movement.mode &&
+      (this.state.flags.cyclingRoad ||
+        [
+          BEHAVIOR.VERTICAL_RAIL,
+          BEHAVIOR.HORIZONTAL_RAIL,
+          BEHAVIOR.ISOLATED_VERTICAL_RAIL,
+          BEHAVIOR.ISOLATED_HORIZONTAL_RAIL,
+        ].includes(cell?.behavior))
     )
-      return { ok: false, reason: "请先上岸。" };
-    const result = this.movement.set(mode, this.world.map);
-    if (result.ok) this.resetFieldInput();
-    if (!result.ok) result.reason = "这里不能使用这辆自行车。";
-    return result;
+      return { ok: false, reason: "在自行车道或轨道上不能下车。" };
+    return this.movement.available(mode, this.world.map)
+      ? { ok: true }
+      : { ok: false, reason: "尚未获得这辆自行车，或这里不能骑车。" };
+  }
+  setMovementMode(mode) {
+    if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    const result = this.inspectMovementMode(mode);
+    if (!result.ok) return result;
+    const changed = this.movement.set(mode, this.world.map);
+    if (changed.ok) this.resetFieldInput();
+    return changed;
   }
   movementTechniqueOptions() {
     const definition = this.movement.registry.get(this.state.movement.mode);

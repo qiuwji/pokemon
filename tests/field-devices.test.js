@@ -353,7 +353,7 @@ test("Fast registered movement clears cracked floor before opening; walking trig
       },
     }),
     g = s.game;
-  g.state.flags.bike = true;
+  g.state.bag.mach_bike = 1;
   assert.equal(g.setMovementMode("devices:test-bike").ok, true);
   for (let i = 0; i < 3; i++) {
     assert(g.move("right"));
@@ -520,7 +520,7 @@ test("Field action avatar registration freezes descriptions, rejects non-player 
 test("Actual Mach input passes a cracked floor; held walking cannot bypass queued fall", async () => {
   const held = { direction: "right", secondary: false, running: false };
   const fast = fixture("cracked-floor", { cell: 5 });
-  fast.game.state.flags.bike = true;
+  fast.game.state.bag.mach_bike = 1;
   assert(fast.game.setMovementMode("mach-bike").ok);
   fast.frame(0, held);
   for (let i = 0; i < 70 && fast.game.state.position.x < 6; i++)
@@ -545,7 +545,7 @@ test("Actual Mach input passes a cracked floor; held walking cannot bypass queue
 test("Releasing fast Mach input over an opened floor requests fall instead of indefinite hovering", async () => {
   const s = fixture("cracked-floor", { cell: 5 }),
     held = { direction: "right", secondary: false, running: false };
-  s.game.state.flags.bike = true;
+  s.game.state.bag.mach_bike = 1;
   s.game.setMovementMode("mach-bike");
   s.frame(0, held);
   for (let i = 0; i < 60 && s.game.state.position.x < 5; i++)
@@ -611,7 +611,7 @@ test("Plugin input rules can select a technique and control movement through pub
 test("A blocked fast departure cannot keep the rider hovering over an opened cracked floor", async () => {
   const s = fixture("cracked-floor", { cell: 5 }),
     held = { direction: "right", secondary: false, running: false };
-  s.game.state.flags.bike = true;
+  s.game.state.bag.mach_bike = 1;
   s.game.setMovementMode("mach-bike");
   s.frame(0, held);
   for (let i = 0; i < 60 && s.game.state.position.x < 5; i++)

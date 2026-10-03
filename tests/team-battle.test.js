@@ -1,3 +1,5 @@
+import { createItemService } from "../dist/engine/items.js";
+import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -34,6 +36,7 @@ function setup(overrides = {}) {
   for (const mon of enemies) mon.stats.spe = 10;
   const awards = [];
   const battle = new Battle({
+    items: createItemService(ITEMS),
     party,
     enemyParty: enemies,
     bag: { potion: 2, pokeball: 2 },
@@ -138,7 +141,7 @@ test("Invalid actions are side-effect free and do not reuse the previous action 
     { kind: "move", index: 0, actor: "stale-uid" },
     { kind: "move", index: 0, target: { kind: "seat", id: "home:0" } },
     { kind: "invented" },
-    { kind: "ball" },
+    { kind: "item", item: "pokeball" },
     { kind: "run" },
   ]) {
     const before = structuredClone({
@@ -177,7 +180,7 @@ test("Residual damage completes before the opponent reserve enters; capture rema
   assert.equal(events.at(-1).kind, "switch");
   const count = b.bag.pokeball,
     turn = b.turn;
-  assert.equal(b.act({ kind: "ball" })[0].kind, "invalid");
+  assert.equal(b.act({ kind: "item", item: "pokeball" })[0].kind, "invalid");
   assert.equal(b.bag.pokeball, count);
   assert.equal(b.turn, turn);
 });

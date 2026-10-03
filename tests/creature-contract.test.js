@@ -1,3 +1,4 @@
+import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -5,11 +6,7 @@ import fs from "node:fs";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { validCreatureValues } from "../dist/engine/creature-contract.js";
-import {
-  createItemService,
-  ItemService,
-  DEFAULT_ITEMS,
-} from "../dist/engine/items.js";
+import { createItemService, ItemService } from "../dist/engine/items.js";
 import { EffectRegistry } from "../dist/engine/effects.js";
 import { CREATION_POLICY } from "../dist/engine/rule-policy.js";
 const db = JSON.parse(
@@ -66,7 +63,7 @@ test("Curing sleep atomically removes its timer; custom item results reject unkn
   const bag = { heal: 1 };
   const service = createItemService({
     heal: {
-      ...DEFAULT_ITEMS.potion,
+      ...ITEMS.potion,
       effects: [{ op: "cureStatus", status: "sleep" }],
     },
   });
@@ -93,7 +90,7 @@ test("Curing sleep atomically removes its timer; custom item results reject unkn
         },
       }),
       item = new ItemService(
-        { potion: { ...DEFAULT_ITEMS.potion, effects: [{ op: "custom" }] } },
+        { potion: { ...ITEMS.potion, effects: [{ op: "custom" }] } },
         registry,
       ),
       target = structuredClone(mon),

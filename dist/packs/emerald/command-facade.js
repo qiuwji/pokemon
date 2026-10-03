@@ -47,10 +47,7 @@ export function createEmeraldCommandFacade(
       "item.use",
       { item, uid: uidAt(game.state.party, index) },
     ],
-    usePotion: (index) => [
-      "item.use",
-      { item: "potion", uid: uidAt(game.state.party, index) },
-    ],
+    performItemAction: (item, action) => ["item.action", { item, action }],
     equipItem: (uid, item) => [
       "item.equip",
       { uid, ...(item ? { item } : { remove: true }) },
@@ -79,7 +76,6 @@ export function createEmeraldCommandFacade(
     setMovementMode: (mode) => ["movement.mode", { mode }],
     boardSurf: () => ["movement.surf", {}],
     flyTo: (destination) => ["movement.fly", { destination }],
-    claimFieldEquipment: () => ["movement.equipment", {}],
     learnMove: (mon, index) => [
       "growth.learn",
       { uid: mon.uid, ...(index === null ? { skip: true } : { index }) },
@@ -111,6 +107,7 @@ export function createEmeraldCommandFacade(
     "playPresentation",
     "teachMove",
     "useItem",
+    "performItemAction",
     "equipItem",
     "depositDaycare",
     "withdrawDaycare",
@@ -145,7 +142,7 @@ export function createEmeraldCommandFacade(
                 .execute(fullId, input, "ui")
                 .catch((error) => failure(name, error));
             const result = bus.executeSync(fullId, input, "ui");
-            return name === "usePotion" ? !!result?.ok : result;
+            return result;
           } catch (error) {
             return failure(name, error);
           }

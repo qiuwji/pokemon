@@ -85,3 +85,5 @@ const plugin = {
 音频仅接受资源文件，插件 sound 只能请求自有已注册音效，规则评价/未提交事务拒绝。完整合同见 docs/engine/AUDIO.md。插件数据旧版本不再自动迁移。
 
 天气注册/只读查询/受权限命令与事务/独立战斗政策及视觉详见 [WEATHER.md](docs/engine/WEATHER.md)。开发版本只接受当前 envelope/dataVersion，旧迁移路径已移除；天气依赖不能静默回退。
+
+关键道具 `items.actions` 可绑定已注册 fieldActions；现有背包自动提供单/多行动入口，core.query 返回持有道具的行动预览，core.item.action 同时用于 UI/网络/授权插件。异步执行复用野外规则/计划/导演与保存，不支持嵌套事务 dispatch。详见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。

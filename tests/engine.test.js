@@ -1,3 +1,5 @@
+import { createItemService } from "../dist/engine/items.js";
+import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -90,6 +92,7 @@ test("Starter rescue ends, grants exact experience, and upgrades moves at level 
       p = createMonster(starter, 5, db, rng),
       e = createMonster("zigzagoon", 2, db, rng);
     const b = new Battle({
+      items: createItemService(ITEMS),
       party: [p],
       enemy: e,
       db,
@@ -113,6 +116,7 @@ test("Status moves lower stats, PP decreases, replacement is free after faint", 
   const { rng, p, e } = setup();
   const second = createMonster("mudkip", 5, db, rng);
   const b = new Battle({
+    items: createItemService(ITEMS),
     party: [p, second],
     enemy: e,
     db,
@@ -134,6 +138,7 @@ test("Poké Balls cannot catch trainers, fail consumes a turn, success uses one 
   const { rng, p, e } = setup();
   let bag = { pokeball: 3, potion: 0 };
   const trainer = new Battle({
+    items: createItemService(ITEMS),
     party: [p],
     enemy: e,
     db,
@@ -141,16 +146,17 @@ test("Poké Balls cannot catch trainers, fail consumes a turn, success uses one 
     bag,
     trainer: true,
   });
-  trainer.act({ kind: "ball" });
+  trainer.act({ kind: "item", item: "pokeball" });
   assert.equal(bag.pokeball, 3);
   const b = new Battle({
+    items: createItemService(ITEMS),
     party: [p],
     enemy: e,
     db,
     rng: { int: () => 0, next: () => 0 },
     bag,
   });
-  b.act({ kind: "ball" });
+  b.act({ kind: "item", item: "pokeball" });
   assert.equal(b.result, "caught");
   assert.equal(bag.pokeball, 2);
   assert(captureCheck(e, db.species.zigzagoon, { int: () => 0 }).caught);
@@ -158,11 +164,18 @@ test("Poké Balls cannot catch trainers, fail consumes a turn, success uses one 
 test("Damage/PP recovery, invalid potions do not consume items, switching consumes turn", () => {
   const { rng, p, e } = setup();
   const bag = { potion: 1, pokeball: 0 };
-  const b = new Battle({ party: [p], enemy: e, db, rng, bag });
-  b.act({ kind: "potion" });
+  const b = new Battle({
+    items: createItemService(ITEMS),
+    party: [p],
+    enemy: e,
+    db,
+    rng,
+    bag,
+  });
+  b.act({ kind: "item", item: "potion", index: 0 });
   assert.equal(bag.potion, 1);
   p.hp = 1;
-  b.act({ kind: "potion" });
+  b.act({ kind: "item", item: "potion", index: 0 });
   assert.equal(bag.potion, 0);
   p.status = "poison";
   p.moves[0].pp = 0;

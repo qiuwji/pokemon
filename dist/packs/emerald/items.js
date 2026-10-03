@@ -1,6 +1,12 @@
 import { BASE_ITEMS } from "./inventory-items.js";
 import { MACHINE_ITEMS } from "./machine-learning.js";
-import { DEFAULT_ITEMS } from "../../engine/items.js";
+const fieldItem = (id, name, fieldAction, input) => ({
+  ...BASE_ITEMS[id],
+  name,
+  contexts: ["field"],
+  target: "field",
+  actions: [{ id: "use", fieldAction, input }],
+});
 export const ITEMS = {
   ...BASE_ITEMS,
   ...Object.fromEntries(
@@ -9,6 +15,15 @@ export const ITEMS = {
       { ...BASE_ITEMS[id], ...machine },
     ]),
   ),
+  mach_bike: fieldItem("mach_bike", "音速自行车", "cycling", {
+    mode: "mach-bike",
+  }),
+  acro_bike: fieldItem("acro_bike", "越野自行车", "cycling", {
+    mode: "acro-bike",
+  }),
+  old_rod: fieldItem("old_rod", "破旧钓竿", "fishing", { rod: "old" }),
+  good_rod: fieldItem("good_rod", "好钓竿", "fishing", { rod: "good" }),
+  super_rod: fieldItem("super_rod", "超级钓竿", "fishing", { rod: "super" }),
   blue_pokeblock: {
     name: "蓝色能量方块",
     price: 100,
@@ -20,17 +35,26 @@ export const ITEMS = {
     description: "干燥口味的能量方块，提高美丽度；饱食度满后不能再喂食。",
   },
   pokeball: {
-    ...DEFAULT_ITEMS.pokeball,
+    ...BASE_ITEMS.pokeball,
+    name: "精灵球",
+    contexts: ["battle"],
+    target: "enemy",
+    effects: [{ op: "capture", bonus: 1 }],
     icon: "◉",
     purchaseRequires: { flag: "pokedex" },
     description: "捕捉野生宝可梦。降低对方体力更容易成功。",
   },
   potion: {
-    ...DEFAULT_ITEMS.potion,
+    ...BASE_ITEMS.potion,
+    name: "伤药",
+    contexts: ["field", "battle"],
+    target: "party",
+    effects: [{ op: "restoreHP", amount: 20 }],
     icon: "✚",
     description: "为一只宝可梦恢复 20 点 HP。",
   },
   super_potion: {
+    ...BASE_ITEMS.super_potion,
     name: "好伤药",
     price: 700,
     icon: "✚",
@@ -40,6 +64,7 @@ export const ITEMS = {
     description: "为一只宝可梦恢复 50 点 HP。",
   },
   antidote: {
+    ...BASE_ITEMS.antidote,
     name: "解毒药",
     price: 100,
     icon: "✚",
@@ -49,6 +74,7 @@ export const ITEMS = {
     description: "解除一只宝可梦的中毒状态。",
   },
   great_ball: {
+    ...BASE_ITEMS.great_ball,
     name: "超级球",
     price: 600,
     icon: "◉",

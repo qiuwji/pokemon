@@ -372,8 +372,11 @@ test("Dive and surface use content-registered links, cover map changes, retain p
     }),
     g = s.game;
   g.state.flags.badgeMind = true;
-  g.state.flags.fieldTraining = true;
-  g.state.party[0].moves = [{ id: "dive", pp: 10, maxPP: 10 }];
+  g.state.flags.badgeBalance = true;
+  g.state.party[0].moves = [
+    { id: "dive", pp: 10, maxPP: 10 },
+    { id: "surf", pp: 15, maxPP: 15 },
+  ];
   assert(g.movement.set("surf", g.world.map).ok);
   const uid = g.state.party[0].uid;
   assert.equal((await g.performFieldAction("dive")).ok, true);
@@ -393,9 +396,12 @@ test("Waterfall climbs as grid steps, blocks ordinary surf ascent and checks the
   behavior[12] = 19;
   const s = adventure({ maps: { Lab: fieldMap({ behavior }) } }),
     g = s.game;
-  g.state.flags.fieldTraining = true;
+  g.state.flags.badgeBalance = true;
   g.state.flags.badgeRain = true;
-  g.state.party[0].moves = [{ id: "waterfall", pp: 15, maxPP: 15 }];
+  g.state.party[0].moves = [
+    { id: "waterfall", pp: 15, maxPP: 15 },
+    { id: "surf", pp: 15, maxPP: 15 },
+  ];
   g.movement.set("surf", g.world.map);
   assert.equal(g.move("up"), false);
   const steps = g.world.steps;
@@ -572,7 +578,10 @@ test("The public fishing command accepts concurrent reel input, launches one enc
         void s.bus.execute("core.field.fishing-input", {});
     },
   });
-  s.game.state.flags.oldRod = true;
+  s.game.state.bag.old_rod = 1;
+  s.game.state.flags.badgeBalance = true;
+  s.game.state.party[0].moves[0] = { id: "surf", pp: 15 };
+  assert(s.game.movement.set("surf", s.game.world.map).ok);
   s.game.rng.int = () => 0;
   s.game.applications.battle.startBattle = (mon) => {
     assert.equal(s.game.actionBusy, false);
@@ -590,14 +599,17 @@ test("The public fishing command accepts concurrent reel input, launches one enc
   assert.equal(encounters[0].species, "zigzagoon");
   assert.equal(closed, 1);
   assert.equal(s.game.fishing, null);
-  assert.equal(s.game.state.flags.oldRod, true);
+  assert.equal(s.game.state.bag.old_rod, 1);
   assert.equal(s.game.fieldDirector.active, false);
 });
 test("Public fishing can cancel without generating a monster, and map requirements prevent a land save with a diving mode", async () => {
   const s = adventure({
     maps: { Lab: fieldMap({ behavior: Array(30).fill(16) }) },
   });
-  s.game.state.flags.oldRod = true;
+  s.game.state.bag.old_rod = 1;
+  s.game.state.flags.badgeBalance = true;
+  s.game.state.party[0].moves[0] = { id: "surf", pp: 15 };
+  assert(s.game.movement.set("surf", s.game.world.map).ok);
   const seed = s.game.rng.seed;
   s.game.ui.showFishing = () => s.game.reelFishing({ cancel: true });
   const result = await s.game.performFieldAction("fishing", { rod: "old" });

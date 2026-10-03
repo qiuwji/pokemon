@@ -1,3 +1,4 @@
+import { validateItemActions } from "../../engine/item-actions.js";
 import { WeatherRegistry } from "../../engine/weather.js";
 import { BattleWeatherRegistry } from "../../engine/battle/weather.js";
 import {
@@ -137,7 +138,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     new MovementInputRegistry(c.movementInputs).validateMovement(
       new MovementRegistry(c.movement),
     );
-    new FieldActionRegistry(c.fieldActions);
+    validateItemActions(c.items, new FieldActionRegistry(c.fieldActions));
     new FieldTerrainRegistry(c.terrainRules);
     for (const action of Object.values(c.fieldActions))
       if (

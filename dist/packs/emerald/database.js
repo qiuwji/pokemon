@@ -1,3 +1,4 @@
+import { GEN3_MAP_CYCLING } from "../../engine/rules/gen3/map-cycling.js";
 import { GEN3_MAP_WEATHER } from "../../engine/rules/gen3/map-weather.js";
 import { MACHINE_LEARNSETS } from "../../engine/rules/gen3/machine-learning.js";
 import { GEN3_REFERENCE_MOVES } from "../../engine/rules/gen3/reference-metadata.js";
@@ -10,6 +11,7 @@ export function emeraldDatabase(db) {
         id,
         {
           ...map,
+          allowBike: map.allowBike ?? GEN3_MAP_CYCLING[id] ?? !map.indoor,
           weather: map.weather ?? GEN3_MAP_WEATHER[id] ?? { default: "clear" },
         },
       ]),

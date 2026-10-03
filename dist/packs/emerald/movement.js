@@ -27,8 +27,7 @@ export const MOVEMENT_MODES = {
     actor: "BrendanMachBike",
     durations: GEN3_MACH_DURATIONS,
     inputRule: "mach-bike",
-    allowed: (c) =>
-      field(c) && c.map.allowBike !== false && capability("bike", c),
+    allowed: (c) => c.map.allowBike === true && capability("mach-bike", c),
     traverse: (c) => land(c) && c.cell.behavior !== BEHAVIOR.LONG_GRASS,
   },
   "acro-bike": {
@@ -63,8 +62,7 @@ export const MOVEMENT_MODES = {
         oneStep: true,
       },
     },
-    allowed: (c) =>
-      field(c) && c.map.allowBike !== false && capability("bike", c),
+    allowed: (c) => c.map.allowBike === true && capability("acro-bike", c),
     traverse: land,
   },
   surf: {

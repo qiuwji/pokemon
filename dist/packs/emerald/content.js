@@ -1,3 +1,6 @@
+import { FieldActionRegistry } from "../../engine/field-actions.js";
+import { EMERALD_FIELD_ACTIONS } from "./field-actions.js";
+import { validateItemActions } from "../../engine/item-actions.js";
 import { EvolutionService } from "../../engine/growth/evolution.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
@@ -28,6 +31,7 @@ export function assertPackContent(db) {
   validateTrainers(TRAINERS, db);
   new MoveEffectRegistry().validateMoves(db.moves);
   createItemService(ITEMS);
+  validateItemActions(ITEMS, new FieldActionRegistry(EMERALD_FIELD_ACTIONS));
   const ids = new Set(EMERALD_STORY.events.map((e) => e.id));
   for (const item of Object.values(ITEMS))
     validateCondition(item.purchaseRequires, ids);
