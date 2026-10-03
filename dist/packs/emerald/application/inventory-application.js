@@ -1,4 +1,5 @@
 import { ItemActionService } from "../../../engine/item-actions.js";
+import { createEmeraldInventory } from "../inventory.js";
 import { FieldActionRegistry } from "../../../engine/field-actions.js";
 import { EMERALD_FIELD_ACTIONS } from "../field-actions.js";
 import { setLead } from "../../../engine/party.js";
@@ -22,18 +23,37 @@ export const INVENTORY_PORTS = Object.freeze([
 export class InventoryApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, INVENTORY_PORTS);
-    this.items = createItemService(this.catalog.items);
+    this.inventory = createEmeraldInventory(this.catalog);
+    this.items = createItemService(this.catalog.items, this.inventory);
     this.itemActions = new ItemActionService({
       items: this.catalog.items,
       registry: new FieldActionRegistry(
         this.catalog.fieldActions || EMERALD_FIELD_ACTIONS,
       ),
-      quantity: (id) => this.state.bag[id] || 0,
+      quantity: (id) => this.itemQuantity(id),
       inspect: (...args) => this.inspectFieldAction(...args),
       perform: (...args) => this.performFieldAction(...args),
     });
     this.partyStorage = new PartyStorageService();
-    this.equipment = new EquipmentService(this.catalog.heldItems);
+    this.equipment = new EquipmentService(
+      this.catalog.heldItems,
+      this.inventory,
+    );
+  }
+  bagView(inBattle = false) {
+    return this.inventory.view(inBattle ? this.battle.bag : this.state.bag);
+  }
+  inventoryPreview(additions) {
+    return this.inventory.preview(
+      this.state.bag,
+      additions.map(({ item, count }) => ({ kind: "add", item, count })),
+    );
+  }
+  itemQuantity(id, inBattle = false) {
+    return this.inventory.quantity(
+      inBattle ? this.battle.bag : this.state.bag,
+      id,
+    );
   }
   setLead(index) {
     return this.canManageParty() && setLead(this.state, index);
@@ -46,15 +66,16 @@ export class InventoryApplication {
       return { ok: false, reason: "请先结束当前行动。" };
     return this.itemActions.perform(id, action);
   }
-  itemPlan(id, index, inBattle = !!this.battle) {
+  itemPlan(id, index, inBattle = !!this.battle, slot) {
     const method = this.itemDefinitions[id]?.learningMethod;
     if (method && !inBattle)
-      return this.learningView(method, this.state.party[index]?.uid);
+      return this.learningView(method, this.state.party[index]?.uid, slot);
     return this.items.prepare({
       id,
       bag: inBattle ? this.battle.bag : this.state.bag,
       party: inBattle ? this.battle.party : this.state.party,
       index,
+      slot,
       context: inBattle ? "battle" : "field",
       enemy: this.battle?.enemy,
       canCapture: this.battle
@@ -62,7 +83,7 @@ export class InventoryApplication {
         : false,
     });
   }
-  useItem(id, index) {
+  useItem(id, index, slot) {
     if (!this.canManageParty())
       return { ok: false, reason: "请先结束当前行动。" };
     return this.items.use({
@@ -70,6 +91,7 @@ export class InventoryApplication {
       bag: this.state.bag,
       party: this.state.party,
       index,
+      slot,
       context: "field",
     });
   }
@@ -85,14 +107,20 @@ export class InventoryApplication {
       item.shopStock !== false &&
       item.price > 0 &&
       this.state.money >= item.price &&
+      this.inventory.prepare(this.state.bag, [
+        { kind: "add", item: id, count: 1 },
+      ]).ok &&
       matchesCondition(item.purchaseRequires, this.state, this.conditionQueries)
     );
   }
   buyItem(id) {
     const item = this.itemDefinitions[id];
     if (!this.canManageParty() || !this.canBuyItem(id)) return false;
+    const result = this.inventory.apply(this.state.bag, [
+      { kind: "add", item: id, count: 1 },
+    ]);
+    if (!result.ok) return false;
     this.state.money -= item.price;
-    this.state.bag[id] = (this.state.bag[id] || 0) + 1;
     return true;
   }
   withdrawBox(index) {

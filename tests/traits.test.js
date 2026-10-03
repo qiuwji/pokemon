@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -47,7 +52,7 @@ function setup({
       : [e],
     db,
     rng,
-    bag: {},
+    bag: createBag({}),
     trainer: true,
     rules: {
       accuracy: () => true,
@@ -251,12 +256,12 @@ test("Equipment swaps atomically by UID, supports box members and rejects missin
     state = {
       party: [p],
       box: [reserve],
-      bag: { oran_berry: 1, leftovers: 1 },
+      bag: createBag({ oran_berry: 1, leftovers: 1 }),
     },
-    service = new EquipmentService(GEN3_HELD_ITEMS);
+    service = new EquipmentService(GEN3_HELD_ITEMS, fixtureInventory());
   assert(service.equip(state, p.uid, "oran_berry").ok);
   assert(service.equip(state, p.uid, "leftovers").ok);
-  assert.equal(state.bag.oran_berry, 1);
+  assert.equal(inventoryQuantity(state.bag, "oran_berry"), 1);
   const before = structuredClone(state);
   assert.equal(service.equip(state, reserve.uid, "leftovers").ok, false);
   assert.deepEqual(state, before);

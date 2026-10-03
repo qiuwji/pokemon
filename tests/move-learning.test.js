@@ -1,3 +1,9 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
 import { BreedingService } from "../dist/engine/growth/breeding.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -30,11 +36,12 @@ function fixture({ friendship, methods = EMERALD_LEARNING_METHODS } = {}) {
     mon = createMonster("mudkip", 5, db, rng);
   const state = {
     party: [mon],
-    bag: { tm_toxic: 2, hm_surf: 1, hm_fly: 1 },
+    bag: createBag({ tm_toxic: 2, hm_surf: 1, hm_fly: 1 }),
     flags: {},
     position: { map: "Lab", x: 1, y: 1 },
   };
   const learning = new MoveLearningService({
+    inventory: fixtureInventory(),
     db,
     methods,
     items: ITEMS,
@@ -80,7 +87,7 @@ test("Machine teaching appends full PP, permits a fainted non-egg, changes frien
   assert(result.ok);
   assert.deepEqual(s.mon.moves.at(-1), { id: "toxic", pp: db.moves.toxic.pp });
   assert.equal(s.mon.friendship, before + 1);
-  assert.equal(s.state.bag.tm_toxic, 1);
+  assert.equal(inventoryQuantity(s.state.bag, "tm_toxic"), 1);
   assert.equal(s.rng.seed, seed);
   const saved = structuredClone(s.state);
   assert.equal(s.learning.use(s.state, "tm_toxic", s.mon.uid).ok, false);
@@ -89,7 +96,7 @@ test("Machine teaching appends full PP, permits a fainted non-egg, changes frien
 test("HM ownership is required but success retains the machine; incompatible species and eggs leave everything unchanged", () => {
   const s = fixture();
   assert(s.learning.use(s.state, "hm_surf", s.mon.uid).ok);
-  assert.equal(s.state.bag.hm_surf, 1);
+  assert.equal(inventoryQuantity(s.state.bag, "hm_surf"), 1);
   for (const change of [
     () => {},
     () => {
@@ -97,7 +104,7 @@ test("HM ownership is required but success retains the machine; incompatible spe
     },
     () => {
       delete s.mon.egg;
-      s.state.bag.hm_fly = 0;
+      setQuantity(s.state.bag, "hm_fly", 0);
     },
   ]) {
     change();
@@ -106,7 +113,7 @@ test("HM ownership is required but success retains the machine; incompatible spe
     assert.deepEqual(s.state, before);
   }
   const absent = fixture();
-  absent.state.bag.hm_surf = 0;
+  setQuantity(absent.state.bag, "hm_surf", 0);
   assert.equal(
     absent.learning.prepare(absent.state, "hm_surf", absent.mon.uid).ok,
     false,
@@ -134,7 +141,12 @@ test("Four-slot learning requires an explicit forgettable slot; HM protection an
 });
 test("Owned learning plans reject forgery, duplicate commits and changed inventory, custody, slots, qualification or loaded state", () => {
   for (const mutate of [
-    (s) => s.state.bag.tm_toxic++,
+    (s) =>
+      setQuantity(
+        s.state.bag,
+        "tm_toxic",
+        inventoryQuantity(s.state.bag, "tm_toxic") + 1,
+      ),
     (s) => (s.state.party = []),
     (s) => s.mon.moves[0].pp--,
     (s) => (s.state.flags.changed = true),
@@ -163,7 +175,7 @@ test("Owned learning plans reject forgery, duplicate commits and changed invento
   const fresh = s.learning.prepare(s.state, "tm_toxic", s.mon.uid);
   assert(s.learning.commit(fresh, { state: s.state }).ok);
   assert.equal(s.learning.commit(fresh, { state: s.state }).ok, false);
-  assert.equal(s.state.bag.tm_toxic, 1);
+  assert.equal(inventoryQuantity(s.state.bag, "tm_toxic"), 1);
 });
 test("Tutor methods compose immutable qualification and declared costs; malformed or asynchronous policies fail before mutation", () => {
   const tutor = {
@@ -177,7 +189,7 @@ test("Tutor methods compose immutable qualification and declared costs; malforme
   s.state.flags.training = true;
   assert(s.learning.use(s.state, "tutor", s.mon.uid).ok);
   assert.equal(s.mon.moves.at(-1).id, "toxic");
-  assert.equal(s.state.bag.tm_toxic, 2);
+  assert.equal(inventoryQuantity(s.state.bag, "tm_toxic"), 2);
   for (const eligible of [
     (context) => {
       context.mon.hp = 0;
@@ -265,8 +277,8 @@ function adventure(plugins = []) {
   game.state.party.push(createMonster("mudkip", 5, db, game.rng));
   game.state.flags.rescued = true;
   game.state.flags.pokedex = true;
-  game.state.bag.tm_toxic = 2;
-  game.state.bag.hm_surf = 1;
+  setQuantity(game.state.bag, "tm_toxic", 2);
+  setQuantity(game.state.bag, "hm_surf", 1);
   return { game, host, catalog, db, errors, ...ports };
 }
 test("Public teaching resolves stable UIDs after party reorder, rejects boxed/busy callers and saves learned slots plus item counts", () => {
@@ -282,7 +294,7 @@ test("Public teaching resolves stable UIDs after party reorder, rejects boxed/bu
     ).ok,
   );
   assert.equal(mon.friendship, before + 1);
-  assert.equal(s.game.state.bag.tm_toxic, 1);
+  assert.equal(inventoryQuantity(s.game.state.bag, "tm_toxic"), 1);
   assert.equal(
     s.bus.executeSync(
       "core.learning.teach",
@@ -315,7 +327,7 @@ test("Public teaching resolves stable UIDs after party reorder, rejects boxed/bu
     s.game.state.party.find((m) => m.uid === mon.uid).moves.at(-1).id,
     "toxic",
   );
-  assert.equal(s.game.state.bag.tm_toxic, 1);
+  assert.equal(inventoryQuantity(s.game.state.bag, "tm_toxic"), 1);
   assert.equal(s.game.canBuyItem("hm_surf"), false);
   assert.equal(s.game.buyItem("tm_toxic"), false);
   assert.equal(s.game.buyItem("mach_bike"), false);
@@ -372,14 +384,14 @@ test("A plugin registers a tutor and an item-backed teaching method without modi
   };
   const s = adventure([plugin]),
     mon = s.game.state.party[0];
-  s.game.state.bag["teacher:disc"] = 1;
+  setQuantity(s.game.state.bag, "teacher:disc", 1);
   await assert.rejects(
     s.bus.execute("teacher:teach", { uid: mon.uid }),
     /学习条件/,
   );
   s.game.state.flags.training = true;
   assert((await s.bus.execute("teacher:teach", { uid: mon.uid })).ok);
-  assert.equal(s.game.state.bag["teacher:disc"], 0);
+  assert.equal(inventoryQuantity(s.game.state.bag, "teacher:disc"), 0);
   assert.equal(s.game.learningView("teacher:bad", mon.uid).ok, false);
   await new Promise((resolve) => setImmediate(resolve));
   assert.match(denied.message, /read.only/i);
@@ -450,7 +462,7 @@ test("Backpack learning uses the selected UID, presents HM-disabled replacement 
   ui.chooseLearningMove("tm_toxic", mon.uid);
   root.querySelectorAll("[data-replace]")[1].onclick();
   assert.equal(mon.moves[1].id, "toxic");
-  assert.equal(s.game.state.bag.tm_toxic, 1);
+  assert.equal(inventoryQuantity(s.game.state.bag, "tm_toxic"), 1);
   assert(lastToast.includes("学会"));
 });
 
@@ -499,7 +511,7 @@ test("A failed later plugin intent restores learned moves, consumed machine, fri
   assert.deepEqual(results, [true, false]);
   assert.deepEqual(s.game.state, before);
   assert.equal(s.game.state.party[0], mon);
-  assert.equal(s.game.state.bag.tm_toxic, 2);
+  assert.equal(inventoryQuantity(s.game.state.bag, "tm_toxic"), 2);
 });
 
 test("New-visit device activation uses the same plugin read isolation as other mechanism phases", async () => {

@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -16,7 +17,7 @@ import { Battle } from "../dist/engine/battle.js";
 const db = JSON.parse(
   fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
 );
-const creationRng=new Random(1);
+const creationRng = new Random(1);
 const mon = (species = "treecko", level = 10) =>
   createMonster(species, level, db, creationRng);
 const traits = (party) =>
@@ -221,7 +222,7 @@ test("Forecast types and form are projected and weather suppression reverses the
     enemy: e,
     db: custom,
     rng: new Random(1),
-    bag: {},
+    bag: createBag({}),
   });
   let view = b.snapshot().combatants[0].monster;
   assert.deepEqual(view.types, ["water"]);
@@ -243,7 +244,7 @@ test("Trace executes copied entry rules and restores the original ability when l
     enemy: e,
     db,
     rng: new Random(1),
-    bag: {},
+    bag: createBag({}),
     trainer: true,
   });
   assert.equal(p.ability, "drizzle");

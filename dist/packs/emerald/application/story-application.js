@@ -29,6 +29,7 @@ export const STORY_PORTS = Object.freeze([
   "enter",
   "fieldDirector",
   "itemDefinitions",
+  "inventory",
   "patchWorld",
   "performStoryFieldAction",
   "rng",
@@ -111,18 +112,11 @@ export class StoryApplication {
           this.state.party.forEach((m) => healMonster(m, this.db));
           this.ui?.updateSide();
         },
-        grant: (c) =>
-          grantReward(
-            this.state,
-            {
-              id: "legacy." + c.flag,
-              flags: { [c.flag]: true },
-              items: { [c.item]: c.amount },
-            },
-            { items: this.itemDefinitions },
-          ),
         reward: (c) =>
-          grantReward(this.state, c, { items: this.itemDefinitions }),
+          grantReward(this.state, c, {
+            items: this.itemDefinitions,
+            inventory: this.inventory,
+          }),
         completeEvent: (c) => completeEvent(this.state, c.id),
         captureMonster: (c) => {
           if (
@@ -200,15 +194,6 @@ export class StoryApplication {
           )
             throw new Error("Invalid battle content reference");
           if (c.type === "reward") validateReward(c, this.itemDefinitions);
-          if (c.type === "grant")
-            validateReward(
-              {
-                id: "legacy." + c.flag,
-                flags: { [c.flag]: true },
-                items: { [c.item]: c.amount },
-              },
-              this.itemDefinitions,
-            );
           if (
             c.type === "completeEvent" &&
             !this.story.events.some((e) => e.id === c.id)

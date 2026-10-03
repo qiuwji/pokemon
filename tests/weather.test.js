@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import { Renderer } from "../dist/adapters/canvas-renderer.js";
 import { PresentationRegistry } from "../dist/presentation/effect-registry.js";
 import test from "node:test";
@@ -140,7 +141,7 @@ function battle({
     db,
     rng,
     trainer: true,
-    bag: {},
+    bag: createBag({}),
     environment: { weather },
     weatherDefinitions,
     effects,
@@ -166,6 +167,28 @@ test("Reference map weather preserves 518 headers and 86 coordinate events with 
   assert.equal(GEN3_WORLD_WEATHER.drought.battle, "sun");
   for (const id of ["rain", "thunderstorm", "downpour"])
     assert.equal(GEN3_WORLD_WEATHER[id].battle, "rain");
+});
+
+test("Weather restore rejects non-object override containers and explicit malformed map weather rather than assuming clear", () => {
+  for (const overrides of [7, "invalid", true, [], null]) {
+    const state = { ...emptyWeather(), overrides },
+      before = structuredClone(state);
+    assert.throws(
+      () => new WorldWeather({ state, registry: registry(), maps }),
+    );
+    assert.deepEqual(state, before);
+  }
+  for (const weather of [null, false, 0, "clear"])
+    assert.throws(() => registry().validateMaps({ A: { ...maps.A, weather } }));
+  assert.doesNotThrow(() =>
+    registry().validateMaps({ A: { width: 5, height: 5 } }),
+  );
+  const { game: g, db, catalog, host } = session();
+  const state = structuredClone(g.state),
+    before = structuredClone(g.state);
+  state.weather.overrides = 7;
+  assert.equal(validateSave(state, db, catalog, host), false);
+  assert.deepEqual(g.state, before);
 });
 test("Coordinate weather respects elevation, remains until another trigger and resets on map entry", () => {
   const w = world();
@@ -430,7 +453,7 @@ test("Registered weather artists are deterministic, opacity-safe and use static 
 test("Application commands, read-only queries, map visits, expiry and current save schema share one owner", async () => {
   const s = session();
   const g = s.game;
-  assert.equal(PACK.version, 9);
+  assert.equal(PACK.version, 10);
   assert.equal(
     (
       await s.bus.execute("core.weather.set", {

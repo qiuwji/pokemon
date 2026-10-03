@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -34,20 +39,20 @@ function setup(options = {}) {
   const rng = new Random(123);
   const player = createMonster("mudkip", 5, db, rng);
   const enemy = createMonster("zigzagoon", 3, db, rng);
-  const bag = {
+  const bag = createBag({
     potion: 2,
     super_potion: 2,
     antidote: 2,
     pokeball: 2,
     great_ball: 2,
-  };
+  });
   const battle = new Battle({
     party: [player],
     enemy,
     bag,
     db,
     rng,
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     ...options,
   });
   return { rng, player, enemy, bag, battle };
@@ -57,7 +62,7 @@ const state = () => ({
   party: [],
   box: [],
   flags: {},
-  bag: { potion: 0, pokeball: 0 },
+  bag: createBag({ potion: 0, pokeball: 0 }),
   money: 3000,
   seen: [],
   caught: [],
@@ -138,10 +143,14 @@ test("Reward commits atomically, is idempotent, persists ledger, rejects malform
     items: { potion: 2 },
     flags: { opened: true },
   };
-  assert(grantReward(s, reward, { items: ITEMS }));
-  assert(!grantReward(s, reward, { items: ITEMS }));
+  assert(
+    grantReward(s, reward, { inventory: fixtureInventory(), items: ITEMS }),
+  );
+  assert(
+    !grantReward(s, reward, { inventory: fixtureInventory(), items: ITEMS }),
+  );
   assert.equal(s.money, 3500);
-  assert.equal(s.bag.potion, 2);
+  assert.equal(inventoryQuantity(s.bag, "potion"), 2);
   assert.deepEqual(s.story.rewards, ["chapter.1"]);
   const before = structuredClone(s);
   assert.throws(
@@ -149,13 +158,18 @@ test("Reward commits atomically, is idempotent, persists ledger, rejects malform
       grantReward(
         s,
         { id: "bad", money: 999, items: { potion: 3, typo: 1 } },
-        { items: ITEMS },
+        { inventory: fixtureInventory(), items: ITEMS },
       ),
     /Invalid reward item/,
   );
   assert.deepEqual(s, before);
   assert.throws(
-    () => grantReward(s, { id: "bad", flags: { stage: {} } }),
+    () =>
+      grantReward(
+        s,
+        { id: "bad", flags: { stage: {} } },
+        { inventory: fixtureInventory() },
+      ),
     /Invalid reward flag/,
   );
   assert.deepEqual(s, before);
@@ -165,7 +179,8 @@ test("A dialogue failure after reward can replay without duplicate money or item
   const s = state();
   let fail = true;
   const runner = new CommandRunner({
-    reward: (c) => grantReward(s, c, { items: ITEMS }),
+    reward: (c) =>
+      grantReward(s, c, { inventory: fixtureInventory(), items: ITEMS }),
     dialog: () => {
       if (fail) throw new Error("presentation failed");
     },
@@ -178,7 +193,7 @@ test("A dialogue failure after reward can replay without duplicate money or item
   fail = false;
   await runner.run(commands);
   assert.equal(s.money, 3300);
-  assert.equal(s.bag.potion, 1);
+  assert.equal(inventoryQuantity(s.bag, "potion"), 1);
 });
 
 test("Current development save contract rejects older versions without mutating their data", () => {
@@ -197,19 +212,19 @@ test("Current development save contract rejects older versions without mutating 
 
 test("Field items use effects, reject dead/full/wrong targets, and stale/double commits do not consume", () => {
   const { player, bag } = setup();
-  const service = createItemService(ITEMS);
+  const service = createItemService(ITEMS, fixtureInventory(ITEMS));
   const use = (id) =>
     service.use({ id, bag, party: [player], index: 0, context: "field" });
   assert(!use("potion").ok);
-  assert.equal(bag.potion, 2);
+  assert.equal(inventoryQuantity(bag, "potion"), 2);
   player.hp = 1;
   assert(use("super_potion").ok);
   assert.equal(player.hp, player.stats.hp);
-  assert.equal(bag.super_potion, 1);
+  assert.equal(inventoryQuantity(bag, "super_potion"), 1);
   player.status = "poison";
   assert(use("antidote").ok);
   assert.equal(player.status, null);
-  assert.equal(bag.antidote, 1);
+  assert.equal(inventoryQuantity(bag, "antidote"), 1);
   assert(!use("antidote").ok);
   assert(!use("great_ball").ok);
   player.hp = 0;
@@ -224,11 +239,11 @@ test("Field items use effects, reject dead/full/wrong targets, and stale/double 
   });
   player.hp = 2;
   assert(!service.commit(plan, bag, "potion"));
-  assert.equal(bag.potion, 2);
+  assert.equal(inventoryQuantity(bag, "potion"), 2);
   player.hp = 1;
   assert(service.commit(plan, bag, "potion"));
   assert(!service.commit(plan, bag, "potion"));
-  assert.equal(bag.potion, 1);
+  assert.equal(inventoryQuantity(bag, "potion"), 1);
 });
 
 test("New data-only item composes healing and curing through the same operations", () => {
@@ -245,10 +260,10 @@ test("New data-only item composes healing and curing through the same operations
       ],
     },
   };
-  const service = createItemService(definitions);
+  const service = createItemService(definitions, fixtureInventory(definitions));
   player.hp = 1;
   player.status = "burn";
-  const bag = { remedy: 1 };
+  const bag = createBag({ remedy: 1 });
   assert(
     service.use({
       id: "remedy",
@@ -260,15 +275,23 @@ test("New data-only item composes healing and curing through the same operations
   );
   assert.equal(player.hp, 8);
   assert.equal(player.status, null);
-  assert.equal(bag.remedy, 0);
+  assert.equal(inventoryQuantity(bag, "remedy"), 0);
   assert.throws(
     () =>
-      createItemService({
-        wrong: {
-          ...definitions.remedy,
-          effects: [{ op: "restoreHPP", amount: 7 }],
+      createItemService(
+        {
+          wrong: {
+            ...definitions.remedy,
+            effects: [{ op: "restoreHPP", amount: 7 }],
+          },
         },
-      }),
+        fixtureInventory({
+          wrong: {
+            ...definitions.remedy,
+            effects: [{ op: "restoreHPP", amount: 7 }],
+          },
+        }),
+      ),
     /items.wrong.effects\[0\]/,
   );
   assert.throws(
@@ -299,7 +322,7 @@ test("Invalid battle item and depleted move leave turn, HP, PP and RNG unchanged
   assert.equal(battle.turn, 0);
   assert.equal(rng.seed, before.seed);
   battle.act({ kind: "item" });
-  assert.equal(bag.potion, 2);
+  assert.equal(inventoryQuantity(bag, "potion"), 2);
 });
 
 test("Successful battle medicine consumes one turn; all capture items share restrictions and bonus rule", () => {
@@ -317,7 +340,7 @@ test("Successful battle medicine consumes one turn; all capture items share rest
   player.status = "poison";
   const events = battle.act({ kind: "item", item: "antidote", index: 0 });
   assert.equal(player.status, null);
-  assert.equal(bag.antidote, 1);
+  assert.equal(inventoryQuantity(bag, "antidote"), 1);
   assert.equal(battle.turn, 1);
   assert.equal(attacks, 1);
   assert(events.some((e) => e.kind === "heal"));
@@ -332,7 +355,7 @@ test("Successful battle medicine consumes one turn; all capture items share rest
   });
   caught.battle.act({ kind: "item", item: "great_ball" });
   assert.equal(bonus, 1.5);
-  assert.equal(caught.bag.great_ball, 1);
+  assert.equal(inventoryQuantity(caught.bag, "great_ball"), 1);
   assert.equal(caught.battle.result, "caught");
   for (const options of [{ trainer: true }, { script: "rescue" }]) {
     const blocked = setup(options);
@@ -341,7 +364,7 @@ test("Successful battle medicine consumes one turn; all capture items share rest
       blocked.battle.act({ kind: "item", item: "great_ball" })[0].kind,
       "invalid",
     );
-    assert.equal(blocked.bag.great_ball, 2);
+    assert.equal(inventoryQuantity(blocked.bag, "great_ball"), 2);
     assert.equal(blocked.rng.seed, seed);
     assert.equal(blocked.battle.turn, 0);
   }

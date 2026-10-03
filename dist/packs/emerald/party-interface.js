@@ -73,7 +73,7 @@ export function createPartyInterface(
         })
         .join(
           "",
-        )}</div><div class="inline-actions"><button class="secondary-button" id="growth-options">伙伴的成长</button><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.state.bag.potion || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.state.bag.potion})</button></div>`,
+        )}</div><div class="inline-actions"><button class="secondary-button" id="growth-options">伙伴的成长</button><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.itemQuantity("potion") || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.itemQuantity("potion")})</button></div>`,
       { back: () => showParty(), type: "detail" },
     );
     game.ui?.extensions?.mountSlot(
@@ -107,11 +107,11 @@ export function createPartyInterface(
     const mon = game.state.party.find((m) => m.uid === uid);
     if (!mon) return;
     const choices = Object.entries(ITEMS).filter(
-      ([id]) => game.equipment.definitions[id] && (game.state.bag[id] || 0) > 0,
+      ([id]) => game.equipment.definitions[id] && game.itemQuantity(id) > 0,
     );
     modal(
       "持有道具",
-      `<p>当前持有：${escapeHTML(ITEMS[mon.heldItem]?.name || "无")}</p><div class="menu-list">${choices.map(([id, item]) => `<button data-equip="${id}">${escapeHTML(item.name)} × ${game.state.bag[id]}<small>${escapeHTML(item.description)}</small></button>`).join("")}${mon.heldItem ? "<button data-remove-held>取下持有道具</button>" : ""}</div>${!choices.length ? "<p>背包里没有可持有的道具。友好商店可以买到树果与训练道具。</p>" : ""}`,
+      `<p>当前持有：${escapeHTML(ITEMS[mon.heldItem]?.name || "无")}</p><div class="menu-list">${choices.map(([id, item]) => `<button data-equip="${id}">${escapeHTML(item.name)} × ${game.itemQuantity(id)}<small>${escapeHTML(item.description)}</small></button>`).join("")}${mon.heldItem ? "<button data-remove-held>取下持有道具</button>" : ""}</div>${!choices.length ? "<p>背包里没有可持有的道具。友好商店可以买到树果与训练道具。</p>" : ""}`,
       { back: () => showMonster(index), type: "equipment" },
     );
     const equip = (id) => {

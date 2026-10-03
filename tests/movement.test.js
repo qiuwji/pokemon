@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
@@ -349,7 +350,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
     position: { map: "Route103", x: 22, y: 9, dir: "right" },
     party: [createMonster("mudkip", 10, db, new Random(3))],
     box: [],
-    bag: { mach_bike: 1 },
+    bag: createBag({ mach_bike: 1 }),
     flags: { badgeBalance: true },
     story: { completed: [], rewards: [] },
     money: 0,

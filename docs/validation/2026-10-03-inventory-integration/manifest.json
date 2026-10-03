@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-03",
+  "baseCommit": "3937daf",
+  "projectVersion": "0.16.0",
+  "saveVersion": 10,
+  "fullSuiteBaseline": {
+    "commit": "1851e9d",
+    "passed": 556
+  },
+  "scope": "Slot inventory migration across real application producers/consumers, controller inventories, commands, readonly queries, plugins/transactions, UI and save10. Weather contracts retained and all18 weather tests passed within the affected run.",
+  "affectedInitial": {
+    "files": [
+      "tests/action-lifecycle.test.js",
+      "tests/battle-states.test.js",
+      "tests/control-states.test.js",
+      "tests/creature-contract.test.js",
+      "tests/crop-growth.test.js",
+      "tests/cutscene.test.js",
+      "tests/encounter-content.test.js",
+      "tests/engine.test.js",
+      "tests/evolution.test.js",
+      "tests/extended-moves.test.js",
+      "tests/field-actions.test.js",
+      "tests/field-devices.test.js",
+      "tests/field-terrain.test.js",
+      "tests/field-traits.test.js",
+      "tests/gen3-rules.test.js",
+      "tests/growth-domain.test.js",
+      "tests/growth-integration.test.js",
+      "tests/item-actions.test.js",
+      "tests/item-shortcut.test.js",
+      "tests/move-learning.test.js",
+      "tests/movement.test.js",
+      "tests/multi-battle.test.js",
+      "tests/network.test.js",
+      "tests/p2-validation.test.js",
+      "tests/plugins.test.js",
+      "tests/presentation.test.js",
+      "tests/reactive-status.test.js",
+      "tests/runtime-forms.test.js",
+      "tests/story-language.test.js",
+      "tests/tactical-ai.test.js",
+      "tests/team-battle.test.js",
+      "tests/traits.test.js",
+      "tests/ui-composition.test.js",
+      "tests/visual-registry.test.js",
+      "tests/weather.test.js",
+      "tests/inventory.test.js",
+      "tests/architecture.test.js",
+      "tests/application-services.test.js"
+    ],
+    "tested": 487,
+    "passed": 484,
+    "failed": 3
+  },
+  "affectedResolution": "Two multi-battle fixtures still provided count dictionaries; one tactical fixture relied on removed default medicine definitions. Updated to authored slot fixtures and explicit catalog/policy injection. Only three failing cases rechecked;3 passed.",
+  "integrationInitial": {
+    "tested": 11,
+    "passed": 9,
+    "failed": 2
+  },
+  "integrationResolution": "Actual aliased-map crop validation used map.id instead of catalog map key; corrected production validator. New trainer fixture lacked required script/prize; repaired fixture. Both failing cases rechecked;2 passed.",
+  "closeTargetedInitial": {
+    "runnerReported": 13,
+    "runnerPassed": 12,
+    "runnerFailed": 1,
+    "note": "One runner entry is a zero-match growth-integration file, not a case proof. Actual12 matching cases:11 passed,1 failed. Trainer positive fixture confused side ID with controller ID; changed to owner(away:0), matching recheck1 passed."
+  },
+  "additional": {
+    "rosterFinal": {
+      "reported": 3,
+      "note": "Two topology cases pass; one empty growth file entry is not proof."
+    },
+    "eggFinal": {
+      "passed": 1
+    },
+    "trainerPreflight": {
+      "passed": 2,
+      "note": "After moving capacity validation ahead of trainer creation, targeted inventory/trainer and standard multi-side encounter cases pass; invalid capacities or missing injection consume no RNG samples."
+    },
+    "learningSlot": {
+      "passed": 1
+    }
+  },
+  "newCaseProofs": [
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Inventory save10 persists only slots, keeps fragments across reload, rejects old counts and preserves live query ports"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "A full shop cannot deduct money; a partial stack accepts the purchase without requiring an empty slot"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Story rewards preflight the whole bundle; full bags never commit money, flags or ledgers and old grant is rejected"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Removing or swapping held items respects return capacity; a same-pocket swap can reuse the freed slot"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Harvesting rejects the entire yield before clearing a ripe tree and can succeed later when stack space is available"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Item plans use the selected stack, refuse moved or replaced containers, and never heal on stale costs"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "The real bag page renders distinct stacks and its command facade consumes the clicked second stack"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Public teaching checks the selected machine slot before modifying moves, friendship or inventory"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Independent allied battle controllers can each spend their own one-item container in the same round"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Battle rejects old or unvalidated inventories before play and rejects slot references on non-item actions"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Plugin pockets flow through reward, page, use and save; failed transactions restore slots, target and memory"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Capacity preview and story itemSpace queries use registered policies without mutating state or permitting a commit"
+    },
+    {
+      "file": "tests/inventory-integration.test.js",
+      "name": "Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle"
+    },
+    {
+      "file": "tests/inventory.test.js",
+      "name": "Authored initial stock uses the registered capacity; invalid stock is not a save migration path"
+    },
+    {
+      "file": "tests/inventory.test.js",
+      "name": "A capacity preview is detached, frozen and never a committable plan"
+    },
+    {
+      "file": "tests/architecture.test.js",
+      "name": "Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans"
+    }
+  ],
+  "checks": {
+    "content": "passed",
+    "strictPublicTypes": "passed",
+    "modules": 255,
+    "postCheckChange": "Trainer creation preflight and weather shape validation changed after full static check. Trainer matching2 cases+syntax and weather matching4 cases+syntax+content startup passed. Other changes docs/version metadata/test formatting."
+  },
+  "logs": [
+    "affected-initial.txt",
+    "fixture-fixes.txt",
+    "integration-initial.txt",
+    "integration-fixes.txt",
+    "close-targeted-initial.txt",
+    "trainer-fixture-fix.txt",
+    "roster-final.txt",
+    "egg-final.txt",
+    "trainer-preflight.txt",
+    "learning-slot.txt",
+    "check.txt",
+    "trainer-syntax.txt"
+  ],
+  "sourceSha256": {
+    "dist/engine/battle.js": "cb68a79a4f2e2a1f7dfd1f6755db19cae9a5f1593671bee06c4ef7dc9af20bbe",
+    "dist/engine/battle/actions.js": "56bafedc7b77a4fceebe60172e5e2a1745906b8d15f05a56b3fbbc878a2ebd20",
+    "dist/engine/battle/decisions.js": "063342a2263081a8a0135921dc5556161e9131de2cd737bffd27bddbcd323127",
+    "dist/engine/battle/roster.js": "02a49b9e82bc0240e4d9012e0602f06dfdf5abd823ad4aa59cc51050f4fc2b06",
+    "dist/engine/battle/strategy-registry.js": "d8ad1f0487645a8a3c5c2035a26c8c2faa152e6d3ad902dfcba4287d72d2b1b3",
+    "dist/engine/condition-queries.js": "7b97c7b2fb59ce72f5b4114a324ddb31fb5b6a55030f003a3c2468a6c3715c13",
+    "dist/engine/contracts.d.ts": "05559bff5645e82355a06f310463b6e777a61c617e9ca848e2c20272d9e274da",
+    "dist/engine/equipment.js": "fcfbca5e58cdf1e5a47a9bdb633c232709f8754df1377386e17429c4c97df828",
+    "dist/engine/extensions/catalog.js": "c2bb82ee5e362d370c2684912818ee534a84fe3f66c17e4e9bd02a5cab8dde91",
+    "dist/engine/field-director.js": "1d0447270fd71c04886bc35b8cef6006037356a182c0ac9948d3abedcc39d318",
+    "dist/engine/growth/evolution.js": "8197f14ba611b100a36e0c20426a3dd45af65ce4a7a77092dfc077dfb1afa848",
+    "dist/engine/growth/move-learning.js": "e40d50c95a3c45cb112dc2fe9792ebab186b6e7aa70b1bd089b2b780b8aa63b4",
+    "dist/engine/growth/session.js": "7e4d520e9a056ec0aba2ef8ff05d855a9cc326d91c4057448914d758bb49a951",
+    "dist/engine/inventory.js": "321df294929a2a4ff5360238d2279c34ad34dd878c936c99a4e320874ec51b04",
+    "dist/engine/items.js": "c872e6e0b6e08848b164f15b4214c761d516466202fa97b6f2ed9cf18f351120",
+    "dist/engine/story.js": "10dc8e5ec28be991cbb41651c60f0e6e50f33da628f62ea108ee91181375c1a5",
+    "dist/engine/trainer-encounters.js": "4e7da16fb97f6edc646dc9b99d606c0a07eb681df5d14e432030160d94e59eae",
+    "dist/packs/emerald/adventure.js": "40bbf8fd16ca0acae6b617c0407234d1db3209d40032212b3c95b246b1f2fab2",
+    "dist/packs/emerald/application-commands.js": "189683557f1e0a091dacbff1b072903d27fd77933e892ea1e525cd1fdffd0ac6",
+    "dist/packs/emerald/application/battle-application.js": "c81aa0335f35f7c01d7a48661caff8215e9c7a1dda3c98a6a28f6bbc19c3bac2",
+    "dist/packs/emerald/application/crop-application.js": "9d6ba166e539f85b0a77fbcb5033c97df22b11df6cd00b42982551e7abd71205",
+    "dist/packs/emerald/application/field-action-application.js": "b5ef878f7c48b8fdd5415a43e2cb6050f11fca6f072768f265c15d0a98efe192",
+    "dist/packs/emerald/application/growth-application.js": "e8ba081492cd1a96f07e98b7f37e76fb8f00fc666353092bd38cb0411b7e1b9d",
+    "dist/packs/emerald/application/inspection-application.js": "20da7c2aaa18333d1271a79fdd0b92896af56f81a087b6400cad1883bd024072",
+    "dist/packs/emerald/application/inventory-application.js": "319a1bffd9045a84df9adac7ad264a128abb29320d728face92d7163687a82b5",
+    "dist/packs/emerald/application/item-shortcut-application.js": "59e65bca896fedbb13df7d5eb4cd5563c9b49ea79d1c2e9717caa2dbb2b947a7",
+    "dist/packs/emerald/application/party-application.js": "a3de10f428e2ed7d26736a6dbd63c2e61bf310cb7ce13badd52d97018e66e4b8",
+    "dist/packs/emerald/application/public-ports.js": "7f67377a68c1c6cec554400ac032d30937b2d67179df146646879a46a4816512",
+    "dist/packs/emerald/application/save-application.js": "a34a4e9e82c4ff0e9dbbd04e34286d0917ee8c0733120a44345ceb59179379e6",
+    "dist/packs/emerald/application/story-application.js": "eff0e978994b20dd0e59819b1376fc918e0292d7b36ee3bb0b693c03939de1fb",
+    "dist/packs/emerald/bag-interface.js": "65a8f5548b6aa9b71671e64b7ace4e4e60afc484a625551e894974c61b8dcf9a",
+    "dist/packs/emerald/berries.js": "21f1e679dc4c1acd278e6e248f01fe5187386b54b7fc8110872adc59271f3ef6",
+    "dist/packs/emerald/command-facade.js": "313f8310263462158965c50bd0b977c1e1f2ac1eff072ded9779ef1dc70be304",
+    "dist/packs/emerald/crop-interface.js": "15455b4622553029f33ecb54851aeed8239bec390db4ed7df3e041355b9dad22",
+    "dist/packs/emerald/extension-ports.js": "464562a68b4372486639b8ed0ad322f9700ff1ce041715601164b9898757c1ea",
+    "dist/packs/emerald/extensions.js": "98ca41255fe571840504f8daa474f42f4a2ad5981ece7e8636f9737a80bb0338",
+    "dist/packs/emerald/field-capabilities.js": "e4a28f1ceea079866f0521012031583e17e3c5f85e3cce249fc6479d71ff8522",
+    "dist/packs/emerald/growth-interface.js": "897d2c2299013368974f034863d91476b60b33e6dbff5296b1fc51797a24c47e",
+    "dist/packs/emerald/inventory.js": "84e4e99eaf403d67aa47e80243dce940b97df9e61e4459dd0e11ecec24a29560",
+    "dist/packs/emerald/pack.js": "bf8d5ef604b123cf71011da714d8b7f2f8e648e7dcd16eaf39f16c8286361177",
+    "dist/packs/emerald/party-interface.js": "c30e1a2d857a74c03ffacc03e04de6805e15b520a80e9fc59279c432731f103a",
+    "dist/packs/emerald/save-contract.js": "126ec6e3ac903f86e959fa1dbf80f740004a33fbf0453d2ef8cc9c0d1377566c",
+    "dist/packs/emerald/shop-interface.js": "8bd6d01b933df885044d93c69d07cda5c344d387296c0afa1dbe35fd048385cf",
+    "tests/action-lifecycle.test.js": "c4e18fde6ddd5c4a4ca61169fd2349ba15c2e8982e9f5d94244b4eaabc7a3023",
+    "tests/architecture.test.js": "4636fda09c3574177decb39b43844b2c79219a818cd1d63eaa4c1b76a92a7820",
+    "tests/battle-states.test.js": "14428a6ea6e112e531a27426c9cc8072a354123dc990df3b7f0158c1f00fd74d",
+    "tests/contracts.typecheck.ts": "fc9de21c20a78afa068fabd4a432eadd475d50bcf8d5b832c2dbd8568d260805",
+    "tests/control-states.test.js": "e59b2b119b7e7756a2aceeace671bf6779bead421175575ce72ab9d23919a5ec",
+    "tests/creature-contract.test.js": "57fa34c982daaf97b56ae39528cad7dc41884e2b977962ba7887efe613fb84c5",
+    "tests/crop-growth.test.js": "019225e1816b86d249f3590e51ce3c7c21d50bbcce6fa9c33e589c7b723ebe82",
+    "tests/cutscene.test.js": "664efd003a6fbf5a6f5d97698997cdb8a281d72fb0520c299b854a835182336b",
+    "tests/encounter-content.test.js": "ef3a72169384d985c192e468fcaf68de38bb15919bc80e4f2186db2df25319fb",
+    "tests/engine.test.js": "bc5f81089965cf7493cf457b254288af62611689233c8fc5ca42f3587b46bf57",
+    "tests/evolution.test.js": "53c42b0c8f721d80dbf9215f1533fe423cb63d166d999a4dd9e671035b124f12",
+    "tests/extended-moves.test.js": "a97df03cad5e885686838d198c43677f7ba8b4570dfc88d23c83adeb889292f2",
+    "tests/field-actions.test.js": "27a3632a655c92b044f4451caf0857c670fe669761a81ad5ccd96f4dc7a0a2f2",
+    "tests/field-devices.test.js": "a463ed9d5ea3c8ac298d2826384a06d5b5484fc837079191ba8c428fe32027f8",
+    "tests/field-terrain.test.js": "9fdee9dc0f92e4387b52a44ec3956c2348c40081c70db417bac72de49b185c34",
+    "tests/field-traits.test.js": "d1f553d5e9732e59662f415ceeabacfe25054945c37ee1d6c8eb998374a2e30b",
+    "tests/gen3-rules.test.js": "f105d1b678727f6b57d26ff247793d2c6c1f553b2264b95dc3e33c5d8974b0fd",
+    "tests/growth-domain.test.js": "782ca400504fb5472d0823ae8c7ace90a70468cef9dbca85e110967ce76d7bc8",
+    "tests/growth-integration.test.js": "aca21a3e53b0dffbb82ccf116f19794e34f4d1fdd6c26ac1bb2086ee6db7fb23",
+    "tests/helpers/battle-fixture.js": "b3e74b9269f633de0955d33cb7809951802455b9657cca0e1395bf20c826e163",
+    "tests/helpers/inventory-fixture.js": "a14e651ed724910f745f963a8cfdc5199facb40c42025543ed393915651788da",
+    "tests/inventory-integration.test.js": "490c8ff64720133e76b8a9e2ddae2b3b4164d39b9e350deda663c2003a907769",
+    "tests/inventory.test.js": "21901651850a54464fa40b9f86abe5dffed0a5bba352ae5203eea70f95394b65",
+    "tests/item-actions.test.js": "a5f60fc0f90749e1c9badaf321e0d1784d641bae6968e48d7a5777eb2c9fb794",
+    "tests/item-shortcut.test.js": "a52d3e08372ddbade7470783c52d2ed7c68ac57d170e00677da340f7a6063a10",
+    "tests/move-learning.test.js": "404c6257cdefbd1a868d77de00556f107b35721fc5cf4ac794cf80652ddd35e2",
+    "tests/movement.test.js": "c4d5d468595b6bb1893e15645693845819a259ce70be888eb48ffd3ba509333d",
+    "tests/multi-battle.test.js": "78a12256a42f9cf93f98d17f11530c43fe68a1765099d4293bd1d625ca437739",
+    "tests/network.test.js": "143ce78147e1e37ff884a6250e08378340a3b88fc05c4c61fee6f87896bfe099",
+    "tests/p2-validation.test.js": "688387b87e234a39e9eac3ff2e04350c9f337faeb5428380b903b4f94d3f6c28",
+    "tests/plugins.test.js": "47e9cc7ff7d69cba740072fd137aaafc08d9b88bbd4974cc0a95d6313552d342",
+    "tests/presentation.test.js": "4a737c421f25da640ec68f91af41e9326d43ed47c1622c5b60a3d3d6e3d92349",
+    "tests/reactive-status.test.js": "7c49174ead0bfb1c9cb441b9a91b4b9a195e7803625b6b7917bcddb83e548f4f",
+    "tests/runtime-forms.test.js": "26f5e2bfa22ec91703a6ec2101667ba3950f7cde00f70be2e53e24bc072f07c1",
+    "tests/story-language.test.js": "5fae7da7d22efc56cf03332abf46e0d291b8f0845745fec7027f69475d01e5fa",
+    "tests/tactical-ai.test.js": "ed006aa9d1fb3f3395ed614441abc83e0626b5d03c82e13776a31bdeec21750f",
+    "tests/team-battle.test.js": "487e95367d6e06990fed0e6167df53321e7af221c921952f20680a60658946db",
+    "tests/traits.test.js": "17904540bb3be18b511d4d443ec024a52732267a725444cdb144df3c8294a770",
+    "tests/ui-composition.test.js": "b7af8790d12b3456526b6c3a7207f79f9a1f8bed0e5cb162547c2b710de3932e",
+    "tests/visual-registry.test.js": "e67be1cf0271f67e9c922f21081d33d72489205cdf717082a8837d07d052a6b7",
+    "tests/weather.test.js": "a900a63c8a7780c4b76059a40ff10c1de7bf0242630ad471857861751f126ada",
+    "dist/engine/weather.js": "88daa85f8e8d35f77e373100eea7ef5a36f48b9d075038f9c7a65a3b04016f85"
+  },
+  "notes": [
+    "No cases/behavior assertions deleted or skipped. Count-template helper is test fixture construction, not production legacy restoration.",
+    "Inventory.create is author-stock construction; saved-state restore accepts only slots.",
+    "Core3937daf evidence remains historical; these proofs replace it only for changed shared contracts. Unchanged weather rules/presentation proofs retained.",
+    "No full system, browser, pixel/audio comparison or final E performed.",
+    "Reference work/pokeemerald SHA731ad5bfd6e6f265508d0efcca0ba42f9dcf5881 remains readonly.",
+    "One new weather restore/map-shape regression reproduced then fixed, logged in adjacent weather-lifecycle manifest. Original18 weather proofs retained; relevant3 cases rechecked after validator fix."
+  ],
+  "invalidateOn": "Related policies/item routes, slot schema/planning/cost custody, application routing/rebinding, readonly projections, commands/permissions, save/transaction/dependency, affected UI behavior or resources change. Unchanged areas reuse evidence; final E runs full regression."
+}

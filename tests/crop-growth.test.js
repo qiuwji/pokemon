@@ -1,3 +1,4 @@
+import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -236,7 +237,7 @@ test("A plugin declares its plot and uses public planting, watering and harvesti
   const s = gameFixture(),
     changes = [];
   s.host.events.on("core:crop-changed", (e) => changes.push(e.payload));
-  s.game.state.bag.oran_berry = 1;
+  setQuantity(s.game.state.bag, "oran_berry", 1);
   assert(
     (
       await s.bus.execute("core.crop.action", {
@@ -246,7 +247,7 @@ test("A plugin declares its plot and uses public planting, watering and harvesti
       })
     ).ok,
   );
-  assert.equal(s.game.state.bag.oran_berry, 0);
+  assert.equal(inventoryQuantity(s.game.state.bag, "oran_berry"), 0);
   assert.equal(
     (
       await s.bus.execute("core.crop.action", {
@@ -282,13 +283,13 @@ test("A plugin declares its plot and uses public planting, watering and harvesti
       })
     ).ok,
   );
-  assert(s.game.state.bag.oran_berry >= 2);
+  assert(inventoryQuantity(s.game.state.bag, "oran_berry") >= 2);
   assert.equal(s.game.cropView("garden:soil").stage, "empty");
   assert(s.host.catalog.dependencies(restored).includes("garden"));
 });
 test("Off-map and unripe operations do not consume inventory and plot interactions route to the crop page", async () => {
   const s = gameFixture();
-  s.game.state.bag.oran_berry = 2;
+  setQuantity(s.game.state.bag, "oran_berry", 2);
   s.game.state.position.dir = "left";
   const before = structuredClone(s.game.state);
   assert.equal(
@@ -323,7 +324,7 @@ test("Off-map and unripe operations do not consume inventory and plot interactio
     ).ok,
     false,
   );
-  assert.equal(s.game.state.bag.oran_berry, 1);
+  assert.equal(inventoryQuantity(s.game.state.bag, "oran_berry"), 1);
 });
 test("Missing plot/object references fail during plugin content assembly", () => {
   const p = gardenPlugin(),
@@ -340,7 +341,7 @@ test("Missing plot/object references fail during plugin content assembly", () =>
 
 test("Pending offline growth survives save validation and resumes only after field locks release", () => {
   const s = gameFixture();
-  s.game.state.bag.oran_berry = 1;
+  setQuantity(s.game.state.bag, "oran_berry", 1);
   assert(s.game.cropAction("garden:soil", "plant", "oran_berry").ok);
   s.game.ui.blocked = true;
   s.tick(720);

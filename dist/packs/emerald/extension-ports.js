@@ -34,7 +34,7 @@ export function attachEmeraldExtensions(game, host) {
     fieldActions: game.fieldActionOptions(),
     registeredItem: game.registeredItemView(),
     itemActions: Object.fromEntries(
-      Object.entries(game.state.bag)
+      Object.entries(game.bagView().counts)
         .filter(([, count]) => count > 0)
         .map(([id]) => [id, game.itemActionOptions(id)])
         .filter(([, actions]) => actions.length),
@@ -47,7 +47,8 @@ export function attachEmeraldExtensions(game, host) {
       ...m,
       name: game.db.species[m.species].name,
     })),
-    bag: { ...game.state.bag },
+    bag: game.bagView().counts,
+    inventory: game.bagView(),
     money: game.state.money,
     flags: { ...game.state.flags },
     seen: [...game.state.seen],
@@ -177,6 +178,7 @@ export function attachEmeraldExtensions(game, host) {
             return {
               ok: grantReward(game.state, intent.reward, {
                 items: game.itemDefinitions,
+                inventory: game.inventory,
               }),
             };
           case "createMonster": {

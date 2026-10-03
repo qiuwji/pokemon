@@ -1,3 +1,8 @@
+import {
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -142,10 +147,16 @@ test("Shortcut identity validates current content and explicit null without acce
     false,
   );
   assert.throws(() =>
-    createItemService({ potion: { ...ITEMS.potion, registerable: true } }),
+    createItemService(
+      { potion: { ...ITEMS.potion, registerable: true } },
+      fixtureInventory({ potion: { ...ITEMS.potion, registerable: true } }),
+    ),
   );
   assert.throws(() =>
-    createItemService({ kit: { ...kit, registerable: "yes" } }),
+    createItemService(
+      { kit: { ...kit, registerable: "yes" } },
+      fixtureInventory({ kit: { ...kit, registerable: "yes" } }),
+    ),
   );
 });
 test("Registration is independent of current usability, does not consume inventory, is idempotent and publishes detached facts", () => {
@@ -199,7 +210,7 @@ test("Native bicycle registration runs through the command bus, preserves RNG an
     g = s.game,
     events = [];
   s.host.events.on("core:item-registration", (value) => events.push(value));
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   assert(
     s.bus.executeSync(
       "core.item.register",
@@ -210,7 +221,7 @@ test("Native bicycle registration runs through the command bus, preserves RNG an
   assert.equal(g.state.movement.mode, "walk");
   const before = g.rng.seed,
     saved = g.exportDocument();
-  assert.equal(saved.version, 9);
+  assert.equal(saved.version, 10);
   g.loadDocument(saved);
   assert.deepEqual(g.registeredItemView().selection, {
     item: "mach_bike",
@@ -219,7 +230,7 @@ test("Native bicycle registration runs through the command bus, preserves RNG an
   assert((await s.bus.execute("core.item.shortcut", {}, "ui")).ok);
   assert.equal(g.state.movement.mode, "mach-bike");
   assert.equal(g.rng.seed, before);
-  assert.equal(g.state.bag.mach_bike, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "mach_bike"), 1);
   assert.equal(g.actionBusy, false);
   assert((await g.useRegisteredItem()).ok);
   assert.equal(g.state.movement.mode, "walk");
@@ -234,7 +245,7 @@ test("A rod can be registered away from water, then its same shortcut rechecks s
       },
     }),
     g = s.game;
-  g.state.bag.old_rod = 1;
+  setQuantity(g.state.bag, "old_rod", 1);
   assert(g.registerItem("old_rod", "use").ok);
   assert.equal(g.registeredItemView().usable, false);
   assert.equal((await g.useRegisteredItem()).ok, false);
@@ -252,7 +263,7 @@ test("A rod can be registered away from water, then its same shortcut rechecks s
   assert(g.registeredItemView().usable);
   const result = await g.useRegisteredItem();
   assert.equal(result.fishing, "cancelled");
-  assert.equal(g.state.bag.old_rod, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "old_rod"), 1);
   const other = fixture({ records: s.records });
   assert.deepEqual(
     other.game.registeredItemView().selection,
@@ -262,7 +273,7 @@ test("A rod can be registered away from water, then its same shortcut rechecks s
 });
 test("Menus, dialogue, battles and story locks cannot start a shortcut or overwrite the registered selection", async () => {
   const { game: g, bus } = fixture();
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   g.registerItem("mach_bike", "use");
   const before = structuredClone(g.state);
   g.ui.blocked = true;
@@ -293,7 +304,7 @@ test("Menus, dialogue, battles and story locks cannot start a shortcut or overwr
 test("Current saves require shortcut identity; stale quantity is preserved until use, while old envelopes and bad references are rejected", async () => {
   const s = fixture(),
     g = s.game;
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   g.registerItem("mach_bike", "use");
   const document = g.exportDocument();
   for (const selection of [
@@ -308,7 +319,7 @@ test("Current saves require shortcut identity; stale quantity is preserved until
   const old = { ...document, version: 8 };
   assert.throws(() => g.loadDocument(old));
   const stale = structuredClone(document);
-  stale.state.bag.mach_bike = 0;
+  setQuantity(stale.state.bag, "mach_bike", 0);
   assert(validateSave(stale.state, g.db, s.catalog, s.host));
   g.loadDocument(stale);
   const snapshots = s.bus.executeSync("core.query", {});
@@ -374,7 +385,7 @@ test("A content plugin registers a chosen action, controls it through authorized
   });
   const s = fixture({ plugins: [p] }),
     g = s.game;
-  g.state.bag["brush:kit"] = 1;
+  setQuantity(g.state.bag, "brush:kit", 1);
   assert(
     (
       await api.commands.dispatch("core.item.register", {
@@ -388,8 +399,8 @@ test("A content plugin registers a chosen action, controls it through authorized
   assert.equal(frozen.selection.action, "blue");
   assert((await api.commands.dispatch("core.item.shortcut", {})).ok);
   assert.equal(g.world.map.behavior[6], 2);
-  assert.equal(g.state.bag["brush:kit"], 1);
-  g.state.bag["brush:kit"] = 0;
+  assert.equal(inventoryQuantity(g.state.bag, "brush:kit"), 1);
+  setQuantity(g.state.bag, "brush:kit", 0);
   g.save();
   assert(g.state.contentDependencies.includes("brush"));
   const raw = [...s.records.values()].at(-1);
@@ -409,7 +420,7 @@ test("A plugin without useItem may read the shortcut but cannot register, clear 
       ],
     }),
     g = s.game;
-  g.state.bag["brush:kit"] = 1;
+  setQuantity(g.state.bag, "brush:kit", 1);
   g.registerItem("brush:kit", "red");
   const before = structuredClone(g.state);
   for (const [id, input] of [
@@ -424,7 +435,7 @@ test("A plugin without useItem may read the shortcut but cannot register, clear 
 test("Bag registration selects a plugin sub-action, does not use it, and toggles the same registered action off", () => {
   const s = fixture({ plugins: [plugin()] }),
     g = s.game;
-  g.state.bag["brush:kit"] = 1;
+  setQuantity(g.state.bag, "brush:kit", 1);
   let buttons = [],
     options;
   const root = {
@@ -549,7 +560,7 @@ test("Native consumable stock survives metadata merging while machines and key i
   assert(g.canBuyItem("pokeball"));
   const money = g.state.money;
   assert(g.buyItem("potion"));
-  assert.equal(g.state.bag.potion, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "potion"), 1);
   assert.equal(g.state.money, money - ITEMS.potion.price);
   for (const id of ["mach_bike", "acro_bike", "old_rod", "hm_surf", "tm_toxic"])
     assert.equal(g.canBuyItem(id), false);

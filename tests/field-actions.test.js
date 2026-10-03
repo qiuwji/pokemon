@@ -1,3 +1,4 @@
+import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -578,7 +579,7 @@ test("The public fishing command accepts concurrent reel input, launches one enc
         void s.bus.execute("core.field.fishing-input", {});
     },
   });
-  s.game.state.bag.old_rod = 1;
+  setQuantity(s.game.state.bag, "old_rod", 1);
   s.game.state.flags.badgeBalance = true;
   s.game.state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(s.game.movement.set("surf", s.game.world.map).ok);
@@ -599,14 +600,14 @@ test("The public fishing command accepts concurrent reel input, launches one enc
   assert.equal(encounters[0].species, "zigzagoon");
   assert.equal(closed, 1);
   assert.equal(s.game.fishing, null);
-  assert.equal(s.game.state.bag.old_rod, 1);
+  assert.equal(inventoryQuantity(s.game.state.bag, "old_rod"), 1);
   assert.equal(s.game.fieldDirector.active, false);
 });
 test("Public fishing can cancel without generating a monster, and map requirements prevent a land save with a diving mode", async () => {
   const s = adventure({
     maps: { Lab: fieldMap({ behavior: Array(30).fill(16) }) },
   });
-  s.game.state.bag.old_rod = 1;
+  setQuantity(s.game.state.bag, "old_rod", 1);
   s.game.state.flags.badgeBalance = true;
   s.game.state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(s.game.movement.set("surf", s.game.world.map).ok);

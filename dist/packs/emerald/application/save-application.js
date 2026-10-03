@@ -1,4 +1,5 @@
 import { emptyWeather } from "../../../engine/weather.js";
+import { emptyInventory } from "../../../engine/inventory.js";
 import { emptyFieldDevices } from "../../../engine/field-devices.js";
 import { emptyActors } from "../../../engine/actor-repository.js";
 import { emptyCrops } from "../../../engine/crop-growth.js";
@@ -70,9 +71,7 @@ export class SaveApplication {
       party: [],
       box: [],
       registeredItem: null,
-      bag: Object.fromEntries(
-        Object.keys(this.itemDefinitions).map((id) => [id, 0]),
-      ),
+      bag: emptyInventory(),
       story: emptyStoryProgress(),
       worldState: emptyWorldState(),
       devices: emptyFieldDevices(),

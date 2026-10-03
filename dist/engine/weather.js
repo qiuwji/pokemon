@@ -61,8 +61,9 @@ export class WeatherRegistry {
           `Map ${id}: weather belongs in map.weather, not presentation`,
         );
       if (
-        map.weather &&
-        (typeof map.weather !== "object" ||
+        map.weather !== undefined &&
+        (!map.weather ||
+          typeof map.weather !== "object" ||
           Array.isArray(map.weather) ||
           typeof map.weather.default !== "string" ||
           !map.weather.default ||
@@ -120,6 +121,7 @@ export class WorldWeather {
       !integer(s.day) ||
       !integer(s.revision) ||
       !s.overrides ||
+      typeof s.overrides !== "object" ||
       Array.isArray(s.overrides) ||
       Object.keys(s).some(
         (k) => !["day", "revision", "active", "overrides"].includes(k),

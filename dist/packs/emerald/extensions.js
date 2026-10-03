@@ -1,6 +1,6 @@
 import { validateItemActions } from "../../engine/item-actions.js";
-import { InventoryRegistry } from "../../engine/inventory-registry.js";
 import { GEN3_INVENTORY_POCKETS } from "../../engine/rules/gen3/inventory.js";
+import { createEmeraldInventory } from "./inventory.js";
 import { WeatherRegistry } from "../../engine/weather.js";
 import { BattleWeatherRegistry } from "../../engine/battle/weather.js";
 import {
@@ -89,10 +89,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
   host.load(plugins);
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
-    new InventoryRegistry(c.inventoryPockets, {
-      items: c.items,
-      defaultPocket: "items",
-    });
+    const inventory = createEmeraldInventory(c);
     new TimeTaskRegistry(c.timeTasks);
     new CropRegistry(c.crops, { items: c.items });
     validateBerryPlots(c.berryPlots, c);
@@ -104,7 +101,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       c.heldItems,
     );
     const strategies = new BattleStrategyRegistry(c.battleStrategies);
-    validateTrainers(c.trainers, c, strategies);
+    validateTrainers(c.trainers, c, strategies, inventory);
     new EncounterTableRegistry(c.encounters, c);
     validateWorldExtensions(c, host.catalog.entries.values());
     const battleStates = new BattleStateRegistry({
@@ -139,6 +136,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       db: c,
       methods: c.learningMethods,
       items: c.items,
+      inventory,
     });
     for (const actor of Object.values(c.actors))
       validateSpriteAnimations(actor);
@@ -170,6 +168,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       behaviors: npcBehaviors,
     });
     new EvolutionService({
+      inventory,
       db: { ...db, ...c },
       abilities: c.abilities,
       heldItems: c.heldItems,

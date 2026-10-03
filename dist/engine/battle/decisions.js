@@ -1,3 +1,4 @@
+import { inventoryQuantity } from "../inventory.js";
 /** Collects one action per occupied human seat. This state never mutates monsters or advances RNG. */
 export class BattleDecisions {
   constructor(battle) {
@@ -51,7 +52,7 @@ export class BattleDecisions {
     if (
       action.kind === "item" &&
       queued.filter((a) => a.kind === "item" && a.item === action.item)
-        .length >= (owner.bag[action.item] || 0)
+        .length >= inventoryQuantity(owner.bag, action.item)
     )
       return "这件道具已被另一行动预留。";
     return null;

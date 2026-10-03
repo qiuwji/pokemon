@@ -1,3 +1,4 @@
+import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -18,7 +19,7 @@ function config() {
     trainer: true,
     db,
     rng,
-    bag: {},
+    bag: createBag({}),
   };
 }
 test("Invalid custom AI requests fail explicitly before PP or turn settlement", () => {

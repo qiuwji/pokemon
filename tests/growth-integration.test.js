@@ -1,3 +1,9 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -30,12 +36,17 @@ const db = JSON.parse(
 const rng = new Random(3947),
   mon = (id = "treecko", level = 5) => createMonster(id, level, db, rng);
 const evolution = (data = db) =>
-  new EvolutionService({ db: data, abilities, heldItems });
+  new EvolutionService({
+    inventory: fixtureInventory(),
+    db: data,
+    abilities,
+    heldItems,
+  });
 function state(party) {
   return {
     party,
     box: [],
-    bag: {},
+    bag: createBag({}),
     flags: { rescued: true },
     money: 3000,
     seen: [],
@@ -61,7 +72,7 @@ test("Imported evolution content includes all branching methods in the slice and
 test("Emerald Nincada creates a genderless 1-HP Shedinja with a free party slot, without requiring or consuming a ball", () => {
   const m = mon("nincada", 20),
     party = [m],
-    bag = { pokeball: 0 },
+    bag = createBag({ pokeball: 0 }),
     service = evolution();
   const result = service.commit(service.prepare(m, { party, bag }));
   assert(result.ok);
@@ -72,7 +83,7 @@ test("Emerald Nincada creates a genderless 1-HP Shedinja with a free party slot,
   assert.equal(extra.gender, "—");
   assert.equal(extra.stats.hp, 1);
   assert.equal(extra.hp, 1);
-  assert.equal(bag.pokeball, 0);
+  assert.equal(inventoryQuantity(bag, "pokeball"), 0);
   assert.notEqual(extra.uid, m.uid);
   assert.equal(extra.heldItem, null);
   const fullMon = mon("nincada", 20),
@@ -89,7 +100,7 @@ test("Evolution companion inherits post-evolution move choices without a species
     pp: db.moves[id].pp,
   }));
   const service = evolution(),
-    result = service.commit(service.prepare(m, { party, bag: {} }));
+    result = service.commit(service.prepare(m, { party, bag: createBag({}) }));
   assert(result.ok);
   assert(m.pendingMoves.length);
   assert.deepEqual(m.growthCompanions, [party[1].uid]);
@@ -122,7 +133,7 @@ test("Personality, stat comparison, time, beauty and item conditions select actu
     service.prepare(eevee, {
       trigger: "item",
       item: "water_stone",
-      bag: { water_stone: 1 },
+      bag: createBag({ water_stone: 1 }),
     }).to,
     "vaporeon",
   );
@@ -176,6 +187,7 @@ test("Daycare and hatch failure restores clocks, friendship, egg cycles and seed
   s.friendshipSteps = 127;
   s.daycare.slots = [{ mon: mon("treecko"), steps: 10, initialLevel: 5 }];
   const session = new GrowthSession({
+    inventory: fixtureInventory(),
     state: s,
     db,
     rng: random,
@@ -216,7 +228,7 @@ test("An egg cannot occupy a battle seat, become a replacement, or count as a us
     egg = mon("mudkip"),
     enemy = mon("zigzagoon");
   egg.egg = { cycles: 1, ready: false, parents: ["a", "b"] };
-  const roster = new BattleRoster(duelRoster([egg, a], [enemy], {}));
+  const roster = new BattleRoster(duelRoster([egg, a], [enemy], createBag()));
   assert.equal(roster.occupant("home:0"), a);
   assert.equal(roster.bench("home:0").length, 0);
   const s = state([a, egg]);
@@ -226,9 +238,9 @@ test("An egg cannot occupy a battle seat, become a replacement, or count as a us
   assert.equal(storage.deposit(s, 0), false);
   assert.equal(storage.exchange(s, 0, 0), false);
   assert.equal(
-    createItemService(ITEMS).prepare({
+    createItemService(ITEMS, fixtureInventory(ITEMS)).prepare({
       id: "blue_pokeblock",
-      bag: { blue_pokeblock: 1 },
+      bag: createBag({ blue_pokeblock: 1 }),
       party: [egg],
       index: 0,
       context: "field",
@@ -261,7 +273,11 @@ test("Trade swaps stable identities, resets non-egg friendship and supports held
   assert.equal(b.friendship, 70);
   assert(b.traded);
   const service = evolution();
-  const plan = service.prepare(b, { trigger: "trade", party: partyA, bag: {} });
+  const plan = service.prepare(b, {
+    trigger: "trade",
+    party: partyA,
+    bag: createBag({}),
+  });
   assert.equal(plan.to, "huntail");
   assert(service.commit(plan).ok);
   assert.equal(b.heldItem, null);
@@ -282,7 +298,7 @@ test("Trade swaps stable identities, resets non-egg friendship and supports held
 test("Evolution faults during staged move learning leave the live creature, inventory and plan reusable", () => {
   const data = structuredClone(db),
     m = mon("eevee", 10),
-    bag = { water_stone: 1 },
+    bag = createBag({ water_stone: 1 }),
     service = evolution(data);
   const plan = service.prepare(m, {
       trigger: "item",
@@ -301,10 +317,10 @@ test("Evolution faults during staged move learning leave the live creature, inve
     snapshot = structuredClone(m);
   assert.throws(() => service.commit(current));
   assert.deepEqual(m, snapshot);
-  assert.equal(bag.water_stone, 1);
+  assert.equal(inventoryQuantity(bag, "water_stone"), 1);
   data.species.vaporeon.learnset.pop();
   assert(service.commit(current).ok);
-  assert.equal(bag.water_stone, 0);
+  assert.equal(inventoryQuantity(bag, "water_stone"), 0);
 });
 
 test("Pokeblock taste rounds ten percent to nearest, fullness persists and rejected feeding preserves inventory", () => {
@@ -313,8 +329,8 @@ test("Pokeblock taste rounds ten percent to nearest, fullness persists and rejec
   assert(applyNutrition(a, { flavors: { beauty: 15 }, feel: 20 }));
   assert.equal(a.beauty, 17);
   assert.equal(a.sheen, 20);
-  const items = createItemService(ITEMS),
-    bag = { blue_pokeblock: 1 };
+  const items = createItemService(ITEMS, fixtureInventory(ITEMS)),
+    bag = createBag({ blue_pokeblock: 1 });
   a.hp = 0;
   assert(
     items.use({
@@ -326,9 +342,9 @@ test("Pokeblock taste rounds ten percent to nearest, fullness persists and rejec
     }).ok,
   );
   assert.equal(a.beauty, 39);
-  assert.equal(bag.blue_pokeblock, 0);
+  assert.equal(inventoryQuantity(bag, "blue_pokeblock"), 0);
   a.sheen = 255;
-  bag.blue_pokeblock = 1;
+  setQuantity(bag, "blue_pokeblock", 1);
   assert.equal(
     items.use({
       id: "blue_pokeblock",
@@ -339,13 +355,13 @@ test("Pokeblock taste rounds ten percent to nearest, fullness persists and rejec
     }).ok,
     false,
   );
-  assert.equal(bag.blue_pokeblock, 1);
+  assert.equal(inventoryQuantity(bag, "blue_pokeblock"), 1);
 });
 
 test("Item drafts protect deep fields and issuer-owned plans reject forged, stale or cross-inventory commits", () => {
   const a = mon(),
-    items = createItemService(ITEMS),
-    bag = { potion: 2 };
+    items = createItemService(ITEMS, fixtureInventory(ITEMS)),
+    bag = createBag({ potion: 2 });
   a.hp--;
   const plan = items.prepare({
     id: "potion",
@@ -355,10 +371,10 @@ test("Item drafts protect deep fields and issuer-owned plans reject forged, stal
     context: "field",
   });
   assert.equal(items.commit({ ...plan }, bag, "potion"), false);
-  assert.equal(items.commit(plan, { potion: 2 }, "potion"), false);
+  assert.equal(items.commit(plan, createBag({ potion: 2 }), "potion"), false);
   a.friendship++;
   assert.equal(items.commit(plan, bag, "potion"), false);
-  assert.equal(bag.potion, 2);
+  assert.equal(inventoryQuantity(bag, "potion"), 2);
   const mutate = (c) => {
     c.target.moves[0].pp--;
     return true;
@@ -374,13 +390,22 @@ test("Item drafts protect deep fields and issuer-owned plans reject forged, stal
       },
     },
     new EffectRegistry({ hack: mutate }),
+    fixtureInventory({
+      hack: {
+        name: "hack",
+        price: 1,
+        contexts: ["field"],
+        target: "party",
+        effects: [{ op: "hack" }],
+      },
+    }),
   );
   const before = structuredClone(a);
   assert.throws(
     () =>
       bad.prepare({
         id: "hack",
-        bag: { hack: 1 },
+        bag: createBag({ hack: 1 }),
         party: [a],
         index: 0,
         context: "field",

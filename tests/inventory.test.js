@@ -328,3 +328,36 @@ test("Plugins register custom pockets and items through the real catalog validat
     /Unknown inventory pocket/,
   );
 });
+
+test("Authored initial stock uses the registered capacity; invalid stock is not a save migration path", () => {
+  const inventory = service();
+  assert.deepEqual(
+    inventory.create({ potion: 7, berry: 0 }),
+    slots(["potion", 5], ["potion", 2], null),
+  );
+  for (const stock of [
+    null,
+    [],
+    { potion: -1 },
+    { potion: 0.5 },
+    { missing: 0 },
+    { potion: 16 },
+    { berry: 10 },
+  ])
+    assert.throws(() => inventory.create(stock));
+  assert.throws(() => inventory.validate({ potion: 7 }));
+});
+
+test("A capacity preview is detached, frozen and never a committable plan", () => {
+  const inventory = service(),
+    state = inventory.create({ potion: 4 });
+  const before = structuredClone(state),
+    preview = inventory.preview(state, [add("potion", 4)]);
+  assert(preview.ok);
+  assert.throws(() => preview.changes[0].after.count++, TypeError);
+  assert.equal(inventory.check(preview, state), false);
+  assert.equal(inventory.commit(preview, state), false);
+  assert.deepEqual(state, before);
+  assert(inventory.apply(state, [add("potion", 4)]).ok);
+  assert.equal(inventory.quantity(state, "potion"), 8);
+});

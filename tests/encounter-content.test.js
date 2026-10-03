@@ -1,3 +1,4 @@
+import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -63,14 +64,27 @@ test("Plugin trainer, policy and conditional encounter references resolve at sta
     strategies = new BattleStrategyRegistry(catalog.battleStrategies);
   const encounter = createTrainerEncounter(
     catalog.trainers["trainer-pack:researcher"],
-    { party, bag: {}, db, rng, strategies },
+    {
+      inventory: fixtureInventory(),
+      party,
+      bag: createBag({}),
+      db,
+      rng,
+      strategies,
+    },
   );
   assert.equal(encounter.enemyParty.length, 2);
   assert.equal(encounter.enemyParty[0].heldItem, "oran_berry");
   assert.deepEqual(encounter.enemyParty[0].moves, [
     { id: "tackle", pp: db.moves.tackle.pp },
   ]);
-  const battle = new Battle({ ...encounter, party, bag: {}, db, rng });
+  const battle = new Battle({
+    ...encounter,
+    party,
+    bag: createBag({}),
+    db,
+    rng,
+  });
   assert.equal(battle.ai(battle, "away:0").index, 0);
   const tables = new EncounterTableRegistry(catalog.encounters, db);
   assert.equal(tables.select("Route101", "land", { flags: {} }), null);
@@ -131,14 +145,15 @@ test("Policy receives frozen detached decisions and a bad choice rolls back the 
   const encounter = createTrainerEncounter(
     catalog.trainers["trainer-pack:researcher"],
     {
+      inventory: fixtureInventory(),
       party,
-      bag: {},
+      bag: createBag({}),
       db,
       rng,
       strategies: new BattleStrategyRegistry(catalog.battleStrategies),
     },
   );
-  const b = new Battle({ ...encounter, party, db, rng, bag: {} }),
+  const b = new Battle({ ...encounter, party, db, rng, bag: createBag({}) }),
     before = structuredClone(party),
     seed = rng.snapshot();
   assert.throws(

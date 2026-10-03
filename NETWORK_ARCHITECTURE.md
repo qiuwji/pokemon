@@ -1,12 +1,12 @@
 # 网络协议 1 与统一应用命令
 
-协议 1；当前工程 v0.15.0，开发存档 envelope 9。网络适配器控制当前单机会话，不提供联机多人、权威服务器、远程认证或连接服务部署。
+协议 1；当前工程 v0.16.0，开发存档 envelope 10。网络适配器控制当前单机会话，不提供联机多人、权威服务器、远程认证或连接服务部署。
 
 ## 模块职责
 
 - `CommandBus`：命令定义/schema、来源、执行许可、同步输入/串行异步执行、提交完成事件。
 - `application-commands.js`：绿宝石应用命令与权限；运行时按 UID 查找个体，调用原领域服务，不在传输层算伤害/库存/进化。
-- `command-facade.js`：可信 UI 的兼容适配器，保持既有 game 方法形状，把 UI/输入/WebMCP 的外部状态修改转为应用命令。内部剧情/领域服务仍直接组合领域对象。
+- `command-facade.js`：可信 UI 的命令适配器，保持既有 game 方法形状，把 UI/输入/WebMCP 的外部状态修改转为应用命令。内部剧情/领域服务仍直接组合领域对象。
 - `network-protocol.js`：有界 JSON 编解码、版本、严格消息形状、重试指纹。
 - `NetworkGateway`：一个连接会话的顺序、去重、有限队列、忙碌等待及关闭；不持有游戏输入锁。
 - `NetworkSession`：协议与传输绑定、hello/结果发送和解绑。
@@ -57,9 +57,9 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 | 查询 | core.query | 空对象；只读，无权限 |
 | 世界 | core.field.move / interact | direction/running 或空对象；movement |
 | 初始伙伴 | core.starter.choose | species；starter；必须已有求救剧情、尚未领取 |
-| 战斗 | core.battle.action | kind/index/item/seat/actor/target；battle；多席位行动用同一规则入口 |
+| 战斗 | core.battle.action | kind/index/item/seat/actor/target/slot；battle；多席位行动用同一规则入口 |
 | 队伍 | core.party.lead | uid；setLead |
-| 道具 | core.item.use / equip / buy | uid/item，装备可 remove:true；useItem/equip/buyItem |
+| 道具 | core.item.use / equip / buy | uid/item/slot，装备可 remove:true；useItem/equip/buyItem |
 | 盒子 | core.box.deposit / withdraw / exchange | uid 或 boxUid/partyUid；storage |
 | 育成 | core.daycare.deposit / withdraw / collect | uid 或空对象；daycare |
 | 交换 | core.trade.prepare / exchange | 空对象或 uid/partnerUid；trade |
@@ -80,3 +80,9 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 浏览器连接真实本地测试控制端，执行 core.query → 抚摸 → 同 ID 重发 → query，详情页确认只有 1 次互动。断开后原菜单可用；截图 outputs/network-interaction.png。UI 拆分和表现扩展已完成，最终综合验收见 FINAL_VALIDATION.md。
 
 登记道具与快捷使用通过 core.item.register / unregister / shortcut 命令，使用useItem权限，查询见core.query.registeredItem；同一锁/资格适用于本地UI和网络。见 docs/engine/ITEM_SHORTCUT.md。
+
+## 槽位库存查询与位置引用
+
+`core.query` 的 bag 是冻结派生数量，inventory 提供所有注册口袋的政策、占用、槽位。`core.inventory.preview {additions:[{item,count}]}` 按实际政策检查整个获得组合，只读且不可提交，网络/插件无需写权限。获得仍由奖励/购买等领域命令执行。
+
+`core.item.use`、`core.learning.teach` 和 kind:item 的 `core.battle.action` 可带 `slot:{pocket,index,item}`；使用时重新验证位置，不能把读到的下标当任意写入口。其他战斗行动不接受 slot。保存10只持久化槽位，不接受旧计数字典。

@@ -1,6 +1,6 @@
 # 架构与扩展约定
 
-当前工程 0.15.0：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
+当前工程 0.16.0：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
 
 首先阅读 [README.md](README.md) 的运行入口和范围；执行顺序看 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md)，验证与已知问题看 [DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md)。本文定义当前结构，不把历史里程碑当作当前能力。
 
@@ -13,7 +13,7 @@ dist/
     battle/                      队伍/席位、目标、行动、阶段结算、状态、历史、事件
     rules/gen3/                  有来源的第三世代规则与数据
     growth/ / creatures/         培育、遗传、进化、形态身份与有效属性
-    inventory*.js                可注册槽位容器及原子计划（应用迁移待完）
+    inventory*.js                可注册槽位容器、容量与原子计划
     items.js                     白名单草稿上的道具预检/提交
     story.js / commands.js       条件、剧情账本与校验后的指令执行
     world*.js                    网格世界、动态覆盖、访问与时间
@@ -59,13 +59,13 @@ flowchart TD
 
 ## 应用服务与状态所有权
 
-`adventure.js` 当前 147 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
+`adventure.js` 当前 149 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
 
 - SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
 - 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。
 - 依赖端口为冻结的实时 getter。读档更换对象后读取新所有者；不会缓存旧 state。可信应用共享领域对象身份，插件获得只读查询和受控写入能力。
 - 只有可信宿主的 state 重载和 storyBusy 控制保留显式赋值口；其他公共字段/方法不可覆写。测试故障注入对准用例所有者。
-- bindField 重绑顺序：RNG → 形态 → 育成 → 时间 → 树果 → Actor → 世界；世界再绑定移动、机关、野外行动和插件。有限的跨服务生命周期接线由 composition 管理。
+- bindField 重绑顺序：RNG → 形态 → 育成 → 时间 → 天气 → 树果 → Actor → 世界；世界再绑定移动、机关、野外行动和插件。有限的跨服务生命周期接线由 composition 管理。
 
 ## 世界、移动与时间
 
@@ -89,7 +89,7 @@ Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多
 
 StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/STORY_LANGUAGE.md) 和 [CUTSCENES.md](CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。
 
-精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT与保存9已接入；槽位库存服务/注册政策及插件启动校验已实现，但当前游戏容量、获得/消耗/保存迁移仍待完成，见 [INVENTORY.md](docs/engine/INVENTORY.md)。见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
+精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT与保存10已接入；槽位库存服务/注册政策及插件启动校验已实现，当前游戏获得/消耗、容量、选槽页面与保存10迁移已完成，见 [INVENTORY.md](docs/engine/INVENTORY.md)。见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
 
 ## 表现、音频与界面扩展
 
@@ -101,8 +101,8 @@ interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，�
 
 ## 存档、复用与验证
 
-SaveStore 只接受开发存档版本 8；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
+SaveStore 只接受开发存档版本 10；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项、天气新增 18 项、关键道具新增 13 项、快捷登记/商店修复新增 13 项、槽位库存核心新增 12 项和受影响范围针对性验证，当前 **254 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项、天气新增 18 项、关键道具新增 13 项、快捷登记/商店修复新增 13 项、槽位库存核心新增 12 项、当前槽位应用迁移组合证明和受影响范围针对性验证，当前 **255 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。

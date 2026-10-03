@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -37,7 +38,7 @@ function setup({
     enemyParty: [e, er],
     db,
     rng,
-    bag: {},
+    bag: createBag({}),
     trainer,
     format,
     rules: {
@@ -655,7 +656,7 @@ test("A new held item reuses a canonical effect with its own parameter and no ca
     enemy,
     db: original,
     rng,
-    bag: {},
+    bag: createBag({}),
     traits: {
       abilities: GEN3_ABILITIES,
       heldItems: {
@@ -678,7 +679,9 @@ test("Experience belongs to every interactive alliance rather than only the firs
   const side = (id, mon, kind) => ({
     id,
     allianceId: id,
-    controllers: [{ id: `${id}:owner`, kind, party: [mon], bag: {} }],
+    controllers: [
+      { id: `${id}:owner`, kind, party: [mon], bag: createBag({}) },
+    ],
     seats: [{ id: `${id}:seat`, controllerId: `${id}:owner` }],
   });
   const b = new Battle({

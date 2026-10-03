@@ -12,6 +12,7 @@ import {
 import { bindApplicationPorts } from "./ports.js";
 export const CROP_PORTS = Object.freeze([
   "state",
+  "inventory",
   "catalog",
   "rng",
   "canManageParty",
@@ -69,16 +70,23 @@ export class CropApplication {
         return { ok: false, reason: "现在不需要浇水。" };
     } else if (action === "plant") {
       const d = this.crops.registry.get(kind);
-      if (before.stage !== "empty" || !(this.state.bag[d.item] > 0))
+      if (
+        before.stage !== "empty" ||
+        !(this.inventory.quantity(this.state.bag, d.item) > 0)
+      )
         return { ok: false, reason: "需要空土壤和一颗树果。" };
+      const cost = this.inventory.prepare(this.state.bag, [
+        { kind: "remove", item: d.item, count: 1 },
+      ]);
+      if (!cost.ok) return cost;
       this.crops.plant(id, kind);
-      this.state.bag[d.item]--;
+      this.inventory.commit(cost, this.state.bag);
     } else if (action === "harvest") {
       if (!before.harvestable) return { ok: false, reason: "树果尚未成熟。" };
-      const count = (this.state.bag[before.item] || 0) + before.yield;
-      if (!Number.isSafeInteger(count))
-        return { ok: false, reason: "背包无法装下树果。" };
-      this.state.bag[before.item] = count;
+      const result = this.inventory.apply(this.state.bag, [
+        { kind: "add", item: before.item, count: before.yield },
+      ]);
+      if (!result.ok) return result;
       this.crops.remove(id);
     } else throw new Error("Unknown crop action");
     const after = this.crops.view(id);

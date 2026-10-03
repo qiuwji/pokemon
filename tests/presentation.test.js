@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -205,9 +210,9 @@ test("Story commands await dialogue before applying later rewards; unknown comma
         finish = resolve;
         order.push("dialog");
       }),
-    grant: () => order.push("grant"),
+    reward: () => order.push("grant"),
   });
-  const job = runner.run([{ type: "dialog" }, { type: "grant" }]);
+  const job = runner.run([{ type: "dialog" }, { type: "reward" }]);
   assert.deepEqual(order, ["dialog"]);
   finish();
   await job;
@@ -246,7 +251,7 @@ test("Battle events expose semantic animation metadata and immutable health snap
     enemy,
     db,
     rng,
-    bag: { potion: 1, pokeball: 1 },
+    bag: createBag({ potion: 1, pokeball: 1 }),
   });
   const events = battle.act({ kind: "move", index: 0 }),
     move = events.find((e) => e.kind === "move" && e.actorUid === party[0].uid);
@@ -262,9 +267,9 @@ test("Battle events expose semantic animation metadata and immutable health snap
 test("Party commands reject invalid use and evolution never revives a fainted member", () => {
   const rng = new Random(1),
     mon = createMonster("mudkip", 16, db, rng),
-    state = { party: [mon], bag: { potion: 1 } };
+    state = { party: [mon], bag: createBag({ potion: 1 }) };
   assert.equal(
-    createItemService(ITEMS).use({
+    createItemService(ITEMS, fixtureInventory(ITEMS)).use({
       id: "potion",
       ...state,
       index: 0,
@@ -274,13 +279,14 @@ test("Party commands reject invalid use and evolution never revives a fainted me
   );
   mon.hp = 0;
   const evolutions = new EvolutionService({
+    inventory: fixtureInventory(),
     db,
     abilities: GEN3_ABILITIES,
     heldItems: GEN3_HELD_ITEMS,
   });
   assert(evolutions.commit(evolutions.prepare(mon)).ok);
   assert.equal(mon.hp, 0);
-  assert.equal(state.bag.potion, 1);
+  assert.equal(inventoryQuantity(state.bag, "potion"), 1);
 });
 test("Pack application rejects out-of-context inventory commands and preserves compatible saves", () => {
   const clock = manualClock(),
@@ -395,7 +401,7 @@ test("Missed moves identify the failed hit so presentation does not draw an impa
       enemy,
       db,
       rng: { next: () => 0.999, int: (max) => max - 1 },
-      bag: {},
+      bag: createBag({}),
     });
   battle.executeMove(0, 0);
   const move = battle.events.find((e) => e.kind === "move");

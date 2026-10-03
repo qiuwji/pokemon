@@ -4,7 +4,12 @@ const identifier = (id) =>
   typeof id === "string" && /^[a-zA-Z0-9_.:-]+$/.test(id);
 
 /** Content validation is independent of field/story/UI. Creation happens only after all references resolve. */
-export function validateTrainers(definitions, db, strategies = null) {
+export function validateTrainers(
+  definitions,
+  db,
+  strategies = null,
+  inventory = null,
+) {
   const team = (members, path) => {
     if (!Array.isArray(members) || !members.length || members.length > 6)
       throw new Error(`Invalid trainer party ${path}`);
@@ -81,16 +86,13 @@ export function validateTrainers(definitions, db, strategies = null) {
       (!t.bag ||
         typeof t.bag !== "object" ||
         Array.isArray(t.bag) ||
-        Object.entries(t.bag).length > 64 ||
         Object.entries(t.bag).some(
           ([item, count]) =>
-            !db.items?.[item] ||
-            !Number.isInteger(count) ||
-            count < 1 ||
-            count > 999,
+            !db.items?.[item] || !Number.isSafeInteger(count) || count < 1,
         ))
     )
       throw new Error("Invalid trainer inventory");
+    if (inventory && t.bag) inventory.create(t.bag);
     team(t.party, id);
     strategy(t.strategy);
     if (
@@ -144,9 +146,11 @@ export function createTrainerTeam(trainer, db, rng) {
 }
 export function createTrainerEncounter(
   trainer,
-  { party, bag, db, rng, strategies },
+  { party, bag, db, rng, strategies, inventory },
 ) {
-  validateTrainers({ selected: trainer }, db, strategies);
+  if (!inventory)
+    throw new Error("Trainer encounters require an inventory service");
+  validateTrainers({ selected: trainer }, db, strategies, inventory);
   const seats = trainer.format === "doubles" ? 2 : 1;
   if (
     party.filter((m) => m.hp > 0 && !m.egg).length <
@@ -157,7 +161,7 @@ export function createTrainerEncounter(
   try {
     const enemyParty = createTrainerTeam(trainer, db, rng),
       topology = teamRoster(party, enemyParty, bag, seats);
-    topology.sides[1].controllers[0].bag = { ...trainer.bag };
+    topology.sides[1].controllers[0].bag = inventory.create(trainer.bag || {});
     topology.sides[1].controllers[0].strategy = trainer.strategy || "random";
     for (const rival of trainer.rivals || []) {
       const members = createTrainerTeam(

@@ -1,0 +1,11 @@
+✔ Two independent human controllers on one alliance share the scheduler and keep their own inventory/party (12.2425ms)
+✔ Three alliances continue after one opposing team is eliminated and settle only the last surviving alliance (5.546792ms)
+✔ Custom strategy receives legal item candidates and frozen analyses, while battle owns item cost and commit (16.375041ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 96.168583

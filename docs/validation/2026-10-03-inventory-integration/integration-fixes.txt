@@ -1,0 +1,10 @@
+✔ Harvesting rejects the entire yield before clearing a ripe tree and can succeed later when stack space is available (22.953292ms)
+✔ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (2.114167ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 135.608625

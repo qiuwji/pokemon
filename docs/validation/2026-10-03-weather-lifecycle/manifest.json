@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-03",
+  "baseCommit": "3937daf",
+  "saveVersion": 10,
+  "scope": "Saved world-weather override shape and explicit map-weather shape validation. Retain existing field/time/battle/presentation contracts and scoped proofs.",
+  "initial": {
+    "tested": 1,
+    "passed": 0,
+    "failed": 1,
+    "reason": "Regression reproduced: numeric override table accepted as valid saved weather."
+  },
+  "final": {
+    "tested": 4,
+    "passed": 4,
+    "failed": 0,
+    "cases": [
+      "New corrupt override/explicit map weather regression, default omitted-map positive case and real save validation",
+      "Existing startup weather/reference/map/residual registry rejection",
+      "Existing real application commands/queries/maps/expiry/current save10",
+      "Existing real plugin weather/combat/visual registration and permissions"
+    ]
+  },
+  "existingEvidence": "All original18 weather cases passed in this phase’s inventory affected487 run. Related validator cases3 rerun after this change; unrelated rule/time/crossfade contracts retain prior evidence. See adjacent inventory-integration manifest/logs.",
+  "checks": {
+    "changedModuleSyntax": "passed",
+    "contentStartup": "passed",
+    "fullSystem": "not repeated",
+    "browserOriginalAssetsAudio": "pending E/business"
+  },
+  "logs": [
+    "shape-initial.txt",
+    "shape-final.txt",
+    "syntax.txt",
+    "content.txt"
+  ],
+  "sourceSha256": {
+    "dist/engine/weather.js": "88daa85f8e8d35f77e373100eea7ef5a36f48b9d075038f9c7a65a3b04016f85",
+    "dist/packs/emerald/application/weather-application.js": "e4d08dab769a81fd51b98a7d3c78165c5e6f1327e36f92432aeb436b051f86c4",
+    "dist/packs/emerald/save-contract.js": "126ec6e3ac903f86e959fa1dbf80f740004a33fbf0453d2ef8cc9c0d1377566c",
+    "dist/packs/emerald/pack.js": "bf8d5ef604b123cf71011da714d8b7f2f8e648e7dcd16eaf39f16c8286361177",
+    "tests/weather.test.js": "a900a63c8a7780c4b76059a40ff10c1de7bf0242630ad471857861751f126ada"
+  },
+  "invalidateOn": "Changed weather schema, lifecycle, map definitions, application/save/command/plugin wiring, independent battle policy or affected presentation contract. Unchanged proofs retained; full E still pending."
+}

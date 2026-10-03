@@ -14,6 +14,7 @@ export const BATTLE_PORTS = Object.freeze([
   "db",
   "director",
   "items",
+  "inventory",
   "moveEffects",
   "plugins",
   "rng",
@@ -57,6 +58,7 @@ export class BattleApplication {
       db: this.db,
       rng: this.rng,
       strategies: this.battleStrategies,
+      inventory: this.inventory,
     });
     return this.startBattle(encounter.enemyParty, {
       ...encounter,

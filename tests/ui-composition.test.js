@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -57,7 +62,7 @@ function fixture() {
     box: [],
     seen: ["mudkip"],
     caught: ["mudkip"],
-    bag: { potion: 2 },
+    bag: createBag({ potion: 2 }),
     money: 3000,
     playSeconds: 0,
     movement: { mode: "walk", visited: [] },
@@ -70,6 +75,8 @@ function fixture() {
     plugins: null,
     world: { map: { title: "未白镇" } },
     itemDefinitions: ITEMS,
+    bagView: () => fixtureInventory().view(state.bag),
+    itemQuantity: (item) => inventoryQuantity(state.bag, item),
     saveStore: { load: () => null },
     clearInput() {},
     save: () => calls.push("save"),

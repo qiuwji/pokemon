@@ -10,12 +10,50 @@ const fingerprint = (state) =>
       .map((id) => [id, state.pockets[id]]),
   );
 export const emptyInventory = () => ({ pockets: {} });
+/** Derived read ports for already validated containers; never a second writable count dictionary. */
+export function inventoryQuantity(state, item) {
+  return Object.values(state.pockets).reduce(
+    (total, slots) =>
+      total +
+      slots.reduce(
+        (count, slot) => count + (slot?.item === item ? slot.count : 0),
+        0,
+      ),
+    0,
+  );
+}
+export function inventoryCounts(state) {
+  const counts = {};
+  for (const slots of Object.values(state.pockets))
+    for (const slot of slots)
+      if (slot) counts[slot.item] = (counts[slot.item] || 0) + slot.count;
+  return readOnly(counts);
+}
 
 /** One slot truth. Plans contain detached changes; their draft, custody and commit identity remain private. */
 export class InventoryService {
   constructor(registry) {
     this.registry = registry;
     this.plans = new WeakMap();
+  }
+  /** Initial quantities are authored content, not an alternate saved-state schema. */
+  create(quantities = {}) {
+    const input = jsonValue(quantities);
+    if (!object(input))
+      throw new Error("Expected initial inventory quantities");
+    const entries = Object.entries(input);
+    for (const [item] of entries) this.registry.pocketOf(item);
+    if (entries.some(([, count]) => !Number.isSafeInteger(count) || count < 0))
+      throw new Error("Invalid initial inventory quantities");
+    const state = emptyInventory(),
+      result = this.apply(
+        state,
+        entries
+          .filter(([, count]) => count > 0)
+          .map(([item, count]) => ({ kind: "add", item, count })),
+      );
+    if (!result.ok) throw new Error(result.reason);
+    return state;
   }
   validate(state) {
     jsonValue(state);
@@ -51,18 +89,11 @@ export class InventoryService {
     return true;
   }
   quantity(state, item) {
-    const pocket = this.registry.pocketOf(item);
-    return (state.pockets[pocket] || []).reduce(
-      (count, slot) => count + (slot?.item === item ? slot.count : 0),
-      0,
-    );
+    this.registry.pocketOf(item);
+    return inventoryQuantity(state, item);
   }
   counts(state) {
-    const counts = {};
-    for (const slots of Object.values(state.pockets))
-      for (const slot of slots)
-        if (slot) counts[slot.item] = (counts[slot.item] || 0) + slot.count;
-    return readOnly(counts);
+    return inventoryCounts(state);
   }
   view(state) {
     this.validate(state);
@@ -171,6 +202,11 @@ export class InventoryService {
       return false;
     }
     return saved.before === fingerprint(state);
+  }
+  preview(state, operations) {
+    const plan = this.prepare(state, operations);
+    this.plans.delete(plan);
+    return readOnly(plan);
   }
   commit(plan, state) {
     const saved = this.plans.get(plan),

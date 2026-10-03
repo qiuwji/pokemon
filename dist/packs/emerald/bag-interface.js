@@ -16,27 +16,39 @@ export function createBagInterface(
   const ITEMS = game.itemDefinitions;
   function showBag(inBattle = false) {
     const shortcut = game.registeredItemView();
+    const view = game.bagView(inBattle);
+    const rows = Object.entries(view.pockets).flatMap(([pocket, definition]) =>
+      definition.slots.flatMap((slot, index) =>
+        slot
+          ? [{ ...slot, reference: { pocket, index, item: slot.item } }]
+          : [],
+      ),
+    );
+    const row = ({ item: id, count, reference }) => {
+      const item = ITEMS[id];
+      const usable =
+        item.contexts.includes(inBattle ? "battle" : "field") &&
+        (item.target === "field"
+          ? !inBattle && game.itemActionOptions(id).some((action) => action.ok)
+          : item.target === "enemy"
+            ? game.itemPlan(id, undefined, inBattle, reference).ok
+            : (inBattle ? game.battle.party : game.state.party).some(
+                (m, index) => game.itemPlan(id, index, inBattle, reference).ok,
+              ));
+      return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${count}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button>${!inBattle && item.registerable ? `<button class="secondary-button" data-register-item="${escapeHTML(id)}">${shortcut.selection?.item === id ? "已登记" : "登记"}</button>` : ""}</div>`;
+    };
     modal(
       "背包",
-      Object.entries(ITEMS)
-        .filter(
-          ([id, item]) =>
-            (game.state.bag[id] || 0) > 0 ||
-            (!item.learningMethod && item.contexts.length),
+      Object.entries(view.pockets)
+        .map(
+          ([pocket, definition]) =>
+            `<section><h3>${escapeHTML(definition.label)} · ${definition.used}/${definition.capacity}</h3>${
+              rows
+                .filter((entry) => entry.reference.pocket === pocket)
+                .map(row)
+                .join("") || "<p>这个口袋是空的。</p>"
+            }</section>`,
         )
-        .map(([id, item]) => {
-          const usable =
-            item.contexts.includes(inBattle ? "battle" : "field") &&
-            (item.target === "field"
-              ? !inBattle &&
-                game.itemActionOptions(id).some((action) => action.ok)
-              : item.target === "enemy"
-                ? game.itemPlan(id, undefined, inBattle).ok
-                : (inBattle ? game.battle.party : game.state.party).some(
-                    (m, index) => game.itemPlan(id, index, inBattle).ok,
-                  ));
-          return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button>${!inBattle && item.registerable ? `<button class="secondary-button" data-register-item="${escapeHTML(id)}" ${(game.state.bag[id] || 0) > 0 ? "" : "disabled"}>${shortcut.selection?.item === id ? "已登记" : "登记"}</button>` : ""}</div>`;
-        })
         .join("") +
         `<div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
       { back: inBattle ? closeModal : showMenu, type: "bag" },
@@ -46,13 +58,14 @@ export function createBagInterface(
         chooseItemRegistration(button.dataset.registerItem);
     });
     root.querySelectorAll("[data-item]").forEach(
-      (button) =>
+      (button, rowIndex) =>
         (button.onclick = () => {
-          const id = button.dataset.item;
+          const id = button.dataset.item,
+            slot = rows[rowIndex].reference;
           if (ITEMS[id].target === "field") chooseItemAction(id);
           else if (ITEMS[id].target === "enemy")
-            void game.turn({ kind: "item", item: id });
-          else chooseItemTarget(id, inBattle);
+            void game.turn({ kind: "item", item: id, slot });
+          else chooseItemTarget(id, inBattle, slot);
         }),
     );
   }
@@ -125,7 +138,7 @@ export function createBagInterface(
         }),
     );
   }
-  function chooseItemTarget(id, inBattle) {
+  function chooseItemTarget(id, inBattle, slot) {
     modal(
       `${ITEMS[id].name} · 选择伙伴`,
       (inBattle ? game.battle.party : game.state.party)
@@ -135,20 +148,26 @@ export function createBagInterface(
     );
     root.querySelectorAll("[data-mon]").forEach((button) => {
       const index = +button.dataset.mon;
-      button.disabled = !game.itemPlan(id, index, inBattle).ok;
+      button.disabled = !game.itemPlan(id, index, inBattle, slot).ok;
       button.onclick = () => {
         if (!inBattle && ITEMS[id].learningMethod) {
           chooseLearningMove(
             ITEMS[id].learningMethod,
             game.state.party[index]?.uid,
+            slot,
           );
           return;
         }
         if (inBattle) {
-          void game.turn({ kind: "item", item: id, index });
+          void game.turn({
+            kind: "item",
+            item: id,
+            index,
+            ...(slot ? { slot } : {}),
+          });
           return;
         }
-        const result = game.useItem(id, index);
+        const result = game.useItem(id, index, slot);
         if (!result.ok) {
           toast(result.reason);
           return;
@@ -161,8 +180,8 @@ export function createBagInterface(
       };
     });
   }
-  function chooseLearningMove(method, uid) {
-    const view = game.learningView(method, uid);
+  function chooseLearningMove(method, uid, slot) {
+    const view = game.learningView(method, uid, slot);
     if (!view.ok) {
       toast(view.reason);
       return;
@@ -170,7 +189,7 @@ export function createBagInterface(
     const mon = game.state.party.find((value) => value.uid === uid);
     const move = game.db.moves[view.move];
     const commit = (index) => {
-      const result = game.teachMove(method, uid, index);
+      const result = game.teachMove(method, uid, index, slot);
       if (!result.ok) {
         toast(result.reason);
         return;

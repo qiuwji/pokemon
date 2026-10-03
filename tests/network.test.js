@@ -1,3 +1,4 @@
+import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -390,7 +391,7 @@ test("Core actions enforce UID/custody/selection constraints and UI evolution co
   });
   const mon = createMonster("eevee", 6, game.db, game.rng);
   game.state.party.push(mon);
-  game.state.bag.water_stone = 1;
+  setQuantity(game.state.bag, "water_stone", 1);
   const plan = game.evolutionPlan(mon, {
     trigger: "item",
     item: "water_stone",
@@ -398,7 +399,7 @@ test("Core actions enforce UID/custody/selection constraints and UI evolution co
   assert(plan);
   assert((await ui.animateEvolution(mon, plan)).ok);
   assert.equal(mon.species, "vaporeon");
-  assert.equal(game.state.bag.water_stone, 0);
+  assert.equal(inventoryQuantity(game.state.bag, "water_stone"), 0);
   assert.equal(bus.active, null);
 });
 

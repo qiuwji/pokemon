@@ -1,3 +1,4 @@
+import { createBag } from "./inventory-fixture.js";
 import fs from "node:fs";
 import { Battle } from "../../dist/engine/battle.js";
 import { Random, createMonster } from "../../dist/engine/model.js";
@@ -45,7 +46,7 @@ export function battleFixture({
     db,
     rng,
     trainer: true,
-    bag: {},
+    bag: createBag({}),
     traits: { abilities: GEN3_ABILITIES, heldItems: GEN3_HELD_ITEMS, hooks },
     rules: {
       accuracy: () => true,

@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -25,7 +26,7 @@ const compare = (id, value, op = "eq", input = {}) => ({
 test("Story queries compare inventory, party, money and variables; invalid schemas fail before execution", () => {
   const s = {
     money: 500,
-    bag: { potion: 2 },
+    bag: createBag({ potion: 2 }),
     party: [{ species: "mudkip" }, { egg: true, species: "mudkip" }],
     position: { map: "Meadow", x: 2, y: 1 },
     story: { completed: [], rewards: [] },

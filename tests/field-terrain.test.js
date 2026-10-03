@@ -1,3 +1,4 @@
+import { setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -417,7 +418,7 @@ test("Application commands select techniques; a paused cutscene stops current dr
   });
   game.attachUI({ blocked: false, dialog: null, updateSide() {}, toast() {} });
   game.enter({ map: "Lab", x: 0, y: 1, dir: "right" });
-  game.state.bag.acro_bike = 1;
+  setQuantity(game.state.bag, "acro_bike", 1);
   const { bus } = attachEmeraldExtensions(game, compiled.host);
   assert((await bus.execute("core.movement.mode", { mode: "acro-bike" })).ok);
   assert(

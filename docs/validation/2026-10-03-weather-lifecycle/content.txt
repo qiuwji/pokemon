@@ -1,0 +1,3 @@
+Content valid: 9 maps, 58 species, 87 moves, 310 items, 26 events.
+Explicitly unavailable move mechanics (0): 
+Runtime content valid: 354 moves, 58 learning methods, 310 items.

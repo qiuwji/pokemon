@@ -14,6 +14,7 @@ export class GrowthSession {
     heldItems,
     hooks = [],
     conditions,
+    inventory,
     hour = () => 12,
   }) {
     Object.assign(this, { state, db, rng, hour });
@@ -24,6 +25,7 @@ export class GrowthSession {
       heldItems,
       hooks,
       conditions,
+      inventory,
     });
     this.hatching = new HatchService({ abilities, heldItems, hooks });
     this.daycare = new DaycareService({

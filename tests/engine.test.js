@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import { createItemService } from "../dist/engine/items.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
@@ -27,7 +32,7 @@ const state = () => ({
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [],
   box: [],
-  bag: { pokeball: 5, potion: 2 },
+  bag: createBag({ pokeball: 5, potion: 2 }),
   flags: {},
   story: { completed: [], rewards: [] },
   seen: [],
@@ -93,12 +98,12 @@ test("Starter rescue ends, grants exact experience, and upgrades moves at level 
       p = createMonster(starter, 5, db, rng),
       e = createMonster("zigzagoon", 2, db, rng);
     const b = new Battle({
-      items: createItemService(ITEMS),
+      items: createItemService(ITEMS, fixtureInventory(ITEMS)),
       party: [p],
       enemy: e,
       db,
       rng,
-      bag: { potion: 1, pokeball: 0 },
+      bag: createBag({ potion: 1, pokeball: 0 }),
       script: "rescue",
     });
     for (let n = 0; n < 30 && !b.ended; n++) b.act({ kind: "move", index: 0 });
@@ -117,12 +122,12 @@ test("Status moves lower stats, PP decreases, replacement is free after faint", 
   const { rng, p, e } = setup();
   const second = createMonster("mudkip", 5, db, rng);
   const b = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     party: [p, second],
     enemy: e,
     db,
     rng,
-    bag: { potion: 0, pokeball: 1 },
+    bag: createBag({ potion: 0, pokeball: 1 }),
   });
   b.act({ kind: "move", index: 1 });
   assert.equal(b.stages[1].def, -1);
@@ -137,9 +142,9 @@ test("Status moves lower stats, PP decreases, replacement is free after faint", 
 });
 test("Poké Balls cannot catch trainers, fail consumes a turn, success uses one ball", () => {
   const { rng, p, e } = setup();
-  let bag = { pokeball: 3, potion: 0 };
+  let bag = createBag({ pokeball: 3, potion: 0 });
   const trainer = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     party: [p],
     enemy: e,
     db,
@@ -148,9 +153,9 @@ test("Poké Balls cannot catch trainers, fail consumes a turn, success uses one 
     trainer: true,
   });
   trainer.act({ kind: "item", item: "pokeball" });
-  assert.equal(bag.pokeball, 3);
+  assert.equal(inventoryQuantity(bag, "pokeball"), 3);
   const b = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     party: [p],
     enemy: e,
     db,
@@ -159,14 +164,14 @@ test("Poké Balls cannot catch trainers, fail consumes a turn, success uses one 
   });
   b.act({ kind: "item", item: "pokeball" });
   assert.equal(b.result, "caught");
-  assert.equal(bag.pokeball, 2);
+  assert.equal(inventoryQuantity(bag, "pokeball"), 2);
   assert(captureCheck(e, db.species.zigzagoon, { int: () => 0 }).caught);
 });
 test("Damage/PP recovery, invalid potions do not consume items, switching consumes turn", () => {
   const { rng, p, e } = setup();
-  const bag = { potion: 1, pokeball: 0 };
+  const bag = createBag({ potion: 1, pokeball: 0 });
   const b = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     party: [p],
     enemy: e,
     db,
@@ -174,10 +179,10 @@ test("Damage/PP recovery, invalid potions do not consume items, switching consum
     bag,
   });
   b.act({ kind: "item", item: "potion", index: 0 });
-  assert.equal(bag.potion, 1);
+  assert.equal(inventoryQuantity(bag, "potion"), 1);
   p.hp = 1;
   b.act({ kind: "item", item: "potion", index: 0 });
-  assert.equal(bag.potion, 0);
+  assert.equal(inventoryQuantity(bag, "potion"), 0);
   p.status = "poison";
   p.moves[0].pp = 0;
   healMonster(p, db);

@@ -45,7 +45,7 @@
 | `scene` | `{type:'scene', position:{map,x,y,dir}, actors:[...]}`，完全遮盖后更换场景、布置角色、揭开 |
 | `flag` | `{type:'flag', key:'bridgeOpen', value:true}`，推进存档进度 |
 
-原有 `dialog / heal / grant / starter / shop / battle / teleport` 继续兼容。`battle` 是进入战斗的交接指令，等待进入动画完成；战斗结果通过 `battleOutcome()` 返回新的演出。不要在其后直接追加假定“战斗已经获胜”的指令。战斗作为一段长剧情中间可恢复的暂停点，尚未实现。
+当前注册 `dialog / heal / reward / starter / shop / battle / teleport`。旧grant已删除，奖励使用稳定ID的reward合同并通过统一库存容量预检。`battle` 是进入战斗的交接指令，等待进入动画完成；战斗结果通过 `battleOutcome()` 返回新的演出。不要在其后直接追加假定“战斗已经获胜”的指令。战斗作为一段长剧情中间可恢复的暂停点，尚未实现。
 
 示例：
 

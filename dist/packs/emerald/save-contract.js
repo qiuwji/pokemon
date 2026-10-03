@@ -1,4 +1,5 @@
 import { validItemShortcut } from "../../engine/item-shortcut.js";
+import { createEmeraldInventory } from "./inventory.js";
 import { WeatherRegistry, WorldWeather } from "../../engine/weather.js";
 import {
   GEN3_WORLD_WEATHER,
@@ -63,6 +64,7 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    createEmeraldInventory(catalog).validate(s.bag);
     if (!validItemShortcut(s.registeredItem, catalog.items)) return false;
     db = emeraldDatabase(db);
     new WorldWeather({
@@ -359,10 +361,5 @@ export function validateSave(
   if (s.daycare?.egg && !s.daycare.egg.egg) return false;
   if (s.flags.rescued && !s.party.some((m) => !m.egg)) return false;
   if (!validStoryProgress(s.story)) return false;
-  return Object.entries(s.bag).every(
-    ([id, v]) =>
-      (v === 0 || Object.hasOwn(catalog.items || db.items || {}, id)) &&
-      Number.isSafeInteger(v) &&
-      v >= 0,
-  );
+  return true;
 }

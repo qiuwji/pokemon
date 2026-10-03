@@ -74,7 +74,7 @@ export interface InventorySlot {
   item: string;
   count: number;
 }
-/** Slot-based container contract; AdventureState.bag will adopt it in the application migration. */
+/** The only persisted inventory truth, shared by adventure and battle controllers. */
 export interface InventoryState {
   pockets: Record<string, (InventorySlot | null)[]>;
 }
@@ -82,6 +82,25 @@ export interface InventorySlotReference {
   pocket: string;
   index: number;
   item: string;
+}
+export interface InventoryView {
+  readonly counts: Readonly<Record<string, number>>;
+  readonly pockets: Readonly<
+    Record<
+      string,
+      Readonly<
+        InventoryPocketDefinition & {
+          used: number;
+          slots: readonly (Readonly<InventorySlot> | null)[];
+        }
+      >
+    >
+  >;
+}
+export interface InventoryFailure {
+  readonly ok: false;
+  readonly code: "full" | "insufficient" | "stale-slot";
+  readonly reason: string;
 }
 export type InventoryOperation =
   | { kind: "add"; item: string; count: number }
@@ -144,7 +163,12 @@ export type BattleAction = {
   target?: TargetRef;
 } & (
   | { kind: "move" | "switch"; index: number }
-  | { kind: "item"; item: string; index?: number }
+  | {
+      kind: "item";
+      item: string;
+      index?: number;
+      slot?: InventorySlotReference;
+    }
   | { kind: "form"; form: string }
   | { kind: "run" | "cancel" }
 );
@@ -209,7 +233,7 @@ export interface BattleController {
   id: string;
   kind: "human" | "ai";
   party: BattleMonster[];
-  bag?: Record<string, number>;
+  bag?: InventoryState;
 }
 export interface BattleSeat {
   id: string;
@@ -346,7 +370,7 @@ export interface AdventureState {
   forms?: Record<string, { id: string }>;
   party: Creature[];
   box: Creature[];
-  bag: Record<string, number>;
+  bag: InventoryState;
   registeredItem: ItemShortcut | null;
   flags: Record<string, boolean | number | string>;
   story: StoryProgress;

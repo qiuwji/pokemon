@@ -1,3 +1,4 @@
+import { inventoryCounts } from "../inventory.js";
 import { TACTICAL_STRATEGY } from "../rules/gen3/tactical-strategy.js";
 import { analyzeCandidate } from "./analysis.js";
 import { readOnly, callSync } from "../extensions/values.js";
@@ -55,7 +56,9 @@ export class BattleStrategyRegistry {
       const action = { kind: "switch", seat, actor: mon.uid, index };
       if (!battle.actions.prepare(action, seat).error) candidates.push(action);
     }
-    for (const [item, count] of Object.entries(battle.roster.owner(seat).bag)) {
+    for (const [item, count] of Object.entries(
+      inventoryCounts(battle.roster.owner(seat).bag),
+    )) {
       if (count <= 0) continue;
       for (
         let index = 0;

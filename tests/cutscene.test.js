@@ -1,3 +1,4 @@
+import { inventoryQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -118,12 +119,12 @@ function makeGame(position = { map: "Route101", x: 6, y: 14, dir: "right" }) {
 test("Entire command tree is validated before rewards or movement; parallel pose conflicts fail early", async () => {
   const effects = [];
   const runner = new CommandRunner(
-    { grant: () => effects.push("grant"), move() {}, face() {} },
+    { reward: () => effects.push("grant"), move() {}, face() {} },
     { resources: storyResources },
   );
   await assert.rejects(
     runner.run([
-      { type: "grant" },
+      { type: "reward" },
       { type: "sequence", commands: [{ type: "unknown" }] },
     ]),
     /Unknown/,
@@ -388,12 +389,17 @@ test("Malformed choreography is rejected before earlier rewards, positions or sa
   const { game, writes } = makeGame();
   await assert.rejects(
     game.runStory([
-      { type: "grant", flag: "gift", item: "potion", amount: 1 },
+      {
+        type: "reward",
+        id: "gift",
+        flags: { gift: true },
+        items: { potion: 1 },
+      },
       { type: "wait", ms: -1 },
     ]),
     /Invalid wait/,
   );
-  assert.equal(game.state.bag.potion, 0);
+  assert.equal(inventoryQuantity(game.state.bag, "potion"), 0);
   assert(!game.state.flags.gift);
   assert.equal(writes.length, 0);
   assert(!game.busy);

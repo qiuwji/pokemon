@@ -1,4 +1,5 @@
 import { ItemShortcutService } from "../../../engine/item-shortcut.js";
+import { inventoryQuantity } from "../../../engine/inventory.js";
 import { bindApplicationPorts } from "./ports.js";
 export const ITEM_SHORTCUT_PORTS = Object.freeze([
   "canManageParty",
@@ -17,7 +18,7 @@ export class ItemShortcutApplication {
     this.service = new ItemShortcutService({
       items: this.itemDefinitions,
       selection: () => this.state.registeredItem,
-      quantity: (item) => this.state.bag[item] || 0,
+      quantity: (item) => inventoryQuantity(this.state.bag, item),
       setSelection: (selection) => {
         this.state.registeredItem = selection;
       },

@@ -1,3 +1,4 @@
+import { inventoryCounts } from "../../../engine/inventory.js";
 import {
   FieldActionRegistry,
   FieldActionService,
@@ -82,7 +83,7 @@ export class FieldActionApplication {
         underwater: !!this.world.map.underwater,
       },
       flags: this.state.flags,
-      bag: this.state.bag,
+      bag: inventoryCounts(this.state.bag),
       party: this.state.party.map((m) => ({
         uid: m.uid,
         hp: m.hp,

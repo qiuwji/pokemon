@@ -1,3 +1,4 @@
+import { inventoryCounts } from "../inventory.js";
 import { qualified, freeze, readOnly } from "./values.js";
 export const CONTENT_KINDS = Object.freeze([
   "species",
@@ -160,7 +161,8 @@ export class ExtensionCatalog {
       ),
       state.movement?.mode,
       state.registeredItem?.item,
-      ...Object.keys(state.bag || {}).filter((id) => state.bag[id] > 0),
+      ...Object.keys(state.bag ? inventoryCounts(state.bag) : {}),
+      ...Object.keys(state.bag?.pockets || {}),
       ...[
         ...(state.party || []),
         ...(state.box || []),

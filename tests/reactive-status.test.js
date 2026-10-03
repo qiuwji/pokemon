@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
 import test from "node:test";
@@ -57,7 +58,7 @@ function fixture({ format = "singles", hooks = [] } = {}) {
     db,
     rng,
     trainer: true,
-    bag: {},
+    bag: createBag({}),
     traits: { hooks, abilities: GEN3_ABILITIES, heldItems: GEN3_HELD_ITEMS },
     rules: {
       accuracy: () => true,

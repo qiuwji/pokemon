@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import { createItemService } from "../dist/engine/items.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
@@ -36,10 +41,10 @@ function setup(overrides = {}) {
   for (const mon of enemies) mon.stats.spe = 10;
   const awards = [];
   const battle = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     party,
     enemyParty: enemies,
-    bag: { potion: 2, pokeball: 2 },
+    bag: createBag({ potion: 2, pokeball: 2 }),
     db,
     rng,
     trainer: true,
@@ -178,10 +183,10 @@ test("Residual damage completes before the opponent reserve enters; capture rema
   assert.equal(enemies[1].hp, enemies[1].stats.hp);
   assert.equal(enemies[1].status, null);
   assert.equal(events.at(-1).kind, "switch");
-  const count = b.bag.pokeball,
+  const count = inventoryQuantity(b.bag, "pokeball"),
     turn = b.turn;
   assert.equal(b.act({ kind: "item", item: "pokeball" })[0].kind, "invalid");
-  assert.equal(b.bag.pokeball, count);
+  assert.equal(inventoryQuantity(b.bag, "pokeball"), count);
   assert.equal(b.turn, turn);
 });
 test("Simultaneous fainting leaves reserves available; exhaustion of both teams follows the explicit loss policy", () => {
@@ -241,7 +246,7 @@ test("Domain events contain detached seat collections and stable IDs, with only 
 });
 test("Topology expresses doubles, shared controllers, multiple controllers and three alliances without changing UID", () => {
   const { party, enemies } = setup();
-  const def = duelRoster(party, enemies, {});
+  const def = duelRoster(party, enemies, createBag());
   def.sides[0].seats.push({ id: "home:1", controllerId: "trainer" });
   def.sides[1].seats.push({ id: "away:1", controllerId: "opponent" });
   const third = createMonster("ralts", 4, db, new Random(999));
@@ -259,7 +264,7 @@ test("Topology expresses doubles, shared controllers, multiple controllers and t
   assert.equal(roster.target("home:0", { kind: "self" })[0].id, "home:0");
   assert.equal(roster.canReplace("home:0", 1), false);
   assert.equal(roster.occupant("home:1").uid, party[1].uid);
-  const independent = duelRoster([party[0]], enemies, {});
+  const independent = duelRoster([party[0]], enemies, createBag());
   independent.sides[0].controllers.push({
     id: "partner",
     kind: "human",
@@ -270,7 +275,7 @@ test("Topology expresses doubles, shared controllers, multiple controllers and t
 });
 test("Topology validation rejects duplicate UIDs, bad targets and double occupation before any external mutation", () => {
   const { party, enemies } = setup();
-  const def = duelRoster(party, enemies, {}),
+  const def = duelRoster(party, enemies, createBag()),
     before = structuredClone(def);
   const roster = new BattleRoster(def);
   assert.throws(() => roster.target("missing", { kind: "field" }), /Unknown/);
@@ -337,7 +342,7 @@ test("Practice prize is committed once after the full win; rematches do not gran
   const s = {
     flags: { rescued: true },
     story: emptyStoryProgress(),
-    bag: {},
+    bag: createBag({}),
     money: 3000,
   };
   assert.equal(
@@ -346,7 +351,8 @@ test("Practice prize is committed once after the full win; rematches do not gran
   );
   const commands = battleOutcome(s, { script: "practice", result: "win" }, db);
   for (const c of commands) {
-    if (c.type === "reward") grantReward(s, c);
+    if (c.type === "reward")
+      grantReward(s, c, { inventory: fixtureInventory() });
     if (c.type === "completeEvent") completeEvent(s, c.id);
   }
   assert.equal(s.money, 3160);
@@ -411,7 +417,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
     party,
     box: [],
     flags: {},
-    bag: {},
+    bag: createBag({}),
     money: 3000,
     seen: [],
     caught: [],

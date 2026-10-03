@@ -1,3 +1,11 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
+import { createItemService } from "../dist/engine/items.js";
+import { ITEMS } from "../dist/packs/emerald/items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -20,11 +28,12 @@ function fixture(definitions = {}) {
   ];
   const strategies = new BattleStrategyRegistry(definitions);
   const b = new Battle({
+    items: createItemService(ITEMS, fixtureInventory()),
     party: [p],
     enemyParty: [e],
     db,
     rng,
-    bag: {},
+    bag: createBag({}),
     trainer: true,
     ai: (battle, seat) => strategies.decide(battle, seat),
   });
@@ -63,13 +72,13 @@ test("Custom strategy receives legal item candidates and frozen analyses, while 
     },
   });
   b.roster.owner(b.awaySeat).strategy = "medic";
-  b.roster.owner(b.awaySeat).bag.potion = 1;
+  setQuantity(b.roster.owner(b.awaySeat).bag, "potion", 1);
   e.hp = 1;
   const action = strategies.decide(b, b.awaySeat);
   assert.equal(action.kind, "item");
   assert.equal(e.hp, 1);
-  assert.equal(b.roster.owner(b.awaySeat).bag.potion, 1);
+  assert.equal(inventoryQuantity(b.roster.owner(b.awaySeat).bag, "potion"), 1);
   b.actions.item(action);
-  assert.equal(b.roster.owner(b.awaySeat).bag.potion, 0);
+  assert.equal(inventoryQuantity(b.roster.owner(b.awaySeat).bag, "potion"), 0);
   assert.equal(e.hp, 21);
 });

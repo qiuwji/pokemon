@@ -1,0 +1,12 @@
+✔ Weather restore rejects non-object override containers and explicit malformed map weather rather than assuming clear (21.471208ms)
+✔ Registries reject missing references, cycles, map regions and invalid residual policies before play (0.351666ms)
+✔ Application commands, read-only queries, map visits, expiry and current save schema share one owner (23.695458ms)
+✔ Plugins register weather, combat policy and drawing without editing core; missing permissions deny commands (13.993416ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 173.74175

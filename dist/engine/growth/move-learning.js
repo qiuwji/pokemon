@@ -6,6 +6,7 @@ export class MoveLearningService {
     db,
     methods = {},
     items = {},
+    inventory,
     friendship = (context) => context.mon.friendship ?? 70,
   }) {
     this.db = db;
@@ -21,6 +22,7 @@ export class MoveLearningService {
       ),
     );
     this.friendship = friendship;
+    this.inventory = inventory;
     this.plans = new WeakMap();
     this.protectedMoves = new Set();
     for (const [id, method] of Object.entries(this.methods)) {
@@ -70,7 +72,7 @@ export class MoveLearningService {
   canForget(move) {
     return !this.protectedMoves.has(move);
   }
-  prepare(state, methodId, uid) {
+  prepare(state, methodId, uid, selectedSlot) {
     const method = Object.hasOwn(this.methods, methodId)
       ? this.methods[methodId]
       : null;
@@ -84,7 +86,13 @@ export class MoveLearningService {
       mon.moves.length > 4
     )
       return failure("这位伙伴不能学习这个招式。");
-    if (method.item && !(state.bag[method.item] >= Math.max(1, method.consume)))
+    if (
+      method.item &&
+      !(
+        this.inventory.quantity(state.bag, method.item) >=
+        Math.max(1, method.consume)
+      )
+    )
       return failure("背包里没有所需道具。");
     if (mon.moves.some((slot) => slot.id === method.move))
       return failure("伙伴已经掌握了这个招式。");
@@ -111,6 +119,18 @@ export class MoveLearningService {
       (!Number.isInteger(friendship) || friendship < 0 || friendship > 255)
     )
       throw new Error("Invalid learned friendship");
+    const cost =
+      method.item && method.consume
+        ? this.inventory.prepare(state.bag, [
+            {
+              kind: "remove",
+              item: method.item,
+              count: method.consume,
+              ...(selectedSlot ? { slot: selectedSlot } : {}),
+            },
+          ])
+        : null;
+    if (cost && !cost.ok) return cost;
     const plan = readOnly({
       ok: true,
       uid,
@@ -128,7 +148,8 @@ export class MoveLearningService {
       method,
       fingerprint: JSON.stringify(state.party),
       bag: state.bag,
-      count: method.item ? state.bag[method.item] : null,
+      bagFingerprint: JSON.stringify(state.bag),
+      cost,
       environment: JSON.stringify([state.position, state.flags]),
       friendship,
     });
@@ -142,7 +163,7 @@ export class MoveLearningService {
       state.bag !== saved.bag ||
       JSON.stringify(state.party) !== saved.fingerprint ||
       JSON.stringify([state.position, state.flags]) !== saved.environment ||
-      (saved.method.item && state.bag[saved.method.item] !== saved.count)
+      JSON.stringify(state.bag) !== saved.bagFingerprint
     ) {
       this.plans.delete(plan);
       return failure("学习计划已失效，请重新选择。");
@@ -164,10 +185,10 @@ export class MoveLearningService {
     };
     if (plan.requiresReplacement) moves[index] = slot;
     else moves.push(slot);
+    if (saved.cost && !this.inventory.commit(saved.cost, state.bag))
+      return failure("学习计划已失效，请重新选择。");
     saved.mon.moves = moves;
     if (saved.friendship !== undefined) saved.mon.friendship = saved.friendship;
-    if (saved.method.item && saved.method.consume)
-      state.bag[saved.method.item] -= saved.method.consume;
     this.plans.delete(plan);
     return {
       ok: true,
@@ -176,8 +197,8 @@ export class MoveLearningService {
       replaced: plan.requiresReplacement ? index : null,
     };
   }
-  use(state, method, uid, index) {
-    const plan = this.prepare(state, method, uid);
+  use(state, method, uid, index, slot) {
+    const plan = this.prepare(state, method, uid, slot);
     return plan.ok ? this.commit(plan, { state, index }) : plan;
   }
 }

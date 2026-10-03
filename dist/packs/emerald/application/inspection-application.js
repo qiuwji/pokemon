@@ -1,3 +1,4 @@
+import { inventoryCounts } from "../../../engine/inventory.js";
 import { questFor } from "../pack.js";
 import { bindApplicationPorts } from "./ports.js";
 export const INSPECTION_PORTS = Object.freeze([
@@ -79,7 +80,7 @@ export class InspectionApplication {
           pp: s.pp,
         })),
       })),
-      bag: { ...this.state.bag },
+      bag: inventoryCounts(this.state.bag),
       battle: this.battle
         ? {
             busy: this.busy,

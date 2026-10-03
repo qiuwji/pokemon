@@ -19,10 +19,10 @@ export function createCropInterface(
       `<div class="save-box"><strong>${e(labels[tree.stage] || tree.stage)}</strong>${tree.kind ? `<p>${e(definitions[tree.kind].name)}</p><p>${tree.harvestable ? `可以收获 ${tree.yield} 颗树果。` : `距下个阶段：${tree.remainingMinutes} 分钟`}</p>` : ""}</div><div class="inline-actions">${
         tree.stage === "empty"
           ? `<select data-berry-kind>${Object.entries(definitions)
-              .filter(([, d]) => game.state.bag[d.item] > 0)
+              .filter(([, d]) => game.itemQuantity(d.item) > 0)
               .map(
                 ([kind, d]) =>
-                  `<option value="${e(kind)}">${e(d.name)} × ${game.state.bag[d.item]}</option>`,
+                  `<option value="${e(kind)}">${e(d.name)} × ${game.itemQuantity(d.item)}</option>`,
               )
               .join("")}</select><button data-crop="plant">种植</button>`
           : `<button data-crop="${tree.harvestable ? "harvest" : "water"}">${tree.harvestable ? "采摘" : "浇水"}</button>`

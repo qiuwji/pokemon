@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -53,7 +54,7 @@ function fixture({ hooks = [] } = {}) {
     enemyParty: [e],
     db,
     rng,
-    bag: {},
+    bag: createBag({}),
     trainer: true,
     formDefinitions: forms,
     traits: { abilities: GEN3_ABILITIES, heldItems: {}, hooks },

@@ -18,9 +18,14 @@ export function createEmeraldCommandFacade(
       { map, weather, ...(durationMs !== null ? { durationMs } : {}) },
     ],
     clearWeather: (map) => ["weather.clear", { map }],
-    teachMove: (method, uid, index) => [
+    teachMove: (method, uid, index, slot) => [
       "learning.teach",
-      { method, uid, ...(index !== undefined ? { index } : {}) },
+      {
+        method,
+        uid,
+        ...(index !== undefined ? { index } : {}),
+        ...(slot ? { slot } : {}),
+      },
     ],
     cropAction: (id, action, kind) => [
       "crop.action",
@@ -43,9 +48,9 @@ export function createEmeraldCommandFacade(
     chooseStarter: (species) => ["starter.choose", { species }],
     turn: (action) => ["battle.action", action],
     setLead: (index) => ["party.lead", { uid: uidAt(game.state.party, index) }],
-    useItem: (item, index) => [
+    useItem: (item, index, slot) => [
       "item.use",
-      { item, uid: uidAt(game.state.party, index) },
+      { item, uid: uidAt(game.state.party, index), ...(slot ? { slot } : {}) },
     ],
     performItemAction: (item, action) => ["item.action", { item, action }],
     registerItem: (item, action) => ["item.register", { item, action }],

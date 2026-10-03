@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -57,7 +58,7 @@ function fixture({
     db,
     rng,
     trainer: true,
-    bag: {},
+    bag: createBag({}),
     states,
     effects,
     traits: {

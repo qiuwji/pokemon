@@ -1,3 +1,4 @@
+import { emptyInventory } from "../inventory.js";
 const identifier = (id) =>
   typeof id === "string" && /^[a-zA-Z0-9_.:-]+$/.test(id);
 
@@ -33,6 +34,17 @@ export class BattleRoster {
           controller.party.length > 6
         )
           throw new Error(`Invalid controller ${controller.id}`);
+        if (
+          controller.bag !== undefined &&
+          (!controller.bag ||
+            typeof controller.bag !== "object" ||
+            Array.isArray(controller.bag) ||
+            Object.keys(controller.bag).length !== 1 ||
+            !controller.bag.pockets ||
+            typeof controller.bag.pockets !== "object" ||
+            Array.isArray(controller.bag.pockets))
+        )
+          throw new Error("Invalid controller inventory");
         for (const mon of controller.party) {
           if (
             !mon?.uid ||
@@ -48,7 +60,7 @@ export class BattleRoster {
         }
         this.controllers.set(controller.id, {
           ...controller,
-          bag: controller.bag ?? {},
+          bag: controller.bag ?? emptyInventory(),
           sideId: side.id,
         });
       }

@@ -51,13 +51,13 @@ export function validateBerryPlots(plots, catalog) {
     )
       throw new Error(`Invalid berry plot ${id}`);
   }
-  for (const map of Object.values(catalog.maps))
+  for (const [mapId, map] of Object.entries(catalog.maps))
     for (const object of map.elements || [])
       if (
         object.kind === "berryPlot" &&
         (!plots[object.plotId] ||
           plots[object.plotId].objectId !== object.id ||
-          plots[object.plotId].map !== map.id)
+          plots[object.plotId].map !== mapId)
       )
         throw new Error("Unknown berry plot reference");
 }

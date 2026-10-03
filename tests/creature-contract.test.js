@@ -1,3 +1,9 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
@@ -18,7 +24,7 @@ const state = () => ({
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [createMonster("mudkip", 5, db, new Random(4))],
   box: [],
-  bag: { potion: 1 },
+  bag: createBag({ potion: 1 }),
   flags: {},
   money: 3000,
   seen: ["mudkip"],
@@ -51,9 +57,9 @@ test("Save validates all six stats, IV/EV budgets, personality/nature, primary s
     assert.equal(validateSave(copy, db), false);
   }
   const missing = structuredClone(base);
-  missing.bag.missing = 1;
+  setQuantity(missing.bag, "missing", 1);
   assert(!validateSave(missing, db));
-  missing.bag.missing = 0;
+  setQuantity(missing.bag, "missing", 0);
   assert(validateSave(missing, db));
 });
 test("Curing sleep atomically removes its timer; custom item results reject unknown status and protected-field additions", () => {
@@ -61,13 +67,21 @@ test("Curing sleep atomically removes its timer; custom item results reject unkn
   mon.status = "sleep";
   mon.sleep = 3;
   mon.hp--;
-  const bag = { heal: 1 };
-  const service = createItemService({
-    heal: {
-      ...ITEMS.potion,
-      effects: [{ op: "cureStatus", status: "sleep" }],
+  const bag = createBag({ heal: 1 });
+  const service = createItemService(
+    {
+      heal: {
+        ...ITEMS.potion,
+        effects: [{ op: "cureStatus", status: "sleep" }],
+      },
     },
-  });
+    fixtureInventory({
+      heal: {
+        ...ITEMS.potion,
+        effects: [{ op: "cureStatus", status: "sleep" }],
+      },
+    }),
+  );
   assert(
     service.use({ id: "heal", bag, party: [mon], index: 0, context: "field" })
       .ok,
@@ -93,9 +107,12 @@ test("Curing sleep atomically removes its timer; custom item results reject unkn
       item = new ItemService(
         { potion: { ...ITEMS.potion, effects: [{ op: "custom" }] } },
         registry,
+        fixtureInventory({
+          potion: { ...ITEMS.potion, effects: [{ op: "custom" }] },
+        }),
       ),
       target = structuredClone(mon),
-      stock = { potion: 1 };
+      stock = createBag({ potion: 1 });
     assert.throws(() =>
       item.prepare({
         id: "potion",
@@ -106,7 +123,7 @@ test("Curing sleep atomically removes its timer; custom item results reject unkn
       }),
     );
     assert.deepEqual(target, mon);
-    assert.equal(stock.potion, 1);
+    assert.equal(inventoryQuantity(stock, "potion"), 1);
   }
 });
 test("Invalid injected creation policy restores seeded randomness and returns no creature", () => {

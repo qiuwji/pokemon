@@ -2,6 +2,11 @@ import { CREATION_POLICY } from "../rule-policy.js";
 import { calculateStats } from "../model.js";
 import { PartyTraits } from "../rules/party-traits.js";
 import { GrowthConditions } from "./conditions.js";
+import {
+  emptyInventory,
+  inventoryQuantity,
+  inventoryCounts,
+} from "../inventory.js";
 const fingerprint = (mon) => JSON.stringify(mon);
 /** Evolution is a checked plan followed by one commit. Animation and cancellation belong to its caller. */
 export class EvolutionService {
@@ -12,8 +17,16 @@ export class EvolutionService {
     heldItems,
     conditions = new GrowthConditions(),
     hooks = [],
+    inventory,
   }) {
-    Object.assign(this, { db, abilities, heldItems, conditions, hooks });
+    Object.assign(this, {
+      db,
+      abilities,
+      heldItems,
+      conditions,
+      hooks,
+      inventory,
+    });
     this.plans = new WeakMap();
     this.definitions = {};
     const ids = new Set();
@@ -75,7 +88,13 @@ export class EvolutionService {
   }
   prepare(
     mon,
-    { trigger = "level", item = null, hour = 12, party = [mon], bag = {} } = {},
+    {
+      trigger = "level",
+      item = null,
+      hour = 12,
+      party = [mon],
+      bag = emptyInventory(),
+    } = {},
   ) {
     if (
       mon.egg ||
@@ -92,7 +111,7 @@ export class EvolutionService {
       item,
       hour,
       party,
-      bag,
+      bag: inventoryCounts(bag),
       actorUid: mon.uid,
       allowed: true,
     };
@@ -108,10 +127,7 @@ export class EvolutionService {
         rule.trigger === trigger && this.conditions.test(rule.conditions, c),
     );
     const rule = matches.at(-1);
-    if (
-      !rule ||
-      (trigger === "item" && !(Number.isInteger(bag[item]) && bag[item] > 0))
-    )
+    if (!rule || (trigger === "item" && !(inventoryQuantity(bag, item) > 0)))
       return null;
     const extraRule = rule.extra
       ? typeof rule.extra === "string"
@@ -121,11 +137,22 @@ export class EvolutionService {
     const extra =
       extraRule &&
       party.length < 6 &&
-      (!extraRule.requiredItem || bag[extraRule.requiredItem] > 0)
+      (!extraRule.requiredItem ||
+        inventoryQuantity(bag, extraRule.requiredItem) > 0)
         ? extraRule.species
         : null;
     if (extra && party.some((m) => m.uid === `${mon.uid}:evolution:${extra}`))
       return null;
+    const operations = [
+      ...(trigger === "item" ? [{ kind: "remove", item, count: 1 }] : []),
+      ...(extra && extraRule.consumeItem && extraRule.requiredItem
+        ? [{ kind: "remove", item: extraRule.requiredItem, count: 1 }]
+        : []),
+    ];
+    const cost = operations.length
+      ? this.inventory.prepare(bag, operations)
+      : null;
+    if (cost && !cost.ok) return null;
     const plan = Object.freeze({
       uid: mon.uid,
       from: mon.species,
@@ -141,10 +168,9 @@ export class EvolutionService {
       bag,
       rule,
       extraRule,
-      extraCost: extraRule?.requiredItem ? bag[extraRule.requiredItem] : null,
+      cost,
+      bagFingerprint: JSON.stringify(bag),
       fingerprint: fingerprint(mon),
-      itemCount: bag[item],
-      ballCount: bag.pokeball,
       partyUids: party.map((m) => m.uid).join("|"),
     });
     return plan;
@@ -157,10 +183,7 @@ export class EvolutionService {
     if (
       fingerprint(mon) !== saved.fingerprint ||
       saved.partyUids !== party.map((m) => m.uid).join("|") ||
-      bag[plan.item] !== saved.itemCount ||
-      bag.pokeball !== saved.ballCount ||
-      (saved.extraRule?.requiredItem &&
-        bag[saved.extraRule.requiredItem] !== saved.extraCost)
+      JSON.stringify(bag) !== saved.bagFingerprint
     )
       return { ok: false, reason: "Evolution conditions changed" };
     if (cancel) {
@@ -223,14 +246,13 @@ export class EvolutionService {
       if (draft.pendingMoves?.length) draft.growthCompanions = [spawned.uid];
     }
     // Stage every calculation and reference before changing the live creature or costs.
+    if (saved.cost && !this.inventory.commit(saved.cost, bag))
+      return { ok: false, reason: "Evolution inventory changed" };
     for (const key of Object.keys(mon))
       if (!Object.hasOwn(draft, key)) delete mon[key];
     Object.assign(mon, draft);
-    if (plan.trigger === "item") bag[plan.item]--;
     if (spawned) {
       party.push(spawned);
-      if (saved.extraRule.consumeItem && saved.extraRule.requiredItem)
-        bag[saved.extraRule.requiredItem]--;
     }
     this.plans.delete(plan);
     return {

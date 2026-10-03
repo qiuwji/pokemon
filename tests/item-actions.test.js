@@ -1,3 +1,9 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -156,9 +162,9 @@ test("Item actions retain immutable declared inputs, recheck ownership, respect 
 test("Ordinary consumable use cannot consume an action item; battles have no hidden potion or ball content", () => {
   const s = fixture();
   const definitions = { kit: item },
-    bag = { kit: 1 };
+    bag = createBag({ kit: 1 });
   assert.equal(
-    createItemService(definitions).use({
+    createItemService(definitions, fixtureInventory(definitions)).use({
       id: "kit",
       bag,
       party: s.game.state.party,
@@ -167,13 +173,13 @@ test("Ordinary consumable use cannot consume an action item; battles have no hid
     }).ok,
     false,
   );
-  assert.equal(bag.kit, 1);
+  assert.equal(inventoryQuantity(bag, "kit"), 1);
   const battle = new Battle({
     db: s.db,
     rng: s.game.rng,
     party: s.game.state.party,
     enemy: createMonster("zigzagoon", 5, s.db, s.game.rng),
-    bag: { potion: 1, pokeball: 1 },
+    bag: createBag({ potion: 1, pokeball: 1 }),
   });
   const mon = battle.party[0];
   mon.hp = 1;
@@ -182,7 +188,7 @@ test("Ordinary consumable use cannot consume an action item; battles have no hid
     "invalid",
   );
   assert.equal(battle.act({ kind: "potion" })[0].kind, "invalid");
-  assert.equal(battle.bag.potion, 1);
+  assert.equal(inventoryQuantity(battle.bag, "potion"), 1);
 });
 test("Research and old bicycle flags grant no capability; each actual bicycle has distinct inventory ownership", async () => {
   const { game: g, bus } = fixture();
@@ -206,16 +212,16 @@ test("Research and old bicycle flags grant no capability; each actual bicycle ha
   );
   assert.equal(typeof g.claimFieldEquipment, "undefined");
   assert.equal(bus.definition("core.movement.equipment"), undefined);
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   assert.equal(g.setMovementMode("acro-bike").ok, false);
   assert.equal(g.setMovementMode("mach-bike").ok, true);
   assert.equal(g.fieldCapabilities()["acro-bike"], false);
-  assert.equal(g.state.bag.mach_bike, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "mach_bike"), 1);
 });
 test("A bicycle bag command plays the existing field scene, toggles riding, preserves facing and RNG, and survives save reload", async () => {
   const s = fixture(),
     g = s.game;
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   const seed = g.rng.seed,
     position = { ...g.state.position };
   assert.equal(
@@ -229,7 +235,7 @@ test("A bicycle bag command plays the existing field scene, toggles riding, pres
     true,
   );
   assert.equal(g.state.movement.mode, "mach-bike");
-  assert.equal(g.state.bag.mach_bike, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "mach_bike"), 1);
   assert.deepEqual(g.state.position, position);
   assert.equal(g.rng.seed, seed);
   assert.equal(g.actionBusy, false);
@@ -240,7 +246,7 @@ test("A bicycle bag command plays the existing field scene, toggles riding, pres
   assert.equal(g.state.movement.mode, "mach-bike");
   assert.equal((await g.performItemAction("mach_bike", "use")).ok, true);
   assert.equal(g.state.movement.mode, "walk");
-  assert.equal(g.state.bag.mach_bike, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "mach_bike"), 1);
 });
 test("Native cycling metadata permits an indoor cave and forbids a building; explicit custom map policy overrides the header", async () => {
   const s = fixture();
@@ -253,10 +259,10 @@ test("Native cycling metadata permits an indoor cave and forbids a building; exp
     true,
   );
   const indoor = fixture({ map: { indoor: true, allowBike: true } }).game;
-  indoor.state.bag.acro_bike = 1;
+  setQuantity(indoor.state.bag, "acro_bike", 1);
   assert.equal(indoor.setMovementMode("acro-bike").ok, true);
   const forbidden = fixture({ map: { allowBike: false } }).game;
-  forbidden.state.bag.mach_bike = 1;
+  setQuantity(forbidden.state.bag, "mach_bike", 1);
   assert.equal(
     (await forbidden.performItemAction("mach_bike", "use")).ok,
     false,
@@ -264,7 +270,7 @@ test("Native cycling metadata permits an indoor cave and forbids a building; exp
 });
 test("Rails and cycling-road rules cannot be bypassed by either the item command or direct movement command", async () => {
   const { game: g, bus } = fixture();
-  g.state.bag.acro_bike = 1;
+  setQuantity(g.state.bag, "acro_bike", 1);
   assert.equal(g.setMovementMode("acro-bike").ok, true);
   for (const rail of [
     BEHAVIOR.VERTICAL_RAIL,
@@ -292,11 +298,11 @@ test("Inventory changes during item choreography invalidate the shared field pla
     onWait(game) {
       if (!changed && game.actionBusy) {
         changed = true;
-        game.state.bag.mach_bike = 0;
+        setQuantity(game.state.bag, "mach_bike", 0);
       }
     },
   });
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   assert.equal((await g.performItemAction("mach_bike", "use")).ok, false);
   assert.equal(g.state.movement.mode, "walk");
   assert.equal(g.actionBusy, false);
@@ -319,10 +325,10 @@ test("Fishing uses the corresponding rod inventory, retains the rod, and rejects
   });
   g.state.flags.oldRod = true;
   assert.equal(g.inspectFieldAction("fishing", { rod: "old" }).ok, false);
-  g.state.bag.old_rod = 1;
+  setQuantity(g.state.bag, "old_rod", 1);
   assert.equal(g.inspectFieldAction("fishing", { rod: "good" }).ok, false);
   assert.equal((await g.performItemAction("old_rod", "use")).ok, true);
-  assert.equal(g.state.bag.old_rod, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "old_rod"), 1);
   g.patchWorld([
     { kind: "tile", map: "Lab", x: 2, y: 3, behavior: BEHAVIOR.WATERFALL },
   ]);
@@ -339,7 +345,7 @@ test("Fishing uses the corresponding rod inventory, retains the rod, and rejects
   ]);
   assert.equal(g.inspectFieldAction("fishing", { rod: "old" }).ok, false);
   const underwater = fixture({ map: { underwater: true, behavior } }).game;
-  underwater.state.bag.old_rod = 1;
+  setQuantity(underwater.state.bag, "old_rod", 1);
   assert.equal(
     underwater.inspectFieldAction("fishing", { rod: "old" }).ok,
     false,
@@ -348,16 +354,16 @@ test("Fishing uses the corresponding rod inventory, retains the rod, and rejects
 test("Save validation rejects unowned active bicycles and retains inventory-backed modes through restore", () => {
   const s = fixture(),
     g = s.game;
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   g.setMovementMode("mach-bike");
   assert(validateSave(g.state, g.db, s.catalog, s.host));
   const invalid = structuredClone(g.state);
-  invalid.bag.mach_bike = 0;
+  setQuantity(invalid.bag, "mach_bike", 0);
   assert.equal(validateSave(invalid, g.db, s.catalog, s.host), false);
   assert.throws(() =>
     g.loadDocument({ ...g.exportDocument(), state: invalid }),
   );
-  assert.equal(g.state.bag.mach_bike, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "mach_bike"), 1);
   assert.equal(g.state.movement.mode, "mach-bike");
 });
 test("Plugin content composes a new key item with a registered field action and the existing bag, command and world overlay", async () => {
@@ -386,7 +392,7 @@ test("Plugin content composes a new key item with a registered field action and 
   };
   const s = fixture({ plugins: [plugin] }),
     g = s.game;
-  g.state.bag["kit:brush"] = 1;
+  setQuantity(g.state.bag, "kit:brush", 1);
   let buttons = [],
     html = "",
     updates = 0;
@@ -435,7 +441,7 @@ test("Plugin content composes a new key item with a registered field action and 
   // UI callback schedules one async scene; allow its command to settle.
   for (let i = 0; i < 30; i++) await Promise.resolve();
   assert.equal(g.world.map.behavior[6], 2);
-  assert.equal(g.state.bag["kit:brush"], 1);
+  assert.equal(inventoryQuantity(g.state.bag, "kit:brush"), 1);
   assert(frozen);
   assert(updates > 0);
   assert.equal(
@@ -451,7 +457,7 @@ test("Plugin content composes a new key item with a registered field action and 
   const saved = g.exportDocument();
   g.loadDocument(saved);
   assert.equal(g.world.map.behavior[6], 1);
-  assert.equal(g.state.bag["kit:brush"], 1);
+  assert.equal(inventoryQuantity(g.state.bag, "kit:brush"), 1);
   const invalid = {
     ...plugin,
     id: "badkit",
@@ -515,7 +521,7 @@ test("Public item queries expose declared actions and permissionless plugins can
     },
   };
   const { game: g, bus } = fixture({ plugins: [plugin] });
-  g.state.bag.mach_bike = 1;
+  setQuantity(g.state.bag, "mach_bike", 1);
   const view = bus.executeSync("core.query", {}, "ui");
   assert.deepEqual(
     view.itemActions.mach_bike.map((a) => ({ id: a.id, ok: a.ok })),
@@ -529,5 +535,5 @@ test("Public item queries expose declared actions and permissionless plugins can
     }),
   );
   assert.equal(g.state.movement.mode, "walk");
-  assert.equal(g.state.bag.mach_bike, 1);
+  assert.equal(inventoryQuantity(g.state.bag, "mach_bike"), 1);
 });

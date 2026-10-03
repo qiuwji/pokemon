@@ -1,0 +1,66 @@
+✔ Inventory save10 persists only slots, keeps fragments across reload, rejects old counts and preserves live query ports (36.598833ms)
+✔ A full shop cannot deduct money; a partial stack accepts the purchase without requiring an empty slot (9.186292ms)
+✔ Story rewards preflight the whole bundle; full bags never commit money, flags or ledgers and old grant is rejected (11.091209ms)
+✔ Removing or swapping held items respects return capacity; a same-pocket swap can reuse the freed slot (7.633459ms)
+✖ Harvesting rejects the entire yield before clearing a ripe tree and can succeed later when stack space is available (2.721625ms)
+✔ Item plans use the selected stack, refuse moved or replaced containers, and never heal on stale costs (7.604ms)
+✔ The real bag page renders distinct stacks and its command facade consumes the clicked second stack (8.84225ms)
+✔ Independent allied battle controllers can each spend their own one-item container in the same round (11.801625ms)
+✔ Plugin pockets flow through reward, page, use and save; failed transactions restore slots, target and memory (28.138ms)
+✔ Capacity preview and story itemSpace queries use registered policies without mutating state or permitting a commit (8.597541ms)
+✖ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (2.477042ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 9
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.482708
+
+✖ failing tests:
+
+test at tests/inventory-integration.test.js:212:1
+✖ Harvesting rejects the entire yield before clearing a ripe tree and can succeed later when stack space is available (2.721625ms)
+  Error: Unknown berry plot reference
+      at validateBerryPlots (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/berries.js:62:15)
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/extensions.js:95:5
+      at ExtensionCatalog.seal (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/catalog.js:116:5)
+      at PluginHost.seal (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/plugin-host.js:457:25)
+      at createEmeraldPlugins (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/extensions.js:90:24)
+      at session (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory-integration.test.js:22:20)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory-integration.test.js:213:28)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+
+test at tests/inventory-integration.test.js:528:1
+✖ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (2.477042ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /口袋/. Input:
+  
+  'Error: Invalid trainer stock:medic'
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory-integration.test.js:557:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Invalid trainer stock:medic
+        at validateTrainers (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/trainer-encounters.js:83:13)
+        at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/extensions.js:104:5
+        at ExtensionCatalog.seal (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/catalog.js:116:5)
+        at PluginHost.seal (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/plugin-host.js:457:25)
+        at createEmeraldPlugins (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/extensions.js:90:24)
+        at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory-integration.test.js:557:23
+        at getActual (node:assert:580:5)
+        at strict.throws (node:assert:728:24)
+        at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory-integration.test.js:557:10)
+        at Test.runInAsyncScope (node:async_hooks:226:14),
+    expected: /口袋/,
+    operator: 'throws',
+    diff: 'simple'
+  }

@@ -1,18 +1,18 @@
 # 可保存的登记道具与快捷操作
 
-已实现并针对性验证：登记/取消、使用时重新资格检查、缺物品清理、单/多行动插件、背包登记界面、键盘 C/触屏 SELECT、公共命令和当前保存格式。原作其他关键道具与完整道具获得/口袋容量不是本模块的完成范围，见后续 INVENTORY_DESIGN.md。
+已实现并针对性验证：登记/取消、使用时重新资格检查、缺物品清理、单/多行动插件、背包登记界面、键盘 C/触屏 SELECT、公共命令和当前保存格式。原作其他关键道具与完整道具获得剧情不是本模块的完成范围；槽位容量与应用接线现已完成，见 INVENTORY.md。
 
 ## 单一职责
 
 `engine/item-shortcut.js` 只拥有选择生命周期，接收 selection/quantity/setSelection/inspect/perform/emit 有限端口；不读取整个 game、DOM、地图 ID、徽章、按键或 RNG。动作的资格、计划/指纹、导演与提交仍归 ItemActionService/FieldActionService。
 
-`ItemShortcutApplication` 是第 20 个职责应用，保存 registeredItem 字段的写入用例，协调锁、UI 更新、事实与保存；不导入兄弟应用。注册/取消从背包模态界面允许，战斗、剧情、移动和对话时拒绝；快捷使用也要求模态界面已关闭。adventure 仍为 147 行组合入口，新增端口由 public-ports 显式路由，未增转发或核心用例。
+`ItemShortcutApplication` 是第 20 个职责应用，保存 registeredItem 字段的写入用例，协调锁、UI 更新、事实与保存；不导入兄弟应用。注册/取消从背包模态界面允许，战斗、剧情、移动和对话时拒绝；快捷使用也要求模态界面已关闭。adventure 仍为 149 行组合入口，新增端口由 public-ports 显式路由，未增转发或核心用例。
 
 ## 内容与状态合同
 
 字段 `item.registerable?:boolean`：true 只用于 target=field、已有 actions 的物品。绿宝石两辆车和三种鱼竿声明 true；普通伤药、球和机器不能登记。插件可显式为自己的行动道具声明 true，不写死关键道具 ID 或口袋名称。
 
-开发保存版本 **9** 要求 `state.registeredItem`：
+当前保存版本 **10** 要求 `state.registeredItem`：
 
 ```js
 null
@@ -61,3 +61,5 @@ SELECT 与 A/B 使用两行像素控制布局，避免三个按钮横向挤压�
 对话锁/导入字段顺序的收尾改变只检查对应项。npm run check 内容/严格类型/251模块通过，商店收尾内容再次通过。证据、范围及源码 hash 见 docs/validation/2026-10-03-item-shortcut/manifest.json。没有重复全部测试或冒充 E 浏览器验收；最新全量基线仍为1851e9d 556项。
 
 选择身份、内容声明、资格/锁、路由/依赖/保存或输入/UI改变才使对应证据失效。后续槽位库存迁移会影响 quantity 与保存边界，须重查此模块的相关组合，但不另建快捷系统。
+
+槽位迁移更新（2026-10-03）：数量资格读取冻结派生投影，保存仅写槽位；所选消费位置经公开命令重新验证，计划成本交由统一库存领域。当前保存10，旧版本拒绝。组合证据见 [库存验收](../validation/2026-10-03-inventory-integration/manifest.json)，本模块未变更的规则/表现证据继续沿用。

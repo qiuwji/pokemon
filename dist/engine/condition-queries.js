@@ -1,3 +1,4 @@
+import { inventoryQuantity, inventoryCounts } from "./inventory.js";
 import {
   objectSchema,
   validateSchema,
@@ -23,7 +24,16 @@ export const CONDITION_QUERIES = {
   money: { schema: objectSchema(), read: (s) => s.money },
   itemCount: {
     schema: objectSchema({ item: id }, ["item"]),
-    read: (s, { item }) => s.bag[item] || 0,
+    read: (s, { item }) => inventoryQuantity(s.bag, item),
+  },
+  itemSpace: {
+    schema: objectSchema({ item: id, count: { type: "integer", minimum: 1 } }, [
+      "item",
+      "count",
+    ]),
+    read: () => {
+      throw new Error("Inventory policy is required for itemSpace");
+    },
   },
   partyCount: {
     schema: objectSchema(),
@@ -44,9 +54,15 @@ export const CONDITION_QUERIES = {
 };
 /** Registered predicates query detached progress; built-ins read narrow scalar values without cloning full state. */
 export class ConditionQueries {
-  constructor(definitions = {}) {
+  constructor(definitions = {}, { inventory } = {}) {
     this.definitions = new Map(Object.entries(CONDITION_QUERIES));
     this.custom = new Set();
+    if (inventory)
+      this.definitions.set("itemSpace", {
+        ...CONDITION_QUERIES.itemSpace,
+        read: (state, { item, count }) =>
+          inventory.preview(state.bag, [{ kind: "add", item, count }]).ok,
+      });
     for (const [id, def] of Object.entries(definitions)) {
       if (this.definitions.has(id) || typeof def?.read !== "function")
         throw new Error(`Invalid condition query ${id}`);
@@ -74,7 +90,7 @@ export class ConditionQueries {
       ? readOnly({
           position: state.position,
           party: state.party,
-          bag: state.bag,
+          bag: inventoryCounts(state.bag),
           money: state.money,
           flags: state.flags,
           story: state.story,

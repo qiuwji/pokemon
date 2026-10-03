@@ -132,3 +132,29 @@ test("Example plugins depend only on public extension utilities", () => {
     );
   }
 });
+
+test("Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans", () => {
+  for (const file of modules(base.pathname)) {
+    const source = fs
+      .readFileSync(file, "utf8")
+      .replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "");
+    assert(
+      !/\bbag(?:\[[^\]]+\]|\.(?!pockets\b)[A-Za-z_$]\w*)\s*(?:=(?!=)|\+\+|--|\+=|-=)/.test(
+        source,
+      ),
+      file,
+    );
+    if (
+      file.endsWith("-interface.js") ||
+      ["interface.js", "ui-shell.js"].includes(path.basename(file))
+    ) {
+      assert(!/\binventory\.(?:apply|prepare|commit)\s*\(/.test(source), file);
+      assert(
+        !/\.pockets(?:\.[A-Za-z_$]\w*|\[[^\]]+\])*\s*(?:=(?!=)|\+\+|--|\+=|-=)/.test(
+          source,
+        ),
+        file,
+      );
+    }
+  }
+});

@@ -1,3 +1,8 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+} from "./helpers/inventory-fixture.js";
 import { createItemService } from "../dist/engine/items.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import test from "node:test";
@@ -30,14 +35,14 @@ function setup({ reserve = false, rules = {}, effects = {} } = {}) {
     m.stats.spe = 100 - i * 10;
   }
   const b = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     party,
     enemyParty,
     trainer: true,
     format: "doubles",
     db,
     rng,
-    bag: { potion: 1 },
+    bag: createBag({ potion: 1 }),
     effects,
     rules: {
       accuracy: () => true,
@@ -193,9 +198,9 @@ test("Shared inventory reservations reject overspending; two valid items cannot 
     b.act({ kind: "item", seat: "home:1", item: "potion", index: 1 })[0].kind,
     "invalid",
   );
-  assert.equal(b.bag.potion, 1);
+  assert.equal(inventoryQuantity(b.bag, "potion"), 1);
   b.act(move("home:1", "away:1"));
-  assert.equal(b.bag.potion, 0);
+  assert.equal(inventoryQuantity(b.bag, "potion"), 0);
   assert(party[0].hp > 1);
 });
 test("Friendly single-target attacks are legal, but do not redirect to enemies when an ally target is lost", () => {
@@ -229,16 +234,21 @@ test("Multi-target damage passes generation-III spread policy while all-others d
 });
 test("Two independent human controllers on one alliance share the scheduler and keep their own inventory/party", () => {
   const { party, enemyParty, rng } = setup();
-  const topology = teamRoster([party[0]], enemyParty, { potion: 0 }, 1);
+  const topology = teamRoster(
+    [party[0]],
+    enemyParty,
+    createBag({ potion: 0 }),
+    1,
+  );
   topology.sides[0].controllers.push({
     id: "partner",
     kind: "human",
     party: [party[1]],
-    bag: { potion: 1 },
+    bag: createBag({ potion: 1 }),
   });
   topology.sides[0].seats.push({ id: "partner:0", controllerId: "partner" });
   const b = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     topology,
     trainer: true,
     db,
@@ -247,13 +257,13 @@ test("Two independent human controllers on one alliance share the scheduler and 
   b.act(move("home:0", "away:0"));
   assert.equal(b.commandSeat, "partner:0");
   assert.equal(b.party[0].uid, party[1].uid);
-  assert.equal(b.bag.potion, 1);
+  assert.equal(inventoryQuantity(b.bag, "potion"), 1);
   b.act(move("partner:0", "away:0"));
   assert.equal(b.turn, 1);
 });
 test("Three alliances continue after one opposing team is eliminated and settle only the last surviving alliance", () => {
   const { party, enemyParty, rng } = setup();
-  const topology = teamRoster(party, enemyParty, {}, 2);
+  const topology = teamRoster(party, enemyParty, createBag(), 2);
   const third = createMonster("ralts", 4, db, rng);
   third.moves = [{ id: "tackle", pp: 35 }];
   topology.sides.push({
@@ -263,7 +273,7 @@ test("Three alliances continue after one opposing team is eliminated and settle 
     seats: [{ id: "third:0", controllerId: "third-owner" }],
   });
   const b = new Battle({
-    items: createItemService(ITEMS),
+    items: createItemService(ITEMS, fixtureInventory(ITEMS)),
     topology,
     trainer: true,
     db,
@@ -300,8 +310,9 @@ test("Doubles and free-for-all content construct valid encounters and reject mis
   assert.throws(
     () =>
       createTrainerEncounter(TRAINERS.doubles, {
+        inventory: fixtureInventory(),
         party: [party[0]],
-        bag: {},
+        bag: createBag({}),
         db,
         rng,
       }),
@@ -310,13 +321,14 @@ test("Doubles and free-for-all content construct valid encounters and reject mis
   assert.equal(rng.seed, seed);
   for (const trainer of [TRAINERS.doubles, TRAINERS.freeForAll]) {
     const encounter = createTrainerEncounter(trainer, {
+      inventory: fixtureInventory(),
       party,
-      bag: {},
+      bag: createBag({}),
       db,
       rng,
     });
     const b = new Battle({
-      items: createItemService(ITEMS),
+      items: createItemService(ITEMS, fixtureInventory(ITEMS)),
       ...encounter,
       party,
       db,

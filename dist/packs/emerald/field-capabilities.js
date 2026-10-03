@@ -1,3 +1,4 @@
+import { inventoryQuantity } from "../../engine/inventory.js";
 /** Inventory and badge/move qualifications are pack policy, shared by live movement and save validation. */
 export const BIKE_ITEMS = Object.freeze({
   "mach-bike": "mach_bike",
@@ -16,7 +17,7 @@ export function emeraldFieldCapabilities(state) {
     ...Object.fromEntries(
       Object.entries(BIKE_ITEMS).map(([mode, item]) => [
         mode,
-        state.bag[item] > 0,
+        inventoryQuantity(state.bag, item) > 0,
       ]),
     ),
     surf: !!state.flags.badgeBalance && knows("surf"),

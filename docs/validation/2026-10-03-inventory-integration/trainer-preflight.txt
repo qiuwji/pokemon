@@ -1,0 +1,10 @@
+✔ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (22.894791ms)
+✔ Doubles and free-for-all content construct valid encounters and reject missing partners before consuming RNG (12.197667ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 132.621291

@@ -10,6 +10,8 @@ import type {
   FieldMechanismDefinition,
   FieldDeviceDefinition,
   LearningMethodDefinition,
+  InventoryView,
+  InventoryFailure,
 } from "../dist/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
@@ -304,3 +306,14 @@ const invalidSlotAddition: import("../dist/engine/contracts.js").InventoryOperat
     slot: { pocket: "items", item: "potion", index: 3 },
   };
 void [selectedRemoval, invalidSlotAddition];
+
+function inventoryReader(view: InventoryView, failure: InventoryFailure) {
+  const count: number = view.counts.potion || 0;
+  const code: "full" | "insufficient" | "stale-slot" = failure.code;
+  // @ts-expect-error Inventory projections never provide a write port.
+  view.counts.potion = count;
+  // @ts-expect-error Nested slot projections are immutable as well.
+  view.pockets.items.slots[0]!.count = count;
+  return { count, code };
+}
+void inventoryReader;

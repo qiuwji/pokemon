@@ -1,0 +1,11 @@
+✔ tests/growth-integration.test.js (69.239584ms)
+✔ Topology expresses doubles, shared controllers, multiple controllers and three alliances without changing UID (6.924625ms)
+✔ Topology validation rejects duplicate UIDs, bad targets and double occupation before any external mutation (2.716417ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 88.50275

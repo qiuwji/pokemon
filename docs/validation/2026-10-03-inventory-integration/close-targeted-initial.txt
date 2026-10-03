@@ -1,0 +1,31 @@
+✔ Adventure remains a composition facade; application services cannot import it or reach sibling services (1.7355ms)
+✔ Every public method uses its declared owner, preserves receivers/results and follows replacement services (1.65775ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (30.500208ms)
+✔ A plugin declares its plot and uses public planting, watering and harvesting commands with saved time (26.926333ms)
+✔ Off-map and unripe operations do not consume inventory and plot interactions route to the crop page (10.749ms)
+✔ Missing plot/object references fail during plugin content assembly (1.957875ms)
+✔ tests/growth-integration.test.js (121.221083ms)
+✔ Battle rejects old or unvalidated inventories before play and rejects slot references on non-item actions (28.597459ms)
+✖ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (12.495625ms)
+✔ Authored initial stock uses the registered capacity; invalid stock is not a save migration path (1.762958ms)
+✔ A capacity preview is detached, frozen and never a committable plan (1.220333ms)
+✔ Doubles and free-for-all content construct valid encounters and reject missing partners before consuming RNG (17.77775ms)
+✔ Trainer defeat is party-based: each faint awards once, replacement waits until the round ends (14.3585ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 187.424167
+
+✖ failing tests:
+
+test at tests/inventory-integration.test.js:584:1
+✖ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (12.495625ms)
+  TypeError: Cannot read properties of undefined (reading 'bag')
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory-integration.test.js:639:56)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)

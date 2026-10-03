@@ -67,7 +67,9 @@ export class EmeraldAdventure {
       plugins,
       catalog,
     });
-    this.conditionQueries = new ConditionQueries(catalog.conditionQueries);
+    this.conditionQueries = new ConditionQueries(catalog.conditionQueries, {
+      inventory: { preview: (...args) => this.inventory.preview(...args) },
+    });
     this.itemDefinitions = catalog.items;
     this.trainerDefinitions = catalog.trainers || TRAINERS;
     this.battleStrategies = new BattleStrategyRegistry(

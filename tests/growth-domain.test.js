@@ -1,3 +1,9 @@
+import {
+  createBag,
+  fixtureInventory,
+  inventoryQuantity,
+  setQuantity,
+} from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -72,8 +78,12 @@ test("Malformed egg clocks fail before mutating a clock or a different egg", () 
 test("Everstone prevents level, item and trade evolution; cancellation is idempotent and keeps UID/HP", () => {
   const m = mon(),
     party = [m],
-    bag = {},
-    service = new EvolutionService({ db: original, ...services });
+    bag = createBag({}),
+    service = new EvolutionService({
+      inventory: fixtureInventory(),
+      db: original,
+      ...services,
+    });
   m.hp = 0;
   m.heldItem = "everstone";
   assert.equal(service.prepare(m, { party, bag }), null);
@@ -115,7 +125,11 @@ for (const item of [
         ],
       },
     };
-    const e = new EvolutionService({ db, ...services }),
+    const e = new EvolutionService({
+        inventory: fixtureInventory(),
+        db,
+        ...services,
+      }),
       plan = e.prepare(m, { trigger: "trade" });
     assert(plan);
     assert.equal(m.heldItem, item);
@@ -148,6 +162,7 @@ test("Level, friendship/time, stat, personality and beauty conditions compose th
     },
   ];
   const e = new EvolutionService({
+    inventory: fixtureInventory(),
     db: { ...original, evolutions: { treecko: rules } },
     ...services,
   });
@@ -161,7 +176,7 @@ test("Level, friendship/time, stat, personality and beauty conditions compose th
 });
 test("Item evolution uses a stale-safe one-use plan and does not mutate inventory during query or cancellation", () => {
   const m = mon(),
-    bag = { leaf_stone: 2 },
+    bag = createBag({ leaf_stone: 2 }),
     db = {
       ...original,
       evolutions: {
@@ -175,16 +190,20 @@ test("Item evolution uses a stale-safe one-use plan and does not mutate inventor
         ],
       },
     };
-  const e = new EvolutionService({ db, ...services });
+  const e = new EvolutionService({
+    inventory: fixtureInventory(),
+    db,
+    ...services,
+  });
   const p = e.prepare(m, { trigger: "item", item: "leaf_stone", bag });
   assert(p);
-  assert.equal(bag.leaf_stone, 2);
-  bag.leaf_stone = 1;
+  assert.equal(inventoryQuantity(bag, "leaf_stone"), 2);
+  setQuantity(bag, "leaf_stone", 1);
   assert.equal(e.commit(p).ok, false);
   assert.equal(m.species, "treecko");
   const q = e.prepare(m, { trigger: "item", item: "leaf_stone", bag });
   assert.equal(e.commit(q).ok, true);
-  assert.equal(bag.leaf_stone, 0);
+  assert.equal(inventoryQuantity(bag, "leaf_stone"), 0);
   assert.equal(e.commit(q).ok, false);
 });
 test("Breeding validates compatibility and all offspring move references before consuming RNG", () => {

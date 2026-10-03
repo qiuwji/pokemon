@@ -112,14 +112,13 @@ export function validateReward(reward, items = {}) {
       throw new Error(`Invalid reward flag ${id}`);
 }
 /** Atomic, idempotent persistent reward. Animation failures cannot grant it twice. */
-export function grantReward(state, reward, { items = {} } = {}) {
+export function grantReward(state, reward, { items = {}, inventory } = {}) {
   validateReward(reward, items);
   const progress = state.story || emptyStoryProgress();
   if (!validStoryProgress(progress)) throw new Error("Invalid story progress");
   if (progress.rewards.includes(reward.id)) return false;
   const draft = {
     flags: { ...state.flags },
-    bag: { ...state.bag },
     money: state.money,
     story: structuredClone(progress),
   };
@@ -127,13 +126,17 @@ export function grantReward(state, reward, { items = {} } = {}) {
     draft.money += reward.money;
     if (!Number.isSafeInteger(draft.money)) throw new Error("Money overflow");
   }
-  for (const [id, count] of Object.entries(reward.items || {})) {
-    draft.bag[id] = (draft.bag[id] || 0) + count;
-    if (!Number.isSafeInteger(draft.bag[id]))
-      throw new Error(`Item overflow ${id}`);
-  }
   Object.assign(draft.flags, reward.flags);
   draft.story.rewards.push(reward.id);
+  const operations = Object.entries(reward.items || {}).map(
+    ([item, count]) => ({ kind: "add", item, count }),
+  );
+  if (operations.length) {
+    const plan = inventory.prepare(state.bag, operations);
+    if (!plan.ok) throw new Error(plan.reason);
+    if (!inventory.commit(plan, state.bag))
+      throw new Error("Reward inventory plan expired");
+  }
   Object.assign(state, draft);
   return true;
 }

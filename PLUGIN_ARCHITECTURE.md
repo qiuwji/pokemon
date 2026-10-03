@@ -1,6 +1,6 @@
 # 插件 API 1：启动注册、受限事务和声明式界面
 
-当前工程版本 v0.15.0，插件 API 1，开发存档 envelope 8。插件是项目内受信任 ES 模块，在启动时装配。它不是第三方代码沙箱，不支持运行中的安装/热卸载。项目内插件也须遵守接口边界，不能自行访问 DOM、全局游戏实例或存储。
+当前工程版本 v0.16.0，插件 API 1，开发存档 envelope 10。插件是项目内受信任 ES 模块，在启动时装配。它不是第三方代码沙箱，不支持运行中的安装/热卸载。项目内插件也须遵守接口边界，不能自行访问 DOM、全局游戏实例或存储。
 
 ## 依赖方向与生命周期
 
@@ -88,4 +88,6 @@ const plugin = {
 
 关键道具 `items.actions` 可绑定已注册 fieldActions；现有背包自动提供单/多行动入口，core.query 返回持有道具的行动预览，core.item.action 同时用于 UI/网络/授权插件。异步执行复用野外规则/计划/导演与保存，不支持嵌套事务 dispatch。详见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。
 
-物品可通过 registerable:true 开放已声明行动的快捷登记，多行动选择/只读预览/公共命令与存档9共用原行动管线。详见 [ITEM_SHORTCUT.md](docs/engine/ITEM_SHORTCUT.md)。槽位库存服务和inventoryPockets注册/引用校验已实现，应用获得/消耗/页面/保存尚未迁移，不能把现有计数字典说成原作完整口袋；当前边界见 [INVENTORY.md](docs/engine/INVENTORY.md)。
+物品可通过 registerable:true 开放已声明行动的快捷登记，多行动选择/只读预览/公共命令与存档10共用原行动管线。详见 [ITEM_SHORTCUT.md](docs/engine/ITEM_SHORTCUT.md)。槽位库存服务和inventoryPockets注册/引用校验、应用获得/消耗/选槽页面/保存10均已接入，数量查询只提供派生冻结投影；当前边界见 [INVENTORY.md](docs/engine/INVENTORY.md)。
+
+库存组合合同：`api.query().bag` 是冻结数量投影，`.inventory` 是完整冻结口袋视图；`core.inventory.preview` 为无写权限的组合容量预检。reward intent 整批失败会恢复库存、个体、插件数据和领取账本。新增口袋/物品已验证领取→页面→使用→保存/重载；缺失口袋或物品所属插件保护原档。插件不直接获得 InventoryService/持久容器，见 [INVENTORY.md](docs/engine/INVENTORY.md)。

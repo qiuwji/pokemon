@@ -7,6 +7,8 @@ export class BattleActions {
     const b = this.battle;
     if (!action || typeof action !== "object")
       return { error: "无效的战斗指令。" };
+    if (action.slot !== undefined && action.kind !== "item")
+      return { error: "道具位置只能用于道具行动。" };
     if (action.kind === "cancel" && !automaticSeat)
       return b.decisions.pending.size
         ? { kind: "cancel", seat: b.commandSeat }
@@ -110,9 +112,17 @@ export class BattleActions {
           context: "battle",
           enemy: targetSeat ? b.roster.occupant(targetSeat) : null,
           canCapture: b.rules.canCapture(b),
+          slot: action.slot,
         });
         if (!plan.ok) return { error: plan.reason };
-        prepared = { ...base, kind: "item", item, index, targetSeat };
+        prepared = {
+          ...base,
+          kind: "item",
+          item,
+          index,
+          targetSeat,
+          ...(action.slot ? { slot: structuredClone(action.slot) } : {}),
+        };
         break;
       }
       case "run":
@@ -183,6 +193,7 @@ export class BattleActions {
     const plan = b.items.prepare({
       id: action.item,
       bag: owner.bag,
+      slot: action.slot,
       party: owner.party,
       index: action.index,
       context: "battle",

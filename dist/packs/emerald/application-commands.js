@@ -1,5 +1,9 @@
 import { objectSchema } from "../../engine/extensions/values.js";
 const id = { type: "string", minLength: 1, maxLength: 128 };
+const inventorySlot = objectSchema(
+  { pocket: id, item: id, index: { type: "integer", minimum: 0 } },
+  ["pocket", "item", "index"],
+);
 const empty = objectSchema();
 const byUid = objectSchema({ uid: id }, ["uid"]);
 /** Public mutations resolve stable identities at execution time; raw domain methods stay private to composition. */
@@ -7,6 +11,26 @@ export function registerEmeraldCommands(game, bus) {
   const field = () => !game.busy && !game.battle && !game.ui?.dialog;
   const partyIndex = (uid) => game.state.party.findIndex((m) => m.uid === uid);
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
+  bus.register("core.inventory.preview", {
+    schema: objectSchema(
+      {
+        additions: {
+          type: "array",
+          maxItems: 256,
+          items: objectSchema(
+            { item: id, count: { type: "integer", minimum: 1 } },
+            ["item", "count"],
+          ),
+        },
+      },
+      ["additions"],
+    ),
+    concurrent: true,
+    plugin: true,
+    network: true,
+    ready: () => true,
+    run: ({ additions }) => game.inventoryPreview(additions),
+  });
   const domainPermissions = {
     time: "time",
     weather: "weather",
@@ -206,19 +230,11 @@ export function registerEmeraldCommands(game, bus) {
       {
         kind: {
           type: "string",
-          enum: [
-            "move",
-            "switch",
-            "item",
-            "potion",
-            "ball",
-            "run",
-            "cancel",
-            "form",
-          ],
+          enum: ["move", "switch", "item", "run", "cancel", "form"],
         },
         index: { type: "integer", minimum: -1, maximum: 5 },
         item: id,
+        slot: inventorySlot,
         form: id,
         seat: id,
         actor: id,
@@ -237,8 +253,8 @@ export function registerEmeraldCommands(game, bus) {
   );
   register(
     "item.use",
-    objectSchema({ uid: id, item: id }, ["uid", "item"]),
-    ({ uid, item }) => game.useItem(item, partyIndex(uid)),
+    objectSchema({ uid: id, item: id, slot: inventorySlot }, ["uid", "item"]),
+    ({ uid, item, slot }) => game.useItem(item, partyIndex(uid), slot),
   );
   register(
     "item.equip",
@@ -323,10 +339,11 @@ export function registerEmeraldCommands(game, bus) {
         method: id,
         uid: id,
         index: { type: "integer", minimum: 0, maximum: 3 },
+        slot: inventorySlot,
       },
       ["method", "uid"],
     ),
-    ({ method, uid, index }) => game.teachMove(method, uid, index),
+    ({ method, uid, index, slot }) => game.teachMove(method, uid, index, slot),
   );
   register(
     "growth.learn",

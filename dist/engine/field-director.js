@@ -252,7 +252,6 @@ export function storyResources(c) {
     [
       "flag",
       "heal",
-      "grant",
       "reward",
       "completeEvent",
       "captureMonster",

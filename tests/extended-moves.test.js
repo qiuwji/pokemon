@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -33,7 +34,7 @@ function setup(extra = {}) {
     enemyParty: [e],
     db,
     rng,
-    bag: {},
+    bag: createBag({}),
     trainer: true,
     traits: { abilities: GEN3_ABILITIES, heldItems: {}, hooks: [] },
     rules: {

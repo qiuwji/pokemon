@@ -1,3 +1,4 @@
+import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -164,12 +165,12 @@ test("Detail interaction composes action, core item/friendship, saved memory, li
   const { game, host, bus, presentation } = gameWith(),
     mon = game.state.party[0],
     friendship = mon.friendship;
-  game.state.bag.blue_pokeblock = 2;
+  setQuantity(game.state.bag, "blue_pokeblock", 2);
   await bus.execute("companion-care:interact", {
     uid: mon.uid,
     activity: "feed",
   });
-  assert.equal(game.state.bag.blue_pokeblock, 1);
+  assert.equal(inventoryQuantity(game.state.bag, "blue_pokeblock"), 1);
   assert(mon.beauty > 0);
   assert(mon.friendship > friendship);
   assert.equal(presentation.length, 1);
@@ -201,7 +202,7 @@ test("Detail interaction composes action, core item/friendship, saved memory, li
 test("Failed feeding rolls back memory, states, inventory, friendship, events and feedback", async () => {
   const { game, host, bus, presentation } = gameWith(),
     mon = game.state.party[0];
-  game.state.bag.blue_pokeblock = 1;
+  setQuantity(game.state.bag, "blue_pokeblock", 1);
   mon.sheen = 250;
   const original = structuredClone(game.state),
     events = [];
@@ -688,7 +689,7 @@ test("Authorized plugins can use exposed domain commands and equipment removal r
   assert(
     (await api.commands.dispatch("core.movement.mode", { mode: "walk" })).ok,
   );
-  game.state.bag.oran_berry = 1;
+  setQuantity(game.state.bag, "oran_berry", 1);
   assert(
     (
       await api.commands.dispatch("core.item.equip", {
@@ -699,7 +700,7 @@ test("Authorized plugins can use exposed domain commands and equipment removal r
   );
   await bus.execute("controller:remove", { uid });
   assert.equal(game.state.party[0].heldItem, null);
-  assert.equal(game.state.bag.oran_berry, 1);
+  assert.equal(inventoryQuantity(game.state.bag, "oran_berry"), 1);
   await assert.rejects(
     api.commands.dispatch("core.growth.learn", { uid, skip: true }),
     /permission/,

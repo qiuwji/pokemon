@@ -1,4 +1,5 @@
 import { extensionGrowthConditions } from "../../../engine/extensions/growth-conditions.js";
+import { emptyInventory } from "../../../engine/inventory.js";
 import { StateCheckpoint } from "../../../engine/state-checkpoint.js";
 import { learnPendingMove } from "../../../engine/party.js";
 import { createMonster } from "../../../engine/model.js";
@@ -11,6 +12,7 @@ export const GROWTH_PORTS = Object.freeze([
   "busy",
   "canManageParty",
   "catalog",
+  "inventory",
   "clearInput",
   "db",
   "learning",
@@ -216,7 +218,7 @@ export class GrowthApplication {
         const plan = this.evolutions.prepare(mon, {
           trigger: "trade",
           party,
-          bag: {},
+          bag: emptyInventory(),
         });
         if (plan)
           await this.growthDirector.play({
@@ -257,6 +259,7 @@ export class GrowthApplication {
       abilities: this.catalog.abilities,
       heldItems: this.catalog.heldItems,
       hooks: this.ruleHooks,
+      inventory: this.inventory,
       conditions: extensionGrowthConditions(
         this.catalog.growthConditions,
         (fn, ...args) => this.plugins.runtime.evaluate(fn, ...args),

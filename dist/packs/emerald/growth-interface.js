@@ -91,11 +91,13 @@ export function createGrowthInterface(
   function showEvolutionOptions(index) {
     const mon = game.state.party[index];
     if (!mon || mon.egg) return;
-    const options = Object.entries(game.state.bag).flatMap(([id, amount]) => {
-      if (!amount) return [];
-      const plan = game.evolutionPlan(mon, { trigger: "item", item: id });
-      return plan ? [{ id, plan }] : [];
-    });
+    const options = Object.entries(game.bagView().counts).flatMap(
+      ([id, amount]) => {
+        if (!amount) return [];
+        const plan = game.evolutionPlan(mon, { trigger: "item", item: id });
+        return plan ? [{ id, plan }] : [];
+      },
+    );
     modal(
       "伙伴的成长",
       `<p>亲密度：${mon.friendship ?? 70} · 美丽度：${mon.beauty ?? 0}</p><p>某些伙伴需要进化石，或在交换时携带特定道具；还有伙伴的成长与亲密度、时间、能力或个体性格有关。</p><div class="menu-grid">${options.map(({ id, plan }) => `<button class="menu-tile" data-stone="${escapeHTML(id)}">使用 ${escapeHTML(game.items.definitions[id].name)}<small>进化为 ${escapeHTML(game.db.species[plan.to].name)}</small></button>`).join("")}</div>${options.length ? "" : "<p>目前没有可使用的进化道具。</p>"}`,

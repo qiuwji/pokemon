@@ -6,6 +6,7 @@ import { bindApplicationPorts } from "./ports.js";
 export const PARTY_PORTS = Object.freeze([
   "battle",
   "catalog",
+  "inventory",
   "friendship",
   "busy",
   "db",
@@ -22,6 +23,7 @@ export class PartyApplication {
       db: this.db,
       methods: this.catalog.learningMethods,
       items: this.catalog.items,
+      inventory: this.inventory,
       friendship: (context) => {
         const mon = { ...context.mon };
         this.friendship.change(mon, "learn", {
@@ -55,15 +57,15 @@ export class PartyApplication {
   canManageParty() {
     return !this.battle && !this.busy && !this.storyBusy;
   }
-  learningView(method, uid) {
+  learningView(method, uid, slot) {
     if (!this.canManageParty())
       return { ok: false, reason: "请先结束当前行动。" };
-    return this.learning.prepare(this.state, method, uid);
+    return this.learning.prepare(this.state, method, uid, slot);
   }
-  teachMove(method, uid, index) {
+  teachMove(method, uid, index, slot) {
     if (!this.canManageParty())
       return { ok: false, reason: "请先结束当前行动。" };
-    return this.learning.use(this.state, method, uid, index);
+    return this.learning.use(this.state, method, uid, index, slot);
   }
   canForgetMove(id) {
     return this.learning.canForget(id);

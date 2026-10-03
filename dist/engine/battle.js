@@ -114,6 +114,12 @@ export class Battle {
       throw new Error("Wild encounters currently require two seats");
     for (const controller of this.roster.controllers.values()) {
       if (
+        !this.items.inventory &&
+        Object.keys(controller.bag.pockets).length > 0
+      )
+        throw new Error("Battle inventory requires an injected item service");
+      this.items.inventory?.validate(controller.bag);
+      if (
         controller.party.some((m) =>
           m.moves.some(
             (slot) =>

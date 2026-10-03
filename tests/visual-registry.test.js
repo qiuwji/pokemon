@@ -1,3 +1,4 @@
+import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { PresentationRegistry } from "../dist/presentation/effect-registry.js";
@@ -199,7 +200,7 @@ test("Battle snapshots carry detached weather, volatile state, actual stage delt
       enemy,
       db,
       rng,
-      bag: {},
+      bag: createBag({}),
       environment: { terrain: "cave" },
     });
   battle.changeStage(0, "atk", 1);

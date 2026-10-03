@@ -9,9 +9,14 @@ import { EffectRegistry } from "./effects.js";
 /** Item effects run on a draft: invalid use never consumes an item or alters a target. */
 export class ItemService {
   /** @param {Record<string, import("./contracts.js").ItemDefinition>} definitions */
-  constructor(definitions, registry = new EffectRegistry(ITEM_OPERATIONS)) {
+  constructor(
+    definitions,
+    registry = new EffectRegistry(ITEM_OPERATIONS),
+    inventory = null,
+  ) {
     this.definitions = definitions;
     this.registry = registry;
+    this.inventory = inventory;
     this.plans = new WeakMap();
     for (const [id, item] of Object.entries(definitions)) {
       if (
@@ -76,19 +81,27 @@ export class ItemService {
         throw new Error(`items.${id}: capture must be the sole enemy effect`);
     }
   }
-  prepare({ id, bag, party, index, context, enemy, canCapture = true }) {
+  prepare({ id, bag, party, index, context, enemy, canCapture = true, slot }) {
     const item = Object.hasOwn(this.definitions, id)
       ? this.definitions[id]
       : null;
-    if (!item || !item.contexts.includes(context) || !(bag[id] > 0))
+    if (
+      !item ||
+      !item.contexts.includes(context) ||
+      !(this.inventory.quantity(bag, id) > 0)
+    )
       return { ok: false, reason: "现在无法使用这个道具。" };
     if (item.target === "field")
       return { ok: false, reason: "请选择道具的野外行动。" };
+    const cost = this.inventory.prepare(bag, [
+      { kind: "remove", item: id, count: 1, ...(slot ? { slot } : {}) },
+    ]);
+    if (!cost.ok) return cost;
     if (item.target === "enemy") {
       if (!enemy || enemy.hp <= 0 || !canCapture)
         return { ok: false, reason: "现在不能捕捉对方的宝可梦！" };
       const plan = { ok: true, item, captureBonus: item.effects[0].bonus };
-      this.plans.set(plan, { bag, id, party, target: null });
+      this.plans.set(plan, { bag, id, party, target: null, cost });
       return plan;
     }
     const target = Number.isInteger(index) ? party[index] : null;
@@ -144,6 +157,7 @@ export class ItemService {
       target,
       fingerprint: JSON.stringify(target),
       draft: structuredClone(draft),
+      cost,
     });
     return plan;
   }
@@ -153,12 +167,13 @@ export class ItemService {
       !saved ||
       saved.bag !== bag ||
       saved.id !== id ||
-      !(bag[id] > 0) ||
+      !this.inventory.check(saved.cost, bag) ||
       (saved.target &&
         (!saved.party.includes(saved.target) ||
           saved.fingerprint !== JSON.stringify(saved.target)))
     )
       return false;
+    if (!this.inventory.commit(saved.cost, bag)) return false;
     if (saved.target)
       for (const field of [
         "hp",
@@ -170,7 +185,6 @@ export class ItemService {
         if (Object.hasOwn(saved.draft, field))
           saved.target[field] = saved.draft[field];
         else delete saved.target[field];
-    bag[id]--;
     plan.committed = true;
     this.plans.delete(plan);
     return true;
@@ -190,5 +204,5 @@ capture.validate = (s, p) => {
 const feed = (c, s) => applyNutrition(c.target, s);
 feed.validate = validateFood;
 export const ITEM_OPERATIONS = { capture, feed };
-export const createItemService = (definitions) =>
-  new ItemService(definitions, new EffectRegistry(ITEM_OPERATIONS));
+export const createItemService = (definitions, inventory = null) =>
+  new ItemService(definitions, new EffectRegistry(ITEM_OPERATIONS), inventory);
