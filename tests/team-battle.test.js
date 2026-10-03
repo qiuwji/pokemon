@@ -418,6 +418,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
     story: emptyStoryProgress(),
   };
   state.weather = emptyWeather();
+  state.registeredItem = null;
   assert(validateSave(state, db));
   state.box.push(structuredClone(party[0]));
   assert.equal(validateSave(state, db), false);

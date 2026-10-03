@@ -1,0 +1,10 @@
+✔ Native consumable stock survives metadata merging while machines and key items remain unavailable for purchase (17.239417ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (20.754333ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 122.297625

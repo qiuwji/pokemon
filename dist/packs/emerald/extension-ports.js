@@ -32,6 +32,7 @@ export function attachEmeraldExtensions(game, host) {
     movement: { ...game.state.movement },
     movementTechnique: game.movement.technique,
     fieldActions: game.fieldActionOptions(),
+    registeredItem: game.registeredItemView(),
     itemActions: Object.fromEntries(
       Object.entries(game.state.bag)
         .filter(([, count]) => count > 0)

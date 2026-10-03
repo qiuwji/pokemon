@@ -16,7 +16,7 @@ export class ItemService {
     for (const [id, item] of Object.entries(definitions)) {
       if (
         !item.name ||
-        ["holdable", "shopStock"].some(
+        ["holdable", "shopStock", "registerable"].some(
           (key) => item[key] !== undefined && typeof item[key] !== "boolean",
         ) ||
         (item.pocket !== undefined &&
@@ -64,6 +64,10 @@ export class ItemService {
         );
       if (item.actions !== undefined && item.target !== "field")
         throw new Error(`items.${id}: action bindings require a field target`);
+      if (item.registerable === true && item.target !== "field")
+        throw new Error(
+          `items.${id}: shortcut registration requires a field action item`,
+        );
       registry.validate(item.effects, `items.${id}.effects`);
       if (
         item.target === "enemy" &&

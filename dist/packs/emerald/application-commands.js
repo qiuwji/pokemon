@@ -27,6 +27,9 @@ export function registerEmeraldCommands(game, bus) {
   const commandPermissions = {
     "item.use": "useItem",
     "item.action": "useItem",
+    "item.register": "useItem",
+    "item.unregister": "useItem",
+    "item.shortcut": "useItem",
     "item.equip": "equip",
     "item.buy": "buyItem",
     "growth.learn": "learnMove",
@@ -272,6 +275,16 @@ export function registerEmeraldCommands(game, bus) {
   register("movement.mode", objectSchema({ mode: id }, ["mode"]), ({ mode }) =>
     game.setMovementMode(mode),
   );
+  register(
+    "item.register",
+    objectSchema({ item: id, action: id }, ["item", "action"]),
+    ({ item, action }) => game.registerItem(item, action),
+  );
+  register("item.unregister", empty, () => game.unregisterItem());
+  register("item.shortcut", empty, () => game.useRegisteredItem(), {
+    mode: "async",
+    ready: () => field() && !game.ui?.blocked,
+  });
   register("movement.surf", empty, () => game.boardSurf(), { mode: "async" });
   register(
     "movement.fly",

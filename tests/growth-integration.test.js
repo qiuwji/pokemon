@@ -438,6 +438,7 @@ test("Save owns daycare and trade identities, keeps egg clocks, and rejects dupl
   s.tradePartner.push(mon("eevee"));
   s.growth.hatchTick = 255;
   s.weather = emptyWeather();
+  s.registeredItem = null;
   assert(validateSave(s, db));
   s.box.push(s.daycare.slots[0].mon);
   assert.equal(validateSave(s, db), false);

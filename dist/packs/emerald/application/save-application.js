@@ -69,6 +69,7 @@ export class SaveApplication {
       position: { ...PACK.start },
       party: [],
       box: [],
+      registeredItem: null,
       bag: Object.fromEntries(
         Object.keys(this.itemDefinitions).map((id) => [id, 0]),
       ),

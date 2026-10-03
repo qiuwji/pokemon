@@ -23,6 +23,7 @@ const db = JSON.parse(
 );
 const state = () => ({
   weather: emptyWeather(),
+  registeredItem: null,
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [],
   box: [],

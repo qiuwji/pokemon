@@ -46,6 +46,7 @@ export type CommonEffect =
 export interface ItemDefinition {
   name: string;
   holdable?: boolean;
+  registerable?: boolean;
   price: number;
   contexts: ("field" | "battle")[];
   target: "party" | "enemy" | "field";
@@ -298,12 +299,17 @@ export interface PluginRecord {
   data: Record<string, Json>;
   states: Record<string, Record<string, { remaining: number; data: Json }>>;
 }
+export interface ItemShortcut {
+  item: string;
+  action: string;
+}
 export interface AdventureState {
   position: Position;
   forms?: Record<string, { id: string }>;
   party: Creature[];
   box: Creature[];
   bag: Record<string, number>;
+  registeredItem: ItemShortcut | null;
   flags: Record<string, boolean | number | string>;
   story: StoryProgress;
   money: number;

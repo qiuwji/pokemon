@@ -1,3 +1,7 @@
+import {
+  ItemShortcutApplication,
+  ITEM_SHORTCUT_PORTS,
+} from "./item-shortcut-application.js";
 import { WeatherApplication, WEATHER_PORTS } from "./weather-application.js";
 import { DeviceApplication, DEVICE_PORTS } from "./device-application.js";
 import { ActorApplication, ACTOR_PORTS } from "./actor-application.js";
@@ -51,6 +55,9 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.inventory = new InventoryApplication(
     liveApplicationPorts(read, INVENTORY_PORTS, {}),
+  );
+  applications.itemShortcut = new ItemShortcutApplication(
+    liveApplicationPorts(read, ITEM_SHORTCUT_PORTS),
   );
   applications.party = new PartyApplication(
     liveApplicationPorts(read, PARTY_PORTS, {}),

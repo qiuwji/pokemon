@@ -32,7 +32,7 @@ dist/
   adapters/                      浏览器输入、Canvas/DOM、存储与真实资源音频
   packs/emerald/                 原作规则配置、剧情、地图业务与页面
     adventure.js                 内容配置、应用装配、生命周期和忙碌聚合
-    application/composition.js   19 个应用服务的有限依赖装配
+    application/composition.js   20 个应用服务的有限依赖装配
     application/public-ports.js  当前宿主 API 的显式字段/方法所有权表
     application/*-application.js 按领域拥有会话、协调用例
     extensions.js                通用插件合同的本作校验/默认注册
@@ -88,7 +88,7 @@ Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多
 
 StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/STORY_LANGUAGE.md) 和 [CUTSCENES.md](CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。
 
-精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，快捷键与正式获得业务待补。见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
+精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT与保存9已接入；槽位容量与正式获得业务待补。见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
 
 ## 表现、音频与界面扩展
 
@@ -104,4 +104,4 @@ SaveStore 只接受开发存档版本 8；插件数据要求当前 dataVersion�
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项、天气新增 18 项、关键道具新增 13 项和受影响范围针对性验证，当前 **249 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 最近全量基线（1851e9d）为 **556 项测试通过**；此后学习新增 14 项、天气新增 18 项、关键道具新增 13 项、快捷登记/商店修复新增 13 项和受影响范围针对性验证，当前 **251 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。

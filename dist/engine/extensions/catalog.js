@@ -158,6 +158,7 @@ export class ExtensionCatalog {
         ]),
       ),
       state.movement?.mode,
+      state.registeredItem?.item,
       ...Object.keys(state.bag || {}).filter((id) => state.bag[id] > 0),
       ...[
         ...(state.party || []),

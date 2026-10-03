@@ -3,6 +3,7 @@ import { MACHINE_ITEMS } from "./machine-learning.js";
 const fieldItem = (id, name, fieldAction, input) => ({
   ...BASE_ITEMS[id],
   name,
+  registerable: true,
   contexts: ["field"],
   target: "field",
   actions: [{ id: "use", fieldAction, input }],
@@ -36,6 +37,7 @@ export const ITEMS = {
   },
   pokeball: {
     ...BASE_ITEMS.pokeball,
+    shopStock: true,
     name: "精灵球",
     contexts: ["battle"],
     target: "enemy",
@@ -46,6 +48,7 @@ export const ITEMS = {
   },
   potion: {
     ...BASE_ITEMS.potion,
+    shopStock: true,
     name: "伤药",
     contexts: ["field", "battle"],
     target: "party",
@@ -55,6 +58,7 @@ export const ITEMS = {
   },
   super_potion: {
     ...BASE_ITEMS.super_potion,
+    shopStock: true,
     name: "好伤药",
     price: 700,
     icon: "✚",
@@ -65,6 +69,7 @@ export const ITEMS = {
   },
   antidote: {
     ...BASE_ITEMS.antidote,
+    shopStock: true,
     name: "解毒药",
     price: 100,
     icon: "✚",
@@ -75,6 +80,7 @@ export const ITEMS = {
   },
   great_ball: {
     ...BASE_ITEMS.great_ball,
+    shopStock: true,
     name: "超级球",
     price: 600,
     icon: "◉",

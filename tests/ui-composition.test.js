@@ -77,6 +77,12 @@ function fixture() {
     canUseDaycare: () => true,
     canBuyItem: () => true,
     itemPlan: () => ({ ok: false }),
+    itemActionOptions: () => [],
+    registeredItemView: () => ({
+      selection: null,
+      owned: false,
+      usable: false,
+    }),
     evolutionPlan: () => null,
     daycareView: () => ({ slots: [], compatibility: 0, egg: false }),
     weatherView: () => ({

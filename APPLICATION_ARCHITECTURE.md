@@ -1,6 +1,6 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0 将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，随后学习/天气装配为 147 行；用例由 19 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
+`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0 将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，随后学习/天气装配为 147 行；用例由 20 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
 
 ## 职责与状态所有权
 
@@ -13,6 +13,7 @@
 | devices | 格子机关、局部延迟任务与领域行动请求协调 | FieldDeviceCatalog、FieldDevices、执行锁 |
 | crops | 树果生命周期、种植/浇水/采摘的库存提交 | CropRegistry、CropService |
 | party | 图鉴登记、初始精灵领取、管理资格、注册学习方式/机器/手动学习协调 | MoveLearningService，无复制持久状态 |
+| itemShortcut | 登记/取消/快捷使用、锁与保存边界 | ItemShortcutService，registeredItem 的写入用例 |
 | inventory | 背包、商店资格/购买、装备、队伍排序与仓库出入 | ItemService、EquipmentService、PartyStorageService |
 | forms | 野外形态操作与保存记录绑定 | CreatureForms |
 | growth | 进化、寄养、领取/孵化、交换及相关演出 | GrowthSession、GrowthDirector、TradeService、育成锁 |
@@ -53,3 +54,5 @@
 学习领域/公共命令/事务与背包协作见 [MOVE_LEARNING.md](docs/engine/MOVE_LEARNING.md)。当前 registry 资格和手动等级学习共享保护集合；ItemService 不允许通过道具效果改 moves。
 
 天气命令与剧情经 WeatherApplication 的独立有限端口；世界/时间/帧通过 composition 调用 enter/step/days/tick，业务不导入兄弟服务。见 [WEATHER.md](docs/engine/WEATHER.md)。
+
+登记道具由 ItemShortcutApplication 独立协调；可登记但暂不可用的道具不缓存旧资格，使用时交还现有物品/野外行动管线。当前20个应用、147行入口，存档9；详见 docs/engine/ITEM_SHORTCUT.md。槽位库存领域的生产调用点设计见 docs/engine/INVENTORY_DESIGN.md，尚未实现。

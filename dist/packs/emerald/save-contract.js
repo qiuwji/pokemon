@@ -1,3 +1,4 @@
+import { validItemShortcut } from "../../engine/item-shortcut.js";
 import { WeatherRegistry, WorldWeather } from "../../engine/weather.js";
 import {
   GEN3_WORLD_WEATHER,
@@ -62,6 +63,7 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (!validItemShortcut(s.registeredItem, catalog.items)) return false;
     db = emeraldDatabase(db);
     new WorldWeather({
       state: s.weather,

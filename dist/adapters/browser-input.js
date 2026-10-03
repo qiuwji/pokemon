@@ -38,6 +38,13 @@ export class BrowserInput {
       },
       options,
     );
+    doc.querySelector("[data-item-shortcut]")?.addEventListener(
+      "click",
+      () => {
+        void this.useRegisteredItem();
+      },
+      options,
+    );
     doc.querySelectorAll("[data-dir]").forEach((button) => {
       button.addEventListener(
         "pointerdown",
@@ -71,7 +78,14 @@ export class BrowserInput {
       running: this.running,
     });
   }
+  async useRegisteredItem() {
+    if (this.ui.blocked || this.game.busy || this.game.battle) return;
+    this.clear();
+    const result = await this.game.useRegisteredItem();
+    if (!result.ok) this.ui.toast(result.reason);
+  }
   keydown(e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key.toLowerCase() === "tab") {
       this.ui.focusTrap(e);
       return;
@@ -91,6 +105,11 @@ export class BrowserInput {
     )
       e.preventDefault();
     if (e.repeat) return;
+    if (key === "c") {
+      e.preventDefault();
+      void this.useRegisteredItem();
+      return;
+    }
     if (key === "shift") {
       this.running = true;
       this.tick();

@@ -430,7 +430,7 @@ test("Registered weather artists are deterministic, opacity-safe and use static 
 test("Application commands, read-only queries, map visits, expiry and current save schema share one owner", async () => {
   const s = session();
   const g = s.game;
-  assert.equal(PACK.version, 8);
+  assert.equal(PACK.version, 9);
   assert.equal(
     (
       await s.bus.execute("core.weather.set", {
@@ -462,7 +462,7 @@ test("Application commands, read-only queries, map visits, expiry and current sa
   const invalid = structuredClone(exported);
   delete invalid.state.weather;
   assert.throws(() => g.loadDocument(invalid), /Invalid save/);
-  const old = { ...exported, version: 7 };
+  const old = { ...exported, version: PACK.version - 1 };
   assert.throws(() => g.loadDocument(old), /Invalid save/);
   s.wall(100);
   g.tick(s.frame(100));

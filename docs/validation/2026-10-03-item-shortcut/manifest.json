@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-03",
+  "baseCommit": "bf6d30a",
+  "fullSuiteBaseline": {
+    "commit": "1851e9d",
+    "passed": 556
+  },
+  "scope": "Registered item lifecycle/input/UI/commands/plugins/save9 and affected current-source suites. No full test suite, browser layout or audio QA.",
+  "initial": {
+    "tested": 209,
+    "passed": 208,
+    "failed": 1
+  },
+  "resolution": "Page assembly failure repaired in pack consumable stock; the failed test and additional stock test passed. Twelve initial shortcut tests plus one stock test have pass evidence. Dialogue-lock and semantic-identity-order changes rechecked only affected cases.",
+  "notes": [
+    "Actual UI file is tests/ui-composition.test.js; earlier ui-assembly filename did not identify a real test file.",
+    "Touch controller grid layout was revised after input checks; visual proof remains pending for E.",
+    "Inventory slot/capacity service is designed but not implemented."
+  ],
+  "logs": [
+    "targeted-initial.txt",
+    "stock-and-ui-fixes.txt",
+    "dialogue-lock.txt",
+    "identity-order.txt",
+    "check.txt",
+    "content-final.txt"
+  ],
+  "sourceSha256": {
+    "dist/adapters/browser-input.js": "4f9360ec662ba5372ecab7ff5f300e4e6abc2973575af450b56ad072006f1060",
+    "dist/engine/contracts.d.ts": "eb131cecebdd2e602899271925a0aa78eb70616db0b4d1e4eda8dc6f85010c50",
+    "dist/engine/extensions/catalog.js": "60086b8e41cc265a9d95f81dd24e8f360435fe4ac76bff910ac2f8b6d78f662e",
+    "dist/engine/item-shortcut.js": "f1739078abd06dcfa49b01c0fedfcb9be0530ed699a2b48841069ab039112b71",
+    "dist/engine/items.js": "51b265beb7483fdf16743926559a0ea8a990c32a4550cd96cab327ddd13708ee",
+    "dist/index.html": "89f65c63394e20a1d665825b28280f63026eae7f373ec81dc79d19551d1fd258",
+    "dist/packs/emerald/application-commands.js": "af10c7464dda36f91dac634f9b0f94381f8918b2512ef574b83f1e651d57a25e",
+    "dist/packs/emerald/application/composition.js": "11290b14e43c2efed51d214d2c5381d404b4949174bbd4ad0e9f25df493907c9",
+    "dist/packs/emerald/application/item-shortcut-application.js": "e59db35b4f9055a7afba404c397b4e9dda7415624b3e06a872f4172de6aa15b0",
+    "dist/packs/emerald/application/public-ports.js": "635eaf978f41dbbbd9b2a3de841033a44617c886f8c3d058e07ef7de294c6eb4",
+    "dist/packs/emerald/application/save-application.js": "98430a1908fa50bf0c044a0dcfa94f6dd0d9aef80c841e42f5c705a2c024d240",
+    "dist/packs/emerald/bag-interface.js": "9e895821f330b4fc9a91d53bbef1064c5f2f63cc09c60f92852dedba038b58cb",
+    "dist/packs/emerald/command-facade.js": "42bc7296c1a0bf65fca4e5c350ff0cf570d67b0049a0998caddbe2128fceacb4",
+    "dist/packs/emerald/extension-ports.js": "3f2843821329be9608d4e3ff2c35fe7def6ef508275e8a15818cd480fb9055c4",
+    "dist/packs/emerald/help-interface.js": "5626ae57eb73482702457860f720327485114822e27b6ede1e68f96a57088a90",
+    "dist/packs/emerald/items.js": "a104ba6f5f352de1c7b1ff4199b04344d68a9837f0536bb65c4bda20e7df39e1",
+    "dist/packs/emerald/pack.js": "2ed98569f95ef8835ddcf402816bd075bec7ac47fe5e8cdbc92d20852d921819",
+    "dist/packs/emerald/save-contract.js": "2b3af3c0a294019040347d816a2013e36668678b9db945a78449f1b3794e1f01",
+    "dist/style.css": "a15e5e52d8ced1182278ea58ba94dac817761b67749bc839168e00dcf9070831",
+    "tests/creature-contract.test.js": "eebcc5402cc8e5ff426345a2b85ae01cb9f46aae91175c66457608fc1af0842b",
+    "tests/engine.test.js": "d125281352e8edfae37680187d4b86e751268a8d10ba9f956e09b1120175ad6a",
+    "tests/evolution.test.js": "80ce4da383dbd039c260dfc5e95a18f5edc4b35f2e046f56a4157fcbfbcaa45e",
+    "tests/growth-integration.test.js": "a5498ec9eb8e16579318015295ebb90dd1e3be6d517164a9aee7341d51549282",
+    "tests/item-shortcut.test.js": "f6a8c047fc71411d1c7244e70a3be8842d9c8634328b3617068a3d52b445f27a",
+    "tests/movement.test.js": "d32d9b6f09d84ffffe065bd32109dfc3de776a7ed6762a119375ba431c65406f",
+    "tests/team-battle.test.js": "c958fa73695ebccbb6a66b43049b11b9d8bc2225dd8b175d1a338046ff22e5d9",
+    "tests/ui-composition.test.js": "7d8eacc3cd12adaade277d90d042823f9548c3ceb629eeaf160b4a72c11b34d2",
+    "tests/weather.test.js": "285d909a25b2e9ff08048c7366cb5f5fc6ee05e13747ccbb3e720edcd758f3d0"
+  },
+  "invalidateOn": "Corresponding source, contracts, schema, domain references, lifecycle/route or fixtures change. Browser requirements need separate visual evidence."
+}

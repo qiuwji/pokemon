@@ -358,6 +358,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
     movement: { mode: "surf", visited: ["OldaleTown"] },
   };
   state.weather = emptyWeather();
+  state.registeredItem = null;
   state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(validateSave(state, db));
   state.movement.mode = "mach-bike";

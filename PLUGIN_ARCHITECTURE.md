@@ -87,3 +87,5 @@ const plugin = {
 天气注册/只读查询/受权限命令与事务/独立战斗政策及视觉详见 [WEATHER.md](docs/engine/WEATHER.md)。开发版本只接受当前 envelope/dataVersion，旧迁移路径已移除；天气依赖不能静默回退。
 
 关键道具 `items.actions` 可绑定已注册 fieldActions；现有背包自动提供单/多行动入口，core.query 返回持有道具的行动预览，core.item.action 同时用于 UI/网络/授权插件。异步执行复用野外规则/计划/导演与保存，不支持嵌套事务 dispatch。详见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。
+
+物品可通过 registerable:true 开放已声明行动的快捷登记，多行动选择/只读预览/公共命令与存档9共用原行动管线。详见 [ITEM_SHORTCUT.md](docs/engine/ITEM_SHORTCUT.md)。槽位库存扩展尚在实现前设计，不将计数字典说成原作完整口袋。

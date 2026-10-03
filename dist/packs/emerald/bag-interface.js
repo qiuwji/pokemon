@@ -15,6 +15,7 @@ export function createBagInterface(
 ) {
   const ITEMS = game.itemDefinitions;
   function showBag(inBattle = false) {
+    const shortcut = game.registeredItemView();
     modal(
       "背包",
       Object.entries(ITEMS)
@@ -34,12 +35,16 @@ export function createBagInterface(
                 : (inBattle ? game.battle.party : game.state.party).some(
                     (m, index) => game.itemPlan(id, index, inBattle).ok,
                   ));
-          return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button></div>`;
+          return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${(inBattle ? game.battle.bag : game.state.bag)[id] || 0}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button>${!inBattle && item.registerable ? `<button class="secondary-button" data-register-item="${escapeHTML(id)}" ${(game.state.bag[id] || 0) > 0 ? "" : "disabled"}>${shortcut.selection?.item === id ? "已登记" : "登记"}</button>` : ""}</div>`;
         })
         .join("") +
         `<div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
       { back: inBattle ? closeModal : showMenu, type: "bag" },
     );
+    root.querySelectorAll("[data-register-item]").forEach((button) => {
+      button.onclick = () =>
+        chooseItemRegistration(button.dataset.registerItem);
+    });
     root.querySelectorAll("[data-item]").forEach(
       (button) =>
         (button.onclick = () => {
@@ -50,6 +55,46 @@ export function createBagInterface(
           else chooseItemTarget(id, inBattle);
         }),
     );
+  }
+  function chooseItemRegistration(id) {
+    const actions = game.itemActionOptions(id);
+    const register = (action) => {
+      const selection = game.registeredItemView().selection;
+      const result =
+        selection?.item === id && selection.action === action
+          ? game.unregisterItem()
+          : game.registerItem(id, action);
+      if (!result.ok) {
+        toast(result.reason);
+        return;
+      }
+      showBag(false);
+      toast(
+        result.selection
+          ? "已登记。探索时按 C 或触屏 SELECT 使用。"
+          : "已取消登记。",
+      );
+    };
+    if (actions.length === 1) {
+      register(actions[0].id);
+      return;
+    }
+    modal(
+      `${ITEMS[id].name} · 登记行动`,
+      actions
+        .map(
+          (action) =>
+            `<button data-register-action="${escapeHTML(action.id)}">${escapeHTML(action.name)}</button>`,
+        )
+        .join(""),
+      { back: () => showBag(false), type: "item-registration" },
+    );
+    root
+      .querySelectorAll("[data-register-action]")
+      .forEach(
+        (button) =>
+          (button.onclick = () => register(button.dataset.registerAction)),
+      );
   }
   function chooseItemAction(id) {
     const actions = game.itemActionOptions(id);
