@@ -1,3 +1,10 @@
+import {
+  FieldDeviceCatalog,
+  FieldDevices,
+} from "../../engine/field-devices.js";
+import { FieldActionRegistry } from "../../engine/field-actions.js";
+import { EMERALD_FIELD_ACTIONS } from "./field-actions.js";
+import { EMERALD_FIELD_MECHANISMS } from "./field-mechanisms.js";
 import { GEN3_ELEVATION } from "../../engine/rules/gen3/elevation.js";
 import { NPCPoseRegistry } from "../../engine/npc-poses.js";
 import {
@@ -49,6 +56,18 @@ export function validateSave(
   try {
     jsonValue(s, 2 * 1024 * 1024);
     GEN3_ELEVATION.validate(s.position || {});
+    if (s.devices !== undefined)
+      new FieldDevices({
+        state: s.devices,
+        catalog: new FieldDeviceCatalog({
+          mechanisms: catalog.fieldMechanisms || EMERALD_FIELD_MECHANISMS,
+          devices: catalog.fieldDevices,
+          maps: db.maps,
+          actions: new FieldActionRegistry(
+            catalog.fieldActions || EMERALD_FIELD_ACTIONS,
+          ),
+        }),
+      });
     if (s.actors !== undefined)
       new ActorRepository({
         state: s.actors,

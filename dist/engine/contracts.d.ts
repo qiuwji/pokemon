@@ -270,6 +270,7 @@ export interface AdventureState {
   playSeconds: number;
   clock?: WorldClockState;
   schedule?: WorldScheduleState;
+  devices?: FieldDeviceState;
   movement: { mode: string; visited: string[] };
   friendshipSteps: number;
   growth: { hatchTick: number };
@@ -378,6 +379,8 @@ export type ContentKind =
   | "terrainRules"
   | "fieldActions"
   | "fieldLinks"
+  | "fieldMechanisms"
+  | "fieldDevices"
   | "destinations"
   | "resources"
   | "mapExtensions"
@@ -737,6 +740,7 @@ export interface FieldActionContext {
     reserved: readonly Readonly<{ x: number; y: number; elevation?: number }>[];
   }>[];
   readonly links: readonly FieldLinkDefinition[];
+  readonly devices: FieldDeviceView;
 }
 export interface FieldLinkDefinition {
   readonly map: string;
@@ -752,6 +756,8 @@ export interface FieldLinkDefinition {
 }
 export interface FieldActionDefinition<T extends Json = Record<string, Json>> {
   name: string;
+  menu?: boolean;
+  avatar?: MoveAnimation["poses"];
   cue: string;
   duration: number;
   schema?: DataSchema;
@@ -780,6 +786,67 @@ export type FieldActionCommand = {
   input?: Record<string, Json>;
   variable?: string;
 };
+
+/** Frame-local work; distinct from world RTC and offline schedule. */
+export interface FieldDeviceState {
+  revision: number;
+  elapsedMs: number;
+  records: Record<string, Json>;
+  timers: Record<string, Record<string, { dueMs: number; payload: Json }>>;
+  requests: Record<
+    string,
+    Record<string, { action: string; input: Record<string, Json> }>
+  >;
+}
+export interface FieldDeviceDefinition {
+  map: string;
+  x: number;
+  y: number;
+  elevation?: number;
+  mechanism: string;
+  config?: Record<string, Json>;
+}
+export interface FieldDeviceView {
+  readonly records: Readonly<Record<string, Json>>;
+  readonly pending: Readonly<FieldDeviceState["requests"]>;
+  readonly devices: Readonly<
+    Record<string, FieldDeviceDefinition & { id: string }>
+  >;
+}
+export interface FieldDeviceContext {
+  readonly device: Readonly<
+    FieldDeviceDefinition & { id: string; config: Record<string, Json> }
+  >;
+  readonly state: Readonly<Json>;
+  readonly event: Readonly<{
+    phase: "enter" | "leave" | "settle" | "timer" | "interact";
+    payload: Json;
+  }>;
+  readonly position: Readonly<Position>;
+  readonly tile: Readonly<{ block: number; behavior: number }>;
+  readonly mode: string;
+  readonly durationMs: number;
+}
+export interface FieldDeviceDecision {
+  state?: Json;
+  operations?: WorldOperation[];
+  timers?: { key: string; delayMs: number; payload?: Json }[];
+  cancelTimers?: string[];
+  requests?: { key: string; action: string; input?: Record<string, Json> }[];
+  cancelRequests?: string[];
+  facts?: { kind: string; data?: Json }[];
+}
+export interface FieldMechanismDefinition {
+  scope: "visit" | "permanent";
+  schema?: DataSchema;
+  initialState?: Json;
+  configSchema?: DataSchema;
+  enter?: (context: FieldDeviceContext) => FieldDeviceDecision;
+  leave?: (context: FieldDeviceContext) => FieldDeviceDecision;
+  settle?: (context: FieldDeviceContext) => FieldDeviceDecision;
+  timer?: (context: FieldDeviceContext) => FieldDeviceDecision;
+  interact?: (context: FieldDeviceContext) => FieldDeviceDecision;
+}
 
 export interface WorldClockState {
   initialized: boolean;

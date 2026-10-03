@@ -144,6 +144,20 @@ export class PluginHost {
                 decide: (c) => evaluate(original.decide, readOnly(c)),
               };
             }
+            if (kind === "fieldMechanisms") {
+              const original = value;
+              value = {
+                ...value,
+                ...Object.fromEntries(
+                  ["enter", "leave", "settle", "timer", "interact"]
+                    .filter((key) => original[key])
+                    .map((key) => [
+                      key,
+                      (context) => evaluate(original[key], readOnly(context)),
+                    ]),
+                ),
+              };
+            }
             if (kind === "growthConditions") {
               if (typeof value.test !== "function")
                 throw new Error("Growth condition requires predicate");

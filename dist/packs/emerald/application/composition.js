@@ -1,3 +1,4 @@
+import { DeviceApplication, DEVICE_PORTS } from "./device-application.js";
 import { ActorApplication, ACTOR_PORTS } from "./actor-application.js";
 import { CropApplication, CROP_PORTS } from "./crop-application.js";
 import { TimeApplication, TIME_PORTS } from "./time-application.js";
@@ -58,11 +59,27 @@ export function composeApplications(applications, read, { storage }) {
     liveApplicationPorts(read, MOVEMENT_PORTS, {}),
   );
   applications.fieldActions = new FieldActionApplication(
-    liveApplicationPorts(read, FIELD_ACTION_PORTS),
+    liveApplicationPorts(read, FIELD_ACTION_PORTS, {
+      deviceView: () => applications.devices.view(),
+    }),
+  );
+  applications.devices = new DeviceApplication(
+    liveApplicationPorts(read, DEVICE_PORTS),
   );
   applications.world = new WorldApplication(
     liveApplicationPorts(read, WORLD_PORTS, {
       bindMovement: () => applications.movement.bind(),
+      bindDevices: (options) => applications.devices.bind(options),
+      interactDevice: () => applications.devices.interactFront(),
+      deviceEvent: (...args) => applications.devices.event(...args),
+      deviceVisit: (map) => {
+        const service = applications.devices.service,
+          draft = service.prepareVisit(map);
+        return {
+          check: () => service.checkVisit(draft),
+          commit: () => service.commitVisit(draft),
+        };
+      },
       resetTriggers: () => applications.triggers.reset(),
       bindFieldActions: () => applications.fieldActions.bind(),
     }),
@@ -77,7 +94,9 @@ export function composeApplications(applications, read, { storage }) {
     liveApplicationPorts(read, STORY_PORTS, {}),
   );
   applications.frame = new FrameApplication(
-    liveApplicationPorts(read, FRAME_PORTS, {}),
+    liveApplicationPorts(read, FRAME_PORTS, {
+      tickDevices: (...args) => applications.devices.tick(...args),
+    }),
   );
   applications.inspection = new InspectionApplication(
     liveApplicationPorts(read, INSPECTION_PORTS, {}),

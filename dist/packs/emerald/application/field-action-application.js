@@ -14,6 +14,7 @@ export const FIELD_ACTION_PORTS = Object.freeze([
   "battle",
   "busy",
   "catalog",
+  "deviceView",
   "clearInput",
   "encounterService",
   "encounterTables",
@@ -62,6 +63,7 @@ export class FieldActionApplication {
     const p = this.state.position;
     return {
       position: { ...p },
+      devices: this.deviceView(),
       mode: this.state.movement.mode,
       revision: this.worldState.state.revision,
       map: {

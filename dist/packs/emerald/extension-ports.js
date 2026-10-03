@@ -27,6 +27,7 @@ export function attachEmeraldExtensions(game, host) {
       ]),
     ),
     position: { ...game.state.position },
+    devices: game.applications.devices.view(),
     movement: { ...game.state.movement },
     movementTechnique: game.movement.technique,
     fieldActions: game.fieldActionOptions(),

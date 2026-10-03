@@ -224,13 +224,22 @@ export class Renderer {
     all.sort((a, b) => priority(b) - priority(a) || a.py - b.py);
     const drawActors = (actors) => {
       for (const n of actors) {
-        const x = n.px - this.camera.x,
-          y = n.py - this.camera.y;
+        const avatar = n.player ? action?.player || {} : {};
+        const x = n.px - this.camera.x + (avatar.x || 0),
+          y = n.py - this.camera.y + (avatar.y || 0);
         if (x < -32 || x > 352 || y < -32 || y > 256) continue;
+        c.save();
+        c.globalAlpha *= avatar.opacity ?? 1;
+        if (avatar.scale !== undefined || avatar.rotation !== undefined) {
+          c.translate(x + 8, y + 8);
+          c.rotate(avatar.rotation || 0);
+          c.scale(avatar.scale ?? 1, avatar.scale ?? 1);
+          c.translate(-x - 8, -y - 8);
+        }
         // Shadows are visual poses; height never changes grid occupancy.
         if (n.actor !== "BirchsBag") {
           c.save();
-          c.globalAlpha = 0.2;
+          c.globalAlpha *= 0.2;
           c.fillStyle = "#182838";
           c.fillRect(Math.round(x + 2), Math.round(y + 11), 12, 3);
           c.fillRect(Math.round(x + 4), Math.round(y + 10), 8, 5);
@@ -289,6 +298,7 @@ export class Renderer {
             n.foot,
             n.moving,
           );
+        c.restore();
       }
     };
     drawActors(all.filter((n) => priority(n) >= 2));

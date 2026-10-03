@@ -1,6 +1,7 @@
 import { bindApplicationPorts } from "./ports.js";
 export const FRAME_PORTS = Object.freeze([
   "tickTime",
+  "tickDevices",
   "playActive",
   "battle",
   "actionBusy",
@@ -26,6 +27,19 @@ export class FrameApplication {
   }
   tick(now, visibleMaps) {
     this.tickTime(now, this.playActive());
+    const paused = !!(
+      this.battle ||
+      this.storyBusy ||
+      this.ui?.blocked ||
+      this.combat.busy ||
+      this.transitions.busy ||
+      this.travelDirector.busy ||
+      this.growthDirector.busy ||
+      this.growthBusy ||
+      this.actionBusy ||
+      this.sceneDirector?.busy
+    );
+    this.tickDevices(now, { paused: paused || !this.playActive() });
     this.field.tick(now);
     if (
       this.ui &&
@@ -47,18 +61,7 @@ export class FrameApplication {
     )
       this.ui.checkGrowth();
     this.field.npcs.tick(now, this.state.position, {
-      paused: !!(
-        this.battle ||
-        this.storyBusy ||
-        this.ui.blocked ||
-        this.combat.busy ||
-        this.transitions.busy ||
-        this.travelDirector.busy ||
-        this.growthDirector.busy ||
-        this.growthBusy ||
-        this.actionBusy ||
-        !!this.sceneDirector?.busy
-      ),
+      paused,
       maps: visibleMaps,
       playerFrom: this.motion.moving(now) ? this.motion.sourcePosition : null,
     });

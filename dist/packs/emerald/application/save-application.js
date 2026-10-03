@@ -1,3 +1,4 @@
+import { emptyFieldDevices } from "../../../engine/field-devices.js";
 import { emptyActors } from "../../../engine/actor-repository.js";
 import { emptyCrops } from "../../../engine/crop-growth.js";
 import { emptyWorldClock } from "../../../engine/world-clock.js";
@@ -72,6 +73,7 @@ export class SaveApplication {
       ),
       story: emptyStoryProgress(),
       worldState: emptyWorldState(),
+      devices: emptyFieldDevices(),
       flags: {},
       money: 3000,
       seen: [],

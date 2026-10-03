@@ -16,6 +16,7 @@ const water = (ctx, visual) => pulse(ctx, { ...visual, color: "#78d5ed" });
 const impact = (ctx, visual) => pulse(ctx, { ...visual, color: "#ffe596" });
 export const FIELD_ACTION_EFFECTS = Object.freeze({
   "field-impact": impact,
+  "field-fall": (ctx, visual) => pulse(ctx, { ...visual, color: "#a58c73" }),
   "field-dive": water,
   "field-water": water,
   "field-fishing": water,

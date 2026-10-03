@@ -13,6 +13,7 @@ export function registerEmeraldCommands(game, bus) {
     actor: "actors",
     field: "movement",
     world: "world",
+    device: "world",
     movement: "movement",
     battle: "battle",
     starter: "starter",
@@ -84,6 +85,9 @@ export function registerEmeraldCommands(game, bus) {
         ...changes,
         ...(data !== undefined ? { data: JSON.parse(data) } : {}),
       }),
+  );
+  register("device.interact", objectSchema({ id }, ["id"]), ({ id }) =>
+    game.applications.devices.interact(id),
   );
   register("actor.remove", byUid, ({ uid }) => game.actors.remove(uid));
   register(

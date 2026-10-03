@@ -1,3 +1,8 @@
+import { FieldDeviceCatalog } from "../../engine/field-devices.js";
+import {
+  EMERALD_FIELD_MECHANISMS,
+  validateEmeraldDeviceContent,
+} from "./field-mechanisms.js";
 import { NPCPoseRegistry } from "../../engine/npc-poses.js";
 import { ActorTemplateRegistry } from "../../engine/actor-repository.js";
 import { CropRegistry } from "../../engine/crop-growth.js";
@@ -60,6 +65,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       movement: MOVEMENT_MODES,
       fieldActions: EMERALD_FIELD_ACTIONS,
       terrainRules: EMERALD_TERRAIN_RULES,
+      fieldMechanisms: EMERALD_FIELD_MECHANISMS,
       destinations: TRAVEL_DESTINATIONS,
     },
     onError,
@@ -101,6 +107,13 @@ export function createEmeraldPlugins(db, plugins, onError) {
       )
         throw new Error(`Unknown field action cue ${action.cue}`);
     validateFieldLinks(c.fieldLinks, c);
+    new FieldDeviceCatalog({
+      mechanisms: c.fieldMechanisms,
+      devices: c.fieldDevices,
+      maps: c.maps,
+      actions: new FieldActionRegistry(c.fieldActions),
+    });
+    validateEmeraldDeviceContent(c);
     const npcBehaviors = new NPCBehaviorRegistry(c.npcBehaviors, {
       poses: new NPCPoseRegistry(c.npcPoses, { actors: c.actors }),
     });

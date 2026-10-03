@@ -1,3 +1,4 @@
+import { validateMoveAnimation } from "./extensions/visual-contracts.js";
 import {
   readOnly,
   validateSchema,
@@ -29,6 +30,17 @@ export class FieldActionRegistry {
       !definition.cue.length
     )
       throw new Error(`Invalid field action ${id}`);
+    if (definition.menu !== undefined && typeof definition.menu !== "boolean")
+      throw new Error("Invalid field action menu visibility");
+    if (definition.avatar) {
+      validateMoveAnimation({
+        duration: Math.max(1, definition.duration),
+        tracks: [],
+        poses: definition.avatar,
+      });
+      if (definition.avatar.some((p) => p.anchor !== "actor"))
+        throw new Error("Field avatars require actor anchors");
+    }
     const schema = validateSchema(definition.schema || objectSchema());
     if (schema.type !== "object")
       throw new Error("Field action inputs must be objects");
@@ -36,6 +48,7 @@ export class FieldActionRegistry {
       id,
       Object.freeze({
         ...definition,
+        ...(definition.avatar ? { avatar: readOnly(definition.avatar) } : {}),
         id,
         schema,
       }),
@@ -85,14 +98,26 @@ export class FieldActionService {
   }
   list(input = {}) {
     const context = readOnly(this.query());
-    return [...this.registry.definitions].map(([id, definition]) => {
-      try {
-        const { ok, reason } = this.inspect(id, input[id] || {}, context);
-        return { id, name: definition.name, ok, ...(reason ? { reason } : {}) };
-      } catch (error) {
-        return { id, name: definition.name, ok: false, reason: error.message };
-      }
-    });
+    return [...this.registry.definitions]
+      .filter(([, d]) => d.menu !== false)
+      .map(([id, definition]) => {
+        try {
+          const { ok, reason } = this.inspect(id, input[id] || {}, context);
+          return {
+            id,
+            name: definition.name,
+            ok,
+            ...(reason ? { reason } : {}),
+          };
+        } catch (error) {
+          return {
+            id,
+            name: definition.name,
+            ok: false,
+            reason: error.message,
+          };
+        }
+      });
   }
   prepare(id, input = {}) {
     const result = this.inspect(id, input);
@@ -108,6 +133,7 @@ export class FieldActionService {
       name: definition.name,
       cue: definition.cue,
       duration: definition.duration,
+      avatar: definition.avatar || null,
       target,
       operation,
     });

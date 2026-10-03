@@ -30,6 +30,10 @@ export const WORLD_PORTS = Object.freeze([
   "battle",
   "bindMovement",
   "bindFieldActions",
+  "bindDevices",
+  "deviceEvent",
+  "deviceVisit",
+  "interactDevice",
   "busy",
   "camera",
   "catalog",
@@ -152,6 +156,7 @@ export class WorldApplication {
     }
   }
   prepareEntry(map) {
+    const deviceVisit = this.deviceVisit(map);
     const draft = this.worldState.prepareVisit(map),
       projected = this.worldState.projectObjects(map, undefined, draft),
       runtime = new Map(this.field.npcs.occupants(map).map((o) => [o.id, o]));
@@ -196,7 +201,9 @@ export class WorldApplication {
             )
           )
             throw new Error("Map entry is occupied");
+          deviceVisit.check();
           this.worldState.commit(draft);
+          deviceVisit.commit();
           for (const id of changed) this.field.npcs.invalidate(map, id);
           return true;
         } catch (error) {
@@ -237,6 +244,7 @@ export class WorldApplication {
     if (this.ui.blocked) return;
     const object = this.world.interact();
     if (!object) {
+      if (this.interactDevice()) return;
       const action = this.fieldActionOptions().find(
         (entry) =>
           entry.ok && ["dive", "surface", "waterfall"].includes(entry.id),
@@ -303,6 +311,8 @@ export class WorldApplication {
       state: this.state.worldState,
       objects: (map) => this.baseWorldObjects(map),
     });
+    const resumeVisit =
+      this.state.worldState.activeMap === this.state.position.map;
     const visit = this.worldState.prepareVisit(this.state.position.map, {
       resume: true,
     });
@@ -359,7 +369,14 @@ export class WorldApplication {
             matchesCondition(e.requires, this.state, this.conditionQueries),
           ),
       onStep: (cell) => this.step(cell),
-      onProgress: () => this.advanceTravelClocks(),
+      onStart: ({ from, position }) => {
+        this.deviceEvent("leave", from, { position });
+        this.deviceEvent("enter", position, { from });
+      },
+      onProgress: () => {
+        this.deviceEvent("settle", this.state.position);
+        this.advanceTravelClocks();
+      },
       onMap: () => {
         this.visitMap();
         this.onMap(this.world.map.title, this.state.position.map);
@@ -383,6 +400,7 @@ export class WorldApplication {
       camera: this.camera,
       reducedMotion: this.reducedMotion,
     });
+    this.bindDevices({ resume: resumeVisit });
     this.bindFieldActions();
     this.visitMap();
     this.plugins?.rebind();

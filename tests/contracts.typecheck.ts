@@ -6,6 +6,8 @@ import type {
   Creature,
   FieldActionDefinition,
   TerrainRuleDefinition,
+  FieldMechanismDefinition,
+  FieldDeviceDefinition,
 } from "../dist/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
@@ -167,3 +169,24 @@ const actorPose: import("../dist/engine/contracts.js").NPCPoseDefinition = {
   actor: "Boy1",
 };
 void actorPose;
+
+const devicePolicy: FieldMechanismDefinition = {
+  scope: "permanent",
+  interact(context) {
+    return {
+      state: { mode: context.mode },
+      timers: [{ key: "reset", delayMs: 20 }],
+      requests: [
+        { key: "fall", action: "fall", input: { device: context.device.id } },
+      ],
+    };
+  },
+};
+const device: FieldDeviceDefinition = {
+  map: "Lab",
+  x: 1,
+  y: 1,
+  mechanism: "demo:switch",
+};
+void devicePolicy;
+void device;

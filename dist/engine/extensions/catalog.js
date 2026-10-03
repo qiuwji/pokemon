@@ -14,6 +14,8 @@ export const CONTENT_KINDS = Object.freeze([
   "fieldActions",
   "fieldLinks",
   "terrainRules",
+  "fieldMechanisms",
+  "fieldDevices",
   "timeTasks",
   "crops",
   "berryPlots",
@@ -112,6 +114,14 @@ export class ExtensionCatalog {
   dependencies(state) {
     const used = [
       state.position?.map,
+      ...Object.keys(state.devices?.records || {}),
+      ...Object.keys(state.devices?.timers || {}),
+      ...Object.entries(state.devices?.requests || {}).flatMap(
+        ([id, requests]) => [
+          id,
+          ...Object.values(requests).map((r) => r.action),
+        ],
+      ),
       ...Object.values(state.actors?.records || {}).flatMap((r) => [
         r.template,
         r.map,

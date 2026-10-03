@@ -51,6 +51,52 @@ const diveTarget = (action) => (c) =>
 
 /** Gen III qualifications belong to the rule pack; content supplies objects, dive links and encounter tables. */
 export const EMERALD_FIELD_ACTIONS = {
+  fall: {
+    name: "落下",
+    cue: "field-fall",
+    menu: false,
+    duration: 80000 / 60,
+    avatar: [
+      {
+        anchor: "actor",
+        start: 0,
+        end: 1,
+        keyframes: [
+          { at: 0, values: { y: 0, opacity: 1 } },
+          { at: 0.25, easing: "in-quad", values: { y: 0, opacity: 1 } },
+          { at: 1, values: { y: 24, opacity: 0 } },
+        ],
+      },
+    ],
+    schema: objectSchema(
+      { device: { type: "string", minLength: 1, maxLength: 128 } },
+      ["device"],
+    ),
+    allowed(c, input) {
+      const d = c.devices.devices[input.device];
+      return (
+        !!d &&
+        c.position.map === d.map &&
+        c.position.x === d.x &&
+        c.position.y === d.y &&
+        GEN3_ELEVATION.compatible(
+          c.position.elevation ?? 0,
+          d.elevation ?? 0,
+        ) &&
+        behavior(c, c.position) === BEHAVIOR.CRACKED_FLOOR_HOLE
+      );
+    },
+    target: (c, input) => ({
+      ...c.position,
+      device: input.device,
+      to: c.devices.devices[input.device].config.to,
+    }),
+    plan: (c, target) => ({
+      kind: "travel",
+      position: target.to,
+      mode: "walk",
+    }),
+  },
   cut: {
     name: "居合斩",
     cue: "field-cut",

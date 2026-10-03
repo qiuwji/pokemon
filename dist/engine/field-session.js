@@ -13,6 +13,7 @@ export class FieldSession {
     now,
     onStep = () => {},
     onProgress = () => {},
+    onStart = () => {},
     onMap = () => {},
     prepareEntry,
     elevation = null,
@@ -37,6 +38,7 @@ export class FieldSession {
       now,
       onStep,
       onProgress,
+      onStart,
       movement,
       terrain,
       canContinue,
@@ -264,6 +266,7 @@ export class FieldSession {
     };
     this.pending = result;
     this.scriptedStep = scripted;
+    this.onStart({ from, position: { ...this.position }, direction });
     return true;
   }
   tick(now) {

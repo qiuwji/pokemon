@@ -1,3 +1,4 @@
+import { sampleAnimationTrack } from "./animation-timing.js";
 /** Semantic action phases; no party qualifications, map mutation or encounter rolls. */
 export class FieldActionDirector {
   constructor({ timeline, reducedMotion = () => false }) {
@@ -7,7 +8,20 @@ export class FieldActionDirector {
   sample(now = this.timeline.now()) {
     if (!this.active) return null;
     const a = this.active;
+    const player = {};
+    if (a.phase !== "settle" && !this.reducedMotion()) {
+      const time = Math.max(
+        0,
+        Math.min(1, (now - a.actionStart) / Math.max(1, a.totalDuration)),
+      );
+      for (const pose of a.avatar || [])
+        Object.assign(
+          player,
+          sampleAnimationTrack(pose, time)?.parameters || {},
+        );
+    }
     return {
+      player,
       id: a.id,
       cue: a.cue,
       target: a.target,
@@ -24,9 +38,13 @@ export class FieldActionDirector {
     const duration = this.reducedMotion()
       ? Math.min(100, plan.duration)
       : plan.duration;
+    const actionStart = this.timeline.now();
     const phase = (name, ms) => {
       this.active = {
         id: plan.id,
+        avatar: plan.avatar,
+        actionStart,
+        totalDuration: duration,
         cue: plan.cue,
         target: plan.target,
         phase: name,

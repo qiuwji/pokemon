@@ -192,7 +192,7 @@ export class World {
         mapId: p.map,
         dir,
         from: { ...p },
-        warp,
+        warp: warp || null,
       }) ||
       oneWay === dir
     ) {
