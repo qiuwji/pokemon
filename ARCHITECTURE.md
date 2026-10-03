@@ -1,168 +1,105 @@
 # 架构与扩展约定
 
-本项目按可继续开发的软件工程维护。浏览器只是一个宿主；规则、内容、会话、演出与宿主适配器各有职责。当前依然是序章切片，不是完整原作。
+当前工程 0.15.0：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
 
-## 目录和依赖方向
+首先阅读 [README.md](README.md) 的运行入口和范围；执行顺序看 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md)，验证与已知问题看 [DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md)。本文定义当前结构，不把历史里程碑当作当前能力。
+
+## 层次与依赖方向
 
 ```text
 dist/
-  app.js                       组合入口，只装配依赖和更新画面
-  engine/                      可在 Node 中运行，不引用网页或绿宝石剧情
-    model.js                   第三世代数值、随机数、精灵和经验
-    battle.js                  装配战斗领域服务
-    battle/                    队伍、行动、回合、招式、临时状态、结算、事件
-    effects.js / move-effects.js  操作注册与招式阶段定义
-    items.js / conditions.js / story.js  道具试算提交、条件与剧情账本
-    contracts.d.ts             内容、目标、组织与视图类型合同
-    party.js                   恢复、首发、学习招式、等级进化命令
-    world.js                   格子碰撞、连接、入口意图、调查探测
-    motion.js                  连续世界坐标、相机用的插值、四向帧表
-    npcs.js                    巡走、朝向、目标与出发格占用
-    field-session.js           移动结束后处理脚步事件和入口转场
-    battle-session.js          串行行动、演出锁、战斗进入/退出
-    timeline.js                可注入时钟，遮盖→提交→揭开的转场协议
-    commands.js                按顺序等待执行剧情指令
-    field-director.js          接管角色、靠近/跟随/表情、演出作用域与参数校验
-    pathfinding.js             复用 World 规则的有界寻路
-    camera.js                  世界坐标镜头聚焦、插值与平滑回归
-    content.js                 内容尺寸、图块和数据库引用校验
-    save-store.js              存储端口、版本检查与迁移链
-  presentation/                把事件变成画面；不决定规则结果
-    battle-view.js             多席位布局和独立快照投影
-    battle-director.js         快照→血条、精灵姿态、粒子与球的状态
-    battle-canvas.js           战斗画面绘制
-    effect-registry.js / scene-director.js  注册视觉与独立场景时钟
-    environment-canvas.js      持续天气、状态、影子和昼夜
-    field-canvas.js            语义表情→像素气泡，不读取剧情进度
-  adapters/                    浏览器有关的输入、绘图、音效与工具接口
-    canvas-renderer.js         可视范围内的网格、图块、角色绘制
-    browser-input.js           键盘/触屏→命令；可解除绑定
-    transition-dom.js          遮盖 Canvas、菜单和 HUD 的转场层
-    audio.js                   真实资源音频、解码缓存、通道、采样循环、续播和释放
-    browser-tools.js           可选 WebMCP；不绕过游戏规则
-  packs/emerald/               本作的上层建筑，允许了解具体角色和物品
-    pack.js                    素材标识、起点与 NPC 内容
-    trainers.js / items.js / quests.js  训练家、道具、任务定义
-    save-contract.js           当前开发存档校验，不配置旧档迁移
-    story.js                   互动和战后故事→指令序列、招式动画配置
-    scenes.js                  本作的求救、背包、回研究所和治疗演出数据
-    adventure.js               内容装配与兼容门面
-    application/              按领域拆分的应用用例、显式端口与会话所有权
-    interface.js               UI 装配器和主菜单入口
-    ui-shell.js                对话、弹窗、导航、焦点与共享视图片段
-    *-interface.js             队伍、背包、图鉴、商店、盒子、存档等页面
-  game-pack.js                 旧调用方的兼容转出口
-  content.json                 结构化地图、图集定义、精灵、招式和遭遇表
+  app.js                         浏览器组合入口、生命周期与画面更新
+  engine/                        通用领域服务，无 DOM/绘图/绿宝石包依赖
+    battle/                      队伍/席位、目标、行动、阶段结算、状态、历史、事件
+    rules/gen3/                  有来源的第三世代规则与数据
+    growth/ / creatures/         培育、遗传、进化、形态身份与有效属性
+    items.js                     白名单草稿上的道具预检/提交
+    story.js / commands.js       条件、剧情账本与校验后的指令执行
+    world*.js                    网格世界、动态覆盖、访问与时间
+    field-*.js                   野外会话、资格/行动、地形、机关与触发
+    movement*.js / motion.js     移动模式/输入策略与可注入时钟的插值
+    actor-repository.js          持续 Actor 身份、状态和命令
+    npcs.js / npc-*.js           自主决策/姿态与占用
+    pathfinding.js               复用世界规则的有界导航
+    extensions/                 内容注册、查询、命令事务、界面与表现合同
+    save-store.js                当前版本存储、原文保护，无迁移链
+    contracts.d.ts               公开类型合同
+  presentation/                  快照/语义事件 → 纯取样与演出帧
+    battle-director.js           战斗导演及注册的事件演出
+    effect-registry.js           可注册效果与招式脚本
+    scene-director.js            场景时钟和状态
+    *-canvas.js                  消费演出帧的 Canvas 绘制器
+  adapters/                      浏览器输入、Canvas/DOM、存储与真实资源音频
+  packs/emerald/                 原作规则配置、剧情、地图业务与页面
+    adventure.js                 内容配置、应用装配、生命周期和忙碌聚合
+    application/composition.js   18 个应用服务的有限依赖装配
+    application/public-ports.js  当前宿主 API 的显式字段/方法所有权表
+    application/*-application.js 按领域拥有会话、协调用例
+    extensions.js                通用插件合同的本作校验/默认注册
+    interface.js / ui-shell.js   页面装配与共用交互基础设施
+    *-interface.js               独立页面，只查询和提交命令
+  content.json                   基础地图、图集、物种与招式数据
+  assets/                        共享图块、精灵、字体、真实音频与来源记录
 ```
 
 ```mermaid
 flowchart TD
-  Entry[app.js 组合入口] --> Pack[绿宝石会话与内容包]
-  Entry --> Host[浏览器适配器]
-  Pack --> Engine[规则与通用会话服务]
-  Pack --> Content[content.json / 图块图集]
-  Engine --> Events[事件快照 / 场景切换意图]
-  Events --> Presentation[演出状态与绘制]
-  Presentation --> Host
+  Content[内容包 / 插件注册] --> Registry[目录与引用校验]
+  Host[浏览器输入 / 网络] --> Commands[同一校验命令入口]
+  Registry --> Applications[有限依赖的应用服务]
+  Commands --> Applications
+  Applications --> Domain[通用领域服务与唯一状态所有者]
+  Domain --> Events[只读快照 / 语义事件]
+  Events --> Directors[导演 / 纯轨迹取样]
+  Directors --> Adapters[Canvas / DOM / 真实资源 Audio]
 ```
 
-`engine/` 不导入 `packs/`、`presentation/`、`adapters/`；`presentation/` 不导入剧情，不调用伤害、捕捉或游戏随机数。依赖通过构造器传入，不使用全局服务定位器。主入口没有博士、小遥、商店或伤害规则。架构测试检查这些约束和模块路径。
+`engine/` 不导入 `packs/`、`presentation/`、`adapters/`；表现层不重新计算伤害、命中或捕捉，不调用游戏随机数。具体规则注入领域服务，视觉注入注册表，跨应用调用通过组合入口提供的有限端口。架构测试检查依赖方向、模块引用和所有 UI 页面写状态的边界。
 
-## 状态所有权和输入边界
+## 应用服务与状态所有权
 
-- 持久进度由 `EmeraldAdventure.state` 持有；地图和战斗规则通过该会话提供的对象工作。
-- `interface.js` 读取状态、发送命令，不能直接修改持久状态。购买、回复、换队、学习、进化、导入都走会话命令；会话再次验证战斗/移动锁及资源条件。
-- `Battle` 执行一次行动，输出带席位集合、UID、行动 ID 的精简独立快照。规则对象可变，事件快照与演出姿态独立，血条动画不会修改真实 HP。
-- `FieldSession` 在当前格移动结束后才触发草丛遭遇，避免脚还没落地就进入战斗。未白镇与道路在同一全局网格中，连接不需要转场。
-- 房屋入口先返回目标意图，人物走到门口，再由 `TransitionController` 完全遮盖画面、提交目标位置、揭开新场景。战斗退出先回到野外，后续剧情保持指令原始顺序；传送不会被提前提取执行。剧情的 `scene` 在完全遮盖时切换并布置入口人物，再播放进场走路。
-- `FieldDirector` 在剧情作用域内接管角色。剧情走路复用地图碰撞和移动插值，但不触发随机遇敌或自动门；NPC 的自主行动暂停，脚本轨道正常推进。镜头和像素表情属于临时状态，不写进存档。
-- 指令整树先校验。并行轨道不能同时控制同一角色或镜头，切场景不能与其他轨道并行。失败会等待正在执行的其他轨道结束并释放作用域，不把中间演出自动保存。
-- `BattleSession` 拒绝演出期间的重复行动。每个回合的规则计算和动画串行执行。战斗结束后在第一个对话输入点返回，剧情指令自己等待玩家确认；不能把工具调用锁死到整段剧情结束。
-- 环境 NPC 的随机数与战斗 PRNG 分开，动画没有随机数，因此帧率不会改变遭遇、伤害或捕捉结果。时钟与等待方法可注入，测试无需真实等待动画。
+`adventure.js` 当前 136 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。
 
-这是单人游戏，采用受控的共享领域对象，而不是把所有状态每帧深复制。UI 不写领域状态的规则由架构测试保护。未来联机需要另加权威服务器和同步协议，不能直接拿目前的本机会话当服务端。
+- SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
+- 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。
+- 依赖端口为冻结的实时 getter。读档更换对象后读取新所有者；不会缓存旧 state。可信应用共享领域对象身份，插件获得只读查询和受控写入能力。
+- 只有可信宿主的 state 重载和 storyBusy 控制保留显式赋值口；其他公共字段/方法不可覆写。测试故障注入对准用例所有者。
+- bindField 重绑顺序：RNG → 形态 → 育成 → 时间 → 树果 → Actor → 世界；世界再绑定移动、机关、野外行动和插件。有限的跨服务生命周期接线由 composition 管理。
 
-## 扩展入口
+## 世界、移动与时间
 
-### 新地图 / 素材
+地图是 **16×16 metatile 网格**，每格从共享 **8×8 tile 图集**组装前后两层。connections 提供连续道路，warps 提供入口。规则不读取整张场景图片，世界 coordinates 与绘制像素分离。
 
-1. 加入 `maps[id]` 的尺寸、`blocks`、`behavior`、`border`、`tileset`、`indoor`、`connections`、`warps`、`npcs`、`signs`。
-2. 图片是共享 **8×8 原始图块图集**。一个 **16×16 metatile** 由 8 个图块描述前后两层；地图是格子 ID 数组，不能以一张整景图片替代。
-3. 连接声明方向/目标/偏移，门声明目标入口序号。`SceneGraph` 自动把相连地图放入同一坐标系。
-4. NPC 在内容包声明 `movement.mode`、范围和方向，复用巡走与占用逻辑。
-5. 运行内容校验与可达性测试。未收录的原作入口允许存在，玩家调查时明确提示，不把它当成可玩区域。
+WorldStateService 分离永久覆盖与当前访问 visit 覆盖；地图重进先预览入口再提交恢复，读档恢复当前访问。appearance 独立覆盖外观，不能偷偷改变碰撞/高度/behavior。玩家、静态 NPC、持续 Actor、寻路、视线和互动使用一致的高度政策与步进预约。见 [WORLD_STATE.md](docs/engine/WORLD_STATE.md)、[WORLD_LIFECYCLE.md](docs/engine/WORLD_LIFECYCLE.md)、[FIELD_ELEVATION.md](docs/engine/FIELD_ELEVATION.md)。
 
-### 新剧情
+FieldActionService 拥有资格、目标和可校验行动计划；应用层协调移动/世界提交/钓鱼会话与演出。FieldTerrainRegistry 管通行和强制动作政策。FieldDeviceCatalog/FieldDevices 管多格 footprint、访问激活、逻辑状态与可保存的局部延迟任务；机关计时遵循游戏暂停，不使用 RTC 驱动帧动画。薄冰、裂地板和桥面升沉是内容包政策，核心没有房间 ID 分支。见 [FIELD_ACTIONS.md](docs/engine/FIELD_ACTIONS.md)、[FIELD_TERRAIN.md](docs/engine/FIELD_TERRAIN.md)、[FIELD_DEVICES.md](docs/engine/FIELD_DEVICES.md)、[BRIDGES.md](docs/engine/BRIDGES.md)。
 
-`story.js` 返回指令，而不是操作 DOM。例如：
+MovementRegistry / MovementInputRegistry 分别描述模式和输入策略。Mach/Acro 原作控制在 Gen3 政策中，浏览器只映射逻辑输入。GridMotion / Sprite 序列负责插值和姿态帧，不决定规则。见 [MOVEMENT_INPUT.md](docs/engine/MOVEMENT_INPUT.md)。
 
-```js
-[
-  { type: "dialog", name: "研究员", lines: ["找到它了！"] },
-  {
-    type: "reward",
-    id: "research.sample",
-    flags: { sampleReceived: true },
-    items: { potion: 1 },
-  },
-  { type: "teleport", position: { map: "SomeLab", x: 3, y: 5, dir: "up" } },
-];
-```
+WorldClock 保存本地游戏 RTC，并单独累计前台游玩时长；宿主注入 wallNow/playActive。恢复、设备时钟回退和离线策略显式处理。WorldSchedule 保存持久任务，事实/业务提交遵循应用可用时机；CropService 单独负责树果成长和浇水/收获。见 [WORLD_TIME.md](docs/engine/WORLD_TIME.md)。每日事件入口不代表全部每日原作业务已经完成。
 
-StoryEngine 按 id/trigger/requires/after/once/build 注册事件，选择条件与依赖符合的事件，分别记录完成和奖励账本并校验依赖循环。内容包为 `CommandRunner` 注入指令处理器。对话确认完成才执行奖励，传送使用同一转场服务。未知指令明确抛错。新的指令种类在注册表增加处理器；既有引擎不需要理解角色名。
+ActorRepository 保存全局身份与模板状态；ActorApplication 提供动态生成、相邻地图交通、只读感知/BFS、邻接互动、姿态和记忆协调。帧插值不写进存档。完整日程/行为模板待补；伙伴跟随按用户要求以后由插件实现。见 [ACTORS.md](docs/engine/ACTORS.md)。
 
-现在还支持自动行走、靠近、跟随、朝向、等待、表情、镜头聚焦/回归、场景布置以及顺序/并行组合。具体的指令合同、角色 ID、控制释放、复用例子和边界见 [CUTSCENES.md](CUTSCENES.md)。NPC 跨房间用明确场景布置；当前不支持长剧情中途存档或把战斗作为可恢复的暂停指令。
+## 战斗、剧情与育成
 
-### 新招式 / 动画
+Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多回合/延迟行动、结算和快照服务。MoveEffectRegistry 是唯一效果描述入口；未知效果报错，明确未支持的效果不能花费 PP 或随机数。规则扩展通过阶段/操作/状态合同，而不是 UI 分支。运行目录有 354 个第三世代招式，完整语义仍待逐项核对。见 [BATTLE_ARCHITECTURE.md](BATTLE_ARCHITECTURE.md)、[机制矩阵](docs/engine/MECHANISM_MATRIX.md)、[MOVE_AUDIT.md](docs/engine/MOVE_AUDIT.md)。
 
-招式效果通过唯一 MoveEffectRegistry 注册阶段描述符；道具通过上下文、目标和效果试算提交。具体说明见 [ENGINE_EVOLUTION.md](ENGINE_EVOLUTION.md)。
+StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/STORY_LANGUAGE.md) 和 [CUTSCENES.md](CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。
 
-Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务，rules 注入计算与政策。事件使用 combatants[] 和 sides[]，携带来源/目标席位和 UID，领域层不输出固定 player/enemy。单打表现适配器才生成双角色视图。模型、示例和结算边界见 [BATTLE_ARCHITECTURE.md](BATTLE_ARCHITECTURE.md)。
+精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。正式关键道具/TM/HM 操作还在推进。见 [GROWTH_ARCHITECTURE.md](GROWTH_ARCHITECTURE.md)、[CREATURE_FORMS.md](docs/engine/CREATURE_FORMS.md)。现代 Mega/Z 还需行动增强、资格/消费/限次等合同，不能以形态动画宣称完整玩法完成。
 
-招式脚本通过 PresentationRegistry 注册，Director 解释多轨时间线，Canvas 通过注册效果绘制；未配置招式保留通用 profile 回退。动画不重新判定命中、伤害或捕获。插件可登记绘制函数、招式覆盖、场景、转场和音频。详情见 [PRESENTATION_ARCHITECTURE.md](PRESENTATION_ARCHITECTURE.md)。
+## 表现、音频与界面扩展
 
-已支持：遭遇遮盖、双方进入、接触攻击、属性弹道、辅助招式波纹、受击闪烁/震动、HP 插值、倒下下沉、换人缩放释放、回复粒子、投球弧线、按真实结果晃球、挣脱释放和成功封球。减少动态效果模式保留时序与转场，移除抖动和闪烁。
+动画描述、纯采样、导演和绘制分离：关键帧、具名缓动、结果分支、区间片段可复用；注册的战斗语义事件演出可追加/替换。计算可脱离浏览器测试、时钟可注入、reducedMotion 统一处理。效果只消费已确定的规则事实。见 [ANIMATION_CONTRACT.md](docs/engine/ANIMATION_CONTRACT.md)。跨 Canvas/DOM/SVG 宿主生命周期与可注册环境合同仍待收口。
 
-当前是匹配像素风格的通用演出，**不是每个原作招式的逐帧动画复刻**。后续可替换某个 profile，而不用修改伤害公式。
+AudioAdapter 只播放注册的真实 WAV/OGG/MP3/M4A 资源；管理解码缓存、音乐/音效通道、循环采样区间、音量、淡入淡出、后台续播和释放。内容使用语义 cue，插件请求自有注册音效；没有振荡器/合成旋律/频率提示 API。目前 7 个真实采样不是完整原作 BGM/SE 库，见 [AUDIO.md](docs/engine/AUDIO.md)。
 
-### 存档版本
+interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，页面工厂只查询状态和提交应用命令。新增页面仍受架构守卫。插件可注册页面、现有菜单入口、HUD、声明式点击与数据/行为反馈；目前的槽位、控件、主题、既有页面区域和自定义对话能力仍有限。详见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md)、[PLUGIN_EVOLUTION.md](docs/engine/PLUGIN_EVOLUTION.md)。网络协议控制当前单机，复用同一校验命令系统，不是多人权威同步。
 
-`SaveStore(storage, key, validate, version, { diagnose })` 注入存储并且只接受当前版本（开发存档 7）。旧/未来 envelope 和已加载插件的旧 dataVersion 明确拒绝，读取不执行迁移、不改原始存档。迁移注册和插件 migrate 回调路径已经删除。存档要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。跨会话冲突与缺失内容依赖检查仍是当前数据完整性合同。
+## 存档、复用与验证
 
-### 另一个同类游戏
+SaveStore 只接受开发存档版本 7；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
 
-保留 `engine/`、通用 director 和输入适配器，建立新的内容包，替换数据库、图集、玩家角色配置、故事、名称和 UI 主题，在 `app.js` 装配新会话。`canvas-renderer.js` 的玩家素材通过 `playerActors` 注入，没有固定小悠；格子规格和 320×224 逻辑视口是当前绘图接口约定。
+制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-测试已经用 `Meadow/Cabin` 的独立小地图运行 `FieldSession` 和门转场，没有引用绿宝石 NPC、剧情或 DOM。当前可复用目标是 **16px 格子、单人探索、多席位回合制捕捉 RPG**，不是任意类型游戏的万能框架。原作地形行为码、默认第三世代规则与中文默认战斗文案属于现有约定；其他地形规则、语言和玩法需要对应规则/内容适配。
-
-## 维护方式和剩余边界
-
-- `npm test`：领域规则、完整序章可达性、资源合同、时序边界、迁移和依赖方向检查。
-- 内容导入工具保留在 `tools/`，来源与许可保留在 README 和 assets/licenses。
-- 代码已统一格式，模块职责、接口和时钟均可单独测试，不靠浏览器跑出一个“看起来没问题”的结果。
-- 当前没有内容编辑器或多人同步。插件 API 1、事务化状态、声明式 UI、事件与命令已实现；剧情 build 由内容包或插件返回校验后的演出指令。
-- 当前 UI 已按页面工厂拆分，ui-shell 管理基础设施，interface.js 仅负责装配与主菜单。
-- 双打/多阵营与特性/持有道具规则已有实现，范围和跨领域验收进度见 BATTLE_ARCHITECTURE.md、GEN3_RULE_COVERAGE.md 与 IMPLEMENTATION_PLAN.md；插件和网络入口详见各自架构文档。
-
-剩余目标见 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)。当前采用 JS、JSDoc/声明文件与运行时校验，尚未启用全项目 TypeScript 静态检查。可复用范围包括格子探索、队伍/席位战斗、剧情、培育与进化、插件事务、命令协议及注册式表现；不是完整通用游戏编辑器。
-
-## UI 页面装配（0.12）
-
-`createUIShell(game, {document, sound})` 管理弹窗、对话、焦点、返回和通知。页面采用 `createXInterface(game, deps)` 工厂，只读取状态并发送应用命令。页面间通过注入的导航回调协作，不互相导入；成长提示由 growth-interface 管理。interface.js 仅装配 shell、页面、扩展 DOM 和主菜单，保留 app.js 使用的动态 getter 与原返回接口。
-
-状态写入守卫递归覆盖内容包中所有 `*-interface.js`、interface.js 和 ui-shell.js，拆分不会让新页面逃逸检查。独立 DOM 端口测试使用冻结状态验证装配、对话和可见控件焦点循环，浏览器验证详情页插件点击和保存。此阶段全量 300 项测试通过。
-
-应用会话保留有意采用的宽门面和共享领域对象，避免机械改名。真正需要隔离的扩展入口使用 PluginHost 的只读查询、权限化事务、声明式 UI 及 CommandBus。页面、本地自动化与协议 1 网络请求共用命令验证。详情见 [PLUGIN_ARCHITECTURE.md](PLUGIN_ARCHITECTURE.md) 与 [NETWORK_ARCHITECTURE.md](NETWORK_ARCHITECTURE.md)。
-
-## 最终合同检查点（0.14）
-
-contracts.d.ts 定义内容、战斗组织/行动/目标、精灵、存档、插件事务/状态、声明式 UI、移动、视觉与网络协议。严格类型消费样例验证合法使用，并要求错误字段/只读写入产生编译错误；这是公共合同检查，尚不是全量 JS 静态类型化。
-
-creature-contract.js 共享创建与存档的精灵标量约束；物种/招式/UID 归属引用由内容包补充。SaveStore 写入前验证 detached draft；错误或不支持版本不会覆盖原存储。ItemService 禁止草稿添加、删除或修改白名单外字段，治愈睡眠同时移除计时。新创建策略失败恢复 PRNG，避免失败消耗游戏随机数。
-
-最终自动检查及浏览器流程见 FINAL_VALIDATION.md。
-
-
-应用层拆分与依赖/生命周期合同见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。门面保持兼容，但剧情、战斗、育成、存档、世界和库存用例已经分别由对应服务拥有。
-
-真实音频 API 与资源证据见 docs/engine/AUDIO.md；原合成音频描述以该文档为准。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。0.15.0 本轮自动检查为 **556 项测试通过、235 个 JS 模块语法通过**，证据见 [FINAL_VALIDATION.md](FINAL_VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。

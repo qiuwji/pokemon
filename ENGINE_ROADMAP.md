@@ -177,3 +177,9 @@ FieldDeviceCatalog/FieldDevices、独立 DeviceApplication、visit/permanent 机
 ### C2 桥面形变与多格机关首轮（2026-10-03）
 
 FieldDevices footprint/activate/范围只读 tiles、事件时钟同步、世界 appearance 独立外观、Fortree 原作默认入口/桥间压低/回弹与 Pacifidlog 双格升沉已针对性验证。新 8 项分别通过，关联 41 项首次 40 通过，旧夹具标准化后失败项通过；内容/类型/236 模块检查通过。详见 BRIDGES.md。完整桥面地图/图集、原音效编曲及逐 GBA 任务相位仍待业务/E，不当作地图完成。下一项正式关键道具/HM/TM 领域操作和资格，移动全时序/骑行道路与原 C/D/E 目标保留。旧视图/剧情回退和引擎示范默认清理继续跟进。
+
+### 用户反馈收口：失败测试、根文档与公共端口（2026-10-03）
+
+用户报告的 7 项失败已复现并修正夹具；保留未支持招式的 PP/回合/PRNG 不变化守卫。adventure.js 逐方法转发整理为冻结的显式 public-ports 所有权表，入口 382→136 行；没有把新用例回填入口，当前应用服务仍持有唯一领域状态。旧 compatibility.js 与 game-pack.js 转出口已删除。UI 命令 Proxy 与故障注入边界已验证，版本更新为 0.15.0。
+
+最终本轮 npm test 556/556，内容/类型/235 模块检查通过；README/ARCHITECTURE/APPLICATION_ARCHITECTURE/FINAL_VALIDATION 已同步当前结构和证据，基础 87 与运行 354 招式目录区分。不重复宣称 E 浏览器或全原作完成，未变化领域继续沿用证据。下一项仍为正式关键道具/TM/HM 操作及资格；先前 source 调研已进行、实现未开始，完整目标不缩减。

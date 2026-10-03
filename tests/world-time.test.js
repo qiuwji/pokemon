@@ -30,7 +30,6 @@ function setupClock(options = {}) {
   const clock = new WorldClock({
     state: emptyWorldClock(),
     wallNow: () => wall,
-    playActive,
     ...options,
   });
   return {

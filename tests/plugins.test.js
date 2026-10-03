@@ -206,8 +206,9 @@ test("Failed feeding rolls back memory, states, inventory, friendship, events an
   const original = structuredClone(game.state),
     events = [];
   host.events.on("companion-care:interacted", (e) => events.push(e));
-  const originalUse = game.useItem.bind(game);
-  game.useItem = (...args) => {
+  const inventory = game.applications.inventory;
+  const originalUse = inventory.useItem.bind(inventory);
+  game.applications.inventory.useItem = (...args) => {
     const result = originalUse(...args);
     if (result.ok) throw new Error("after item fault");
     return result;

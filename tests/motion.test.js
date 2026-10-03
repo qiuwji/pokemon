@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { SceneGraph, GridMotion, actorFrame } from "../dist/engine/motion.js";
 import { NPCSystem } from "../dist/engine/npcs.js";
-import { objectsFor } from "../dist/game-pack.js";
+import { objectsFor } from "../dist/packs/emerald/pack.js";
 const db = JSON.parse(
   fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
 );

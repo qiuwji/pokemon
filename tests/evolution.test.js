@@ -303,14 +303,14 @@ test("Successful battle medicine consumes one turn; all capture items share rest
   let attacks = 0;
   const { battle, player, enemy, bag } = setup({
     rules: {
-      accuracy:()=>true,
+      accuracy: () => true,
       damage: () => {
         attacks++;
         return { amount: 1, type: 1 };
       },
     },
   });
-  enemy.moves=[{id:"tackle",pp:35}];
+  enemy.moves = [{ id: "tackle", pp: 35 }];
   player.status = "poison";
   const events = battle.act({ kind: "item", item: "antidote", index: 0 });
   assert.equal(player.status, null);
@@ -359,11 +359,21 @@ test("Effect names and descriptors validate before battle; unsupported moves do 
       }),
     /invalid stage/,
   );
-  const { battle, player, rng } = setup();
-  player.moves[0] = { id: "taunt", pp: db.moves.taunt.pp };
+  const effects = new MoveEffectRegistry({
+    definitions: {
+      deliberately_unavailable: { supported: false, reason: "Not implemented" },
+    },
+  });
+  const local = structuredClone(db);
+  local.moves.unavailable = {
+    ...local.moves.taunt,
+    effect: "deliberately_unavailable",
+  };
+  const { battle, player, rng } = setup({ db: local, effects });
+  player.moves[0] = { id: "unavailable", pp: local.moves.unavailable.pp };
   const seed = rng.seed;
   assert.equal(battle.act({ kind: "move", index: 0 })[0].kind, "invalid");
-  assert.equal(player.moves[0].pp, db.moves.taunt.pp);
+  assert.equal(player.moves[0].pp, local.moves.unavailable.pp);
   assert.equal(battle.turn, 0);
   assert.equal(rng.seed, seed);
 });

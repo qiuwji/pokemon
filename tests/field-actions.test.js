@@ -574,7 +574,7 @@ test("The public fishing command accepts concurrent reel input, launches one enc
   });
   s.game.state.flags.oldRod = true;
   s.game.rng.int = () => 0;
-  s.game.startBattle = (mon) => {
+  s.game.applications.battle.startBattle = (mon) => {
     assert.equal(s.game.actionBusy, false);
     encounters.push(mon);
   };

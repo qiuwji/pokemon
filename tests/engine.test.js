@@ -14,7 +14,7 @@ import {
 } from "../dist/engine/model.js";
 import { Battle } from "../dist/engine/battle.js";
 import { World, SaveStore } from "../dist/engine/world.js";
-import { objectsFor, validateSave } from "../dist/game-pack.js";
+import { objectsFor, validateSave } from "../dist/packs/emerald/pack.js";
 const db = JSON.parse(
   fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
 );
