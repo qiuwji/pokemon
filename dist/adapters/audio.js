@@ -1,198 +1,269 @@
-/** Host audio port: asset playback, generated cues, loops, fades and teardown. No gameplay access. */
+import { validateAudioCue } from "../engine/extensions/audio-contracts.js";
+/** Resource player: decoding, channels, sample loops and host lifecycle. No gameplay access. */
 export class AudioAdapter {
   constructor({
     cues = new Map(),
-    createContext = () =>
-      new (window.AudioContext || window.webkitAudioContext)(),
-    createMedia = (source) => new Audio(source),
-    schedule = (...args) => setTimeout(...args),
-    cancel = (id) => clearTimeout(id),
+    createContext = () => new window.AudioContext(),
+    fetchAsset = (source) => fetch(source),
     onError = () => {},
   } = {}) {
-    Object.assign(this, {
-      cues,
-      createContext,
-      createMedia,
-      schedule,
-      cancel,
-      onError,
-    });
+    this.cues = new Map(
+      [...cues].map(([id, cue]) => [id, validateAudioCue(cue)]),
+    );
+    Object.assign(this, { createContext, fetchAsset, onError });
     this.context = null;
+    this.buffers = new Map();
+    this.voices = new Set();
+    this.volumes = { master: 1, music: 1, sound: 1 };
     this._enabled = false;
+    this.suspended = false;
+    this.disposed = false;
     this.music = null;
     this.musicVoice = null;
-    this.voices = new Set();
+    this.musicOffset = 0;
     this.generation = 0;
+    this.musicGeneration = 0;
+    this.musicRequest = null;
   }
   get enabled() {
     return this._enabled;
   }
   set enabled(value) {
-    this._enabled = !!value;
-    if (!this._enabled) {
-      this.generation++;
-      this.stopAll();
-    } else if (this.music) this.setMusic(this.music, true);
+    value = !!value;
+    if (this.disposed || value === this._enabled) return;
+    this._enabled = value;
+    if (value) {
+      this.unlock().catch(this.onError);
+      this.resumeMusic();
+    } else this.pausePlayback();
+  }
+  get playable() {
+    return this.enabled && !this.suspended && !this.disposed;
   }
   contextReady() {
-    this.context ??= this.createContext();
-    Promise.resolve(this.context.resume()).catch(this.onError);
-    return this.context;
+    if (this.disposed) throw new Error("Audio player is disposed");
+    return (this.context ??= this.createContext());
   }
-  tone(freq = 600, length = 0.07) {
-    if (!this.enabled) return;
-    try {
-      const a = this.contextReady(),
-        o = a.createOscillator(),
-        g = a.createGain();
-      o.type = "square";
-      o.frequency.value = freq;
-      g.gain.setValueAtTime(0.025, a.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + length);
-      o.connect(g);
-      g.connect(a.destination);
-      o.start();
-      o.stop(a.currentTime + length);
-    } catch (error) {
-      this.onError(error);
-    }
+  async unlock() {
+    await this.contextReady().resume();
   }
-  setMusic(id, force = false) {
-    if (id === this.music && !force) return;
-    this.music = id;
-    this.generation++;
-    if (this.musicVoice) this.stopVoice(this.musicVoice, 0.2);
-    this.musicVoice = null;
-    if (this.enabled && id) this.musicVoice = this.play(id, { music: true });
-  }
-  play(id, { music = false } = {}) {
-    if (!this.enabled) return null;
+  async load(id) {
     const cue = this.cues.get(id);
-    if (!cue) {
-      this.onError(new Error(`Unknown audio cue ${id}`));
+    if (!cue) throw new Error(`Unknown audio cue ${id}`);
+    const context = this.contextReady();
+    if (!this.buffers.has(cue.source)) {
+      const request = (async () => {
+        const response = await this.fetchAsset(cue.source);
+        if (!response.ok)
+          throw new Error(
+            `Audio resource failed: ${cue.source} (${response.status})`,
+          );
+        return context.decodeAudioData(await response.arrayBuffer());
+      })();
+      this.buffers.set(cue.source, request);
+      request.catch(() => {
+        if (this.buffers.get(cue.source) === request)
+          this.buffers.delete(cue.source);
+      });
+    }
+    const buffer = await this.buffers.get(cue.source);
+    if (cue.loopEnd !== undefined && cue.loopEnd > buffer.duration)
+      throw new Error(`Audio loop exceeds resource: ${id}`);
+    return buffer;
+  }
+  preload(ids) {
+    return Promise.all(ids.map((id) => this.load(id)));
+  }
+  targetVolume(cue) {
+    return cue.volume * this.volumes.master * this.volumes[cue.kind];
+  }
+  setVolume(channel, value) {
+    if (
+      !Object.hasOwn(this.volumes, channel) ||
+      !Number.isFinite(value) ||
+      value < 0 ||
+      value > 1
+    )
+      throw new Error("Invalid audio channel volume");
+    this.volumes[channel] = value;
+    for (const voice of this.voices)
+      if (!voice.stopped) {
+        const at = this.context.currentTime;
+        voice.gain.gain.cancelScheduledValues(at);
+        voice.gain.gain.setValueAtTime(this.targetVolume(voice.cue), at);
+      }
+  }
+  async play(id) {
+    const cue = this.cues.get(id);
+    if (!cue || cue.kind !== "sound") {
+      this.onError(new Error(`Unknown sound cue ${id}`));
       return null;
     }
-    let voice;
+    return this.start(id, cue);
+  }
+  setMusic(id) {
+    if (id !== null && this.cues.get(id)?.kind !== "music") {
+      this.onError(new Error(`Unknown music cue ${id}`));
+      return Promise.resolve(null);
+    }
+    if (id === this.music)
+      return this.musicRequest || Promise.resolve(this.musicVoice);
+    this.musicGeneration++;
+    if (this.musicVoice)
+      this.stopVoice(this.musicVoice, this.musicVoice.cue.fadeOutMs ?? 200);
+    this.musicVoice = null;
+    this.music = id;
+    this.musicOffset = 0;
+    this.musicRequest = null;
+    return this.resumeMusic();
+  }
+  resumeMusic() {
+    if (!this.playable || !this.music) return Promise.resolve(null);
+    const id = this.music,
+      token = ++this.musicGeneration;
+    const request = this.start(id, this.cues.get(id), {
+      musicToken: token,
+      offset: this.musicOffset,
+    })
+      .then((voice) => {
+        if (token === this.musicGeneration) this.musicVoice = voice;
+        return voice;
+      })
+      .finally(() => {
+        if (this.musicRequest === request) this.musicRequest = null;
+      });
+    this.musicRequest = request;
+    return request;
+  }
+  async start(id, cue, { musicToken = null, offset = 0 } = {}) {
+    if (!this.playable) return null;
+    const generation = this.generation;
+    let voice, gain, source;
     try {
-      const a = this.contextReady(),
-        gain = a.createGain();
+      const buffer = await this.load(id);
+      if (
+        !this.playable ||
+        generation !== this.generation ||
+        (musicToken !== null && musicToken !== this.musicGeneration)
+      )
+        return null;
+      const context = this.contextReady(),
+        active = [...this.voices].filter((v) => !v.stopped && v.id === id);
+      if (cue.kind === "sound" && active.length >= (cue.maxVoices ?? 8))
+        this.stopVoice(active[0]);
+      if (this.voices.size >= 64)
+        this.stopVoice(this.voices.values().next().value);
+      gain = context.createGain();
+      source = context.createBufferSource();
       voice = {
         id,
+        cue,
         gain,
-        nodes: [],
-        timer: null,
-        media: null,
+        source,
         stopped: false,
-        generation: this.generation,
+        cleaned: false,
+        startedAt: context.currentTime,
+        offset,
       };
       this.voices.add(voice);
-      gain.connect(a.destination);
-      gain.gain.setValueAtTime(music ? 0 : cue.volume, a.currentTime);
-      if (music)
-        gain.gain.linearRampToValueAtTime(cue.volume, a.currentTime + 0.2);
-      if (cue.source) {
-        const media = this.createMedia(cue.source);
-        voice.media = media;
-        media.loop = cue.loop;
-        const node = a.createMediaElementSource(media);
-        node.connect(gain);
-        voice.nodes.push(node);
-        media.onended = () => this.stopVoice(voice);
-        Promise.resolve(media.play()).catch((error) => {
-          this.stopVoice(voice);
-          this.onError(error);
-        });
-      } else {
-        const cycle = () => {
-          if (
-            voice.stopped ||
-            !this.enabled ||
-            (music && voice.generation !== this.generation)
-          )
-            return;
-          let at = a.currentTime + 0.02;
-          voice.nodes = voice.nodes.filter((node) => !node.finished);
-          for (const [note, duration] of cue.notes) {
-            if (note) {
-              const oscillator = a.createOscillator(),
-                envelope = a.createGain();
-              oscillator.type = "square";
-              oscillator.frequency.value = 440 * 2 ** ((note - 69) / 12);
-              envelope.gain.setValueAtTime(1, at);
-              envelope.gain.setValueAtTime(1, at + duration * 0.8);
-              envelope.gain.linearRampToValueAtTime(0, at + duration);
-              oscillator.connect(envelope);
-              envelope.connect(gain);
-              oscillator.onended = () => {
-                oscillator.finished = true;
-                oscillator.disconnect();
-                envelope.disconnect();
-              };
-              voice.nodes.push(oscillator);
-              oscillator.start(at);
-              oscillator.stop(at + duration);
-            }
-            at += duration;
-          }
-          voice.timer = this.schedule(
-            cue.loop ? cycle : () => this.stopVoice(voice),
-            (at - a.currentTime) * 1000,
-          );
-        };
-        cycle();
+      source.buffer = buffer;
+      source.loop = cue.loop;
+      if (cue.loopStart !== undefined) {
+        source.loopStart = cue.loopStart;
+        source.loopEnd = cue.loopEnd;
       }
+      const end = cue.loopEnd ?? buffer.duration,
+        begin = cue.loopStart ?? 0;
+      offset =
+        cue.loop && offset >= end
+          ? begin + ((offset - begin) % (end - begin))
+          : Math.min(offset, buffer.duration);
+      voice.offset = offset;
+      source.connect(gain);
+      gain.connect(context.destination);
+      const fade = (cue.fadeInMs ?? (cue.kind === "music" ? 200 : 0)) / 1000,
+        target = this.targetVolume(cue);
+      gain.gain.setValueAtTime(fade ? 0 : target, context.currentTime);
+      if (fade)
+        gain.gain.linearRampToValueAtTime(target, context.currentTime + fade);
+      source.onended = () => this.cleanup(voice);
+      source.start(0, offset);
       return voice;
     } catch (error) {
       if (voice) this.stopVoice(voice);
+      else {
+        source?.disconnect();
+        gain?.disconnect();
+      }
       this.onError(error);
       return null;
     }
   }
-  stopVoice(voice, fade = 0) {
-    if (!voice || voice.stopped) return;
+  cleanup(voice) {
+    if (voice.cleaned) return;
+    voice.cleaned = true;
     voice.stopped = true;
-    this.cancel(voice.timer);
-    const cleanup = () => {
-      this.voices.delete(voice);
-      voice.media?.pause();
-      for (const node of voice.nodes) {
-        try {
-          node.stop?.();
-          node.disconnect();
-        } catch {}
+    this.voices.delete(voice);
+    voice.source.onended = null;
+    voice.source.disconnect();
+    voice.gain.disconnect();
+    if (this.musicVoice === voice) this.musicVoice = null;
+  }
+  stopVoice(voice, fadeMs = 0) {
+    if (!voice || voice.cleaned) return;
+    if (!Number.isFinite(fadeMs) || fadeMs < 0 || fadeMs > 10000)
+      throw new Error("Invalid audio stop fade");
+    const at = this.context.currentTime;
+    voice.stopped = true;
+    if (fadeMs) {
+      voice.gain.gain.cancelAndHoldAtTime(at);
+      voice.gain.gain.linearRampToValueAtTime(0, at + fadeMs / 1000);
+      try {
+        voice.source.stop(at + fadeMs / 1000);
+      } catch {
+        this.cleanup(voice);
       }
-      voice.gain.disconnect();
-    };
-    if (fade && this.context) {
-      voice.gain.gain.cancelScheduledValues(this.context.currentTime);
-      voice.gain.gain.setValueAtTime(
-        voice.gain.gain.value,
-        this.context.currentTime,
-      );
-      voice.gain.gain.linearRampToValueAtTime(
-        0,
-        this.context.currentTime + fade,
-      );
-      voice.cleanupTimer = this.schedule(cleanup, fade * 1000);
     } else {
-      this.cancel(voice.cleanupTimer);
-      cleanup();
+      try {
+        voice.source.stop();
+      } catch {
+        /* An unstarted/ended source still owns connections to release. */
+      } finally {
+        this.cleanup(voice);
+      }
     }
   }
+  pausePlayback() {
+    this.generation++;
+    this.musicGeneration++;
+    this.musicRequest = null;
+    if (this.musicVoice)
+      this.musicOffset =
+        this.musicVoice.offset +
+        Math.max(0, this.context.currentTime - this.musicVoice.startedAt);
+    this.stopAll();
+  }
+  setSuspended(value) {
+    value = !!value;
+    if (this.disposed || value === this.suspended) return;
+    this.suspended = value;
+    if (value) this.pausePlayback();
+    else this.resumeMusic();
+  }
   stopAll() {
-    for (const voice of [...this.voices]) {
-      if (voice.stopped) {
-        this.cancel(voice.cleanupTimer);
-        voice.stopped = false;
-      }
-      this.stopVoice(voice);
-    }
+    this.generation++;
+    this.musicGeneration++;
+    this.musicRequest = null;
+    for (const voice of [...this.voices]) this.stopVoice(voice);
     this.musicVoice = null;
   }
   dispose() {
+    if (this.disposed) return;
+    this.pausePlayback();
+    this.disposed = true;
     this._enabled = false;
-    this.stopAll();
     this.music = null;
+    this.buffers.clear();
     Promise.resolve(this.context?.close()).catch(this.onError);
     this.context = null;
   }

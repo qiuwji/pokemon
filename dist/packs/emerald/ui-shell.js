@@ -2,7 +2,7 @@ import { PACK, TYPE_NAMES, STATUS_NAMES, questFor } from "./pack.js";
 /** Shared UI services. Domain mutations use the supplied application command facade. */
 export function createUIShell(
   game,
-  { document: doc = document, tone = () => {} } = {},
+  { document: doc = document, sound = () => {} } = {},
 ) {
   const navigation = {};
   const requestFrame =
@@ -165,7 +165,7 @@ export function createUIShell(
 
   function nextDialogue() {
     if (!dialog) return;
-    tone(660);
+    sound("emerald:confirm");
     if (++dialog.index >= dialog.lines.length) {
       const cb = dialog.after;
       dialog = null;
@@ -229,7 +229,7 @@ export function createUIShell(
     document: doc,
     root,
     canvas,
-    tone,
+    sound,
     modal,
     closeModal,
     toast,

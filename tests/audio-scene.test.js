@@ -6,26 +6,31 @@ import { createEmeraldAudio } from "../dist/packs/emerald/audio-library.js";
 import { SceneDirector } from "../dist/presentation/scene-director.js";
 import { createEmeraldSceneDefinitions } from "../dist/packs/emerald/presentation-scenes.js";
 import { Timeline } from "../dist/engine/timeline.js";
-function fakeAudio() {
-  const timers = new Map(),
-    nodes = [];
-  let sequence = 0;
+function fakeAudio({ fetchAsset } = {}) {
+  const nodes = [],
+    requests = [];
   const node = () => {
     const result = {
       connect() {},
       disconnect() {
         this.disconnected = true;
       },
-      start() {},
-      stop() {
-        this.stopped = true;
+      start(at, offset) {
+        this.offset = offset;
       },
-      frequency: {},
+      stop(at) {
+        this.stopped = true;
+        if (at === undefined) this.onended?.();
+      },
       gain: {
         value: 0,
-        setValueAtTime() {},
-        linearRampToValueAtTime() {},
-        exponentialRampToValueAtTime() {},
+        setValueAtTime(v) {
+          this.value = v;
+        },
+        linearRampToValueAtTime(v) {
+          this.value = v;
+        },
+        cancelAndHoldAtTime() {},
         cancelScheduledValues() {},
       },
     };
@@ -34,118 +39,324 @@ function fakeAudio() {
   };
   const context = {
     currentTime: 0,
+    destination: {},
     createGain: node,
-    createOscillator: node,
-    createMediaElementSource: node,
+    createBufferSource: node,
+    decodeAudioData: async () => ({ duration: 10 }),
     resume: async () => {},
     close: async () => {},
   };
   return {
     context,
     nodes,
-    timers,
-    schedule: (fn) => {
-      timers.set(++sequence, fn);
-      return sequence;
-    },
-    cancel: (id) => timers.delete(id),
+    requests,
+    fetchAsset:
+      fetchAsset ||
+      (async (source) => {
+        requests.push(source);
+        return { ok: true, arrayBuffer: async () => new ArrayBuffer(8) };
+      }),
   };
 }
-test("Music switches/muting cancels loops and voices; re-enable restores current context without spawning duplicate tracks", () => {
+const musicCues = () =>
+  new Map([
+    [
+      "town",
+      validateAudioCue({
+        kind: "music",
+        volume: 0.4,
+        loop: true,
+        source: "assets/town.ogg",
+        loopStart: 2,
+        loopEnd: 8,
+      }),
+    ],
+    [
+      "battle",
+      validateAudioCue({
+        kind: "music",
+        volume: 0.5,
+        loop: true,
+        source: "assets/battle.ogg",
+      }),
+    ],
+    [
+      "hit",
+      validateAudioCue({
+        kind: "sound",
+        volume: 0.2,
+        loop: false,
+        source: "assets/hit.wav",
+        maxVoices: 2,
+      }),
+    ],
+  ]);
+const player = (f, more = {}) =>
+  new AudioAdapter({
+    cues: musicCues(),
+    createContext: () => f.context,
+    fetchAsset: f.fetchAsset,
+    ...more,
+  });
+test("Asset music switches, caches decoded buffers and resumes its sample position after mute/background pause", async () => {
   const f = fakeAudio(),
-    audio = new AudioAdapter({
-      cues: createEmeraldAudio(),
-      createContext: () => f.context,
-      schedule: f.schedule,
-      cancel: f.cancel,
-    });
-  audio.setMusic("emerald:town");
+    audio = player(f);
+  await audio.setMusic("town");
   assert.equal(f.nodes.length, 0);
   audio.enabled = true;
-  const first = audio.musicVoice;
+  const first = await audio.setMusic("town");
   assert(first);
-  audio.setMusic("emerald:town");
-  assert.equal(audio.musicVoice, first);
-  audio.setMusic("emerald:battle");
+  assert.equal(first.source.loopStart, 2);
+  assert.equal(first.source.loopEnd, 8);
+  assert.equal(await audio.setMusic("town"), first);
+  f.context.currentTime = 9;
+  audio.setSuspended(true);
+  assert.equal(audio.voices.size, 0);
+  audio.setSuspended(false);
+  const resumed = await audio.setMusic("town");
+  assert.equal(resumed.offset, 3);
+  assert.equal(f.requests.length, 1);
+  const battle = await audio.setMusic("battle");
   assert(first.stopped);
-  assert(audio.musicVoice);
+  assert.equal(battle.id, "battle");
   audio.enabled = false;
   assert.equal(audio.voices.size, 0);
-  assert.equal(f.timers.size, 0);
   audio.enabled = true;
-  assert.equal(audio.musicVoice.id, "emerald:battle");
+  assert.equal((await audio.setMusic("battle")).id, "battle");
   audio.dispose();
-  assert.equal(f.timers.size, 0);
+  assert.equal(audio.voices.size, 0);
+  assert.equal(audio.buffers.size, 0);
+});
+test("Pending asset loads cannot start after mute, track replacement or disposal", async () => {
+  const responses = new Map(),
+    f = fakeAudio({
+      fetchAsset: (source) => new Promise((r) => responses.set(source, r)),
+    }),
+    audio = player(f);
+  audio.enabled = true;
+  const town = audio.setMusic("town"),
+    battle = audio.setMusic("battle");
+  responses.get("assets/town.ogg")({
+    ok: true,
+    arrayBuffer: async () => new ArrayBuffer(1),
+  });
+  assert.equal(await town, null);
+  audio.enabled = false;
+  responses.get("assets/battle.ogg")({
+    ok: true,
+    arrayBuffer: async () => new ArrayBuffer(1),
+  });
+  assert.equal(await battle, null);
+  assert.equal(f.nodes.length, 0);
+  audio.enabled = true;
+  await audio.setMusic("battle");
+  const hit = audio.play("hit");
+  audio.dispose();
+  responses.get("assets/hit.wav")({
+    ok: true,
+    arrayBuffer: async () => new ArrayBuffer(1),
+  });
+  assert.equal(await hit, null);
   assert.equal(audio.voices.size, 0);
 });
-test("Audio resources reject traversal/malformed sequence and failed media playback releases the voice", async () => {
-  assert.throws(() =>
-    validateAudioCue({
-      kind: "music",
-      volume: 0.1,
-      loop: true,
-      source: "assets/../private.mp3",
+test("Asset-only contracts reject note programs, traversal and malformed loops; HTTP/decode failures can retry", async () => {
+  const sound = {
+    kind: "sound",
+    volume: 0.1,
+    loop: false,
+    source: "assets/chime.ogg",
+  };
+  for (const bad of [
+    { ...sound, source: "assets/../private.mp3" },
+    { ...sound, notes: [[60, 0.1]] },
+    { ...sound, source: undefined },
+    { ...sound, loopStart: 1, loopEnd: 2 },
+    { ...sound, loop: true, loopStart: 3, loopEnd: 2 },
+    { ...sound, maxVoices: 0 },
+  ])
+    assert.throws(() => validateAudioCue(bad));
+  let fail = true;
+  const f = fakeAudio({
+      fetchAsset: async () => ({
+        ok: !fail,
+        status: 404,
+        arrayBuffer: async () => new ArrayBuffer(8),
+      }),
     }),
-  );
-  assert.throws(() =>
-    validateAudioCue({
-      kind: "sound",
-      volume: 0.1,
-      loop: false,
-      notes: [[60, 0]],
-    }),
-  );
+    errors = [],
+    audio = player(f, { onError: (e) => errors.push(e) });
+  audio.enabled = true;
+  assert.equal(await audio.play("hit"), null);
+  assert.equal(audio.voices.size, 0);
+  fail = false;
+  assert(await audio.play("hit"));
+  assert.equal(errors.length, 1);
+  audio.dispose();
+});
+test("Sound limits, channel volume, ended cleanup and synchronous host failure release audio resources", async () => {
   const f = fakeAudio(),
     errors = [],
-    cue = validateAudioCue({
-      kind: "sound",
-      volume: 0.1,
-      loop: false,
-      source: "assets/chime.ogg",
-    }),
-    audio = new AudioAdapter({
-      cues: new Map([["test", cue]]),
-      createContext: () => f.context,
-      createMedia: () => ({
-        play: async () => {
-          throw new Error("missing");
-        },
-        pause() {},
-      }),
-      schedule: f.schedule,
-      cancel: f.cancel,
-      onError: (e) => errors.push(e),
-    });
+    audio = player(f, { onError: (e) => errors.push(e) });
   audio.enabled = true;
-  audio.play("test");
-  await new Promise(setImmediate);
-  assert.equal(audio.voices.size, 0);
+  const first = await audio.play("hit");
+  await audio.play("hit");
+  const last = await audio.play("hit");
+  assert(first.stopped);
+  assert.equal(audio.voices.size, 2);
+  assert.equal(f.requests.length, 1);
+  audio.setVolume("master", 0.5);
+  assert.equal(last.gain.gain.value, 0.1);
+  audio.setVolume("sound", 0.5);
+  assert.equal(last.gain.gain.value, 0.05);
+  assert.throws(() => audio.setVolume("unknown", 1));
+  last.source.onended();
+  assert.equal(audio.voices.size, 1);
+  f.context.createBufferSource = () => {
+    throw new Error("host failure");
+  };
+  assert.equal(await audio.play("hit"), null);
+  assert(f.nodes.at(-1).disconnected);
   assert.equal(errors.length, 1);
+  audio.dispose();
+  assert.equal(audio.voices.size, 0);
 });
-test("Synchronous media creation failure releases gain and voice before reporting the host error", () => {
-  const f = fakeAudio(),
-    errors = [];
-  const audio = new AudioAdapter({
-    cues: new Map([
-      [
-        "asset",
-        { kind: "sound", volume: 0.1, loop: false, source: "assets/test.ogg" },
-      ],
-    ]),
-    createContext: () => f.context,
-    createMedia: () => {
-      throw new Error("host creation failed");
+test("Real Emerald sample library has existing WAV resources and music is selected by explicit content IDs", async () => {
+  const fs = await import("node:fs");
+  const { emeraldMusic, emeraldBattleSound } = await import(
+    "../dist/packs/emerald/audio-library.js"
+  );
+  const cues = createEmeraldAudio();
+  assert(cues.size >= 9);
+  for (const cue of cues.values()) {
+    const data = fs.readFileSync(
+      new URL("../dist/" + cue.source, import.meta.url),
+    );
+    assert.equal(data.toString("ascii", 0, 4), "RIFF");
+    assert.equal(data.toString("ascii", 8, 12), "WAVE");
+    assert.equal(cue.notes, undefined);
+  }
+  assert.equal(emeraldBattleSound("move", cues), "emerald:attack");
+  assert.equal(emeraldBattleSound("unmatched", cues), null);
+  assert.throws(
+    () =>
+      createEmeraldAudio({
+        audioCues: new Map([["emerald:confirm", cues.get("emerald:confirm")]]),
+      }),
+    /Duplicate audio cue/,
+  );
+  const c = musicCues();
+  assert.equal(emeraldMusic({ map: {} }, c), null);
+  assert.equal(emeraldMusic({ map: { music: "town" } }, c), "town");
+  assert.equal(
+    emeraldMusic(
+      { battle: true, map: { music: "town", battleMusic: "battle" } },
+      c,
+    ),
+    "battle",
+  );
+  assert.equal(emeraldMusic({ map: { music: "hit" } }, c), null);
+});
+test("Plugin sounds request only owned registered resources outside rules/transactions and never receive host nodes", async () => {
+  const { PluginHost } = await import(
+    "../dist/engine/extensions/plugin-host.js"
+  );
+  const { CommandBus } = await import(
+    "../dist/engine/extensions/command-bus.js"
+  );
+  let api, cue;
+  const host = new PluginHost({ base: {} });
+  host.load([
+    {
+      id: "audio-demo",
+      apiVersion: 1,
+      version: "1.0.0",
+      dataVersion: 1,
+      permissions: [],
+      setup(a) {
+        api = a;
+        cue = a.presentation.audio("click", {
+          kind: "sound",
+          volume: 0.2,
+          loop: false,
+          source: "assets/audio/bicycle-bell.wav",
+        });
+      },
     },
-    schedule: f.schedule,
-    cancel: f.cancel,
-    onError: (e) => errors.push(e),
-  });
+  ]);
+  assert.throws(() => api.presentation.sound(cue));
+  const state = {},
+    runtime = host.attach({
+      bus: new CommandBus(),
+      ports: { state: () => state, query: () => ({}) },
+    }),
+    events = [];
+  host.events.on("core:audio-request", (e) => events.push(e));
+  api.presentation.sound(cue);
+  assert.equal(events[0].payload.id, cue);
+  assert.throws(() => api.presentation.sound("foreign:click"));
+  runtime.evaluate(() => assert.throws(() => api.presentation.sound(cue)));
+  runtime.active = true;
+  assert.throws(() => api.presentation.sound(cue));
+  runtime.active = false;
+});
+test("Current plugin records are required; mismatched data does not invoke an old migration callback", async () => {
+  const { PluginHost } = await import(
+    "../dist/engine/extensions/plugin-host.js"
+  );
+  const { CommandBus } = await import(
+    "../dist/engine/extensions/command-bus.js"
+  );
+  const host = new PluginHost({ base: {} });
+  let migrated = false;
+  host.load([
+    {
+      id: "current",
+      apiVersion: 1,
+      version: "1.0.0",
+      dataVersion: 2,
+      permissions: [],
+      setup() {},
+      migrate() {
+        migrated = true;
+        return { version: 2, data: {}, states: {} };
+      },
+    },
+  ]);
+  const record = { version: 1, data: {}, states: {} },
+    state = { extensions: { current: record } };
+  assert.throws(
+    () => host.attach({ bus: new CommandBus(), ports: { state: () => state } }),
+    /version mismatch/,
+  );
+  assert.equal(migrated, false);
+  assert.equal(state.extensions.current, record);
+  assert.equal(record.version, 1);
+});
+test("Stopping all cancels pending sounds and a source start failure still releases its connections", async () => {
+  let resolve;
+  const f = fakeAudio({ fetchAsset: () => new Promise((r) => (resolve = r)) }),
+    audio = player(f);
   audio.enabled = true;
-  assert.equal(audio.play("asset"), null);
+  const pending = audio.play("hit");
+  audio.stopAll();
+  resolve({ ok: true, arrayBuffer: async () => new ArrayBuffer(8) });
+  assert.equal(await pending, null);
   assert.equal(audio.voices.size, 0);
-  assert.equal(f.timers.size, 0);
+  const original = f.context.createBufferSource;
+  f.context.createBufferSource = () => {
+    const source = original();
+    source.start = () => {
+      throw new Error("start failed");
+    };
+    source.stop = () => {
+      throw new Error("unstarted");
+    };
+    return source;
+  };
+  assert.equal(await audio.play("hit"), null);
+  assert.equal(audio.voices.size, 0);
   assert(f.nodes.every((n) => n.disconnected));
-  assert.equal(errors.length, 1);
+  audio.dispose();
 });
 test("Scene clock validates before taking control, rejects overlaps and releases scope even when cue fails", async () => {
   let resolve,
@@ -202,4 +413,39 @@ test("UI scene facade serializes typed payload through the shared command envelo
   );
   assert.equal(received.id, "core.presentation.play");
   assert.deepEqual(JSON.parse(received.input.payload), { species: "mudkip" });
+});
+
+test("Decoder failures release cached rejection for retry and loop points cannot exceed decoded audio", async () => {
+  const f = fakeAudio(),
+    audio = player(f);
+  let failed = true;
+  f.context.decodeAudioData = async () => {
+    if (failed) throw new Error("unsupported file");
+    return { duration: 10 };
+  };
+  await assert.rejects(audio.load("hit"), /unsupported file/);
+  failed = false;
+  assert.equal((await audio.load("hit")).duration, 10);
+  assert.equal(f.requests.length, 2);
+  const loop = new AudioAdapter({
+    cues: new Map([
+      [
+        "short",
+        {
+          kind: "music",
+          source: "assets/short.wav",
+          volume: 0.2,
+          loop: true,
+          loopStart: 1,
+          loopEnd: 12,
+        },
+      ],
+    ]),
+    createContext: () => f.context,
+    fetchAsset: f.fetchAsset,
+  });
+  await assert.rejects(loop.load("short"), /loop exceeds/);
+  assert.equal(loop.voices.size, 0);
+  loop.dispose();
+  audio.dispose();
 });

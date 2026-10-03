@@ -296,7 +296,7 @@ test("Pack application rejects out-of-context inventory commands and preserves c
   assert.equal(game.setLead(0), false);
   assert.throws(() => game.loadDocument(doc));
 });
-test("Versioned storage migrates older saves without rewriting source and rejects future versions", async () => {
+test("Versioned storage accepts only the current save format without rewriting rejected source", async () => {
   const { SaveStore } = await import("../dist/engine/save-store.js");
   const raw = { version: 1, savedAt: 100, state: { name: "player" } };
   const storage = {
@@ -305,10 +305,13 @@ test("Versioned storage migrates older saves without rewriting source and reject
       throw new Error("Should not write during read");
     },
   };
-  const store = new SaveStore(storage, "demo", (s) => s.coins === 10, 2, {
-    migrations: { 1: (s) => ({ ...s, coins: 10 }) },
-  });
-  assert.equal(store.load().state.coins, 10);
+  const store = new SaveStore(storage, "demo", (s) => s.coins === 10, 2);
+  assert.equal(store.load(), null);
+  assert.equal(store.lastIssue.code, "unsupported_version");
+  assert.equal(
+    store.decode({ version: 2, state: { coins: 10 } }).state.coins,
+    10,
+  );
   assert.equal(raw.state.coins, undefined);
   assert.equal(store.decode({ version: 3, state: { coins: 10 } }), null);
 });

@@ -145,25 +145,11 @@ export function validateSave(
       )
         return false;
       const manifest = plugins?.manifests.get(owner);
-      if (
-        manifest &&
-        record.version !== manifest.dataVersion &&
-        manifest.migrate
-      ) {
-        const migrated = jsonValue(
-          callSync(manifest.migrate, [readOnly(record), manifest.dataVersion]),
-        );
-        if (migrated.version !== manifest.dataVersion) return false;
-        s.extensions[owner] = migrated;
-        new PluginState(plugins.states).validate(migrated, owner);
-        callSync(manifest.validateData, [readOnly(migrated.data)]);
-        continue;
-      }
-      if (manifest && record.version === manifest.dataVersion) {
+      if (manifest) {
+        if (record.version !== manifest.dataVersion) return false;
         new PluginState(plugins.states).validate(record, owner);
         callSync(manifest.validateData, [readOnly(record.data)]);
-      } else if (manifest && typeof manifest.migrate !== "function")
-        return false;
+      }
     }
   } catch {
     return false;

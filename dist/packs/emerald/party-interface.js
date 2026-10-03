@@ -13,7 +13,7 @@ export function createPartyInterface(
     partyCard,
     updateSide,
     escapeHTML,
-    tone,
+    sound,
     showEvolutionOptions,
   },
 ) {
@@ -95,7 +95,7 @@ export function createPartyInterface(
       updateSide();
       game.save();
       showMonster(index);
-      tone(800);
+      sound("emerald:confirm");
     };
   }
 

@@ -1,96 +1,96 @@
 import { validateAudioCue } from "../../engine/extensions/audio-contracts.js";
-// Short original demonstration melodies, not extracted Emerald music.
-const music = (notes) => ({ kind: "music", volume: 0.022, loop: true, notes });
-const sound = (notes) => ({ kind: "sound", volume: 0.03, loop: false, notes });
-const cues = {
-  town: music([
-    [60, 0.25],
-    [64, 0.25],
-    [67, 0.5],
-    [64, 0.25],
-    [62, 0.25],
-    [65, 0.5],
-    [64, 0.25],
-    [60, 0.25],
-    [62, 0.5],
-    [0, 0.5],
-  ]),
-  route: music([
-    [67, 0.18],
-    [69, 0.18],
-    [72, 0.36],
-    [69, 0.18],
-    [67, 0.18],
-    [64, 0.36],
-    [65, 0.18],
-    [67, 0.18],
-    [69, 0.36],
-    [0, 0.36],
-  ]),
-  indoor: music([
-    [60, 0.4],
-    [67, 0.4],
-    [64, 0.4],
-    [62, 0.4],
-    [65, 0.4],
-    [64, 0.4],
-    [0, 0.8],
-  ]),
-  battle: music([
-    [48, 0.15],
-    [60, 0.15],
-    [55, 0.15],
-    [58, 0.15],
-    [48, 0.15],
-    [62, 0.15],
-    [55, 0.15],
-    [60, 0.15],
-    [53, 0.15],
-    [65, 0.15],
-    [60, 0.15],
-    [63, 0.15],
-    [0, 0.3],
-  ]),
-  reward: sound([
-    [60, 0.12],
-    [64, 0.12],
-    [67, 0.12],
-    [72, 0.5],
-  ]),
-  attack: sound([
-    [76, 0.04],
-    [64, 0.06],
-    [52, 0.08],
-  ]),
-  hurt: sound([
-    [52, 0.08],
-    [48, 0.1],
-  ]),
-  heal: sound([
-    [64, 0.09],
-    [67, 0.09],
-    [72, 0.2],
-  ]),
+/** Real source samples for provisional UI/SFX; not a claim of reconstructed native song/SE mixing. */
+export const EMERALD_AUDIO_CUES = {
+  confirm: {
+    kind: "sound",
+    source: "assets/audio/bicycle-bell.wav",
+    volume: 0.16,
+    loop: false,
+    maxVoices: 2,
+  },
+  purchase: {
+    kind: "sound",
+    source: "assets/audio/register-noise.wav",
+    volume: 0.2,
+    loop: false,
+    maxVoices: 2,
+  },
+  reward: {
+    kind: "sound",
+    source: "assets/audio/bicycle-bell.wav",
+    volume: 0.28,
+    loop: false,
+    maxVoices: 2,
+  },
+  attack: {
+    kind: "sound",
+    source: "assets/audio/kick.wav",
+    volume: 0.3,
+    loop: false,
+    maxVoices: 4,
+  },
+  hurt: {
+    kind: "sound",
+    source: "assets/audio/snare.wav",
+    volume: 0.2,
+    loop: false,
+    maxVoices: 4,
+  },
+  heal: {
+    kind: "sound",
+    source: "assets/audio/bicycle-bell.wav",
+    volume: 0.24,
+    loop: false,
+    maxVoices: 2,
+  },
+  "cry.mudkip": {
+    kind: "sound",
+    source: "assets/audio/cry-mudkip.wav",
+    volume: 0.4,
+    loop: false,
+    maxVoices: 1,
+  },
+  "cry.treecko": {
+    kind: "sound",
+    source: "assets/audio/cry-treecko.wav",
+    volume: 0.4,
+    loop: false,
+    maxVoices: 1,
+  },
+  "cry.torchic": {
+    kind: "sound",
+    source: "assets/audio/cry-torchic.wav",
+    volume: 0.4,
+    loop: false,
+    maxVoices: 1,
+  },
 };
 export function createEmeraldAudio(host) {
   const result = new Map(
-    Object.entries(cues).map(([id, cue]) => [
+    Object.entries(EMERALD_AUDIO_CUES).map(([id, cue]) => [
       "emerald:" + id,
       validateAudioCue(cue),
     ]),
   );
-  for (const [id, cue] of host?.audioCues || []) result.set(id, cue);
+  for (const [id, cue] of host?.audioCues || []) {
+    if (result.has(id)) throw new Error(`Duplicate audio cue ${id}`);
+    result.set(id, cue);
+  }
   return result;
 }
-export function emeraldMusic({ battle, map }) {
-  return (
-    "emerald:" +
-    (battle
-      ? "battle"
-      : map.indoor
-        ? "indoor"
-        : map.id?.startsWith("Route")
-          ? "route"
-          : "town")
-  );
+/** Content chooses explicit registered cues; absent music remains silent until real BGM is imported. */
+export function emeraldMusic({ battle, map }, cues) {
+  const id = battle ? map.battleMusic : map.music;
+  return id && cues.get(id)?.kind === "music" ? id : null;
+}
+
+export const EMERALD_BATTLE_AUDIO = Object.freeze({
+  move: "emerald:attack",
+  hurt: "emerald:hurt",
+  heal: "emerald:heal",
+  level: "emerald:reward",
+});
+export function emeraldBattleSound(kind, cues) {
+  const id = EMERALD_BATTLE_AUDIO[kind];
+  return id && cues.get(id)?.kind === "sound" ? id : null;
 }

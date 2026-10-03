@@ -320,6 +320,17 @@ export class PluginHost {
             staged.audioCues.set(key, validateAudioCue(definition));
             return key;
           },
+          sound: (id) => {
+            if (
+              !staged.runtime ||
+              staged.runtime.readDepth ||
+              staged.runtime.active ||
+              !id.startsWith(owner + ":") ||
+              staged.audioCues.get(id)?.kind !== "sound"
+            )
+              throw new Error("Sound cannot be played here");
+            staged.events.emit("core:audio-request", { id });
+          },
           scene: (id, definition) => {
             if (
               typeof definition.draw !== "function" ||

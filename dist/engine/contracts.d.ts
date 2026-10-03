@@ -494,8 +494,12 @@ export interface AudioCue {
   kind: "music" | "sound";
   volume: number;
   loop: boolean;
-  source?: string;
-  notes?: [number, number][];
+  source: string;
+  loopStart?: number;
+  loopEnd?: number;
+  fadeInMs?: number;
+  fadeOutMs?: number;
+  maxVoices?: number;
 }
 export interface NPCIntent {
   interaction?: { target: string; kind: string };
@@ -589,6 +593,7 @@ export interface PluginAPI {
       definition: { draw: (context: unknown, frame: Readonly<Json>) => void },
     ): string;
     audio(id: string, definition: AudioCue): string;
+    sound(id: string): void;
   };
 }
 export interface PluginManifest {
@@ -599,7 +604,6 @@ export interface PluginManifest {
   permissions: string[];
   dependencies?: Record<string, number | string>;
   setup(api: PluginAPI): void;
-  migrate?: (record: Readonly<PluginRecord>, version: number) => PluginRecord;
   validateData?: (data: Readonly<Record<string, Json>>) => void;
 }
 export interface MovementTechnique {

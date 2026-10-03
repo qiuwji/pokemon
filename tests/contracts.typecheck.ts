@@ -21,6 +21,24 @@ const plugin: PluginManifest = {
   dataVersion: 1,
   permissions: [],
   setup(api) {
+    const cue = api.presentation.audio("confirm", {
+      kind: "sound",
+      source: "assets/audio/bicycle-bell.wav",
+      volume: 0.3,
+      loop: false,
+      maxVoices: 2,
+    });
+    api.events.on("demo:finished", () => api.presentation.sound(cue));
+    api.presentation.audio("music", {
+      kind: "music",
+      source: "assets/demo.ogg",
+      volume: 0.5,
+      loop: true,
+      loopStart: 2,
+      loopEnd: 30,
+      fadeInMs: 200,
+      fadeOutMs: 200,
+    });
     const effect = api.presentation.effect("trail", { draw: () => {} });
     api.presentation.move("water", {
       moveId: "water_gun",

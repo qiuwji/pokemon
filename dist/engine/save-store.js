@@ -4,21 +4,20 @@ export class SaveConflict extends Error {
     this.code = "save_conflict";
   }
 }
-/** Storage is a port, not global localStorage. Migration runs before validation. */
+/** Storage is a port. Only the current envelope version is accepted. */
 export class SaveStore {
   constructor(
     storage,
     key,
     validate,
     version = 1,
-    { migrations = {}, diagnose = () => null } = {},
+    { diagnose = () => null } = {},
   ) {
     Object.assign(this, {
       storage,
       key,
       validate,
       version,
-      migrations,
       diagnose,
     });
   }
@@ -56,25 +55,13 @@ export class SaveStore {
       );
       if (
         !Number.isInteger(envelope.version) ||
-        envelope.version > this.version
+        envelope.version !== this.version
       ) {
         this.lastIssue = {
           code: "unsupported_version",
           version: envelope.version,
         };
         return null;
-      }
-      while (envelope.version < this.version) {
-        const migrate = this.migrations[envelope.version];
-        if (!migrate) {
-          this.lastIssue = {
-            code: "unsupported_version",
-            version: envelope.version,
-          };
-          return null;
-        }
-        envelope.state = migrate(envelope.state);
-        envelope.version++;
       }
       if (this.validate(envelope.state)) return envelope;
       this.lastIssue = this.diagnose(envelope.state) || {

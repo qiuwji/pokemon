@@ -38,7 +38,7 @@ dist/
     canvas-renderer.js         可视范围内的网格、图块、角色绘制
     browser-input.js           键盘/触屏→命令；可解除绑定
     transition-dom.js          遮盖 Canvas、菜单和 HUD 的转场层
-    audio.js                   资源/合成音频、音乐切换、循环、淡出和释放
+    audio.js                   真实资源音频、解码缓存、通道、采样循环、续播和释放
     browser-tools.js           可选 WebMCP；不绕过游戏规则
   packs/emerald/               本作的上层建筑，允许了解具体角色和物品
     pack.js                    素材标识、起点与 NPC 内容
@@ -127,7 +127,7 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 
 ### 存档版本
 
-`SaveStore(storage, key, validate, version, { migrations })` 注入本地/内存/其他存储；读取先做顺序迁移，再验证内容引用。迁移函数按旧版本号注册，读操作不覆盖原始存档，未知未来版本拒绝读取。本作开发存档版本为 7，按用户授权移除了旧档迁移表，拒绝旧版本。当前结构要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。
+`SaveStore(storage, key, validate, version, { diagnose })` 注入存储并且只接受当前版本（开发存档 7）。旧/未来 envelope 和已加载插件的旧 dataVersion 明确拒绝，读取不执行迁移、不改原始存档。迁移注册和插件 migrate 回调路径已经删除。存档要求唯一精灵 UID 和剧情账本；存档键按内容包隔离。跨会话冲突与缺失内容依赖检查仍是当前数据完整性合同。
 
 ### 另一个同类游戏
 
@@ -148,7 +148,7 @@ Battle 已拆出队伍、行动、回合、招式、临时状态和结算服务�
 
 ## UI 页面装配（0.12）
 
-`createUIShell(game, {document, tone})` 管理弹窗、对话、焦点、返回和通知。页面采用 `createXInterface(game, deps)` 工厂，只读取状态并发送应用命令。页面间通过注入的导航回调协作，不互相导入；成长提示由 growth-interface 管理。interface.js 仅装配 shell、页面、扩展 DOM 和主菜单，保留 app.js 使用的动态 getter 与原返回接口。
+`createUIShell(game, {document, sound})` 管理弹窗、对话、焦点、返回和通知。页面采用 `createXInterface(game, deps)` 工厂，只读取状态并发送应用命令。页面间通过注入的导航回调协作，不互相导入；成长提示由 growth-interface 管理。interface.js 仅装配 shell、页面、扩展 DOM 和主菜单，保留 app.js 使用的动态 getter 与原返回接口。
 
 状态写入守卫递归覆盖内容包中所有 `*-interface.js`、interface.js 和 ui-shell.js，拆分不会让新页面逃逸检查。独立 DOM 端口测试使用冻结状态验证装配、对话和可见控件焦点循环，浏览器验证详情页插件点击和保存。此阶段全量 300 项测试通过。
 
@@ -164,3 +164,5 @@ creature-contract.js 共享创建与存档的精灵标量约束；物种/招式/
 
 
 应用层拆分与依赖/生命周期合同见 [APPLICATION_ARCHITECTURE.md](APPLICATION_ARCHITECTURE.md)。门面保持兼容，但剧情、战斗、育成、存档、世界和库存用例已经分别由对应服务拥有。
+
+真实音频 API 与资源证据见 docs/engine/AUDIO.md；原合成音频描述以该文档为准。

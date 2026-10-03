@@ -3,6 +3,7 @@ import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
   createEmeraldAudio,
   emeraldMusic,
+  emeraldBattleSound,
 } from "./packs/emerald/audio-library.js";
 import { SceneDirector } from "./presentation/scene-director.js";
 import { SceneDOM } from "./adapters/scene-dom.js";
@@ -70,17 +71,18 @@ async function boot() {
       cues: createEmeraldAudio(host),
       onError: console.error,
     });
+    const detachAudio = host.events.on("core:audio-request", ({ payload }) =>
+      audio.play(payload.id),
+    );
+    const audioVisibility = () => audio.setSuspended(document.hidden);
+    document.addEventListener("visibilitychange", audioVisibility);
+    audioVisibility();
     const director = new BattleDirector(timeline, {
       profiles: ANIMATION_PROFILES,
       registry: presentation,
       onCue: (kind) => {
-        const id = {
-          move: "attack",
-          hurt: "hurt",
-          heal: "heal",
-          level: "reward",
-        }[kind];
-        if (id) audio.play("emerald:" + id);
+        const id = emeraldBattleSound(kind, audio.cues);
+        if (id) audio.play(id);
       },
       reducedMotion,
     });
@@ -153,7 +155,7 @@ async function boot() {
     const { bus } = attachEmeraldExtensions(adventure, host);
     game = createEmeraldCommandFacade(adventure, bus);
     const ui = createEmeraldInterface(game, {
-      tone: (...args) => audio.tone(...args),
+      sound: (id) => audio.play(id),
       extensionAssets: assets,
     });
     game.attachUI(ui);
@@ -173,7 +175,7 @@ async function boot() {
       $("sound").ariaLabel = audio.enabled
         ? "关闭音乐与音效"
         : "开启音乐与音效";
-      audio.tone();
+      audio.play("emerald:confirm");
       ui.toast(audio.enabled ? "音效已开启。" : "音效已关闭。");
     };
     $("touch-a").onclick = () => ui.confirm();
@@ -205,10 +207,13 @@ async function boot() {
     function frame(now) {
       if (!document.hidden) {
         audio.setMusic(
-          emeraldMusic({
-            battle: !!game.battle,
-            map: { ...game.world.map, id: game.state.position.map },
-          }),
+          emeraldMusic(
+            {
+              battle: !!game.battle,
+              map: { ...game.world.map, id: game.state.position.map },
+            },
+            audio.cues,
+          ),
         );
         input.tick();
         const visible = renderer.graph.visible(
@@ -238,7 +243,15 @@ async function boot() {
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
-    window.addEventListener("pagehide", () => audio.dispose(), { once: true });
+    window.addEventListener(
+      "pagehide",
+      () => {
+        detachAudio();
+        document.removeEventListener("visibilitychange", audioVisibility);
+        audio.dispose();
+      },
+      { once: true },
+    );
   } catch (error) {
     $("loading").innerHTML = "<p>游戏未能载入，请刷新页面重试。</p>";
     console.error(error);

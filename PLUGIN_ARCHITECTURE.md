@@ -26,7 +26,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 | 导航 | entry.page、通用页面 back | 由适配器负责导航、关闭与焦点 |
 | 布局交互 | 页面 render 返回声明式节点 | text/heading/image/button/select/meter/panel/row/grid；图片可以绑定点击行动 |
 | HUD | `api.ui.hud` | 常驻信息；状态改变时刷新，不把整份存档每帧序列化 |
-| 持久化 | `ctx.store.set` / `view.store.get` | 每个插件独立记录，dataVersion/migrate/validateData；保存读取跟随核心存档 |
+| 持久化 | `ctx.store.set` / `view.store.get` | 每个插件独立记录，dataVersion/validateData，当前版本严格校验；保存读取跟随核心存档 |
 | 表现 | `api.presentation.register/play` / `ctx.feedback` / `api.ui.theme` | page/field/battle 独立动画时钟与 Canvas 反馈；受控像素主题 token |
 
 地图来自 16px 网格和 8px tile/metatile 图集，不是整张场景截图。注册地图可引用既有 tileset/actor；新图集、角色和宝可梦位图通过资源文件供应。基础内容、地图引用、网格尺寸、招式效果、道具效果和进化条件在启动时统一校验。
@@ -78,6 +78,8 @@ const plugin = {
 
 ## 表现扩展补充
 
-`api.presentation.effect/move/scene/transition/audio` 分别注册绘制器、按 moveId 的多轨脚本、带 schema 的独立场景、转场模式和音频声明。绘制回调不获得可写领域对象；故障由宿主隔离。演出请求使用 `core.presentation.play` 命令，须声明 presentation 权限。现有 register/play 与 ctx.feedback 提供页面/野外/战斗反馈。原作未开放设施只有场景演出槽位；新设施规则仍需对应领域合同。
+`api.presentation.effect/move/scene/transition/audio/sound` 分别注册绘制器、按 moveId 的多轨脚本、带 schema 的独立场景、转场模式和音频声明。绘制回调不获得可写领域对象；故障由宿主隔离。演出请求使用 `core.presentation.play` 命令，须声明 presentation 权限。现有 register/play 与 ctx.feedback 提供页面/野外/战斗反馈。原作未开放设施只有场景演出槽位；新设施规则仍需对应领域合同。
 
 公共类型消费检查和最终数据保护验收见 FINAL_VALIDATION.md；282 是 P6 阶段检查点，不是当前全量数量。
+
+音频仅接受资源文件，插件 sound 只能请求自有已注册音效，规则评价/未提交事务拒绝。完整合同见 docs/engine/AUDIO.md。插件数据旧版本不再自动迁移。

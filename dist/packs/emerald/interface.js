@@ -18,9 +18,9 @@ import { createBattleInterface } from "./battle-interface.js";
 /** Composition only: shared shell, page factories and one menu entry. */
 export function createEmeraldInterface(
   game,
-  { document: doc = document, tone = () => {}, extensionAssets = {} } = {},
+  { document: doc = document, sound = () => {}, extensionAssets = {} } = {},
 ) {
-  const shell = createUIShell(game, { document: doc, tone });
+  const shell = createUIShell(game, { document: doc, sound });
   const { modal, root } = shell;
   const deps = {
     ...shell,

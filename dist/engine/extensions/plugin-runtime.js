@@ -35,19 +35,8 @@ export class PluginRuntime {
       if (!record)
         record = { version: manifest.dataVersion, data: {}, states: {} };
       else record = jsonValue(record);
-      if (record.version !== manifest.dataVersion) {
-        if (typeof manifest.migrate !== "function")
-          throw new Error(`Plugin data version mismatch: ${owner}`);
-        record = jsonValue(
-          this.evaluate(
-            manifest.migrate,
-            readOnly(record),
-            manifest.dataVersion,
-          ),
-        );
-      }
       if (record.version !== manifest.dataVersion)
-        throw new Error("Migration did not produce current version");
+        throw new Error(`Plugin data version mismatch: ${owner}`);
       this.stateService.validate(record, owner);
       if (manifest.validateData)
         this.evaluate(manifest.validateData, readOnly(record.data));

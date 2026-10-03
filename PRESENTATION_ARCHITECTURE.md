@@ -40,9 +40,9 @@ registry.move('water_gun', {
 
 ## 音频端口
 
-`AudioAdapter` 支持音频文件、有限音符序列、循环、切曲淡入淡出、静音恢复与销毁。音乐选择由内容包提供，Adapter 不知道地图、战斗或剧情。插件 `api.presentation.audio` 注册 music / sound；source 仅允许 assets 下 ogg/wav/mp3，或注册有界 notes（MIDI音高、秒数）。它不经过图片加载器。
+`AudioAdapter` 只播放注册的真实资源文件，支持解码缓存、采样循环区间、music/sound/master 通道、淡入淡出、静音/后台续播与销毁。插件 audio 注册、sound 提出自有声音请求；规则/未提交事务不能播放。页面使用具名 sound(id)，音频不改变领域结果。完整合同与实际资源来源见 [AUDIO.md](docs/engine/AUDIO.md)。
 
-目前内置城镇、道路、室内、战斗的原创简短示例旋律，以及攻击、受击、恢复、领取提示；没有提取原作 BGM。浏览器声音默认关闭，点击开启后才启动。切图、切战斗换曲，静音与 pagehide 清理循环和节点。音效故障不改变游戏结果。
+合成提示音和示范旋律已删除。现有 7 个参考 WAV 供临时 UI/战斗采样映射及初始精灵鸣叫，原作 BGM/SE 编曲尚未导入，不用缺失资源宣称音频保真。地图显式指定 music/battleMusic；未配置时安静。
 
 ## 验证与边界
 

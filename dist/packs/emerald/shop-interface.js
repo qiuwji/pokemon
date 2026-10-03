@@ -1,7 +1,7 @@
 /** Owns this page and its navigation; gameplay changes are application commands. */
 export function createShopInterface(
   game,
-  { modal, root, updateSide, tone, toast },
+  { modal, root, updateSide, sound, toast },
 ) {
   const ITEMS = game.itemDefinitions;
   function showShop() {
@@ -27,7 +27,7 @@ export function createShopInterface(
           updateSide();
           game.save();
           showShop();
-          tone(880);
+          sound("emerald:purchase");
           toast(`买到了 1 个${ITEMS[id].name}。`);
         }),
     );

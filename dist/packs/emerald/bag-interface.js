@@ -1,7 +1,7 @@
 /** Owns this page and its navigation; gameplay changes are application commands. */
 export function createBagInterface(
   game,
-  { modal, closeModal, showMenu, root, partyCard, toast, updateSide, tone },
+  { modal, closeModal, showMenu, root, partyCard, toast, updateSide, sound },
 ) {
   const ITEMS = game.itemDefinitions;
   function showBag(inBattle = false) {
@@ -59,7 +59,7 @@ export function createBagInterface(
         updateSide();
         game.save();
         showBag(false);
-        tone(800);
+        sound("emerald:confirm");
         toast(`使用了${ITEMS[id].name}。`);
       };
     });
