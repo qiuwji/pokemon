@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-03",
+  "baseCommit": "9211f93",
+  "fullSuiteBaseline": {
+    "commit": "1851e9d",
+    "passed": 556
+  },
+  "scope": "Slot inventory core and real plugin startup catalog validation only. Current AdventureState.bag, application producers/consumers, save format and UI have NOT migrated.",
+  "initial": {
+    "tested": 38,
+    "passed": 36,
+    "failed": 2
+  },
+  "resolution": "Two newly written fixtures referenced nonexistent tm01. Actual native item tm_focus_punch used; only both failed tests rechecked and passed. Final catalog shape guard rechecked through its matching test; final strict type fixtures passed. All 12 new inventory tests have individual pass evidence.",
+  "notes": [
+    "Check passed for content, strict types and 254 module syntax before the final catalog-shape guard/type fixtures. The changed guard received matching negative-case and direct syntax checks, and final type fixtures received check:contracts.",
+    "Slot container serialize/reload test is a domain test, not evidence that current game save migrated.",
+    "No legacy count-dictionary conversion or second persisted inventory truth introduced.",
+    "Unchanged weather evidence retained; only current version wording corrected in WEATHER.md.",
+    "No full-suite or browser run in this phase."
+  ],
+  "logs": [
+    "targeted-initial.txt",
+    "tm-fixture-fixes.txt",
+    "catalog-shape.txt",
+    "check.txt",
+    "types-final.txt"
+  ],
+  "sourceSha256": {
+    "dist/engine/inventory-registry.js": "800fdad9dad8df686e3e3b72398058b68497146e7c6e45882c84c1e026f3af92",
+    "dist/engine/inventory.js": "e0c36d35585bf9981bc38f28f9f7012f1b8f13b73d66d67ecd73511578f8b477",
+    "dist/engine/rules/gen3/inventory.js": "dfe410ea0649f250055c791d0a677923074659969726e866eb7d334b30cc97c1",
+    "dist/engine/contracts.d.ts": "c6bfb3395de2c155245e2e18fff89699021ae17995fe70066985bdee3f5dcd2c",
+    "dist/engine/extensions/catalog.js": "7f57516561ad7d018ffc362aa791c579c715d7797fca25f4fb2f875af969cc59",
+    "dist/packs/emerald/extensions.js": "00abfedf127d549d8334639baa0f6e946616fc60236573d5b88410d185ad33aa",
+    "tests/inventory.test.js": "43e7e480fadb4ac39cb38fdf4f0bf4965a27870fbe6bb6db28d98a1076ba9bbd",
+    "tests/contracts.typecheck.ts": "e13230d3e9a50763ae935c7dff81b35232299583c3ec36088c655b655506a4aa"
+  },
+  "invalidateOn": "Changed domain policies, item routing, slot schema/operations/commit custody or affected plugin catalog contracts; full application migration requires separate combined evidence."
+}

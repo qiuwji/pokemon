@@ -14,7 +14,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 | 能力 | 提供的入口 | 使用范围 |
 | --- | --- | --- |
-| 内容注册 | `api.content.register(kind,id,definition)` | species/moves/items/learningMethods/weather/battleWeather/abilities/heldItems/moveEffects/actors/resources/tilesets 等 |
+| 内容注册 | `api.content.register(kind,id,definition)` | species/moves/items/inventoryPockets/learningMethods/weather/battleWeather/abilities/heldItems/moveEffects/actors/resources/tilesets 等 |
 | 世界扩展 | maps/mapExtensions/movement/destinations | 网格地图、NPC 元素、门和连接；已有地图仅追加元素/门/连接 |
 | 状态定义 | `api.states.register`，`ctx.states` | 按精灵 UID 保存，自定义 schema，step/round/manual/permanent 生命周期 |
 | 行为注入 | `api.actions.register`，`api.rules.register`，`api.story.register` | 事务行动、标准规则阶段、剧情命令构建 |
@@ -88,4 +88,4 @@ const plugin = {
 
 关键道具 `items.actions` 可绑定已注册 fieldActions；现有背包自动提供单/多行动入口，core.query 返回持有道具的行动预览，core.item.action 同时用于 UI/网络/授权插件。异步执行复用野外规则/计划/导演与保存，不支持嵌套事务 dispatch。详见 [ITEM_ACTIONS.md](docs/engine/ITEM_ACTIONS.md)。
 
-物品可通过 registerable:true 开放已声明行动的快捷登记，多行动选择/只读预览/公共命令与存档9共用原行动管线。详见 [ITEM_SHORTCUT.md](docs/engine/ITEM_SHORTCUT.md)。槽位库存扩展尚在实现前设计，不将计数字典说成原作完整口袋。
+物品可通过 registerable:true 开放已声明行动的快捷登记，多行动选择/只读预览/公共命令与存档9共用原行动管线。详见 [ITEM_SHORTCUT.md](docs/engine/ITEM_SHORTCUT.md)。槽位库存服务和inventoryPockets注册/引用校验已实现，应用获得/消耗/页面/保存尚未迁移，不能把现有计数字典说成原作完整口袋；当前边界见 [INVENTORY.md](docs/engine/INVENTORY.md)。

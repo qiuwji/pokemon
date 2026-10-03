@@ -1,4 +1,6 @@
 import { validateItemActions } from "../../engine/item-actions.js";
+import { InventoryRegistry } from "../../engine/inventory-registry.js";
+import { GEN3_INVENTORY_POCKETS } from "../../engine/rules/gen3/inventory.js";
 import { WeatherRegistry } from "../../engine/weather.js";
 import { BattleWeatherRegistry } from "../../engine/battle/weather.js";
 import {
@@ -71,6 +73,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       learningMethods: EMERALD_LEARNING_METHODS,
       trainers: TRAINERS,
       items: ITEMS,
+      inventoryPockets: GEN3_INVENTORY_POCKETS,
       crops: EMERALD_CROPS,
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
@@ -86,6 +89,10 @@ export function createEmeraldPlugins(db, plugins, onError) {
   host.load(plugins);
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
+    new InventoryRegistry(c.inventoryPockets, {
+      items: c.items,
+      defaultPocket: "items",
+    });
     new TimeTaskRegistry(c.timeTasks);
     new CropRegistry(c.crops, { items: c.items });
     validateBerryPlots(c.berryPlots, c);

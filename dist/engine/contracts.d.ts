@@ -63,6 +63,44 @@ export type DeepReadonly<T> = T extends object
   ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
   : T;
 
+/** Policy data, independent of a particular game's native pocket names. */
+export interface InventoryPocketDefinition {
+  label: string;
+  capacity: number;
+  stackLimit: number;
+  allowDuplicates: boolean;
+}
+export interface InventorySlot {
+  item: string;
+  count: number;
+}
+/** Slot-based container contract; AdventureState.bag will adopt it in the application migration. */
+export interface InventoryState {
+  pockets: Record<string, (InventorySlot | null)[]>;
+}
+export interface InventorySlotReference {
+  pocket: string;
+  index: number;
+  item: string;
+}
+export type InventoryOperation =
+  | { kind: "add"; item: string; count: number }
+  | {
+      kind: "remove";
+      item: string;
+      count: number;
+      slot?: InventorySlotReference;
+    };
+export interface InventoryPlan {
+  readonly ok: true;
+  readonly changes: readonly Readonly<{
+    pocket: string;
+    index: number;
+    before: Readonly<InventorySlot> | null;
+    after: Readonly<InventorySlot> | null;
+  }>[];
+}
+
 /** A learning pathway may be item-backed or a tutor; ordinary replacement respects registered protected moves. */
 export interface LearningMethodDefinition {
   move: string;
@@ -416,6 +454,7 @@ export type ContentKind =
   | "actors"
   | "evolutions"
   | "items"
+  | "inventoryPockets"
   | "learningMethods"
   | "weather"
   | "battleWeather"

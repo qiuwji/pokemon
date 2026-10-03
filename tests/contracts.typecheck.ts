@@ -22,6 +22,14 @@ const plugin: PluginManifest = {
   dataVersion: 1,
   permissions: [],
   setup(api) {
+    const pocket: import("../dist/engine/contracts.js").InventoryPocketDefinition =
+      {
+        label: "材料",
+        capacity: 12,
+        stackLimit: 50,
+        allowDuplicates: true,
+      };
+    api.content.register("inventoryPockets", "materials", pocket);
     const cue = api.presentation.audio("confirm", {
       kind: "sound",
       source: "assets/audio/bicycle-bell.wav",
@@ -279,3 +287,20 @@ const stormBattle: import("../dist/engine/contracts.js").BattleWeatherDefinition
 const regionWeather: import("../dist/engine/contracts.js").MapWeatherDefinition =
   { default: "clear", regions: [{ x: 1, y: 1, weather: "garden:storm" }] };
 void [storm, stormBattle, regionWeather];
+
+const selectedRemoval: import("../dist/engine/contracts.js").InventoryOperation =
+  {
+    kind: "remove",
+    item: "potion",
+    count: 1,
+    slot: { pocket: "items", item: "potion", index: 3 },
+  };
+const invalidSlotAddition: import("../dist/engine/contracts.js").InventoryOperation =
+  {
+    kind: "add",
+    item: "potion",
+    count: 1,
+    // @ts-expect-error additions fill existing stacks; a selected slot only applies to removal
+    slot: { pocket: "items", item: "potion", index: 3 },
+  };
+void [selectedRemoval, invalidSlotAddition];

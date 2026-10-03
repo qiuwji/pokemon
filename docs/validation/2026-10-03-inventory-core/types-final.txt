@@ -1,0 +1,4 @@
+
+> emerald-web-engine@0.15.0 check:contracts
+> tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+

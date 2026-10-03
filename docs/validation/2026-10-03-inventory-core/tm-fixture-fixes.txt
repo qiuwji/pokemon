@@ -1,0 +1,10 @@
+✔ Inventory policies are supplied by the pack, cloned and frozen; native pocket capacities match the reference (1.508542ms)
+✔ Native normal items can exceed 99 across slots while berries and machines preserve their single-stack limit (0.679542ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 78.001083

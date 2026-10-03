@@ -1,0 +1,72 @@
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (20.780833ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (3.048541ms)
+✔ Composition root does not own story, inventory or damage rules (0.313584ms)
+✔ Every local ES module import resolves after refactors (13.270334ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.252083ms)
+✔ Example plugins depend only on public extension utilities (0.354375ms)
+✖ Inventory policies are supplied by the pack, cloned and frozen; native pocket capacities match the reference (1.774708ms)
+✔ Invalid pocket definitions and item references fail registration instead of becoming unrestricted storage (0.344958ms)
+✔ Slot validation rejects count dictionaries, sparse arrays, wrong pockets, zero stacks and forbidden duplicates (0.24725ms)
+✔ Addition fills existing partial stacks before empty slots and can span ordinary duplicates (0.354167ms)
+✔ Full-pocket additions and multi-pocket batches fail atomically without filling part of an earlier stack (0.219125ms)
+✔ Single-stack pockets cannot spill into a second empty slot even when the container has room (0.17875ms)
+✔ Removal prefers the selected matching slot then uses slot order, preserving fragments and clearing zero stacks (0.178834ms)
+✔ Insufficient quantities, stale selected slots and invalid operations leave the whole batch unchanged (0.208166ms)
+✔ Plan custody prevents forgery, replay, modified slots and replacement containers; exposed data cannot alter commits (0.301459ms)
+✔ Slot-state reload keeps order and fragments; quantity projections and empty-pocket views remain detached (0.295792ms)
+✖ Native normal items can exceed 99 across slots while berries and machines preserve their single-stack limit (0.558208ms)
+✔ Plugins register custom pockets and items through the real catalog validator and reuse the same slot service (14.676459ms)
+✔ Plugin startup orders dependencies, rejects versions/cycles/duplicates, and failed setup leaks no registration (1.726375ms)
+✔ JSON and schema boundaries reject prototypes, cycles, non-finite data, extra keys and unsupported schema options (0.622042ms)
+✔ Two independent plugins register pages and slots without modifying the built-in catalogs (30.414958ms)
+✔ Detail interaction composes action, core item/friendship, saved memory, lifecycle and presentation once (105.907ms)
+✔ Failed feeding rolls back memory, states, inventory, friendship, events and feedback (10.196834ms)
+✔ Custom states tick and expire once with transactional lifecycle callbacks; stale context cannot write later (9.739417ms)
+✔ Plugin numeric rules enter the same battle pipeline and cannot mutate snapshot or dispatch commands (14.078292ms)
+✔ Core permission and namespace boundaries reject foreign status writes and undeclared intents (7.239875ms)
+✔ Plugin memory survives lead changes, box custody and omission; content references report missing dependency (20.640917ms)
+✔ Event failures are isolated and recursive cascades are bounded (0.166041ms)
+✔ Command bus serializes asynchronous work, validates network declarations, and releases locks on failure (0.183833ms)
+✔ New species, moves, traits, movement and growth predicates are registered as content and validated before play (14.600083ms)
+✔ Async status callbacks are rejected and late callbacks cannot modify committed records (8.524833ms)
+✔ A state fault restores its clock and memory and missing plugin core content is never silently loaded (17.155167ms)
+✔ Two live sessions cannot silently overwrite each other and read-only save inspection does not adopt a changed baseline (0.369584ms)
+✔ Extension map references and grid values fail before play, including patched connections (5.235417ms)
+✔ Intent shapes reject extra fields before writes and observer failures cannot undo committed actions (8.320209ms)
+✔ Themes and world feedback use bounded public definitions; invalid scopes and asynchronous validation fail (16.329ms)
+✔ Domain permissions are supplied by the content pack and queued observation steps flush after asynchronous command completion (14.845583ms)
+✔ Authorized plugins can use exposed domain commands and equipment removal remains a validated intent (10.824375ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 36
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 423.424834
+
+✖ failing tests:
+
+test at tests/inventory.test.js:44:1
+✖ Inventory policies are supplied by the pack, cloned and frozen; native pocket capacities match the reference (1.774708ms)
+  Error: Unknown inventory item tm01
+      at InventoryRegistry.pocketOf (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory-registry.js:49:13)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory.test.js:55:23)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)
+
+test at tests/inventory.test.js:235:1
+✖ Native normal items can exceed 99 across slots while berries and machines preserve their single-stack limit (0.558208ms)
+  Error: Unknown inventory item tm01
+      at InventoryRegistry.pocketOf (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory-registry.js:49:13)
+      at InventoryService.validateOperation (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:90:34)
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:109:35
+      at Array.forEach (<anonymous>)
+      at InventoryService.prepare (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:109:14)
+      at InventoryService.apply (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/inventory.js:184:23)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/inventory.test.js:244:15)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
