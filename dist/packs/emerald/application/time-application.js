@@ -22,6 +22,7 @@ export const TIME_PORTS = Object.freeze([
   "ui",
   "world",
   "canManageParty",
+  "advanceCrops",
 ]);
 /** Coordinates clocks and domain time notifications. It owns no inventory, actor, berry or battle rules. */
 export class TimeApplication {
@@ -89,6 +90,7 @@ export class TimeApplication {
   }
   process() {
     const change = this.clock.boundaries();
+    if (change.minutes) this.advanceCrops(change.minutes);
     if (change.days)
       this.plugins?.events.emit("core:world-day", {
         ...change,

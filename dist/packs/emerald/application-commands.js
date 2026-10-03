@@ -9,6 +9,7 @@ export function registerEmeraldCommands(game, bus) {
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
   const domainPermissions = {
     time: "time",
+    crop: "crops",
     field: "movement",
     world: "world",
     movement: "movement",
@@ -46,6 +47,18 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  register(
+    "crop.action",
+    objectSchema(
+      {
+        id,
+        action: { type: "string", enum: ["plant", "water", "harvest"] },
+        kind: id,
+      },
+      ["id", "action"],
+    ),
+    ({ id, action, kind }) => game.cropAction(id, action, kind),
+  );
   register("creature.form.restore", byUid, ({ uid }) => game.restoreForm(uid), {
     plugin: true,
     permission: "forms",

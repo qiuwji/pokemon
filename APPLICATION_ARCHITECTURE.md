@@ -7,6 +7,8 @@
 | 服务 | 职责 | 自己持有的会话对象/状态 |
 | --- | --- | --- |
 | save | 默认进度、加载/导入/导出/重开、保存保护、随机数重绑 | state、rng、SaveStore、保存时间与保护信息 |
+| time | 世界 RTC、实际游玩时长、时间边界与持久任务协调 | WorldClock、WorldSchedule |
+| crops | 树果生命周期、种植/浇水/采摘的库存提交 | CropRegistry、CropService |
 | party | 图鉴登记、初始精灵领取、管理资格、学习招式协调 | 无复制状态 |
 | inventory | 背包、商店资格/购买、装备、队伍排序与仓库出入 | ItemService、EquipmentService、PartyStorageService |
 | forms | 野外形态操作与保存记录绑定 | CreatureForms |
@@ -33,7 +35,7 @@
 
 ## 重载生命周期
 
-加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑野外行动服务，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
+加载/重开先更换保存服务的 state，再由 bindField 依次重绑 RNG → 形态 → 育成 → 时间 → 树果 → 世界。世界绑定动态覆盖后，显式调用移动服务重绑，再创建 FieldSession 与导演并重绑野外行动服务，最后重绑插件。浏览器/UI 生命周期由宿主继续驱动；这些服务不读取 DOM 或 localStorage。
 
 ## 继续开发约束
 

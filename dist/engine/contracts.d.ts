@@ -369,6 +369,8 @@ export type ContentKind =
   | "moveEffects"
   | "movement"
   | "timeTasks"
+  | "crops"
+  | "berryPlots"
   | "terrainRules"
   | "fieldActions"
   | "fieldLinks"
@@ -755,4 +757,16 @@ export interface TimeTaskDefinition {
 export interface WorldScheduleState {
   sequence: number;
   tasks: Record<string, { definition: string; dueMs: number; data: Json }>;
+}
+
+export interface CropDefinition {
+  item: string;
+  name: string;
+  durationMinutes: number;
+  minYield: number;
+  maxYield: number;
+}
+export interface BerryPlotDefinition {
+  map: string;
+  objectId: string;
 }

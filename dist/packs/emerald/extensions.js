@@ -1,3 +1,5 @@
+import { CropRegistry } from "../../engine/crop-growth.js";
+import { EMERALD_CROPS, validateBerryPlots } from "./berries.js";
 import { TimeTaskRegistry } from "../../engine/world-schedule.js";
 import { CreatureFormRegistry } from "../../engine/creatures/forms.js";
 import { GEN3_REFERENCE_MOVES } from "../../engine/rules/gen3/reference-metadata.js";
@@ -50,6 +52,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       ),
       trainers: TRAINERS,
       items: ITEMS,
+      crops: EMERALD_CROPS,
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
       movement: MOVEMENT_MODES,
@@ -63,6 +66,8 @@ export function createEmeraldPlugins(db, plugins, onError) {
   const catalog = host.seal((c) => {
     assertContent({ ...db, ...c });
     new TimeTaskRegistry(c.timeTasks);
+    new CropRegistry(c.crops, { items: c.items });
+    validateBerryPlots(c.berryPlots, c);
     new ConditionQueries(c.conditionQueries);
     const forms = new CreatureFormRegistry(
       c.forms,

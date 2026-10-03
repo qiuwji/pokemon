@@ -1,3 +1,4 @@
+import { emptyCrops } from "../../../engine/crop-growth.js";
 import { emptyWorldClock } from "../../../engine/world-clock.js";
 import { emptyWorldSchedule } from "../../../engine/world-schedule.js";
 import { emptyWorldState } from "../../../engine/world-state.js";
@@ -77,6 +78,7 @@ export class SaveApplication {
       playSeconds: 0,
       clock: emptyWorldClock(),
       schedule: emptyWorldSchedule(),
+      crops: emptyCrops(),
       friendshipSteps: 0,
       movement: { mode: "walk", visited: [PACK.start.map] },
       growth: { hatchTick: 0 },

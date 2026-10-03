@@ -1,3 +1,4 @@
+import { createCropInterface } from "./crop-interface.js";
 import { createTimeInterface } from "./time-interface.js";
 import { createPresentationInterface } from "./presentation-interface.js";
 import { createUIShell } from "./ui-shell.js";
@@ -36,6 +37,7 @@ export function createEmeraldInterface(
     dexUI = createDexInterface(game, deps),
     saveUI = createSaveInterface(game, deps),
     timeUI = createTimeInterface(game, deps),
+    cropUI = createCropInterface(game, deps),
     boxUI = createBoxInterface(game, deps),
     shopUI = createShopInterface(game, deps),
     helpUI = createHelpInterface(game, deps),
@@ -52,6 +54,7 @@ export function createEmeraldInterface(
     dexUI,
     saveUI,
     timeUI,
+    cropUI,
     boxUI,
     shopUI,
     helpUI,

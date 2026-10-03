@@ -1,3 +1,9 @@
+import { CropRegistry, CropService } from "../../engine/crop-growth.js";
+import {
+  EMERALD_CROPS,
+  EMERALD_CROP_POLICY,
+  emeraldBerryYield,
+} from "./berries.js";
 import { validateWorldClock } from "../../engine/world-clock.js";
 import {
   WorldSchedule,
@@ -38,6 +44,18 @@ export function validateSave(
     if (s.clock !== undefined) {
       validateWorldClock(s.clock);
       if (s.playSeconds !== Math.floor(s.clock.playMs / 1000)) return false;
+    }
+    if (s.crops !== undefined) {
+      new CropService({
+        registry: new CropRegistry(catalog.crops || EMERALD_CROPS, {
+          items: catalog.items,
+        }),
+        state: s.crops,
+        policy: EMERALD_CROP_POLICY,
+        calculateYield: emeraldBerryYield,
+      });
+      if (Object.keys(s.crops.trees).some((id) => !catalog.berryPlots?.[id]))
+        return false;
     }
     if (s.schedule !== undefined)
       new WorldSchedule({

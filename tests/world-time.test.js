@@ -30,6 +30,7 @@ function setupClock(options = {}) {
   const clock = new WorldClock({
     state: emptyWorldClock(),
     wallNow: () => wall,
+    playActive,
     ...options,
   });
   return {
@@ -240,7 +241,11 @@ test("Original tide windows and registered story queries read the saved local cl
   assert.equal(q.read({ id: "worldMinute" }, state), 45);
   assert.equal(q.read({ id: "clockSet" }, state), true);
 });
-function adventure(plugins = [], savedDocument = null) {
+function adventure(
+  plugins = [],
+  savedDocument = null,
+  playActive = () => true,
+) {
   let wall = 100000,
     frame = 0,
     saved = savedDocument;
@@ -255,6 +260,7 @@ function adventure(plugins = [], savedDocument = null) {
     ...compiled,
     plugins: compiled.host,
     wallNow: () => wall,
+    playActive,
     storage: {
       getItem: () => saved,
       setItem: (_, value) => {
@@ -439,4 +445,22 @@ test("Explicit time advances obey the same time-event deferral as RTC ticks", as
   s.tick(1000);
   assert.equal(days.length, 1);
   assert.equal(days[0].days, 1);
+});
+
+test("Host visibility excludes background frames from play duration while world RTC still advances", () => {
+  let active = true;
+  const s = adventure([], null, () => active);
+  s.game.startClock(12, 0);
+  s.tick(0);
+  s.tick(1000);
+  active = false;
+  s.setWall(160000);
+  s.tick(61000);
+  s.tick(62000);
+  assert.equal(s.game.timeView().minute, 1);
+  assert.equal(s.game.state.playSeconds, 1);
+  active = true;
+  s.tick(63000);
+  s.tick(64000);
+  assert.equal(s.game.state.playSeconds, 2);
 });

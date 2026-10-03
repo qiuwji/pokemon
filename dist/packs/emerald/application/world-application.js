@@ -152,6 +152,10 @@ export class WorldApplication {
       this.ui.showFieldAction(object.kind === "cutTree" ? "cut" : "rock-smash");
       return;
     }
+    if (object.kind === "berryPlot") {
+      this.ui.showBerryPlot(object.plotId);
+      return;
+    }
     if (object.kind === "daycare") {
       this.ui.showDaycare();
       return;

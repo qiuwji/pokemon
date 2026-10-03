@@ -108,6 +108,7 @@ async function boot() {
     });
     let input, sceneTimer;
     const adventure = new EmeraldAdventure({
+      playActive: () => !document.hidden,
       db,
       catalog,
       plugins: host,

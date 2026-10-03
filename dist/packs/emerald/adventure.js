@@ -28,6 +28,7 @@ export class EmeraldAdventure {
     onMap = () => {},
     onSave = () => {},
     wallNow = Date.now,
+    playActive = () => true,
     clearInput = () => {},
     plugins = null,
     catalog = {
@@ -51,6 +52,7 @@ export class EmeraldAdventure {
       onMap,
       onSave,
       wallNow,
+      playActive,
       clearInput,
       plugins,
       catalog,
@@ -127,7 +129,17 @@ export class EmeraldAdventure {
     this.applications.forms.bind();
     this.applications.growth.bind();
     this.applications.time.bind();
+    this.applications.crops.bind();
     this.applications.world.bind();
+  }
+  cropView(...args) {
+    return this.applications.crops.cropView(...args);
+  }
+  cropAction(...args) {
+    return this.applications.crops.cropAction(...args);
+  }
+  advanceCrops(...args) {
+    return this.applications.crops.advanceCrops(...args);
   }
   timeView(...args) {
     return this.applications.time.timeView(...args);

@@ -13,6 +13,10 @@ export function createEmeraldCommandFacade(
     to: plan.to,
   });
   const routes = {
+    cropAction: (id, action, kind) => [
+      "crop.action",
+      { id, action, ...(kind ? { kind } : {}) },
+    ],
     playPresentation: (id, payload = {}) => [
       "presentation.play",
       { id, payload: JSON.stringify(payload) },
@@ -89,6 +93,7 @@ export function createEmeraldCommandFacade(
   };
   const objectFailures = new Set([
     "startClock",
+    "cropAction",
     "playPresentation",
     "useItem",
     "equipItem",

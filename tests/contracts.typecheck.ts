@@ -134,3 +134,16 @@ const timer: import("../dist/engine/contracts.js").TimeTaskDefinition = {
   catchUp: "aggregate",
 };
 void timer;
+
+const crop: import("../dist/engine/contracts.js").CropDefinition = {
+  item: "oran_berry",
+  name: "Oran",
+  durationMinutes: 180,
+  minYield: 2,
+  maxYield: 3,
+};
+const plot: import("../dist/engine/contracts.js").BerryPlotDefinition = {
+  map: "garden:field",
+  objectId: "soil",
+};
+void [crop, plot];
