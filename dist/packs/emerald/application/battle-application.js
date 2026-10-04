@@ -1,6 +1,8 @@
 import { BATTLE_RULES } from "../../../engine/battle-rules.js";
 import { GEN3_GLOBAL_HOOKS } from "../../../engine/rules/gen3/global-rules.js";
 import { healMonster } from "../../../engine/model.js";
+import { StateCheckpoint } from "../../../engine/state-checkpoint.js";
+import { validateMoney, settleMoney } from "../../../engine/currency.js";
 import { BattleSession } from "../../../engine/battle-session.js";
 import { ITEMS } from "../pack.js";
 import { EncounterService } from "../../../engine/encounters.js";
@@ -49,12 +51,28 @@ export class BattleApplication {
         this.ui?.drawBattleHUD();
         this.ui?.updateSide();
       },
+      onFailure: (error, battle) => {
+        this.settlementCheckpoint?.restore();
+        const recover = this.resultRecovery;
+        this.settlementCheckpoint = null;
+        this.resultRecovery = null;
+        this.resultOwner = null;
+        return recover?.(error, battle);
+      },
       onResult: (b) => {
+        this.settlementCheckpoint = new StateCheckpoint(this.state, this.rng);
         const plan = this.resultOwner
           ? this.resultOwner(b)
           : this.resultPlan(b);
         this.resultOwner = null;
-        return plan;
+        return {
+          commit: () => {
+            plan.commit?.();
+            this.settlementCheckpoint = null;
+            this.resultRecovery = null;
+          },
+          after: () => plan.after?.(),
+        };
       },
     });
   }
@@ -79,7 +97,7 @@ export class BattleApplication {
       context,
     );
   }
-  async startTrainerBattle(id, resultOwner = null) {
+  async startTrainerBattle(id, resultOwner = null, recover = null) {
     if (this.facilityActive) return false;
     const trainer = this.trainerDefinitions[id];
     if (!trainer) throw new Error("Unknown trainer encounter");
@@ -99,11 +117,14 @@ export class BattleApplication {
       },
       null,
       resultOwner,
+      recover,
     );
   }
-  async startEncounterBattle(monster, resultPlan) {
-    return this.startBattle(monster, {}, null, (b) =>
-      this.directResultPlan(b, resultPlan(b)),
+  async startEncounterBattle(monster, resultPlan, recover = null) {
+    return this.startBattle(
+      monster, {}, null,
+      (b) => this.directResultPlan(b, resultPlan(b)),
+      recover,
     );
   }
   directResultPlan(b, owner) {
@@ -118,10 +139,9 @@ export class BattleApplication {
                 amount: reward,
               })
             : this.state.money;
-        if (!Number.isSafeInteger(money) || money < 0)
-          throw new Error("Invalid currency settlement");
+        validateMoney(money);
         owner.commit?.();
-        this.state.money = money;
+        settleMoney(this.state, money);
         if (b.result === "loss")
           this.state.party.forEach((m) => healMonster(m, this.db));
         else
@@ -133,7 +153,9 @@ export class BattleApplication {
       after: () => owner.after?.(),
     };
   }
-  async startBattle(enemy, options = {}, context = null, resultOwner = null) {
+  async startBattle(
+    enemy, options = {}, context = null, resultOwner = null, recover = null,
+  ) {
     if (this.facilityActive && !context) return false;
     const party = context?.party || this.state.party,
       bag = context?.bag || this.state.bag;
@@ -154,6 +176,7 @@ export class BattleApplication {
     this.clearInput();
     this.ui.closeModal();
     this.resultOwner = resultOwner || context?.resultPlan || null;
+    this.resultRecovery = recover || context?.recover || null;
     return this.combat.start({
       party,
       enemyParty: enemies,
@@ -271,8 +294,7 @@ export class BattleApplication {
               amount: reward,
             })
           : this.state.money;
-        if (!Number.isSafeInteger(money) || money < 0)
-          throw new Error("Invalid currency settlement");
+        validateMoney(money);
         if (b.result === "caught" && !this.partyStorage.canReceive(this.state))
           throw new Error("Capture storage unavailable");
         if (b.result !== "loss")
@@ -292,7 +314,7 @@ export class BattleApplication {
             throw new Error("Captured monster could not be received");
           this.seen(b.enemy.species, true);
         }
-        this.state.money = money;
+        settleMoney(this.state, money);
         committed = true;
       },
       after: () => {

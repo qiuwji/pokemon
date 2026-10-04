@@ -2,6 +2,7 @@ import {
   FacilityRegistry,
   FacilitySession,
 } from "../../../engine/facilities.js";
+import { changeMoney, settleMoney, validateMoney } from "../../../engine/currency.js";
 import { grantReward } from "../../../engine/story.js";
 import { healMonster } from "../../../engine/model.js";
 import { readOnly } from "../../../engine/extensions/values.js";
@@ -103,9 +104,10 @@ export class FacilityApplication {
       story: structuredClone(this.state.story),
     };
     if (plan.cost) {
+      validateMoney(plan.cost.money ?? 0);
       if (draft.money < (plan.cost.money || 0))
         throw new Error("没有足够的游戏币（金钱）。");
-      draft.money -= plan.cost.money || 0;
+      settleMoney(draft, changeMoney(draft.money, -(plan.cost.money ?? 0)));
       const debit = this.inventory.apply(
         draft.bag,
         Object.entries(plan.cost.items || {}).map(([item, count]) => ({
@@ -128,9 +130,10 @@ export class FacilityApplication {
     return draft;
   }
   commit(plan, draft) {
+    validateMoney(draft.money);
     const result = this.session.commit(plan);
     this.state.bag = draft.bag;
-    this.state.money = draft.money;
+    settleMoney(this.state, draft.money);
     this.state.story = draft.story;
     if (!this.facilityActive) this.context = null;
     return result;
@@ -167,6 +170,7 @@ export class FacilityApplication {
           ...this.context,
           environment: { weather: plan.battle.weather ?? null },
           resultPlan: (battle) => this.resultPlan(ticket, battle),
+          recover: () => this.session.cancelBattle(ticket),
         });
         if (!started) throw new Error("Facility battle could not start");
       } finally {
@@ -191,7 +195,7 @@ export class FacilityApplication {
   }
   resultPlan(ticket, battle) {
     this.session.checkTicket(ticket);
-    let committed = false;
+    let committed = false, result;
     return {
       commit: () => {
         if (committed) return;
@@ -200,11 +204,11 @@ export class FacilityApplication {
           battle.result,
           this.worldView(),
         );
-        const result = this.commit(plan, this.economy(plan));
+        result = this.commit(plan, this.economy(plan));
         committed = true;
-        this.notify(result);
       },
       after: () => {
+        this.notify(result);
         this.ui?.showFacility?.();
         this.ui?.updateSide();
         if (!this.facilityActive) this.save();

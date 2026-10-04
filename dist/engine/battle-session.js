@@ -9,6 +9,7 @@ export class BattleSession {
     onMessage = () => {},
     onChange = () => {},
     onResult = () => ({}),
+    onFailure = () => {},
   }) {
     Object.assign(this, {
       director,
@@ -17,6 +18,7 @@ export class BattleSession {
       onMessage,
       onChange,
       onResult,
+      onFailure,
     });
     this.battle = null;
     this.locked = false;
@@ -53,6 +55,30 @@ export class BattleSession {
       this.onChange();
     }
   }
+  /** Always return control; owners recover uncommitted domain transactions. */
+  async finish() {
+    const battle = this.battle;
+    let result, committed = false, failure;
+    try {
+      result = this.pendingResult = this.onResult(battle);
+      await this.transitions.run("battle-exit", () => {
+        result.commit?.();
+        committed = true;
+      });
+    } catch (error) {
+      failure = error;
+      if (!committed) await this.onFailure(error, battle);
+    } finally {
+      this.battle = null;
+      this.pendingResult = null;
+      this.locked = false;
+      this.director.reset();
+      this.onChange();
+    }
+    // A failed exit animation must not discard an already committed continuation.
+    if (committed) await result.after?.();
+    if (failure) throw failure;
+  }
   async act(action) {
     if (!this.battle || this.busy) return false;
     this.locked = true;
@@ -70,17 +96,7 @@ export class BattleSession {
           await this.director.play(event, { message: this.onMessage });
       }
       if (this.battle.ended) {
-        const result = (this.pendingResult ??= this.onResult(this.battle));
-        await this.transitions.run("battle-exit", () => {
-          result.commit?.();
-          this.battle = null;
-          this.director.reset();
-          this.pendingResult = null;
-          this.onChange();
-        });
-        // Release combat lock before dialogue or another scripted battle.
-        this.locked = false;
-        await result.after?.();
+        await this.finish();
       }
       return true;
     } finally {

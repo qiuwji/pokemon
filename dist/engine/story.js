@@ -1,3 +1,4 @@
+import { changeMoney, settleMoney } from "./currency.js";
 import { matchesRegion, validateRegion } from "./field-triggers.js";
 import { validStoryVariables } from "./story-variables.js";
 import { DEFAULT_CONDITION_QUERIES } from "./condition-queries.js";
@@ -139,6 +140,13 @@ export class StoryEngine {
     );
   }
 }
+export function validateStoryFlag(key, value, label = "story") {
+  if (typeof key !== "string" || !key ||
+      ["__proto__", "constructor", "prototype"].includes(key) ||
+      !["boolean", "string", "number"].includes(typeof value) ||
+      (typeof value === "number" && !Number.isFinite(value)))
+    throw new Error(`Invalid ${label} flag ${key}`);
+}
 /** @param {import("./contracts.js").Reward} reward */
 export function validateReward(reward, items = {}) {
   if (!reward?.id || typeof reward.id !== "string")
@@ -160,12 +168,7 @@ export function validateReward(reward, items = {}) {
     if (!Object.hasOwn(items, id) || !Number.isSafeInteger(count) || count <= 0)
       throw new Error(`Invalid reward item ${id}`);
   for (const [id, value] of Object.entries(reward.flags || {}))
-    if (
-      ["__proto__", "constructor", "prototype"].includes(id) ||
-      !["boolean", "string", "number"].includes(typeof value) ||
-      (typeof value === "number" && !Number.isFinite(value))
-    )
-      throw new Error(`Invalid reward flag ${id}`);
+    validateStoryFlag(id, value, "reward");
 }
 /** Atomic, idempotent persistent reward. Animation failures cannot grant it twice. */
 export function grantReward(state, reward, { items = {}, inventory } = {}) {
@@ -188,8 +191,7 @@ export function grantRewardResult(
     story: structuredClone(progress),
   };
   if (reward.money !== undefined) {
-    draft.money += reward.money;
-    if (!Number.isSafeInteger(draft.money)) throw new Error("Money overflow");
+    settleMoney(draft, changeMoney(draft.money, reward.money));
   }
   Object.assign(draft.flags, reward.flags);
   draft.story.rewards.push(reward.id);

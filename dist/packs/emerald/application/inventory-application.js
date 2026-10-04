@@ -1,3 +1,4 @@
+import { changeMoney, settleMoney } from "../../../engine/currency.js";
 import { ItemActionService } from "../../../engine/item-actions.js";
 import { createEmeraldInventory } from "../inventory.js";
 import { FieldActionRegistry } from "../../../engine/field-actions.js";
@@ -105,7 +106,7 @@ export class InventoryApplication {
     return (
       !!item &&
       item.shopStock !== false &&
-      item.price > 0 &&
+      Number.isSafeInteger(item.price) && item.price > 0 &&
       this.state.money >= item.price &&
       this.inventory.prepare(this.state.bag, [
         { kind: "add", item: id, count: 1 },
@@ -116,11 +117,12 @@ export class InventoryApplication {
   buyItem(id) {
     const item = this.itemDefinitions[id];
     if (!this.canManageParty() || !this.canBuyItem(id)) return false;
+    const money = changeMoney(this.state.money, -item.price);
     const result = this.inventory.apply(this.state.bag, [
       { kind: "add", item: id, count: 1 },
     ]);
     if (!result.ok) return false;
-    this.state.money -= item.price;
+    settleMoney(this.state, money);
     return true;
   }
   withdrawBox(index) {

@@ -273,6 +273,14 @@ export class FacilitySession {
     if (this.#active?.phase !== "battle" || ticket !== this.#ticket)
       throw new Error("Stale facility battle result");
   }
+  /** Failed settlement consumes no result/reward and releases the matching wait. */
+  cancelBattle(ticket) {
+    if (this.#active?.phase !== "battle" || ticket !== this.#ticket) return false;
+    this.#active = { ...this.#active, phase: "ready" };
+    this.#ticket = null;
+    this.#revision++;
+    return true;
+  }
   prepareResult(ticket, result, world) {
     this.checkTicket(ticket);
     const activity = this.registry.activity(this.#active.facility);

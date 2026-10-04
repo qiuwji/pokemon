@@ -79,3 +79,7 @@ dist/packs/emerald/story.js             # 本作事件装配，不放地区实�
 | 原生与插件统一细粒度授权写政策 | 新bundle限制直接旗标/变量/奖励写为自身命名空间；既有高级story.register权限并未被本轮全面重设 |
 
 原作转写例和搜索方法见[接手Skill](../../skills/emerald-story-reconstruction/SKILL.md)，最小端到端组合见[story-bundle.test.js](../../examples/story-bundle.test.js)。测试与浏览器验收分开：headless证明领域提交/续接，不证明全部原作动画或观感。
+
+## 战斗等待的失败收尾
+
+结果计划创建或提交失败时，应用层回滚本次结算，并通过`StorySession.cancelBattle(progress, waiting)`将**同一个等待会话**恢复为ready。游标仍指向战斗节点，玩家通过菜单继续时重新挑战；不自动走胜利分支，不重放部分奖励，不把失败回执写成completed。此状态允许保存和导出。已经执行的战斗回合不会被撤回，结算检查点不是战前完整重置。转场失败但领域提交成功时保留结果并继续剧情，不能回滚已成功结算。合同与责任见[应用层](APPLICATION.md)。

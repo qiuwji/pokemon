@@ -377,3 +377,34 @@ test("Losing a session-owned trainer battle does not grant its victory prize", a
   assert.equal(s.game.state.money, before);
   assert(!s.game.state.story.rewards.includes("trainer.youngster.prize"));
 });
+
+for (const failure of ["receipt", "commit"]) {
+  test(`Story battle ${failure} failure returns to a saveable node without advancing or retaining partial rewards`, async () => {
+    const s = program([{
+      node: "fight", type: "battle", species: "zigzagoon", level: 2,
+      onResult: { win: [], loss: [], caught: [], escaped: [] },
+    }], `recover-${failure}`);
+    await s.begin();
+    const waiting = s.game.state.story.session, cursor = waiting.cursor;
+    if (failure === "receipt") waiting.token = "wrong-receipt";
+    else s.game.applications.battle.resultPlan = () => ({ commit: () => {
+      s.game.state.money += 50;
+      s.game.state.story.rewards.push("partial-result");
+      throw new Error("result commit rejected");
+    } });
+    const money = s.game.state.money, rewards = [...s.game.state.story.rewards];
+    s.game.battle.finish("win");
+    await assert.rejects(s.bus.execute("core.battle.action", { kind: "run" }), /receipt rejected|commit rejected/);
+    assert.equal(s.game.battle, null);
+    assert.equal(s.game.state.story.session.status, "ready");
+    assert.equal(s.game.state.story.session.cursor, cursor);
+    assert.equal(s.game.state.story.session.token, undefined);
+    assert.equal(s.game.state.money, money);
+    assert.deepEqual(s.game.state.story.rewards, rewards);
+    assert.doesNotThrow(() => s.game.exportDocument());
+    s.game.save();
+    assert.equal(JSON.parse(s.game.saveStore.raw()).state.story.session.status, "ready");
+    await s.game.resumeStory();
+    assert(s.game.battle);
+  });
+}

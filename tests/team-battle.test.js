@@ -373,7 +373,7 @@ test("Practice prize is committed once after the full win; rematches do not gran
     ).some((c) => c.type === "reward"),
   );
 });
-test("Invalid battle construction precedes transition, and result plans are not created twice on exit retry", async () => {
+test("Invalid battle construction precedes transition, and failed exit releases combat without replaying settlement", async () => {
   let transitions = 0;
   const session = new BattleSession({
     director: { busy: false },
@@ -411,9 +411,11 @@ test("Invalid battle construction precedes transition, and result plans are not 
   ended.battle = { ended: true, act: () => [] };
   await assert.rejects(ended.act({}), /exit failed/);
   fail = false;
-  await ended.act({});
+  assert.equal(await ended.act({}), false);
   assert.equal(results, 1);
-  assert.equal(commits, 1);
+  assert.equal(commits, 0);
+  assert.equal(ended.busy, false);
+  assert.equal(ended.pendingResult, null);
   assert.equal(ended.battle, null);
 });
 

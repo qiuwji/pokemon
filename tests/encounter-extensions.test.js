@@ -645,3 +645,26 @@ test("Plugins choose distinct grass cells proportionally through the seeded rand
     /permission/,
   );
 });
+
+test("Rejected encounter custody leaves its ticket and actor reusable and does not mark it caught", async () => {
+  const s = encounterFixture(), { actor } = await s.spawn();
+  const { ticket } = await s.api.commands.dispatch("core.encounter.prepare", {
+    actor: actor.uid, area: "land",
+  });
+  await s.api.commands.dispatch("core.field.move", { direction: "right" });
+  await s.api.commands.dispatch("core.encounter.request", {
+    ticket: ticket.id, contact: s.api.query().contacts[0].sequence,
+  });
+  s.game.battle.finish("caught");
+  const before = structuredClone(s.game.state);
+  const receive = s.game.partyStorage.receive;
+  s.game.partyStorage.receive = () => false; // Includes the duplicate-UID rejection contract.
+  try {
+    await assert.rejects(s.bus.execute("core.battle.action", { kind: "run" }), /could not be received/);
+  } finally { s.game.partyStorage.receive = receive; }
+  assert.deepEqual(s.game.state, before);
+  assert.equal(s.game.battle, null);
+  assert.equal(s.api.query().encounters[0].claimed, false);
+  assert(s.api.query().actors[actor.uid]);
+  assert(validateSave(s.game.exportDocument().state, s.db, s.catalog, s.host));
+});

@@ -62,3 +62,17 @@
 公开地图快照、暗雷政策、宿主随机选格和接触凭证战斗见[ENCOUNTERS_AND_CONTACTS](../engine/world/ENCOUNTERS_AND_CONTACTS.md)。保存13为野生个体提供唯一仓储；Actor移除和战斗结算通过装配端口释放关联，插件不导入应用服务。
 
 AppearanceApplication拥有视觉选择，ViewApplication组合相机配置与环境层的独立所有者；二者通过有限端口接线，地图访问和读档由装配器交接清理，不向adventure增加领域实现。
+
+## 战斗结算失败与经济不变量
+
+`BattleSession.finish()`只协调结果计划、退出表现和控制权：无论计划创建、提交或转场是否失败，都会释放战斗引用、待提交计划和输入锁。结果提交成功后，退出动画失败仍执行`after`续接；提交失败不执行成功通知。
+
+`BattleApplication`在创建结果计划前用`StateCheckpoint`记录当前JSON状态图与RNG。计划创建或commit失败时恢复这些状态，再调用本次战斗所属用例的恢复端口。这个检查点位于**结算前**，不会重置已经进行的回合、消耗或战斗时间；它防止部分入库、拾取、金钱、奖励和剧情游标混合提交。检查点不捕获运行时服务或外部事件，结果计划必须先完成领域提交，再通过after发布通知。
+
+- 持久剧情：恢复仅作用于发起战斗时的同一会话对象，回到当前battle节点的ready态，删除等待token。玩家可以导出/保存，从菜单重新挑战；不会伪造胜利或推进后继，也不会覆盖另一段剧情。
+- 可见遭遇：`PartyStorageService.receive()`返回true后才释放凭证并记录捕获。结算拒绝时撤销claim、保留Actor/凭证；普通暗雷的失败结果不作为待支付奖励保存，错误明确返回，玩家可继续探索。
+- 设施：`FacilitySession.cancelBattle(ticket)`只解除匹配票据的等待，回到ready，允许退出或再次行动；不发奖、不记成功。已经在开战前支付的入场/行动成本保留。设施commit与notify分开，已提交状态不因通知故障回滚。
+
+通用货币模块为`dist/engine/currency.js`：`validateMoney(value)`检查非负安全整数，`changeMoney(current, delta, {clamp?})`纯计算余额，`settleMoney(state, value)`作为写入口。购物先计算合法余额，再提交库存；奖励、罚金、拾取结算和设施经济使用同一不变量。罚金显式允许下限为0，其他扣款不足即拒绝；小数、无穷值和溢出均在写入前拒绝。注入的rewardCurrency规则仍决定收益，宿主验证规则返回值。
+
+本次复审修复与新测试尚未执行验证，见[当前记录](../project/VALIDATION.md)。

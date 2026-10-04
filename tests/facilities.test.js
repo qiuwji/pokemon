@@ -513,3 +513,20 @@ test("Completed activity results reload with their plugin, while a missing activ
   missing.save();
   assert.equal([...storage.values()][0], saved);
 });
+
+test("Failed facility battle settlement releases its wait and permits quitting without writing a result", async () => {
+  const { game, mon, bus } = fixture();
+  assert(game.enterFacility("practice-series", [mon.uid]).ok);
+  assert((await game.facilityAction("next")).ok);
+  game.battle.finish("win");
+  const facility = game.applications.facilities, before = structuredClone(game.state);
+  const economy = facility.economy;
+  facility.economy = () => { throw new Error("没有足够的游戏币"); };
+  await assert.rejects(bus.execute("core.battle.action", { kind: "run" }), /游戏币/);
+  assert.equal(game.battle, null);
+  assert.equal(game.facilityView().active.phase, "ready");
+  assert.deepEqual(game.state, before);
+  facility.economy = economy;
+  assert(game.quitFacility().ok);
+  assert.doesNotThrow(() => game.exportDocument());
+});

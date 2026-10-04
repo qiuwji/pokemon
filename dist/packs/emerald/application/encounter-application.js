@@ -138,9 +138,8 @@ export class EncounterApplication {
       return { ok: false, reason: "遭遇凭证已被使用。" };
     const monster = this.tickets.record(id).monster;
     try {
-      const started = await this.startEncounterBattle(monster, (b) =>
-        this.resultPlan(id, b),
-      );
+      const started = await this.startEncounterBattle(monster,
+        (b) => this.resultPlan(id, b), () => this.tickets.unclaim(id));
       if (!started) {
         this.tickets.unclaim(id);
         return { ok: false, reason: "现在无法开始战斗。" };
@@ -166,8 +165,9 @@ export class EncounterApplication {
         if (b.result === "caught") {
           if (!this.partyStorage.canReceive(this.state))
             throw new Error("Capture storage unavailable");
+          if (!this.partyStorage.receive(this.state, monster))
+            throw new Error("Captured monster could not be received");
           this.tickets.release(id);
-          this.partyStorage.receive(this.state, monster);
           this.seen(monster.species, true);
         } else this.tickets.release(id);
         this.removeEncounterActor(ticket.actor);

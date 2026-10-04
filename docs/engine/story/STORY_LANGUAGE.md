@@ -7,6 +7,7 @@
 - `where: {map,x,y,width,height}`：限定触发矩形，支持 `step`，与 `requires`、`after`、`once` 组合。区域必须位于已注册地图内。
 - `requires` / `if.condition`：已有旗标、事件、奖励、all/any/not；新增 `compare: {query:{id,input},op,value}`。`op` 支持 eq/ne/gt/gte/lt/lte；数值比较只接受数值。
 - 查询：money、itemCount、partyCount（排除蛋）、hasSpecies、variable、map、positionX/Y。插件通过 `content.register('conditionQueries', id, {schema,read})` 注册纯只读标量查询。
+- `flag: {key,value}`：key为非空字符串，禁止`__proto__`/`constructor`/`prototype`；value仅允许布尔、字符串或有限数值。与reward.flags共用校验，整树预检先于任何命令写入。
 - `setVariable: {name,operation:'set'|'add',value}`：变量由剧情领域持有，保存于 `story.variables`。值为标量；add 仅支持数值。
 - `if: {condition,then:[...],else:[...]}`：选择一条分支执行。
 - `choice: {name,prompt,variable?,cancel?,options:[{id,label,commands:[...]}]}`：由 UI 端口返回选项 ID。变量记录选项 ID，再执行该分支。只有声明 `cancel` 时返回键才选择该选项；没有取消选项时必须做出选择。

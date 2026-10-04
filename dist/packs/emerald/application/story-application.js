@@ -13,6 +13,7 @@ import {
   grantRewardResult,
   completeEvent,
   validateReward,
+  validateStoryFlag,
 } from "../../../engine/story.js";
 import {
   matchesCondition,
@@ -25,6 +26,7 @@ import {
   StorySession,
   validStoryActors,
 } from "../../../engine/story-session.js";
+import { changeMoney, settleMoney } from "../../../engine/currency.js";
 import { trainerRewardId } from "../trainers.js";
 import { createStoryDialoguePorts } from "./story-dialogue-ports.js";
 export const STORY_PORTS = Object.freeze([
@@ -148,6 +150,7 @@ export class StoryApplication {
         cameraTo: (c) => this.fieldDirector.cameraTo(c),
         cameraFollow: (c) => this.fieldDirector.cameraFollow(c),
         flag: (c) => {
+          validateStoryFlag(c.key, c.value);
           this.state.flags[c.key] = c.value;
           this.ui?.updateSide();
         },
@@ -174,14 +177,10 @@ export class StoryApplication {
           this.seen(mon.species, true);
         },
         lossPenalty: () => {
-          const money = Math.max(
-            0,
-            this.state.money -
-              Math.max(0, ...this.state.party.map((m) => m.level)) * 8,
-          );
-          if (!Number.isSafeInteger(money))
-            throw new Error("Invalid loss currency settlement");
-          this.state.money = money;
+          const delta = -Math.max(0, ...this.state.party.map((m) => m.level)) * 8;
+          settleMoney(this.state, changeMoney(this.state.money, delta, {
+            clamp: true, message: "Invalid loss currency settlement",
+          }));
         },
       },
       {
@@ -229,6 +228,7 @@ export class StoryApplication {
             );
           if (c.type === "weather") this.validateWeatherCommand(c);
           if (c.type === "setVariable") validateVariableCommand(c);
+          if (c.type === "flag") validateStoryFlag(c.key, c.value);
           if (c.type === "choice" && c.variable)
             validateVariableCommand({ name: c.variable, value: "" });
           if (c.type === "worldPatch")
@@ -332,6 +332,8 @@ export class StoryApplication {
     }
   }
   async startSessionBattle(command, token) {
+    const waiting = this.state.story.session;
+    const recover = () => this.sessions.cancelBattle(this.state.story, waiting);
     const owner = (battle) => {
       const base = this.resultPlan(battle, { story: false });
       return {
@@ -352,7 +354,8 @@ export class StoryApplication {
               { items: this.itemDefinitions, inventory: this.inventory },
             );
           }
-          this.sessions.battleResult(this.state.story, token, battle.result);
+          if (!this.sessions.battleResult(this.state.story, token, battle.result))
+            throw new Error("Story battle receipt rejected");
         },
         after: () => {
           this.save();
@@ -364,12 +367,13 @@ export class StoryApplication {
       };
     };
     if (command.trainerId)
-      return this.startTrainerBattle(command.trainerId, owner);
+      return this.startTrainerBattle(command.trainerId, owner, recover);
     return this.startBattle(
       createMonster(command.species, command.level, this.db, this.rng),
       command.options || {},
       null,
       owner,
+      recover,
     );
   }
   resumeStory() {

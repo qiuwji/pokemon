@@ -179,6 +179,13 @@ export class StorySession {
     if (record.event) this.complete(record.event);
     readProgress().session = null;
   }
+  /** Settlement rollback reopens only the exact waiting session, never another story. */
+  cancelBattle(progress, waiting) {
+    if (progress.session !== waiting || waiting?.status !== "battle") return false;
+    waiting.status = "ready";
+    delete waiting.token;
+    return true;
+  }
   battleResult(progress, token, result) {
     const record = progress.session;
     if (!record || record.status !== "battle" || record.token !== token)
