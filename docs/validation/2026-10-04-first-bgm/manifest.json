@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-04",
+  "scope": "first original MIDI BGM pack, canonical naming and sample-clock loop",
+  "pack": "emerald-littleroot-bgm",
+  "song": "MUS_LITTLEROOT",
+  "cueId": "emerald-first-bgm:mus_littleroot",
+  "asset": "assets/audio/emerald-first-bgm/mus_littleroot.wav",
+  "assetSha256": "8e8bdb813ff42554f5693517cce489e124b357ac28a8d9380bab0ea770c15044",
+  "sampleRate": 44100,
+  "frames": 4740746,
+  "loopStartFrame": 2388748,
+  "loopEndFrame": 4740746,
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "renderer": {
+    "repository": "https://github.com/huderlem/poryaaaa",
+    "revision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+    "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
+  },
+  "coreTests": {
+    "passed": 851,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pluginTests": {
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pythonToolCases": 4,
+  "qualityChecks": "passed",
+  "testLog": "test.log",
+  "checkLog": "check.log",
+  "inGameListening": {
+    "status": "user-confirmed-audible",
+    "date": "2026-10-04",
+    "scene": "LittlerootTown",
+    "source": "User: 音乐好了"
+  },
+  "loopValidation": "actual cue registration, source.loop bounds, same-track source reuse and pause beyond several cycles resume within loop verified by product example",
+  "unverified": [
+    "long-loop listening",
+    "fixed-reference listening comparison",
+    "bit-exact hardware output",
+    "full battle/story audio-selection and fanfare restoration"
+  ],
+  "browser": "IAB at http://127.0.0.1:5175/?plugins=emerald-first-bgm; sound button enabled, no captured warn/error; user confirmed audible before naming update",
+  "moduleSyntaxCount": 328
+}

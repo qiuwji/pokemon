@@ -17,6 +17,12 @@
       "arguments": [
         "content:maps.LittlerootTown_ProfessorBirchsLab"
       ]
+    },
+    {
+      "id": "emerald-first-bgm",
+      "module": "./emerald-first-bgm.js",
+      "export": "bgmPlugin",
+      "enabled": false
     }
   ]
 }

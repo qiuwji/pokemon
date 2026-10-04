@@ -99,7 +99,7 @@ StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本�
 
 动画描述、纯采样、导演和绘制分离：关键帧、具名缓动、结果分支、区间片段可复用；注册的战斗语义事件演出可追加/替换。计算可脱离浏览器测试、时钟可注入、reducedMotion 统一处理。效果只消费已确定的规则事实。见 [ANIMATION_CONTRACT.md](docs/engine/presentation/ANIMATION_CONTRACT.md)。注册环境层和内嵌Canvas生命周期已提供；任意DOM/SVG视觉宿主尚未提供。
 
-AudioAdapter 只播放注册的真实 WAV/OGG/MP3/M4A 资源；管理解码缓存、音乐/音效通道、循环采样区间、音量、淡入淡出、后台续播和释放。内容使用语义 cue，插件请求自有注册音效；没有振荡器/合成旋律/频率提示 API。目前 7 个真实采样不是完整原作 BGM/SE 库，见 [AUDIO.md](docs/engine/presentation/AUDIO.md)。
+AudioAdapter只播放注册的真实WAV/OGG/MP3/M4A资源，管理解码缓存、音乐/音效通道、循环采样区间、音量、淡变、后台续播和释放。内容使用语义cue，插件请求自有音效，运行时没有振荡器旋律回退。离线音乐工具单独读取原作MIDI/voicegroup/采样生成具名成品包，安装器绑定内容与默认关闭的音乐插件；不在播放器中识别地图或计算规则。首个未白镇包已接入，以按帧循环第二遍保留已有尾音；7个原采样及首曲不等于完整原作BGM/SE库。合同见[AUDIO.md](docs/engine/presentation/AUDIO.md)，生产流程见[音频工具](tools/audio/README.md)。
 
 interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，页面工厂只查询状态和提交应用命令。新增页面仍受架构守卫。插件可注册页面、现有菜单入口、HUD、声明式点击与数据/行为反馈；目前的槽位、控件、主题、既有页面区域和自定义对话能力仍有限。详见 [docs/architecture/PLUGINS.md](docs/architecture/PLUGINS.md)、[PLUGIN_EVOLUTION.md](docs/project/PLUGIN_ROADMAP.md)。网络协议控制当前单机，复用同一校验命令系统，不是多人权威同步。
 

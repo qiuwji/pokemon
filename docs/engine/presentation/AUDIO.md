@@ -44,7 +44,9 @@ source 必须是 assets 下的 wav/ogg/mp3/m4a 文件。volume 为 0..1；loop �
 
 `python3 tools/import.py audio work/pokeemerald --check`预演复制profile所选的真实WAV；审阅后去掉--check执行。当前默认profile选择sound/direct_sound_samples中的7个文件。原始bytes不重采样/合成，路径、SHA256、时长与修订记在dist/assets/audio/provenance.json。初始三精灵使用对应原采样；UI/战斗通用音效是临时采样映射，**不等于原作SE序列**。参数、写入归属见[导入索引](../../development/IMPORT_SCRIPTS.md)。
 
-完整BGM/SE按[音乐导入Skill指南](../../../skills/emerald-story-reconstruction/references/music-import.md)继续：从固定参考的歌曲常量、序列/构建参数、voicegroup/采样追踪，离线转换成品、记录引子/循环和来源，再注册及听感验收。现有工具没有完整BGM转换能力，mid2agb和wav2agb也不是整曲音频渲染器。离线原作音色渲染属于资源生产，运行时仍只播放成品音频；不能用通用MIDI音色或占位旋律声称完成原作音乐。
+完整BGM/SE按[音乐导入Skill指南](../../../skills/emerald-story-reconstruction/references/music-import.md)继续：从固定参考追踪歌曲常量、序列/构建参数、voicegroup/采样，记录引子/循环和来源。现有[成品BGM工具](../../../tools/audio/README.md)通过固定poryaaaa修订离线渲染MIDI循环曲目并安装音频插件，未白镇已接入；完整SE/汇编和全作选择政策尚待补齐。mid2agb和wav2agb不是整曲音频渲染器。运行时只播放成品音频，不用通用MIDI音色或占位旋律声称完成原作音乐。
+
+曲目文件保留原作身份：MUS_LITTLEROOT→mus_littleroot.wav，cue为owner命名空间内的mus_littleroot。按PCM帧计算loopStart/loopEnd，播放器用AudioBufferSourceNode.loop持续重复指定区域；引子不会每轮重播，不通过JS计时器或ended回调重启。未白镇部署包含引子和两遍曲身，重复第二遍以保留已有尾音。
 
 当前emeraldMusic只按map.music/map.battleMusic选择，冲浪/骑车、剧情特殊切曲、fanfare等待及BGM恢复等完整原作政策需追调用分别补齐。API能播放成品不等于这些业务已还原，曲目完成状态归[STATUS](../../project/STATUS.md)。
 

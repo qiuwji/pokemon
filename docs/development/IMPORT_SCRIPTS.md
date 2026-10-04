@@ -32,6 +32,8 @@
 
 ## 推荐顺序
 
+成品音乐另见[音频生产工具](../../tools/audio/README.md)：`tools/audio/render-bgm.py --config ... --renderer ... --output ... --check`预演单曲MIDI/voicegroup转换计划，去掉--check生成可安装包；`install.py --check`预演内容安装。此链不归上表19个采样/内容导入入口，不把完整BGM生产混进import-audio.py。参考只读，使用固定渲染器构建，资源保留原曲身份且loop按PCM帧计算；当前仅完成未白镇代表曲，完整SE/汇编/fanfare政策仍待开发。
+
 A：区域与野外资源
 
 ```text
