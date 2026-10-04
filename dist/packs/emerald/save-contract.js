@@ -87,6 +87,8 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (!["male", "female"].includes(s.playerGender) ||
+        typeof s.playerName !== "string" || !s.playerName.trim() || s.playerName.length > 16) return false;
     if (!s.appearances) return false;
     const appearances = new AppearanceRegistry(
       catalog.appearances || emeraldAppearances(db),

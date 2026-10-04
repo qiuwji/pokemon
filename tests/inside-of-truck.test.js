@@ -34,8 +34,8 @@ test("The reference opening map is present and centred on the truck interior", (
   // puts the player in the map centre when the reference passes no coordinates.
   assert.equal(Math.floor(map.width / 2), 2);
   assert.equal(Math.floor(map.height / 2), 2);
-  // The reference declares MAP_TYPE_INDOOR; the importer derives `indoor` from the map name.
-  assert.equal(map.indoor, false);
+  // The importer now reads MAP_TYPE_INDOOR instead of guessing from underscores.
+  assert.equal(map.indoor, true);
   assert.deepEqual(s.game.state.position, {
     map: "InsideOfTruck", x: 2, y: 2, dir: "down", elevation: 3, previousElevation: 3,
   });
@@ -100,6 +100,8 @@ test("Stepping on the truck door leaves for Littleroot at the reference warp til
   const s = session();
   s.game.state.flags.truckLeft = false;
   s.game.enter({ map: "InsideOfTruck", x: 2, y: 2, dir: "down" });
+  await s.game.flushStoryQueue();
+  await s.settle();
   // Let the arrival beats finish before the player regains control.
   for (let i = 0; i < 40 && (s.game.storyBusy || s.game.busy); i++) {
     await s.game.flushStoryQueue();
@@ -107,6 +109,11 @@ test("Stepping on the truck door leaves for Littleroot at the reference warp til
   }
   assert.equal(s.game.storyBusy, false);
   // The reference coord_event fires when the player steps onto the tiles in front of the door.
+  assert.equal(s.game.move("right"), true);
+  await s.game.timeline.wait(s.game.motion.duration);
+  s.game.field.tick(s.game.timeline.now());
+  assert.equal(s.game.state.position.map, "InsideOfTruck");
+  await s.settle();
   assert.equal(s.game.move("right"), true);
   await s.game.timeline.wait(s.game.motion.duration);
   s.game.field.tick(s.game.timeline.now());

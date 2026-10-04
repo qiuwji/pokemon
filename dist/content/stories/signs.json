@@ -686,15 +686,6 @@
       },
       "script": "littleroottown_brendanshouse_2f.1"
     },
-    "littleroottown_brendanshouse_2f.2": {
-      "trigger": "interact",
-      "selector": {
-        "map": "LittlerootTown_BrendansHouse_2F",
-        "script": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock",
-        "kind": "sign"
-      },
-      "script": "littleroottown_brendanshouse_2f.2"
-    },
     "littleroottown_brendanshouse_2f.3": {
       "trigger": "interact",
       "selector": {

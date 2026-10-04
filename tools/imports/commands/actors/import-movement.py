@@ -15,6 +15,8 @@ if len(sheets) != len(config['sheets']):
     raise ValueError('Duplicate movement sheet IDs')
 for ident in session.select('actors', sheets):
     entry = sheets[ident]
+    entry_palette = entry.get('palette', config['palette'])
+    palette = [tuple(map(int,line.split())) for line in (session.source / entry_palette).read_text().splitlines()[3:19]]
     image = Image.open(session.source / entry['path'])
     output = Image.new('RGBA', image.size)
     output.putdata([(*palette[int(v)%16],255 if int(v)%16 else 0) for v in image.getdata()])

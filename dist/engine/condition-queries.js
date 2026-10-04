@@ -8,6 +8,8 @@ import {
 } from "./extensions/values.js";
 const id = { type: "string", minLength: 1, maxLength: 128 };
 export const CONDITION_QUERIES = {
+  playerFacing: { schema: objectSchema(), read: (s) => s.position.dir },
+  playerGender: { schema: objectSchema(), read: (s) => s.playerGender },
   playerName: { schema: objectSchema(), read: (s) => s.playerName || "训练家" },
   worldHour: {
     schema: objectSchema(),

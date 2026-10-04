@@ -39,6 +39,10 @@ export class NPCSystem {
   }
   state(map, def) {
     const key = map + ":" + def.id;
+    // A controlled actor owns its pose until the scene releases it. Refreshes must
+    // not replace the object being animated with an unpinned definition clone.
+    const pinned = this.scene?.pins.get(key);
+    if (pinned) return pinned;
     let n = this.states.get(key);
     if (!n || n._worldVersion !== def._worldVersion) {
       n = {

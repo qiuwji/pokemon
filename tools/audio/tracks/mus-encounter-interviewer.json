@@ -1,0 +1,18 @@
+{
+  "id": "mus-encounter-interviewer",
+  "title": "道馆新闻",
+  "song": "MUS_ENCOUNTER_INTERVIEWER",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+  "midi": "sound/songs/midi/mus_encounter_interviewer.mid",
+  "voicegroup": "encounter_interviewer",
+  "sampleRate": 44100,
+  "songVolume": 62,
+  "reverb": 50,
+  "polyphony": 5,
+  "pcmMixRate": 13379,
+  "cueVolume": 0.6,
+  "oneShot": false,
+  "kind": "music",
+  "selection": "story"
+}

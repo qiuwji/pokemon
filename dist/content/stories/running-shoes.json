@@ -1,0 +1,298 @@
+{
+  "id": "emerald:running-shoes",
+  "version": 1,
+  "dialogues": {
+    "wait": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "等等，{{who}}！"
+      ]
+    },
+    "offer": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "{{who}}，你已经向小田卷博士打过招呼了吗？",
+        "好可爱的宝可梦！是博士送给你的吧？你们站在一起真精神！",
+        "既然要出去冒险，就穿上这双跑步鞋吧！"
+      ]
+    },
+    "switch": {
+      "name": "",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "{{who}}换上了跑步鞋！"
+      ]
+    },
+    "manual": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "鞋子还附有说明：“按住 B 键就能跑得更快！”",
+        "在这里，按住 Shift 或触屏的跑步按钮即可奔跑。"
+      ]
+    },
+    "farewell": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "爸爸知道你有自己的宝可梦，一定会很高兴。",
+        "路上要小心。遇到什么事，都可以回家来。",
+        "去吧，亲爱的！"
+      ]
+    }
+  },
+  "scripts": {
+    "give.male": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "wait"
+        },
+        {
+          "type": "approach",
+          "actor": "littleroot.mom",
+          "target": "player"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "left"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "offer"
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:mus_obtain_item",
+          "channel": "fanfare"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "switch"
+        },
+        {
+          "type": "waitSound",
+          "channel": "fanfare"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "manual"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "farewell"
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "to": {
+            "x": 5,
+            "y": 9
+          }
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "runningShoes",
+          "value": true
+        },
+        {
+          "type": "hide",
+          "actor": "littleroot.mom"
+        }
+      ]
+    },
+    "give.female": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "wait"
+        },
+        {
+          "type": "approach",
+          "actor": "littleroot.mom",
+          "target": "player"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "offer"
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:mus_obtain_item",
+          "channel": "fanfare"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "switch"
+        },
+        {
+          "type": "waitSound",
+          "channel": "fanfare"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "manual"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "farewell"
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "to": {
+            "x": 14,
+            "y": 9
+          }
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "runningShoes",
+          "value": true
+        },
+        {
+          "type": "hide",
+          "actor": "littleroot.mom"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "give.male": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "script": "give.male",
+      "where": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "pokedex",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "runningShoes",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "give.female": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "script": "give.female",
+      "where": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "pokedex",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "runningShoes",
+              "equals": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "label": "LittlerootTown_EventScript_GiveRunningShoes",
+      "map": "LittlerootTown",
+      "status": "original-verified",
+      "note": "原作 fanfare→换鞋消息→waitfanfare。奖励只在对话和妈妈回家后解锁；这里用邻接寻路处理六个触发格的会合，未声称复刻六套每一帧转身路径。"
+    }
+  ]
+}

@@ -132,6 +132,16 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 
 奖励容量失败保留具体reason，修正剧情分支而不关容量策略。choice.cancel必须是options中的ID；界面返回未知选项会报Invalid story choice result。若检索不到错误全文，查关键部分和对应校验器，错误路径会随命令树层级变化。
 
+## 原作对象与异步演出的易错边界
+
+先区分OnTransition摆位与可见applymovement：前者在入图安排位置，不能因为中途var/flag改变就让实时projection把人物瞬移。相邻中间状态保持同一摆位，需变化的位置通过移动命令或明确的下一次入图条件表达。原生对象有显式或隐式local ID；后者是来源object_events的1起始序号，男女地图顺序不一定相同。绑定须核准来源身份及图形帧，不能拿坐标或通用宝可梦静态图冒充角色动画。
+
+坐标脚本可能就在门格上，应先让step脚本处理已落地位置再决定warp；核对正常走路、脚本移动忽略自动warp和取消/重入三种路径。演出移动必须按实际时钟等到结束，模拟异步界面/帧刷新时也应保持NPC pin身份；不能只用同步递增时钟的最终坐标测试证明无锁死。
+
+页面special必须规定打开、确认/取消、关闭及回调过期。当前clock screen返回confirmed/cancelled/viewed，提交回调由故事生命周期授权；页面和动画不直接改clock，淡入淡出不能阻断自己已授权的提交。原作时钟图块和门帧再生成见[opening-art导入](../../docs/development/IMPORT_SCRIPTS.md)，流程为grid→opening-art；帧素材与姿态复用既有注册合同，不在引擎写地图/角色名分支。
+
+用户若要求自行端到端验收，就仅修代码及授权的代码测试，交付可执行的画面/听音清单并标为待用户验证，不再使用Computer Use操作其游戏。当前切片落点与已知演绎集中在[地区切片](../../docs/regions/LITTLEROOT_OPENING.md)，实际进度仍读取STATUS。
+
 ## 工具、质量及验收
 
 执行说明、导入器风险和代码位置统一见[作者指南](../../docs/development/AUTHORING.md)，测试写法与证据复用见[测试指南](../../docs/development/TESTING.md)。`python3 tools/import.py emerald`从profile和locale读取地图/物种清单，可用--maps/--species选择，现按[内容管线](../../docs/development/CONTENT_PIPELINE.md)的字段所有权合并；先--check，grid另行执行。它不是C剧情自动翻译器，不为新增一个故事重新导入全工程。

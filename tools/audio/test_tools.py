@@ -93,5 +93,44 @@ class AudioTools(unittest.TestCase):
             self.assertEqual(files(project), before)
 
 
+class AudioBundleTools(unittest.TestCase):
+    def test_shared_provenance_survives_consolidation_without_duplicate_input_tables(self):
+        bundler = module('bundle-audio')
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, _pack = fixture(root)
+            build = root / 'rendered'
+            build.mkdir()
+            songs = ['SE_ONE', 'SE_TWO']
+            inputs = [{'path': 'sound/sample.wav', 'sha256': 'a' * 64}]
+            for song in songs:
+                folder = build / song
+                folder.mkdir()
+                audio = song.encode()
+                (folder / 'track.wav').write_bytes(audio)
+                (folder / 'manifest.json').write_text(json.dumps({
+                    'id': song.lower(), 'song': song, 'sourceRevision': 'source',
+                    'renderer': {'revision': 'renderer'}, 'assetName': 'track.wav',
+                    'assetSha256': hashlib.sha256(audio).hexdigest(), 'inputs': inputs,
+                    'frames': 10, 'durationSeconds': 1, 'midiLoopStartFrame': 0,
+                    'midiLoopEndFrame': 10, 'cue': {'source': 'track.wav', 'loop': False},
+                }))
+            spec = root / 'bundle.json'
+            spec.write_text(json.dumps({'id': 'bundle', 'title': 'test',
+                'sourceRevision': 'source', 'rendererRevision': 'renderer',
+                'sounds': [{'song': song} for song in songs]}))
+            before = files(project)
+            bundler.install(spec, build, project, check=True)
+            self.assertEqual(files(project), before)
+            bundler.install(spec, build, project)
+            manifest = json.loads((project / 'dist/assets/audio/bundle/manifest.json').read_text())
+            self.assertEqual(len(manifest['sourceInputSets']), 1)
+            for track in manifest['tracks']:
+                self.assertEqual(manifest['sourceInputSets'][track['inputSet']],
+                                 {'sound/sample.wav': 'a' * 64})
+                asset = project / 'dist' / track['source']
+                self.assertEqual(hashlib.sha256(asset.read_bytes()).hexdigest(), track['assetSha256'])
+
+
 if __name__ == '__main__':
     unittest.main()

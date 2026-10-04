@@ -53,6 +53,12 @@ export class FieldDirector {
     const map = this.field.position.map;
     return { ...this.field.npcs.control(id, map), map };
   }
+  async waitUntil(deadline) {
+    // Browser timers can fire before a fractional frame deadline. Settle the
+    // movement by its clock, not by assuming one timer callback means completion.
+    while (this.timeline.now() < deadline)
+      await this.timeline.wait(Math.max(1, deadline - this.timeline.now()));
+  }
   async ready(id) {
     if (id === "player") return;
     const n = this.field.npcs.control(id, this.field.position.map);
@@ -89,15 +95,15 @@ export class FieldDirector {
       },
     );
   }
-  async step(id, dir, { running = false, allowVacatedBy = null, mode } = {}) {
+  async step(id, dir, { running = false, allowVacatedBy = null, mode, jump = false } = {}) {
     if (!DIRECTIONS[dir]) throw new Error(`Invalid walking direction ${dir}`);
     await this.ready(id);
     if (id === "player") {
       if (
-        !this.field.move(dir, { running, scripted: true, allowVacatedBy, mode })
+        !this.field.move(dir, { running, scripted: true, allowVacatedBy, mode, jump })
       )
         throw new Error(`Scripted player movement blocked: ${dir}`);
-      await this.timeline.wait(this.field.motion.duration);
+      await this.waitUntil(this.field.motion.start + this.field.motion.duration);
       this.field.tick(this.timeline.now());
       return;
     }
@@ -135,7 +141,7 @@ export class FieldDirector {
     n.duration = n.jump ? 256 : running ? 96 : 160;
     n.foot = (n.foot + 1) % 2;
     try {
-      await this.timeline.wait(n.duration);
+      await this.waitUntil(n.start + n.duration);
     } finally {
       n.fromX = n.toX = n.x;
       n.fromY = n.toY = n.y;
@@ -149,13 +155,14 @@ export class FieldDirector {
     running = false,
     allowVacatedBy = null,
     mode,
+    jump = false,
   }) {
     await this.ready(actor);
     const route = path || this.route(actor, to, allowVacatedBy, mode);
     if (!Array.isArray(route))
       throw new Error("Movement needs a path or a destination");
     for (const dir of route)
-      await this.step(actor, dir, { running, allowVacatedBy, mode });
+      await this.step(actor, dir, { running, allowVacatedBy, mode, jump });
   }
   async approach({ actor, target = "player" }) {
     await this.ready(actor);
@@ -308,6 +315,7 @@ export function storyResources(c) {
       "captureMonster",
       "lossPenalty",
       "setVariable",
+      "identity",
     ].includes(c.type)
   )
     return ["state"];
@@ -358,6 +366,7 @@ export function validateFieldCommand(c, maps) {
       : !coordinate(c.to))
   )
     fail();
+  if (c.type === "move" && c.jump !== undefined && typeof c.jump !== "boolean") fail();
   if (c.type === "move" && c.mode !== undefined && !id(c.mode)) fail();
   if (c.type === "face" && !(c.target ? id(c.target) : DIRECTIONS[c.dir]))
     fail();

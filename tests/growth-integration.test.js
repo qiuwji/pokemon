@@ -48,6 +48,8 @@ function state(party) {
     money: 3000,
     seen: [],
     caught: [],
+    playerGender: "male",
+    playerName: "训练家",
     position: { map: "LittlerootTown", x: 10, y: 10, dir: "down" },
     story: { completed: [], rewards: [] },
     friendshipSteps: 0,

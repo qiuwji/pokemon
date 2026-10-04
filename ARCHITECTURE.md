@@ -6,6 +6,9 @@
 
 已有世界编辑复用WorldStateService、WorldQuery和StoryCatalog。world-object-index只负责稳定来源身份、对象目录与能力描述，应用服务负责字段资格和领域提交；告示牌独立投影，不加入NPC占位。运行时Actor/机关接有效地图，详情见[世界状态合同](docs/engine/world/STATE_AND_LIFECYCLE.md)。该局部增强已通过全量核心/插件回归及实际浏览器启动验收，范围与证据见STATUS。
 
+
+开场业务按地区bundle拆在content/stories：车内、未白镇、玩家家、邻居家、跑步鞋各自维护条件与命令；opening-objects只声明条件演员和原生local ID。性别/身份、时钟提交和声音等待分别由所属应用服务协调。FieldSession在已落地的门格先允许坐标剧情接管，再执行warp；NPC场景pin在控制期保持对象引用，FieldDirector按注入时钟等待移动截止点。原作门动画是visit视觉metatile，不改通行与传送；表盘是纯取样，UI只提交已确认的时间。具体合同见[剧情语言](docs/engine/story/STORY_LANGUAGE.md)，来源和验收边界见[开场切片](docs/regions/LITTLEROOT_OPENING.md)。
+
 ## 层次与依赖方向
 
 ```text

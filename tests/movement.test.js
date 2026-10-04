@@ -347,6 +347,8 @@ test("Imported mode frames have valid native grid sizes and fly destinations res
 test("Saved movement rejects a bike on water, a surf mode on land and unknown visit destinations", () => {
   const db = loadContentSync();
   const state = {
+    playerGender: "male",
+    playerName: "训练家",
     position: { map: "Route103", x: 22, y: 9, dir: "right" },
     party: [createMonster("mudkip", 10, db, new Random(3))],
     box: [],

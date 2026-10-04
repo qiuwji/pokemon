@@ -17,6 +17,7 @@ export const TIME_PORTS = Object.freeze([
   "wallNow",
   "plugins",
   "busy",
+  "field",
   "battle",
   "storyBusy",
   "ui",
@@ -60,6 +61,15 @@ export class TimeApplication {
   }
   startClock(hour, minute) {
     if (!this.canManageParty())
+      return { ok: false, reason: "请先结束当前行动。" };
+    return this.commitClock(hour, minute);
+  }
+  /** Trusted story screen supplies this callback; public commands retain their readiness guard. */
+  commitClock(hour, minute) {
+    const field = this.field;
+    // The clock screen owns its fade transition. Reject logical movement/combat,
+    // rather than rejecting that screen's own visual cover as a busy field.
+    if (this.battle || field.pending || field.force || field.motion.moving(field.now()))
       return { ok: false, reason: "请先结束当前行动。" };
     const result = this.clock.start(hour, minute);
     if (result.ok) {

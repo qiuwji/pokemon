@@ -36,7 +36,7 @@
     }
   },
   "scripts": {
-    "truck.arrival": {
+    "truck.arrival.male": {
       "commands": [
         {
           "type": "sound",
@@ -47,11 +47,88 @@
           "actor": "player",
           "path": [
             "right"
+          ],
+          "jump": true
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 900
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 901
+            }
           ]
         },
         {
           "type": "wait",
-          "ms": 420
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 902
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 903
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 904
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 905
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "flag",
+          "key": "momOutside",
+          "value": true
         },
         {
           "type": "move",
@@ -59,6 +136,85 @@
           "path": [
             "down"
           ]
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 902
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 903
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 900
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 901
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": null
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": null
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "wait",
+          "ms": 166
         },
         {
           "type": "move",
@@ -82,6 +238,111 @@
           "dialogue": "mom.welcome"
         },
         {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "move",
+              "actor": "littleroot.mom",
+              "path": [
+                "up"
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "player",
+                  "path": [
+                    "right"
+                  ],
+                  "allowVacatedBy": "littleroot.mom"
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "up"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 900
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 901
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 902
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 903
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 904
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 5,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 905
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
           "type": "move",
           "actor": "littleroot.mom",
           "path": [
@@ -89,25 +350,26 @@
           ]
         },
         {
+          "type": "hide",
+          "actor": "littleroot.mom"
+        },
+        {
           "type": "move",
           "actor": "player",
           "path": [
-            "right"
+            "up",
+            "up"
           ]
-        },
-        {
-          "type": "face",
-          "actor": "player",
-          "dir": "up"
-        },
-        {
-          "type": "hide",
-          "actor": "littleroot.mom"
         },
         {
           "type": "flag",
           "key": "introDone",
           "value": true
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 3
         },
         {
           "type": "scene",
@@ -120,22 +382,409 @@
           }
         }
       ]
+    },
+    "truck.arrival.female": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_ledge"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "right"
+          ],
+          "jump": true
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 900
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 901
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 902
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 903
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 904
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 905
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "flag",
+          "key": "momOutside",
+          "value": true
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 902
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 903
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 900
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 901
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": null
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": null
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "wait",
+          "ms": 166
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.mom",
+          "dir": "left"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "mom.welcome"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "move",
+              "actor": "littleroot.mom",
+              "path": [
+                "up"
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "player",
+                  "path": [
+                    "right"
+                  ],
+                  "allowVacatedBy": "littleroot.mom"
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "up"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 900
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 901
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 902
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 903
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 7,
+              "scope": "visit",
+              "appearance": 904
+            },
+            {
+              "kind": "tile",
+              "map": "LittlerootTown",
+              "x": 14,
+              "y": 8,
+              "scope": "visit",
+              "appearance": 905
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 67
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "type": "hide",
+          "actor": "littleroot.mom"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "introDone",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 3
+        },
+        {
+          "type": "scene",
+          "kind": "door",
+          "position": {
+            "map": "LittlerootTown_MaysHouse_1F",
+            "x": 2,
+            "y": 8,
+            "dir": "down"
+          }
+        }
+      ]
     }
   },
   "entries": {
-    "truck.arrival": {
+    "truck.arrival.male": {
       "trigger": "mapEnter",
-      "priority": 20,
+      "priority": 30,
       "selector": {
         "map": "LittlerootTown"
       },
+      "script": "truck.arrival.male",
       "requires": {
-        "not": {
-          "flag": "introDone",
-          "equals": true
-        }
+        "all": [
+          {
+            "not": {
+              "flag": "introDone",
+              "equals": true
+            }
+          },
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          }
+        ]
+      }
+    },
+    "truck.arrival.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown"
       },
-      "script": "truck.arrival"
+      "script": "truck.arrival.female",
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "introDone",
+              "equals": true
+            }
+          },
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          }
+        ]
+      }
     }
   },
   "sources": [
@@ -143,7 +792,59 @@
       "label": "LittlerootTown_EventScript_StepOffTruckMale",
       "map": "LittlerootTown",
       "status": "original-verified",
-      "note": "原作由 LittlerootTown_OnFrame 的 map_script_2 VAR_LITTLEROOT_INTRO_STATE,1 触发：玩家从卡车的 dynamic warp 落在 (3,10)，jump_right 跳到 (4,10)（伴 SE_LEDGE），妈妈从 LOCALID_LITTLEROOT_MOM 走出两步到 (5,10) 并面向玩家说 LittlerootTown_Text_OurNewHomeLetsGoInside，然后两人走向门口、妈妈先进、玩家跟进，warpsilent 到 BRENDANS_HOUSE_1F 8,8，并 clearflag FAT_MAN 与 MAP_NAME_POPUP。本项目以 introDone 记录该时刻；原作脚本移动可穿过门格，故妈妈进屋改为隐藏、玩家停在门前由场景转场。女玩家分支（May 家）待转写，当前使用 Brendan 家。"
+      "note": "按 GoInsideWithMom 的逐格路径转写；妈妈先走入门格并隐藏，玩家再上移两格，不绕过世界碰撞。男女分别落到 (3,10)/(12,10)，门口 (5,8)/(14,8)，屋内 (8,8)/(2,8)。"
+    }
+  ],
+  "projections": [
+    {
+      "map": "LittlerootTown",
+      "objectId": "littleroot.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "introDone"
+                    }
+                  },
+                  {
+                    "flag": "momOutside"
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "flag": "pokedex"
+                  },
+                  {
+                    "not": {
+                      "flag": "runningShoes"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "changes": {
+        "x": 14,
+        "y": 8,
+        "dir": "up"
+      }
     }
   ]
 }

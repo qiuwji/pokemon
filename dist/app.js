@@ -65,6 +65,7 @@ async function boot() {
         cameraConfiguration: () =>
           game?.cameraConfiguration() || { columns: 20, rows: 14, zoom: 1 },
         environmentLayers: () => game?.environmentFrames() || [],
+        objectTransforms: (now) => sceneDirector.objectTransforms(now),
         appearanceView: (target, context) =>
           game?.appearanceFrame(target, context) || null,
         fieldPriority: emeraldFieldPriority,
@@ -218,7 +219,7 @@ async function boot() {
     function frame(now) {
       if (!document.hidden) {
         audio.setMusic(
-          emeraldMusic(
+          game.storyMusic || emeraldMusic(
             {
               battle: game.battle,
               map: { ...game.world.map, id: game.state.position.map },

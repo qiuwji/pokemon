@@ -165,6 +165,7 @@ export class AudioAdapter {
         startedAt: context.currentTime,
         offset,
       };
+      voice.finished = new Promise((resolve) => { voice.finish = resolve; });
       this.voices.add(voice);
       source.buffer = buffer;
       source.loop = cue.loop;
@@ -202,6 +203,7 @@ export class AudioAdapter {
   cleanup(voice) {
     if (voice.cleaned) return;
     voice.cleaned = true;
+    voice.finish?.();
     voice.stopped = true;
     this.voices.delete(voice);
     voice.source.onended = null;

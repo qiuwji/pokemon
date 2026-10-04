@@ -525,13 +525,14 @@ export class PluginHost {
               !definition ||
               Object.keys(definition).some(
                 (k) =>
-                  !["duration", "schema", "sound", "draw", "field"].includes(k),
+                  !["duration", "schema", "sound", "draw", "field", "objects"].includes(k),
               ) ||
               (definition.draw !== undefined &&
                 typeof definition.draw !== "function") ||
               (definition.field !== undefined &&
                 typeof definition.field !== "function") ||
-              (!definition.draw && !definition.field) ||
+              (definition.objects !== undefined && typeof definition.objects !== "function") ||
+              (!definition.draw && !definition.field && !definition.objects) ||
               !Number.isFinite(definition.duration) ||
               definition.duration < 1 ||
               definition.duration > 10000
@@ -546,6 +547,7 @@ export class PluginHost {
                       evaluate(definition.draw, ctx, readOnly(frame), assets),
                   }
                 : {}),
+              ...(definition.objects ? { objects: (frame) => evaluate(definition.objects, readOnly(frame)) } : {}),
               ...(definition.field
                 ? {
                     field: (frame) =>

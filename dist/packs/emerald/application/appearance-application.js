@@ -5,6 +5,7 @@ import {
 import {
   emeraldAppearances,
   emeraldAppearanceResources,
+  emeraldDefaultAppearance,
 } from "../appearance-definitions.js";
 import { bindApplicationPorts } from "./ports.js";
 import { readOnly } from "../../../engine/extensions/values.js";
@@ -115,18 +116,7 @@ export class AppearanceApplication {
           definition.appearance.data,
         );
     }
-    if (!fallback) {
-      if (context.species)
-        fallback = {
-          appearance: "emerald-species",
-          data: { species: context.species },
-        };
-      else if (context.actor)
-        fallback = {
-          appearance: "emerald-actor",
-          data: { actor: context.actor },
-        };
-    }
-    return this.selections.resolve(target, context, fallback);
+    if (!fallback) fallback = emeraldDefaultAppearance(target, context);
+    return this.selections.resolve(target, target.kind === "player" ? { ...context, gender: this.state.playerGender } : context, fallback);
   }
 }

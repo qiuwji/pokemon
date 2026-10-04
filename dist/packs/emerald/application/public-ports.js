@@ -23,6 +23,7 @@ export const APPLICATION_FIELDS = Object.freeze({
   combat: "battle",
   commands: "story",
   storyBusy: "story",
+  storyMusic: "story",
   movement: "movement",
   travel: "movement",
   travelDirector: "movement",

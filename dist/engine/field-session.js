@@ -16,6 +16,7 @@ export class FieldSession {
     onStart = () => {},
     onMap = () => {},
     onWarp = () => {},
+    beforeWarp = () => false,
     prepareEntry,
     elevation = null,
     onBlocked = () => {},
@@ -41,6 +42,7 @@ export class FieldSession {
       onProgress,
       onStart,
       onWarp,
+      beforeWarp,
       movement,
       terrain,
       canContinue,
@@ -249,6 +251,7 @@ export class FieldSession {
       allowVacatedBy = null,
       mode,
       forced = null,
+      jump = false,
       duration,
     } = {},
   ) {
@@ -299,7 +302,7 @@ export class FieldSession {
         ? { mode: this.movementPlan.mode, duration: this.movementPlan.duration }
         : {}),
       ...(visual.duration ? { duration: visual.duration } : {}),
-      jump: !!result.jump || !!visual.jump,
+      jump: jump || !!result.jump || !!visual.jump,
       freezeAnimation: !!visual.freezeAnimation,
       pose: visual.pose || this.movement?.technique || "normal",
       turnAt: visual.turnAt,
@@ -350,6 +353,8 @@ export class FieldSession {
       this.scriptedStep = false;
       return;
     }
+    // Coordinate scripts may take control before a warp on the same landed cell.
+    if (result.warp && this.beforeWarp(cell)) return;
     if (result.warp) {
       void this.transitions
         .run("door", () => {

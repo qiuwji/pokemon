@@ -17,7 +17,8 @@
       "actors.*",
       "moves.*",
       "typeChart.*",
-      "maps.*.pendingGrid"
+      "maps.*.pendingGrid",
+      "maps.*.allowRunning"
     ],
     "outputs": [
       "assets/actor-*.png",
@@ -203,6 +204,18 @@
     "content": [],
     "outputs": [],
     "entry": "tools/imports/commands/region/import-script-text.py",
+    "category": "region"
+  },
+  "import-opening-art.py": {
+    "content": [
+      "tilesets.general-petalburg.*"
+    ],
+    "outputs": [
+      "assets/wallclock-*.png",
+      "assets/tiles-general-petalburg.png",
+      "assets/opening-art-source.json"
+    ],
+    "entry": "tools/imports/commands/region/import-opening-art.py",
     "category": "region"
   }
 }

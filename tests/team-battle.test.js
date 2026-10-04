@@ -425,6 +425,8 @@ test("Save validation rejects missing or duplicated creature identities and miss
   );
   const { party } = setup();
   const state = {
+    playerGender: "male",
+    playerName: "训练家",
     position: { map: "Route101", x: 16, y: 9, dir: "up" },
     party,
     box: [],

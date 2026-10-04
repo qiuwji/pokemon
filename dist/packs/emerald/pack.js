@@ -1,3 +1,4 @@
+import { openingObjects } from "./opening-objects.js";
 import { sourceObjectId, sourceLocalId } from "../../engine/world-object-index.js";
 // The Emerald slice is a content pack. Engine classes know nothing about these characters.
 export const PACK = {
@@ -10,7 +11,7 @@ export const PACK = {
     surf: "BrendanSurf",
   },
   travelActor: "FlyBird",
-  version: 14,
+  version: 15,
   title: "绿宝石 · 丰缘序章",
   // WarpToTruck() starts at the centre of the truck interior.
   start: { map: "InsideOfTruck", x: 2, y: 2, dir: "down" },
@@ -76,6 +77,8 @@ export { ITEMS } from "./items.js";
 export { questFor } from "./quests.js";
 export { validateSave } from "./save-contract.js";
 function baseObjects(state, db) {
+  const opening = openingObjects(state);
+  if (opening) return opening;
   const map = state.position.map,
     flag = state.flags;
   const obj = (x, y, actor, kind, dialogueId) => {
@@ -96,17 +99,19 @@ function baseObjects(state, db) {
   if (map === "LittlerootTown")
     return [
       obj(16, 10, "Twin", "talk", "npc.talk.1"),
+      ...(!flag.introDone ? [{ id: 'littleroot.truck', actor: 'Truck', kind: 'talk',
+        x: state.playerGender === 'female' ? 12 : 3, y: 10,
+        sourceLocalId: state.playerGender === 'female' ? '6' : '5', name: '搬运卡车', text: '' }] : []),
       // The original keeps mom inside until the truck scene reveals her, and the fat man
       // stays hidden until that scene finishes (LittlerootTown_EventScript_GoInsideWithMom).
-      ...(flag.introDone
-        ? [obj(12, 13, "FatMan", "talk", "npc.talk.2")]
-        : [
+      ...(flag.introDone ? [obj(12, 13, "FatMan", "talk", "npc.talk.2")] : []),
+      ...((!flag.introDone && flag.momOutside) || (flag.pokedex && !flag.runningShoes) ? [
             {
-              ...obj(5, 8, "Mom", "talk", "npc.mom.welcome"),
+              ...obj(state.playerGender === "female" ? 14 : 5, 8, "Mom", "talk", "npc.mom.welcome"),
               id: "littleroot.mom",
               sourceLocalId: "LOCALID_LITTLEROOT_MOM",
             },
-          ]),
+          ] : []),
       obj(14, 17, "Boy2", "talk", "npc.talk.3"),
     ];
   if (map === "Route101")
@@ -163,7 +168,7 @@ function baseObjects(state, db) {
     ];
   if (map === "Route103")
     return !flag.rivalWon
-      ? [obj(10, 3, "MayNormal", "rival", "npc.rival.13")]
+      ? [obj(10, 3, state.playerGender === "female" ? "BrendanNormal" : "MayNormal", "rival", "npc.rival.13")]
       : [];
   if (map === "LittlerootTown_ProfessorBirchsLab")
     return [
@@ -208,9 +213,9 @@ export function objectsFor(state, db) {
       return n;
     }
     const map = state.position.map;
-    const matches = db.maps[map].npcs.filter((o) =>
+    const matches = db.maps[map].npcs.filter((o, index) =>
       n.sourceLocalId
-        ? o.local_id === n.sourceLocalId
+        ? sourceLocalId(o, index) === n.sourceLocalId
         : o.x === n.x && o.y === n.y,
     );
     if (matches.length !== 1 || !matches[0].movement_type)
@@ -230,13 +235,13 @@ export function objectsFor(state, db) {
           : "down";
     let mode = type.includes("WANDER")
       ? "wander"
-      : type.includes("WALK_LEFT_AND_RIGHT")
+      : /WALK_(LEFT_AND_RIGHT|RIGHT_AND_LEFT)/.test(type)
         ? "horizontal"
-        : type.includes("WALK_DOWN_AND_UP")
+        : /WALK_(DOWN_AND_UP|UP_AND_DOWN)/.test(type)
           ? "vertical"
           : type.includes("LOOK_AROUND")
             ? "look"
-            : type.includes("JOG")
+            : (type.includes("JOG") || type.includes("WALK_IN_PLACE"))
               ? "jog"
               : "still";
     if (n.kind === "starter") mode = "still";

@@ -12,6 +12,7 @@
 | --- | --- | --- | --- |
 | 区域 `import-emerald.py` | maps/layouts、物种/招式/属性表、对象和精灵图 → 选定地图/物种/招式/actor字段及PNG | 可选source、--maps/--species/--profile；现有包。区域/中文名来自slice及locale | 是 |
 | 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | 可选source、--maps/--profile；先地图导入，动画区间从配置读取 | 是 |
+| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、门帧 → 男女时钟资源、门metatile 900–905及来源哈希 | source/--target/--strict；先grid；重新生成图集后重跑，重复运行不累加派生帧 | 是 |
 | 区域 `import-encounters.py` | wild_encounters.json陆地表 → 地图陆地遭遇字段 | 可选source、--maps；所需物种先导入，校验槽位数，不再写进化 | 是 |
 | 区域 `import-water-encounters.py` | 同上水上表 → 地图水上遭遇字段 | 可选source、--maps；所需水上物种先导入，校验槽位数 | 是 |
 | 区域 `import-weather.py` | 所有地图header/坐标事件 → rules/gen3/map-weather.js | 可选source；原作地图header不能为空，不依赖可玩地图数量 | 是 |
@@ -33,11 +34,11 @@
 
 新地图分两步导入：`emerald` 写入地图数据并标记 `pendingGrid`，`grid` 补图集与 border 后清除该标记。标记是显式的未完成态，不放宽 tileset/border 校验。指向 `MAP_DYNAMIC` 的 warp 在运行时才设定，导入器按遗漏报告并交给剧情接管。
 
-表中20个入口都支持`--target /另一份/dist`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
+表中21个入口都支持`--target /另一份/dist`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
 
 ## 推荐顺序
 
-成品音乐另见[音频生产工具](../../tools/audio/README.md)：`tools/audio/render-bgm.py --config ... --renderer ... --output ... --check`预演单曲MIDI/voicegroup转换计划，去掉--check生成可安装包；`install.py --check`预演内容安装。此链不归上表20个采样/内容导入入口，不把完整BGM生产混进import-audio.py。参考只读，使用固定渲染器构建，资源保留原曲身份且loop按PCM帧计算；第一章6首地图曲（MUS_LITTLEROOT/ROUTE101/OLDALE/BIRCH_LAB/POKE_CENTER/POKE_MART）已按midi.cfg各自音量渲染并默认启用安装；战斗曲、剧情切曲与SE/汇编/fanfare政策仍待开发。
+成品音乐另见[音频生产工具](../../tools/audio/README.md)：`tools/audio/render-bgm.py --config ... --renderer ... --output ... --check`预演单曲MIDI/voicegroup转换计划，去掉--check生成可安装包；`install.py --check`预演内容安装。此链不归上表21个采样/内容导入入口，不把完整BGM生产混进import-audio.py。参考只读，使用固定渲染器构建，资源保留原曲身份且loop按PCM帧计算；第一章6首地图曲（MUS_LITTLEROOT/ROUTE101/OLDALE/BIRCH_LAB/POKE_CENTER/POKE_MART）已按midi.cfg各自音量渲染并默认启用安装；战斗曲、剧情切曲与SE/汇编/fanfare政策仍待开发。
 
 A：区域与野外资源
 

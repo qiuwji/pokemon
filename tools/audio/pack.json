@@ -49,6 +49,21 @@
       "song": "MUS_VS_RIVAL",
       "config": "tracks/vs_rival.json",
       "selection": "battle-rival"
+    },
+    {
+      "song": "MUS_ENCOUNTER_INTERVIEWER",
+      "config": "tracks/mus-encounter-interviewer.json",
+      "selection": "story"
+    },
+    {
+      "song": "MUS_ENCOUNTER_MAY",
+      "config": "tracks/mus-encounter-may.json",
+      "selection": "story"
+    },
+    {
+      "song": "MUS_ENCOUNTER_BRENDAN",
+      "config": "tracks/mus-encounter-brendan.json",
+      "selection": "story"
     }
   ],
   "sounds": [
@@ -126,6 +141,16 @@
       "song": "SE_TRUCK_DOOR",
       "config": "tracks/se-truck-door.json",
       "selection": "intro-truck-door"
+    },
+    {
+      "song": "MUS_OBTAIN_ITEM",
+      "config": "tracks/mus-obtain-item.json",
+      "selection": "fanfare"
+    },
+    {
+      "song": "SE_EXIT",
+      "config": "tracks/se-exit.json",
+      "selection": "ui"
     }
   ]
 }

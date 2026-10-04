@@ -338,7 +338,7 @@ export function createUIShell(
     if (
       game.busy &&
       !dialog &&
-      !["story-choice", "fishing"].includes(modalType)
+      !["story-choice", "fishing", "clock"].includes(modalType)
     )
       return;
     if (modalType === "learning" || modalType === "evolution") return;

@@ -56,6 +56,7 @@ def install(pack_file, build, project, check=False):
     available = load_track_packs(build)
     root = project.resolve() / 'dist'
     changes, tracks, superseded, removals = {}, [], set(), []
+    input_sets = {}
     for section, kind in zip(SOUND_SECTIONS, ('music', 'sound')):
         for entry in spec.get(section) or []:
             song = entry['song']
@@ -73,6 +74,9 @@ def install(pack_file, build, project, check=False):
             if not asset.startswith(f'assets/audio/{track_id}/'):
                 raise ValueError('Invalid consolidated asset destination')
             changes[(root / asset).resolve()] = audio.read_bytes()
+            inputs = {item['path']: item['sha256'] for item in data.get('inputs', [])}
+            input_set = hashlib.sha256(json.dumps(inputs, sort_keys=True).encode()).hexdigest()
+            input_sets[input_set] = inputs
             tracks.append({
                 'song': song,
                 'kind': kind,
@@ -89,7 +93,7 @@ def install(pack_file, build, project, check=False):
                 'midiLoopEndFrame': data['midiLoopEndFrame'],
                 'renderConfig': data.get('renderConfig'),
                 'renderer': data.get('renderer'),
-                'inputs': data.get('inputs', []),
+                'inputSet': input_set,
             })
             superseded.add(data['id'])
     if not tracks:
@@ -133,7 +137,7 @@ def install(pack_file, build, project, check=False):
     manifest = {
         'id': track_id, 'title': spec['title'], 'defaultEnabled': bool(spec.get('defaultEnabled', True)),
         'sourceRevision': spec['sourceRevision'], 'rendererRevision': spec['rendererRevision'],
-        'cuePrefix': track_id, 'tracks': tracks,
+        'cuePrefix': track_id, 'tracks': tracks, 'sourceInputSets': input_sets,
         'supersededPacks': sorted(superseded),
         'verification': {'installed': True, 'referenceListening': 'pending', 'inGameListening': 'pending'},
         'fidelity': 'Source MIDI and original voicegroups/samples via m4a emulation; not verified bit-exact hardware output.',

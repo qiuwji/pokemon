@@ -63,7 +63,7 @@ api.story.register('gate', {
 | battle | trainerId引用已登记训练家；或species、level（1–100）及可选options；同一会话规则，非任意C trainerbattle模式 |
 | worldPatch | operations数组；每项按WorldState合同定义kind/map/坐标/变更及scope，不直接改地图数据 |
 | fieldAction | id已注册行动，input可选对象，variable可选保存ok结果；未指定variable时失败抛错 |
-| move | actor默认player，path方向数组或to:{x,y,map?}二选一，running可选，mode可选；通过真实通行，不直接改坐标 |
+| move | actor默认player，path方向数组或to:{x,y,map?}二选一，running可选，mode/jump可选；jump为表现跳步，不绕过通行；通过真实通行，不直接改坐标 |
 | approach | actor必填，target默认player；移动到合法邻接格 |
 | face | actor默认player，dir方向或target角色；等该角色在途动作结束 |
 | escort | actor必填且不能player，to:{x,y,map?}，followers可选1–32个唯一ID（默认[player]）；同图有序相邻队列协调步行，非任意队形 |
@@ -72,7 +72,7 @@ api.story.register('gate', {
 | cameraTo / cameraFollow | cameraTo取actor或position:{map,x,y}，ms可选；cameraFollow回到玩家 |
 | teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位；真正需要传送时使用，不代替行走 |
 | wait | ms必填，有限且0–60000 |
-| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头回调，等待场景结束；不写规则 |
+| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头/objects纯对象像素偏移回调，等待场景结束；不写规则 |
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |
 | heal / starter / shop | 无必需额外参数；分别调用现有治疗、选择伙伴和商店界面端口 |
 
@@ -102,7 +102,10 @@ api.story.register('gate', {
 | call | script局部或完整引用、input可选对象；仅在bundle中编译展开，用`{$param:"key"}`传递typed参数 |
 | dialog | dialogue局部/完整引用替代name/lines，parameters由调用输入提供；不在运行时嗅探原label字符串 |
 | checkpoint | 持久脚本稳定保存点；非动画计时；短事件中不会自动创建会话 |
-| screen | id为clock/berry/daycare，input按所属页面需要；界面返回不是自动领域结果 |
+| screen | id为clock/berry/daycare；clock等待关闭并返回status=confirmed/cancelled/viewed，可声明onResult同名命令分支；berry/daycare仍是打开业务页面，不承诺完整结果会话 |
+| identity | name为1–16字符，gender为male/female；开场仅配置一次，走PlayerProfile领域校验 |
+| sound / waitSound | sound.cue为已注册sound cue，可选channel；waitSound同channel等待该声部finished，自然结束/静音/停止均释放，不用固定ms猜音长 |
+| music | cue为已注册music cue；不传cue恢复地图选曲；剧情finally清理临时覆盖 |
 | reward.onResult | {ok:[],alreadyGranted:[],inventoryFull:[]}；按实际返回status执行；未知结果报错，无此字段保留直接失败语义 |
 | battle.onResult | durable脚本声明win/loss/escaped/caught所需分支；普通短battle仅发起，不承诺等待胜负 |
 
@@ -113,3 +116,8 @@ choice另支持default选项ID、timeoutMs（1–60000，必须配default）；o
 新插件bundle直接写的flag.key、setVariable.name、choice.variable、reward.id/flags使用owner:或owner.命名空间；核心业务调用走现有领域命令，不借文本/渲染修改核心。旧高级register仍是已有合同，不据此宣称整个插件权限模型已全面重设。
 
 示例：[story-bundle.test.js](../../../examples/story-bundle.test.js)。测试：[story-content](../../../tests/story-content.test.js)、[story-session](../../../tests/story-session.test.js)。搜索锚点：registerBundle、class StoryCatalog、class StorySession、STORY_SUSPENDED。长剧情恢复边界详见架构，不能把当前短序章当作全作持久剧情已转写。
+
+
+坐标脚本与门格重合时，落地后先允许step剧情接管warp。脚本步行本身不触发自动warp，跨图仍使用显式scene。场景pin维持同一个演员直到释放；定义刷新不得在演出中替换正在移动的对象。状态投影仍是实时声明：同一段可见演出中的中间状态应保持一致摆位，不把C的OnTransition摆位误转成每次flag变化都重置。
+
+调钟提交仅由当前等待中的页面回调授权；关闭页面后回调失效。公用core.time.start仍拒绝剧情忙态。时钟页面拥有淡入淡出，可信提交检查真实在途移动及战斗，不把自己的遮盖动画当成非法移动。

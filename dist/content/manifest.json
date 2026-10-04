@@ -492,6 +492,43 @@
       "section": "maps",
       "key": "InsideOfTruck",
       "path": "maps/InsideOfTruck/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "LittlerootTown_MaysHouse_1F",
+      "path": "maps/LittlerootTown_MaysHouse_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "LittlerootTown_MaysHouse_1F",
+      "path": "maps/LittlerootTown_MaysHouse_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "LittlerootTown_MaysHouse_2F",
+      "path": "maps/LittlerootTown_MaysHouse_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "LittlerootTown_MaysHouse_2F",
+      "path": "maps/LittlerootTown_MaysHouse_2F/map.json"
+    },
+    {
+      "section": "stories",
+      "key": "players-house",
+      "path": "stories/players-house.json"
+    },
+    {
+      "section": "stories",
+      "key": "running-shoes",
+      "path": "stories/running-shoes.json"
+    },
+    {
+      "section": "stories",
+      "key": "rivals-house",
+      "path": "stories/rivals-house.json"
     }
   ]
 }

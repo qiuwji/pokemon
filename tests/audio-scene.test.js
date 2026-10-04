@@ -453,3 +453,18 @@ test("Decoder failures release cached rejection for retry and loop points cannot
   loop.dispose();
   audio.dispose();
 });
+
+test('Voice completion resolves on natural end and mute so waiting stories cannot retain an audio lock', async () => {
+  const f = fakeAudio(), audio = player(f);
+  audio.enabled = true; await audio.unlock();
+  const natural = await audio.play('hit');
+  let ended = false;
+  natural.finished.then(() => { ended = true; });
+  await Promise.resolve(); assert.equal(ended, false);
+  natural.source.onended(); await natural.finished;
+  assert.equal(ended, true); assert.equal(audio.voices.size, 0);
+  const stopped = await audio.play('hit');
+  audio.enabled = false; await stopped.finished;
+  assert.equal(audio.voices.size, 0);
+  audio.dispose();
+});

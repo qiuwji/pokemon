@@ -13,7 +13,7 @@ export function emeraldFieldCapabilities(state) {
   const knows = (id) =>
     state.party.some((m) => !m.egg && m.moves.some((s) => s.id === id));
   return {
-    run: true,
+    run: !!state.flags.runningShoes,
     ...Object.fromEntries(
       Object.entries(BIKE_ITEMS).map(([mode, item]) => [
         mode,

@@ -46,6 +46,12 @@ export function session(plugins = [], { fresh = false } = {}) {
   if (!fresh) {
     // The truck opening already happened; examples start mid-adventure in the town.
     game.state.flags.introDone = true;
+    game.state.flags.introState = 7;
+    game.state.flags.roomChecked = true;
+    game.state.flags.tvWatched = true;
+    game.state.flags.neighborMet = true;
+    game.state.flags.playerConfigured = true;
+    game.state.flags.runningShoes = true;
     game.state.flags.truckLeft = true;
     game.enter({ map: "LittlerootTown", x: 10, y: 10, dir: "up" });
   }

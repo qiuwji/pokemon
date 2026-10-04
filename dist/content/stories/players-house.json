@@ -1,0 +1,1429 @@
+{
+  "id": "emerald:players-house",
+  "version": 1,
+  "dialogues": {
+    "welcome": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "屋里也不错吧，{{who}}？"
+      ]
+    },
+    "set-clock": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "搬运公司的宝可梦搬完东西，还帮忙打扫了呢。真方便呀！",
+        "{{who}}，你的房间在楼上。爸爸买了一只新时钟，记得去调好时间哦！"
+      ]
+    },
+    "go-up": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "还没有调好时钟呢，{{who}}。先去看看自己的房间吧！"
+      ]
+    },
+    "room": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "{{who}}，你喜欢自己的新房间吗？",
+        "很好！东西都收拾得整整齐齐了。楼下也搬完了。",
+        "宝可梦搬家服务真方便！别忘了看看桌上的东西有没有都在哦。"
+      ]
+    },
+    "stopped": {
+      "name": "时钟",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "钟停了呢……还是调好时间，让它开始走吧！"
+      ]
+    },
+    "tv-call": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "{{who}}，快过来！快过来！"
+      ]
+    },
+    "tv-dad": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "电视在报道橙华道馆！说不定能看到爸爸呢！"
+      ]
+    },
+    "tv-report": {
+      "name": "电视",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "这里是橙华道馆，我们刚才为大家带来了现场报道。"
+      ]
+    },
+    "tv-over": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "啊，已经结束了！我们错过爸爸了呢。",
+        "小田卷博士住在隔壁。他是爸爸的朋友。",
+        "{{who}}，去隔壁打个招呼、认识一下他的孩子吧！"
+      ]
+    },
+    "mom-talk": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "你见到小田卷博士了吗？研究所就在镇子的南边。"
+      ]
+    },
+    "mom-heal": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "冒险一定很累吧？先休息一会儿。"
+      ]
+    },
+    "mom-after": {
+      "name": "妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "你和宝可梦都精神起来了！路上小心哦。"
+      ]
+    }
+  },
+  "scripts": {
+    "enter.male": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "welcome"
+        },
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "left"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "set-clock"
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 4
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "up"
+        }
+      ]
+    },
+    "upstairs.male": {
+      "commands": [
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 5
+        }
+      ]
+    },
+    "return-early.male": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "go-up"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "move",
+              "actor": "player",
+              "path": [
+                "up"
+              ]
+            },
+            {
+              "type": "move",
+              "actor": "house.mom",
+              "path": [
+                "up"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "scene",
+          "kind": "door",
+          "position": {
+            "map": "LittlerootTown_BrendansHouse_2F",
+            "x": 7,
+            "y": 1,
+            "dir": "up"
+          }
+        }
+      ]
+    },
+    "clock-mom.male": {
+      "commands": [
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 6
+        },
+        {
+          "type": "wait",
+          "ms": 134
+        },
+        {
+          "type": "move",
+          "actor": "house.mom.upstairs",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "house.mom.upstairs",
+          "dir": "left"
+        },
+        {
+          "type": "wait",
+          "ms": 400
+        },
+        {
+          "type": "move",
+          "actor": "house.mom.upstairs",
+          "path": [
+            "left"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "room"
+        },
+        {
+          "type": "move",
+          "actor": "house.mom.upstairs",
+          "path": [
+            "right",
+            "up"
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 134
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "flag",
+          "key": "roomChecked",
+          "value": true
+        },
+        {
+          "type": "hide",
+          "actor": "house.mom.upstairs"
+        }
+      ]
+    },
+    "clock.male": {
+      "commands": [
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "clockSet"
+              },
+              "op": "eq",
+              "value": true
+            }
+          },
+          "then": [
+            {
+              "type": "if",
+              "condition": {
+                "flag": "roomChecked"
+              },
+              "then": [
+                {
+                  "type": "screen",
+                  "id": "clock"
+                }
+              ],
+              "else": [
+                {
+                  "type": "call",
+                  "script": "clock-mom.male"
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "stopped"
+            },
+            {
+              "type": "screen",
+              "id": "clock",
+              "onResult": {
+                "confirmed": [
+                  {
+                    "type": "call",
+                    "script": "clock-mom.male"
+                  }
+                ],
+                "cancelled": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "tv.male": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "right"
+        },
+        {
+          "type": "emote",
+          "actor": "house.mom",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-call"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "down",
+            "down",
+            "left",
+            "left",
+            "left"
+          ]
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_interviewer"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-dad"
+        },
+        {
+          "type": "move",
+          "actor": "house.mom",
+          "path": [
+            "left"
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "left"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "up"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-report"
+        },
+        {
+          "type": "music"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "left"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-over"
+        },
+        {
+          "type": "move",
+          "actor": "house.mom",
+          "path": [
+            "left",
+            "down"
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 7
+        },
+        {
+          "type": "flag",
+          "key": "tvWatched",
+          "value": true
+        }
+      ]
+    },
+    "mom-talk.male": {
+      "commands": [
+        {
+          "type": "if",
+          "condition": {
+            "flag": "rescued",
+            "equals": true
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "mom-heal"
+            },
+            {
+              "type": "heal"
+            },
+            {
+              "type": "dialog",
+              "dialogue": "mom-after"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "mom-talk"
+            }
+          ]
+        }
+      ]
+    },
+    "enter.female": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "welcome"
+        },
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "right"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "left"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "set-clock"
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 4
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "up"
+        }
+      ]
+    },
+    "upstairs.female": {
+      "commands": [
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 5
+        }
+      ]
+    },
+    "return-early.female": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "go-up"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "move",
+              "actor": "player",
+              "path": [
+                "up"
+              ]
+            },
+            {
+              "type": "move",
+              "actor": "house.mom",
+              "path": [
+                "up"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "scene",
+          "kind": "door",
+          "position": {
+            "map": "LittlerootTown_MaysHouse_2F",
+            "x": 1,
+            "y": 1,
+            "dir": "up"
+          }
+        }
+      ]
+    },
+    "clock-mom.female": {
+      "commands": [
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 6
+        },
+        {
+          "type": "wait",
+          "ms": 134
+        },
+        {
+          "type": "move",
+          "actor": "house.mom.upstairs",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "house.mom.upstairs",
+          "dir": "right"
+        },
+        {
+          "type": "wait",
+          "ms": 400
+        },
+        {
+          "type": "move",
+          "actor": "house.mom.upstairs",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "left"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "room"
+        },
+        {
+          "type": "move",
+          "actor": "house.mom.upstairs",
+          "path": [
+            "left",
+            "up"
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 134
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "flag",
+          "key": "roomChecked",
+          "value": true
+        },
+        {
+          "type": "hide",
+          "actor": "house.mom.upstairs"
+        }
+      ]
+    },
+    "clock.female": {
+      "commands": [
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "clockSet"
+              },
+              "op": "eq",
+              "value": true
+            }
+          },
+          "then": [
+            {
+              "type": "if",
+              "condition": {
+                "flag": "roomChecked"
+              },
+              "then": [
+                {
+                  "type": "screen",
+                  "id": "clock"
+                }
+              ],
+              "else": [
+                {
+                  "type": "call",
+                  "script": "clock-mom.female"
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "stopped"
+            },
+            {
+              "type": "screen",
+              "id": "clock",
+              "onResult": {
+                "confirmed": [
+                  {
+                    "type": "call",
+                    "script": "clock-mom.female"
+                  }
+                ],
+                "cancelled": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "tv.female": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "left"
+        },
+        {
+          "type": "emote",
+          "actor": "house.mom",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-call"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "down",
+            "down",
+            "right",
+            "right",
+            "right"
+          ]
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_interviewer"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-dad"
+        },
+        {
+          "type": "move",
+          "actor": "house.mom",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "up"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-report"
+        },
+        {
+          "type": "music"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "tv-over"
+        },
+        {
+          "type": "move",
+          "actor": "house.mom",
+          "path": [
+            "right",
+            "down"
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 7
+        },
+        {
+          "type": "flag",
+          "key": "tvWatched",
+          "value": true
+        }
+      ]
+    },
+    "mom-talk.female": {
+      "commands": [
+        {
+          "type": "if",
+          "condition": {
+            "flag": "rescued",
+            "equals": true
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "mom-heal"
+            },
+            {
+              "type": "heal"
+            },
+            {
+              "type": "dialog",
+              "dialogue": "mom-after"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "mom-talk"
+            }
+          ]
+        }
+      ]
+    },
+    "leave-early.male": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "go-up"
+        },
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "up"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "up"
+          ]
+        }
+      ]
+    },
+    "leave-early.female": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "go-up"
+        },
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "up"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "up"
+          ]
+        }
+      ]
+    }
+  },
+  "entries": {
+    "enter.male": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "script": "enter.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 3
+          }
+        ]
+      }
+    },
+    "upstairs.male": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F"
+      },
+      "script": "upstairs.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 4
+          }
+        ]
+      }
+    },
+    "return-early.male": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "script": "return-early.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 5
+          },
+          {
+            "not": {
+              "compare": {
+                "query": {
+                  "id": "clockSet"
+                },
+                "op": "eq",
+                "value": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    "clock.male": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
+      },
+      "script": "clock.male",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "male"
+        }
+      }
+    },
+    "tv.male": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "script": "tv.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 6
+          },
+          {
+            "flag": "roomChecked",
+            "equals": true
+          }
+        ]
+      }
+    },
+    "mom-talk.male": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F",
+        "objectId": "house.mom"
+      },
+      "script": "mom-talk.male",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "male"
+        }
+      }
+    },
+    "enter.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "script": "enter.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 3
+          }
+        ]
+      }
+    },
+    "upstairs.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_2F"
+      },
+      "script": "upstairs.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 4
+          }
+        ]
+      }
+    },
+    "return-early.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "script": "return-early.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 5
+          },
+          {
+            "not": {
+              "compare": {
+                "query": {
+                  "id": "clockSet"
+                },
+                "op": "eq",
+                "value": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    "clock.female": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_2F",
+        "script": "LittlerootTown_MaysHouse_2F_EventScript_WallClock"
+      },
+      "script": "clock.female",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "female"
+        }
+      }
+    },
+    "tv.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "script": "tv.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 6
+          },
+          {
+            "flag": "roomChecked",
+            "equals": true
+          }
+        ]
+      }
+    },
+    "mom-talk.female": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F",
+        "objectId": "house.mom"
+      },
+      "script": "mom-talk.female",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "female"
+        }
+      }
+    },
+    "leave-early.male": {
+      "trigger": "step",
+      "priority": 40,
+      "where": {
+        "map": "LittlerootTown_BrendansHouse_1F",
+        "x": 8,
+        "y": 8,
+        "width": 1,
+        "height": 1
+      },
+      "script": "leave-early.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 4
+          }
+        ]
+      }
+    },
+    "leave-early.female": {
+      "trigger": "step",
+      "priority": 40,
+      "where": {
+        "map": "LittlerootTown_MaysHouse_1F",
+        "x": 2,
+        "y": 8,
+        "width": 1,
+        "height": 1
+      },
+      "script": "leave-early.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 4
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "label": "PlayersHouse_1F_EventScript_EnterHouseMovingIn",
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "status": "original-verified",
+      "note": "INTRO_STATE 3→4；上楼 4→5；未调钟返回由妈妈劝回并传到楼梯；调钟确认 5→6；回一楼看电视 6→7。中文为原意转写。"
+    },
+    {
+      "label": "PlayersHouse_1F_EventScript_EnterHouseMovingIn",
+      "map": "LittlerootTown_MaysHouse_1F",
+      "status": "original-verified",
+      "note": "INTRO_STATE 3→4；上楼 4→5；未调钟返回由妈妈劝回并传到楼梯；调钟确认 5→6；回一楼看电视 6→7。中文为原意转写。"
+    }
+  ],
+  "projections": [
+    {
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "any": [
+              {
+                "flag": "introState",
+                "equals": 3
+              },
+              {
+                "flag": "introState",
+                "equals": 4
+              }
+            ]
+          }
+        ]
+      },
+      "changes": {
+        "x": 9,
+        "y": 8,
+        "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 5
+          }
+        ]
+      },
+      "changes": {
+        "x": 8,
+        "y": 4,
+        "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 6
+          }
+        ]
+      },
+      "changes": {
+        "x": 4,
+        "y": 5,
+        "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_MaysHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "any": [
+              {
+                "flag": "introState",
+                "equals": 3
+              },
+              {
+                "flag": "introState",
+                "equals": 4
+              }
+            ]
+          }
+        ]
+      },
+      "changes": {
+        "x": 1,
+        "y": 8,
+        "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_MaysHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 5
+          }
+        ]
+      },
+      "changes": {
+        "x": 2,
+        "y": 4,
+        "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_MaysHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 6
+          }
+        ]
+      },
+      "changes": {
+        "x": 6,
+        "y": 5,
+        "dir": "up"
+      }
+    }
+  ]
+}

@@ -1,11 +1,14 @@
 import { matchesCondition } from "../../engine/conditions.js";
 export const QUESTS = [
+  { id: "clock", requires: { not: { flag: "rescued" } }, number: "00", title: "安顿新家", description: "到自己家二楼调查墙上的时钟，设定时间。", complete: { compare: { query: { id: "clockSet" }, op: "eq", value: true } } },
+  { id: "neighbor", number: "00", title: "认识新邻居", description: "回一楼看电视，再去隔壁二楼调查精灵球。", requires: { flag: "tvWatched" }, complete: { flag: "neighborMet" } },
   {
     id: "rescue",
     destination: { map: "Route101", kind: "bag" },
     number: "01",
     title: "草丛里的求救声",
     description: "沿未白镇北边的小路前往 101 号道路，调查博士的背包。",
+    requires: { flag: "neighborMet" },
     complete: { flag: "rescued" },
   },
   {
@@ -26,6 +29,11 @@ export const QUESTS = [
     description: "返回未白镇研究所，向小田卷博士报告。他有一份礼物要给你。",
     requires: { flag: "rivalWon" },
     complete: { flag: "pokedex" },
+  },
+  {
+    id: "shoes", number: "04", title: "出发前的礼物",
+    description: "从未白镇北边出发，妈妈还有礼物要给你。",
+    requires: { flag: "pokedex" }, complete: { flag: "runningShoes" },
   },
   {
     id: "explore",

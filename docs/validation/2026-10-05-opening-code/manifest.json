@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-05",
+  "version": "0.31.0",
+  "saveVersion": 15,
+  "baseCommit": "e5e7242c1c8176776108df15d1266cb691d77131",
+  "scope": "Opening chapter code, source sprites/clock/doors, actor control and warp timing; no browser acceptance",
+  "inputFingerprint": "a0ab0f23d9418bebc52ebdd0039c24a7fd179de4a1ccb5e97fabda498f83be5d",
+  "tests": {
+    "core": {
+      "passed": 892,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 26,
+      "failed": 0
+    },
+    "log": "tests.log",
+    "audioToolUnitTests": 5,
+    "audioLog": "audio-tools.log"
+  },
+  "quality": {
+    "result": "All main checks passed after documentation updates: content references/assets, 338 module syntax, strict contracts, 79 Markdown documents/782 local links/17 synchronized examples, ESLint and configured engine type checks.",
+    "log": "check.log"
+  },
+  "artPreview": "art-preview.log",
+  "browser": {
+    "status": "pending-user",
+    "reason": "User requested no Computer Use; end-to-end testing delegated to user"
+  },
+  "limitations": [
+    "Visual/timing/audio fidelity not verified in browser this round.",
+    "Neighbor alternate entry, northern gate and exact six-position running-shoes paths still need business fidelity work.",
+    "Source extraction profile is limited; translations and the rest of Emerald remain incomplete."
+  ]
+}

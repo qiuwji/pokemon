@@ -58,3 +58,18 @@ test("A malformed NPC extension is isolated while other actors continue; jumping
   assert.equal(npc.reserved(npc.objects("test")[1]).length, 1);
   assert.equal(npc.objects("test")[1].x, 3);
 });
+
+test('A scene pin keeps the same actor through definition refreshes and releases cleanly', () => {
+  let version = 1;
+  const npc = new NPCSystem({ test: map }, () => [{ id:'n', x:1, y:1, dir:'down', _worldVersion:version }]);
+  npc.beginScene();
+  const controlled = npc.control('n', 'test');
+  controlled.x = controlled.toX = 2;
+  version = 2;
+  npc.tick(100, { map:'test', x:4, y:4 }, { paused:true });
+  assert.strictEqual(npc.control('n', 'test'), controlled);
+  assert.strictEqual(npc.states.get('test:n'), controlled);
+  assert.equal(npc.objects('test')[0].x, 2);
+  npc.endScene();
+  assert.equal(npc.objects('test')[0].x, 1, 'after release the changed definition can apply');
+});

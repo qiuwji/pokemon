@@ -92,6 +92,8 @@ export class SaveApplication {
   }
   newState() {
     return {
+      playerGender: "male",
+      playerName: "训练家",
       facilities: emptyFacilities(),
       encounters: emptyEncounterTickets(),
       appearances: emptyAppearances(),

@@ -261,5 +261,6 @@
   ],
   "music": "MUS_LITTLEROOT",
   "tileset": "building-brendans_mays_house",
-  "indoor": true
+  "indoor": true,
+  "allowRunning": false
 }

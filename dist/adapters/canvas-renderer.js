@@ -24,6 +24,7 @@ export class Renderer {
       appearanceView = () => null,
       cameraConfiguration = () => ({ columns: 20, rows: 14, zoom: 1 }),
       environmentLayers = () => [],
+      objectTransforms = () => [],
       cameraRig = null,
       travelActor = null,
       environment = () => ({ weather: null, hour: 12 }),
@@ -40,6 +41,7 @@ export class Renderer {
       appearanceView,
       cameraConfiguration,
       environmentLayers,
+      objectTransforms,
       cameraRig,
       travelActor,
       environment,
@@ -270,6 +272,7 @@ export class Renderer {
           );
         }
       for (const id of ids) this.drawMap(id, false, now);
+      const offsets = this.objectTransforms(now);
       const all = ids.flatMap((id) => {
         const o = this.graph.placements[id];
         return npcs
@@ -278,11 +281,12 @@ export class Renderer {
             const move = action?.objects?.find(
               (e) => e.map === id && e.id === n.id,
             );
+            const visual = offsets.find((v) => v.map === id && v.id === n.id);
             return {
               ...n,
               map: id,
-              px: n.px + o.x * 16 + (move?.x || 0),
-              py: n.py + o.y * 16 + (move?.y || 0),
+              px: n.px + o.x * 16 + (move?.x || 0) + (visual?.x || 0),
+              py: n.py + o.y * 16 + (move?.y || 0) + (visual?.y || 0),
             };
           });
       });

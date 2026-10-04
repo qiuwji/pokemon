@@ -1,0 +1,1012 @@
+{
+  "id": "emerald:rivals-house",
+  "version": 1,
+  "dialogues": {
+    "neighbor-mom": {
+      "name": "邻居的妈妈",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "你就是刚搬来的{{who}}吧！我是小田卷博士的妻子。",
+        "博士在野外工作，我的孩子就在楼上。快去打个招呼吧！"
+      ]
+    },
+    "may": {
+      "name": "小遥",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "咦？你……你是谁？",
+        "啊，你就是{{who}}！今天刚搬来吧？我是小遥，很高兴认识你！",
+        "我的梦想是和全世界的宝可梦成为朋友。爸爸小田卷博士跟我提过你。",
+        "希望我们也能成为朋友！……才刚认识就说这些，有点害羞呢。",
+        "哎呀，我忘了！还要去帮爸爸捕捉野生宝可梦呢。待会儿见！"
+      ]
+    },
+    "brendan": {
+      "name": "小悠",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "喂！你是谁？",
+        "你就是搬到隔壁的{{who}}吧？原来是个女孩子！",
+        "爸爸说邻居是道馆馆主的孩子，我还以为会是男孩呢。",
+        "我叫小悠。你好，新邻居！",
+        "咦，你还没有宝可梦吗？我得去帮爸爸研究野生宝可梦了。以后见！"
+      ]
+    },
+    "rival-later": {
+      "name": "邻居",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "宝可梦恢复完毕！道具也准备好了……爸爸还在野外呢。"
+      ]
+    },
+    "go-neighbor": {
+      "name": "",
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      },
+      "lines": [
+        "先去隔壁向小田卷博士的家人打个招呼吧。"
+      ]
+    }
+  },
+  "scripts": {
+    "mom.male": {
+      "commands": [
+        {
+          "type": "emote",
+          "actor": "neighbor.mom",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "approach",
+          "actor": "neighbor.mom",
+          "target": "player"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "neighbor-mom"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMomMet",
+          "value": true
+        }
+      ]
+    },
+    "mom-talk.male": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "neighbor-mom"
+        }
+      ]
+    },
+    "meet.male": {
+      "commands": [
+        {
+          "type": "flag",
+          "key": "meetingRival",
+          "value": true
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival",
+          "path": [
+            "down",
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival",
+          "dir": "right"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_may"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerFacing"
+              },
+              "op": "eq",
+              "value": "up"
+            }
+          },
+          "then": [
+            {
+              "type": "move",
+              "actor": "neighbor.rival",
+              "path": [
+                "right",
+                "right",
+                "down",
+                "down",
+                "right"
+              ]
+            },
+            {
+              "type": "face",
+              "actor": "player",
+              "dir": "left"
+            },
+            {
+              "type": "dialog",
+              "dialogue": "may"
+            },
+            {
+              "type": "move",
+              "actor": "neighbor.rival",
+              "path": [
+                "up",
+                "up",
+                "up"
+              ]
+            },
+            {
+              "type": "face",
+              "actor": "neighbor.rival",
+              "dir": "right"
+            },
+            {
+              "type": "move",
+              "actor": "neighbor.rival",
+              "path": [
+                "right",
+                "right",
+                "right",
+                "right"
+              ]
+            },
+            {
+              "type": "face",
+              "actor": "neighbor.rival",
+              "dir": "up"
+            }
+          ],
+          "else": [
+            {
+              "type": "if",
+              "condition": {
+                "compare": {
+                  "query": {
+                    "id": "playerFacing"
+                  },
+                  "op": "eq",
+                  "value": "down"
+                }
+              },
+              "then": [
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival",
+                  "path": [
+                    "right",
+                    "right",
+                    "right"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "left"
+                },
+                {
+                  "type": "dialog",
+                  "dialogue": "may"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival",
+                  "path": [
+                    "up"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival",
+                  "dir": "right"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival",
+                  "path": [
+                    "right",
+                    "right",
+                    "right",
+                    "right"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival",
+                  "dir": "up"
+                }
+              ],
+              "else": [
+                {
+                  "type": "if",
+                  "condition": {
+                    "compare": {
+                      "query": {
+                        "id": "playerFacing"
+                      },
+                      "op": "eq",
+                      "value": "left"
+                    }
+                  },
+                  "then": [
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "right",
+                        "right",
+                        "right",
+                        "right",
+                        "right"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "down"
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "up"
+                    },
+                    {
+                      "type": "dialog",
+                      "dialogue": "may"
+                    },
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "up",
+                        "right",
+                        "right"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "up"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "type": "if",
+                      "condition": {
+                        "compare": {
+                          "query": {
+                            "id": "playerFacing"
+                          },
+                          "op": "eq",
+                          "value": "right"
+                        }
+                      },
+                      "then": [
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "right",
+                            "right",
+                            "down"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "right"
+                        },
+                        {
+                          "type": "face",
+                          "actor": "player",
+                          "dir": "left"
+                        },
+                        {
+                          "type": "dialog",
+                          "dialogue": "may"
+                        },
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "up",
+                            "up",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "up"
+                        }
+                      ],
+                      "else": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRival",
+          "value": false
+        }
+      ]
+    },
+    "rival-talk.male": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rival-later"
+        }
+      ]
+    },
+    "mom.female": {
+      "commands": [
+        {
+          "type": "emote",
+          "actor": "neighbor.mom",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "approach",
+          "actor": "neighbor.mom",
+          "target": "player"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "left"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "neighbor-mom"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMomMet",
+          "value": true
+        }
+      ]
+    },
+    "mom-talk.female": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "neighbor-mom"
+        }
+      ]
+    },
+    "meet.female": {
+      "commands": [
+        {
+          "type": "flag",
+          "key": "meetingRival",
+          "value": true
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival",
+          "path": [
+            "down",
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival",
+          "dir": "left"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_brendan"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerFacing"
+              },
+              "op": "eq",
+              "value": "up"
+            }
+          },
+          "then": [
+            {
+              "type": "move",
+              "actor": "neighbor.rival",
+              "path": [
+                "left",
+                "left",
+                "down",
+                "down",
+                "left"
+              ]
+            },
+            {
+              "type": "face",
+              "actor": "player",
+              "dir": "right"
+            },
+            {
+              "type": "dialog",
+              "dialogue": "brendan"
+            },
+            {
+              "type": "move",
+              "actor": "neighbor.rival",
+              "path": [
+                "up",
+                "up",
+                "up",
+                "left",
+                "left",
+                "left",
+                "left"
+              ]
+            },
+            {
+              "type": "face",
+              "actor": "neighbor.rival",
+              "dir": "up"
+            }
+          ],
+          "else": [
+            {
+              "type": "if",
+              "condition": {
+                "compare": {
+                  "query": {
+                    "id": "playerFacing"
+                  },
+                  "op": "eq",
+                  "value": "down"
+                }
+              },
+              "then": [
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival",
+                  "path": [
+                    "left",
+                    "left",
+                    "left"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "right"
+                },
+                {
+                  "type": "dialog",
+                  "dialogue": "brendan"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival",
+                  "path": [
+                    "up",
+                    "left",
+                    "left",
+                    "left",
+                    "left"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival",
+                  "dir": "up"
+                }
+              ],
+              "else": [
+                {
+                  "type": "if",
+                  "condition": {
+                    "compare": {
+                      "query": {
+                        "id": "playerFacing"
+                      },
+                      "op": "eq",
+                      "value": "left"
+                    }
+                  },
+                  "then": [
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "left",
+                        "left",
+                        "down"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "left"
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "right"
+                    },
+                    {
+                      "type": "dialog",
+                      "dialogue": "brendan"
+                    },
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "up",
+                        "up",
+                        "left",
+                        "left",
+                        "left",
+                        "left",
+                        "left"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "up"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "type": "if",
+                      "condition": {
+                        "compare": {
+                          "query": {
+                            "id": "playerFacing"
+                          },
+                          "op": "eq",
+                          "value": "right"
+                        }
+                      },
+                      "then": [
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "down"
+                        },
+                        {
+                          "type": "face",
+                          "actor": "player",
+                          "dir": "up"
+                        },
+                        {
+                          "type": "dialog",
+                          "dialogue": "brendan"
+                        },
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "up",
+                            "left",
+                            "left"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "up"
+                        }
+                      ],
+                      "else": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRival",
+          "value": false
+        }
+      ]
+    },
+    "rival-talk.female": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rival-later"
+        }
+      ]
+    },
+    "first-neighbor": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "go-neighbor"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "down"
+          ]
+        }
+      ]
+    }
+  },
+  "entries": {
+    "mom.male": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "script": "mom.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "tvWatched",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMomMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "mom-talk.male": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F",
+        "objectId": "neighbor.mom"
+      },
+      "script": "mom-talk.male",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "male"
+        }
+      }
+    },
+    "meet.male": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_2F",
+        "objectId": "neighbor.ball"
+      },
+      "script": "meet.male",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "rival-talk.male": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_2F",
+        "objectId": "neighbor.rival"
+      },
+      "script": "rival-talk.male",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "male"
+        }
+      }
+    },
+    "mom.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "script": "mom.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "tvWatched",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMomMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "mom-talk.female": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F",
+        "objectId": "neighbor.mom"
+      },
+      "script": "mom-talk.female",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "female"
+        }
+      }
+    },
+    "meet.female": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "objectId": "neighbor.ball"
+      },
+      "script": "meet.female",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "rival-talk.female": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "objectId": "neighbor.rival"
+      },
+      "script": "rival-talk.female",
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "female"
+        }
+      }
+    },
+    "first-neighbor": {
+      "trigger": "step",
+      "priority": 50,
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "script": "first-neighbor",
+      "where": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "label": "LittlerootTown_MaysHouse_2F_EventScript_MeetMay",
+      "map": "LittlerootTown_MaysHouse_2F",
+      "status": "original-verified",
+      "note": "精灵球触发初见；四个方向的接近/去电脑路径机械转写为 move/face/wait 数据。原作玩家观看对方走向电脑的逐帧转身未逐条移植；不会影响进度。"
+    },
+    {
+      "label": "LittlerootTown_BrendansHouse_2F_EventScript_MeetBrendan",
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "status": "original-verified",
+      "note": "精灵球触发初见；四个方向的接近/去电脑路径机械转写为 move/face/wait 数据。原作玩家观看对方走向电脑的逐帧转身未逐条移植；不会影响进度。"
+    }
+  ],
+  "projections": [
+    {
+      "map": "LittlerootTown_MaysHouse_2F",
+      "objectId": "neighbor.rival",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "neighborMet"
+          }
+        ]
+      },
+      "changes": {
+        "x": 8,
+        "y": 2,
+        "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "objectId": "neighbor.rival",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "neighborMet"
+          }
+        ]
+      },
+      "changes": {
+        "x": 0,
+        "y": 2,
+        "dir": "up"
+      }
+    }
+  ]
+}

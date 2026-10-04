@@ -31,7 +31,8 @@ function documentPort() {
         replaceChildren(...nodes) {
           this.children = nodes;
         },
-        getContext: () => ({ clearRect() {}, drawImage() {} }),
+        getContext: () => ({ clearRect() {}, drawImage() {}, fillRect() {} }),
+        setAttribute() {},
         classList: { add() {}, remove() {} },
         focus() {
           doc.activeElement = this;
@@ -269,7 +270,7 @@ test("Clock page submits setup through a command and renders live saved time", (
   };
   ui.showTime();
   assert.equal(ui.modalType, "clock");
-  assert.match(doc.getElementById("modal-root").innerHTML, /开始计时/);
+  assert.match(doc.getElementById("modal-root").innerHTML, /确认时间/);
   doc.getElementById("[data-clock-hour]").value = "23";
   doc.getElementById("[data-clock-minute]").value = "59";
   doc.getElementById("[data-start-clock]").onclick();

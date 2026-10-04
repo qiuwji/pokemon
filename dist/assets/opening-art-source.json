@@ -1,0 +1,56 @@
+{
+  "generator": "tools/import.py opening-art",
+  "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "inputs": [
+    {
+      "path": "data/tilesets/secondary/petalburg/palettes/06.pal",
+      "sha256": "d19ac2cc38bf373a77ca9067bb62fa3860d7efc3b2e3662287e077016becb685"
+    },
+    {
+      "path": "data/tilesets/secondary/petalburg/palettes/10.pal",
+      "sha256": "05dff2802ae119041dfd03c7685b735c7c751ee5f93f60f8828e04a2bce53548"
+    },
+    {
+      "path": "graphics/door_anims/littleroot.png",
+      "sha256": "5c9bedca4b334698723581bee88dceeb938722dd664b9901b75c1bfed6f04757"
+    },
+    {
+      "path": "graphics/wallclock/clock.png",
+      "sha256": "3ae1b4976231883cb816ce2e33790a0fcbdb91bd6ff748712fe18a93f7119cfa"
+    },
+    {
+      "path": "graphics/wallclock/clock_start.bin",
+      "sha256": "5d6a6408aaba63e5cb5c4c2c34295e53da9a61f837dc92256f990965a09afb0d"
+    },
+    {
+      "path": "graphics/wallclock/clock_view.bin",
+      "sha256": "ca67c987592cd16cffdcc40c10d2f7cb5bee3b1463daeae8c9b891399970e90c"
+    },
+    {
+      "path": "graphics/wallclock/female.pal",
+      "sha256": "c770380790ee71f3647cae5812b1e7b0f041a887972ca26bb454c0719efcc67b"
+    },
+    {
+      "path": "graphics/wallclock/hand.png",
+      "sha256": "7a8b19bbc80630a1635f4b8eb5bd53a5e8c2e59608cb1e6c3c99c7ab97000187"
+    },
+    {
+      "path": "graphics/wallclock/male.pal",
+      "sha256": "bec80cd474b57f736cb7fffc82efa8dd84fc1898a14a9246a269155fdcfcf77c"
+    }
+  ],
+  "doorMetatiles": [
+    [
+      900,
+      901
+    ],
+    [
+      902,
+      903
+    ],
+    [
+      904,
+      905
+    ]
+  ]
+}

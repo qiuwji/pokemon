@@ -11,13 +11,5 @@
       ]
     }
   },
-  "entries": {
-    "clock": {
-      "trigger": "interact",
-      "selector": {
-        "script": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
-      },
-      "script": "open"
-    }
-  }
+  "entries": {}
 }

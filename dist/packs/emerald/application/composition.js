@@ -185,6 +185,7 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.story = new StoryApplication(
     liveApplicationPorts(read, STORY_PORTS, {
+      commitStoryClock: (hour, minute) => applications.time.commitClock(hour, minute),
       validateWeatherCommand: (command) =>
         applications.weather.validateStory(command),
       performStoryWeather: (command) => applications.weather.story(command),

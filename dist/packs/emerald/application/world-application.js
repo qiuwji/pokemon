@@ -473,6 +473,15 @@ export class WorldApplication {
           .filter((e) =>
             matchesCondition(e.requires, this.state, this.conditionQueries),
           ),
+      beforeWarp: (cell) => {
+        if (this.storyBusy) return false;
+        const commands = this.story.resolve('step', this.state, {
+          map: this.state.position.map, position: { ...this.state.position }, cell,
+        });
+        if (!commands.length) return false;
+        void this.playStory(commands);
+        return true;
+      },
       onWarp: ({ from, to }) => {
         this.control.record("teleport", { from, to });
         if (from.map !== to.map) this.control.record("map.changed", { from: from.map, to: to.map });

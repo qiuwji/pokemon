@@ -23,7 +23,7 @@ test("Browser and Node assemble the same production pack from readable metadata 
   const db = await loadContent(CONTENT_MANIFEST, { readJSON });
   assert.deepEqual(db, loadContentSync());
   // The reference opening map InsideOfTruck joins the imported set.
-  assert.equal(Object.keys(db.maps).length, 10);
+  assert.equal(Object.keys(db.maps).length, 12);
   assert(Object.keys(db.maps).every((id) => !id.startsWith("E2E")));
   assert(
     db.maps.LittlerootTown.warps.every((w) => !w.dest_map.startsWith("E2E")),
@@ -154,7 +154,7 @@ test("Missing map/script references and duplicate warps are rejected unless expl
     assert(validateContentReferences(db).length > 0);
   }
   const db = loadContentSync();
-  assert.equal(Object.keys(db.references.maps).length, 7);
+  assert.equal(Object.keys(db.references.maps).length, 6);
   assert.equal(validateContentReferences(db).length, 0);
 });
 test("Atlas metadata and frame indices must match actual PNG dimensions", () => {

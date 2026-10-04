@@ -1,0 +1,9 @@
+{
+  "script": "import-opening-art.py",
+  "check": true,
+  "files": [
+    "assets/wallclock-female-hands.png"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

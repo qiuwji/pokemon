@@ -25,6 +25,8 @@ const state = () => ({
   fieldEffects: emptyFieldEffects(),
   encounters: emptyEncounterTickets(),
   appearances: { revision: 0, records: {} },
+  playerGender: "male",
+  playerName: "训练家",
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [createMonster("mudkip", 5, db, new Random(4))],
   box: [],

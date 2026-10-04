@@ -560,5 +560,147 @@
   "MovingBox": {
     "w": 16,
     "h": 16
+  },
+  "MayRun": {
+    "w": 16,
+    "h": 32
+  },
+  "MayMachBike": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
+  },
+  "MayAcroBike": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
+  },
+  "MaySurf": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 2,
+        "left": 4,
+        "right": 4
+      },
+      "walk": {
+        "down": [
+          0,
+          1
+        ],
+        "up": [
+          2,
+          3
+        ],
+        "left": [
+          4,
+          5
+        ],
+        "right": [
+          4,
+          5
+        ]
+      }
+    },
+    "underlay": {
+      "actor": "SurfBlob",
+      "offsetY": 8
+    }
+  },
+  "ItemBall": {
+    "w": 16,
+    "h": 16
+  },
+  "VigorothCarryingBox": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 0,
+        "left": 0,
+        "right": 0
+      },
+      "walk": {
+        "down": [
+          1,
+          2
+        ],
+        "up": [
+          1,
+          2
+        ],
+        "left": [
+          1,
+          2
+        ],
+        "right": [
+          1,
+          2
+        ]
+      }
+    }
+  },
+  "VigorothFacingAway": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 3,
+        "up": 3,
+        "left": 3,
+        "right": 3
+      },
+      "walk": {
+        "down": [
+          4,
+          3
+        ],
+        "up": [
+          4,
+          3
+        ],
+        "left": [
+          4,
+          3
+        ],
+        "right": [
+          4,
+          3
+        ]
+      }
+    }
+  },
+  "Truck": {
+    "w": 48,
+    "h": 48,
+    "offsetX": -16,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 0,
+        "left": 0,
+        "right": 0
+      },
+      "walk": {
+        "down": [
+          0
+        ],
+        "up": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ]
+      }
+    }
   }
 }

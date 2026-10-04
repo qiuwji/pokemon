@@ -28,6 +28,8 @@ import {
 } from "../../../engine/story-session.js";
 import { changeMoney, settleMoney } from "../../../engine/currency.js";
 import { trainerRewardId } from "../trainers.js";
+import { configurePlayer, validatePlayerProfile } from "../player-profile.js";
+import { createStoryScreenPorts } from "./story-screen-ports.js";
 import { createStoryDialoguePorts } from "./story-dialogue-ports.js";
 export const STORY_PORTS = Object.freeze([
   "control",
@@ -58,6 +60,7 @@ export const STORY_PORTS = Object.freeze([
   "storyCatalog",
   "timeline",
   "playStorySound",
+  "commitStoryClock",
   "trainerDefinitions",
   "transitions",
   "ui",
@@ -70,6 +73,8 @@ export class StoryApplication {
     bindApplicationPorts(this, ports, STORY_PORTS);
     this.storyBusy = false;
     this.mapQueue = [];
+    this.sounds = new Map();
+    this.storyMusic = null;
     const dialogue = createStoryDialoguePorts({
       catalog: this.storyCatalog,
       queries: this.conditionQueries,
@@ -95,14 +100,11 @@ export class StoryApplication {
           if (c.event) completeEvent(this.state, c.event);
         },
         checkpoint: () => {},
-        screen: (c) => {
-          const screens = {
-            clock: () => this.ui.showTime(),
-            berry: () => this.ui.showBerryPlot(c.input?.plotId),
-            daycare: () => this.ui.showDaycare(),
-          };
-          return screens[c.id]();
-        },
+        screen: createStoryScreenPorts({
+          readUI: () => this.ui,
+          transitions: this.transitions,
+          commitClock: (hour, minute) => this.commitStoryClock(hour, minute),
+        }).screen,
         dialog: dialogue.dialog,
         starter: () => this.ui.starterPicker(),
         shop: () => this.ui.showShop(),
@@ -129,7 +131,14 @@ export class StoryApplication {
           }),
         wait: (c) => this.timeline.wait(c.ms),
         // The original scripts play sound effects inline; only registered cues are reachable.
-        sound: (c) => this.playStorySound(c.cue),
+        identity: (c) => configurePlayer(this.state, c),
+        sound: (c) => {
+          const voice = Promise.resolve(this.playStorySound(c.cue));
+          this.sounds.set(c.channel || "effect", voice);
+          return c.wait ? voice.then((v) => v?.finished) : undefined;
+        },
+        music: (c) => { this.storyMusic = c.cue ?? null; },
+        waitSound: (c) => this.sounds.get(c.channel || "effect")?.then((v) => v?.finished),
         weather: (c) => this.performStoryWeather(c),
         worldPatch: (c) => this.patchWorld(c.operations),
         fieldAction: async (c) => {
@@ -194,8 +203,8 @@ export class StoryApplication {
           const scene =
             c.type === "presentation" &&
             this.sceneDirector?.definitions.get(c.id);
-          return scene?.field && !scene.draw
-            ? ["field-presentation"]
+          return scene?.field || scene?.objects
+            ? ["field-presentation", ...(scene.draw ? ["scene-overlay"] : [])]
             : storyResources(c);
         },
         testCondition: (c) =>
@@ -203,6 +212,12 @@ export class StoryApplication {
         choose: dialogue.choose,
         validateCommand: (c) => {
           validateFieldCommand(c, this.db.maps);
+          if (c.type === "identity") validatePlayerProfile(c);
+          if (c.type === "music" && c.cue !== undefined && (typeof c.cue !== "string" || !c.cue)) throw new Error("Invalid story music cue");
+          if (["sound", "waitSound"].includes(c.type) &&
+              ((c.channel !== undefined && (typeof c.channel !== "string" || !/^[a-z][a-z0-9.-]{0,63}$/.test(c.channel))) ||
+               (c.wait !== undefined && typeof c.wait !== "boolean")))
+            throw new Error("Invalid story audio command");
           if (c.type === "script") {
             const commands = this.storyCatalog.commands(c.id, c.input);
             this.commands.validate(commands);
@@ -424,6 +439,8 @@ export class StoryApplication {
       try {
         if (this.fieldDirector.active) await this.fieldDirector.end({ failed });
       } finally {
+        this.storyMusic = null;
+        this.sounds.clear();
         this.storyBusy = false;
         this.clearInput();
         this.ui?.updateSide();

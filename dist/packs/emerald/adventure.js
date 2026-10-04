@@ -106,7 +106,7 @@ export class EmeraldAdventure {
   }
   playStorySound(cue) {
     if (typeof cue !== "string" || !cue) throw new Error("Invalid story sound cue");
-    this.playSound?.(cue);
+    return this.playSound?.(cue);
   }
   attachUI(ui) {
     this.ui = ui;

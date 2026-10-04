@@ -922,6 +922,7 @@ export interface PluginAPI {
         duration: number;
         schema: DataSchema;
         sound?: string;
+        objects?: (frame: Readonly<SceneFrame>) => readonly { map: string; id: string; x: number; y: number }[];
         field?: (frame: Readonly<SceneFrame>) => {
           x?: number;
           y?: number;

@@ -42,6 +42,7 @@ export class SceneDirector {
         : definition.duration;
     try {
       this.failedField = false;
+      this.failedObjects = false;
       this.active = { id, payload: data, duration, start: this.timeline.now() };
       this.onCue(definition.sound || null);
       await this.timeline.wait(duration);
@@ -76,6 +77,26 @@ export class SceneDirector {
       this.failedField = true;
       this.onError(error);
       return neutral();
+    }
+  }
+  /** Render-only pixel offsets: identities and grid occupancy are never changed. */
+  objectTransforms(now = this.timeline.now()) {
+    const frame = this.sample(now), definition = frame && this.definitions.get(frame.id);
+    if (!definition?.objects || frame.reducedMotion || this.failedObjects) return [];
+    try {
+      const values = readOnly(callSync(definition.objects, [readOnly(frame)]));
+      if (!Array.isArray(values) || values.length > 64 ||
+          new Set(values.map((v) => `${v.map}/${v.id}`)).size !== values.length ||
+          values.some((v) => !v || typeof v.map !== "string" || !v.map ||
+            typeof v.id !== "string" || !v.id ||
+            Object.keys(v).some((k) => !["map", "id", "x", "y"].includes(k)) ||
+            ["x", "y"].some((k) => !Number.isFinite(v[k]) || Math.abs(v[k]) > 64)))
+        throw new Error(`Invalid object presentation transforms ${frame.id}`);
+      return values;
+    } catch (error) {
+      this.failedObjects = true;
+      this.onError(error);
+      return [];
     }
   }
   sample(now = this.timeline.now()) {

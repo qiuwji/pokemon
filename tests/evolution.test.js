@@ -59,6 +59,8 @@ function setup(options = {}) {
   return { rng, player, enemy, bag, battle };
 }
 const state = () => ({
+  playerGender: "male",
+  playerName: "训练家",
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [],
   box: [],

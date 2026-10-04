@@ -456,7 +456,7 @@ test("Registered weather artists are deterministic, opacity-safe and use static 
 test("Application commands, read-only queries, map visits, expiry and current save schema share one owner", async () => {
   const s = session();
   const g = s.game;
-  assert.equal(PACK.version, 14);
+  assert.equal(PACK.version, 15);
   assert.equal(
     (
       await s.bus.execute("core.weather.set", {

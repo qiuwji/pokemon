@@ -52,3 +52,10 @@ content.register("crops", id, {item,name,durationMinutes,minYield,maxYield})；c
 crop-growth 10 个场景分别验证四段浇水/成熟/再生/离线/停止/保存/公式/坏数据原子性、替换阶段图、插件公开种植采摘/离线延迟恢复/引用。初次 7 项通过、2 个真实插件场景因夹具误用 professor 资源名而失败；改用现有 ProfBirch 后仅失败项通过。追加离线重绑 1 项通过。受影响架构/应用/插件/网络/UI 共 47 项、时钟应用 3 项通过；新宿主后台帧资格 1 项通过；公开类型检查通过。
 
 树果注册/schema、阶段政策、产量随机数、分钟推进/锁处理、库存/对象交互、保存引用发生变化时对应证据失效；尚未执行浏览器树果素材/布局或最终系统回归。
+
+
+## 开场调钟界面
+
+`players-house`地区bundle调查墙钟，通过等待式screen进入页面。首次确认提交初始时间，取消不初始化；设置完成才执行妈妈上楼、退出和下一次一楼电视剧情。再次调查只查看已保存时间。页面使用原作wallclock tilemap/男女背景调色板及手针素材，纯WallClockDial负责编辑/取样；UI不能写clock/state。左右调整分针，上下调整小时，触屏按钮/拖动共用同一编辑状态。页面持有资源和输入清理，时钟提交回调仅在此screen寿命内有效。
+
+资源通过`python3 tools/import.py opening-art --check`预演，去掉--check导入；原作只有时针/分针，未虚构秒针。源码来源和用户待验场景见[开场切片](../../regions/LITTLEROOT_OPENING.md)。
