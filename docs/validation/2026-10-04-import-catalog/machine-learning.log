@@ -1,0 +1,10 @@
+58 machines, 411 species learnsets
+{
+  "script": "import-machine-learning.py",
+  "check": true,
+  "files": [
+    "engine/rules/gen3/machine-learning.js"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

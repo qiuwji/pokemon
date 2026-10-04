@@ -1,0 +1,10 @@
+518 headers, 86 coordinate weather events
+{
+  "script": "import-weather.py",
+  "check": true,
+  "files": [
+    "engine/rules/gen3/map-weather.js"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

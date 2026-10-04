@@ -49,7 +49,7 @@ class ImportOutputTests(unittest.TestCase):
     def test_machine_count_policy_is_configured_and_fails_before_writes(self):
         config = self.dist.parent / 'invalid-config.json'
         config.write_text(json.dumps({'expectedTMCount': 51, 'expectedHMCount': 8}))
-        result = subprocess.run([sys.executable, str(PROJECT / 'tools/import-machine-learning.py'),
+        result = subprocess.run([sys.executable, str(PROJECT / 'tools/import.py'), 'machine-learning',
                                  '--config', str(config), '--target', str(self.dist)],
                                 cwd=self.dist.parent, text=True, capture_output=True)
         self.assertNotEqual(result.returncode, 0)

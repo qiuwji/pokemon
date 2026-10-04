@@ -1,6 +1,6 @@
 # 导入脚本索引
 
-从需要的产物找脚本，而不是重跑所有导入。原C参考`work/pokeemerald/`和`sources/`只读，固定修订与获取信息见[项目位置](../../skills/emerald-project-handoff/references/project-map.md)。Python图像转换需要Pillow；内容候选检查需要Node。所有路径均从项目根描述。
+从需要的产物找脚本，而不是重跑所有导入。原C参考`work/pokeemerald/`和`sources/`只读，固定修订与获取信息见[项目位置](../../skills/emerald-project-handoff/references/project-map.md)。Python图像转换需要Pillow；内容候选检查需要Node。所有路径均从项目根描述。统一入口为`python3 tools/import.py COMMAND [SOURCE] [OPTIONS]`；`--list`按领域列出命令。实现位于tools/imports/commands/{region,dex,battle,items,actors,audio}，不保留旧的平铺脚本入口。表中的脚本名称为ownership的逻辑ID。
 
 ## 分类、输入、输出和参数
 
@@ -8,25 +8,25 @@
 
 | 工作流 / 脚本 | 读取 → 写入 | 参数 / 前置依赖 | 预演 |
 | --- | --- | --- | --- |
-| 区域 `import-emerald.py` | maps/layouts、物种/招式/属性表、对象和精灵图 → 选定地图/物种/招式/actor字段及PNG | source；现有内容包。选区/中文表仍为脚本内默认清单，参数化待后续 | 是 |
-| 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | source；地图及原作header必须存在，先地图导入 | 是 |
-| 区域 `import-encounters.py` | wild_encounters.json陆地表 → 地图陆地遭遇字段 | source；所需物种先导入。不再写进化 | 是 |
-| 区域 `import-water-encounters.py` | 同上水上表 → 地图水上遭遇字段 | source；所需水上物种先导入 | 是 |
+| 区域 `import-emerald.py` | maps/layouts、物种/招式/属性表、对象和精灵图 → 选定地图/物种/招式/actor字段及PNG | 可选source、--maps/--species/--profile；现有包。区域/中文名来自slice及locale | 是 |
+| 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | 可选source、--maps/--profile；先地图导入，动画区间从配置读取 | 是 |
+| 区域 `import-encounters.py` | wild_encounters.json陆地表 → 地图陆地遭遇字段 | 可选source、--maps；所需物种先导入，校验槽位数，不再写进化 | 是 |
+| 区域 `import-water-encounters.py` | 同上水上表 → 地图水上遭遇字段 | 可选source、--maps；所需水上物种先导入，校验槽位数 | 是 |
 | 区域 `import-weather.py` | 所有地图header/坐标事件 → rules/gen3/map-weather.js | 可选source；原作地图header不能为空，不依赖可玩地图数量 | 是 |
 | 区域 `import-map-cycling.py` | 所有地图header → rules/gen3/map-cycling.js | 可选source；原作地图header不能为空 | 是 |
-| 图鉴 `import-species.py` | species_info/learnsets/PNG → 单个物种及PNG | source及一个或多个`species-id:中文名:图鉴号`；需要招式表。未导入招式保留unavailableLearnset | 是 |
-| 图鉴 `import-species-metadata.py` | species_info/egg_moves/tmhm_learnsets → 物种成长/遗传/机器字段 | 可选source，默认仓库参考；物种和当前招式已就位。完整遗传遗漏审计待后续 | 是 |
-| 图鉴 `import-evolutions.py` | evolution.h → evolutions及露力丽后代政策 | source；相关物种先导入。只保留已导入目标，完整遗漏报告待后续 | 是 |
-| 图鉴 `import-detail-sprites.py` | 已导入精灵前PNG → pack/detail-sprite-frames.js | 无source；先导入精灵图，支持`--target` | 是 |
+| 图鉴 `import-species.py` | species_info/learnsets/PNG → 单个物种及PNG | 可选source与旧式条目，或--species/--profile；未导入招式保留unavailableLearnset并报告 | 是 |
+| 图鉴 `import-species-metadata.py` | species_info/egg_moves/tmhm_learnsets → 物种成长/遗传/机器字段 | 可选source、--species；先有物种/招式。遗传和机器招式遗漏逐条报告 | 是 |
+| 图鉴 `import-evolutions.py` | evolution.h → evolutions及露力丽后代政策 | 可选source、--species/--profile；缺目标/附加物种报告，局部导入保留其他家族 | 是 |
+| 图鉴 `import-detail-sprites.py` | 已导入精灵前PNG → pack/detail-sprite-frames.js | 无source，--species；读取target内精灵图，支持--target | 是 |
 | 物品 `import-item-metadata.py` | items.h → rules/gen3/item-metadata.js | 可选source；至少解析到一个物品 | 是 |
 | 物品 `import-held-items.py` | items.h → rules/gen3/held-catalog.js | 可选source；至少解析到一个持有物品 | 是 |
 | 机器 `import-machine-learning.py` | tms_hms/tmhm_learnsets → rules/gen3/machine-learning.js | 可选source及`--config`；数量政策来自gen3.json，机器/学习表不能为空 | 是 |
-| 战斗 `import-move-metadata.py` | battle_moves/battle_util → 已导入招式目标/接触/声音字段 | source；先有招式表，候选招式须在此参考中存在；共用严格解析器 | 是 |
+| 战斗 `import-move-metadata.py` | battle_moves/battle_util → 已导入招式目标/接触/声音字段 | 可选source、--moves；先有招式表，候选招式须在此参考中存在；共用严格解析器 | 是 |
 | 战斗 `import-rule-metadata.py` | battle_moves/pokedex_entries/battle_util → rules/gen3/reference-metadata.js | 可选source及`--config`；数量/Nature Power清单来自gen3.json，共用严格解析器 | 是 |
-| 人物 `import-movement.py` | 原作交通/水面/鸟PNG → actor定义与PNG | source；现有pack。保留后续姿态字段 | 是 |
-| 人物 `import-actor-animations.py` | object_event_anims及现有Acro PNG → Acro动画/帧数 | source；先导入movement素材 | 是 |
-| 孵化 `import-egg-assets.py` | egg目录的四张PNG → egg-front/icon/hatch/shard.png | 可选source；只导入图像，不生成成长规则 | 是 |
-| 音频 `import-audio.py` | direct_sound_samples WAV → audio资源及来源记录 | 可选source；不是整部原作BGM转换器，记录实际参考修订 | 是 |
+| 人物 `import-movement.py` | 原作交通/水面/鸟PNG → actor定义与PNG | 可选source、--actors/--profile；资源/帧定义来自配置，保留后续姿态字段 | 是 |
+| 人物 `import-actor-animations.py` | object_event_anims及现有Acro PNG → Acro动画/帧数 | 可选source、--profile；先导入movement素材，姿态/序列映射来自配置 | 是 |
+| 孵化 `import-egg-assets.py` | egg目录的四张PNG → egg-front/icon/hatch/shard.png | 可选source、--profile；只导入图像，不生成成长规则 | 是 |
+| 音频 `import-audio.py` | direct_sound_samples WAV → audio资源及来源记录 | 可选source、--profile；不是整部原作BGM转换器，记录实际参考修订 | 是 |
 
 表中19个入口都支持`--target /另一份/dist`；所有入口共用ImportSession，不是只跳过最后一次JSON写入。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
 
@@ -53,15 +53,15 @@ B：图鉴、战斗与成长
 - 正式运行会更新其声明的生成物；`--check`绝不写入。不要把生成物里的手工更改当作长期业务数据。
 - 不同脚本共写物种或地图时按字段分工，不能用“最后执行者优先”解决冲突。具体范围以ownership.json为准，越界提交失败。
 - 当业务需要变更写入范围，同次更新所有权、管线文档和保留/越权测试；不要直接让一个脚本写所有section。
-- 六个原作规则数据生成器使用统一`@generated`头，含实际只读参考Git修订；业务处理器仍为手写，不可覆盖。其他地图/物种清单、本地化、动画区间共源与遗漏审计尚待治理，预演通过不能冒充全部12项工具需求完成。
+- 六个原作规则数据生成器使用统一`@generated`头，含实际只读参考Git修订；业务处理器仍为手写，不可覆盖。默认区域/物种、人物/音频/蛋资源映射和图块动画区间来自slice配置，中文名在独立locale文件。导入器报告所选内容的缺失依赖；预演不证明原作完整内容已经导入。
 - `work/*.py`历史一次性脚本不是受支持导入入口，仍可能依赖已删除的旧content.json；本轮不执行它们。复现或归档作为后续工具治理任务，不能继续字符串替换核心源码。
 
 ## 参数与生成物示例
 
 ```sh
-python3 /项目路径/tools/import-weather.py --check
-python3 /项目路径/tools/import-audio.py /参考路径/pokeemerald --target /临时路径/dist --check
-python3 /项目路径/tools/import-machine-learning.py --config /配置路径/rules.json --check
+python3 /项目路径/tools/import.py weather --check
+python3 /项目路径/tools/import.py audio /参考路径/pokeemerald --target /临时路径/dist --check
+python3 /项目路径/tools/import.py machine-learning --config /配置路径/rules.json --check
 ```
 
 `--config`默认读取[gen3.json](../../tools/imports/config/gen3.json)。可设置expectedTMCount、expectedHMCount、expectedMoveCount；null表示不限定数量，但空表仍失败。naturePowerMoves为完整参考招式生成器需要的ID列表。扩展参考规则时另建配置，不改解析器里的数字。
@@ -71,3 +71,29 @@ python3 /项目路径/tools/import-machine-learning.py --config /配置路径/ru
 源文件读取失败、原作表缺失、配置数量不符或越权输出都会停止且不提交已暂存资源。预演只列出字节不同的文件；只报告头部/格式差异也可能出现，核对Git和数据语义后再提交。
 
 `check:docs`核对本表、ownership和真实入口文件的一致性，重命名/增删脚本必须一起更新。它不验证表中的源码说明语义；解析/产物行为由针对性测试和临时导入对照证明。
+
+## 选择、依赖与遗漏审计
+
+默认配置见[slice.json](../../tools/imports/config/slice.json)，中文内容见[zh-CN.json](../../tools/imports/locales/zh-CN.json)。复制profile并指定locale相对路径即可扩展区域/物种/资源，无需修改脚本。参数选择优先于profile默认；元数据/遭遇/进化默认处理当前pack中的全部记录，不限于初始切片。详情帧读取目标包图片，不会偷偷读取正式dist图片。
+
+```sh
+python3 tools/import.py emerald --profile /路径/region.json --maps LittlerootTown --species mudkip --check
+python3 tools/import.py species-metadata --species treecko --check
+python3 tools/import.py evolutions --species mudkip --strict --check
+python3 tools/import.py encounters --maps Route101 --strict --check
+```
+
+预演末尾JSON的omissions逐条包含kind、owner、reference、reason。learnset/eggMoves/machineMoves未导入招式、进化目标/附加物种缺失均可追踪；--strict在有遗漏时写前失败。选择不存在、源表缺失、遭遇权重长度不符、未知进化方法等始终失败，不受strict控制。选择无遭遇表的地图也会报告，严格批次应只选择需要导入该表的地图。
+
+字段归属依旧以ownership为准；catalog的entry/category也由同一声明管理。`--list`与文档检查消费它，避免维护第三套脚本路径。不存在旧脚本路径兼容层。生成数据本身没有自动版本迁移。
+
+## E2E场景的可携带生成
+
+[验证表模块](../../tools/imports/e2e_terrain.py)、[图块选择](../../tools/imports/config/e2e-terrain.json)、[场景配方](../../tools/imports/config/e2e-scenes.json)与[统一生成器](../../tools/fixtures/generate.py)均受版本控制。原work/e2e-terrain.py及两个旧make脚本已被这些文件替代；不依赖被忽略目录，不再读取content.json或给正式地图添加测试入口。
+
+```sh
+python3 tools/fixtures/generate.py --check
+python3 tools/fixtures/generate.py --scenes E2ETestField
+```
+
+只写dist/fixtures/world.json。terrain表记录水/冰/岩壁的视觉来源；泥坡、凸坡、横/竖轨道另以原图集行为属性和渲染截图确认。水动画区间与grid导入共读tile-animations.json，花动画不算水。自动检查只能证明索引/动画/行为合同；外观另做图片观察，不把生成成功当视觉还原。安装图像工具依赖用`python3 -m pip install -r tools/requirements.txt`。干净副本无work/的生成与第二次无差异预演由Python可携带性测试覆盖。

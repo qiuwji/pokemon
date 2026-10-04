@@ -1,0 +1,38 @@
+{
+  "flower": {
+    "start": 508,
+    "count": 4,
+    "ms": 240,
+    "order": [
+      0,
+      1,
+      0,
+      2
+    ],
+    "semantic": "flower"
+  },
+  "water": {
+    "start": 432,
+    "count": 30,
+    "ms": 160,
+    "semantic": "water"
+  },
+  "sand_water_edge": {
+    "start": 464,
+    "count": 10,
+    "ms": 160,
+    "semantic": "water"
+  },
+  "land_water_edge": {
+    "start": 480,
+    "count": 10,
+    "ms": 160,
+    "semantic": "water"
+  },
+  "waterfall": {
+    "start": 496,
+    "count": 6,
+    "ms": 80,
+    "semantic": "water"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "script": "import-encounters.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": [
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "OldaleTown",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown_ProfessorBirchsLab",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown_BrendansHouse_1F",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown_BrendansHouse_2F",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "OldaleTown_PokemonCenter_1F",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "OldaleTown_Mart",
+      "reference": "land_mons",
+      "reason": "reference has no table for selected map"
+    }
+  ]
+}

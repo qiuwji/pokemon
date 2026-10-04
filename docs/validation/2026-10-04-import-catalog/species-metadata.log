@@ -1,0 +1,5743 @@
+{
+  "script": "import-species-metadata.py",
+  "check": true,
+  "files": [
+    "content/species/alakazam.json",
+    "content/species/azumarill.json",
+    "content/species/azurill.json",
+    "content/species/beautifly.json",
+    "content/species/blaziken.json",
+    "content/species/cascoon.json",
+    "content/species/combusken.json",
+    "content/species/ditto.json",
+    "content/species/dustox.json",
+    "content/species/eevee.json",
+    "content/species/espeon.json",
+    "content/species/feebas.json",
+    "content/species/flareon.json",
+    "content/species/gardevoir.json",
+    "content/species/gorebyss.json",
+    "content/species/grovyle.json",
+    "content/species/hitmonchan.json",
+    "content/species/hitmonlee.json",
+    "content/species/hitmontop.json",
+    "content/species/huntail.json",
+    "content/species/jolteon.json",
+    "content/species/kadabra.json",
+    "content/species/kirlia.json",
+    "content/species/linoone.json",
+    "content/species/lombre.json",
+    "content/species/lotad.json",
+    "content/species/ludicolo.json",
+    "content/species/marill.json",
+    "content/species/marshtomp.json",
+    "content/species/mightyena.json",
+    "content/species/milotic.json",
+    "content/species/mudkip.json",
+    "content/species/nincada.json",
+    "content/species/ninjask.json",
+    "content/species/nuzleaf.json",
+    "content/species/pelipper.json",
+    "content/species/ralts.json",
+    "content/species/sceptile.json",
+    "content/species/seedot.json",
+    "content/species/shedinja.json",
+    "content/species/shiftry.json",
+    "content/species/silcoon.json",
+    "content/species/swampert.json",
+    "content/species/swellow.json",
+    "content/species/taillow.json",
+    "content/species/tentacool.json",
+    "content/species/tentacruel.json",
+    "content/species/torchic.json",
+    "content/species/treecko.json",
+    "content/species/tyrogue.json",
+    "content/species/umbreon.json",
+    "content/species/vaporeon.json",
+    "content/species/wingull.json",
+    "content/species/wurmple.json"
+  ],
+  "contentChanges": [
+    "species.alakazam.eggMoves",
+    "species.azumarill.eggMoves",
+    "species.beautifly.eggMoves",
+    "species.blaziken.eggMoves",
+    "species.cascoon.eggMoves",
+    "species.combusken.eggMoves",
+    "species.ditto.eggMoves",
+    "species.dustox.eggMoves",
+    "species.espeon.eggMoves",
+    "species.flareon.eggMoves",
+    "species.gardevoir.eggMoves",
+    "species.gorebyss.eggMoves",
+    "species.grovyle.eggMoves",
+    "species.hitmonchan.eggMoves",
+    "species.hitmonlee.eggMoves",
+    "species.hitmontop.eggMoves",
+    "species.huntail.eggMoves",
+    "species.jolteon.eggMoves",
+    "species.kadabra.eggMoves",
+    "species.kirlia.eggMoves",
+    "species.linoone.eggMoves",
+    "species.lombre.eggMoves",
+    "species.ludicolo.eggMoves",
+    "species.marshtomp.eggMoves",
+    "species.mightyena.eggMoves",
+    "species.milotic.eggMoves",
+    "species.ninjask.eggMoves",
+    "species.nuzleaf.eggMoves",
+    "species.pelipper.eggMoves",
+    "species.sceptile.eggMoves",
+    "species.shedinja.eggMoves",
+    "species.shiftry.eggMoves",
+    "species.silcoon.eggMoves",
+    "species.swampert.eggMoves",
+    "species.swellow.eggMoves",
+    "species.tentacruel.eggMoves",
+    "species.umbreon.eggMoves",
+    "species.vaporeon.eggMoves",
+    "species.wurmple.eggMoves"
+  ],
+  "omissions": [
+    {
+      "kind": "eggMoves",
+      "owner": "treecko",
+      "reference": "leech_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "treecko",
+      "reference": "dragon_breath",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "treecko",
+      "reference": "crush_claw",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "treecko",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "grovyle",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "dragon_claw",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "sceptile",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "torchic",
+      "reference": "counter",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "torchic",
+      "reference": "reversal",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "torchic",
+      "reference": "endure",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "torchic",
+      "reference": "rock_slide",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "torchic",
+      "reference": "smelling_salt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "fire_blast",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "overheat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "torchic",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "fire_blast",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "overheat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "combusken",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "fire_blast",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "overheat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "blaziken",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "mudkip",
+      "reference": "refresh",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "mudkip",
+      "reference": "uproar",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "mudkip",
+      "reference": "curse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "mudkip",
+      "reference": "stomp",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "mudkip",
+      "reference": "ice_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "mudkip",
+      "reference": "mirror_coat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mudkip",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marshtomp",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swampert",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "poochyena",
+      "reference": "poison_fang",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "poochyena",
+      "reference": "yawn",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "poochyena",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "mightyena",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "zigzagoon",
+      "reference": "charm",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "zigzagoon",
+      "reference": "substitute",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "zigzagoon",
+      "reference": "tickle",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "zigzagoon",
+      "reference": "trick",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "thunderbolt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "thunder",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "zigzagoon",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "thunderbolt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "thunder",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "linoone",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "wingull",
+      "reference": "twister",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "wingull",
+      "reference": "gust",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "steel_wing",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "wingull",
+      "reference": "fly",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "steel_wing",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "fly",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "pelipper",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "lotad",
+      "reference": "razor_leaf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "lotad",
+      "reference": "sweet_scent",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "lotad",
+      "reference": "leech_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lotad",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "seedot",
+      "reference": "leech_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "seedot",
+      "reference": "amnesia",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "seedot",
+      "reference": "razor_wind",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "seedot",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "ralts",
+      "reference": "disable",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "ralts",
+      "reference": "will_o_wisp",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "ralts",
+      "reference": "mean_look",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "ralts",
+      "reference": "memento",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "ralts",
+      "reference": "destiny_bond",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "thunderbolt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ralts",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "taillow",
+      "reference": "refresh",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "taillow",
+      "reference": "rage",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "taillow",
+      "reference": "sky_attack",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "steel_wing",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "taillow",
+      "reference": "fly",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tentacool",
+      "reference": "aurora_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tentacool",
+      "reference": "mirror_coat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tentacool",
+      "reference": "rapid_spin",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tentacool",
+      "reference": "haze",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tentacool",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tentacool",
+      "reference": "confuse_ray",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "sludge_bomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacool",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "nincada",
+      "reference": "endure",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "nincada",
+      "reference": "faint_attack",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "nincada",
+      "reference": "gust",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "nincada",
+      "reference": "silver_wind",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "sandstorm",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nincada",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "sandstorm",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ninjask",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "sandstorm",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shedinja",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "beautifly",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "sludge_bomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "dustox",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "eevee",
+      "reference": "charm",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "eevee",
+      "reference": "endure",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "eevee",
+      "reference": "curse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "eevee",
+      "reference": "tickle",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "eevee",
+      "reference": "wish",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "eevee",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "vaporeon",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "thunderbolt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "thunder",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "jolteon",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "fire_blast",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "flareon",
+      "reference": "overheat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "espeon",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "umbreon",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "clamperl",
+      "reference": "refresh",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "clamperl",
+      "reference": "body_slam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "clamperl",
+      "reference": "barrier",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "clamperl",
+      "reference": "confuse_ray",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "clamperl",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "huntail",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gorebyss",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tyrogue",
+      "reference": "rapid_spin",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tyrogue",
+      "reference": "hi_jump_kick",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tyrogue",
+      "reference": "mach_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tyrogue",
+      "reference": "mind_reader",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "tyrogue",
+      "reference": "helping_hand",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tyrogue",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonlee",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmonchan",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "sandstorm",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "hitmontop",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "feebas",
+      "reference": "mirror_coat",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "feebas",
+      "reference": "dragon_breath",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "feebas",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "feebas",
+      "reference": "confuse_ray",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "feebas",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "milotic",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "azurill",
+      "reference": "encore",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "azurill",
+      "reference": "sing",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "azurill",
+      "reference": "refresh",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "azurill",
+      "reference": "tickle",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azurill",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "marill",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "marill",
+      "reference": "present",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "marill",
+      "reference": "amnesia",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "marill",
+      "reference": "perish_song",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "marill",
+      "reference": "substitute",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "marill",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "azumarill",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "abra",
+      "reference": "encore",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "abra",
+      "reference": "barrier",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "abra",
+      "reference": "knock_off",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "abra",
+      "reference": "thunder_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "eggMoves",
+      "owner": "abra",
+      "reference": "ice_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "abra",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kadabra",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "iron_tail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "alakazam",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "lombre",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "focus_punch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "ludicolo",
+      "reference": "dive",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "nuzleaf",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "bullet_seed",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "solar_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "dig",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "brick_break",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "rock_tomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "strength",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "shiftry",
+      "reference": "rock_smash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "thunderbolt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "kirlia",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "light_screen",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "safeguard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "thunderbolt",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "shadow_ball",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "reflect",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "shock_wave",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "torment",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "skill_swap",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "snatch",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "gardevoir",
+      "reference": "flash",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "steel_wing",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "swellow",
+      "reference": "fly",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "water_pulse",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "toxic",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "hail",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "hidden_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "ice_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "blizzard",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "hyper_beam",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "frustration",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "return",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "sludge_bomb",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "facade",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "secret_power",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "attract",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "cut",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "surf",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "waterfall",
+      "reason": "move not imported"
+    },
+    {
+      "kind": "machineMoves",
+      "owner": "tentacruel",
+      "reference": "dive",
+      "reason": "move not imported"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Imported Acro sprite timelines from C; frames: 27
+{
+  "script": "import-actor-animations.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": []
+}

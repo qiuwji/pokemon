@@ -1,0 +1,215 @@
+{
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "emerald",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 1,
+      "log": "emerald.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "grid",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "grid.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "species",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--species",
+        "mudkip",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "species.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "species-metadata",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "species-metadata.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "encounters",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "encounters.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "water-encounters",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "water-encounters.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "move-metadata",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "move-metadata.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "evolutions",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "evolutions.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "movement",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "movement.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "actor-animations",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "actor-animations.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "detail-sprites",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "detail-sprites.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "weather",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "weather.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "map-cycling",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "map-cycling.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "item-metadata",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "item-metadata.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "held-items",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "held-items.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "machine-learning",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "machine-learning.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "rule-metadata",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "rule-metadata.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "egg-assets",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "egg-assets.log"
+    },
+    {
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import.py",
+        "audio",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "audio.log"
+    }
+  ],
+  "outputsUnchanged": true
+}

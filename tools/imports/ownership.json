@@ -24,7 +24,9 @@
       "assets/*-back.png",
       "assets/*-icon.png",
       "assets/battle-bg.png"
-    ]
+    ],
+    "entry": "tools/imports/commands/region/import-emerald.py",
+    "category": "region"
   },
   "import-grid.py": {
     "content": [
@@ -36,7 +38,9 @@
     "outputs": [
       "assets/tiles-*.png",
       "assets/actor-BrendanRun.png"
-    ]
+    ],
+    "entry": "tools/imports/commands/region/import-grid.py",
+    "category": "region"
   },
   "import-species.py": {
     "content": [
@@ -46,7 +50,9 @@
       "assets/*-front.png",
       "assets/*-back.png",
       "assets/*-icon.png"
-    ]
+    ],
+    "entry": "tools/imports/commands/dex/import-species.py",
+    "category": "dex"
   },
   "import-species-metadata.py": {
     "content": [
@@ -57,21 +63,27 @@
       "species.*.eggMoves",
       "species.*.machineMoves"
     ],
-    "outputs": []
+    "outputs": [],
+    "entry": "tools/imports/commands/dex/import-species-metadata.py",
+    "category": "dex"
   },
   "import-encounters.py": {
     "content": [
       "maps.*.encounters",
       "maps.*.encounterRate"
     ],
-    "outputs": []
+    "outputs": [],
+    "entry": "tools/imports/commands/region/import-encounters.py",
+    "category": "region"
   },
   "import-water-encounters.py": {
     "content": [
       "maps.*.waterEncounters",
       "maps.*.waterEncounterRate"
     ],
-    "outputs": []
+    "outputs": [],
+    "entry": "tools/imports/commands/region/import-water-encounters.py",
+    "category": "region"
   },
   "import-move-metadata.py": {
     "content": [
@@ -80,14 +92,18 @@
       "moves.*.sound",
       "moves.*.flags"
     ],
-    "outputs": []
+    "outputs": [],
+    "entry": "tools/imports/commands/battle/import-move-metadata.py",
+    "category": "battle"
   },
   "import-evolutions.py": {
     "content": [
       "evolutions.*",
-      "species.azurill.offspring*"
+      "species.*.offspring*"
     ],
-    "outputs": []
+    "outputs": [],
+    "entry": "tools/imports/commands/dex/import-evolutions.py",
+    "category": "dex"
   },
   "import-movement.py": {
     "content": [
@@ -95,68 +111,90 @@
     ],
     "outputs": [
       "assets/actor-*.png"
-    ]
+    ],
+    "entry": "tools/imports/commands/actors/import-movement.py",
+    "category": "actors"
   },
   "import-actor-animations.py": {
     "content": [
-      "actors.BrendanAcroBike.animations*",
-      "actors.BrendanAcroBike.frameCount"
+      "actors.*.animations*",
+      "actors.*.frameCount"
     ],
-    "outputs": []
+    "outputs": [],
+    "entry": "tools/imports/commands/actors/import-actor-animations.py",
+    "category": "actors"
   },
   "import-detail-sprites.py": {
     "content": [],
     "outputs": [
       "packs/emerald/detail-sprite-frames.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/dex/import-detail-sprites.py",
+    "category": "dex"
   },
   "import-weather.py": {
     "content": [],
     "outputs": [
       "engine/rules/gen3/map-weather.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/region/import-weather.py",
+    "category": "region"
   },
   "import-map-cycling.py": {
     "content": [],
     "outputs": [
       "engine/rules/gen3/map-cycling.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/region/import-map-cycling.py",
+    "category": "region"
   },
   "import-item-metadata.py": {
     "content": [],
     "outputs": [
       "engine/rules/gen3/item-metadata.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/items/import-item-metadata.py",
+    "category": "items"
   },
   "import-held-items.py": {
     "content": [],
     "outputs": [
       "engine/rules/gen3/held-catalog.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/items/import-held-items.py",
+    "category": "items"
   },
   "import-machine-learning.py": {
     "content": [],
     "outputs": [
       "engine/rules/gen3/machine-learning.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/items/import-machine-learning.py",
+    "category": "items"
   },
   "import-rule-metadata.py": {
     "content": [],
     "outputs": [
       "engine/rules/gen3/reference-metadata.js"
-    ]
+    ],
+    "entry": "tools/imports/commands/battle/import-rule-metadata.py",
+    "category": "battle"
   },
   "import-egg-assets.py": {
     "content": [],
     "outputs": [
       "assets/egg-*.png"
-    ]
+    ],
+    "entry": "tools/imports/commands/dex/import-egg-assets.py",
+    "category": "dex"
   },
   "import-audio.py": {
     "content": [],
     "outputs": [
       "assets/audio/*.wav",
       "assets/audio/provenance.json"
-    ]
+    ],
+    "entry": "tools/imports/commands/audio/import-audio.py",
+    "category": "audio"
   }
 }

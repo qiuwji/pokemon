@@ -1,0 +1,364 @@
+{
+  "cells": {
+    "#": {
+      "terrain": "wall",
+      "behavior": 0,
+      "collision": 1
+    },
+    ".": {
+      "terrain": "floor",
+      "behavior": 0
+    },
+    "~": {
+      "terrain": "water",
+      "behavior": 16
+    },
+    "b": {
+      "terrain": "floor",
+      "behavior": 112
+    },
+    "i": {
+      "terrain": "ice",
+      "behavior": 32
+    },
+    "t": {
+      "terrain": "ice",
+      "behavior": 38
+    },
+    "g": {
+      "terrain": "floor",
+      "behavior": 3
+    },
+    "n": {
+      "terrain": "floor",
+      "behavior": 10
+    },
+    "m": {
+      "terrain": "mud",
+      "behavior": 208
+    },
+    "u": {
+      "terrain": "bump",
+      "behavior": 209
+    },
+    "V": {
+      "terrain": "rail",
+      "behavior": 211
+    },
+    "H": {
+      "terrain": "rail_horizontal",
+      "behavior": 212
+    },
+    "v": {
+      "terrain": "rail",
+      "behavior": 213
+    },
+    "h": {
+      "terrain": "rail_horizontal",
+      "behavior": 214
+    },
+    "R": {
+      "terrain": "floor",
+      "behavior": 48
+    },
+    "L": {
+      "terrain": "floor",
+      "behavior": 49
+    },
+    "U": {
+      "terrain": "floor",
+      "behavior": 50
+    },
+    "D": {
+      "terrain": "floor",
+      "behavior": 51
+    },
+    ">": {
+      "terrain": "floor",
+      "behavior": 56
+    },
+    "e": {
+      "terrain": "floor",
+      "behavior": 59
+    },
+    "S": {
+      "terrain": "floor",
+      "behavior": 71
+    }
+  },
+  "scenes": {
+    "E2ETestField": {
+      "id": "E2ETestField",
+      "title": "地形测试场",
+      "width": 16,
+      "height": 16,
+      "connections": [],
+      "warps": [
+        {
+          "x": 1,
+          "y": 1,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 14,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "4"
+        }
+      ],
+      "signs": [],
+      "npcs": [],
+      "music": "MUS_LITTLEROOT",
+      "tileset": "general-petalburg",
+      "indoor": false,
+      "weather": {
+        "default": "clear"
+      },
+      "layout": [
+        "################",
+        "#..............#",
+        "#.gggggggggggg.#",
+        "#.gggggggggggg.#",
+        "#..............#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~bbbbbbbbbb~.#",
+        "#.~~~~~~~~~~~~.#",
+        "#..............#",
+        "#.iiiiiiiiiiii.#",
+        "#.iiiiiiiiiiii.#",
+        "#..............#",
+        "#.nnnnnnnnnnnn.#",
+        "#.R.L.U.D.>v...#",
+        "#..............#",
+        "################"
+      ]
+    },
+    "E2EBikeField": {
+      "id": "E2EBikeField",
+      "title": "自行车测试场",
+      "width": 16,
+      "height": 16,
+      "connections": [],
+      "warps": [
+        {
+          "x": 1,
+          "y": 1,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 14,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "4"
+        }
+      ],
+      "signs": [],
+      "npcs": [],
+      "music": "MUS_LITTLEROOT",
+      "tileset": "general-petalburg",
+      "indoor": false,
+      "weather": {
+        "default": "clear"
+      },
+      "layout": [
+        "################",
+        "#..............#",
+        "#.mmmmmmmmmmmm.#",
+        "#.mmmmmmmmmmmm.#",
+        "#.uuuuuuuuuuuu.#",
+        "#.uuuuuuuuuuuu.#",
+        "#.uuuuuuuuuuuu.#",
+        "#..............#",
+        "#..HHHHHHHHHH..#",
+        "#..HHHHHHHHHH..#",
+        "#..............#",
+        "#..VVVVVVVVVV..#",
+        "#..VVVVVVVVVV..#",
+        "#..............#",
+        "#..............#",
+        "################"
+      ]
+    },
+    "E2ESurfField": {
+      "id": "E2ESurfField",
+      "title": "冲浪测试场",
+      "width": 16,
+      "height": 16,
+      "connections": [],
+      "warps": [
+        {
+          "x": 1,
+          "y": 1,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 14,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "4"
+        }
+      ],
+      "signs": [],
+      "npcs": [],
+      "music": "MUS_LITTLEROOT",
+      "tileset": "general-petalburg",
+      "indoor": false,
+      "weather": {
+        "default": "clear"
+      },
+      "layout": [
+        "################",
+        "#..............#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~..~~~~~~~#",
+        "#.~~~~..~~~~~~~#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~~~~~~~~~.#",
+        "#.~~~~..~~~~~~~#",
+        "#.~~~~..~~~~~~~#",
+        "#.~~~~~~~~~~~~.#",
+        "#..............#",
+        "################"
+      ]
+    },
+    "E2EFlyField": {
+      "id": "E2EFlyField",
+      "title": "飞行测试场",
+      "width": 16,
+      "height": 16,
+      "connections": [],
+      "warps": [
+        {
+          "x": 1,
+          "y": 1,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 14,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ETestHub",
+          "dest_warp_id": "4"
+        }
+      ],
+      "signs": [],
+      "npcs": [],
+      "music": "MUS_LITTLEROOT",
+      "tileset": "general-petalburg",
+      "indoor": false,
+      "weather": {
+        "default": "clear"
+      },
+      "layout": [
+        "################",
+        "#..............#",
+        "#..............#",
+        "#..g........g..#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..g........g..#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "################"
+      ]
+    },
+    "E2ETestHub": {
+      "id": "E2ETestHub",
+      "title": "测试中枢",
+      "width": 16,
+      "height": 16,
+      "connections": [],
+      "warps": [
+        {
+          "x": 1,
+          "y": 1,
+          "elevation": 0,
+          "dest_map": "LittlerootTown",
+          "dest_warp_id": "2"
+        },
+        {
+          "x": 2,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ETestField",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 5,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2EBikeField",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 8,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ESurfField",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 11,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2EFlyField",
+          "dest_warp_id": "0"
+        },
+        {
+          "x": 14,
+          "y": 14,
+          "elevation": 0,
+          "dest_map": "E2ETestField",
+          "dest_warp_id": "1"
+        }
+      ],
+      "signs": [],
+      "npcs": [],
+      "music": "MUS_LITTLEROOT",
+      "tileset": "general-petalburg",
+      "indoor": false,
+      "weather": {
+        "default": "clear"
+      },
+      "layout": [
+        "################",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "#..............#",
+        "################"
+      ]
+    }
+  }
+}

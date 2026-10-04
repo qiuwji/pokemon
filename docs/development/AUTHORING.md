@@ -54,9 +54,9 @@
 | `npm run check:docs` | 本地文档链接及Skill代码片段同步；不执行游戏规则 |
 | `npm run check` | 内容启动引用、公开类型和dist语法；阶段合并/收口或相关合同改变时执行 |
 | `node tools/audit-mechanisms.mjs work/pokeemerald` | 读取固定C参考，更新docs/engine/battle下生成审计；登记/无引用不等于规则已验证 |
-| `python3 tools/import-emerald.py work/pokeemerald` | 先加--check预演；通过内容清单及字段所有权合并选定内容，不自动调用grid；详见[导入索引](IMPORT_SCRIPTS.md) |
-| `python3 tools/import-encounters.py work/pokeemerald` | 先加--check预演；只写地图陆地遭遇字段，禁止触碰进化；详见[内容管线](CONTENT_PIPELINE.md) |
-| `python3 tools/import-audio.py work/pokeemerald` | 复制选定真实WAV并记录来源hash，写dist/assets/audio；不是整部原作BGM自动转换 |
+| `python3 tools/import.py emerald work/pokeemerald` | 先加--check预演；通过内容清单及字段所有权合并选定内容，不自动调用grid；详见[导入索引](IMPORT_SCRIPTS.md) |
+| `python3 tools/import.py encounters work/pokeemerald` | 先加--check预演；只写地图陆地遭遇字段，禁止触碰进化；详见[内容管线](CONTENT_PIPELINE.md) |
+| `python3 tools/import.py audio work/pokeemerald` | 复制选定真实WAV并记录来源hash，写dist/assets/audio；不是整部原作BGM自动转换 |
 
 其他导入工具按`tools/`实际参数解析和输出路径读取，不根据名字猜用法。宽导入器需要在临时**项目副本**中生成、比较和挑选本次数据，不在参考目录创建输出，也不对主树整包覆盖。不需要重新下载已提供资料；缺参考时按[项目导航](../../skills/emerald-project-handoff/references/project-map.md)的固定修订获取。
 

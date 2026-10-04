@@ -1,0 +1,56 @@
+{
+  "script": "import-water-encounters.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": [
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "Route101",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "OldaleTown",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown_ProfessorBirchsLab",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown_BrendansHouse_1F",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "LittlerootTown_BrendansHouse_2F",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "OldaleTown_PokemonCenter_1F",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    },
+    {
+      "kind": "encounterTable",
+      "owner": "OldaleTown_Mart",
+      "reference": "water_mons",
+      "reason": "reference has no table for selected map"
+    }
+  ]
+}

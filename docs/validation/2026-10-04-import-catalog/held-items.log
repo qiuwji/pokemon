@@ -1,0 +1,10 @@
+70 items, 66 effect types
+{
+  "script": "import-held-items.py",
+  "check": true,
+  "files": [
+    "engine/rules/gen3/held-catalog.js"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

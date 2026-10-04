@@ -1,0 +1,10 @@
+309 canonical items, 244 holdable
+{
+  "script": "import-item-metadata.py",
+  "check": true,
+  "files": [
+    "engine/rules/gen3/item-metadata.js"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

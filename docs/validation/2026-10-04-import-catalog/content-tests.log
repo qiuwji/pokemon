@@ -1,0 +1,16 @@
+✔ Browser and Node assemble the same production pack from readable metadata and generated grids (15.48225ms)
+✔ Content deployment prefixes are preserved and file failures identify the failing fragment (143.856792ms)
+✔ Manifest rejects missing sections, duplicate paths, escapes and unsafe identities (0.474833ms)
+✔ Fragments cannot overwrite existing fields or succeed with an unfilled file (3.557709ms)
+✔ A missing or malformed local fragment cannot silently produce a partial pack (19.455375ms)
+✔ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (1311.299834ms)
+✔ Missing map/script references and duplicate warps are rejected unless explicitly classified (13.993208ms)
+✔ Atlas metadata and frame indices must match actual PNG dimensions (3.360459ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1573.817125

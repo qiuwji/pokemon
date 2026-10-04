@@ -1,6 +1,6 @@
 import { matchesStatus } from "../../creatures/status.js";
 import { ABILITY_IDS } from "./ability-catalog.js";
-import { NUMERIC_ABILITIES, isPhysical } from "./numeric.js";
+import { NUMERIC_ABILITIES } from "./numeric.js";
 import { effectiveness } from "../../model.js";
 const hooks = (ids) =>
   Object.fromEntries(ids.map((id) => [id, { hooks: [], coverage: "pending" }]));

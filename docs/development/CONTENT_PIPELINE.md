@@ -55,8 +55,8 @@ const db = loadContentSync(); // 示例位置：tests/helpers/；其他位置调
 所有受支持导入脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，输出归dist；`--target`可指向另一份输出目录。内容脚本需要现有清单，独立规则/资源生成器可写空的临时目标。
 
 ```sh
-python3 tools/import-encounters.py /绝对路径/pokeemerald --check
-python3 tools/import-encounters.py /绝对路径/pokeemerald
+python3 tools/import.py encounters /绝对路径/pokeemerald --check
+python3 tools/import.py encounters /绝对路径/pokeemerald
 ```
 
 1. 加载清单，计算完整候选数据与资源，不立即写文件。

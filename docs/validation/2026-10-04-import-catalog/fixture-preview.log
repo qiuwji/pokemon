@@ -1,0 +1,9 @@
+{
+  "script": "fixture-scenes",
+  "check": true,
+  "files": [
+    "fixtures/world.json"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

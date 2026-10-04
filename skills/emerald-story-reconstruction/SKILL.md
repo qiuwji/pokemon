@@ -116,7 +116,7 @@ test("data story arrival chooses a branch and persists its variable", async () =
 
 ## 工具、质量及验收
 
-执行说明、导入器风险和代码位置统一见[作者指南](../../docs/development/AUTHORING.md)，测试写法与证据复用见[测试指南](../../docs/development/TESTING.md)。`import-emerald.py`仍使用默认地图/物种清单，现按[内容管线](../../docs/development/CONTENT_PIPELINE.md)的字段所有权合并；先--check，grid另行执行。它不是C剧情自动翻译器，不为新增一个故事重新导入全工程。
+执行说明、导入器风险和代码位置统一见[作者指南](../../docs/development/AUTHORING.md)，测试写法与证据复用见[测试指南](../../docs/development/TESTING.md)。`python3 tools/import.py emerald`从profile和locale读取地图/物种清单，可用--maps/--species选择，现按[内容管线](../../docs/development/CONTENT_PIPELINE.md)的字段所有权合并；先--check，grid另行执行。它不是C剧情自动翻译器，不为新增一个故事重新导入全工程。
 
 数据/插件→真实触发→选择/自动移动→领域提交→解锁→保存恢复要完整。至少验证入口前置不满足、正确分支、取消/重入、奖励容量失败不标领取；涉及战斗/切图还查输赢和位置/角色清理。规则专项与肉眼观察分别记录，不能凭headless等待证明动画流畅。
 

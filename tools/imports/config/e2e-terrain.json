@@ -1,0 +1,26 @@
+{
+  "tileset": "general-petalburg",
+  "metatiles": {
+    "floor": 1,
+    "wall": 115,
+    "water": 52,
+    "ice": 256,
+    "mud": 232,
+    "rail": 243,
+    "bump": 504,
+    "rail_horizontal": 237
+  },
+  "border": [
+    "floor",
+    "floor",
+    "floor",
+    "floor"
+  ],
+  "basis": "Floor/wall/water/ice appearance traced to user table; mud/bump/rail additionally matched shipped Gen3 attribute codes 0xd0/0xd1/0xd3/0xd4 and visually inspected. This is a test fixture, not a complete native terrain reconstruction.",
+  "expectedBehaviors": {
+    "mud": 208,
+    "bump": 209,
+    "rail": 211,
+    "rail_horizontal": 212
+  }
+}

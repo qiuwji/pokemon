@@ -1,0 +1,243 @@
+{
+  "maps": [
+    "LittlerootTown",
+    "Route101",
+    "OldaleTown",
+    "Route103",
+    "LittlerootTown_ProfessorBirchsLab",
+    "LittlerootTown_BrendansHouse_1F",
+    "LittlerootTown_BrendansHouse_2F",
+    "OldaleTown_PokemonCenter_1F",
+    "OldaleTown_Mart"
+  ],
+  "species": [
+    "treecko",
+    "grovyle",
+    "sceptile",
+    "torchic",
+    "combusken",
+    "blaziken",
+    "mudkip",
+    "marshtomp",
+    "swampert",
+    "poochyena",
+    "mightyena",
+    "zigzagoon",
+    "linoone",
+    "wurmple",
+    "wingull",
+    "pelipper",
+    "lotad",
+    "seedot",
+    "ralts",
+    "taillow"
+  ],
+  "actors": [
+    "BrendanNormal",
+    "MayNormal",
+    "ProfBirch",
+    "Twin",
+    "FatMan",
+    "Boy1",
+    "Boy2",
+    "Youngster",
+    "Nurse",
+    "Gentleman",
+    "Girl1",
+    "Man3",
+    "Woman1",
+    "Scientist1",
+    "BirchsBag",
+    "Mom",
+    "LittleBoy"
+  ],
+  "battleBackground": "tall_grass",
+  "locale": "../locales/zh-CN.json",
+  "tileAnimations": "tile-animations.json",
+  "offspring": {
+    "azurill": {
+      "incense": {
+        "item": "sea_incense",
+        "without": "marill"
+      }
+    }
+  },
+  "audio": {
+    "bicycle-bell.wav": "bicycle_bell.wav",
+    "register-noise.wav": "register_noise.wav",
+    "kick.wav": "sc88pro_rnd_kick.wav",
+    "snare.wav": "sd90_solo_snare.wav",
+    "cry-mudkip.wav": "cries/mudkip.wav",
+    "cry-treecko.wav": "cries/treecko.wav",
+    "cry-torchic.wav": "cries/torchic.wav"
+  },
+  "egg": {
+    "directory": "graphics/pokemon/egg",
+    "palette": "normal.pal",
+    "frames": [
+      "front",
+      "icon",
+      "hatch",
+      "shard"
+    ]
+  },
+  "movement": {
+    "palette": "graphics/object_events/palettes/brendan.pal",
+    "sheets": [
+      {
+        "id": "BrendanMachBike",
+        "path": "graphics/object_events/pics/people/brendan/mach_bike.png",
+        "definition": {
+          "w": 32,
+          "h": 32,
+          "offsetX": -8
+        }
+      },
+      {
+        "id": "BrendanAcroBike",
+        "path": "graphics/object_events/pics/people/brendan/acro_bike.png",
+        "definition": {
+          "w": 32,
+          "h": 32,
+          "offsetX": -8
+        }
+      },
+      {
+        "id": "BrendanSurf",
+        "path": "graphics/object_events/pics/people/brendan/surfing.png",
+        "definition": {
+          "w": 32,
+          "h": 32,
+          "offsetX": -8,
+          "frames": {
+            "facing": {
+              "down": 0,
+              "up": 2,
+              "left": 4,
+              "right": 4
+            },
+            "walk": {
+              "down": [
+                0,
+                1
+              ],
+              "up": [
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5
+              ],
+              "right": [
+                4,
+                5
+              ]
+            }
+          },
+          "underlay": {
+            "actor": "SurfBlob",
+            "offsetY": 8
+          }
+        }
+      },
+      {
+        "id": "SurfBlob",
+        "path": "graphics/field_effects/pics/surf_blob.png",
+        "definition": {
+          "w": 32,
+          "h": 32,
+          "offsetX": -8,
+          "frames": {
+            "facing": {
+              "down": 0,
+              "up": 1,
+              "left": 2,
+              "right": 2
+            },
+            "walk": {
+              "down": [
+                0
+              ],
+              "up": [
+                1
+              ],
+              "left": [
+                2
+              ],
+              "right": [
+                2
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": "FlyBird",
+        "path": "graphics/field_effects/pics/bird.png",
+        "definition": {
+          "w": 32,
+          "h": 32,
+          "offsetX": -8,
+          "frames": {
+            "facing": {
+              "down": 0,
+              "up": 0,
+              "left": 0,
+              "right": 0
+            },
+            "walk": {
+              "down": [
+                0
+              ],
+              "up": [
+                0
+              ],
+              "left": [
+                0
+              ],
+              "right": [
+                0
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "actorAnimations": {
+    "actor": "BrendanAcroBike",
+    "directions": {
+      "down": "South",
+      "up": "North",
+      "left": "West",
+      "right": "East"
+    },
+    "sequences": {
+      "rise": "BunnyHopBackWheel",
+      "lower": "StandingWheelieBackWheel",
+      "moving": "MovingWheelie"
+    },
+    "held": {
+      "raised": "rise"
+    },
+    "poses": {
+      "wheelie-rise": {
+        "idle": "rise",
+        "move": "rise"
+      },
+      "wheelie-lower": {
+        "idle": "lower",
+        "move": "lower"
+      },
+      "wheelie": {
+        "idle": "raised",
+        "move": "moving"
+      },
+      "hop": {
+        "idle": "rise",
+        "move": "rise"
+      }
+    }
+  }
+}

@@ -1,0 +1,327 @@
+{
+  "maps": {
+    "LittlerootTown": "未白镇",
+    "Route101": "101 号道路",
+    "OldaleTown": "古辰镇",
+    "Route103": "103 号道路",
+    "LittlerootTown_ProfessorBirchsLab": "小田卷博士研究所",
+    "LittlerootTown_BrendansHouse_1F": "我的家 · 一楼",
+    "LittlerootTown_BrendansHouse_2F": "我的家 · 二楼",
+    "OldaleTown_PokemonCenter_1F": "宝可梦中心",
+    "OldaleTown_Mart": "友好商店"
+  },
+  "species": {
+    "treecko": {
+      "name": "木守宫",
+      "dex": 252
+    },
+    "grovyle": {
+      "name": "森林蜥蜴",
+      "dex": 253
+    },
+    "sceptile": {
+      "name": "蜥蜴王",
+      "dex": 254
+    },
+    "torchic": {
+      "name": "火稚鸡",
+      "dex": 255
+    },
+    "combusken": {
+      "name": "力壮鸡",
+      "dex": 256
+    },
+    "blaziken": {
+      "name": "火焰鸡",
+      "dex": 257
+    },
+    "mudkip": {
+      "name": "水跃鱼",
+      "dex": 258
+    },
+    "marshtomp": {
+      "name": "沼跃鱼",
+      "dex": 259
+    },
+    "swampert": {
+      "name": "巨沼怪",
+      "dex": 260
+    },
+    "poochyena": {
+      "name": "土狼犬",
+      "dex": 261
+    },
+    "mightyena": {
+      "name": "大狼犬",
+      "dex": 262
+    },
+    "zigzagoon": {
+      "name": "蛇纹熊",
+      "dex": 263
+    },
+    "linoone": {
+      "name": "直冲熊",
+      "dex": 264
+    },
+    "wurmple": {
+      "name": "刺尾虫",
+      "dex": 265
+    },
+    "wingull": {
+      "name": "长翅鸥",
+      "dex": 278
+    },
+    "pelipper": {
+      "name": "大嘴鸥",
+      "dex": 279
+    },
+    "lotad": {
+      "name": "莲叶童子",
+      "dex": 270
+    },
+    "seedot": {
+      "name": "橡实果",
+      "dex": 273
+    },
+    "ralts": {
+      "name": "拉鲁拉丝",
+      "dex": 280
+    },
+    "taillow": {
+      "name": "傲骨燕",
+      "dex": 276
+    },
+    "eevee": {
+      "name": "伊布",
+      "dex": 133
+    },
+    "tentacruel": {
+      "name": "毒刺水母",
+      "dex": 73
+    },
+    "tentacool": {
+      "name": "玛瑙水母",
+      "dex": 72
+    },
+    "lombre": {
+      "name": "莲帽小童",
+      "dex": 271
+    },
+    "clamperl": {
+      "name": "珍珠贝",
+      "dex": 366
+    },
+    "gorebyss": {
+      "name": "樱花鱼",
+      "dex": 368
+    },
+    "hitmontop": {
+      "name": "战舞郎",
+      "dex": 237
+    },
+    "flareon": {
+      "name": "火伊布",
+      "dex": 136
+    },
+    "hitmonchan": {
+      "name": "快拳郎",
+      "dex": 107
+    },
+    "azurill": {
+      "name": "露力丽",
+      "dex": 298
+    },
+    "ditto": {
+      "name": "百变怪",
+      "dex": 132
+    },
+    "ninjask": {
+      "name": "铁面忍者",
+      "dex": 291
+    },
+    "feebas": {
+      "name": "丑丑鱼",
+      "dex": 349
+    },
+    "kadabra": {
+      "name": "勇基拉",
+      "dex": 64
+    },
+    "ludicolo": {
+      "name": "乐天河童",
+      "dex": 272
+    },
+    "huntail": {
+      "name": "猎斑鱼",
+      "dex": 367
+    },
+    "swellow": {
+      "name": "大王燕",
+      "dex": 277
+    },
+    "alakazam": {
+      "name": "胡地",
+      "dex": 65
+    },
+    "beautifly": {
+      "name": "狩猎凤蝶",
+      "dex": 267
+    },
+    "jolteon": {
+      "name": "雷伊布",
+      "dex": 135
+    },
+    "nuzleaf": {
+      "name": "长鼻叶",
+      "dex": 274
+    },
+    "milotic": {
+      "name": "美纳斯",
+      "dex": 350
+    },
+    "shedinja": {
+      "name": "脱壳忍者",
+      "dex": 292
+    },
+    "espeon": {
+      "name": "太阳伊布",
+      "dex": 196
+    },
+    "umbreon": {
+      "name": "月亮伊布",
+      "dex": 197
+    },
+    "kirlia": {
+      "name": "奇鲁莉安",
+      "dex": 281
+    },
+    "shiftry": {
+      "name": "狡猾天狗",
+      "dex": 275
+    },
+    "azumarill": {
+      "name": "玛力露丽",
+      "dex": 184
+    },
+    "vaporeon": {
+      "name": "水伊布",
+      "dex": 134
+    },
+    "cascoon": {
+      "name": "盾甲茧",
+      "dex": 268
+    },
+    "dustox": {
+      "name": "毒粉蛾",
+      "dex": 269
+    },
+    "nincada": {
+      "name": "土居忍士",
+      "dex": 290
+    },
+    "tyrogue": {
+      "name": "无畏小子",
+      "dex": 236
+    },
+    "silcoon": {
+      "name": "甲壳茧",
+      "dex": 266
+    },
+    "abra": {
+      "name": "凯西",
+      "dex": 63
+    },
+    "gardevoir": {
+      "name": "沙奈朵",
+      "dex": 282
+    },
+    "hitmonlee": {
+      "name": "飞腿郎",
+      "dex": 106
+    },
+    "marill": {
+      "name": "玛力露",
+      "dex": 183
+    }
+  },
+  "moves": {
+    "pound": "拍击",
+    "leer": "瞪眼",
+    "absorb": "吸取",
+    "quick_attack": "电光一闪",
+    "pursuit": "追打",
+    "screech": "刺耳声",
+    "mega_drain": "超级吸取",
+    "agility": "高速移动",
+    "slam": "摔打",
+    "detect": "看穿",
+    "giga_drain": "终极吸取",
+    "scratch": "抓",
+    "growl": "叫声",
+    "focus_energy": "聚气",
+    "ember": "火花",
+    "peck": "啄",
+    "sand_attack": "泼沙",
+    "fire_spin": "火焰旋涡",
+    "slash": "劈开",
+    "mirror_move": "鹦鹉学舌",
+    "flamethrower": "喷射火焰",
+    "tackle": "撞击",
+    "mud_slap": "掷泥",
+    "water_gun": "水枪",
+    "bide": "忍耐",
+    "foresight": "识破",
+    "mud_sport": "玩泥巴",
+    "take_down": "猛撞",
+    "whirlpool": "潮旋",
+    "protect": "守住",
+    "hydro_pump": "水炮",
+    "bite": "咬住",
+    "odor_sleuth": "气味侦测",
+    "roar": "吼叫",
+    "swagger": "虚张声势",
+    "scary_face": "鬼面",
+    "taunt": "挑衅",
+    "crunch": "咬碎",
+    "thief": "小偷",
+    "tail_whip": "摇尾巴",
+    "headbutt": "头锤",
+    "pin_missile": "飞弹针",
+    "belly_drum": "腹鼓",
+    "rest": "睡觉",
+    "covet": "渴望",
+    "poison_sting": "毒针",
+    "string_shot": "吐丝",
+    "gust": "起风",
+    "wing_attack": "翅膀攻击",
+    "supersonic": "超音波",
+    "mist": "白雾",
+    "water_pulse": "水之波动",
+    "aerial_ace": "燕返",
+    "double_team": "影子分身",
+    "harden": "变硬",
+    "astonish": "惊吓",
+    "nature_power": "自然之力",
+    "rain_dance": "求雨",
+    "synthesis": "光合作用",
+    "sunny_day": "大晴天",
+    "confusion": "念力",
+    "teleport": "瞬间移动",
+    "calm_mind": "冥想",
+    "psychic": "精神强念",
+    "hypnosis": "催眠术",
+    "dream_eater": "食梦",
+    "double_edge": "舍身冲撞",
+    "endeavor": "蛮干",
+    "fury_cutter": "连斩",
+    "leaf_blade": "叶刃",
+    "swords_dance": "剑舞",
+    "double_kick": "二连踢",
+    "bulk_up": "健美",
+    "sky_uppercut": "冲天拳",
+    "blaze_kick": "火焰踢",
+    "mud_shot": "泥巴射击",
+    "muddy_water": "浊流",
+    "earthquake": "地震"
+  }
+}

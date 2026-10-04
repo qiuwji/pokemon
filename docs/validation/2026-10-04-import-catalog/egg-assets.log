@@ -1,0 +1,11 @@
+front (64, 64)
+icon (32, 64)
+hatch (32, 128)
+shard (32, 8)
+{
+  "script": "import-egg-assets.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": []
+}

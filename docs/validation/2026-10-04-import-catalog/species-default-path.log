@@ -1,0 +1,14 @@
+mudkip 12 available learn entries; 0 pending
+{
+  "script": "import-species.py",
+  "check": true,
+  "files": [
+    "assets/mudkip-icon.png",
+    "content/species/mudkip.json"
+  ],
+  "contentChanges": [
+    "species.mudkip.genderless",
+    "species.mudkip.unavailableLearnset"
+  ],
+  "omissions": []
+}

@@ -1,0 +1,10 @@
+354 moves, 386 weights
+{
+  "script": "import-rule-metadata.py",
+  "check": true,
+  "files": [
+    "engine/rules/gen3/reference-metadata.js"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
