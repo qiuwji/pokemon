@@ -18,7 +18,7 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**780项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**307个JS模块**检查通过。Canvas及相关回归的日志和范围见[检查点证据](docs/validation/2026-10-04-plugin-canvas/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**783项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**308个JS模块**检查通过。上层区域组合及相关回归的日志和范围见[检查点证据](docs/validation/2026-10-04-upper-layer-composition/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
@@ -38,6 +38,7 @@ npm run check:docs
 - 研究所育成页面：寄存、产蛋、领取、步数孵化、交换；详情页支持装备、进化石，成长流程支持遗传和复杂进化条件。
 - 三个默认启动插件：详情互动页可点击伙伴抚摸、玩耍、喂食并保存记录；观察手记扩展新网格房间、NPC、奖励、菜单和 HUD；设施转轮插件演示非战斗活动。
 - 可选背包笔记插件：地址加 `?bag-notebook=1`，在原背包加入表单、页签与库存表格；主题、布局及自定义组合组件见[UI合同](docs/engine/presentation/UI_CONTRACT.md)。
+- 可选组合研究区：地址加 `?integration-lab=1`，从未白镇(10,8)入口进入；西侧异色格是开关，东侧向导按机关状态选择对话，北侧研究员提供两只精灵挑战和一次奖励。地图、机关、剧情、训练家、道具均由[独立插件](dist/plugins/integration-lab.js)注册；领域/保存链已测，浏览器实玩待验，不是原作区域。
 - 可选爆发插件：地址加 `?battle-burst=1`，攻击菜单可选一次招式增强，资格、原槽PP、费用/限次和演出通过公开合同组合；见[AUGMENTS](docs/engine/battle/AUGMENTS.md)。这不是完整Z招式规则包。
 - 扩展连接页面：本地协议验证及可替换 WebSocket 传输。网络消息经过校验进入与 UI 相同的命令系统，控制当前单机。
 - 注册式战斗效果与多轨招式脚本，持续天气/异常状态、升降能力、逐次命中、训练家入场、地形背景；野外影子、昼夜、天气和表情。六类转场及六个独立场景演出示例。声音由用户开启，采用真实 WAV 资源；插件可注册音效/音乐，支持通道、循环和暂停续播。原作完整 BGM 尚未导入。

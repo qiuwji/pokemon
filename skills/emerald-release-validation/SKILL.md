@@ -31,6 +31,8 @@ description: 对绿宝石工程做针对性验证、框架阶段系统和浏览�
 
 组合验收让上层内容完成“新区域→机关→分支剧情→训练家→奖励→保存重载”，记录被迫改核心的接口缺口。原作全内容和音画仍可暂缓，但必须明确哪些没有验收。
 
+可复用[独立研究区插件](../../dist/plugins/integration-lab.js)和[公开组合测试](../../tests/upper-layer-composition.test.js)，搜索`Upper-layer plugin composes`；在项目根运行`node --test tests/upper-layer-composition.test.js`。它以真实移动/机关/条件/训练家后备/奖励和全新会话恢复验证业务链，只准备强队并替代时钟及UI确认；不会mock战斗结果。浏览器入口`?integration-lab=1`从未白镇的新增入口进入，操作路线查README，不能拿领域测试当实际点击或原作地图还原。无需重写已匹配来源的组合证明，接口/入口变化时才复查相应范围。
+
 ## 可携带交接
 
 更新STATUS/DEVELOPMENT_LOG、相应规格和证据。交付当前代码、资源、docs、skills及固定参考获取信息；排除node_modules、运行缓存和个人存档。验证接手者能定位项目、启动、选任务和找到示例。打包/链接的版本与实际源码一致，既有ZIP/部署不能冒充本次成果；对外发布按用户授权办理，不由Skill自行授权。

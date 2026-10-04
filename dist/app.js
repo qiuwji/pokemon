@@ -1,5 +1,6 @@
 import { bagNotebook } from "./plugins/bag-notebook.js";
 import { canvasGallery } from "./plugins/canvas-gallery.js";
+import { createIntegrationLab } from "./plugins/integration-lab.js";
 import { actorDayCycle } from "./plugins/actor-day-cycle.js";
 import { battleBurst } from "./plugins/battle-burst.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
@@ -58,6 +59,9 @@ async function boot() {
           : []),
         ...(new URLSearchParams(location.search).get("actor-day-cycle") === "1"
           ? [actorDayCycle]
+          : []),
+        ...(new URLSearchParams(location.search).get("integration-lab") === "1"
+          ? [createIntegrationLab(base.maps.LittlerootTown)]
           : []),
         createFieldJournal(base.maps.LittlerootTown_ProfessorBirchsLab),
         e2eSupport,
