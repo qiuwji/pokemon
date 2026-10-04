@@ -16,29 +16,38 @@ export class ExtensionDOM {
     Object.assign(this, { host, shell, doc, resources, assets, onError });
     this.active = null;
     this.mounts = new Set();
-    this.layout = new LayoutDOM({
-      document: doc,
-      resources,
-      themes: host.ui.themes,
-      dispatch: (id, input) => host.runtime.bus.execute(id, input, "ui"),
-      onResult: (result) => {
-        if (result?.message) shell.toast(result.message);
-      },
-      onError: (error) =>
-        shell.toast(
-          error.code === "busy" ? "请先结束当前行动。" : error.message,
-        ),
-    });
+    this.reducedMotion = shell.reducedMotion || (() => false);
     const visualDefinitions = new Map(
       [...host.presentation].map(([id, definition]) => [
         id,
         {
           ...definition,
-          draw: (ctx, data) =>
-            host.runtime.evaluate(definition.draw, ctx, data),
+          draw: (ctx, data, assets) =>
+            host.runtime.evaluate(definition.draw, ctx, data, assets),
         },
       ]),
     );
+    this.layout = new LayoutDOM({
+      document: doc,
+      resources,
+      themes: host.ui.themes,
+      visuals: visualDefinitions,
+      assets,
+      dispatch: (id, input) => host.runtime.bus.execute(id, input, "ui"),
+      onResult: (result) => {
+        if (result?.message) shell.toast(result.message);
+      },
+      onError: (error) => {
+        onError(error);
+        shell.toast(
+          error.code === "busy" ? "请先结束当前行动。" : error.message,
+        );
+      },
+    });
+    this.visibilityChanged = () => {
+      if (doc.hidden || doc.visibilityState === "hidden") this.layout.pause();
+    };
+    doc.addEventListener("visibilitychange", this.visibilityChanged);
     this.feedback = new ExtensionFeedback(
       new Map(
         [...visualDefinitions].filter(
@@ -92,6 +101,7 @@ export class ExtensionDOM {
         resources: this.resources,
         themes: this.host.ui.themes,
         components: this.host.ui.components,
+        visuals: this.host.presentation,
       },
       (definition, props) =>
         this.host.runtime.evaluate(
@@ -102,6 +112,8 @@ export class ExtensionDOM {
     );
   }
   refreshMount(mount) {
+    for (const region of this.host.ui.inSlot(mount.slot, "regions"))
+      this.layout.disposeScope("region:" + region.id);
     mount.root.replaceChildren();
     for (const entry of this.host.ui.inSlot(mount.slot))
       try {
@@ -149,6 +161,7 @@ export class ExtensionDOM {
       }
   }
   unmountRegions() {
+    if (this.active) this.layout.disposeScope("page:" + this.active.id);
     for (const mount of this.mounts)
       for (const region of this.host.ui.inSlot(mount.slot, "regions"))
         this.layout.clearScope("region:" + region.id);
@@ -178,7 +191,7 @@ export class ExtensionDOM {
   showPage(id, context = {}, back = () => this.shell.closeModal()) {
     const page = this.host.ui.pages.get(id);
     if (!page) throw new Error("Unknown plugin page");
-    this.layout.clear();
+    if (this.active) this.layout.clearScope("page:" + this.active.id);
     this.active = { id, context: readOnly(context), back };
     this.rendered = false;
     this.feedback.clear();
@@ -203,7 +216,7 @@ export class ExtensionDOM {
             this.active = null;
             this.rendered = false;
             this.feedback.clear();
-            this.layout.clear();
+            this.layout.clearScope("page:" + id);
             back();
           },
         },
@@ -219,6 +232,7 @@ export class ExtensionDOM {
       this.canvas = overlay;
       this.rendered = true;
     } catch (error) {
+      this.layout.clearScope("page:" + id);
       this.onError(error);
       this.shell.toast("扩展页面暂时无法显示。");
       this.active = null;
@@ -247,6 +261,8 @@ export class ExtensionDOM {
   }
   refreshHUD() {
     if (!this.hud) return;
+    for (const definition of this.host.ui.hud.values())
+      this.layout.disposeScope("hud:" + definition.id);
     this.hud.replaceChildren();
     for (const definition of this.host.ui.hud.values())
       try {
@@ -277,11 +293,14 @@ export class ExtensionDOM {
     ).play(id, readOnly(payload));
   }
   render(now, view = {}) {
+    this.layout.render(now, { reducedMotion: this.reducedMotion() });
     const worldCtx = this.worldCanvas.getContext("2d");
     worldCtx.clearRect(0, 0, 320, 224);
     const feedback =
       view.mode === "battle" ? this.battleFeedback : this.fieldFeedback;
-    feedback.draw(worldCtx, this.assets, readOnly(view), now);
+    feedback.draw(worldCtx, this.assets, readOnly(view), now, {
+      reducedMotion: this.reducedMotion(),
+    });
     if (this.shell.modalType !== "extension" || !this.canvas) {
       this.feedback.clear();
       return;
@@ -294,6 +313,19 @@ export class ExtensionDOM {
       this.assets,
       readOnly(this.active?.context || {}),
       now,
+      { reducedMotion: this.reducedMotion() },
     );
+  }
+  dispose() {
+    this.doc.removeEventListener?.("visibilitychange", this.visibilityChanged);
+    this.layout.clear();
+    this.mounts.clear();
+    this.active = null;
+    for (const feedback of [
+      this.feedback,
+      this.fieldFeedback,
+      this.battleFeedback,
+    ])
+      feedback.clear();
   }
 }

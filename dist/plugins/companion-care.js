@@ -41,6 +41,10 @@ export const companionCare = {
     });
     const feedback = api.presentation.register("affection", {
       duration: 900,
+      schema: objectSchema(
+        { uid, activity: { type: "string", enum: ["pet", "play", "feed"] } },
+        ["uid", "activity"],
+      ),
       draw(ctx, { progress, payload }) {
         ctx.fillStyle = payload.activity === "play" ? "#edc55d" : "#e2839a";
         for (let i = 0; i < 5; i++) {

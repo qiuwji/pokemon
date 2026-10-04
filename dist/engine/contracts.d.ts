@@ -627,6 +627,7 @@ export type LayoutKind =
   | "text"
   | "heading"
   | "image"
+  | "canvas"
   | "button"
   | "row"
   | "grid"
@@ -667,6 +668,10 @@ export interface LayoutNode {
   };
   text?: string;
   src?: string;
+  width?: number;
+  height?: number;
+  visual?: string;
+  payload?: Record<string, Json>;
   alt?: string;
   label?: string;
   theme?: string;
@@ -824,10 +829,12 @@ export interface PluginAPI {
       id: string,
       definition: {
         duration: number;
+        loop?: boolean;
+        schema?: DataSchema;
         scope?: "page" | "field" | "battle";
         draw: (
           context: unknown,
-          frame: Readonly<Json>,
+          frame: Readonly<VisualFrame>,
           assets: unknown,
         ) => void;
       },
@@ -1567,4 +1574,16 @@ export interface SceneFrame {
   start: number;
   progress: number;
   reducedMotion: boolean;
+}
+
+export interface VisualFrame {
+  elapsedMs: number;
+  progress: number;
+  cycle: number;
+  complete: boolean;
+  reducedMotion: boolean;
+  width: number;
+  height: number;
+  payload: Readonly<Record<string, Json>>;
+  view: Readonly<Record<string, Json>>;
 }

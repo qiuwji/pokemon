@@ -40,6 +40,7 @@
 | --- | --- |
 | text、heading | text；显示纯文本 |
 | image | src 为已注册资源 ID、alt；可选 action/input/disabled，使图片可点击 |
+| canvas | width/height（整数1～512）、visual（presentation.register返回ID）、alt（非空名称）、payload（视觉schema参数）；可选action/input/disabled；每棵树最多16个 |
 | button | text，action/input/disabled；表单提交按钮改用 submit:true，无 action |
 | row、grid、panel、list | children 数组；list 的子项会包成原生 li |
 | divider | 分隔线 |
@@ -68,7 +69,7 @@
 
 ## 布局与主题
 
-style 只接受 gap/padding（整数0～32像素）、columns（1～8）、align（start/center/end/stretch）、justify（start/center/end/between）、width（auto/full）、fontSize（8～32）。不接受任意 CSS、HTML、脚本或外部字体 URL。自定义组件可以组合这些原语，尚不能注册任意 DOM/Canvas 控件。
+style 只接受 gap/padding（整数0～32像素）、columns（1～8）、align（start/center/end/stretch）、justify（start/center/end/between）、width（auto/full）、fontSize（8～32）。不接受任意 CSS、HTML、脚本或外部字体 URL。自定义组件可以组合这些原语，Canvas已有通用宿主；尚不能注册任意DOM控件。
 
 主题颜色 background/foreground/border/accent 为六位十六进制；数值 fontSize（8～32）、spacing（0～24）、borderWidth（1～4）、duration（0～1000毫秒）受限。默认像素字体与 reducedMotion 政策保持宿主所有权。duration 传为 CSS token，不意味着所有控件会自动出现动画；具体表现仍走演出接口。
 
@@ -82,6 +83,20 @@ LayoutDOM 只保存临时草稿和页签选择；插件持久数据在 store，�
 
 树结构变化时为需要稳定身份的控件设置 key；删除字段或改变定义后的过期草稿不属于存档。区域完整重开会清理草稿。组件声明不能覆盖伤害或库存；渲染错误只隔离页面/区域并记录，不回滚已提交的规则。
 
+## 注册视觉与内嵌 Canvas
+
+`api.presentation.register(id,{duration,loop?,schema?,scope?,draw})` 注册可复用视觉。duration为1～10000毫秒，loop默认false；schema为严格对象schema，省略时只接受空对象。draw同步，签名为 `draw(ctx,frame,assets)`，资源由宿主预加载，以第三参数提供。布局树只引用visual及JSON payload，不能包含draw函数、DOM节点或另起定时器。
+
+frame深冻结，含width/height、payload、view（该页面/区域的context）、elapsedMs、progress、cycle、complete、reducedMotion。循环按duration取模；有限片段结束保留progress=1终帧；缩减动态效果只绘制progress=0静帧。Canvas不取得可写世界或规则RNG，交互仍走action。
+
+挂载的Canvas由LayoutDOM管理，ExtensionDOM在游戏统一帧中驱动；描述校验、纯VisualTimeline时间采样和VisualCanvas绘制各自独立。隐藏页签、隐藏文档或离开DOM不绘制、不累计隐藏时间；显示后从暂停相位继续。整棵页面/区域重建是新挂载，相位重新开始；动画相位不是存档业务数据。页面关闭/替换、区域消失、构建失败及宿主dispose均清理实例，迟到帧不能重画旧节点。关闭模态框不会释放仍显示的HUD Canvas。
+
+有action的Canvas包成原生button，alt为可访问名称；鼠标点击提交 `pointer:{x,y,source:'pointer'}`，坐标为Canvas逻辑像素，随CSS缩放换算，画布外点击不提交。键盘Enter/Space使用中心坐标及source:'keyboard'。合并顺序为context→input→宿主pointer，action schema需声明这些字段；复杂区域命中判断由插件action基于坐标处理。无action时Canvas使用img角色与文本替代，不接管移动输入。
+
+原有 `presentation.play` 与事务 `ctx.feedback` 仍是有限、按scope选择的叠层反馈。二者在播放/提交前验证同一payload schema，循环定义明确拒绝，要求通过有生命周期的Canvas挂载；不提供无人管理的无限叠层。绘制错误恢复Canvas状态、停止出错实例并报告，其他控件继续；异步draw拒绝。插件代码是受信任扩展，公开端口不是任意JavaScript沙箱。
+
+最小完整注册→挂载→互动→保存→关闭例见 [plugin-canvas.test.js](../../../examples/plugin-canvas.test.js)，宿主端口夹具仅替代DOM。可选 [canvas-gallery.js](../../../dist/plugins/canvas-gallery.js) 用 `?canvas-gallery=1` 启用，主菜单打开“像素画布示例”，或在宝可梦详情内容区域点击；它只记录插件自有互动，属于框架代表例。规格证明见 [plugin-canvas测试](../../../tests/plugin-canvas.test.js)，搜索 `Canvas mounts`、`Independent Canvas gallery`。
+
 ## 可运行代表例与验证
 
 [bag-notebook.js](../../../dist/plugins/bag-notebook.js)是独立插件：在原背包挂入编辑/库存两个页签，输入标题、复选框、滑杆和单选范围；表单写插件笔记，组合组件查询真实库存表格。开发地址加 `?bag-notebook=1` 启用；打开主菜单→背包。这个例是项目扩展，不是绿宝石原作笔记系统。
@@ -92,6 +107,8 @@ LayoutDOM 只保存临时草稿和页签选择；插件持久数据在 store，�
 | --- | --- |
 | Invalid UI definition: unknown region slot | 从宿主表选择真实名称，不编造新 slot |
 | Unknown layout action/component | 使用 register 返回的完整 ID，先注册再引用 |
+| Unknown presentation / Invalid layout Canvas | 检查visual完整ID、已注册视觉、尺寸与alt；payload必须匹配该视觉schema |
+| Loop presentation requires a mounted Canvas | 不向play/feedback提交循环定义；通过canvas节点挂载，宿主释放 |
 | Invalid or duplicate layout form field | 字段须具名、同表单唯一，且不设置独立 action |
 | Invalid layout form boundary/button action | 不嵌套表单；submit 按钮只在表单内，无 action |
 | Invalid plugin layout expansion budget | 组件递归或树超预算，拆分界面而不是取消限制 |

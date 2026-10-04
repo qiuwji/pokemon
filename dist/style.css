@@ -1274,6 +1274,9 @@ button {
 .extension-button,.extension-sprite {background:#e4ebce; color:#394b38; border:2px solid #788875; box-shadow:inset -2px -2px #c1ccb1; padding:8px 12px; font:inherit; cursor:pointer;}
 .extension-button:disabled {opacity:.5;cursor:default;}
 .extension-sprite {padding:8px;min-width:128px;}
+.extension-canvas-surface {display:block;max-width:100%;height:auto;image-rendering:pixelated;}
+button.extension-canvas {padding:4px;background:var(--extension-background,#e4ebce);border:2px solid var(--extension-border,#788875);cursor:pointer;}
+button.extension-canvas:focus-visible {outline:3px solid var(--extension-accent,#e3b655);outline-offset:2px;}
 .extension-image {width:128px;height:128px;object-fit:contain;image-rendering:pixelated;}
 .extension-meter {accent-color:#769d68;width:180px;height:12px;}
 .extension-feedback {position:absolute;top:20px;left:50%;transform:translateX(-50%);width:320px;height:112px;pointer-events:none;image-rendering:pixelated;}

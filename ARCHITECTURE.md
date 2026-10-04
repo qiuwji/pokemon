@@ -95,7 +95,7 @@ StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本�
 
 ## 表现、音频与界面扩展
 
-动画描述、纯采样、导演和绘制分离：关键帧、具名缓动、结果分支、区间片段可复用；注册的战斗语义事件演出可追加/替换。计算可脱离浏览器测试、时钟可注入、reducedMotion 统一处理。效果只消费已确定的规则事实。见 [ANIMATION_CONTRACT.md](docs/engine/presentation/ANIMATION_CONTRACT.md)。跨 Canvas/DOM/SVG 宿主生命周期与可注册环境合同仍待收口。
+动画描述、纯采样、导演和绘制分离：关键帧、具名缓动、结果分支、区间片段可复用；注册的战斗语义事件演出可追加/替换。计算可脱离浏览器测试、时钟可注入、reducedMotion 统一处理。效果只消费已确定的规则事实。见 [ANIMATION_CONTRACT.md](docs/engine/presentation/ANIMATION_CONTRACT.md)。注册环境层和内嵌Canvas生命周期已提供；任意DOM/SVG视觉宿主尚未提供。
 
 AudioAdapter 只播放注册的真实 WAV/OGG/MP3/M4A 资源；管理解码缓存、音乐/音效通道、循环采样区间、音量、淡入淡出、后台续播和释放。内容使用语义 cue，插件请求自有注册音效；没有振荡器/合成旋律/频率提示 API。目前 7 个真实采样不是完整原作 BGM/SE 库，见 [AUDIO.md](docs/engine/presentation/AUDIO.md)。
 
@@ -122,3 +122,5 @@ AppearanceRegistry校验配方及资源，AppearanceSelections拥有按身份保
 结构化对话也沿用单向依赖：引擎校验数据，DialoguePlayer按注入时钟采样，TextEffectRegistry给出纯视觉偏移，DialogueDOM管理节点/帧生命周期；UI shell拥有最终确认Promise。注册文字效果不允许规则写入，reducedMotion统一处理，详见[对话合同](docs/engine/presentation/DIALOGUE.md)。
 
 SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与SpriteCanvas分开；UI shell统一登记页面资源并在替换/关闭/卸载时释放。绿宝石包只提供默认素材布局及时序，插件覆盖绑定无需改详情页。见[帧片段合同](docs/engine/presentation/SPRITE_CLIPS.md)。
+
+内嵌Canvas使用声明式visual引用和严格payload：引擎只校验，VisualTimeline拥有纯时间取样，VisualCanvas拥有绘制隔离，LayoutDOM拥有作用域内实例，ExtensionDOM沿宿主统一帧驱动。文档隐藏事件暂停时间，即使后台不再提供帧也不会计入循环；关闭/替换/构建失败释放，HUD生命周期独立于模态页面。点击坐标交给既有action事务，不从绘制提交领域行为。实际合同见[UI_CONTRACT](docs/engine/presentation/UI_CONTRACT.md)。

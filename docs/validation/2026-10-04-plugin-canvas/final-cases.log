@@ -1,0 +1,19 @@
+✔ Draw failure restores context, disposes only that visual and forbids writes or async callbacks (43.159666ms)
+✖ Independent Canvas gallery mounts through native menu and detail slots and rejects stale creature context (27.38375ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 164.63475
+
+✖ failing tests:
+
+test at tests/plugin-canvas.test.js:425:1
+✖ Independent Canvas gallery mounts through native menu and detail slots and rejects stale creature context (27.38375ms)
+  TypeError: Cannot read properties of undefined (reading 'message')
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/plugin-canvas.test.js:453:31)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

@@ -67,3 +67,7 @@ SceneDirector统一拥有场景时钟和镜头采样，SceneDOM只消费可选dr
 真实入门例见[scene-story.test.js](../../examples/scene-story.test.js)，Node端口验收见[story-presentation.test.js](../../tests/story-presentation.test.js)。如果源码更名，搜索`fieldTransform`、`api.presentation.scene`、`Escort members`。
 
 剧情中field-only场景声明独立field-presentation资源，可以与move、escort或cameraTo/cameraFollow并行；两段镜头片段不可重叠，完整parallel等待所有分支结束再继续。带draw的场景保留全屏/模态互斥，不能借字段同时绕过两种合同。
+
+## 内嵌视觉宿主
+
+插件Canvas引用注册presentation，VisualTimeline进行纯时间采样，VisualCanvas只画冻结frame，LayoutDOM持有页面/区域/HUD作用域实例；ExtensionDOM在统一帧调用render，文档可见性事件在无后台帧时仍暂停时间。隐藏页签暂停、结束静帧、reducedMotion与失败销毁共用合同；有限feedback亦使用相同取样和schema，循环只经显式Canvas挂载。点击经宿主坐标变换→action事务，表现不决定规则。参数、作者示例与生命周期见[UI合同](../engine/presentation/UI_CONTRACT.md)。

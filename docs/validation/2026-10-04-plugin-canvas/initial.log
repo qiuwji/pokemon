@@ -1,0 +1,18 @@
+✔ Canvas registration and layout reject bad refs, callable data, schema input and resource budgets before mounting (32.754458ms)
+✔ Visual samples separate looping, terminal frames, hidden and reduced intervals with backwards-clock high water (0.139208ms)
+✔ Canvas mounts arbitrary sizes, samples independent visible frames and stops hidden tabs, closed pages and stale players (15.555792ms)
+✔ Canvas clicks use logical coordinates, keyboard center and protected real transactions without changing core state (25.875792ms)
+✔ Reduced-motion and finite visual mounts retain a single static or terminal frame without a second timer (24.131834ms)
+✔ Draw failure restores context, disposes only that visual and forbids writes or async callbacks (22.685458ms)
+✔ Region and HUD refresh release old resources and disappearing content; closing modals preserves the HUD (14.299416ms)
+✔ Canvas build failure disposes earlier siblings and leaves other scopes intact (11.721417ms)
+✔ Invalid feedback schema and mounted-only loops fail before committing queued plugin state (11.572709ms)
+✔ Finite feedback consumes immutable sampled frames and separate assets, expires and supports reduced motion (11.66225ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 296.498166

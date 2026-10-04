@@ -1,4 +1,6 @@
 import { LAYOUT_FIELDS } from "../engine/extensions/layout-contracts.js";
+import { presentationPayload } from "../engine/extensions/presentation-contracts.js";
+import { VisualCanvas, canvasPointer } from "./visual-canvas.js";
 
 const SIMPLE_TAGS = {
   text: "p",
@@ -10,7 +12,16 @@ const SIMPLE_TAGS = {
 };
 /** Browser primitive rendering and local drafts. Receives a command port, never game state. */
 export class LayoutDOM {
-  constructor({ document, resources, themes, dispatch, onResult, onError }) {
+  constructor({
+    document,
+    resources,
+    themes,
+    dispatch,
+    onResult,
+    onError,
+    visuals = new Map(),
+    assets = {},
+  }) {
     Object.assign(this, {
       doc: document,
       resources,
@@ -18,8 +29,11 @@ export class LayoutDOM {
       dispatch,
       onResult,
       onError,
+      visuals,
+      assets,
     });
     this.drafts = new Map();
+    this.canvases = new Map();
     this.sequence = 0;
     this.factories = {
       ...Object.fromEntries(
@@ -29,6 +43,7 @@ export class LayoutDOM {
         ]),
       ),
       image: (t, s) => this.image(t, s),
+      canvas: (t, s) => this.canvas(t, s),
       meter: (t) => this.meter(t),
       button: (t) => {
         const n = this.doc.createElement("button");
@@ -47,22 +62,31 @@ export class LayoutDOM {
     };
   }
   create(tree, { context = {}, scope = "layout", refresh = () => {} } = {}) {
-    return this.node(tree, {
-      context,
-      scope,
-      refresh,
-      path: "root",
-      form: null,
-    });
+    this.disposeScope(scope);
+    try {
+      return this.node(tree, {
+        context,
+        scope,
+        refresh,
+        path: "root",
+        form: null,
+      });
+    } catch (error) {
+      this.disposeScope(scope);
+      throw error;
+    }
   }
   node(t, s) {
     const key = s.scope + ":" + (t.key || s.path),
       element = this.factories[t.kind](t, { ...s, key });
     element.classList.add(`extension-${t.kind}`);
-    if (t.text) element.textContent = t.text;
+    if (t.text && t.kind !== "canvas") element.textContent = t.text;
     if (t.disabled || s.form?.disabled) element.disabled = true;
     this.style(element, t);
-    if (["button", "image"].includes(t.kind) || LAYOUT_FIELDS.includes(t.kind))
+    if (
+      ["button", "image", "canvas"].includes(t.kind) ||
+      LAYOUT_FIELDS.includes(t.kind)
+    )
       element.setAttribute("data-extension-key", key);
     let form = s.form;
     if (t.kind === "form") form = { fields: new Map(), disabled: !!t.disabled };
@@ -120,11 +144,18 @@ export class LayoutDOM {
         );
       };
     else if (t.action && !LAYOUT_FIELDS.includes(t.kind))
-      element.onclick = () => this.act(element, t, s);
+      element.onclick = (event) => {
+        const pointer =
+          t.kind === "canvas"
+            ? canvasPointer(element._visualCanvas, event)
+            : undefined;
+        if (t.kind === "canvas" && !pointer) return;
+        return this.act(element, t, s, pointer ? { pointer } : {});
+      };
     return element._extensionWrapper || element;
   }
   async act(element, tree, scope, fields = {}, reset = {}) {
-    if (tree.disabled || element._extensionPending) return;
+    if (tree.disabled || element.disabled || element._extensionPending) return;
     element._extensionPending = true;
     const controls =
         tree.kind === "form"
@@ -154,11 +185,60 @@ export class LayoutDOM {
     }
   }
   clearScope(scope) {
+    this.disposeScope(scope);
     for (const key of this.drafts.keys())
       if (key.startsWith(scope + ":")) this.drafts.delete(key);
   }
   clear() {
+    for (const scope of [...this.canvases.keys()]) this.disposeScope(scope);
     this.drafts.clear();
+  }
+  disposeScope(scope) {
+    for (const player of this.canvases.get(scope) || []) player.dispose();
+    this.canvases.delete(scope);
+  }
+  pause() {
+    for (const players of this.canvases.values())
+      for (const player of players) player.pause();
+  }
+  render(now, { reducedMotion = false } = {}) {
+    for (const players of this.canvases.values())
+      for (const player of players)
+        player.render(now, {
+          reducedMotion,
+          visible:
+            this.doc.visibilityState !== "hidden" &&
+            player.canvas.isConnected &&
+            player.canvas.getClientRects().length > 0,
+        });
+  }
+  canvas(t, s) {
+    const canvas = this.doc.createElement("canvas");
+    canvas.width = t.width;
+    canvas.height = t.height;
+    canvas.className = "extension-canvas-surface";
+    canvas.setAttribute("role", "img");
+    canvas.setAttribute("aria-label", t.alt);
+    canvas.textContent = t.alt;
+    const definition = this.visuals.get(t.visual),
+      player = new VisualCanvas({
+        canvas,
+        definition,
+        payload: presentationPayload(definition, t.payload),
+        context: s.context,
+        assets: this.assets,
+        onError: (error) => this.onError?.(error),
+      });
+    if (!this.canvases.has(s.scope)) this.canvases.set(s.scope, new Set());
+    this.canvases.get(s.scope).add(player);
+    if (!t.action) return canvas;
+    const button = this.doc.createElement("button");
+    button.type = "button";
+    button.setAttribute("aria-label", t.alt);
+    canvas.setAttribute("aria-hidden", "true");
+    button.append(canvas);
+    button._visualCanvas = canvas;
+    return button;
   }
   style(element, tree) {
     const theme = this.themes.get(tree.theme);

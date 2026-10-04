@@ -200,6 +200,45 @@ test("a registered detail clip is selected, sampled and cleaned up by the real p
 });
 ```
 
+## 内嵌 Canvas 与视觉生命周期
+
+按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)注册presentation视觉，再在页面/区域/HUD返回canvas节点。树仅保存visual、尺寸和schema参数，不能塞draw函数；draw使用冻结frame和第三参数assets，循环由宿主帧驱动。点击由宿主产生pointer坐标并调用action，schema须声明context/input/pointer。不要在绘制里发命令、取游戏RNG或自行启动计时器。隐藏页签暂停，页面重建重新挂载，关闭释放；循环定义不能用于一次性play/feedback。
+
+[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。浏览器可用 `?canvas-gallery=1` 沿原菜单打开示例，或在详情内容区互动；生产插件放dist/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
+
+<!-- runnable-example: examples/plugin-canvas.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session, objectSchema } from "./helpers/session.js";
+import { canvasAdapter } from "../tests/helpers/canvas-extension-fixture.js";
+test("a plugin mounts a looping clickable visual with saved interaction and host cleanup", async () => {
+  let api;
+  const frames = [], plugin = manifest("canvas-demo", value => {
+    api = value;
+    const visual = api.presentation.register("portrait", { duration: 100, loop: true,
+      draw: (_ctx, frame) => frames.push(frame.progress),
+    });
+    const action = api.actions.register("touch", { schema: objectSchema({ pointer: objectSchema({
+      x: { type: "number" }, y: { type: "number" }, source: { type: "string" },
+    }, ["x", "y", "source"]) }, ["pointer"]), run: (ctx, input) => ctx.store.set("point", input.pointer) });
+    const page = api.ui.page("portrait", { title: "互动", render: () => ({
+      kind: "canvas", width: 200, height: 100, visual, action, alt: "互动画像",
+    }) });
+    api.ui.entry("portrait", { slot: "monster.detail", page, label: "互动" });
+  });
+  const s = session([plugin]), a = canvasAdapter(s);
+  a.ext.showPage("canvas-demo:portrait"); a.frame(0); a.frame(125);
+  assert.deepEqual(frames, [0, 0.25]);
+  await a.root.querySelector("button").onclick({ detail: 0 });
+  assert.deepEqual(api.store.get("point"), { x: 100, y: 50, source: "keyboard" });
+  s.game.loadDocument(s.game.exportDocument());
+  assert.equal(api.store.get("point").x, 100);
+  a.shell.closeModal(); a.frame(200);
+  assert.equal(a.ext.layout.canvases.size, 0);
+});
+```
+
 ## 常见错误与排查
 
 报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。

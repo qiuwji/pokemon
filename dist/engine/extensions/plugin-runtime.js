@@ -1,4 +1,5 @@
 import { StateCheckpoint } from "../state-checkpoint.js";
+import { presentationPayload } from "./presentation-contracts.js";
 import { PluginState } from "./plugin-state.js";
 import { jsonValue, readOnly, qualified, callSync } from "./values.js";
 /** Executes plugin transactions against injected application ports. Core references never cross its API. */
@@ -169,8 +170,12 @@ export class PluginRuntime {
       },
       feedback: (id, payload = {}) => {
         bounded();
-        if (!this.presentation.has(id)) throw new Error("Unknown presentation");
-        feedback.push([id, jsonValue(payload)]);
+        feedback.push([
+          id,
+          presentationPayload(this.presentation.get(id), payload, {
+            feedback: true,
+          }),
+        ]);
       },
     });
     this.active = true;

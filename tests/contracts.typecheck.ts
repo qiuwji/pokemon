@@ -83,6 +83,27 @@ const plugin: PluginManifest = {
         },
       ],
     });
+    const visual = api.presentation.register("portrait", {
+      duration: 1000,
+      loop: true,
+      draw(_ctx, frame) {
+        const phase: number = frame.progress;
+        // @ts-expect-error Visual frame data is not a state write port.
+        frame.payload.mood = phase;
+        // @ts-expect-error Playback time cannot be rewritten by plugins.
+        frame.elapsedMs = 0;
+      },
+    });
+    api.ui.region("portrait", {
+      slot: "monster.content",
+      render: () => ({
+        kind: "canvas",
+        visual,
+        width: 200,
+        height: 200,
+        alt: "互动画像",
+      }),
+    });
     api.presentation.textEffect("float", {
       sample(parameters, context) {
         // @ts-expect-error Visual contexts cannot be rewritten by plugins.

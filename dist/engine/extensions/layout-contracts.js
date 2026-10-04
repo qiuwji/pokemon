@@ -1,4 +1,5 @@
 import { readOnly, jsonValue, validateValue, freeze } from "./values.js";
+import { presentationPayload } from "./presentation-contracts.js";
 const exact = (v, keys) =>
   v &&
   typeof v === "object" &&
@@ -45,6 +46,24 @@ export const LAYOUT_NODES = freeze({
     keys: ["src", "alt", "action", "input", "disabled"],
     valid: (t, c) => Object.hasOwn(c.resources, t.src),
     error: "Unknown layout resource",
+  },
+  canvas: {
+    keys: [
+      "width",
+      "height",
+      "visual",
+      "payload",
+      "alt",
+      "action",
+      "input",
+      "disabled",
+    ],
+    valid: (t) =>
+      bounded(t.width, 1, 512) &&
+      bounded(t.height, 1, 512) &&
+      typeof t.alt === "string" &&
+      t.alt.trim().length > 0,
+    error: "Invalid layout Canvas dimensions or accessible name",
   },
   button: {
     keys: ["action", "input", "disabled", "submit"],
@@ -218,6 +237,11 @@ export function validateLayout(
     throw new Error("Unknown layout action");
   if (descriptor.valid && !descriptor.valid(tree, contract))
     throw new Error(descriptor.error || `Invalid layout ${tree.kind}`);
+  if (tree.kind === "canvas") {
+    if ((count.canvases = (count.canvases || 0) + 1) > 16)
+      throw new Error("Layout Canvas budget exceeded");
+    presentationPayload(contract.visuals?.get(tree.visual), tree.payload);
+  }
   if (tree.kind === "form") {
     if (form || !tree.action) throw new Error("Invalid layout form boundary");
     form = new Set();

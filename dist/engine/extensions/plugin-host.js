@@ -1,4 +1,8 @@
 import { validateSpriteClip } from "./sprite-clip-contracts.js";
+import {
+  validatePresentation,
+  presentationPayload,
+} from "./presentation-contracts.js";
 import { validateAudioCue } from "./audio-contracts.js";
 import { ExtensionCatalog, safeTrait, ruleContext } from "./catalog.js";
 import { PluginUIRegistry } from "./ui-registry.js";
@@ -555,19 +559,19 @@ export class PluginHost {
               staged.presentation.get(id)?.owner !== owner
             )
               throw new Error("Presentation cannot be played here");
-            staged.runtime.ports.present(id, readOnly(payload));
+            staged.runtime.ports.present(
+              id,
+              presentationPayload(staged.presentation.get(id), payload, {
+                feedback: true,
+              }),
+            );
           },
           register: (id, definition) => {
-            if (
-              typeof definition.draw !== "function" ||
-              !Number.isFinite(definition.duration) ||
-              definition.duration < 1 ||
-              definition.duration > 10000 ||
-              (definition.scope !== undefined &&
-                !["page", "field", "battle"].includes(definition.scope))
-            )
-              throw new Error("Invalid presentation");
-            return register(staged.presentation, id, definition);
+            return register(
+              staged.presentation,
+              id,
+              validatePresentation(definition),
+            );
           },
         }),
         query: () => {

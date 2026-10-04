@@ -15,6 +15,7 @@
 | 战斗 | [battle-effect.test.js](battle-effect.test.js) | 注册效果/招式→真实训练家回合→能力阶段和PP |
 | 非战斗设施 | [facility.test.js](facility.test.js) | 注册活动/设施→推进→待领取→结算/去重→重载 |
 | 页面插件 | [plugin-page.test.js](plugin-page.test.js) | 详情入口→布局校验→控件action→自有记忆→重载 |
+| 内嵌 Canvas | [plugin-canvas.test.js](plugin-canvas.test.js) | 注册循环视觉→声明式页面→帧取样→键盘互动→保存→关闭释放；DOM端口替身 |
 | 遇敌插件 | [encounter-extension.test.js](encounter-extension.test.js) | 关闭step→查询格子→Actor与凭证→接触→真实野生战斗，不经过剧情 |
 | 外观/相机/环境插件 | [visual-extension.test.js](visual-extension.test.js) | 外观选择→可见格数租约→独立雾层→释放与重载 |
 | Actor | [actor.test.js](actor.test.js) | 模板→公开创建/更新→持久UID和记忆→移除 |

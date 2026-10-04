@@ -1,4 +1,5 @@
 import { bagNotebook } from "./plugins/bag-notebook.js";
+import { canvasGallery } from "./plugins/canvas-gallery.js";
 import { actorDayCycle } from "./plugins/actor-day-cycle.js";
 import { battleBurst } from "./plugins/battle-burst.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
@@ -51,6 +52,9 @@ async function boot() {
           : []),
         ...(new URLSearchParams(location.search).get("bag-notebook") === "1"
           ? [bagNotebook]
+          : []),
+        ...(new URLSearchParams(location.search).get("canvas-gallery") === "1"
+          ? [canvasGallery]
           : []),
         ...(new URLSearchParams(location.search).get("actor-day-cycle") === "1"
           ? [actorDayCycle]
@@ -269,6 +273,7 @@ async function boot() {
         audio.dispose();
         ui.disposeDialogue();
         ui.disposeModalResources();
+        ui.extensions?.dispose();
       },
       { once: true },
     );
