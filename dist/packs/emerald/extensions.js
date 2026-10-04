@@ -1,3 +1,4 @@
+import { EMERALD_PUBLIC_EVENTS } from "./public-events.js";
 import { createEmeraldSpriteClips } from "./sprite-clips.js";
 import { createEmeraldPresentation } from "./animations.js";
 import { CameraProfiles } from "../../engine/camera-view.js";
@@ -80,6 +81,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
   const resources = db.resources;
   const host = new PluginHost({
     permissions: EMERALD_PLUGIN_PERMISSIONS,
+    publicEvents: EMERALD_PUBLIC_EVENTS,
     base: {
       ...db,
       resources,

@@ -94,6 +94,7 @@ export function attachEmeraldExtensions(game, host) {
         args,
         result: result ?? null,
       });
+      host.events.emit("core:command-settled");
     },
   });
   bus.register("core.query", {

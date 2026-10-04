@@ -128,3 +128,9 @@ SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与Sprite
 内嵌Canvas使用声明式visual引用和严格payload：引擎只校验，VisualTimeline拥有纯时间取样，VisualCanvas拥有绘制隔离，LayoutDOM拥有作用域内实例，ExtensionDOM沿宿主统一帧驱动。文档隐藏事件暂停时间，即使后台不再提供帧也不会计入循环；关闭/替换/构建失败释放，HUD生命周期独立于模态页面。点击坐标交给既有action事务，不从绘制提交领域行为。实际合同见[UI_CONTRACT](docs/engine/presentation/UI_CONTRACT.md)。
 
 内容加载、文件归属和导入候选提交见[内容管线](docs/development/CONTENT_PIPELINE.md)；导入工具入口见[脚本索引](docs/development/IMPORT_SCRIPTS.md)。清单纯装配合同与浏览器/Node/Python I/O分离；不保留旧聚合文件读取分支。
+
+## 插件观察边界与工具所有权
+
+通用PluginHost只接受装配方注入的publicEvents，不内置绿宝石事件；插件只能监听自有/声明依赖命名空间及公开core清单。内部命令完成事件保留完整审计数据，但插件仅获得空载荷command-settled；公开事件不增加命令权限。所有插件modify输入包括特性/持有道具均深冻结副本，返回值参与规则；核心可变数据不被插件输入冻结。完整合同见[插件规格](docs/architecture/PLUGINS.md)。
+
+导入命令按region/dex/battle/items/actors/audio分类，统一tools/import.py发现和调用；ownership声明逻辑工具名、真实入口和写入字段。选择/本地化/资源及图块动画数据由受跟踪配置提供，缺依赖与strict遗漏在写入前失败。测试场景生成器与metatile表位于tools中，只写独立fixture，不读取被忽略的work脚本或添加生产入口。操作和边界见[工具索引](docs/development/IMPORT_SCRIPTS.md)。

@@ -310,7 +310,10 @@ export function safeTrait(definition, evaluate = (fn, ...args) => fn(...args)) {
       ...h,
       ...(h.when ? { when: (c) => evaluate(h.when, ruleContext(c)) } : {}),
       ...(h.modify
-        ? { modify: (value, c) => evaluate(h.modify, value, ruleContext(c)) }
+        ? {
+            modify: (value, c) =>
+              evaluate(h.modify, readOnly(value), ruleContext(c)),
+          }
         : {}),
       ...(typeof h.effects === "function"
         ? { effects: (c) => evaluate(h.effects, ruleContext(c)) }

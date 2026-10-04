@@ -8,6 +8,8 @@
 
 manifest 包含 `id / apiVersion / version / dataVersion / permissions / dependencies / setup`。ID 为小写命名空间，注册局部 ID 得到 `plugin-id:local-id`。API 版本必须为 1，插件版本为三段数字，依赖声明指定主版本。重复、缺依赖、环依赖和失败的 setup 都中止启动，失败的暂存不污染基础内容。
 
+版本是合同而非发布编号：`apiVersion`仅在公开合同不兼容时变更，新增兼容能力不要求所有插件锁步升级。本开发工程明确不兼容历史存档；`dataVersion`不匹配拒绝加载原文，不迁移、不静默跳过插件或丢弃其数据。改变数据结构时使用当前版本的新存档；正式发布前如需兼容，另行设计迁移合同。
+
 核心引擎不导入绿宝石、浏览器或表现模块。插件宿主只接收 state/query/random/applyIntent/present/changed 端口；项目内的宽应用门面仍是可信装配层的有意取舍。插件 API 不暴露该门面。
 
 ## 14 项能力及入口
@@ -18,8 +20,8 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 | 世界扩展 | maps/mapExtensions/movement/destinations | 网格地图、NPC 元素、门和连接；已有地图仅追加元素/门/连接 |
 | 状态定义 | `api.states.register`，`ctx.states` | 按精灵 UID 保存，自定义 schema，step/round/manual/permanent 生命周期 |
 | 行为注入 | `api.actions.register`，`api.rules.register`，`api.story.register` | 事务行动、标准规则阶段、剧情命令构建 |
-| 数值修饰 | rules 的 phase/priority/when/modify | 与原特性、道具共用规则管线；只读上下文 |
-| 事件 | `api.events.on`，`ctx.emit` | 提交后发布事实，自定义事件必须属于自己的命名空间 |
+| 数值修饰 | rules 的 phase/priority/when/modify | 与原特性、道具共用规则管线；value与上下文均为脱离领域对象的深冻结值 |
+| 事件 | `api.events.on`，`ctx.emit` | 提交后发布事实；监听自有/显式依赖命名空间及内容包声明的公开事件，发射限自有命名空间 |
 | 查询 | `api.query()` / `view.query()` / `ctx.query()` | 脱离领域对象且深冻结的世界、队伍、背包、剧情、育成和战斗投影 |
 | 行动交互 | `api.actions.register` / `api.commands.dispatch` | 参数 schema 校验；UI、插件与网络共用 CommandBus |
 | 页面与页签 | `api.ui.page` / `api.ui.entry` / `api.ui.region` | 注册页面及现有菜单/详情/背包/队伍/商店/战斗/设施区域 |
@@ -69,6 +71,16 @@ const plugin = {
 ```
 
 详情页 context 包含 uid，控件输入合并该 context，action.schema 必须声明 uid。菜单页面 context 为空。页面节点不接受原始 HTML、任意 CSS 或 DOM 回调。
+
+## 事件可见性与规则输入
+
+`api.events.on(type, listener)`在setup注册。type必须是完整的`namespace:event`，允许自己的命名空间、manifest显式声明的直接依赖，以及内容包公开清单。`core`为保留命名空间，不能用作插件ID；未知core事件和未声明的其他插件事件在注册时抛出`Event subscription denied`，整批注册失败不留下监听器或内容。
+
+通用宿主由`publicEvents`注入公开core事实，不依赖绿宝石业务。绿宝石清单在[public-events.js](../../dist/packs/emerald/public-events.js)，包括移动、接触、天气、时钟、Actor、战斗等事实。新增公开事件须审查其载荷并加入该清单；内部事件默认不公开。监听器收到的事件包为`{type,payload,sequence}`，整包为深冻结的副本。
+
+`core:command-complete`的id/args/result只供可信宿主内部观察，插件不能订阅。插件等待命令完成改监听`core:command-settled`，其payload固定为`{}`，然后用只读query判断是否可行动；手记插件由此保持异步步数累计。公开事实供观察，不授予执行命令的权限。插件仍是受信任模块，这个API边界不等于隔离恶意JavaScript的沙箱。
+
+`rules.modify(value, context, view)`以及插件特性/持有道具的modify只收到脱离原对象、深冻结的value；通过返回新值参与计算，不能原地修改类型数组。核心自身的规则管线仍由领域控制，不把内部可变数组直接冻结。
 
 ## 范围与验收
 

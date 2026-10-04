@@ -805,6 +805,7 @@ export interface PluginAPI {
     ): string;
   };
   events: {
+    /** Own/dependency namespace or an explicitly public core event; internal commands are excluded. */
     on(type: string, listener: (payload: Readonly<Json>) => void): void;
   };
   query(): Readonly<Json>;

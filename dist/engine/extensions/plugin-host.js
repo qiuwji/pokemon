@@ -12,7 +12,6 @@ import { EventBus } from "./event-bus.js";
 import {
   qualified,
   localId,
-  freeze,
   readOnly,
   jsonValue,
   validateSchema,
@@ -28,7 +27,22 @@ import { RULE_PHASES } from "../rule-pipeline.js";
 export const PLUGIN_API_VERSION = 1;
 /** Startup host: content + declarative interfaces + runtime ports. Trusted code, explicit API, no hot unload. */
 export class PluginHost {
-  constructor({ base, permissions = [], onError = () => {} }) {
+  constructor({
+    base,
+    permissions = [],
+    publicEvents = [],
+    onError = () => {},
+  }) {
+    if (
+      publicEvents.some(
+        (type) =>
+          typeof type !== "string" ||
+          !type.startsWith("core:") ||
+          !localId(type.slice(5)),
+      )
+    )
+      throw new Error("Invalid public event declaration");
+    this.publicEvents = Object.freeze([...publicEvents]);
     this.allowedPermissions = Object.freeze([...permissions]);
     this.catalog = new ExtensionCatalog(base);
     this.ui = new PluginUIRegistry();
@@ -58,6 +72,7 @@ export class PluginHost {
     for (const plugin of plugins) {
       if (
         !localId(plugin.id) ||
+        plugin.id === "core" ||
         pending.has(plugin.id) ||
         plugin.apiVersion !== PLUGIN_API_VERSION ||
         !/^\d+\.\d+\.\d+$/.test(plugin.version) ||
@@ -96,6 +111,7 @@ export class PluginHost {
     const staged = new PluginHost({
       base: this.catalog.base,
       permissions: this.allowedPermissions,
+      publicEvents: this.publicEvents,
       onError: this.onError,
     });
     for (const plugin of ordered) {
@@ -107,6 +123,7 @@ export class PluginHost {
         Object.freeze({
           ...plugin,
           permissions: Object.freeze([...plugin.permissions]),
+          dependencies: Object.freeze({ ...plugin.dependencies }),
         }),
       );
       const register = (registry, id, definition) => {
@@ -394,6 +411,20 @@ export class PluginHost {
         events: Object.freeze({
           on: (type, fn) => {
             if (typeof fn !== "function") throw new Error("Invalid listener");
+            const parts = typeof type === "string" ? type.split(":") : [];
+            if (parts.length !== 2 || !parts.every(localId))
+              throw new Error("Invalid event subscription");
+            const namespace = parts[0];
+            if (
+              namespace === "core"
+                ? !staged.publicEvents.includes(type)
+                : namespace !== owner &&
+                  !Object.hasOwn(
+                    staged.manifests.get(owner).dependencies,
+                    namespace,
+                  )
+            )
+              throw new Error(`Event subscription denied: ${type}`);
             callbacks.push(() => staged.events.on(type, fn));
           },
         }),
@@ -683,7 +714,7 @@ export class PluginHost {
             modify: (value, c) =>
               this.runtime.evaluate(
                 h.modify,
-                value,
+                readOnly(value),
                 ruleContext(c),
                 this.runtime.view(h.owner),
               ),

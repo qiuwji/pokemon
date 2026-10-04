@@ -38,7 +38,7 @@ null
 - `core.item.unregister {}`：明确取消。
 - `core.item.shortcut {}`：异步，使用登记项；当下重新检查库存、地图和行动条件。
 
-UI、网络、插件使用同一命令；插件权限为 useItem。事务动作中不能嵌套 dispatch，异步场景由事务外命令调用。最终动作继续发 core:field-action，命令完成继续发 core:command-complete。
+UI、网络、插件使用同一命令；插件权限为 useItem。事务动作中不能嵌套 dispatch，异步场景由事务外命令调用。最终动作继续发 core:field-action，插件命令完成通知使用公开的 core:command-settled（空载荷），内部 core:command-complete 不可订阅。
 
 登记改变的事实：`core:item-registration {selection,cause}`，cause 为 register/unregister/missing-item，payload 冻结。取消没有登记的状态/再次登记同一项不会重复发事实。失败的资格不改变选择、不消耗物品。
 
@@ -115,7 +115,7 @@ api.content.register("items", "key", {
 - 命令：`core.item.action {item,action}`，异步，UI/网络/插件同一路由；插件要求 useItem 权限。action 是该物品的本地绑定 ID，不能传任意输入替换绑定或指定任意命令。
 - `core.field.action` 仍由 movement 权限控制独立野外行动；它自己的规则同样检查资格。物品绑定不会自动限制一个故意声明为无条件的独立行动。
 - 事务插件动作中不能嵌套 dispatch；异步场景通过事务外的 command 调用，不承诺跨动画事务回滚。需要事务性 HP/库存操作时使用已有领域 intent，不把异步动作塞入任意效果回调。
-- 成功事实复用 `core:field-action {id,target,outcome}`；命令完毕沿用 `core:command-complete`。不新增重复成功事件。
+- 成功事实复用 `core:field-action {id,target,outcome}`；插件命令完毕监听 `core:command-settled`（空载荷）；`core:command-complete`仅供宿主内部。不新增重复成功事件。
 
 ## 绿宝石规则与来源
 

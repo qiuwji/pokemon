@@ -121,7 +121,7 @@ export function createFieldJournal(baseMap) {
         pendingSteps++;
         flush();
       });
-      api.events.on("core:command-complete", flush);
+      api.events.on("core:command-settled", flush);
       const page = api.ui.page("journal", {
         title: "旅途 · 观察手记",
         render: (view) => ({

@@ -1,15 +1,16 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-当前工程版本 **0.26.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+当前工程版本 **0.27.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
 ## 运行与验证
 
-需要 Node.js 22+ 和 Python 3。浏览器运行无前端框架或运行时 npm 依赖；TypeScript 仅用于开发合同检查。
+需要 Node.js 22.13+ 和 Python 3.9+。浏览器运行无前端框架或运行时 npm 依赖；TypeScript/ESLint用于开发检查，导入与场景生成使用固定Pillow依赖。
 
 ```sh
 npm ci
+python3 -m pip install -r tools/requirements.txt
 npm run dev
 # 打开 http://localhost:5173
 npm test
@@ -18,7 +19,7 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法和文档。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。当前阶段全量回归：**795项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**312个JS模块**检查通过。最新工具回归见[检查点证据](docs/validation/2026-10-04-import-tools/manifest.json)，内容拆分的启动证明见[内容证据](docs/validation/2026-10-04-content-pipeline/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。当前工作树全量回归：**815项通过，0失败、0跳过**（含十五个Skill示例，Python管线另含20项嵌套证明）；**313个JS模块**语法通过。插件事件边界与本轮工具/质量检查见[最新证据](docs/validation/2026-10-04-plugin-boundaries/manifest.json)，范围与复用条件见[验证记录](docs/project/VALIDATION.md)。严格JS类型目前只覆盖剧情变量与两个纯动画采样模块，不代表全工程类型覆盖。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
