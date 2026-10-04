@@ -1,5 +1,6 @@
 /** Explicit host API routing. Each field/method has one application owner; no legacy fallback. */
 export const APPLICATION_FIELDS = Object.freeze({
+  textEffects: "presentation",
   appearanceRegistry: "appearance",
   facilityActive: "facilities",
   learning: "party",
@@ -41,6 +42,7 @@ export const APPLICATION_FIELDS = Object.freeze({
 });
 
 export const APPLICATION_METHODS = Object.freeze({
+  validateDialogue: Object.freeze(["presentation", "validateDialogue"]),
   projectCamera: Object.freeze(["view", "project"]),
   unprojectCamera: Object.freeze(["view", "unproject"]),
   cameraProjection: Object.freeze(["view", "projection"]),

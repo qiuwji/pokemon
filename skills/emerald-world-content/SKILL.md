@@ -80,6 +80,45 @@ test("registered NPC triggers a once-only data story", async () => {
 });
 ```
 
+## 需要逐字文本或行内效果时
+
+先读[对话合同](../../docs/engine/presentation/DIALOGUE.md)：speed为毫秒/字素，文字效果纯采样，不推进剧情。向既有剧情写结构化runs即可；无需自己启动计时器或改ui-shell。整棵剧情预检效果引用，真正的奖励/行为另写命令。
+
+完整例：[examples/dialogue.test.js](../../examples/dialogue.test.js)，在项目根执行 `node --test examples/dialogue.test.js`。沿用上述真实装配夹具；UI替身立即确认，此例只证明注册→NPC触发→参数转发→剧情完成，实际时间/确认/取消另由tests/dialogue.test.js验证。
+
+<!-- runnable-example: examples/dialogue.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session } from "./helpers/session.js";
+test("registered text effect reaches an NPC dialogue through the story application", async () => {
+  const plugin = manifest("speech-demo", api => {
+    const effect = api.presentation.textEffect("float", {
+      sample: (_, c) => ({ y: Math.sin(c.elapsedMs / 120 + c.index) }),
+    });
+    api.content.register("mapExtensions", "guide", {
+      map: "LittlerootTown", elements: [{ id: "speech-demo:guide",
+        x: 8, y: 9, actor: "Boy1", dir: "down", kind: "talk", name: "向导",
+        text: "你好", movement: { mode: "still", rangeX: 0, rangeY: 0 } }],
+    });
+    api.story.register("greeting", {
+      trigger: "interact", once: true,
+      match: ({ object }) => object?.id === "speech-demo:guide",
+      commands: [{ type: "dialog", name: "向导", speed: 40, lines: [{ runs: [
+        { text: "你好", effect }, { pauseMs: 200 }, { text: "！", color: "#ee8866" },
+      ] }] }, { type: "reward", id: "speech-demo:thanks", money: 5 }],
+    });
+  });
+  const s = session([plugin]), before = s.game.state.money;
+  assert(s.game.enter({ map: "LittlerootTown", x: 8, y: 10, dir: "up" }));
+  await s.bus.execute("core.field.interact", {}); await s.settle();
+  assert.equal(s.dialogs[0].lines[0].runs[0].effect, "speech-demo:float");
+  assert.deepEqual(s.dialogs[0].options, { speed: 40, mode: "typewriter" });
+  assert.equal(s.game.state.money, before + 5);
+  assert(s.game.state.story.completed.includes("speech-demo:greeting"));
+});
+```
+
 ## 常见错误与排查
 
 报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。

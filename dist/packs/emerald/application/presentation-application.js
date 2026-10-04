@@ -1,5 +1,8 @@
+import { createTextEffects } from "../../../presentation/text-effects.js";
+import { dialogueDescription } from "../../../engine/dialogue.js";
 import { bindApplicationPorts } from "./ports.js";
 export const PRESENTATION_PORTS = Object.freeze([
+  "plugins",
   "battle",
   "busy",
   "clearInput",
@@ -10,6 +13,12 @@ export const PRESENTATION_PORTS = Object.freeze([
 export class PresentationApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, PRESENTATION_PORTS);
+    this.textEffects = createTextEffects(this.plugins);
+  }
+  validateDialogue(command) {
+    return dialogueDescription(command, (id, data) =>
+      this.textEffects.parameters(id, data),
+    );
   }
   async playPresentation(id, payload = {}) {
     if (this.busy || this.battle || this.ui?.dialog)

@@ -265,6 +265,7 @@ async function boot() {
         detachAudio();
         document.removeEventListener("visibilitychange", audioVisibility);
         audio.dispose();
+        ui.disposeDialogue();
       },
       { once: true },
     );

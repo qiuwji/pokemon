@@ -818,6 +818,7 @@ export interface PluginAPI {
     theme(id: string, definition: UITheme): string;
   };
   presentation: {
+    textEffect(id: string, definition: TextEffectDefinition): string;
     register(
       id: string,
       definition: {
@@ -1510,4 +1511,32 @@ export interface EnvironmentLayerDefinition {
   initialData?: Record<string, Json>;
   opacity?: number;
   order?: number;
+}
+
+/** Structured text is data; animation offsets cannot advance dialogue or decide story rules. */
+export type DialogueRun =
+  | {
+      text: string;
+      color?: string;
+      effect?: string;
+      parameters?: Record<string, Json>;
+    }
+  | { pauseMs: number };
+export interface DialogueDescription {
+  name: string;
+  lines: (string | { runs: DialogueRun[] })[];
+  speed?: number;
+  mode?: "typewriter" | "instant";
+}
+export interface TextEffectDefinition {
+  schema?: DataSchema;
+  initialData?: Record<string, Json>;
+  sample: (
+    parameters: Readonly<Record<string, Json>>,
+    context: Readonly<{
+      elapsedMs: number;
+      index: number;
+      reducedMotion: boolean;
+    }>,
+  ) => { x?: number; y?: number; opacity?: number };
 }

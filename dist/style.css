@@ -472,6 +472,9 @@ footer {
   z-index: 12;
   white-space: pre-line;
 }
+.dialogue-glyph {
+  white-space: pre-wrap;
+}
 .dialogue strong {
   display: block;
   font-size: 3.75cqw;

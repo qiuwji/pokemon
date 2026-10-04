@@ -19,6 +19,7 @@ import {
 } from "../../../engine/conditions.js";
 import { bindApplicationPorts } from "./ports.js";
 export const STORY_PORTS = Object.freeze([
+  "validateDialogue",
   "battle",
   "validateWeatherCommand",
   "performStoryWeather",
@@ -55,7 +56,11 @@ export class StoryApplication {
     this.commands = new CommandRunner(
       {
         presentation: (c) => this.sceneDirector.play(c.id, c.payload || {}),
-        dialog: (c) => this.ui.say(c.name, c.lines),
+        dialog: (c) =>
+          this.ui.say(c.name, c.lines, null, {
+            speed: c.speed ?? 30,
+            mode: c.mode ?? "typewriter",
+          }),
         starter: () => this.ui.starterPicker(),
         shop: () => this.ui.showShop(),
         battle: (c) => {
@@ -160,6 +165,7 @@ export class StoryApplication {
         },
         validateCommand: (c) => {
           validateFieldCommand(c, this.db.maps);
+          if (c.type === "dialog") this.validateDialogue(c);
           if (c.type === "if")
             validateCondition(
               c.condition,

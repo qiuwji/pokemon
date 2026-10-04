@@ -1,3 +1,4 @@
+import { layoutDocument } from "./helpers/layout-document.js";
 import {
   createBag,
   fixtureInventory,
@@ -18,12 +19,16 @@ function documentPort() {
       activeElement: null,
       defaultView: { requestAnimationFrame: (callback) => callback() },
     };
+  doc.createElement = layoutDocument().createElement;
   doc.getElementById = (id) => {
     if (!elements.has(id)) {
       let html = "";
       elements.set(id, {
         id,
         children: [],
+        replaceChildren(...nodes) {
+          this.children = nodes;
+        },
         classList: { add() {}, remove() {} },
         focus() {
           doc.activeElement = this;
@@ -105,9 +110,21 @@ function fixture() {
       playSeconds: 0,
       tide: "high",
     }),
-    facilityView: () => ({ active: null, results: [], definitions: { demo: { name: "设施示例", activity: "demo", parameters: {} } } }),
-    enterFacility: (id, team) => { calls.push([id, team]); return { ok: true }; },
-    facilityAction: (id) => { calls.push(id); return { ok: true }; },
+    facilityView: () => ({
+      active: null,
+      results: [],
+      definitions: {
+        demo: { name: "设施示例", activity: "demo", parameters: {} },
+      },
+    }),
+    enterFacility: (id, team) => {
+      calls.push([id, team]);
+      return { ok: true };
+    },
+    facilityAction: (id) => {
+      calls.push(id);
+      return { ok: true };
+    },
     claimFacility: () => ({ ok: true }),
     quitFacility: () => ({ ok: true }),
     movementOptions: () => [],
@@ -186,7 +203,9 @@ test("Fishing remains controllable while the world is locked and displays bite f
 });
 test("Shared shell owns dialogue completion, return navigation and command confirmation without global document", async () => {
   const { ui, calls } = fixture();
-  const complete = ui.say("博士", ["第一句", "第二句"]);
+  const complete = ui.say("博士", ["第一句", "第二句"], null, {
+    mode: "instant",
+  });
   assert(ui.dialog);
   assert(ui.blocked);
   ui.nextDialogue();
@@ -264,7 +283,6 @@ test("Clock page submits setup through a command and renders live saved time", (
   assert.match(doc.getElementById("weather").textContent, /09:04/);
 });
 
-
 test("Facility page renders frozen plugin data and submits entry/action through application commands", async () => {
   const { game, doc, ui, calls } = fixture();
   ui.showFacility();
@@ -273,10 +291,17 @@ test("Facility page renders frozen plugin data and submits entry/action through 
   ui.showFacility("demo");
   doc.getElementById("[data-enter-facility]").onclick();
   assert.deepEqual(calls[0], ["demo", []]);
-  game.facilityView = () => readOnly({ active: { facility: "demo", phase: "ready", data: { score: 12 } }, actions: [{ id: "appeal", label: "表演" }], definitions: { demo: { name: "设施示例" } }, results: [] });
+  game.facilityView = () =>
+    readOnly({
+      active: { facility: "demo", phase: "ready", data: { score: 12 } },
+      actions: [{ id: "appeal", label: "表演" }],
+      definitions: { demo: { name: "设施示例" } },
+      results: [],
+    });
   const actionButton = { dataset: { facilityAction: "appeal" } };
   const root = doc.getElementById("modal-root");
-  root.querySelectorAll = (selector) => selector === "[data-facility-action]" ? [actionButton] : [];
+  root.querySelectorAll = (selector) =>
+    selector === "[data-facility-action]" ? [actionButton] : [];
   ui.showFacility();
   await actionButton.onclick();
   await new Promise(setImmediate);

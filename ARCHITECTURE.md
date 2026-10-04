@@ -118,3 +118,5 @@ SaveStore 只接受PACK.version指定的当前开发存档格式（当前14）�
 ## 外观与统一视图
 
 AppearanceRegistry校验配方及资源，AppearanceSelections拥有按身份保存的选择与临时覆盖；默认玩家/Actor/物种资源策略归绿宝石包，renderer只消费图层。身体与服饰共用移动采样，不产生第二个Actor或修改碰撞。ViewApplication只装配CameraProfiles、EnvironmentLayers与VisualLeases；CameraRig独立拥有剧情时序。统一投影服务地图裁切、连通场景、角色、天气/光照和屏幕反变换，租约负责优先级、访问与重载清理。独立雾层不写逻辑天气，尚不拥有探索记忆。公开API、默认规则与限制见[合同](docs/engine/presentation/APPEARANCE_AND_VIEW.md)。
+
+结构化对话也沿用单向依赖：引擎校验数据，DialoguePlayer按注入时钟采样，TextEffectRegistry给出纯视觉偏移，DialogueDOM管理节点/帧生命周期；UI shell拥有最终确认Promise。注册文字效果不允许规则写入，reducedMotion统一处理，详见[对话合同](docs/engine/presentation/DIALOGUE.md)。

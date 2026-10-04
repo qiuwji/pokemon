@@ -11,6 +11,8 @@ import {
   readOnly,
   jsonValue,
   validateSchema,
+  validateValue,
+  objectSchema,
   callSync,
 } from "./values.js";
 import {
@@ -31,6 +33,7 @@ export class PluginHost {
     this.rules = new Map();
     this.presentation = new Map();
     this.visualEffects = new Map();
+    this.textEffects = new Map();
     this.moveAnimations = new Map();
     this.battleAnimations = new Map();
     this.presentationScenes = new Map();
@@ -473,6 +476,31 @@ export class PluginHost {
               schema: validateSchema(definition.schema),
               draw: (ctx, frame, assets) =>
                 evaluate(definition.draw, ctx, readOnly(frame), assets),
+            });
+          },
+          textEffect: (id, definition) => {
+            if (
+              !definition ||
+              Object.keys(definition).some(
+                (k) => !["schema", "initialData", "sample"].includes(k),
+              ) ||
+              typeof definition.sample !== "function"
+            )
+              throw new Error("Text effect requires a sample handler");
+            const schema = validateSchema(definition.schema || objectSchema()),
+              initialData = readOnly(definition.initialData || {}, 8192);
+            if (schema.type !== "object")
+              throw new Error("Text effect parameters must be an object");
+            validateValue(schema, initialData);
+            return register(staged.textEffects, id, {
+              schema,
+              initialData,
+              sample: (parameters, context) =>
+                evaluate(
+                  definition.sample,
+                  readOnly(parameters),
+                  readOnly(context),
+                ),
             });
           },
           effect: (id, definition) => {

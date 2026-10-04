@@ -1,8 +1,17 @@
+import { dialogueDescription } from "../../engine/dialogue.js";
+import { DialogueDOM } from "../../adapters/dialogue-dom.js";
+import { createTextEffects } from "../../presentation/text-effects.js";
 import { PACK, TYPE_NAMES, STATUS_NAMES, questFor } from "./pack.js";
 /** Shared UI services. Domain mutations use the supplied application command facade. */
 export function createUIShell(
   game,
-  { document: doc = document, sound = () => {} } = {},
+  {
+    document: doc = document,
+    sound = () => {},
+    dialogueClock = null,
+    textEffects = game.textEffects || createTextEffects(),
+    reducedMotion = game.reducedMotion || (() => false),
+  } = {},
 ) {
   const navigation = {};
   const requestFrame =
@@ -17,6 +26,22 @@ export function createUIShell(
     modalType = null,
     modalFocus = null,
     toastTimer;
+  const frameHost = doc.defaultView;
+  const clock = dialogueClock || {
+    now: () => game.timeline?.now() ?? performance.now(),
+    request:
+      frameHost?.requestAnimationFrame?.bind(frameHost) ||
+      ((fn) => setTimeout(fn, 16)),
+    cancel: frameHost?.cancelAnimationFrame?.bind(frameHost) || clearTimeout,
+  };
+  const dialogueView = new DialogueDOM({
+    document: doc,
+    container: $("dialogue"),
+    effects: textEffects,
+    ...clock,
+    reducedMotion,
+    onError: (error) => disposeDialogue(error),
+  });
   const escapeHTML = (s) =>
     String(s).replace(
       /[&<>"']/g,
@@ -122,21 +147,41 @@ export function createUIShell(
     return `<button class="party-card" data-mon="${i}"><img src="${escapeHTML(spriteURL(m.species))}" alt=""><div class="mon-main"><div class="mon-heading">${s.name}<span>Lv.${m.level}</span></div>${hpTrack(m)}<div class="hp-value"><span class="type-pill">${m.status ? STATUS_NAMES[m.status] : s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</span><span>${m.hp} / ${m.stats.hp}</span></div></div></button>`;
   }
 
-  function say(name, lines, after = null) {
-    return new Promise((resolve) => {
+  function say(name, lines, after = null, options = {}) {
+    if (dialog)
+      return Promise.reject(new Error("A dialogue is already active"));
+    let description;
+    try {
+      description = dialogueDescription(
+        { name, lines, ...options },
+        (id, data) => textEffects.parameters(id, data),
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+    return new Promise((resolve, reject) => {
       dialog = {
-        name,
-        lines,
+        ...description,
         index: 0,
-        after: () => {
-          after?.();
-          resolve();
-        },
+        renderedIndex: -1,
+        after,
+        resolve,
+        reject,
       };
-      renderDialogue();
-      announce(lines[0]);
-      game.clearInput();
+      try {
+        renderDialogue();
+        announce(description.lines[0].text);
+        game.clearInput();
+      } catch (error) {
+        disposeDialogue(error);
+      }
     });
+  }
+  function disposeDialogue(reason = new Error("Dialogue disposed")) {
+    const previous = dialog;
+    dialog = null;
+    dialogueView.hide();
+    previous?.reject(reason);
   }
 
   function choose(name, prompt, options, cancel) {
@@ -164,28 +209,48 @@ export function createUIShell(
     });
   }
   function renderDialogue() {
-    const d = $("dialogue");
     if (!dialog) {
-      d.hidden = true;
+      dialogueView.hide();
       return;
     }
-    d.hidden = false;
-    d.innerHTML = `<strong>${escapeHTML(dialog.name)}</strong>${escapeHTML(dialog.lines[dialog.index])}<span class="continue">▼ Z / 确认</span>`;
+    if (dialog.renderedIndex === dialog.index) {
+      dialogueView.update();
+      return;
+    }
+    dialogueView.show(dialog.name, dialog.lines[dialog.index], {
+      speed: dialog.speed,
+      mode: dialog.mode,
+    });
+    dialog.renderedIndex = dialog.index;
   }
 
   function nextDialogue() {
     if (!dialog) return;
-    sound("emerald:confirm");
-    if (++dialog.index >= dialog.lines.length) {
-      const cb = dialog.after;
-      dialog = null;
-      renderDialogue();
-      cb?.();
-      updateSide();
-      game.save();
-    } else {
-      renderDialogue();
-      announce(dialog.lines[dialog.index]);
+    try {
+      sound("emerald:confirm");
+      if (!dialogueView.complete) {
+        dialogueView.skip();
+        return;
+      }
+      if (++dialog.index >= dialog.lines.length) {
+        const completed = dialog;
+        dialog = null;
+        renderDialogue();
+        game.clearInput();
+        try {
+          completed.after?.();
+          updateSide();
+          game.save();
+          completed.resolve();
+        } catch (error) {
+          completed.reject(error);
+        }
+      } else {
+        renderDialogue();
+        announce(dialog.lines[dialog.index].text);
+      }
+    } catch (error) {
+      disposeDialogue(error);
     }
   }
 
@@ -257,6 +322,7 @@ export function createUIShell(
     choose,
     nextDialogue,
     renderDialogue,
+    disposeDialogue,
     back,
     connect(actions) {
       Object.assign(navigation, actions);

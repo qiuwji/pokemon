@@ -61,6 +61,15 @@ const plugin: PluginManifest = {
         allowDuplicates: true,
       };
     api.content.register("inventoryPockets", "materials", pocket);
+    api.presentation.textEffect("float", {
+      sample(parameters, context) {
+        // @ts-expect-error Visual contexts cannot be rewritten by plugins.
+        context.elapsedMs = 0;
+        // @ts-expect-error Text-effect parameters are read-only.
+        parameters.height = 10;
+        return { y: Math.sin(context.elapsedMs / 100) };
+      },
+    });
     const cue = api.presentation.audio("confirm", {
       kind: "sound",
       source: "assets/audio/bicycle-bell.wav",

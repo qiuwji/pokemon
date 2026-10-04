@@ -39,7 +39,7 @@ api.story.register('gate', {
 
 | type | 参数与行为 |
 | --- | --- |
-| dialog | name字符串，lines字符串数组；等待UI完成 |
+| dialog | name，lines字符串或{runs}数组；speed为毫秒/字素，mode为typewriter/instant；支持停顿/颜色/注册文字效果，等待最终确认。完整参数见[对话合同](../presentation/DIALOGUE.md) |
 | if | condition条件，then命令数组，else可选命令数组 |
 | choice | name、prompt；options为2–16个{id,label,commands?}；variable可选，cancel可选且必须对应option.id |
 | sequence / parallel | commands数组；parallel校验角色/镜头/模态资源冲突，不能并行切场景 |
