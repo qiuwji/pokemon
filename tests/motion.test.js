@@ -67,7 +67,7 @@ test("Run and walk finish at the same grid destination with matching animation c
 test("Original town NPCs wander within declared ranges, reserve cells and interpolate", () => {
   const state = {
     position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
-    flags: {},
+    flags: { introDone: true },
     party: [],
   };
   const npc = new NPCSystem(

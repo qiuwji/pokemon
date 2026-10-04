@@ -1,0 +1,18 @@
+{
+  "id": "se-ball-open",
+  "title": "球打开",
+  "song": "SE_BALL_OPEN",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+  "midi": "sound/songs/midi/se_ball_open.mid",
+  "voicegroup": "rs_sfx_1",
+  "sampleRate": 44100,
+  "songVolume": 100,
+  "reverb": 50,
+  "polyphony": 5,
+  "pcmMixRate": 13379,
+  "cueVolume": 0.6,
+  "oneShot": true,
+  "kind": "sound",
+  "selection": "ui"
+}

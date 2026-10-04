@@ -235,7 +235,11 @@ test("Real Emerald sample library has existing WAV resources and music is select
     assert.equal(data.toString("ascii", 8, 12), "WAVE");
     assert.equal(cue.notes, undefined);
   }
-  assert.equal(emeraldBattleSound("move", cues), "emerald:attack");
+  // The original plays a per-move sound effect, so no generic move/hurt cue is shipped.
+  assert.equal(emeraldBattleSound("move", cues), null);
+  assert.equal(emeraldBattleSound("hurt", cues), null);
+  assert.equal(emeraldBattleSound("heal", cues), "emerald:heal");
+  assert.equal(emeraldBattleSound("level", cues), "emerald:reward");
   assert.equal(emeraldBattleSound("unmatched", cues), null);
   assert.throws(
     () =>

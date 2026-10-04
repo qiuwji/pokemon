@@ -448,6 +448,11 @@
     },
     {
       "section": "stories",
+      "path": "stories/littleroot-intro.json",
+      "key": "littleroot-intro"
+    },
+    {
+      "section": "stories",
       "path": "stories/littleroot-town.json",
       "key": "littleroot-town"
     },

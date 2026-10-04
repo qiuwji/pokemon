@@ -95,7 +95,17 @@ function baseObjects(state, db) {
   if (map === "LittlerootTown")
     return [
       obj(16, 10, "Twin", "talk", "npc.talk.1"),
-      obj(12, 13, "FatMan", "talk", "npc.talk.2"),
+      // The original keeps mom inside until the truck scene reveals her, and the fat man
+      // stays hidden until that scene finishes (LittlerootTown_EventScript_GoInsideWithMom).
+      ...(flag.introDone
+        ? [obj(12, 13, "FatMan", "talk", "npc.talk.2")]
+        : [
+            {
+              ...obj(5, 8, "Mom", "talk", "npc.mom.welcome"),
+              id: "littleroot.mom",
+              sourceLocalId: "LOCALID_LITTLEROOT_MOM",
+            },
+          ]),
       obj(14, 17, "Boy2", "talk", "npc.talk.3"),
     ];
   if (map === "Route101")

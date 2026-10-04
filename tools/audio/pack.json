@@ -5,15 +5,107 @@
   "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
   "defaultEnabled": true,
   "music": [
-    { "song": "MUS_LITTLEROOT", "config": "tracks/littleroot.json", "selection": "map-music" },
-    { "song": "MUS_ROUTE101", "config": "tracks/route101.json", "selection": "map-music" },
-    { "song": "MUS_OLDALE", "config": "tracks/oldale.json", "selection": "map-music" },
-    { "song": "MUS_BIRCH_LAB", "config": "tracks/birch_lab.json", "selection": "map-music" },
-    { "song": "MUS_POKE_CENTER", "config": "tracks/poke_center.json", "selection": "map-music" },
-    { "song": "MUS_POKE_MART", "config": "tracks/poke_mart.json", "selection": "map-music" },
-    { "song": "MUS_VS_WILD", "config": "tracks/vs_wild.json", "selection": "battle-wild" },
-    { "song": "MUS_VS_TRAINER", "config": "tracks/vs_trainer.json", "selection": "battle-trainer" },
-    { "song": "MUS_VS_RIVAL", "config": "tracks/vs_rival.json", "selection": "battle-rival" }
+    {
+      "song": "MUS_LITTLEROOT",
+      "config": "tracks/littleroot.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_ROUTE101",
+      "config": "tracks/route101.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_OLDALE",
+      "config": "tracks/oldale.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_BIRCH_LAB",
+      "config": "tracks/birch_lab.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_POKE_CENTER",
+      "config": "tracks/poke_center.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_POKE_MART",
+      "config": "tracks/poke_mart.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_VS_WILD",
+      "config": "tracks/vs_wild.json",
+      "selection": "battle-wild"
+    },
+    {
+      "song": "MUS_VS_TRAINER",
+      "config": "tracks/vs_trainer.json",
+      "selection": "battle-trainer"
+    },
+    {
+      "song": "MUS_VS_RIVAL",
+      "config": "tracks/vs_rival.json",
+      "selection": "battle-rival"
+    }
   ],
-  "sounds": []
+  "sounds": [
+    {
+      "song": "SE_SELECT",
+      "config": "tracks/se-select.json",
+      "selection": "ui-menu"
+    },
+    {
+      "song": "SE_SHOP",
+      "config": "tracks/se-shop.json",
+      "selection": "ui-purchase"
+    },
+    {
+      "song": "SE_EXP",
+      "config": "tracks/se-exp.json",
+      "selection": "ui-heal"
+    },
+    {
+      "song": "SE_SAVE",
+      "config": "tracks/se-save.json",
+      "selection": "ui-save"
+    },
+    {
+      "song": "SE_DOOR",
+      "config": "tracks/se-door.json",
+      "selection": "field-door"
+    },
+    {
+      "song": "SE_LEDGE",
+      "config": "tracks/se-ledge.json",
+      "selection": "field-ledge"
+    },
+    {
+      "song": "SE_BALL",
+      "config": "tracks/se-ball.json",
+      "selection": "capture-ball"
+    },
+    {
+      "song": "SE_BALL_THROW",
+      "config": "tracks/se-ball-throw.json",
+      "selection": "capture-throw"
+    },
+    {
+      "song": "SE_BALL_OPEN",
+      "config": "tracks/se-ball-open.json",
+      "selection": "capture-open"
+    },
+    {
+      "song": "SE_PC_LOGIN",
+      "config": "tracks/se-pc-login.json",
+      "selection": "storage-pc"
+    },
+    {
+      "song": "MUS_LEVEL_UP",
+      "config": "tracks/fanfare-level-up.json",
+      "selection": "fanfare-level"
+    }
+  ]
 }

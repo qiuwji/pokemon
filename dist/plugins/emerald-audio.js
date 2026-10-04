@@ -11,5 +11,16 @@ export const audioPlugin = {
     api.presentation.audio("mus_vs_wild", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_vs_wild.wav", "volume": 0.6, "loop": true, "loopStart": 52.65299319727891, "loopEnd": 91.83662131519274, "fadeInMs": 0, "fadeOutMs": 0});
     api.presentation.audio("mus_vs_trainer", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_vs_trainer.wav", "volume": 0.6, "loop": true, "loopStart": 89.69687074829932, "loopEnd": 167.27253968253967, "fadeInMs": 0, "fadeOutMs": 0});
     api.presentation.audio("mus_vs_rival", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_vs_rival.wav", "volume": 0.6, "loop": true, "loopStart": 64.89786848072562, "loopEnd": 117.55086167800454, "fadeInMs": 0, "fadeOutMs": 0});
+    api.presentation.audio("se_select", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_select.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_shop", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_shop.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_exp", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_exp.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_save", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_save.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_door", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_door.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_ledge", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_ledge.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_ball", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_ball.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_ball_throw", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_ball_throw.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_ball_open", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_ball_open.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_pc_login", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_pc_login.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("mus_level_up", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/mus_level_up.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
   },
 };

@@ -1,5 +1,17 @@
 # 当前开发与验证记录
 
+## 2026-10-05 · 原版音效替换与卡车开场剧情
+
+按原作`midi.cfg`渲染第一批11个一次性音效（SE_SELECT/SE_SHOP/SE_EXP/SE_SAVE/SE_DOOR/SE_LEDGE/SE_BALL/SE_BALL_THROW/SE_BALL_OPEN/SE_PC_LOGIN与MUS_LEVEL_UP），全部用`rs_sfx_1`/`rs_sfx_2`/`fanfare`原作音色组与各自音量，装进同一`emerald-audio`包的`sounds/`。UI占位采样（自行车铃、收银噪声、底鼓、军鼓）全部退役：确认→SE_SELECT（src/menu.c）、购买→SE_SHOP（src/shop.c:1135）、回复→SE_EXP（src/battle_controller_player.c:1215）、升级→MUS_LEVEL_UP。招式命中与受伤音效**故意留空**：原作为每个招式配独立音效，通用采样属于替代品，须等招式音效表导入，本条记为明确缺口。
+
+渲染器新增一次性模式：SE无循环标记时整段渲染并产出`kind:"sound"`、`loop:false`的cue；原曲常量校验同时接受`SE_`前缀。
+
+开场剧情按`LittlerootTown_EventScript_StepOffTruckMale`转写：新游戏从卡车格(2,10)起步，`mapEnter`一次性场景让玩家跳下车、妈妈从门口走出、说`LittlerootTown_Text_OurNewHomeLetsGoInside`全文，然后一同进屋落到Brendan家1F(8,8)，并置`introDone`。妈妈户外出现、胖男人在开场后才现身，都对应原作的隐藏flag时机。
+
+过程中修正三处：bundler曾把音效cue的`loop`字段剥掉导致合同校验失败；地图门格不可通行，原作是脚本直接`warpsilent`，因此妈妈进屋改为隐藏、玩家停在门前由场景转场；两个测试夹具（weather/world-time）需声明"开场已完成"才是中期状态。
+
+核心875/875、插件26/26，`npm run check`通过。原作性别分支（女玩家走May家）、卡车精灵图、出场SE_LEDGE音效接线、屋内妈妈对话链（上二楼调钟、电视报道、跑步鞋）均未完成。
+
 ## 2026-10-05 · 第一章原作音乐成包、战斗选曲与未白镇广场逐字还原
 
 按固定poryaaaa修订重建渲染器（项目内原本没有可执行文件），用原作`midi.cfg`各自音量渲染第一章6首地图曲（MUS_LITTLEROOT/ROUTE101/OLDALE/BIRCH_LAB/POKE_CENTER/POKE_MART）与3首战斗曲（MUS_VS_WILD/VS_TRAINER/VS_RIVAL）。发现并修复两个真实缺陷：地图内容写的是原作`MUS_*`常量而运行时只认已注册cue，导致6张地图长期静默；通用对白兜底只念对象文本第一行，原作多行对白被截断。地图现保留原作常量，由`ORIGINAL_SONG_CUES`唯一映射解析；战斗按原作`GetBattleBGM`的三类选择，劲敌走`MUS_VS_RIVAL`。

@@ -1,47 +1,86 @@
 import { validateAudioCue } from "../../engine/extensions/audio-contracts.js";
-/** Real source samples for provisional UI/SFX; not a claim of reconstructed native song/SE mixing. */
+/**
+ * UI and battle cues now carry the original sound identity rendered from the reference MIDI.
+ * Attack and hit sounds stay absent on purpose: the original plays a per-move sound effect, so
+ * a generic hit sample would be a substitute rather than a restoration.
+ */
 export const EMERALD_AUDIO_CUES = {
   confirm: {
     kind: "sound",
-    source: "assets/audio/bicycle-bell.wav",
-    volume: 0.16,
+    source: "assets/audio/emerald-audio/sounds/se_select.wav",
+    volume: 0.5,
     loop: false,
     maxVoices: 2,
   },
   purchase: {
     kind: "sound",
-    source: "assets/audio/register-noise.wav",
-    volume: 0.2,
+    source: "assets/audio/emerald-audio/sounds/se_shop.wav",
+    volume: 0.5,
     loop: false,
     maxVoices: 2,
   },
   reward: {
     kind: "sound",
-    source: "assets/audio/bicycle-bell.wav",
-    volume: 0.28,
+    source: "assets/audio/emerald-audio/sounds/mus_level_up.wav",
+    volume: 0.5,
+    loop: false,
+    maxVoices: 1,
+  },
+  door: {
+    kind: "sound",
+    source: "assets/audio/emerald-audio/sounds/se_door.wav",
+    volume: 0.5,
     loop: false,
     maxVoices: 2,
   },
-  attack: {
+  ledge: {
     kind: "sound",
-    source: "assets/audio/kick.wav",
-    volume: 0.3,
+    source: "assets/audio/emerald-audio/sounds/se_ledge.wav",
+    volume: 0.5,
     loop: false,
-    maxVoices: 4,
+    maxVoices: 2,
   },
-  hurt: {
+  "ball.throw": {
     kind: "sound",
-    source: "assets/audio/snare.wav",
-    volume: 0.2,
+    source: "assets/audio/emerald-audio/sounds/se_ball_throw.wav",
+    volume: 0.5,
     loop: false,
-    maxVoices: 4,
+    maxVoices: 2,
+  },
+  "ball.shake": {
+    kind: "sound",
+    source: "assets/audio/emerald-audio/sounds/se_ball.wav",
+    volume: 0.5,
+    loop: false,
+    maxVoices: 2,
+  },
+  "ball.open": {
+    kind: "sound",
+    source: "assets/audio/emerald-audio/sounds/se_ball_open.wav",
+    volume: 0.5,
+    loop: false,
+    maxVoices: 2,
   },
   heal: {
     kind: "sound",
-    source: "assets/audio/bicycle-bell.wav",
-    volume: 0.24,
+    source: "assets/audio/emerald-audio/sounds/se_exp.wav",
+    volume: 0.5,
     loop: false,
     maxVoices: 2,
+  },
+  save: {
+    kind: "sound",
+    source: "assets/audio/emerald-audio/sounds/se_save.wav",
+    volume: 0.5,
+    loop: false,
+    maxVoices: 1,
+  },
+  "storage.pc": {
+    kind: "sound",
+    source: "assets/audio/emerald-audio/sounds/se_pc_login.wav",
+    volume: 0.5,
+    loop: false,
+    maxVoices: 1,
   },
   "cry.mudkip": {
     kind: "sound",
@@ -109,9 +148,14 @@ export function emeraldMusic({ battle, map, battleSong }, cues) {
   return cueId && cues.get(cueId)?.kind === "music" ? cueId : null;
 }
 
+/**
+ * Battle cues keep the original mapping where the reference has one: level up plays the
+ * level fanfare and recovery plays the exp sound. Move and hurt stay unmapped until the
+ * per-move sound effect table is imported; the original plays a different sound per move.
+ */
 export const EMERALD_BATTLE_AUDIO = Object.freeze({
-  move: "emerald:attack",
-  hurt: "emerald:hurt",
+  move: null,
+  hurt: null,
   heal: "emerald:heal",
   level: "emerald:reward",
 });

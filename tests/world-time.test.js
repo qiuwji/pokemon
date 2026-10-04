@@ -277,6 +277,8 @@ function adventure(
     checkGrowth() {},
   });
   const { bus } = attachEmeraldExtensions(game, compiled.host);
+  // Clock cases run mid-adventure; the truck arrival scene is not under test here.
+  game.state.flags.introDone = true;
   return {
     game,
     bus,

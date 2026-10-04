@@ -102,6 +102,8 @@ function session(plugins = [], records = {}, wallStart = 100000) {
   };
   const extensions = attachEmeraldExtensions(game, compiled.host);
   game.state.party = [createMonster("mudkip", 15, game.db, game.rng)];
+  // These cases run mid-adventure; the truck arrival scene is not under test here.
+  game.state.flags.introDone = true;
   return {
     game,
     ...compiled,

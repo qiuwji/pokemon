@@ -49,7 +49,9 @@ python3 tools/audio/bundle-audio.py --build /tmp/audio-build --check
 python3 tools/audio/bundle-audio.py --build /tmp/audio-build
 ```
 
-`tools/audio/pack.json`是唯一的装配清单：`music`逐首列出原曲常量、对应曲目配置和选曲用途（`map-music`/`battle-wild`/`battle-trainer`/`battle-rival`），`sounds`留给一次性音效。安装结果固定为：
+`tools/audio/pack.json`是唯一的装配清单：`music`逐首列出原曲常量、对应曲目配置和选曲用途（`map-music`/`battle-wild`/`battle-trainer`/`battle-rival`），`sounds`列一次性音效。音色组、音量与声部全部取自原作`midi.cfg`（例如`se_select`为`rs_sfx_1 -V080 -P5`），不在生成器里硬编码。
+
+音效配置带`oneShot:true`：原作SE没有循环标记，渲染器整段渲一遍，cue为`kind:"sound"`、`loop:false`，不套用曲子的引子+两遍曲身策略。安装结果固定为：
 
 ```text
 dist/assets/audio/emerald-audio/music/<原曲常量小写>.wav

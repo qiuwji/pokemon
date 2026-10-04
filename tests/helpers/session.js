@@ -40,6 +40,8 @@ export function session(plugins = []) {
   });
   // Arrange an unlocked test scene, not an implementation of the original opening story.
   game.state.flags.rescued = true;
+  // The truck arrival scene already happened in this session; examples start mid-adventure.
+  game.state.flags.introDone = true;
   const mon = createMonster("mudkip", 10, db, game.rng);
   game.state.party.push(mon);
   const { bus } = attachEmeraldExtensions(game, host);

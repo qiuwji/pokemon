@@ -42,8 +42,9 @@ def resolve_cue(track_id, song, kind, section, folder, data):
                     'loopStart': data['cue']['loopStart'],
                     'loopEnd': data['cue']['loopEnd']})
     else:
-        for key in ('loop', 'loopStart', 'loopEnd'):
+        for key in ('loopStart', 'loopEnd'):
             cue.pop(key, None)
+        cue['loop'] = False
     return local, asset, cue
 
 
