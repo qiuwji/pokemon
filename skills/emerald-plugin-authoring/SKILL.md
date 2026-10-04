@@ -44,6 +44,10 @@ manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。se
 
 更新STATUS和领域规格，明确实现能力与后续内容。网络控制复用[NETWORK_ARCHITECTURE](../../docs/architecture/NETWORK.md)的命令协议，不另造任意脚本注入或承诺多人同步。
 
+## 玩家联线与单机控制
+
+需要两个玩家实际交换/对战时，先读[玩家联线设计](../../docs/architecture/PLAYER_LINK.md)并核对STATUS。现有NetworkGateway只控制一份存档，连接内去重不保证跨重连成交；core.trade的本地伙伴池不是远端所有者。设计中的联线API尚未实现，先完成会话、持久决策和领域托管框架，再写业务插件；不能通过远端JSON改队伍或整档覆盖。验收使用两份独立存档和断线/重启后的真实领域状态，而非双方都显示成功。现有网络例和规则证据继续复用，只验证新增边界。
+
 ## 最小完整示例
 
 接口锚点：插件 API 1；此示例与仓库可执行文件同步。当前工程版本查 package.json，完成度查 STATUS，不能据本段推断全作已完成。

@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-04",
+  "baselineCommit": "54d4c4c",
+  "projectVersion": "0.25.0",
+  "scope": "Design-only optional persistent room layouts and player-link contracts; skill routing and stale network documentation correction. No new runtime API or completed gameplay claim.",
+  "auditedSources": [
+    "dist/engine/world-state.js: objectFields and validateOperations",
+    "dist/packs/emerald/application/world-application.js: prepareWorldPatch and assertOccupants",
+    "dist/packs/emerald/extension-intents.js: current intent vocabulary",
+    "dist/engine/facilities.js and docs/engine/facilities/FACILITIES.md: temporary sessions/save boundary",
+    "dist/engine/extensions/network-session.js and network-gateway.js: connection-local lifecycle",
+    "dist/adapters/network-transport.js: replaceable transport",
+    "tests/network.test.js: control protocol coverage",
+    "work/pokeemerald/include/global.h: SecretBase decoration fields",
+    "work/pokeemerald/include/decoration.h: placement permissions/shape"
+  ],
+  "delivery": {
+    "roomLayouts": "Design complete; no layout registry/service/save field implemented",
+    "playerLink": "Design complete; no room/authority/escrow/cross-save exchange implemented"
+  },
+  "reusedEvidence": {
+    "manifest": "../2026-10-04-plugin-canvas/manifest.json",
+    "runtimeSourceHashCheck": {
+      "checked": 430,
+      "changed": []
+    },
+    "fullTests": 780,
+    "examples": 15,
+    "note": "No runtime changes in this task; previous full checks remain applicable, not re-executed."
+  },
+  "checks": [
+    {
+      "command": "npm run check:docs",
+      "result": "69 Markdown, 541 links, 15 examples passed before final navigation entries"
+    },
+    {
+      "command": "npm run check:docs after evidence navigation",
+      "result": "Failed: referenced manifest did not yet exist; create this evidence file then validate again",
+      "behaviorChange": false
+    },
+    {
+      "command": "npm run check:docs final",
+      "result": "passed: 69 Markdown files, 545 local links, 15 synchronized examples",
+      "exitCode": 0,
+      "log": "docs.log"
+    }
+  ],
+  "notVerified": [
+    "Runtime room layouts",
+    "Runtime player-link sessions/trades/battles",
+    "Final seven-domain composition",
+    "New browser flows"
+  ],
+  "invalidatedBy": "Implementation of any proposed interface requires new runtime, save, occupancy/transaction and multi-session tests; documentation-only evidence cannot prove those behaviors.",
+  "reference": "Fixed C reference unchanged; modern rotation/coordination policies are project design, not claimed original behavior.",
+  "hashes": {
+    "docs/engine/world/ROOM_LAYOUTS.md": "f92350b23bf7686f61bd3cedb04e1e171d65f583ad45d5759720a133c19cc278",
+    "docs/architecture/PLAYER_LINK.md": "76c55b5d8f54869e68c961cf295493eadd38ce5cff7ebb61fd2569c7ed61f617",
+    "docs/architecture/NETWORK.md": "c9c430952adb896ad662e2a3fde78813f74d794399fcdcc5d6de560fbaba5347",
+    "docs/README.md": "4dfdbe6a3c125a200d16421066a3b11e6e49d5a2c7a4ac0cd07598cac7b1da90",
+    "docs/project/SKILLS.md": "4bd4af8c62209235ecc46a8f535e29dc3de6dc36bedd20fb40184bd4d7c4a452",
+    "docs/project/STATUS.md": "7731109fe59414a6eb1ae0d6c04f2d4eccc965fc58597fd7b1908ffa65d15f86",
+    "docs/project/CHANGELOG.md": "7f14d605c425b97b8ef0c43d5aa17e1ce71119f36a6f2a2003ee2ccd90262f65",
+    "docs/project/VALIDATION.md": "a7acdf0b2adfa52a8075c8d81ee359f54d2c2f838cf232053dfaf1e635e69792",
+    "skills/emerald-world-content/SKILL.md": "aea9c54571f248f860566330156033a9eec8048e17e34ebaf9fdea2cb6b136a9",
+    "skills/emerald-facility-content/SKILL.md": "10d55439cdb725c219f24ac2b50f4037aa93aac076dd45b7f360d4cf491714bc",
+    "skills/emerald-plugin-authoring/SKILL.md": "0960090d4e3c26bca35d40331e56aa5fe93b827f5e7d73d8f573f6bbd3fca40b"
+  }
+}

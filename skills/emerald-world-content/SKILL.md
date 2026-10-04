@@ -155,6 +155,10 @@ test("a registered field scene focuses the view and gates a subsequent reward", 
 });
 ```
 
+## 秘密基地与长期房间编辑
+
+先读[持久房间布局设计](../../docs/engine/world/ROOM_LAYOUTS.md)，再核对STATUS是否已有实际实现。world.patch的一批覆盖可保存，但不提供多格家具/旋转/布局库存的共同提交；插件store与另一次world.patch也不是原子事务。长期布局应有单一所有者，世界占位/碰撞/导航/交互从同一投影派生，不把设施局部data当房间存档。设计中的注册/命令尚未实现时，先做对应框架任务，再转写secret_base.c/decoration.c业务；原作放置权限与现代旋转扩展分别记录。代表验收和失败路径以该设计页为入口，不为家具名称在导演中增加分支。
+
 ## 常见错误与排查
 
 报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。

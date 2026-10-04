@@ -19,7 +19,7 @@
 | 领域 | 规格及架构 |
 | --- | --- |
 | 应用服务/公共命令 | [APPLICATION](architecture/APPLICATION.md)、[PLUGINS](architecture/PLUGINS.md)、[NETWORK](architecture/NETWORK.md) |
-| 世界/时间/天气 | [状态与访问](engine/world/STATE_AND_LIFECYCLE.md)、[时间](engine/world/WORLD_TIME.md)、[天气](engine/world/WEATHER.md)、[遇敌与接触](engine/world/ENCOUNTERS_AND_CONTACTS.md) |
+| 世界/时间/天气 | [状态与访问](engine/world/STATE_AND_LIFECYCLE.md)、[时间](engine/world/WORLD_TIME.md)、[天气](engine/world/WEATHER.md)、[遇敌与接触](engine/world/ENCOUNTERS_AND_CONTACTS.md)；[持久房间布局](engine/world/ROOM_LAYOUTS.md)为待实现设计 |
 | 地形/移动/HM | [地形](engine/field/FIELD_TERRAIN.md)、[高度](engine/field/FIELD_ELEVATION.md)、[机关](engine/field/FIELD_DEVICES.md)、[野外行动](engine/field/FIELD_ACTIONS.md)、[输入](engine/field/MOVEMENT_INPUT.md)、[桥梁](engine/field/BRIDGES.md)、[移动架构](architecture/MOVEMENT.md) |
 | 剧情/演出 | [剧情语言](engine/story/STORY_LANGUAGE.md)、[逐字对话](engine/presentation/DIALOGUE.md)、[原作转写流程](../skills/emerald-story-reconstruction/SKILL.md)、[剧情导演](architecture/CUTSCENES.md) |
 | 战斗 | [架构](architecture/BATTLE.md)、[机制矩阵](engine/battle/MECHANISM_MATRIX.md)、[状态与行动](engine/battle/STATES_AND_ACTIONS.md)、[插件行动增强](engine/battle/AUGMENTS.md)、[语义审计](engine/battle/MOVE_AUDIT.md)、[规则覆盖](engine/battle/GEN3_RULE_COVERAGE.md) |
@@ -28,6 +28,7 @@
 | 设施及非战斗活动 | [FACILITIES](engine/facilities/FACILITIES.md)；完整开拓区、选美、游戏厅仍是后续业务 |
 | 视觉/声音 | [表现架构](architecture/PRESENTATION.md)、[外观/相机/环境](engine/presentation/APPEARANCE_AND_VIEW.md)、[动画合同](engine/presentation/ANIMATION_CONTRACT.md)、[资源帧片段](engine/presentation/SPRITE_CLIPS.md)、[真实音频](engine/presentation/AUDIO.md)、[插件UI](engine/presentation/UI_CONTRACT.md) |
 | 插件后续接口需求 | [PLUGIN_ROADMAP](project/PLUGIN_ROADMAP.md)；计划不能当现有能力 |
+| 玩家联线（可选） | [PLAYER_LINK](architecture/PLAYER_LINK.md)为待实现设计；现有[NETWORK](architecture/NETWORK.md)只控制一份单机会话 |
 
 ## 每种文档只负责一件事
 

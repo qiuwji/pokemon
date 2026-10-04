@@ -1,6 +1,6 @@
 # 网络协议 1 与统一应用命令
 
-协议 1；当前工程 v0.16.0，开发存档 envelope 10。网络适配器控制当前单机会话，不提供联机多人、权威服务器、远程认证或连接服务部署。
+协议 1；当前工程/保存版本查[README](../../README.md)与[STATUS](../project/STATUS.md)，本页不维护另一份版本数字。网络适配器控制当前单机会话，不提供联机多人、权威服务器、远程认证或连接服务部署。玩家联线的后续设计见[PLAYER_LINK](PLAYER_LINK.md)，其中拟议接口尚未实现。
 
 ## 模块职责
 
@@ -75,9 +75,9 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 
 ## 验收
 
-当前 297 项完整检查（最终执行结果以实现计划中的检查点为准）：协议错误、白名单、重复/乱序、在途去重、队列/断开、等待上限、处理器失败不重试、锁释放、UI/插件/网络同路、UID/进化、权限与步数事件补记。测试同时用 in-memory transport、假 socket 及 Node 标准库测试 peer 的真实 WebSocket handshake/frame；该 peer 位于 tests/helpers，不作为生产服务。
+实际专项入口为[network.test.js](../../tests/network.test.js)：协议错误、白名单、重复/乱序、在途去重、队列/断开、等待上限、处理器失败不重试、锁释放、UI/插件/网络同路、UID/进化、权限与步数事件补记。测试同时用 in-memory transport、假 socket 及 Node 标准库测试 peer 的真实 WebSocket handshake/frame；该 peer 位于 tests/helpers，不作为生产服务。最新系统结果和证据有效范围见[VALIDATION](../project/VALIDATION.md)，不把历史297项写成当前全量。
 
-浏览器连接真实本地测试控制端，执行 core.query → 抚摸 → 同 ID 重发 → query，详情页确认只有 1 次互动。断开后原菜单可用；截图 outputs/network-interaction.png。UI 拆分和表现扩展已完成，最终综合验收见 docs/project/VALIDATION.md。
+历史浏览器记录曾连接真实本地测试控制端，执行 core.query → 抚摸 → 同 ID 重发 → query，详情页确认只有1次互动，断开后原菜单可用。它只证明当时的控制协议流程，不证明当前玩家联线或最终综合验收；当前检查点仍查上述VALIDATION。
 
 登记道具与快捷使用通过 core.item.register / unregister / shortcut 命令，使用useItem权限，查询见core.query.registeredItem；同一锁/资格适用于本地UI和网络。见 docs/engine/items/FIELD_ITEMS.md。
 
@@ -85,4 +85,4 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 
 `core.query` 的 bag 是冻结派生数量，inventory 提供所有注册口袋的政策、占用、槽位。`core.inventory.preview {additions:[{item,count}]}` 按实际政策检查整个获得组合，只读且不可提交，网络/插件无需写权限。获得仍由奖励/购买等领域命令执行。
 
-`core.item.use`、`core.learning.teach` 和 kind:item 的 `core.battle.action` 可带 `slot:{pocket,index,item}`；使用时重新验证位置，不能把读到的下标当任意写入口。其他战斗行动不接受 slot。保存10只持久化槽位，不接受旧计数字典。
+`core.item.use`、`core.learning.teach` 和 kind:item 的 `core.battle.action` 可带 `slot:{pocket,index,item}`；使用时重新验证位置，不能把读到的下标当任意写入口。其他战斗行动不接受 slot。当前保存合同持久化槽位，不接受旧计数字典；版本查README。
