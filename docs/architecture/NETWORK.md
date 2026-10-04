@@ -92,3 +92,11 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 开发服务器提供/control中转，浏览器PollingTransport与WebSocket使用同一NetworkSession/NetworkGateway合同。CLI、顺序与重试、只读状态、语义UI输入及测试插件见[AI控制指南](../development/AI_CONTROL.md)。AI插件默认装配不等于默认联网；测试内容需要独立环境。控制HTTP仅转发消息，不改CommandBus白名单、领域校验或存档事实。
 
 异步领域命令等待UI时，已声明concurrent的查询/语义输入可并发完成；普通领域修改依旧串行。所有请求继续按sequence接受并按id去重，响应完成次序可不同，需要按id/sequence关联。CLI的--submit/--result用于交互式等待，不重复发起领域操作。
+
+## 控制观察与连续执行
+
+AI产品的操作例和字段以[插件指南](../../dist/plugins/ai-control/README.md)为准。core.field.move返回moved/blocked/animating/busy/interacted结构化回执；UI命令适配器取accepted用于原输入反馈。core.control.walk由独立ControlApplication与可测ControlWalk编排，等待实际野外结算，事件边界停止，取消不会回滚已完成步。ObservationJournal保存有界瞬时事实，剧情领域另保存已确认对象对白身份；引擎不依赖产品插件。
+
+CommandDefinition.query用于声明纯同步读命令；core.query、控制查询及插件queries已标记。网络头可携带observe/observeInput（查询ID/JSON字符串）。网关在动作前验证查询资格和输入，执行后取状态；动作已经提交后观察失败只附observationError，不能把它报告为需重试的动作失败。请求指纹包含观察选项，去重复用整个结果。
+
+开发HTTP桥使用Condition在poll和result查询上最多等待25000ms，入队、结果到达、关闭和重连立即通知，等待释放互斥锁。在途poll有连接租期，不能被旧5秒短轮询活性检查误判；浏览器用AbortController取消poll。CLI使用同一结果长轮询，不固定sleep等待。传输和网关不读取领域状态或重算规则。

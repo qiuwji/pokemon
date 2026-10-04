@@ -89,6 +89,14 @@ export class NetworkGateway {
       ...body,
     });
   }
+  validateObservation(request) {
+    if (!request.observe) return;
+    const query = this.bus.definition(request.observe);
+    if (!query?.query || !query.concurrent || query.mode !== "instant" || query.network !== true)
+      throw new CommandError("invalid_observation", "Observation must be a network-enabled read-only query");
+    // Reject invalid observation requests before accepting the mutation.
+    this.bus.prepare(request.observe, JSON.parse(request.observeInput || "{}"), "network");
+  }
   async run(request) {
     const deadline = this.now() + this.limits.waitMs;
     for (;;) {
@@ -117,7 +125,14 @@ export class NetworkGateway {
   }
   async executeJob(job) {
     try {
-      this.settle(job, { ok: true, result: (await this.run(job.request)) ?? null });
+      this.validateObservation(job.request);
+      const result = (await this.run(job.request)) ?? null;
+      const body = { ok: true, result };
+      if (job.request.observe) {
+        try { body.state = this.bus.executeSync(job.request.observe, JSON.parse(job.request.observeInput || "{}"), "network"); }
+        catch (error) { body.observationError = errorResult(error); }
+      }
+      this.settle(job, body);
     } catch (error) {
       this.settle(job, { ok: false, error: errorResult(error) });
     }

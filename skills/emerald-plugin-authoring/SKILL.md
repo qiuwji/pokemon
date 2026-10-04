@@ -281,4 +281,4 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 
 ## 只读查询与AI消费方
 
-纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件、测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。
+纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件位于dist/plugins/ai-control，真实移动回执、连续执行、事件游标和命令附状态见[插件指南](../../dist/plugins/ai-control/README.md)。以moved判断移动，不把accepted或网络ok当作走动；查询用detail选择字段并保存nextCursor，gap时刷新状态。长轮询由传输承担，不能在插件事务里嵌套异步路线。测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。

@@ -10,6 +10,7 @@ import { isWater } from "../../../engine/terrain.js";
 import { createTrainerEncounter, trainerRewardId } from "../trainers.js";
 import { bindApplicationPorts } from "./ports.js";
 export const BATTLE_PORTS = Object.freeze([
+  "control",
   "facilityActive",
   "battleStrategies",
   "busy",
@@ -47,6 +48,7 @@ export class BattleApplication {
         this.ui.announce(text);
       },
       onChange: () => {
+        this.control.battleChanged(this.combat.battle);
         this.ui?.resetBattleMenu();
         this.ui?.drawBattleHUD();
         this.ui?.updateSide();

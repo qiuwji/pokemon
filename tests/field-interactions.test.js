@@ -124,7 +124,8 @@ test("Strength activation owns no PP or encounter rolls; ordinary blocked moveme
     true,
   );
   assert.equal(g.field.npcs.objects(room).find((o) => o.id === "stone").y, 3);
-  assert.equal(await bus.execute("core.field.move", { direction: "up" }), true);
+  const receipt = await bus.execute("core.field.move", { direction: "up" });
+  assert.equal(receipt.status, "interacted"); assert.equal(receipt.moved, false);
   await g.applications.fieldActions.pendingInteraction;
   assert.equal(g.state.position.y, 3);
   assert.equal(g.field.npcs.objects(room).find((o) => o.id === "stone").y, 2);
@@ -144,7 +145,8 @@ test("A custom crate triggers without story; its final occupancy drives an indep
     facts = [],
     stories = g.state.story.completed.slice();
   host.events.on("core:device-fact", (e) => facts.push(e.payload));
-  assert.equal(await bus.execute("core.field.move", { direction: "up" }), true);
+  const receipt = await bus.execute("core.field.move", { direction: "up" });
+  assert.equal(receipt.status, "interacted"); assert.equal(receipt.moved, false);
   await g.applications.fieldActions.pendingInteraction;
   assert.equal(g.state.position.y, 3);
   assert.equal(g.field.npcs.objects(room).find((o) => o.id === "crate").y, 2);

@@ -1,3 +1,4 @@
+import { ControlApplication, CONTROL_PORTS } from "./control-application.js";
 import { ViewApplication, VIEW_PORTS } from "./view-application.js";
 import {
   AppearanceApplication,
@@ -47,6 +48,9 @@ import {
 } from "./presentation-application.js";
 /** Owns service assembly and the few intentional lifecycle handoffs; it owns no domain state. */
 export function composeApplications(applications, read, { storage }) {
+  applications.control = new ControlApplication(liveApplicationPorts(read, CONTROL_PORTS, {
+    devicePending: () => !!applications.devices.service.nextRequest(),
+  }));
   applications.save = new SaveApplication(
     liveApplicationPorts(read, SAVE_PORTS, { storage }),
   );

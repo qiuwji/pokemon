@@ -127,7 +127,11 @@ test("Example plugins depend only on public extension utilities", () => {
       (x) => x[1],
     );
     assert(
-      imports.every((x) => x.startsWith("../engine/extensions/")),
+      imports.every((x) => {
+        const target = path.resolve(path.dirname(file), x);
+        return target.startsWith(new URL("engine/extensions/", base).pathname) ||
+          (path.dirname(file) !== new URL("plugins/", base).pathname && target.startsWith(path.dirname(file) + path.sep));
+      }),
       file,
     );
   }

@@ -84,7 +84,13 @@ export class World {
     this.onMap(target.map);
     return true;
   }
+  block(reason, object) {
+    this.lastBlocked = { reason, ...(object ? { objectId: object.id } : {}) };
+    this.onBlocked(reason, object);
+    return false;
+  }
   move(dir, { ignoreWarps = false, allowVacatedBy = null } = {}) {
+    this.lastBlocked = null;
     const [dx, dy] = DIRECTIONS[dir];
     const p = this.position;
     p.dir = dir;
@@ -116,29 +122,16 @@ export class World {
           y = p.y - c.offset;
         }
         const i = y * dest.width + x;
-        if (
-          x < 0 ||
-          y < 0 ||
-          x >= dest.width ||
-          y >= dest.height ||
-          (this.elevation &&
-            !this.elevation.canEnter(p.elevation, dest.blocks[i] >> 12)) ||
-          !this.passage({
-            cell: {
-              block: dest.blocks[i],
-              behavior: dest.behavior[i],
-              collision: (dest.blocks[i] >> 10) & 3,
-              elevation: dest.blocks[i] >> 12,
-            },
-            map: dest,
-            mapId: id,
-            dir,
-            from: { ...p },
-            warp: null,
-          }) ||
-          preview.objects.some((n) => this.occupied(dest, n, x, y))
-        )
-          return false;
+        if (x < 0 || y < 0 || x >= dest.width || y >= dest.height)
+          return this.block("boundary");
+        const targetCell = { block: dest.blocks[i], behavior: dest.behavior[i],
+          collision: (dest.blocks[i] >> 10) & 3, elevation: dest.blocks[i] >> 12 };
+        if (this.elevation && !this.elevation.canEnter(p.elevation, targetCell.elevation))
+          return this.block("elevation");
+        const object = preview.objects.find(n => this.occupied(dest, n, x, y));
+        if (object) return this.block("object", object);
+        if (!this.passage({ cell: targetCell, map: dest, mapId: id, dir, from: { ...p }, warp: null }))
+          return this.block("wall");
         this.beforeMove({
           map: dest,
           cell: {
@@ -151,13 +144,12 @@ export class World {
         });
         const target = { ...p, map: id, x, y, dir };
         this.elevation?.advance(target, sourceElevation, dest.blocks[i] >> 12);
-        if (!this.commitEntry(target, preview)) return false;
+        if (!this.commitEntry(target, preview)) return this.block("entry-rejected");
         this.steps++;
         this.onStep(this.cell(x, y));
         return true;
       }
-      this.onBlocked("boundary");
-      return false;
+      return this.block("boundary");
     }
     const jumpDir = ledgeDirection(cell.behavior);
     let jump = false;
@@ -174,8 +166,7 @@ export class World {
       warp.dest_map !== "MAP_DYNAMIC" &&
       !this.resolve(warp.dest_map)
     ) {
-      this.onBlocked("unavailable");
-      return false;
+      return this.block("unavailable");
     }
     const obj = this.objects(p.map).find((n) =>
       this.occupied(m, n, x, y, { reservations: n.id !== allowVacatedBy }),
@@ -196,8 +187,9 @@ export class World {
       }) ||
       oneWay === dir
     ) {
-      this.onBlocked(obj ? "object" : "wall", obj);
-      return false;
+      return this.block(obj ? "object" : !cell ? "boundary" :
+        this.elevation && !this.elevation.canEnter(p.elevation, cell.elevation) ? "elevation" :
+        oneWay === dir ? "one-way" : "wall", obj);
     }
     this.beforeMove({ map: m, cell, dir });
     p.x = x;

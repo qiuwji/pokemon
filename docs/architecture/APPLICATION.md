@@ -76,3 +76,9 @@ AppearanceApplication拥有视觉选择，ViewApplication组合相机配置与�
 通用货币模块为`dist/engine/currency.js`：`validateMoney(value)`检查非负安全整数，`changeMoney(current, delta, {clamp?})`纯计算余额，`settleMoney(state, value)`作为写入口。购物先计算合法余额，再提交库存；奖励、罚金、拾取结算和设施经济使用同一不变量。罚金显式允许下限为0，其他扣款不足即拒绝；小数、无穷值和溢出均在写入前拒绝。注入的rewardCurrency规则仍决定收益，宿主验证规则返回值。
 
 本次复审修复与新测试尚未执行验证，见[当前记录](../project/VALIDATION.md)。
+
+## 外部控制应用服务
+
+ControlApplication通过显式CONTROL_PORTS读取当前领域对象，提供行动条件、真实移动回执、连续执行及观察记录；control-observation负责目录关联和只读投影，产品ai-control插件只选择字段。新增模块不接管碰撞、剧情、奖励、战斗或存档规则。
+
+World在阻挡时留下权威原因，FieldSession区分逻辑步接受与动画完成；应用层保留触发物体行动的accepted语义，公共移动回执另报moved。连续执行器复用原领域入口，等待实际野外结算，并在控制边界返回部分结果。剧情领域将确认对象对白写入story.interactions，控制事件缓冲仍是瞬时观察数据，两者不复制领域状态。

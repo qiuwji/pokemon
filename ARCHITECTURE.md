@@ -140,3 +140,5 @@ SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与Sprite
 插件查询通过api.queries.register注册同步只读投影，由宿主并发执行并冻结输入/输出；不进入动作事务。control-ports仅组合世界网格、UI语义及network命令元数据；ControlDOM将当前可见按钮映射为可失效的ID，UI输入仍沿原按钮与对话回调。local标记的存档替换操作不开放给语义网络输入。
 
 默认AI插件只消费这些公开接口；测试插件仅在测试环境装配。PollingTransport与WebSocket遵循同一传输合同，Python本机桥只转发协议，不持有领域状态或决策。所有权与CLI见[AI控制指南](docs/development/AI_CONTROL.md)，不会增加Adventure职责或让核心导入产品插件。
+
+AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用架构](docs/architecture/APPLICATION.md)和[网络架构](docs/architecture/NETWORK.md)，操作字段与实例见[插件指南](dist/plugins/ai-control/README.md)。

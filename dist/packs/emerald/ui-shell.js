@@ -174,6 +174,7 @@ export function createUIShell(
       };
       try {
         renderDialogue();
+        game.control?.record("dialogue.started", { name: description.name, lines: description.lines.length });
         announce(description.lines[0].text);
         game.clearInput();
       } catch (error) {
@@ -185,6 +186,7 @@ export function createUIShell(
     const previous = dialog;
     dialog = null;
     dialogueView.hide();
+    if (previous) game.control?.record("dialogue.closed", { reason: reason.message });
     previous?.reject(reason);
   }
 
@@ -194,6 +196,7 @@ export function createUIShell(
       const complete = (id) => {
         if (settled || !options.some((o) => o.id === id && !o.disabled)) return;
         settled = true;
+        game.control?.record("choice.selected", { name, id });
         closeModal();
         resolve(id);
       };
@@ -226,6 +229,7 @@ export function createUIShell(
       });
       try {
         view.mount(prompt, options, policy);
+        game.control?.record("choice.opened", { name, prompt, options });
       } catch (error) {
         fail(error);
       }
@@ -261,6 +265,7 @@ export function createUIShell(
       }
       if (++dialog.index >= dialog.lines.length) {
         const completed = dialog;
+        game.control?.record("dialogue.completed", { name: dialog.name });
         dialog = null;
         renderDialogue();
         game.clearInput();
@@ -274,6 +279,7 @@ export function createUIShell(
         }
       } else {
         renderDialogue();
+        game.control?.record("dialogue.line", { name: dialog.lines[dialog.index].name ?? dialog.name, index: dialog.index });
         announce(dialog.lines[dialog.index].text);
       }
     } catch (error) {

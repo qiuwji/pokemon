@@ -712,6 +712,7 @@ export class PluginHost {
         schema: definition.schema,
         network: definition.network === true,
         concurrent: true,
+        query: true,
         ready: () => true,
         run: (input) => readOnly(runtime.evaluate(
           definition.read, runtime.view(definition.owner), readOnly(input),

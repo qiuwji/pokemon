@@ -3,7 +3,7 @@
   "plugins": [
     {
       "id": "ai-control",
-      "module": "./ai-control.js",
+      "module": "./ai-control/index.js",
       "export": "aiControl",
       "enabled": true
     },

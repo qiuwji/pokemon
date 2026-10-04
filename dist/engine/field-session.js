@@ -15,6 +15,7 @@ export class FieldSession {
     onProgress = () => {},
     onStart = () => {},
     onMap = () => {},
+    onWarp = () => {},
     prepareEntry,
     elevation = null,
     onBlocked = () => {},
@@ -39,6 +40,7 @@ export class FieldSession {
       onStep,
       onProgress,
       onStart,
+      onWarp,
       movement,
       terrain,
       canContinue,
@@ -84,7 +86,7 @@ export class FieldSession {
             },
           }
         : {}),
-      onBlocked,
+      onBlocked: (kind, object) => onBlocked(kind, object),
       beforeMove: ({ map, cell, dir }) => {
         this.movementPlan = movement?.plan(this.stepMode, dir, cell, map);
       },
@@ -256,6 +258,7 @@ export class FieldSession {
     )
       throw new Error("Invalid movement duration");
     if (scripted && !this.pending) this.cancelForced("scripted");
+    this.lastMove = { moved: false, reason: this.disposed ? "disposed" : "animation" };
     if (this.disposed || this.busy || this.motion.moving(this.now()))
       return false;
     this.stepMode = this.movement?.effective({
@@ -264,7 +267,9 @@ export class FieldSession {
       mode,
       map: this.world.map,
     });
-    if (this.movement && !this.stepMode) return false;
+    if (this.movement && !this.stepMode) {
+      this.lastMove = { moved: false, reason: "movement-mode" }; return false;
+    }
     const from = { ...this.position };
     this.terrainPlan = null;
     const result = this.world.move(direction, {
@@ -278,6 +283,8 @@ export class FieldSession {
     };
     if (visual.keepFacing) this.position.dir = from.dir;
     if (!result) {
+      this.lastMove = { moved: false, reason: this.terrainPlan?.reason || this.world.lastBlocked?.reason || "wall",
+        ...(this.world.lastBlocked?.objectId ? { objectId: this.world.lastBlocked.objectId } : {}) };
       this.movement?.reset();
       return false;
     }
@@ -301,6 +308,7 @@ export class FieldSession {
         ? { duration: ledge?.durationMs, liftFrames: ledge?.liftFrames }
         : {}),
     });
+    this.lastMove = { moved: true, reason: null };
     this.lastDirection = direction;
     this.lastStep = {
       from,
@@ -347,7 +355,8 @@ export class FieldSession {
         .run("door", () => {
           const { map, x, y, dir } = result.warp;
           this.cancelForced("warp");
-          this.world.enter(map, x, y, dir);
+          const from = { ...this.position };
+          if (this.world.enter(map, x, y, dir)) this.onWarp({ from, to: { ...this.position } });
           this.motion.snap(this.position);
         })
         .then(() => {

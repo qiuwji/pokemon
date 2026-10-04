@@ -215,6 +215,7 @@ export function exposeApplicationPorts(target, applications) {
         return [name, { get: () => invoke }];
       }),
     ),
+    control: { get: () => applications.control },
     actors: { get: () => applications.actors.api },
     actorRuntime: { get: () => applications.actors.runtime },
   });

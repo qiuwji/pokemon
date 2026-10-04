@@ -50,3 +50,14 @@ export function recordDialogue(progress, description, source) {
   progress.history = history;
 }
 export const dialogueHistory = (progress) => readOnly(progress.history || []);
+
+/** Confirmed object conversations are save metadata; attempting an interaction does not mark it talked. */
+export function recordStoryInteraction(progress, identity) {
+  if (!identity) return;
+  if (typeof identity.map !== "string" || typeof identity.id !== "string" ||
+      !identity.map || !identity.id || identity.map.length + identity.id.length > 480)
+    throw new Error("Invalid story interaction identity");
+  const key = JSON.stringify([identity.map, identity.id]);
+  const list = progress.interactions ||= [];
+  if (!list.includes(key) && list.length < 4096) list.push(key);
+}

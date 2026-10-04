@@ -30,6 +30,7 @@ import { changeMoney, settleMoney } from "../../../engine/currency.js";
 import { trainerRewardId } from "../trainers.js";
 import { createStoryDialoguePorts } from "./story-dialogue-ports.js";
 export const STORY_PORTS = Object.freeze([
+  "control",
   "validateDialogue",
   "battle",
   "validateWeatherCommand",
@@ -74,6 +75,7 @@ export class StoryApplication {
       readState: () => this.state,
       readUI: () => this.ui,
       validateDialogue: (c) => this.validateDialogue(c),
+      readInteraction: () => this.control.interaction,
     });
     this.commands = new CommandRunner(
       {

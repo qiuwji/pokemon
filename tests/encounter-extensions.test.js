@@ -251,11 +251,11 @@ test("Real field collisions publish one stable contact after commands and accept
     events = [];
   s.host.events.on("core:field-contact", (e) => events.push(e.payload));
   assert.equal(
-    await s.api.commands.dispatch("core.field.move", { direction: "right" }),
+    (await s.api.commands.dispatch("core.field.move", { direction: "right" })).moved,
     false,
   );
   assert.equal(
-    await s.api.commands.dispatch("core.field.move", { direction: "right" }),
+    (await s.api.commands.dispatch("core.field.move", { direction: "right" })).moved,
     false,
   );
   assert.equal(events.length, 1);

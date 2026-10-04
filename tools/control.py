@@ -8,9 +8,9 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-def request(url, data=None):
+def request(url, data=None, timeout=5):
     raw = None if data is None else json.dumps(data).encode()
-    with urlopen(Request(url, data=raw, headers={'Content-Type': 'application/json'}), timeout=5) as response:
+    with urlopen(Request(url, data=raw, headers={'Content-Type': 'application/json'}), timeout=timeout) as response:
         return json.load(response)
 
 
@@ -18,10 +18,10 @@ def execute(endpoint, body, timeout=10):
     receipt = request(endpoint + '/command', body)
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
-        result = request(endpoint + '/result/' + receipt['id'])
+        wait_ms = min(25000, max(1, int((deadline - time.monotonic()) * 1000)))
+        result = request(endpoint + '/result/' + receipt['id'] + '?waitMs=' + str(wait_ms), timeout=wait_ms / 1000 + 2)
         if not result['pending']:
             return result['response']
-        time.sleep(0.1)
     raise ValueError('Result timeout; query result/' + receipt['id'] + ' or reuse the same id, never blindly replay')
 
 
@@ -37,8 +37,10 @@ def run_scenario(endpoint, scenario, timeout=10):
         raise ValueError('Scenario requires 1-128 steps')
     records = []
     for step in steps:
-        response = execute(endpoint, {'command': step['command'], 'input': step.get('input', {}),
-                                     'policy': step.get('policy', 'reject')}, timeout)
+        body = {'command': step['command'], 'input': step.get('input', {}), 'policy': step.get('policy', 'reject')}
+        if 'state' in step:
+            body.update(observe='ai-control:observe', observeInput=json.dumps(step['state']))
+        response = execute(endpoint, body, timeout)
         if not response['ok']:
             raise ValueError('Scenario command failed: ' + json.dumps(response))
         for check in step.get('assert', []):
@@ -59,6 +61,8 @@ def main():
     parser.add_argument('--command', help='For example ai-control:observe or core.field.move')
     parser.add_argument('--input', default='{}', help='JSON object')
     parser.add_argument('--id', help='Stable retry id; reuse only with identical command/input')
+    parser.add_argument('--state', choices=['summary', 'world', 'battle', 'party', 'bag', 'collection', 'all'], help='Attach post-command AI observation')
+    parser.add_argument('--since', type=int, help='Observation event cursor; use with --state')
     parser.add_argument('--timeout', type=float, default=10)
     parser.add_argument('--wait', action='store_true', help='Wait for readiness, not retry a handler failure')
     args = parser.parse_args()
@@ -73,6 +77,11 @@ def main():
         if not args.command:
             print(json.dumps(request(endpoint + '/status'), ensure_ascii=False)); return 0
         body = {'command': args.command, 'input': json.loads(args.input), 'policy': 'wait' if args.wait else 'reject'}
+        if args.state:
+            body['observe'] = 'ai-control:observe'
+            body['observeInput'] = json.dumps({'detail': args.state, **({'since': args.since} if args.since is not None else {})})
+        elif args.since is not None:
+            raise ValueError('--since requires --state')
         if args.id:
             body['id'] = args.id
         if args.submit:

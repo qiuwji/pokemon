@@ -27,6 +27,8 @@ const envelope = validateSchema(
         maximum: Number.MAX_SAFE_INTEGER,
       },
       command: identifier,
+      observe: identifier,
+      observeInput: { type: "string", maxLength: 4096 },
       policy: { type: "string", enum: ["reject", "wait"] },
       // Command-specific input is validated by the same CommandBus used by UI.
     },
@@ -45,6 +47,11 @@ export function decodeRequest(raw) {
     validateValue(envelope, header, "message");
     if (!input || typeof input !== "object" || Array.isArray(input))
       throw new Error("Command input must be an object");
+    if (header.observeInput !== undefined && !header.observe) throw new Error("observeInput requires observe");
+    if (header.observeInput !== undefined) {
+      const options = jsonValue(JSON.parse(header.observeInput));
+      if (!options || typeof options !== "object" || Array.isArray(options)) throw new Error("Expected observation input object");
+    }
     return { ...header, input, policy: header.policy || "reject" };
   } catch (error) {
     throw new CommandError("invalid_message", error.message);

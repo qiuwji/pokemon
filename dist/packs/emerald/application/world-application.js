@@ -19,6 +19,7 @@ import {
 import { EMERALD_TERRAIN_RULES } from "../terrain-rules.js";
 import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
+  "control",
   "advanceTravelClocks",
   "storyCatalog",
   "storyMapEntered",
@@ -194,6 +195,7 @@ export class WorldApplication {
     return {
       map: this.worldState.map(map, draft),
       entered: () => {
+        this.control.record("map.entered", { map, reason: options.reason || "travel", position: { ...this.state.position } });
         this.storyMapEntered(map, options.reason || "travel");
         this.enterWeather(map);
         this.deviceEvent("activate", this.state.position);
@@ -237,6 +239,7 @@ export class WorldApplication {
     };
   }
   enter(position) {
+    const from = { ...this.state.position };
     this.field.cancelForced("travel");
     const entered = this.world.enter(
       position.map,
@@ -245,7 +248,11 @@ export class WorldApplication {
       position.dir,
       this.world.entryPreview(position.map, { reason: "travel" }),
     );
-    if (entered) this.motion.snap(this.state.position);
+    if (entered) {
+      this.motion.snap(this.state.position);
+      this.control.record("teleport", { from, to: { ...this.state.position } });
+      if (from.map !== this.state.position.map) this.control.record("map.changed", { from: from.map, to: this.state.position.map });
+    }
     return entered;
   }
   move(dir, { running = false, duration } = {}) {
@@ -322,13 +329,14 @@ export class WorldApplication {
       object,
       mapTitle: this.world.map.title,
     });
+    const interaction = this.control.beginInteraction(object);
     void this.playStory(
       commands.length
         ? commands
         : object.trainerId
           ? this.trainerScene(object)
           : [],
-    );
+    ).finally(() => this.control.endInteraction(interaction));
   }
   get world() {
     return this.field.world;
@@ -410,11 +418,17 @@ export class WorldApplication {
           .filter((e) =>
             matchesCondition(e.requires, this.state, this.conditionQueries),
           ),
+      onWarp: ({ from, to }) => {
+        this.control.record("teleport", { from, to });
+        if (from.map !== to.map) this.control.record("map.changed", { from: from.map, to: to.map });
+      },
       onStep: (cell) => {
         this.stepWeather(this.state.position);
         this.step(cell);
       },
       onStart: ({ from, position }) => {
+        this.control.record("movement.started", { from, to: position });
+        if (from.map !== position.map) this.control.record("map.changed", { from: from.map, to: position.map });
         this.deviceEvent("leave", from, { position });
         const map = this.worldState.maps[from.map],
           index = from.y * map.width + from.x;
@@ -424,6 +438,7 @@ export class WorldApplication {
         });
       },
       onProgress: () => {
+        this.control.record("movement.settled", { position: { ...this.state.position } });
         this.deviceEvent("settle", this.state.position);
         this.advanceTravelClocks();
       },

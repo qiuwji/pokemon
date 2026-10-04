@@ -440,6 +440,7 @@ export type DataSchema = {
   maxItems?: number;
 };
 export interface CommandDefinition<I extends Json = Json, O = unknown> {
+  query?: boolean;
   schema: DataSchema;
   run: (input: I) => O | Promise<O>;
   mode?: "instant" | "async";
@@ -469,6 +470,8 @@ export interface NetworkCommand {
   command: string;
   input: Record<string, Json>;
   policy?: "reject" | "wait";
+  observe?: string;
+  observeInput?: string;
 }
 export interface NetworkResult {
   protocol: 1;
@@ -479,6 +482,8 @@ export interface NetworkResult {
   ok: boolean;
   result?: Json;
   error?: { code: string; message: string };
+  state?: Json;
+  observationError?: { code: string; message: string };
 }
 export interface NetworkTransport {
   send(message: string): void;

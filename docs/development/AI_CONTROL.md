@@ -1,12 +1,14 @@
 # AI观察、操作与测试游戏
 
+AI 控制的完整用法以[插件使用指南](../../dist/plugins/ai-control/README.md)为准，包含真实移动回执、行动条件、事件游标、连续执行、状态附带和长轮询。本页保留共享连接与测试插件说明。
+
 两个独立插件：`ai-control`默认启用，提供精简只读观察和公开命令目录；`test-harness`默认关闭，只在显式测试环境装配。都只使用PluginAPI。旧十个插件未恢复，核心不依赖这两个产品模块。
 
 ## 启动与连接
 
 在项目根运行`npm run dev`，打开`http://127.0.0.1:5173/?control=1`。若换端口，以实际端口为准。这会连接同源`/control`本地开发通道；也可正常打开游戏，在“扩展连接”页面手动连接默认HTTP地址。不要同时开启自动连接和第二条手动连接。
 
-`npm run dev`的Python服务器只监听127.0.0.1。HTTP桥接采用现有协议1的hello/命令/结果，转交同一个NetworkGateway和CommandBus，不解析规则、不读写存档。浏览器以短轮询获取命令，结果经同一通道返回；WebSocket接口继续可用。静态部署没有Python控制通道，需要另配已有WebSocket传输。
+`npm run dev`的Python服务器只监听127.0.0.1。HTTP桥接采用现有协议1的hello/命令/结果，转交同一个NetworkGateway和CommandBus，不解析规则、不读写存档。浏览器以有界长轮询等待命令，结果经同一通道返回；WebSocket接口继续可用。静态部署没有Python控制通道，需要另配已有WebSocket传输。
 
 先建立一次浏览器连接，后续AI可通过命令行读取JSON并操作，无需每步截图。命令行只用Python标准库：
 
@@ -18,15 +20,15 @@ python3 tools/control.py --command core.field.move --input '{"direction":"up","r
 python3 tools/control.py --command core.ui.input --input '{"action":"confirm"}'
 ```
 
-默认URL是5173；其他端口给每次调用加--url。返回JSON包含`ok/result`或`error`；进程0表示命令成功，1表示失败。动作返回false也可能是合法的碰撞结果，不要只看进程成功判断已经移动。
+默认URL是5173；其他端口给每次调用加--url。返回JSON包含`ok/result`或`error`；进程0表示命令成功，1表示失败。移动返回结构化回执，必须检查 result.moved/status；进程成功仅表示命令处理完成。
 
 ## AI如何观察与行动
 
-1. `ai-control:observe {detail:"summary"}`是默认精简视图：位置、忙碌、当前对话/模态、可点击按钮、队伍简表、时间及战斗。`world`额外给附近最多9×9格、对象、道路连接、传送点和野外行动；`all`再含背包、旗标和剧情事实。命令目录只需开始时读一次，接口改变再读取。
+1. `ai-control:observe {detail:"summary"}`是默认精简视图：位置、忙碌、当前对话/模态、可点击按钮、队伍简表、时间及战斗。`world`额外给附近最多9×9格、对象、道路连接、传送点和野外行动；`party/bag/collection/battle`按需补培养、道具、图鉴/盒子和对手；`all`含全部详情、旗标和剧情事实。命令目录只需开始时读一次，接口改变再读取。
 2. 格子是世界领域当前覆盖与占位的真实只读投影，不是可通行保证。碰撞、高度、预约、移动模式和剧情条件仍由正常动作判定。更大区域用`core.world.bounds`/`core.world.cells`，按目录schema传参；不要一次读取整个世界。
 3. 有对话先`core.ui.input {action:"confirm"}`；逐字时第一次揭示，后续确认推进。选择/菜单按最新observe.ui.buttons的ID调用`{action:"activate",id:"ui-..."}`。按钮换页、重建或内容变化后ID过期，必须重新观察；禁用项拒绝执行。菜单可用menu/back/navigate动作，方向字段只给navigate。
-4. 野外走格子用`core.field.move`，交互用`core.field.interact`；战斗使用当前快照席位/目标和`core.battle.action`，伙伴使用UID。首次伙伴选择走`core.starter.choose`，不跳过正常资格或剧情。
-5. 操作后重新读精简状态；移动插值、对话等待或剧情演出时，观察仍可用。--wait只等待命令就绪，不会重试已执行且失败的处理器。观察可用不代表当前每个动作都可执行。
+4. 野外走格子用`core.field.move`并检查moved/status，交互用`core.field.interact`；战斗使用当前快照席位/目标和`core.battle.action`，伙伴使用UID。首次伙伴选择走`core.starter.choose`，不跳过正常资格或剧情。
+5. 操作可加`--state summary`附带执行后状态，连续移动用`core.control.walk`；移动插值、对话等待或剧情演出时，观察仍可用。--wait只等待命令就绪，不会重试已执行且失败的处理器。观察可用不代表当前每个动作都可执行。
 
 按钮入口不提供任意CSS选择器或脚本执行。读取替换存档、导入和重开按钮标为local，仅由本地UI操作，语义通道会显示禁用；文本输入/文件选择、画面观感及音频质量仍需正常UI工具验收；当前语义控制只涵盖按钮、菜单、对话和现有领域命令。
 

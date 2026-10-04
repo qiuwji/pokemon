@@ -1,4 +1,4 @@
-import { recordDialogue } from "../../../engine/dialogue-history.js";
+import { recordDialogue, recordStoryInteraction } from "../../../engine/dialogue-history.js";
 import { choiceOptions } from "../../../engine/story-choice.js";
 import { changeStoryVariable } from "../../../engine/story-variables.js";
 /** Dialogue presentation and confirmed history; domain consequences remain separate commands. */
@@ -8,9 +8,11 @@ export function createStoryDialoguePorts({
   readState,
   readUI,
   validateDialogue,
+  readInteraction = () => null,
 }) {
   return {
     dialog: async (command) => {
+      const identity = readInteraction();
       const c = catalog.resolveDialogue(command, readState());
       const description = validateDialogue(c);
       await readUI().say(c.name, c.lines, null, {
@@ -18,6 +20,7 @@ export function createStoryDialoguePorts({
         mode: c.mode ?? "typewriter",
       });
       recordDialogue(readState().story, description, c.source);
+      recordStoryInteraction(readState().story, identity);
     },
     choose: async (c) => {
       const options = choiceOptions(c, readState(), queries);

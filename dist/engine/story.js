@@ -10,11 +10,15 @@ export const emptyStoryProgress = () => ({
   completed: [],
   rewards: [],
   history: [],
+  interactions: [],
 });
 export function validStoryProgress(progress) {
   return (
     !!progress &&
     validDialogueHistory(progress.history) &&
+    (progress.interactions === undefined || (Array.isArray(progress.interactions) &&
+      progress.interactions.length <= 4096 && new Set(progress.interactions).size === progress.interactions.length &&
+      progress.interactions.every(id => typeof id === "string" && id.length > 0 && id.length <= 512))) &&
     validStorySession(progress.session) &&
     validStoryVariables(progress.variables) &&
     [progress.completed, progress.rewards].every(
@@ -90,8 +94,8 @@ export class StoryEngine {
       validateCondition(q.complete, ids, `quests.${q.id}.complete`, queries);
     }
   }
-  resolve(trigger, state, context = {}) {
-    const candidates = (this.byTrigger.get(trigger) || []).filter(
+  candidates(trigger, state, context = {}) {
+    return (this.byTrigger.get(trigger) || []).filter(
       (e) =>
         e.trigger === trigger &&
         (!e.where ||
@@ -113,6 +117,9 @@ export class StoryEngine {
                     : context.object?.[key]) === value,
         ),
     );
+  }
+  resolve(trigger, state, context = {}) {
+    const candidates = this.candidates(trigger, state, context);
     candidates.sort((a, b) => (b.priority || 0) - (a.priority || 0));
     const event = candidates[0];
     if (!event) return [];

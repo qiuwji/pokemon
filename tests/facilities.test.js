@@ -283,9 +283,8 @@ test("Facility admission and active-session boundaries reject party changes, fie
     bus.execute("core.battle.start", { trainerId: "youngster" }),
     { code: "busy" },
   );
-  assert.throws(() => bus.executeSync("core.field.move", { direction: "up" }), {
-    code: "busy",
-  });
+  const movement = bus.executeSync("core.field.move", { direction: "up" });
+  assert.equal(movement.status, "busy"); assert.equal(movement.reason, "facility");
   assert(bus.executeSync("core.facility.quit").ok);
   assert(game.canManageParty());
   assert.equal(game.facilityView().results[0].outcome, "quit");

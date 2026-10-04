@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-04",
+  "version": "0.30.0",
+  "scope": "AI control movement receipts, readiness, event journal, traversal, rich state and long polling",
+  "tests": {
+    "core": {
+      "passed": 858,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 24,
+      "failed": 0
+    },
+    "log": "tests.log"
+  },
+  "quality": {
+    "log": "check.log",
+    "result": "passed before final documentation sync and final small projection changes; not rerun after user stopped verification"
+  },
+  "browser": {
+    "url": "http://127.0.0.1:5181/?control=1&plugins=emerald-first-bgm",
+    "before": "browser-before.json",
+    "walk": "browser-walk.json",
+    "result": "Three actual steps completed through real browser/HTTP long polls; final state and movement facts attached"
+  },
+  "limitations": [
+    "User requested stopping tests; no further validation was run.",
+    "Final documentation sync has not been rechecked.",
+    "Browser dialogue, choice, battle and full original story combination not newly exercised.",
+    "Original game content remains the prologue slice."
+  ]
+}

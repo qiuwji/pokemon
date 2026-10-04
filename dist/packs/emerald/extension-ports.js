@@ -90,6 +90,7 @@ export function attachEmeraldExtensions(game, host) {
           !game.battle &&
           !game.ui?.dialog,
     onComplete: (id, args, result) => {
+      if (bus.definition(id)?.query) return;
       game.flushContacts();
       host.events.emit("core:command-complete", {
         id,
@@ -102,6 +103,7 @@ export function attachEmeraldExtensions(game, host) {
   bus.register("core.query", {
     schema: objectSchema(),
     concurrent: true,
+    query: true,
     plugin: true,
     network: true,
     id: "core.query",
@@ -119,9 +121,9 @@ export function attachEmeraldExtensions(game, host) {
     plugin: true,
     network: true,
     permission: "movement",
-    ready: () =>
-      !game.facilityActive && !game.busy && !game.battle && !game.ui?.blocked,
-    run: ({ direction, running = false }) => game.move(direction, { running }),
+    concurrent: true,
+    ready: () => true,
+    run: ({ direction, running = false }) => game.control.step(direction, { running }),
   });
   bus.register("core.party.lead", {
     schema: objectSchema({ uid }, ["uid"]),

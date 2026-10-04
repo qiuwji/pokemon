@@ -4,6 +4,7 @@ export function controlSnapshot(game) {
   const { x, y, map } = game.state.position, m = game.world.map;
   const left = Math.max(0, x - 4), top = Math.max(0, y - 4);
   return {
+    observation: game.control.observation(),
     ui: game.ui?.controlView?.() || { modal: null, dialogue: null, buttons: [] },
     field: {
       map, title: m.title || map, width: m.width, height: m.height,
@@ -17,6 +18,20 @@ export function controlSnapshot(game) {
   };
 }
 export function registerControlCommands(game, bus) {
+  const direction = { type: "string", enum: ["up", "down", "left", "right"] };
+  bus.register("core.control.availability", { schema: objectSchema(), concurrent: true,
+    query: true, network: true, plugin: true, ready: () => true, run: () => game.control.availability() });
+  bus.register("core.control.events", { schema: objectSchema({
+    since: { type: "integer", minimum: 0 }, limit: { type: "integer", minimum: 1, maximum: 256 },
+  }), concurrent: true, query: true, network: true, plugin: true, ready: () => true,
+    run: options => game.control.journal.read(options) });
+  bus.register("core.control.walk", { schema: objectSchema({
+    directions: { type: "array", minItems: 1, maxItems: 256, items: direction }, running: { type: "boolean" },
+    timeoutMs: { type: "integer", minimum: 1, maximum: 60000 }, continueOnMapChange: { type: "boolean" },
+  }, ["directions"]), mode: "async", network: true, plugin: true, permission: "movement",
+    ready: () => true, run: options => game.control.walker.run(options) });
+  bus.register("core.control.cancel", { schema: objectSchema(), concurrent: true, ready: () => true,
+    network: true, plugin: true, permission: "movement", run: () => game.control.walker.cancel() });
   bus.register("core.ui.input", {
     schema: objectSchema({
       action: { type: "string", enum: ["confirm", "back", "navigate", "activate", "menu"] },

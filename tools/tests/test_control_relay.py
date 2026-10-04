@@ -34,6 +34,40 @@ class RelayTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'expired'):
             relay.handle('POST', 'poll', {'client': client})
 
+    def test_long_polls_wake_on_commands_results_and_reconnect_without_holding_ingress_lock(self):
+        import time
+        relay = ControlRelay()
+        client = relay.handle('POST', 'connect', {})['client']
+        relay.handle('POST', 'reply', {'client': client, 'message': {'protocol': 1, 'type': 'hello', 'session': 's', 'nextSequence': 1}})
+        messages, errors = [], []
+        def poll():
+            try:
+                messages.extend(relay.handle('POST', 'poll', {'client': client, 'waitMs': 2000})['messages'])
+            except ValueError as error:
+                errors.append(str(error))
+        t = threading.Thread(target=poll); t.start()
+        deadline = time.monotonic() + 1
+        while not relay.polling and time.monotonic() < deadline:
+            time.sleep(0.001)
+        self.assertTrue(relay.polling)
+        relay.last_poll -= 10
+        self.assertTrue(relay.handle('GET', 'status', {})['connected'])
+        relay.handle('POST', 'command', {'id': 'wake', 'command': 'core.query'})
+        t.join(1); self.assertFalse(t.is_alive()); self.assertEqual(messages[0]['id'], 'wake')
+        result = []
+        waiter = threading.Thread(target=lambda: result.append(relay.handle('GET', 'result/wake?waitMs=2000', {})))
+        waiter.start()
+        relay.handle('POST', 'reply', {'client': client, 'message': dict(messages[0], type='result', ok=True, result=True)})
+        waiter.join(1); self.assertFalse(waiter.is_alive()); self.assertFalse(result[0]['pending'])
+        t = threading.Thread(target=poll); t.start()
+        deadline = time.monotonic() + 1
+        while not relay.polling and time.monotonic() < deadline:
+            time.sleep(0.001)
+        relay.handle('POST', 'connect', {})
+        t.join(1); self.assertFalse(t.is_alive()); self.assertIn('Control connection expired', errors)
+        with self.assertRaisesRegex(ValueError, 'waitMs'):
+            relay.handle('GET', 'status?waitMs=30000', {})
+
     def test_http_routes_and_scenario_uses_real_transport(self):
         class Handler(ControlHandler, SimpleHTTPRequestHandler):
             def log_message(self, *args): pass

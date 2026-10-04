@@ -165,7 +165,7 @@ export function createEmeraldCommandFacade(
                 .execute(fullId, input, "ui")
                 .catch((error) => failure(name, error));
             const result = bus.executeSync(fullId, input, "ui");
-            return result;
+            return name === "move" ? result.accepted : result;
           } catch (error) {
             return failure(name, error);
           }
