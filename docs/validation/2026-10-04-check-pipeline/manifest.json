@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-04",
+  "baseline": "9edfd71",
+  "version": "0.26.0",
+  "scope": "Main check and test chains include documentation and examples; initial read-only-reference CI and loaded-module coverage baseline",
+  "verification": {
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "log": "check.log",
+      "modules": 312
+    },
+    "coverage": {
+      "command": "npm run test:coverage",
+      "passed": 810,
+      "failed": 0,
+      "skipped": 0,
+      "log": "coverage.log",
+      "linesPercent": 95.74,
+      "branchesPercent": 87.61,
+      "functionsPercent": 88.88,
+      "scope": "Loaded dist JavaScript modules only; not every project file and not browser end-to-end coverage"
+    }
+  },
+  "environment": {
+    "node": "v26.0.0",
+    "python": "Python 3.9.6"
+  },
+  "notExecuted": [
+    "Remote GitHub workflow on Node 22/Python 3.11",
+    "Browser regression (runtime unchanged)"
+  ],
+  "reuse": "Content pipeline checks from 9edfd71 remain valid; coverage executes the same 810 tests once, without a second npm test run",
+  "invalidatedBy": [
+    "Changes to check scripts, workflow, test discovery or included runtime source"
+  ],
+  "sourceHashes": {
+    "package.json": "80825ba6b48f0b3dcff421247658e003032daecb779b392dd0e8051f49e1785b",
+    ".github/workflows/checks.yml": "4ee7f2db5fb04a49361a15d71dbe8b93ed8eca923b1c1e61b622ecce039c2761"
+  }
+}

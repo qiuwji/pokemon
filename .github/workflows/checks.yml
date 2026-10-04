@@ -1,0 +1,27 @@
+name: Project checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read-only original reference for documentation links
+        uses: actions/checkout@v4
+        with:
+          repository: pret/pokeemerald
+          ref: 731ad5bfd6e6f265508d0efcca0ba42f9dcf5881
+          path: work/pokeemerald
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npm run check
+      # Coverage runs the normal tests and examples once; no duplicate npm test step.
+      - run: npm run test:coverage

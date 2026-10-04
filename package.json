@@ -5,11 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "python3 tools/serve.py",
-    "test": "node --test tests/*.test.js",
-    "check": "node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs",
+    "test": "node --test tests/*.test.js examples/*.test.js",
+    "check": "node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs",
     "check:contracts": "tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts",
     "test:examples": "node --test examples/*.test.js",
-    "check:docs": "node tools/check-docs.mjs"
+    "check:docs": "node tools/check-docs.mjs",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"dist/**/*.js\" tests/*.test.js examples/*.test.js"
   },
   "devDependencies": {
     "typescript": "^5.7.3"

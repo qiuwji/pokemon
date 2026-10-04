@@ -48,7 +48,7 @@ const db = loadContentSync(); // 示例位置：tests/helpers/；其他位置调
 
 待实现清单是明确的内容债，并不是实现证明。它不会让缺失区域可进入，也不会执行C脚本。当前pack的对象/剧情逻辑与原作npcs资料尚未统一；新增可运行对象继续使用公开`mapExtensions.elements`和剧情注册，不能只写一个原作script字符串就宣称NPC完成。
 
-`npm run check`检查内容、实际图集、严格公开类型和所有运行时模块；文档检查另见package.json。导入前置校验复用pack语义和引用检查。
+`npm run check`检查内容、实际图集、严格公开类型和所有运行时模块；同一check链也检查文档。导入前置校验复用pack语义和引用检查。
 
 ## 导入如何保护数据
 

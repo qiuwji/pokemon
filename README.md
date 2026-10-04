@@ -18,7 +18,7 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**795项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**312个JS模块**检查通过。本轮内容拆分及回归的日志和范围见[检查点证据](docs/validation/2026-10-04-content-pipeline/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法和文档。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。当前阶段全量回归：**795项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**312个JS模块**检查通过。本轮内容拆分及回归的日志和范围见[检查点证据](docs/validation/2026-10-04-content-pipeline/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 

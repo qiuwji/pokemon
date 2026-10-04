@@ -30,7 +30,7 @@
 
 失败后保留命令和原日志，判断是实现、合同还是夹具错，再修正最小范围。不要删断言、skip失败、关闭校验、放宽权限、恢复旧格式来让数字变绿。修复后复查失败项和新增影响范围；无关已经通过的项不再重跑。异步任务未结束时继续观察同一进程，不启动第二份测试。
 
-新示例由`npm run test:examples`统一执行。`npm run check:docs`检查Skill代码块与文件完全一致，并检查项目本地Markdown链接；示例改动后必须同步Skill。元数据校验使用接手工具已有Skill校验器，或按普通YAML frontmatter确认name/description；不要把流程绑定到某个模型专属工具。
+`npm test`统一执行tests和examples；`npm run test:examples`用于只查示例。`npm run check:docs`检查Skill代码块与文件完全一致，并检查项目本地Markdown链接；示例改动后必须同步Skill。元数据校验使用接手工具已有Skill校验器，或按普通YAML frontmatter确认name/description；不要把流程绑定到某个模型专属工具。
 
 ## 证据记录
 
@@ -45,7 +45,7 @@
 
 ## 框架阶段最后一次系统与浏览器验收
 
-收口时执行`npm test`、`npm run test:examples`、`npm run check`、`npm run check:docs`；记录实际结果，不预填测试数。只在这时做当前全量回归。
+收口时执行`npm test`和`npm run check`；两条主链分别已包含示例和文档，不能再重复执行同等全量。覆盖率需求时以`npm run test:coverage`替代npm test，它执行同一组测试并统计dist运行时模块，不把测试文件计入产品覆盖。CI使用同一check和coverage组合，固定只读参考用于文档链接；本地通过不代表远端CI已经运行。记录实际结果，不预填测试数。
 
 浏览器沿正常入口验输入/朝向、连续地图与门转场、剧情自动移动/选择、代表训练家战斗、非战斗设施、详情互动、Actor、保存重载、触屏与reducedMotion、真实资源音频。至少让内容作者完成一次“新区域→机关→分支剧情→训练家→奖励→保存重载”，记录被迫改核心的缺口。
 

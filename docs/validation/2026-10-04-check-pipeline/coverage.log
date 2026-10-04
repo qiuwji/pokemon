@@ -1,0 +1,1152 @@
+
+> emerald-web-engine@0.26.0 test:coverage
+> node --test --experimental-test-coverage --test-coverage-include="dist/**/*.js" tests/*.test.js examples/*.test.js
+
+✔ plugin actor identity and memory survive save restore (76.635917ms)
+✔ registered move effect runs in a real trainer turn (122.060459ms)
+✔ registered text effect reaches an NPC dialogue through the story application (115.284208ms)
+✔ a plugin controls step encounters and opens a contact-owned wild battle (102.267083ms)
+✔ non-battle facility progresses and settles once (128.087917ms)
+✔ plugin field plan commits through the public command (134.466959ms)
+✔ first plugin uses registered content and public reward transaction (113.449167ms)
+✔ a plugin mounts a looping clickable visual with saved interaction and host cleanup (129.792292ms)
+✔ detail entry renders a clickable action with persistent memory (111.834167ms)
+✔ a registered field scene focuses the view and gates a subsequent reward (111.6435ms)
+✔ a registered detail clip is selected, sampled and cleaned up by the real player (68.850625ms)
+✔ data story arrival chooses a branch and persists its variable (127.931166ms)
+✔ late invalid intent rolls back plugin memory and world money (108.031875ms)
+✔ a plugin composes appearance, camera range and independent fog (134.900208ms)
+✔ registered NPC triggers a once-only data story (121.524958ms)
+✔ Acro ordinary motion takes 6 frames; idle turn waits 6 without steps or direction jitter (9.344291ms)
+✔ Recent direction and secondary edges side-hop one tile with locked facing; stale edge only turns (1.016083ms)
+✔ Opposite-direction jump turns halfway in place without advancing field counters (0.317916ms)
+✔ Standing wheelie uses native rise timing, 40-frame charge and repeated 16-frame in-place hops (0.599708ms)
+✔ Wheelie moves in 8 frames, blocked wheelie pedals in place and bumpy slope retains raised wheel (2.429875ms)
+✔ Side-hop rail entry is perpendicular; rejected side-hop returns ordinary facing (0.833208ms)
+✔ Pausing or changing modes clears Acro input and idle pose while preserving an active interpolation (0.425375ms)
+✔ Native Acro frame metadata is validated and sampled without browser, RNG or directional leakage (6.425375ms)
+✔ Acro ledge hop retains two-tile landing and native 32-frame high jump rather than ordinary riding duration (0.392292ms)
+✔ Charge consumes PP once, locks choice, continues automatically, and clears concealment; sun skips solar charge (21.980292ms)
+✔ Concealed targets reject ordinary attacks and configured attacks hit; switch/faint clears locks (2.44275ms)
+✔ Repeat action locks for bounded turns with one PP charge; recharge owns one otherwise empty action (6.171834ms)
+✔ Delayed attacks resolve on the third turn against the seat replacement and retain the original source UID (2.7645ms)
+✔ Only one delayed attack per target is allowed; scheduled work and history roll back with failed rules (3.534083ms)
+✔ Move replacement reads bounded history and spends only the selecting move PP (1.578958ms)
+✔ Session presents automatic charge continuation without another player command; state lifecycle ticks exactly once (6.128833ms)
+✔ Schedules validate coverage, references and targets before attaching; weekday selection uses the saved game-day cycle (3.031875ms)
+✔ Visible scheduled actors navigate across connected maps before applying arrival behavior and pose (104.44975ms)
+✔ Unconfigured clocks and explicit hold never teleport actors; visible endpoints and paused sessions prevent catch-up (87.088291ms)
+✔ Offscreen catch-up waits for collision to clear, emits once, and restores current rather than missed routines (64.864667ms)
+✔ Routine changes cannot relocate a scripted or still interpolating actor (96.526666ms)
+✔ Clock restore and rollback select a monotonic latest phase without an Actor-specific persisted clock (0.657292ms)
+✔ A schedule includes foreign destination plugins in the save dependency ledger before the actor visits them (101.400875ms)
+✔ The independent daily-worker plugin assembles and saves through public registration and commands (30.225625ms)
+✔ Actor identities and schema-defined memory persist independently of maps, and only external changes invalidate motion (1.54975ms)
+✔ Invalid actor state fails without writing earlier fields and unknown templates cannot load (1.052584ms)
+✔ Perception filters distance/maps and visibility through walls; observations are read-only (0.270458ms)
+✔ Navigation uses common walls and reservations and selects an adjacent goal without stepping onto its target (1.022583ms)
+✔ Public spawn, autonomous movement and cross-map identity use the same reservation/motion and survive save rebinding (115.75025ms)
+✔ Brain state and schedule query are frozen; goal-driven actors approach the player but respect occupied tiles (32.423834ms)
+✔ Spawn/teleport cannot overlap players or NPC reservations, bad brain state is isolated, and removal clears caches (28.369833ms)
+✔ World edits cannot block persistent actors or create a second owner for their identities (87.609541ms)
+✔ Adjacent actor interactions are semantic requests; plugins retain ownership of relation effects (44.843792ms)
+✔ Registered poses change pure visual samples and sprites without changing occupancy and restore through saved actors (40.849083ms)
+✔ Reduced actor pose motion keeps committed location and sprite but removes cosmetic bounce and jogging (22.855833ms)
+✔ Memory and pose commands do not restart an in-flight actor interpolation (34.247958ms)
+✔ Map restoration cannot cover persistent actors and world patches protect both cells of an in-flight step (42.517625ms)
+✔ A restored static object cannot cover an actor, and temporary overlays cannot become a second saved actor owner (30.272083ms)
+✔ Pure tracks interpolate segment keyframes with shared named easing and stable boundaries (1.5095ms)
+✔ Reusable fragments keep local keyframe timing when placed in charge, release and impact intervals (0.546541ms)
+✔ Per-target hit and miss branches use committed facts and cannot mutate event or layout (0.316125ms)
+✔ Strict animation contracts reject unknown timing, channel shape, pose, async data and easing (0.819584ms)
+✔ Battle event registration picks specific selectors, rejects duplicates and seals against mutation (0.319459ms)
+✔ A form plugin controls injected-clock choreography while battle snapshots and reduced-motion facts remain intact (7.535375ms)
+✔ Append choreography preserves default movement while adding a reusable effect (0.213583ms)
+✔ A per-move pose track drives visual offsets without adding a new director branch (0.156208ms)
+✔ Field-wide event tracks have a viewport anchor even when the semantic event has no acting seat (0.075458ms)
+✔ Appearance public commands persist a layered choice without changing creature, movement or random state (85.9555ms)
+✔ Appearance-only Actor template shares persistent identity and removals clear its selection (94.667208ms)
+✔ Appearance leases prioritize, reject ties, release to saved choice and expire on map entry/load (99.848584ms)
+✔ Appearance recipes reject invalid references, parameters, identities and asynchronous selectors before selection writes (65.446417ms)
+✔ Appearance selectors are pure and permissions reject unauthorized writes (107.47075ms)
+✔ Layer drawing shares direction/pose clock, deterministic offsets, reduced motion and balanced cleanup (0.433416ms)
+✔ Saved choices validate current schemas, missing Actor identities and referenced resource dependencies (48.308208ms)
+✔ Scene object selectors accept existing dialogue IDs and restore dormant choices without modifying object state (50.499416ms)
+✔ Saved appearance dependencies include the resource owner even when another plugin declares the recipe (71.714333ms)
+✔ Application dependencies are explicit, live across state replacement, and cannot be overwritten or broadened (10.066708ms)
+✔ Application fields forward to one owning service, including the explicitly writable host story lock (1.058791ms)
+✔ Adventure remains a composition facade; application services cannot import it or reach sibling services (22.8595ms)
+✔ Every public method uses its declared owner, preserves receivers/results and follows replacement services (85.322084ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (15.559959ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (2.485375ms)
+✔ Composition root does not own story, inventory or damage rules (0.285333ms)
+✔ Every local ES module import resolves after refactors (22.192084ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (4.423542ms)
+✔ Example plugins depend only on public extension utilities (0.516792ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (14.331375ms)
+✔ Asset music switches, caches decoded buffers and resumes its sample position after mute/background pause (3.567792ms)
+✔ Pending asset loads cannot start after mute, track replacement or disposal (0.597917ms)
+✔ Asset-only contracts reject note programs, traversal and malformed loops; HTTP/decode failures can retry (0.388875ms)
+✔ Sound limits, channel volume, ended cleanup and synchronous host failure release audio resources (0.228166ms)
+✔ Real Emerald sample library has existing WAV resources and music is selected by explicit content IDs (2.405917ms)
+✔ Plugin sounds request only owned registered resources outside rules/transactions and never receive host nodes (9.315208ms)
+✔ Current plugin records are required; mismatched data does not invoke an old migration callback (0.346625ms)
+✔ Stopping all cancels pending sounds and a source start failure still releases its connections (0.355708ms)
+✔ Scene clock validates before taking control, rejects overlaps and releases scope even when cue fails (5.936166ms)
+✔ UI scene facade serializes typed payload through the shared command envelope (2.274958ms)
+✔ Decoder failures release cached rejection for retry and loop points cannot exceed decoded audio (0.401375ms)
+✔ Human Baton Pass pauses the same round before the enemy, rejects unrelated commands, then transfers boosts before remaining attacks (31.848ms)
+✔ Gen III handoff preserves specified volatiles and states, substitutes and source bindings but excludes statuses, attraction, Disable and Stockpile (11.703ms)
+✔ No eligible reserve fails with PP payment; AI replaces immediately using its policy and never requests a human decision (7.267167ms)
+✔ A returning creature cannot reuse move history from its previous entry, while the bounded diagnostic action log remains available (4.099ms)
+✔ The Emerald runtime catalog includes all original moves, retains imported names and flags, and validates every effect at startup (36.745792ms)
+✔ Doubles preserves every selected action and its original actor UID while waiting for one mid-round replacement (5.848041ms)
+✔ A failure during replacement entry restores the original pending request and queue; retry neither repeats the selecting move nor consumes a second turn (2.7525ms)
+✔ A resumed enemy rule failure rolls back the replacement, transferred sources, HP and the unfinished round together (6.972084ms)
+✔ Registered creature-scoped state can opt into handoff and rebinds to the new UID, while ordinary leave still removes it (7.581584ms)
+✔ The presentation session returns control for replacement, and a called Baton Pass uses the same request instead of owning another scheduler (4.92825ms)
+✔ Registered plugin augment uses public battle command, source PP, one controller use and registered presentation (99.737792ms)
+✔ Unknown references, charge replacements and malformed limits/costs fail registration (73.670583ms)
+✔ Choice reserves shared uses in doubles; cancellation releases without PP, cost or RNG (45.821333ms)
+✔ Inventory fees share reservation with ordinary item actions in both directions (46.349167ms)
+✔ A late rule fault rolls back source PP, payment, random stream and augment usage (68.081125ms)
+✔ Execution rechecks selected source/qualification; sleep never consumes augmentation (45.249583ms)
+✔ Replacement target mode governs validation and costs consume once even on protection (64.39025ms)
+✔ Rule callbacks are frozen, synchronous and cannot select undeclared moves (177.776041ms)
+✔ Shared limit groups reject conflicting caps and count across different registered augments (78.893334ms)
+✔ AI strategy receives valid augmented candidates and replacement priority orders the real turn (56.615583ms)
+✔ Forged internal replacement fields cannot bypass source choice or augment eligibility (49.503917ms)
+✔ Battle menu adapter forwards the registered augment instead of silently using the base move (31.669041ms)
+✔ Replacement self-target is validated without inheriting the source attack target (58.657958ms)
+✔ Scoped states distinguish creature, seat, side and field; stacks, exclusions and lifecycles are battle-owned (14.167667ms)
+✔ Substitute costs one quarter HP, absorbs without spillover, blocks status and resets on switching (8.16175ms)
+✔ Reflect protects the side, survives switching, ignores critical hits and expires after five ticks; taunt blocks queued status moves (3.310916ms)
+✔ A rule fault restores state instances, source identities, PP and seeded RNG alongside the original battle (6.653791ms)
+✔ Plugin battle states use frozen rule views and registered operations, without adding battle-loop branches (38.7655ms)
+✔ Appearance overlays are validated, immutable, saved/reset by visit and never alter collision/elevation/behavior (6.617375ms)
+✔ Canvas chooses appearance per grid cell without changing logical map or scene placement (1.653791ms)
+✔ Fortree preserves unpatched reference entry behavior, lowers bridge-to-bridge and bounces visually while logical tile is raised (81.794416ms)
+✔ Fortree activation handles spawn/re-entry, an odd lower plane never depresses, and re-entry cancels stale bounce frames (73.291917ms)
+✔ Log bridge sinks both cells, stays submerged between its ends and raises with separate logical/render tiles (30.720917ms)
+✔ Bridge work pauses, saves remaining animation and re-enters with a fresh visit; delayed input starts timers at event time (54.233333ms)
+✔ Footprints reject duplicates/bounds and multi-cell devices share identity and phase matching (0.453375ms)
+✔ Native bridge content fails startup for an absent frame, mismatched pair or multi-cell Fortree section (49.127625ms)
+✔ Sleep Talk allows sleep, excludes charge moves, ignores called PP, and applies availability rules without another readiness pass (13.081ms)
+✔ Snore fails awake with PP payment, works asleep, and thawing moves can act through freeze (7.612833ms)
+✔ Assist considers non-egg party members even when fainted or statused and called charge continues without spending their PP (3.038792ms)
+✔ Metronome uses original IDs, excludes forbidden and plugin-only moves and reports called success (8.689ms)
+✔ A called Mirror Move can delegate again through the common bounded caller without an extra PP or readiness payment (2.438083ms)
+✔ Sketch copies a printed unsuccessful move permanently with full PP, rejects transformed users, and survives battle cleanup (11.310583ms)
+✔ Rollout doubles through five actions, Defense Curl doubles once more, misses release the lock and continuation does not pay PP (13.027917ms)
+✔ Triple Kick checks every hit and uses independent 10/20/30 powers, stopping at the first later miss (7.275667ms)
+✔ Uproar shares its repeated-action timer, wakes sleepers, blocks new sleep, exempts Soundproof and clears at completion (15.531542ms)
+✔ Called moves and permanent Sketch changes roll back with the existing journal; internal call depth cannot be supplied by a player (6.848583ms)
+✔ New move policies are validated and reference metadata keeps all 354 moves, sounds and interception flags (3.0285ms)
+✔ Browser and Node assemble the same production pack from readable metadata and generated grids (20.623083ms)
+✔ Content deployment prefixes are preserved and file failures identify the failing fragment (284.660667ms)
+✔ Manifest rejects missing sections, duplicate paths, escapes and unsafe identities (0.5375ms)
+✔ Fragments cannot overwrite existing fields or succeed with an unfilled file (9.370166ms)
+✔ A missing or malformed local fragment cannot silently produce a partial pack (32.579042ms)
+✔ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (1219.846666ms)
+✔ Missing map/script references and duplicate warps are rejected unless explicitly classified (25.979583ms)
+✔ Atlas metadata and frame indices must match actual PNG dimensions (5.925125ms)
+✔ Disable, Encore and Torment share eligibility and queued-action settlement, without history leaking across replacements (23.9475ms)
+✔ Mean Look clears when its source leaves; Wish stays with the seat and heals its current recipient (8.962417ms)
+✔ Yawn respects prevention and two ticks; Leech Seed drains to the source seat and Rapid Spin removes seed and hazards (14.833791ms)
+✔ Spikes applies once before entry traits, scales by layers, survives switching; Perish Song clears on leave and kills after four ticks (8.892583ms)
+✔ Lock On bypasses accuracy and concealment only for the source, but protection still blocks (2.987542ms)
+✔ Save validates all six stats, IV/EV budgets, personality/nature, primary status and pending custody references (72.925333ms)
+✔ Curing sleep atomically removes its timer; custom item results reject unknown status and protected-field additions (4.375416ms)
+✔ Invalid injected creation policy restores seeded randomness and returns no creature (2.583542ms)
+✔ Invalid writes and unsupported versions preserve source text until explicit replacement (5.984291ms)
+✔ Four separately watered stages mature with the source yield formula and four-duration ripe interval (1.954ms)
+✔ Minute catch-up equals individual updates, stopped source trees wait until seen, and state restores halfway (3.133542ms)
+✔ The tenth regrowth removes a tree and the source 71-duration offline shortcut consumes no random samples (0.276208ms)
+✔ Yield uses original modulo and nearest-quarter rounding for every water count (0.07475ms)
+✔ Bad saves, unknown crops, invalid durations and failed yields cannot partially advance other trees (1.699916ms)
+✔ Stage graphs are replaceable without changes to the growth driver (0.335584ms)
+✔ A plugin declares its plot and uses public planting, watering and harvesting commands with saved time (80.3665ms)
+✔ Off-map and unripe operations do not consume inventory and plot interactions route to the crop page (32.442125ms)
+✔ Missing plot/object references fail during plugin content assembly (5.923375ms)
+✔ Pending offline growth survives save validation and resumes only after field locks release (78.435167ms)
+✔ Entire command tree is validated before rewards or movement; parallel pose conflicts fail early (1.678042ms)
+✔ Parallel choreography joins every track and drains in-flight movement before reporting failure (2.084167ms)
+✔ Camera pans independently of player state, holds focus, then returns smoothly to live follow (0.613292ms)
+✔ A different content pack reuses scripted walking, NPC tracks, camera and emotes without field triggers (2.479167ms)
+✔ Rescue choreography from bag side 6,14 approaches before travel and enters lab under blackout (172.778375ms)
+✔ Rescue choreography from bag side 7,13 approaches before travel and enters lab under blackout (220.474042ms)
+✔ Rescue choreography from bag side 8,14 approaches before travel and enters lab under blackout (148.269208ms)
+✔ Rescue choreography from bag side 7,15 approaches before travel and enters lab under blackout (136.929417ms)
+✔ Intro plays independent NPC tracks, keeps progress incomplete until dialogue finishes, and releases camera (28.65925ms)
+✔ Bag investigation walks to its interaction position and waits before opening selection (40.437792ms)
+✔ Failed scene clears input ownership, camera, actor overrides and transient effects without saving partial choreography (159.995375ms)
+✔ Defeat return uses the shared entrance choreography and finishes on reachable center floor (20.147917ms)
+✔ Route planning honors connected-map destination NPCs and rejects unreachable targets (0.625208ms)
+✔ Malformed choreography is rejected before earlier rewards, positions or save state are changed (12.575125ms)
+✔ Movement automation returns at a story/dialogue boundary without waiting for acknowledgement (25.015417ms)
+✔ Dialogue confirmation gates later actor movement and flags, and input stays locked between commands (22.502625ms)
+✔ Scripted battle handoff releases field input ownership and redraws a ready combat menu (17.725625ms)
+✔ Pure dialogue sampling preserves grapheme clusters and exact leading/interior/trailing pause boundaries (5.013458ms)
+✔ Instant/reduced-motion/skip reveal all text and pauses; a new line starts clean and invalid clocks fail (0.221708ms)
+✔ Structured dialogue rejects invalid speed/shape/markup style/pauses before an effect callback runs (0.164541ms)
+✔ Text effects are registered pure samples, bounded, synchronous and centrally disabled for reduced motion (0.405042ms)
+✔ DOM player safely creates text, types without layout rewrites, shows confirmation only after complete and ignores cancelled callbacks (0.548375ms)
+✔ Shared shell uses first confirm to reveal, second to advance; final acknowledgement resolves once and clears animation (115.741583ms)
+✔ Timed shell advances only after actual display duration and reader announcement stays complete (44.427334ms)
+✔ Dialogue disposal and replacement reject the old wait, stop effects and prevent stale visual writes (75.130334ms)
+✔ Reduced motion displays immediately, suppresses text animation loop and still waits for acknowledgement (31.090292ms)
+✔ Registered plugin text samples receive frozen parameters and cannot submit core commands from a read-only callback (85.00075ms)
+✔ Whole story preflight rejects bad dialogue/effect parameters before any reward and forwards speed through the real application (42.199542ms)
+✔ A text-effect failure during confirm rejects the active wait and unlocks without completion callbacks (59.041292ms)
+✔ Plugin trainer, policy and conditional encounter references resolve at startup without changing built-in content (68.624583ms)
+✔ Invalid strategy/party/encounter references fail before producing a game (40.731042ms)
+✔ Policy receives frozen detached decisions and a bad choice rolls back the entire round and RNG (34.6925ms)
+✔ Public battle.start uses registered trainer, keeps battle alive for its bench and grants one default prize (122.319333ms)
+✔ Channel policies select one eligible priority and explicit suppression never falls through (1.2925ms)
+✔ Disabled native step encounters consume no random samples and remain independent of StoryRunner (87.65775ms)
+✔ Regional queries merge registered and embedded sources without random draws; sample yields no individual custody (52.023833ms)
+✔ Policy callbacks are pure and sampling permission is separate from free read-only queries (85.460375ms)
+✔ World region queries reflect overlays and true/reserved occupancy with detached snapshots and bounded regions (101.258875ms)
+✔ Contact edges deduplicate held and reversed requests; movement, separation and distinct planes invalidate proofs (0.321708ms)
+✔ Real field collisions publish one stable contact after commands and accept a fresh contact after separation (68.761416ms)
+✔ NPC active interactions bridge into the same contact facts at frame boundary (77.66825ms)
+✔ Prepared individuals have one saved custodian and actor dependency; duplicate or corrupt references are rejected (107.775542ms)
+✔ A ticket starts exactly one real wild battle on published contact; capture transfers custody and never runs a story (62.572125ms)
+✔ Plugin contact listeners can request battle at the stable boundary and a failed start keeps the ticket reusable (57.25375ms)
+✔ Encounter win, escape and loss share release lifecycle without story rewards, dialogues or duplicate actors (193.441375ms)
+✔ Reserved actor source cells are visible to queries but never count as actual contact (22.078041ms)
+✔ Stale and different-actor contact proofs cannot consume a prepared ticket, and dead-party requests do not spend it (57.781625ms)
+✔ The native encounter cooldown has one owner and is reset during field rebinding (50.294375ms)
+✔ Failed individual preparation restores the random source and ticket state before any notification (42.05975ms)
+✔ Full capture storage rejects before claiming or starting a wild battle (61.674625ms)
+✔ Plugins choose distinct grass cells proportionally through the seeded random permission, then save the resulting source (79.039667ms)
+✔ Generation III stat formula, nature, growth curve and physical/special split (2.896834ms)
+✔ STAB, type effectiveness, critical hit, immunity and low HP starter abilities (1.134167ms)
+✔ Starter rescue ends, grants exact experience, and upgrades moves at level 6 (40.2725ms)
+✔ Status moves lower stats, PP decreases, replacement is free after faint (2.964459ms)
+✔ Poké Balls cannot catch trainers, fail consumes a turn, success uses one ball (12.372333ms)
+✔ Damage/PP recovery, invalid potions do not consume items, switching consumes turn (26.596583ms)
+✔ Original map doors are collision 1 but traversable; indoor exits return to correct tile (0.877917ms)
+✔ Connected roads retain position and NPC/water/walls stop movement (1.122125ms)
+✔ Stairs arrive on accessible floor, ledges only allow southward jumps (1.463375ms)
+✔ Browser save round-trip and corruption validation (22.001542ms)
+✔ Full story path: town → rescue bag → center nurse → rival → professor (46.880083ms)
+✔ Reusable story dependencies gate branches and completion; cyclic/missing dependencies reject (4.4005ms)
+✔ Emerald story selection is pure; completed rival event unlocks graph-driven Pokédex gift (2.217916ms)
+✔ Reward commits atomically, is idempotent, persists ledger, rejects malformed partial gifts (3.825667ms)
+✔ A dialogue failure after reward can replay without duplicate money or items (1.610625ms)
+✔ Current development save contract rejects older versions without mutating their data (7.538667ms)
+✔ Field items use effects, reject dead/full/wrong targets, and stale/double commits do not consume (7.945666ms)
+✔ New data-only item composes healing and curing through the same operations (5.824417ms)
+✔ Invalid battle item and depleted move leave turn, HP, PP and RNG unchanged (24.72425ms)
+✔ Successful battle medicine consumes one turn; all capture items share restrictions and bonus rule (27.152666ms)
+✔ Effect names and descriptors validate before battle; unsupported moves do not spend PP (8.449334ms)
+✔ A custom move definition uses existing operations without changing battle orchestration (3.977125ms)
+✔ Move phases preserve drain, recoil immunity, false swipe and bide setup (8.5945ms)
+✔ Fury Cutter power modifications survive phase execution and snapshots exclude private data (32.660792ms)
+✔ Monster creation policy is injectable and NPC caches belong to a disposable session (0.426542ms)
+✔ Former imported disabled effects are registered; typo effects remain rejected (3.48925ms)
+✔ Endeavor and fixed damage bypass formula multipliers but preserve type immunity and fail if user HP is higher (67.915208ms)
+✔ Belly Drum HP cost and Swagger boost/confusion obey domain permissions (20.56275ms)
+✔ Stockpile caps at three without Gen IV stat boosts; Swallow and Spit Up consume it (36.813459ms)
+✔ Registered power preparation uses Gen III HP thresholds, friendship, IV bits and target weight (18.520166ms)
+✔ Nature Power calls the terrain move with one PP payment; Imprison blocks shared moves while owner remains in battle (49.582125ms)
+✔ Facility activity registration rejects missing references, asynchronous rules and invalid state schemas (115.0295ms)
+✔ Non-battle plugin activity controls independent appeal state, public inputs, reward and saved result (84.087209ms)
+✔ Two registered trainer rounds use isolated selected team, suppress normal prizes, and settle once (68.926291ms)
+✔ Facility admission and active-session boundaries reject party changes, field motion, saving and importing (66.407375ms)
+✔ Failed facility action restores RNG/economy/session; slot plugin runs without any combat (36.257041ms)
+✔ Unauthorized plugin cannot drive facilities and invalid transitions leave state intact (78.695541ms)
+✔ Facility transition stamps and battle tickets reject repeated or foreign results (0.286667ms)
+✔ Reward capacity rejection keeps an earned facility claim pending without partially awarding (27.161459ms)
+✔ UI facade routes facilities through the shared bus and save validation rejects forged ledgers (50.331167ms)
+✔ Presentation failure after a non-battle commit preserves its economy, progress and consumed RNG (24.645834ms)
+✔ Losing an isolated facility battle releases the session without blackout, party damage or normal settlement (63.591667ms)
+✔ Completed activity results reload with their plugin, while a missing activity plugin protects the original save (119.652917ms)
+✔ Field plans validate before changes, expose immutable data and cannot be forged, reused or committed by a different issuer (1.362458ms)
+✔ Changed conditions, coordinates and cancelled plans reject without side effects (0.191333ms)
+✔ Registration rejects duplicate actions, missing rules, invalid durations and invalid schemas (0.121ms)
+✔ Action transitions commit only under cover and release presentation on exceptions (0.363375ms)
+✔ Cut runs through a public command, saves an object overlay, and a repeated action cannot remove a different object (99.029708ms)
+✔ Rock smash requires the correct badge and move; normal field actions do not honor research equipment bypass (30.127833ms)
+✔ A content-only plugin defines an action and receives read-only state; host validation rejects an illegal player-blocking plan (50.454542ms)
+✔ Changes during action animation invalidate the old target and release locks (24.849875ms)
+✔ Dive and surface use content-registered links, cover map changes, retain party and restore movement modes (83.224209ms)
+✔ Waterfall climbs as grid steps, blocks ordinary surf ascent and checks the full route before animation (66.284ms)
+✔ Fishing has waiting, early-input failure, bite windows, no-table failure and exact timeout precedence (0.325292ms)
+✔ Fishing rod rules require repeated rounds and lead suction cups changes bite odds without treating eggs as an ability owner (0.083084ms)
+✔ Fishing encounter tables select the correct rod and reject rod filters on other encounter areas (0.168041ms)
+✔ Successful fishing bypasses a second encounter probability roll and intimidation while preserving wild creation rules (2.796875ms)
+✔ The public fishing command accepts concurrent reel input, launches one encounter after cleanup, and keeps the rod (30.836917ms)
+✔ Public fishing can cancel without generating a monster, and map requirements prevent a land save with a diving mode (45.370583ms)
+✔ Data-driven stories reuse their field scene, record action results and reject unsafe parallel actions before any flag write (52.765ms)
+✔ Plugins register a field action visual through the shared presentation registry; unknown cues and malformed links fail at startup (42.823292ms)
+✔ Cut and rock reset on connected entry without losing permanent changes or active-save progress (61.526625ms)
+✔ Restored obstacles cannot occupy the landing cell; rejected entry leaves position and overlays unchanged (32.986875ms)
+✔ Map-visit observers see committed player location; blocked story entry stops subsequent rewards (36.427ms)
+✔ Device registration rejects bad placements, state schemas, async policies and unknown action requests (6.251542ms)
+✔ Device callbacks stage state and world effects atomically before host commits (0.411333ms)
+✔ Due timers are ordered, cancellable and replacement timers wait for their own deadline (0.571292ms)
+✔ Timer failures preserve saved cursor, own state and pending task for retry (0.334916ms)
+✔ Visit resets clear transient work, preserve permanent records, support resume and reject stale plans (0.723042ms)
+✔ Device saves validate content references and elevation matching avoids other planes (0.245708ms)
+✔ Thin ice cracks, survives active-visit save reload and breaks on second entry before animated fall (116.302916ms)
+✔ Device timers pause during menus and restore remaining delay from saves (35.58775ms)
+✔ Fast registered movement clears cracked floor before opening; walking triggers fall (88.585167ms)
+✔ Plugin interaction uses public world command and read-only device query with persistent state (54.203042ms)
+✔ Fall pose is clock-driven, commits under cover, restores after landing and respects reducedMotion (0.40975ms)
+✔ Blocked fall reports rejection and keeps player position; device switch also responds to ordinary interaction (68.881208ms)
+✔ Field action avatar registration freezes descriptions, rejects non-player anchors and other-plane falls (0.2405ms)
+✔ Actual Mach input passes a cracked floor; held walking cannot bypass queued fall (106.703333ms)
+✔ Releasing fast Mach input over an opened floor requests fall instead of indefinite hovering (41.518625ms)
+✔ Plugin input rules can select a technique and control movement through public input command without editing the engine (22.916834ms)
+✔ A blocked fast departure cannot keep the rider hovering over an opened cracked floor (50.572209ms)
+✔ Elevation is optional; Gen III transition and multi-level tiles retain separate logical and visual heights (1.180875ms)
+✔ Bridge objects and both movement reservations collide only on compatible planes; interaction uses the same policy (0.198208ms)
+✔ Pathfinding distinguishes the same bridge coordinate on different heights instead of discarding a reachable route (0.235625ms)
+✔ Connected movement preserves bridge height and serialized standing state restores the same collision (0.759125ms)
+✔ Autonomous NPCs share height collisions with players, keep reservation height and cannot walk off their plane (0.699875ms)
+✔ Trainer sight and Fortree bicycle policy read actor height rather than the bridge tile sentinel (0.471834ms)
+✔ Renderer draws lower actors below the bridge overlay and higher actors above it without changing state (1.390209ms)
+✔ Public actor commands permit two bridge planes, restore saved heights and reject invalid plane writes atomically (85.178166ms)
+✔ Effect scopes preserve active saves, reset visit effects and apply registered retention on ordinary entry versus travel (2.08125ms)
+✔ Effect data, ownership, one-shot plans and retention contracts fail before mutation (0.47975ms)
+✔ Strength activation owns no PP or encounter rolls; ordinary blocked movement displaces and follows through registered plans (97.109875ms)
+✔ A custom crate triggers without story; its final occupancy drives an independently registered sensor (45.838583ms)
+✔ Object destinations reject walls, water, other objects, warps and incompatible elevations without moving either participant (248.323416ms)
+✔ Motion rechecks occupancy after presentation and a failed follower restores the object overlay (40.424709ms)
+✔ Displacement respects both-end reservations and can move independently without moving the player (23.493ms)
+✔ Object and follower interpolation share one duration and settle before field action unlock (32.160583ms)
+✔ Registered interaction priority selects a qualified action consistently and saved effect references declare their plugin dependency (97.436333ms)
+✔ A terrain interaction is routed into the same action API; item ownership gates the same effect lifecycle (85.882125ms)
+✔ Flash uses its badge and registered darkness; strict saves reject removed effects and missing current-format state (140.546167ms)
+✔ Automatic interaction schemas and priorities validate at registration; pure effect callbacks cannot dispatch writes (54.610834ms)
+✔ Lighting metadata validates; pure sampling expands smoothly and reduced motion does not change rule state (4.985541ms)
+✔ Lighting masks preserve world pixels inside the union of lights and draw only outside rows (0.207584ms)
+✔ Terrain rules combine deterministic priority and veto with immutable small snapshots (2.757958ms)
+✔ Invalid, asynchronous and non-boolean terrain callbacks fail explicitly (0.507584ms)
+✔ Ice moves continuously with frozen footsteps and preserves per-tile clocks and encounters (3.750958ms)
+✔ A modal pauses queued terrain movement and resumes without losing the route; scripted movement overrides it (0.7825ms)
+✔ Walls stop forced movement and cyclic conveyors release the input lock with an explicit reason (1.026125ms)
+✔ Slide tiles lock the facing direction while conveyors turn it to their flow (0.805417ms)
+✔ Ice crosses adjacent maps without a transition or a discontinuous camera coordinate (1.017292ms)
+✔ Currents remain water, retain surfing and dismount on land; encounter flags are independent (0.974417ms)
+✔ Muddy slopes reject a slow climb and retain facing while sliding down; fast Mach momentum climbs (6.45775ms)
+✔ Acro techniques gate bumpy slopes, enforce rail axes and consume a side hop only after committing (0.875875ms)
+✔ No-running tiles keep walking speed and visual pose; forbidden bike tiles block before changing coordinates (0.268792ms)
+✔ Faulty post-step policies release the lock while invalid pre-step output cannot move the actor (0.302333ms)
+✔ Plugins register terrain policies without altering the executor and receive only immutable terrain metadata (37.19925ms)
+✔ Application commands select techniques; a paused cutscene stops current drift and queued steps resume afterward (113.20125ms)
+✔ Blocked slide continuation preserves facing instead of turning toward the blocked flow (0.488875ms)
+✔ Lead traits and held items compose field encounter probability without touching HP or PP (4.194917ms)
+✔ Encounter tables validate before RNG, low-level deterrents reject and repel uses the first living non-egg (2.144666ms)
+✔ Wild generation applies synchronize, cute charm, level boosts and registered held rarity (2.460417ms)
+✔ Type-attracting abilities select a uniform matching slot before regular weighted fallback (4.787167ms)
+✔ Pickup uses Emerald level tiers, skips existing held items and eggs, and every resulting item is holdable (106.588375ms)
+✔ EXP SHARE splits before personal bonuses, and a benched holder receives EVs with Macho Brace policy (0.684125ms)
+✔ Integer damage order applies spread before the +2 base addition, and Guts replaces burn reduction (0.282417ms)
+✔ Forecast types and form are projected and weather suppression reverses them without changing species (14.999916ms)
+✔ Trace executes copied entry rules and restores the original ability when leaving (5.740041ms)
+✔ Gen III numeric huge_power/attack uses integer source arithmetic (16.621958ms)
+✔ Gen III numeric pure_power/attack uses integer source arithmetic (4.641916ms)
+✔ Gen III numeric guts/attack uses integer source arithmetic (2.553791ms)
+✔ Gen III numeric hustle/attack uses integer source arithmetic (4.2945ms)
+✔ Gen III numeric marvel_scale/defense uses integer source arithmetic (4.7005ms)
+✔ Gen III numeric thick_fat/attack uses integer source arithmetic (4.384292ms)
+✔ Gen III numeric overgrow/power uses integer source arithmetic (3.964167ms)
+✔ Gen III numeric blaze/power uses integer source arithmetic (3.327875ms)
+✔ Gen III numeric torrent/power uses integer source arithmetic (3.807542ms)
+✔ Gen III numeric swarm/power uses integer source arithmetic (3.10575ms)
+✔ Gen III numeric compound_eyes/accuracy uses integer source arithmetic (3.175125ms)
+✔ Gen III numeric hustle/accuracy uses integer source arithmetic (4.994792ms)
+✔ Gen III numeric serene_grace/secondary-chance uses integer source arithmetic (3.366ms)
+✔ Gen III numeric pressure/pp-cost uses integer source arithmetic (3.174125ms)
+✔ limber prevents its status, and cures it on re-entry (3.056042ms)
+✔ insomnia prevents its status, and cures it on re-entry (1.535208ms)
+✔ vital_spirit prevents its status, and cures it on re-entry (1.453708ms)
+✔ immunity prevents its status, and cures it on re-entry (1.968209ms)
+✔ magma_armor prevents its status, and cures it on re-entry (2.204875ms)
+✔ water_veil prevents its status, and cures it on re-entry (2.428334ms)
+✔ clear_body rejects hostile drops while allowing self-inflicted changes (6.2875ms)
+✔ white_smoke rejects hostile drops while allowing self-inflicted changes (3.512417ms)
+✔ keen_eye rejects hostile drops while allowing self-inflicted changes (3.283333ms)
+✔ hyper_cutter rejects hostile drops while allowing self-inflicted changes (1.932ms)
+✔ Ability immunities keep statuses, flinch, attraction and secondary effects in independent phases (1.580125ms)
+✔ static responds to contact but not non-contact hits (1.521292ms)
+✔ poison_point responds to contact but not non-contact hits (1.466125ms)
+✔ flame_body responds to contact but not non-contact hits (1.635458ms)
+✔ Effect Spore and Cute Charm delegate to status and attraction permissions (6.441292ms)
+✔ battle_armor blocks critical permission without changing ordinary damage (2.398416ms)
+✔ shell_armor blocks critical permission without changing ordinary damage (4.415ms)
+✔ drizzle sets indefinite weather on entry (3.769542ms)
+✔ drought sets indefinite weather on entry (1.483042ms)
+✔ sand_stream sets indefinite weather on entry (1.478542ms)
+✔ Speed doubles before stages, then held-item halving and paralysis use separate integer boundaries (1.594875ms)
+✔ Accuracy floors stages before abilities and evasion items; immunity does not heal behind Protect (1.792125ms)
+✔ Choice Band floors before Hustle, and Thick Fat before Plus/Minus (1.561125ms)
+✔ Flash Fire remembers the boost for fire only; Color Change changes projected types until leave (7.148584ms)
+✔ Wonder Guard blocks neutral damaging hits but allows weaknesses and status; Soundproof uses imported flags (3.153042ms)
+✔ Truant alternates without PP loss, Early Bird decreases the sleep counter twice, and Speed Boost skips its entry turn (7.584792ms)
+✔ Rain Dish, Shed Skin and Sand Veil residual rules respect weather suppression and living owners (3.627709ms)
+✔ shadow_tag switch boundary for normal (4.490958ms)
+✔ magnet_pull switch boundary for steel (3.000292ms)
+✔ magnet_pull switch boundary for normal (1.791458ms)
+✔ arena_trap switch boundary for flying (6.34475ms)
+✔ arena_trap switch boundary for normal (2.940708ms)
+✔ Sticky Hold blocks only transfer; Roar respects Suction Cups; Damp spends PP and prevents self-destruction (6.608042ms)
+✔ Sturdy blocks Gen III OHKO but has no full-HP survival rule (1.628334ms)
+✔ silver_powder boosts its matching raw attack and leaves other types unchanged (1.363917ms)
+✔ metal_coat boosts its matching raw attack and leaves other types unchanged (5.663333ms)
+✔ soft_sand boosts its matching raw attack and leaves other types unchanged (2.905917ms)
+✔ hard_stone boosts its matching raw attack and leaves other types unchanged (2.73975ms)
+✔ miracle_seed boosts its matching raw attack and leaves other types unchanged (1.709291ms)
+✔ black_glasses boosts its matching raw attack and leaves other types unchanged (1.378667ms)
+✔ black_belt boosts its matching raw attack and leaves other types unchanged (7.10175ms)
+✔ magnet boosts its matching raw attack and leaves other types unchanged (1.452208ms)
+✔ mystic_water boosts its matching raw attack and leaves other types unchanged (1.424125ms)
+✔ sharp_beak boosts its matching raw attack and leaves other types unchanged (3.019792ms)
+✔ poison_barb boosts its matching raw attack and leaves other types unchanged (1.460791ms)
+✔ never_melt_ice boosts its matching raw attack and leaves other types unchanged (1.299459ms)
+✔ spell_tag boosts its matching raw attack and leaves other types unchanged (1.293958ms)
+✔ twisted_spoon boosts its matching raw attack and leaves other types unchanged (1.240542ms)
+✔ charcoal boosts its matching raw attack and leaves other types unchanged (1.268583ms)
+✔ dragon_fang boosts its matching raw attack and leaves other types unchanged (1.234458ms)
+✔ silk_scarf boosts its matching raw attack and leaves other types unchanged (1.272917ms)
+✔ sea_incense boosts its matching raw attack and leaves other types unchanged (8.5415ms)
+✔ cheri_berry immediately cures its status once (4.566833ms)
+✔ chesto_berry immediately cures its status once (2.445ms)
+✔ pecha_berry immediately cures its status once (1.378625ms)
+✔ rawst_berry immediately cures its status once (1.330375ms)
+✔ aspear_berry immediately cures its status once (1.29625ms)
+✔ lum_berry immediately cures its status once (1.343959ms)
+✔ Lum, Persim, Mental and White Herb react immediately at their own applied phase (4.174667ms)
+✔ liechi_berry consumes before raising a stat, avoiding reentrant activations (1.3935ms)
+✔ ganlon_berry consumes before raising a stat, avoiding reentrant activations (3.621ms)
+✔ salac_berry consumes before raising a stat, avoiding reentrant activations (3.94225ms)
+✔ petaya_berry consumes before raising a stat, avoiding reentrant activations (4.900125ms)
+✔ apicot_berry consumes before raising a stat, avoiding reentrant activations (4.314917ms)
+✔ figy_berry heals and confuses a nature that dislikes its flavor (1.601084ms)
+✔ wiki_berry heals and confuses a nature that dislikes its flavor (1.3485ms)
+✔ mago_berry heals and confuses a nature that dislikes its flavor (1.291ms)
+✔ aguav_berry heals and confuses a nature that dislikes its flavor (1.296458ms)
+✔ iapapa_berry heals and confuses a nature that dislikes its flavor (1.218166ms)
+✔ Leppa, Lansat and Starf restore PP, add focus or raise one non-maxed stat once (8.077125ms)
+✔ Quick Claw cannot defeat move priority; Focus Band survives a lethal hit; Kings Rock respects Inner Focus (3.1095ms)
+✔ deep_sea_tooth applies only to its supported species and stat (1.432916ms)
+✔ deep_sea_scale applies only to its supported species and stat (1.287541ms)
+✔ light_ball applies only to its supported species and stat (1.2605ms)
+✔ metal_powder applies only to its supported species and stat (5.105833ms)
+✔ thick_club applies only to its supported species and stat (1.373791ms)
+✔ soul_dew applies only to its supported species and stat (1.344125ms)
+✔ soul_dew applies only to its supported species and stat (1.204167ms)
+✔ Critical held items use species restrictions, Smoke Ball and Run Away bypass traps, Amulet Coin applies once (2.215792ms)
+✔ Lightning Rod redirects to an opposing seat without granting electric immunity, retaining a chosen rod target (3.524833ms)
+✔ volt_absorb heals damaging hits but does not absorb a status move (3.332709ms)
+✔ water_absorb heals damaging hits but does not absorb a status move (4.98275ms)
+✔ A new held item reuses a canonical effect with its own parameter and no canonical-ID lookup (6.343417ms)
+✔ Experience belongs to every interactive alliance rather than only the first human side (2.968917ms)
+✔ Soothe Bell floors positive friendship before location/Luxury bonuses and never magnifies losses (3.575792ms)
+✔ magma_armor halves egg cycles on the saved clock without stacking (2.554ms)
+✔ flame_body halves egg cycles on the saved clock without stacking (3.20175ms)
+✔ Malformed egg clocks fail before mutating a clock or a different egg (0.170792ms)
+✔ Everstone prevents level, item and trade evolution; cancellation is idempotent and keeps UID/HP (2.59725ms)
+✔ dragon_scale participates in a trade condition and consumes only after a valid evolution commit (0.695208ms)
+✔ up_grade participates in a trade condition and consumes only after a valid evolution commit (2.212417ms)
+✔ metal_coat participates in a trade condition and consumes only after a valid evolution commit (1.228416ms)
+✔ kings_rock participates in a trade condition and consumes only after a valid evolution commit (1.2005ms)
+✔ deep_sea_tooth participates in a trade condition and consumes only after a valid evolution commit (1.366416ms)
+✔ deep_sea_scale participates in a trade condition and consumes only after a valid evolution commit (1.211333ms)
+✔ Level, friendship/time, stat, personality and beauty conditions compose through a reusable registry (1.674208ms)
+✔ Item evolution uses a stale-safe one-use plan and does not mutate inventory during query or cancellation (2.582208ms)
+✔ Breeding validates compatibility and all offspring move references before consuming RNG (3.924583ms)
+✔ Egg creation inherits father egg/TM moves, shared level moves and female Everstone nature; HP and DEF quirks are explicit (3.263417ms)
+✔ Ditto compatibility, incense offspring, paired variants and a held-item special move use species definitions (4.112209ms)
+✔ Daycare keeps one pending egg, never duplicates collection, preserves living party and charges on withdrawal (1.217292ms)
+✔ Imported evolution content includes all branching methods in the slice and validates references (3.199583ms)
+✔ Emerald Nincada creates a genderless 1-HP Shedinja with a free party slot, without requiring or consuming a ball (5.252083ms)
+✔ Evolution companion inherits post-evolution move choices without a species-specific branch (3.016167ms)
+✔ Personality, stat comparison, time, beauty and item conditions select actual original species (6.417875ms)
+✔ Daycare's second deposit owns the production clock and deposited moves remain unchanged until withdrawal (1.124459ms)
+✔ Daycare and hatch failure restores clocks, friendship, egg cycles and seeded random state together (0.888083ms)
+✔ Everstone-inherited nature agrees with personality, derived gender and ability (0.15075ms)
+✔ An egg cannot occupy a battle seat, become a replacement, or count as a usable storage guard (1.779875ms)
+✔ Trade swaps stable identities, resets non-egg friendship and supports held-item evolution on the received party (2.823708ms)
+✔ Evolution faults during staged move learning leave the live creature, inventory and plan reusable (2.936ms)
+✔ Pokeblock taste rounds ten percent to nearest, fullness persists and rejected feeding preserves inventory (1.202916ms)
+✔ Item drafts protect deep fields and issuer-owned plans reject forged, stale or cross-inventory commits (1.388416ms)
+✔ Growth presentation commits once under its white cover and clears locks when domain validation fails (0.275958ms)
+✔ Save owns daycare and trade identities, keeps egg clocks, and rejects duplicated custody or invalid eggs (20.850917ms)
+✔ A failed post-trade evolution restores both parties, identities, friendship and RNG (72.327166ms)
+✔ Magic Coat consumes one guard and reflects onto the selecting actor while charging only the original PP (16.633583ms)
+✔ A Pressure source reduces the reflecting guard's own PP, including a content-defined alias of Magic Coat (3.752083ms)
+✔ Consumed reflection guards bound a double bounce and explicit custom flags can opt out of reference flags (9.51ms)
+✔ Snatch processes guards in action order, permits Gen III chained stealing and charges guard PP from a Pressure source (7.365ms)
+✔ Interception guards fail when acting last and expire after the round; unflagged attacks are unaffected (8.379542ms)
+✔ Beat Up uses healthy non-egg party base Attack and level, target base Defense, and typeless individual critical/random impacts (6.85525ms)
+✔ Missed kick computes Gen III would-be damage/2 capped at target maxHP/2, without attacking target or its Substitute (5.44ms)
+✔ Crash skips type immunity and previews Endure/Focus Band survival without consuming Substitute or modifying the target (6.765459ms)
+✔ Pay Day accrues player-side level*5, saturates original coin storage, settles only a win and respects money multipliers (25.718834ms)
+✔ Application payout commits once independently of trainer/story rewards and preserves the configured currency cap (18.59125ms)
+✔ Interception metadata rejects malformed flags at registration before they can break an action (1.8685ms)
+✔ Interception ownership, coin storage and per-hit mutations all roll back after a registered rule fault (4.675791ms)
+✔ Inventory current save persists only slots, keeps fragments across reload, rejects old counts and preserves live query ports (168.258042ms)
+✔ A full shop cannot deduct money; a partial stack accepts the purchase without requiring an empty slot (71.54275ms)
+✔ Story rewards preflight the whole bundle; full bags never commit money, flags or ledgers and old grant is rejected (68.493666ms)
+✔ Removing or swapping held items respects return capacity; a same-pocket swap can reuse the freed slot (47.928167ms)
+✔ Harvesting rejects the entire yield before clearing a ripe tree and can succeed later when stack space is available (36.95525ms)
+✔ Item plans use the selected stack, refuse moved or replaced containers, and never heal on stale costs (43.066833ms)
+✔ The real bag page renders distinct stacks and its command facade consumes the clicked second stack (77.383583ms)
+✔ Public teaching checks the selected machine slot before modifying moves, friendship or inventory (34.298708ms)
+✔ Independent allied battle controllers can each spend their own one-item container in the same round (59.098792ms)
+✔ Battle rejects old or unvalidated inventories before play and rejects slot references on non-item actions (48.880625ms)
+✔ Plugin pockets flow through reward, page, use and save; failed transactions restore slots, target and memory (140.451916ms)
+✔ Capacity preview and story itemSpace queries use registered policies without mutating state or permitting a commit (27.917ms)
+✔ Trainer stocks are compiled into slots and oversized custom-pocket stocks fail startup before any battle (49.1495ms)
+✔ Inventory policies are supplied by the pack, cloned and frozen; native pocket capacities match the reference (4.719416ms)
+✔ Invalid pocket definitions and item references fail registration instead of becoming unrestricted storage (0.605ms)
+✔ Slot validation rejects count dictionaries, sparse arrays, wrong pockets, zero stacks and forbidden duplicates (0.318166ms)
+✔ Addition fills existing partial stacks before empty slots and can span ordinary duplicates (0.420208ms)
+✔ Full-pocket additions and multi-pocket batches fail atomically without filling part of an earlier stack (0.227875ms)
+✔ Single-stack pockets cannot spill into a second empty slot even when the container has room (0.170791ms)
+✔ Removal prefers the selected matching slot then uses slot order, preserving fragments and clearing zero stacks (0.199292ms)
+✔ Insufficient quantities, stale selected slots and invalid operations leave the whole batch unchanged (0.239542ms)
+✔ Plan custody prevents forgery, replay, modified slots and replacement containers; exposed data cannot alter commits (0.169ms)
+✔ Slot-state reload keeps order and fragments; quantity projections and empty-pocket views remain detached (0.260708ms)
+✔ Native normal items can exceed 99 across slots while berries and machines preserve their single-stack limit (0.389291ms)
+✔ Plugins register custom pockets and items through the real catalog validator and reuse the same slot service (62.6125ms)
+✔ Authored initial stock uses the registered capacity; invalid stock is not a save migration path (0.342666ms)
+✔ A capacity preview is detached, frozen and never a committable plan (0.184ms)
+✔ Item action bindings validate field targets, schemas, duplicate names and registered references before startup (1.176042ms)
+✔ Item actions retain immutable declared inputs, recheck ownership, respect domain denial and never consume key items (0.243875ms)
+✔ Ordinary consumable use cannot consume an action item; battles have no hidden potion or ball content (64.540666ms)
+✔ Research and old bicycle flags grant no capability; each actual bicycle has distinct inventory ownership (55.86ms)
+✔ A bicycle bag command plays the existing field scene, toggles riding, preserves facing and RNG, and survives save reload (107.970209ms)
+✔ Native cycling metadata permits an indoor cave and forbids a building; explicit custom map policy overrides the header (93.769833ms)
+✔ Rails and cycling-road rules cannot be bypassed by either the item command or direct movement command (97.084208ms)
+✔ Inventory changes during item choreography invalidate the shared field plan and release scene locks (48.415333ms)
+✔ Fishing uses the corresponding rod inventory, retains the rod, and rejects underwater, waterfalls and blocked water (83.462292ms)
+✔ Save validation rejects unowned active bicycles and retains inventory-backed modes through restore (60.464167ms)
+✔ Plugin content composes a new key item with a registered field action and the existing bag, command and world overlay (104.153667ms)
+✔ Gen III fishing distinguishes shore elevations, surfable water and bridge edges without consuming RNG (0.290167ms)
+✔ Public item queries expose declared actions and permissionless plugins cannot submit an item command (31.762042ms)
+✔ Shortcut identity validates current content and explicit null without accepting unknown fields or consumer items (3.573333ms)
+✔ Registration is independent of current usability, does not consume inventory, is idempotent and publishes detached facts (0.382333ms)
+✔ Activation queries current rules, runs only the chosen binding and keeps the registered item on ordinary denial (0.77475ms)
+✔ Read-only lookup never clears a missing item; first activation clears it once and does not invoke an action (0.096542ms)
+✔ Native bicycle registration runs through the command bus, preserves RNG and inventory, and follows fresh state after restore (126.3595ms)
+✔ A rod can be registered away from water, then its same shortcut rechecks shore elevation and starts the owned fishing session (143.399541ms)
+✔ Menus, dialogue, battles and story locks cannot start a shortcut or overwrite the registered selection (35.334583ms)
+✔ Current saves require shortcut identity; stale quantity is preserved until use, while old envelopes and bad references are rejected (94.758959ms)
+✔ A content plugin registers a chosen action, controls it through authorized commands and retains dependency identity even at zero quantity (93.209ms)
+✔ A plugin without useItem may read the shortcut but cannot register, clear or activate it (41.996125ms)
+✔ Bag registration selects a plugin sub-action, does not use it, and toggles the same registered action off (83.899333ms)
+✔ Browser Select maps C and touch once, respects focus/modifiers/locks, and disposes its listeners (0.486917ms)
+✔ Native consumable stock survives metadata merging while machines and key items remain unavailable for purchase (25.083167ms)
+✔ Native directional walk frames never mix south, north or west poses (0.787042ms)
+✔ Town to route and route to town are exactly one grid step in a shared world (0.260291ms)
+✔ Crossing a map boundary interpolates instead of resetting and locks direction (0.190625ms)
+✔ Run and walk finish at the same grid destination with matching animation clocks (0.09825ms)
+✔ Original town NPCs wander within declared ranges, reserve cells and interpolate (1.85025ms)
+✔ NPCs respect player collision, dialogue pause and face player after interaction (1.318458ms)
+✔ Every map uses 8x8 tile atlas definitions, not pre-rendered scene files (6.2495ms)
+✔ Reference machine catalog preserves all 50 TMs, 8 HMs and species eligibility without guessed moves (1.4005ms)
+✔ Machine teaching appends full PP, permits a fainted non-egg, changes friendship once and consumes only a successful TM (2.283375ms)
+✔ HM ownership is required but success retains the machine; incompatible species and eggs leave everything unchanged (3.253083ms)
+✔ Four-slot learning requires an explicit forgettable slot; HM protection and cancellation never consume a TM (0.854ms)
+✔ Owned learning plans reject forgery, duplicate commits and changed inventory, custody, slots, qualification or loaded state (7.472666ms)
+✔ Tutor methods compose immutable qualification and declared costs; malformed or asynchronous policies fail before mutation (5.584542ms)
+✔ Manual pending level learning uses the same HM protection while declining learning remains available (0.443792ms)
+✔ Public teaching resolves stable UIDs after party reorder, rejects boxed/busy callers and saves learned slots plus item counts (74.097958ms)
+✔ A plugin registers a tutor and an item-backed teaching method without modifying the page; permissions and policy read isolation apply (99.58575ms)
+✔ Backpack learning uses the selected UID, presents HM-disabled replacement and commits through the UI command proxy (50.412833ms)
+✔ A failed later plugin intent restores learned moves, consumed machine, friendship and plugin memory as one transaction (45.370209ms)
+✔ New-visit device activation uses the same plugin read isolation as other mechanism phases (31.558542ms)
+✔ New plugin species can declare machine compatibility; invalid references fail during content compilation (44.771666ms)
+✔ Full reference machine compatibility also feeds existing Gen3 paternal TM/HM inheritance (0.530792ms)
+✔ Mach input accelerates through original 16/8/4-frame steps and coasts through 4/8/16 on release (2.914916ms)
+✔ Mach standing turns first, moving turns retain acceleration and blocked feedback resets inertia (0.470541ms)
+✔ Motion busy does not advance Mach speed; pause and mode change clear transient input state (1.655041ms)
+✔ Rail-facing constraints prevent illegal idle turns and respect moving deceleration (0.769125ms)
+✔ Control policies must be synchronous and read-only; invalid actions cannot commit memory (1.151917ms)
+✔ Fractional frame motion finishes at its deadline without a floating-point extra frame (0.423291ms)
+✔ Browser maps held and released logical input, preserves field/menu paths and clears on blur (1.182458ms)
+✔ Mach bike accelerates on consecutive steps, turns and blocked steps reset momentum, ordinary grass remains passable (3.79475ms)
+✔ Surf boarding and dismount commit modes at animation completion, including a continuous water map connection (0.580459ms)
+✔ Mode permissions and NPC reservations apply to water just as on land (0.390458ms)
+✔ Invalid extension plans fail before coordinates, step clocks or persistent modes change (1.013125ms)
+✔ A foreign content pack adds its own movement mode and cutscene path without changing field or pathfinding code (0.689625ms)
+✔ Bike normalizes to walking inside a doorway and transient running does not alter the saved mode (0.20675ms)
+✔ Movement registration rejects duplicate IDs and invalid durations before a session starts (0.133584ms)
+✔ Flight validates visit, capability, indoor origin and live landing occupancy without moving the trainer (0.234208ms)
+✔ Flight plans are issuer-owned, stale-position checked, and committed once (0.081042ms)
+✔ Flight covers the old map before committing, renders departure/arrival and releases its lock on failure (0.413208ms)
+✔ Imported mode frames have valid native grid sizes and fly destinations resolve to unobstructed land (7.201333ms)
+✔ Saved movement rejects a bike on water, a surf mode on land and unknown visit destinations (41.284791ms)
+✔ Flight uses a destination preview and delegates entry without changing position on rejection (0.16ms)
+✔ All human seats choose before the round advances; each queued actor executes exactly once (21.745333ms)
+✔ Invalid second action preserves the first; cancel discards only unexecuted choices without consuming RNG (3.50225ms)
+✔ Spread status hits every opposing seat, spends PP once, and self-protection affects only its seat (7.608083ms)
+✔ A target fainted by an earlier action redirects an enemy-targeted attack and skips its own queued action (10.373958ms)
+✔ Both opponents faint together, one reserve enters once and the other seat becomes empty (6.55925ms)
+✔ Every human forced replacement is completed before a new round; occupied and reserved allies cannot be selected twice (2.81025ms)
+✔ Shared inventory reservations reject overspending; two valid items cannot commit stale HP drafts (5.11975ms)
+✔ Friendly single-target attacks are legal, but do not redirect to enemies when an ally target is lost (7.539417ms)
+✔ Multi-target damage passes generation-III spread policy while all-others damage includes allies (3.245292ms)
+✔ Two independent human controllers on one alliance share the scheduler and keep their own inventory/party (8.684833ms)
+✔ Three alliances continue after one opposing team is eliminated and settle only the last surviving alliance (16.528458ms)
+✔ Multi-side renderer carries every seat and animates only the named target without modifying snapshots (6.067083ms)
+✔ Doubles and free-for-all content construct valid encounters and reject missing partners before consuming RNG (9.412209ms)
+✔ Wire decoder rejects malformed, oversized, unsupported and prototype-bearing messages without mutation (2.766708ms)
+✔ Completed and pending duplicate requests execute exactly once; conflicts and out-of-order requests are explicit (1.302416ms)
+✔ Unknown/private commands and invalid parameters are rejected on the shared registry; failures consume accepted sequence (0.561125ms)
+✔ Reject and bounded wait busy policies use readiness only; handler busy errors never replay (0.636167ms)
+✔ Queue bounds and disconnect cancel pending work while a committed asynchronous action releases its own lock (4.086125ms)
+✔ Retry fingerprints ignore object key order and expired cache cannot replay an old sequence (0.534333ms)
+✔ Loopback transport carries hello, encoded commands, results and disconnect without protocol-specific game logic (3.883625ms)
+✔ WebSocket adapter and loopback are interchangeable; binary input and disconnection are handled by the wire boundary (36.045583ms)
+✔ UI facade, plugin action and network use one registry; stable UIDs survive reordering and disabled commands cannot replace saves (85.462917ms)
+✔ Core actions enforce UID/custody/selection constraints and UI evolution commands rebuild a valid domain plan (52.19525ms)
+✔ Real loopback WebSocket handshake and encoded retry reach the same CommandBus once (20.385416ms)
+✔ Readiness callbacks cannot leave locks overwritten and completion observers cannot report a committed command as failed (0.22125ms)
+✔ Command completion is delivered after lock release, allowing a committed listener to submit follow-up work (0.129708ms)
+✔ Registered NPC intentions retain common collision/range checks and immutable context (1.542625ms)
+✔ A malformed NPC extension is isolated while other actors continue; jumping pose does not change occupancy (0.234875ms)
+✔ Invalid custom AI requests fail explicitly before PP or turn settlement (14.079917ms)
+✔ User-or-selected includes self, unknown formats and duplicate content sides fail preflight (4.466667ms)
+✔ Canvas registration and layout reject bad refs, callable data, schema input and resource budgets before mounting (115.674ms)
+✔ Visual samples separate looping, terminal frames, hidden and reduced intervals with backwards-clock high water (0.377625ms)
+✔ Canvas mounts arbitrary sizes, samples independent visible frames and stops hidden tabs, closed pages and stale players (39.170583ms)
+✔ Canvas clicks use logical coordinates, keyboard center and protected real transactions without changing core state (91.269542ms)
+✔ Reduced-motion and finite visual mounts retain a single static or terminal frame without a second timer (92.86375ms)
+✔ Draw failure restores context, disposes only that visual and forbids writes or async callbacks (63.61ms)
+✔ Region and HUD refresh release old resources and disappearing content; closing modals preserves the HUD (51.955ms)
+✔ Canvas build failure disposes earlier siblings and leaves other scopes intact (35.354ms)
+✔ Invalid feedback schema and mounted-only loops fail before committing queued plugin state (33.256834ms)
+✔ Finite feedback consumes immutable sampled frames and separate assets, expires and supports reduced motion (60.76925ms)
+✔ Independent Canvas gallery mounts through native menu and detail slots and rejects stale creature context (82.859083ms)
+✔ Disabled form Canvas refuses clicks; one in-flight action cannot remount a closed page (110.948834ms)
+✔ Document visibility pauses Canvas even when the host stops producing hidden frames and releases its subscription (40.369ms)
+✔ Default data catalog composes actual plugins without loading scenario rewards or fixture maps (36.432125ms)
+✔ Explicit test environment loads isolated fixture maps through real registration (17.719583ms)
+✔ Additional enabled plugins and explicit disabling use the catalog without editing app.js (19.872334ms)
+✔ Dependency errors fail before importing code; enabled dependencies load in order (0.581083ms)
+✔ Declarative layouts reject bad field types, duplicate names, nested forms and unbounded style before any command (54.82875ms)
+✔ Component schemas and recursive expansion are bounded; primitive factories cover every resolved kind (31.939625ms)
+✔ Bad region slots, component schemas and theme values fail during production plugin assembly (12.732417ms)
+✔ Real bag page mounts a plugin form; typed submit saves plugin memory without changing inventory and reloads (93.120209ms)
+✔ Region refresh preserves unsaved text, focus and tab choice, while unmount removes its drafts (35.943459ms)
+✔ Form duplicate submission is locked; closing before completion cannot remount a removed region (49.245042ms)
+✔ Native editable controls retain game keys, Escape returns, and widget-handled arrows do not navigate the game (4.433125ms)
+✔ A late old-page submission cannot refresh a different page, and component callbacks receive frozen props and queries (24.004958ms)
+✔ Disabled forms block submission and a rejected command retains editable drafts (0.237375ms)
+✔ Successful standalone input refreshes the normalized committed value rather than an old local draft (33.53825ms)
+✔ Plugin startup orders dependencies, rejects versions/cycles/duplicates, and failed setup leaks no registration (2.338834ms)
+✔ JSON and schema boundaries reject prototypes, cycles, non-finite data, extra keys and unsupported schema options (0.920416ms)
+✔ Two independent plugins register pages and slots without modifying the built-in catalogs (104.654708ms)
+✔ Detail interaction composes action, core item/friendship, saved memory, lifecycle and presentation once (986.755916ms)
+✔ Failed feeding rolls back memory, states, inventory, friendship, events and feedback (24.948125ms)
+✔ Custom states tick and expire once with transactional lifecycle callbacks; stale context cannot write later (33.357625ms)
+✔ Plugin numeric rules enter the same battle pipeline and cannot mutate snapshot or dispatch commands (24.525291ms)
+✔ Core permission and namespace boundaries reject foreign status writes and undeclared intents (17.644042ms)
+✔ Plugin memory survives lead changes, box custody and omission; content references report missing dependency (51.197583ms)
+✔ Event failures are isolated and recursive cascades are bounded (0.168125ms)
+✔ Command bus serializes asynchronous work, validates network declarations, and releases locks on failure (0.219125ms)
+✔ New species, moves, traits, movement and growth predicates are registered as content and validated before play (31.371ms)
+✔ Async status callbacks are rejected and late callbacks cannot modify committed records (21.863208ms)
+✔ A state fault restores its clock and memory and missing plugin core content is never silently loaded (39.188709ms)
+✔ Two live sessions cannot silently overwrite each other and read-only save inspection does not adopt a changed baseline (0.3445ms)
+✔ Extension map references and grid values fail before play, including patched connections (12.422958ms)
+✔ Intent shapes reject extra fields before writes and observer failures cannot undo committed actions (17.382583ms)
+✔ Themes and world feedback use bounded public definitions; invalid scopes and asynchronous validation fail (32.442167ms)
+✔ Domain permissions are supplied by the content pack and queued observation steps flush after asynchronous command completion (28.009875ms)
+✔ Authorized plugins can use exposed domain commands and equipment removal remains a validated intent (23.7755ms)
+✔ Scene commit occurs at full coverage exactly once; duplicate transition is refused (3.401541ms)
+✔ Transition failures release the input lock (0.356166ms)
+✔ HP interpolation is visual only; a zero-HP actor remains visible until faint finishes (4.241709ms)
+✔ Capture shakes follow domain result; failed capture restores opponent and successful capture seals ball (2.634042ms)
+✔ Combat session rejects repeated actions while presenting the previous turn (1.097666ms)
+✔ A different tiny content pack reuses the field session without Emerald names or DOM (7.770958ms)
+✔ Story commands await dialogue before applying later rewards; unknown commands fail explicitly (1.11875ms)
+✔ Reduced motion removes shaking while preserving HP timing and blackout commit (0.508458ms)
+✔ Content contract rejects missing grid tiles, invalid learnsets and dimensions (16.401333ms)
+✔ Battle events expose semantic animation metadata and immutable health snapshots (26.214625ms)
+✔ Party commands reject invalid use and evolution never revives a fainted member (2.088ms)
+✔ Pack application rejects out-of-context inventory commands and preserves compatible saves (34.364375ms)
+✔ Versioned storage accepts only the current save format without rewriting rejected source (1.847042ms)
+✔ Completed combat returns at dialogue boundary without waiting for the next user confirmation (27.961708ms)
+✔ Missed moves identify the failed hit so presentation does not draw an impact (5.200666ms)
+✔ Toxic persists as a major condition, increases with Gen III integer rounding, resets on switch and is cured by poison-family items (9.9765ms)
+✔ Toxic prevention, Immunity entry cure and Synchronize use the poison family; poisonous berries also cure Toxic (7.504542ms)
+✔ Counter and Mirror Coat target the factual attacker in doubles and distinguish physical/special impacts (8.605667ms)
+✔ Substitute damage does not enable retaliation; Revenge doubles only for its attacker and Focus Punch loses focus after real damage (7.196709ms)
+✔ Endure keeps 1 HP for direct damage only and expires; repeated Protect can fail; impact ledgers roll back with a failed rule (14.084542ms)
+✔ Battle form activation changes derived stats/types/ability without modifying base identity, costs no turn and enforces controller limit (40.107125ms)
+✔ Transform copies effective combat stats, types, ability, IV and 5 PP moves; base moves and species survive switching (21.211334ms)
+✔ Mimic uses temporary move slots with independent PP and restores after battle (21.405834ms)
+✔ World forms persist IDs and derive new stats after level changes; invalid saved references fail and custody reconciliation removes obsolete forms (16.182125ms)
+✔ Form mutation faults roll back records, activation limits and base creature through the battle checkpoint (16.716333ms)
+✔ Clip validation rejects invalid timing, dimensions, shape and binding; definitions are deeply immutable (2.066458ms)
+✔ Pure frame sampling uses exact boundaries, loop modulo, finite clocks and reduced-motion first frame (2.832916ms)
+✔ Registry rejects unknown resources/species and conflicting explicit bindings while allowing replacement of native defaults (1.492875ms)
+✔ Canvas player crops actual frames, draws only changes, letterboxes and cancels stale callbacks on replacement (1.803958ms)
+✔ Missing/oversized resource frames fail before the first draw, and asynchronous drawing failures release the loop (0.683333ms)
+✔ Reduced motion and single frames draw once; non-loop clips finish without a lingering timer (0.2715ms)
+✔ Public plugin clip registration replaces only presentation; duplicates and bad references fail at startup (126.98ms)
+✔ Every generated native clip has real asset rectangles; current single and multiple sheets select correct metadata (55.423084ms)
+✔ Shared modal lifecycle disposes page resources exactly once on replacement, close and explicit host disposal (82.384708ms)
+✔ Real detail page mounts the registered clip and shared shell releases its playback on page navigation (47.142208ms)
+✔ Browser scenario-support machine IDs resolve and a granted machine teaches through the production inventory route (90.216084ms)
+✔ Story queries compare inventory, party, money and variables; invalid schemas fail before execution (2.129041ms)
+✔ Choice, nested conditions and sequence select only the chosen branch; entire tree validates first (2.108333ms)
+✔ Region triggers respect bounds, prerequisites and once-only completion (0.232541ms)
+✔ Trainer sight uses facing/range, collision and blockers without moving actors (0.48725ms)
+✔ Data-only plugin story and custom readonly query execute choices through UI and persist progress (82.919458ms)
+✔ Escort coordinates multiple NPC/player tracks through shared source occupancy and releases control (14.942583ms)
+✔ Escort may coordinate NPCs without moving the player, and malformed/nonadjacent chains fail before moving (5.346375ms)
+✔ Group escort resource claims prevent a parallel branch from controlling any member before rewards (0.364583ms)
+✔ Scene field transforms are pure bounded sampling with reduced motion and isolated faulty callbacks (0.866916ms)
+✔ Malformed/async field transforms report once and restore neutral projection instead of breaking the render loop (2.277541ms)
+✔ Public field-only scenes change actual world projection and inverse coordinates, never world state or RNG (66.754708ms)
+✔ Registered overlay and field definitions validate together; invalid scene payload preflights before reward (65.349ms)
+✔ Pack bootstrap materializes native sprite resources for headless and plugin sessions using one policy (36.793541ms)
+✔ Field-only scenes can run alongside movement and focus, while two clips still conflict before any reward (87.155625ms)
+✔ Charge and Helping Hand multiply after critical and before type, and do not become Gen IV charge-defense boosts (22.633083ms)
+✔ Follow Me overrides Lightning Rod for a single target, leaves spread targets intact and lasts one round (9.745667ms)
+✔ Destiny Bond drains all newly fainted seats before outcomes; Grudge zeros the causal slot, and both clear before a prevented next attempt (13.157042ms)
+✔ Rage boosts on actual hits only; Memento fails at both minimum stats, but still faints against protection; Secret Power uses terrain policy (4.750166ms)
+✔ Registered base multipliers reach the real formula for Spit Up and Weather Ball rather than changing power before integer rounding (4.836042ms)
+✔ Tactical AI considers type, estimated damage and knockout; estimation consumes no gameplay RNG or state (50.474833ms)
+✔ Custom strategy receives legal item candidates and frozen analyses, while battle owns item cost and commit (39.566583ms)
+✔ Trainer defeat is party-based: each faint awards once, replacement waits until the round ends (17.615917ms)
+✔ Experience participation belongs to each opponent encounter, identified by creature UID (12.711209ms)
+✔ Voluntary switching consumes a turn; forced replacement consumes neither turn nor RNG (5.642042ms)
+✔ Invalid actions are side-effect free and do not reuse the previous action ID (4.370791ms)
+✔ Residual damage completes before the opponent reserve enters; capture remains forbidden after replacement (3.88675ms)
+✔ Simultaneous fainting leaves reserves available; exhaustion of both teams follows the explicit loss policy (15.905875ms)
+✔ Paralysis action check uses its own rule, independently of thawing (2.234209ms)
+✔ Domain events contain detached seat collections and stable IDs, with only presentation fields (6.327667ms)
+✔ Topology expresses doubles, shared controllers, multiple controllers and three alliances without changing UID (4.735209ms)
+✔ Topology validation rejects duplicate UIDs, bad targets and double occupation before any external mutation (3.826416ms)
+✔ Enemy replacement animation releases the enemy silhouette and preserves team HUD metadata (3.972916ms)
+✔ Trainer content validates the complete team before creating any creature or consuming RNG (0.339333ms)
+✔ Practice prize is committed once after the full win; rematches do not grant another reward (5.736583ms)
+✔ Invalid battle construction precedes transition, and result plans are not created twice on exit retry (0.605375ms)
+✔ Save validation rejects missing or duplicated creature identities and missing story ledger (43.312458ms)
+✔ Rule pipeline validates IDs, phases, deterministic ordering, removal and non-finite modifiers (1.67425ms)
+✔ Entry intimidate, stage immunity and natural cure use the same seat lifecycle (20.481583ms)
+✔ Absorption heals once without damage, critical immunity overrides critical policy and pressure charges PP (14.039166ms)
+✔ Contact feedback happens per successful hit; immunity produces no contact effects (6.275958ms)
+✔ Status immunity, synchronize and immediately consumed cure berries cannot recurse (6.476042ms)
+✔ Multi-hit HP berries consume exactly once, leftovers stay held and fainted holders never heal (5.60825ms)
+✔ Choice band locks the selected move, replacement resets it, shell bell heals once per action (7.760125ms)
+✔ Rock head blocks ordinary recoil, liquid ooze reverses drains and both use dedicated check phases (8.113292ms)
+✔ Numeric ability and held item rules compose once, and model direct callers use the same ability definitions (3.640667ms)
+✔ Weather entry, suppression and residual exclusions respect living seats (3.666209ms)
+✔ Equipment swaps atomically by UID, supports box members and rejects missing inventory (2.689917ms)
+✔ Canonical metadata covers 76 used Gen III abilities and every 66 held effect type explicitly (0.133625ms)
+✔ A failing extension after damage restores creature identities, PP, HP, inventory, turn and seeded RNG (3.308916ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (22.17175ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (9.070291ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (6.14025ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (5.578042ms)
+✔ Clock page submits setup through a command and renders live saved time (5.971583ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (15.936708ms)
+✔ Upper-layer plugin composes real map travel, device, branch, trainer bench, once reward and a fresh saved session (224.877ms)
+✔ The author plugin rejects distant device use and can cancel challenge without rewards or battle (49.65675ms)
+✔ Integration content coexists with the journal and its HUD consumes the actual public view shape (40.817125ms)
+✔ Type changes preserve creature identity and leave cleanup; Conversion 2 remembers landed type across turns (11.645333ms)
+✔ Role Play and Skill Swap restore original abilities; active form overrides also accept temporary abilities (4.572375ms)
+✔ Consumed items are recyclable only within the current battle; Knock Off is temporary while Trick transfers ownership (3.824709ms)
+✔ Magnitude uses one roll for spread targets, Weather Ball changes type, Present can heal even a Ghost target (4.680708ms)
+✔ Fake Out is entry-limited, SmellingSalt cures paralysis, Spite uses the original 2–5 PP range and Ghost Curse costs HP (3.508166ms)
+✔ Public camera leases change range/focus without changing world state; ties and disconnected foci fail before writes (64.5635ms)
+✔ Projection and inverse use the same letterboxed space, reject margins and preserve tile coordinates (31.020083ms)
+✔ Story camera temporarily wins over plugin focus, then restores it; visit/session leases reset at proper boundaries (37.441958ms)
+✔ Independent fog layers compose in order without replacing logical weather; schema errors and unknown drawings fail (29.336ms)
+✔ Field renderer shares projection for tiles/actors/weather/light and environment; frame drawing leaves rules untouched (32.318875ms)
+✔ Environment drawing is deterministic, honors reduced motion and releases context on failure (0.1275ms)
+✔ Public density composition selects distinct grass cells, prepares regional individuals and displays their species without StoryRunner (64.10975ms)
+✔ Animation declarations reject unknown effects and malformed timing, then seal against changes (1.738042ms)
+✔ Per-move tracks select distinct visuals, fan out over seats and keep input snapshots unchanged (3.040875ms)
+✔ All registered pixel effects draw without domain access and isolate a failing external drawing handler (3.436375ms)
+✔ Persistent environment/status/protection visuals consume projections only; all transition patterns fully cover commits (2.519167ms)
+✔ Plugins can override one existing move through public presentation registration without editing the renderer (2.677917ms)
+✔ Battle snapshots carry detached weather, volatile state, actual stage delta and per-hit identity (12.878334ms)
+✔ Reference map weather preserves 518 headers and 86 coordinate events with separate field/battle identities (0.937417ms)
+✔ Weather restore rejects non-object override containers and explicit malformed map weather rather than assuming clear (59.512458ms)
+✔ Coordinate weather respects elevation, remains until another trigger and resets on map entry (0.467375ms)
+✔ Daily cycles advance saved stages once and resolve only on entry or coordinate selection (0.421792ms)
+✔ Temporary and remote overrides expire once; invalid requests never mutate valid state (0.519083ms)
+✔ Registries reject missing references, cycles, map regions and invalid residual policies before play (0.762791ms)
+✔ Abnormal weather phase is a saved foreground clock rather than render randomness or RTC (0.394667ms)
+✔ Battle inherits permanent weather, applies registered residual immunity and suppresses it through Cloud Nine (48.480542ms)
+✔ Weather moves expire after five rounds, repeated weather fails and entry abilities can make it permanent (51.728958ms)
+✔ Weather crossfades are clock-injected, preserve interruption continuity and respect reduced motion (0.2575ms)
+✔ Registered weather artists are deterministic, opacity-safe and use static reduced-motion rendering (1.135334ms)
+✔ Application commands, read-only queries, map visits, expiry and current save schema share one owner (60.085ms)
+✔ Plugins register weather, combat policy and drawing without editing core; missing permissions deny commands (37.75975ms)
+✔ Saved RTC days advance weather stages once after offline restore while active selections remain stable (45.029125ms)
+✔ Story weather validates the full sequence before writing, resets on entry, and conflicts in parallel tracks (23.06175ms)
+✔ Weather intents join transactions, roll back a partial change and emit no rolled-back weather facts (24.278417ms)
+✔ Field weather crosses the real battle application boundary and combat changes cannot rewrite the field (20.952ms)
+✔ Foreground abnormal phases pause across battle/hidden gaps and survive a current-schema reload (46.168542ms)
+✔ Field renderer uses the actual map key and registered indoor weather, without altering domain state (1.17225ms)
+✔ Persistent overlays share collision/projection, preserve source arrays, and restore after serialization (2.62525ms)
+✔ Invalid batch leaves no partial tile write; unknown references and stale plans fail (0.432792ms)
+✔ Object spawn/hide and changed positions invalidate autonomous and scene-pinned NPC state (0.583292ms)
+✔ Public world command and story worldPatch persist a created actor and grid update; load uses the same overlay (105.232625ms)
+✔ Visit overlays compose field by field, survive active-visit serialization and expire only on entry (0.409417ms)
+✔ Temporary object edits inherit permanent visibility, expire spawned objects, and reject invalid scopes atomically (0.392875ms)
+✔ A map-entry preview restores connected collision and invalidates patch plans (0.318334ms)
+✔ World time starts once at a selected local time and advances independently of foreground play time (1.812333ms)
+✔ Clock restore advances offline intervals once while preserving play duration and rollback high-water mark (0.130625ms)
+✔ Explicit offline pause and cap policies do not change foreground clock rules (0.0895ms)
+✔ Play duration retains fractional frame time and excludes hidden sessions, backwards clocks and reload gaps (0.064167ms)
+✔ Invalid clocks and setup input fail before changing time (0.187083ms)
+✔ Tasks validate data, preserve stable identities through serialization and deliver once after their deadline (0.554584ms)
+✔ Repeated task catch-up can aggregate, select latest or drain every occurrence with a bounded ordered queue (0.386791ms)
+✔ Scheduler rejects overflow atomically without losing earlier pending one-shot tasks (0.255833ms)
+✔ Original tide windows and registered story queries read the saved local clock rather than device timezone (0.18875ms)
+✔ Public time setup, scheduled plugin facts and save/load use the same domain clock without core writes (112.203958ms)
+✔ World clocks advance during dialogue but daily/task effects wait until the field is available (21.293375ms)
+✔ Registered actor behavior observes saved world time and map environment through immutable context (20.886625ms)
+✔ Explicit time advances obey the same time-event deferral as RTC ticks (16.838959ms)
+✔ Host visibility excludes background frames from play duration while world RTC still advances (23.972042ms)
+ℹ tests 810
+ℹ suites 0
+ℹ pass 810
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4700.502917
+ℹ start of coverage report
+ℹ ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ℹ file                             | line % | branch % | funcs % | uncovered lines
+ℹ ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ℹ dist                             |        |          |         | 
+ℹ  adapters                        |        |          |         | 
+ℹ   audio.js                       |  96.30 |    87.04 |   90.00 | 75-76 99-101 106-108 224-225
+ℹ   browser-input.js               |  78.08 |    91.89 |   83.33 | 34-37 49-65 90-92 133-140
+ℹ   canvas-renderer.js             |  64.42 |    68.97 |   62.50 | 59-60 62-66 68-131 133-152 154-171 215-216 348-352 387-397 425-432 444-454 460-461 464-489
+ℹ   content-loader.js              |  80.65 |   100.00 |   66.67 | 7-12
+ℹ   dialogue-dom.js                |  97.62 |    90.63 |   93.33 | 100-102
+ℹ   extension-dom.js               |  92.75 |    81.93 |   82.93 | 152-153 156-162 216-220 283-284 287-294
+ℹ   layout-dom.js                  |  84.76 |    93.15 |   86.27 | 254-276 279-289 291-296 320-324 350 367-374 412-423
+ℹ   network-transport.js           |  97.37 |    95.12 |   95.83 | 40-42
+ℹ   plugin-loader.js               |  95.04 |    83.02 |   87.50 | 8-11 109-110
+ℹ   scene-dom.js                   |  67.50 |    75.00 |   66.67 | 26-38
+ℹ   sprite-canvas.js               | 100.00 |    93.10 |   88.89 | 
+ℹ   visual-canvas.js               | 100.00 |    96.67 |   83.33 | 
+ℹ  engine                          |        |          |         | 
+ℹ   actor-navigation.js            |  98.80 |    89.47 |  100.00 | 36
+ℹ   actor-repository.js            | 100.00 |    91.86 |  100.00 | 
+ℹ   actor-schedules.js             |  98.45 |    93.85 |  100.00 | 125-126
+ℹ   appearances.js                 |  96.79 |    81.82 |   97.14 | 66-67 133 177-178 334-339
+ℹ   battle-rules.js                | 100.00 |    73.08 |   90.00 | 
+ℹ   battle-session.js              | 100.00 |    85.19 |   90.00 | 
+ℹ   battle.js                      |  98.04 |    84.78 |   93.75 | 206-208 258-259 397-398 422-424
+ℹ   battle                         |        |          |         | 
+ℹ    action-lifecycle.js           | 100.00 |    90.24 |  100.00 | 
+ℹ    actions.js                    |  89.93 |    89.22 |   88.89 | 221-225 264-287
+ℹ    ai.js                         | 100.00 |    77.78 |  100.00 | 
+ℹ    analysis.js                   | 100.00 |    72.22 |  100.00 | 
+ℹ    augments.js                   |  99.62 |    89.11 |  100.00 | 145
+ℹ    called-moves.js               | 100.00 |    80.00 |  100.00 | 
+ℹ    checkpoint.js                 | 100.00 |   100.00 |  100.00 | 
+ℹ    continuous-operations.js      | 100.00 |   100.00 |  100.00 | 
+ℹ    control-operations.js         |  71.03 |    68.00 |   57.89 | 28-30 55-57 61-63 79-81 95-97 100-101 104-105 108-109 113-118 121-126 129-136 139
+ℹ    control-state-operations.js   |  90.11 |    66.67 |   90.91 | 26-28 43-48
+ℹ    copy-operations.js            |  98.31 |    92.68 |  100.00 | 107-108
+ℹ    damage-calculation.js         | 100.00 |    94.44 |  100.00 | 
+ℹ    damage-operations.js          |  87.68 |    74.07 |   70.83 | 16-18 43 56-60 98-100 108 111-114
+ℹ    decisions.js                  |  98.55 |    90.91 |  100.00 | 61
+ℹ    events.js                     | 100.00 |    94.44 |   81.82 | 
+ℹ    form-operations.js            |  67.12 |    54.55 |   71.43 | 3-12 23-26 56-59 67-72
+ℹ    held-items.js                 | 100.00 |    81.25 |  100.00 | 
+ℹ    interception.js               | 100.00 |    95.83 |  100.00 | 
+ℹ    major-status.js               | 100.00 |    85.19 |  100.00 | 
+ℹ    move-selection.js             | 100.00 |    87.50 |  100.00 | 
+ℹ    moves.js                      |  98.05 |    90.12 |  100.00 | 261-263 282 284-286
+ℹ    outcomes.js                   |  98.83 |    98.36 |   95.00 | 169-170
+ℹ    random-power-operations.js    |  93.33 |    66.67 |  100.00 | 27-29
+ℹ    reactive-operations.js        | 100.00 |    95.65 |  100.00 | 
+ℹ    readiness.js                  |  83.70 |    92.00 |  100.00 | 14-16 79-90
+ℹ    replacement-requests.js       | 100.00 |    84.62 |  100.00 | 
+ℹ    roster.js                     |  99.54 |    91.01 |  100.00 | 180
+ℹ    round.js                      |  91.58 |    87.80 |  100.00 | 28-30 48-50 183-193
+ℹ    special-hit-operations.js     |  90.48 |    76.47 |   87.50 | 2-4 54-56
+ℹ    special-operations.js         |  79.75 |    62.50 |   72.73 | 12-15 55-58 78-80 83-85 87-89 91-92 134-137 146-155
+ℹ    spoils.js                     | 100.00 |    77.78 |  100.00 | 
+ℹ    state-operations.js           |  76.47 |    70.00 |   50.00 | 11-13 17-19 22-23
+ℹ    state-registry.js             | 100.00 |    93.33 |  100.00 | 
+ℹ    strategy-registry.js          | 100.00 |    75.00 |  100.00 | 
+ℹ    support-operations.js         |  91.04 |    71.43 |  100.00 | 38 41-43 60-61
+ℹ    targeting.js                  |  91.89 |    91.84 |   90.91 | 50-53 61-62
+ℹ    trait-operations.js           | 100.00 |    76.47 |  100.00 | 
+ℹ    traits.js                     | 100.00 |    92.31 |  100.00 | 
+ℹ    utility-operations.js         |  83.07 |    61.90 |   90.91 | 21-23 36-37 49-51 67-69 78-80 130-132 156-160 163-164 169-173 180-182
+ℹ    volatiles.js                  | 100.00 |    90.91 |  100.00 | 
+ℹ    weather.js                    | 100.00 |    96.43 |  100.00 | 
+ℹ   camera-view.js                 | 100.00 |    84.21 |  100.00 | 
+ℹ   camera.js                      | 100.00 |    81.25 |  100.00 | 
+ℹ   commands.js                    |  92.74 |    90.32 |   82.35 | 76-79 82-86
+ℹ   condition-queries.js           |  99.09 |    84.00 |   68.42 | 35
+ℹ   conditions.js                  |  98.86 |    88.52 |   75.00 | 36
+ℹ   content-manifest.js            |  97.59 |    97.73 |  100.00 | 80-81
+ℹ   content-references.js          |  96.51 |    63.16 |  100.00 | 48-50
+ℹ   content.js                     | 100.00 |    81.40 |  100.00 | 
+ℹ   creature-contract.js           | 100.00 |   100.00 |  100.00 | 
+ℹ   creatures                      |        |          |         | 
+ℹ    forms.js                      |  95.72 |    82.76 |   88.89 | 232-236 240 242-246
+ℹ    status.js                     | 100.00 |   100.00 |  100.00 | 
+ℹ   crop-growth.js                 | 100.00 |    90.83 |  100.00 | 
+ℹ   dialogue.js                    | 100.00 |    97.56 |   85.71 | 
+ℹ   effects.js                     | 100.00 |    90.91 |  100.00 | 
+ℹ   elevation.js                   | 100.00 |   100.00 |  100.00 | 
+ℹ   encounter-policies.js          | 100.00 |    97.22 |  100.00 | 
+ℹ   encounter-tables.js            | 100.00 |    90.48 |  100.00 | 
+ℹ   encounter-tickets.js           |  98.18 |    87.18 |   94.12 | 102-103
+ℹ   encounters.js                  | 100.00 |    80.77 |   91.67 | 
+ℹ   environment-layers.js          | 100.00 |    94.12 |  100.00 | 
+ℹ   equipment.js                   | 100.00 |    85.00 |  100.00 | 
+ℹ   experience.js                  | 100.00 |   100.00 |   83.33 | 
+ℹ   extensions                     |        |          |         | 
+ℹ    audio-contracts.js            |  98.31 |    93.75 |  100.00 | 47
+ℹ    catalog.js                    |  99.69 |    86.96 |   82.35 | 169
+ℹ    command-bus.js                | 100.00 |    97.37 |   90.91 | 
+ℹ    event-bus.js                  |  96.23 |    83.33 |   60.00 | 19-20
+ℹ    field-utils.js                | 100.00 |    66.67 |  100.00 | 
+ℹ    growth-conditions.js          | 100.00 |   100.00 |   75.00 | 
+ℹ    layout-contracts.js           |  95.48 |    91.60 |   88.57 | 157-158 181-192
+ℹ    network-gateway.js            | 100.00 |    94.44 |   90.00 | 
+ℹ    network-protocol.js           | 100.00 |    90.48 |  100.00 | 
+ℹ    network-session.js            |  75.36 |    58.33 |   85.71 | 28-30 40-49 53-54 58-59
+ℹ    plugin-host.js                |  92.38 |    85.34 |   92.86 | 150-153 219-220 282-283 356-357 407-408 429-431 449-454 673-679 692-718
+ℹ    plugin-runtime.js             | 100.00 |    90.11 |   96.30 | 
+ℹ    plugin-state.js               | 100.00 |    71.43 |  100.00 | 
+ℹ    presentation-contracts.js     | 100.00 |   100.00 |  100.00 | 
+ℹ    sprite-clip-contracts.js      | 100.00 |    96.67 |  100.00 | 
+ℹ    sprite-contracts.js           | 100.00 |    92.31 |  100.00 | 
+ℹ    terrain-utils.js              | 100.00 |   100.00 |  100.00 | 
+ℹ    ui-registry.js                |  98.06 |    80.49 |   93.33 | 69-70
+ℹ    values.js                     | 100.00 |    92.68 |   93.33 | 
+ℹ    visual-contracts.js           | 100.00 |    92.65 |  100.00 | 
+ℹ    world-content.js              | 100.00 |    93.33 |  100.00 | 
+ℹ   facilities.js                  |  99.24 |    82.39 |   97.22 | 116-118
+ℹ   field-actions.js               | 100.00 |    92.59 |   94.12 | 
+ℹ   field-contacts.js              | 100.00 |    95.92 |  100.00 | 
+ℹ   field-devices.js               | 100.00 |    91.52 |  100.00 | 
+ℹ   field-director.js              |  96.68 |    82.16 |   97.62 | 286-298
+ℹ   field-effects.js               | 100.00 |    90.00 |  100.00 | 
+ℹ   field-session.js               |  97.80 |    88.43 |   92.59 | 205-211 238
+ℹ   field-terrain.js               | 100.00 |    95.59 |  100.00 | 
+ℹ   field-triggers.js              |  96.26 |    95.24 |  100.00 | 36-39
+ℹ   fishing.js                     | 100.00 |    86.21 |  100.00 | 
+ℹ   growth                         |        |          |         | 
+ℹ    breeding.js                   |  95.57 |    85.15 |  100.00 | 47-51 73-75 83
+ℹ    conditions.js                 | 100.00 |    73.17 |  100.00 | 
+ℹ    daycare.js                    |  94.17 |    86.96 |   94.74 | 79-81 116-119
+ℹ    evolution.js                  |  96.63 |    79.79 |  100.00 | 39-44 68-70
+ℹ    friendship.js                 | 100.00 |    90.00 |  100.00 | 
+ℹ    hatching.js                   | 100.00 |    92.31 |  100.00 | 
+ℹ    move-learning.js              | 100.00 |    93.07 |  100.00 | 
+ℹ    nutrition.js                  | 100.00 |    85.00 |  100.00 | 
+ℹ    session.js                    |  98.00 |    64.71 |   81.82 | 45-46
+ℹ    trading.js                    | 100.00 |    92.31 |  100.00 | 
+ℹ   inventory-registry.js          | 100.00 |    97.22 |  100.00 | 
+ℹ   inventory.js                   |  99.11 |    97.84 |  100.00 | 202-203
+ℹ   item-actions.js                | 100.00 |   100.00 |  100.00 | 
+ℹ   item-shortcut.js               | 100.00 |    96.00 |   90.00 | 
+ℹ   items.js                       | 100.00 |    96.91 |   91.67 | 
+ℹ   map-lighting.js                | 100.00 |    87.50 |  100.00 | 
+ℹ   model.js                       | 100.00 |    89.13 |  100.00 | 
+ℹ   motion.js                      |  98.60 |    95.77 |  100.00 | 149-151
+ℹ   move-effects.js                |  94.57 |    80.17 |   78.79 | 207-208 211-212 215 229-243 246-247 254-257 302-305 569
+ℹ   move-flags.js                  | 100.00 |   100.00 |  100.00 | 
+ℹ   movement-input.js              | 100.00 |    93.48 |  100.00 | 
+ℹ   movement.js                    | 100.00 |    91.58 |  100.00 | 
+ℹ   npc-behaviors.js               |  97.06 |    75.86 |   73.33 | 42-44
+ℹ   npc-poses.js                   | 100.00 |    90.91 |  100.00 | 
+ℹ   npcs.js                        |  99.04 |    89.31 |   96.88 | 373-376
+ℹ   object-motion.js               | 100.00 |    82.14 |   90.91 | 
+ℹ   party-storage.js               |  77.78 |    77.78 |   90.00 | 23-31 46-50
+ℹ   party.js                       | 100.00 |    80.00 |  100.00 | 
+ℹ   pathfinding.js                 | 100.00 |   100.00 |  100.00 | 
+ℹ   presentation-cues.js           | 100.00 |   100.00 |  100.00 | 
+ℹ   random-selection.js            | 100.00 |   100.00 |  100.00 | 
+ℹ   rule-pipeline.js               | 100.00 |    96.77 |  100.00 | 
+ℹ   rule-policy.js                 | 100.00 |    92.00 |  100.00 | 
+ℹ   rules                          |        |          |         | 
+ℹ    attachments.js                | 100.00 |    92.59 |  100.00 | 
+ℹ    gen3                          |        |          |         | 
+ℹ     abilities.js                 |  99.45 |    90.24 |   95.51 | 356-358
+ℹ     ability-catalog.js           | 100.00 |   100.00 |  100.00 | 
+ℹ     acro-input.js                |  86.86 |    81.58 |   81.82 | 113-116 131-134 139-146 153-156 165-166 169-170 227-233
+ℹ     battle-states.js             |  94.72 |    82.61 |   73.33 | 143-147 163-168 234 241
+ℹ     bike-input-helpers.js        | 100.00 |    87.50 |  100.00 | 
+ℹ     bike-input.js                | 100.00 |   100.00 |  100.00 | 
+ℹ     continuous-states.js         | 100.00 |    87.50 |  100.00 | 
+ℹ     control-states.js            |  98.18 |    83.87 |   82.14 | 63-64 131 190-191
+ℹ     elevation.js                 | 100.00 |   100.00 |  100.00 | 
+ℹ     extended-move-effects.js     | 100.00 |   100.00 |  100.00 | 
+ℹ     fishing.js                   | 100.00 |    96.00 |  100.00 | 
+ℹ     global-rules.js              |  97.30 |    23.08 |  100.00 | 31
+ℹ     held-catalog.js              | 100.00 |   100.00 |  100.00 | 
+ℹ     held-items.js                | 100.00 |    95.24 |  100.00 | 
+ℹ     inventory.js                 | 100.00 |   100.00 |  100.00 | 
+ℹ     item-metadata.js             | 100.00 |   100.00 |  100.00 | 
+ℹ     machine-learning.js          | 100.00 |   100.00 |  100.00 | 
+ℹ     map-cycling.js               | 100.00 |   100.00 |  100.00 | 
+ℹ     map-weather.js               | 100.00 |   100.00 |  100.00 | 
+ℹ     numeric.js                   |  98.88 |    77.78 |   91.30 | 158-159
+ℹ     reference-metadata.js        | 100.00 |   100.00 |  100.00 | 
+ℹ     support-states.js            | 100.00 |    77.78 |  100.00 | 
+ℹ     tactical-strategy.js         |  95.00 |    31.25 |   50.00 | 14 26
+ℹ     weather.js                   | 100.00 |   100.00 |  100.00 | 
+ℹ    party-traits.js               | 100.00 |   100.00 |   83.33 | 
+ℹ   save-store.js                  |  97.73 |    96.55 |   87.50 | 85-86
+ℹ   state-checkpoint.js            |  97.06 |    90.48 |  100.00 | 13
+ℹ   story-variables.js             | 100.00 |    92.00 |  100.00 | 
+ℹ   story.js                       | 100.00 |    91.01 |  100.00 | 
+ℹ   terrain.js                     | 100.00 |   100.00 |  100.00 | 
+ℹ   timeline.js                    | 100.00 |    88.00 |   75.00 | 
+ℹ   trainer-encounters.js          |  97.03 |    85.33 |  100.00 | 143-145 199-201
+ℹ   travel.js                      |  96.00 |    93.75 |   60.00 | 74-77
+ℹ   type-rules.js                  | 100.00 |   100.00 |  100.00 | 
+ℹ   visual-leases.js               | 100.00 |    84.21 |  100.00 | 
+ℹ   weather.js                     | 100.00 |    96.32 |   96.30 | 
+ℹ   world-clock.js                 |  96.88 |    91.53 |   92.31 | 95-97 131-132
+ℹ   world-query.js                 | 100.00 |    85.19 |   85.71 | 
+ℹ   world-schedule.js              | 100.00 |    91.04 |  100.00 | 
+ℹ   world-state.js                 |  95.95 |    86.83 |   91.67 | 126-128 130-143
+ℹ   world.js                       |  99.33 |    98.10 |   96.43 | 291-292
+ℹ  packs                           |        |          |         | 
+ℹ   emerald                        |        |          |         | 
+ℹ    ability-names.js              | 100.00 |   100.00 |  100.00 | 
+ℹ    adventure.js                  | 100.00 |   100.00 |  100.00 | 
+ℹ    animations.js                 | 100.00 |   100.00 |   75.00 | 
+ℹ    appearance-definitions.js     | 100.00 |   100.00 |  100.00 | 
+ℹ    application-commands.js       |  98.95 |    90.98 |   81.98 | 492-493 652-653 690-691 707-708
+ℹ    application                   |        |          |         | 
+ℹ     actor-application.js         | 100.00 |    93.00 |  100.00 | 
+ℹ     appearance-application.js    |  99.24 |    88.24 |  100.00 | 45
+ℹ     battle-application.js        |  96.26 |    69.09 |   84.85 | 110-112 265-270 285-286
+ℹ     composition.js               | 100.00 |    97.83 |  100.00 | 
+ℹ     contact-application.js       | 100.00 |    78.13 |  100.00 | 
+ℹ     crop-application.js          | 100.00 |    88.00 |  100.00 | 
+ℹ     device-application.js        |  95.98 |    85.37 |   89.47 | 108-109 112-114 152-153
+ℹ     encounter-application.js     |  89.78 |    73.77 |   95.45 | 145-147 155-157 235-237 246-258 267-272
+ℹ     facility-application.js      |  98.68 |    84.48 |   95.65 | 112-114
+ℹ     field-action-application.js  |  99.79 |    90.60 |   97.30 | 210
+ℹ     forms-application.js         |  58.21 |    80.00 |   50.00 | 20-32 34-48
+ℹ     frame-application.js         | 100.00 |    90.32 |  100.00 | 
+ℹ     growth-application.js        |  63.54 |    53.57 |   59.09 | 38 44-60 69-83 85-88 90-93 95-114 116-142 163-165 169 232-240
+ℹ     inspection-application.js    |  22.43 |   100.00 |   50.00 | 24-106
+ℹ     inventory-application.js     |  93.66 |    70.59 |   89.47 | 127-130 132-136
+ℹ     item-shortcut-application.js | 100.00 |   100.00 |  100.00 | 
+ℹ     movement-application.js      |  76.49 |    88.89 |   63.16 | 109-116 151-161 168-185 187-206 239-240
+ℹ     party-application.js         |  70.93 |    88.89 |   70.00 | 44-57 74-75 77-85
+ℹ     ports.js                     | 100.00 |   100.00 |  100.00 | 
+ℹ     presentation-application.js  |  72.97 |   100.00 |   75.00 | 27-36
+ℹ     public-ports.js              | 100.00 |   100.00 |  100.00 | 
+ℹ     save-application.js          |  87.92 |    90.38 |  100.00 | 149-157 178-186 196-202
+ℹ     story-application.js         |  96.43 |    87.95 |   90.70 | 100 141-145 197 248-249
+ℹ     time-application.js          |  94.81 |    88.46 |   83.33 | 36-38 121-122 130-131
+ℹ     triggers-application.js      |  74.68 |    92.31 |   71.43 | 48-49 53-55 61-75
+ℹ     view-application.js          |  97.74 |    93.75 |  100.00 | 69-71
+ℹ     weather-application.js       |  94.29 |    86.49 |   92.31 | 99-104
+ℹ     world-application.js         |  95.49 |    87.60 |  100.00 | 267-269 272-274 296-298 304-306 323 432-439
+ℹ     world-object-operations.js   |  95.24 |    84.62 |  100.00 | 66-70
+ℹ    audio-library.js              |  97.92 |    94.44 |  100.00 | 77-78
+ℹ    bag-interface.js              |  88.55 |    73.97 |   87.18 | 88-90 99-101 128-130 169-176 179-181 193-195 201-203
+ℹ    battle-interface.js           |  58.89 |    49.21 |   64.86 | 34-43 59-63 69-73 80-82 94-97 122 124-152 198-203 220-251 256-259 262 265-271 274-284
+ℹ    berries.js                    | 100.00 |    95.45 |  100.00 | 
+ℹ    box-interface.js              |  44.19 |    75.00 |   50.00 | 15-38
+ℹ    bridge-mechanisms.js          | 100.00 |    92.31 |  100.00 | 
+ℹ    command-facade.js             |  85.33 |    80.49 |   44.90 | 24-25 38-39 46-47 67-68 72-73 76-77 80-84 95-96 103-108 112-113
+ℹ    content.js                    | 100.00 |    66.67 |  100.00 | 
+ℹ    crop-interface.js             |  28.07 |   100.00 |   50.00 | 15-55
+ℹ    database.js                   | 100.00 |    90.91 |  100.00 | 
+ℹ    detail-sprite-frames.js       | 100.00 |   100.00 |  100.00 | 
+ℹ    dex-interface.js              | 100.00 |    92.86 |  100.00 | 
+ℹ    encounter-policies.js         |  95.83 |    42.86 |  100.00 | 18
+ℹ    extension-intents.js          | 100.00 |    71.43 |  100.00 | 
+ℹ    extension-ports.js            |  89.04 |    87.23 |   93.75 | 186-188 199-219 221
+ℹ    extensions.js                 |  99.65 |    84.85 |   60.00 | 255
+ℹ    facilities.js                 | 100.00 |    66.67 |  100.00 | 
+ℹ    facility-interface.js         |  97.06 |    64.52 |   57.89 | 83-85
+ℹ    field-actions.js              | 100.00 |    88.10 |  100.00 | 
+ℹ    field-capabilities.js         | 100.00 |    90.00 |  100.00 | 
+ℹ    field-effects.js              | 100.00 |    80.00 |  100.00 | 
+ℹ    field-layers.js               | 100.00 |    66.67 |  100.00 | 
+ℹ    field-mechanisms.js           |  99.44 |    90.00 |  100.00 | 82
+ℹ    growth-interface.js           |  32.24 |    50.00 |   28.57 | 22-26 30-32 59-61 64-65 69-90 92-122 124-181
+ℹ    help-interface.js             | 100.00 |   100.00 |  100.00 | 
+ℹ    interface.js                  |  93.15 |    50.00 |   28.57 | 103-109 113-115
+ℹ    inventory-items.js            | 100.00 |   100.00 |  100.00 | 
+ℹ    inventory.js                  | 100.00 |   100.00 |  100.00 | 
+ℹ    items.js                      | 100.00 |   100.00 |  100.00 | 
+ℹ    machine-learning.js           | 100.00 |    85.71 |  100.00 | 
+ℹ    movement-interface.js         |  61.07 |    60.00 |   40.00 | 23-29 33-37 41-45 50-57 70-73 77-93 113-117
+ℹ    movement.js                   | 100.00 |   100.00 |  100.00 | 
+ℹ    network-interface.js          |  22.09 |   100.00 |   12.50 | 25-37 40-48 51-77 80-85 88-109 112-147 150-170
+ℹ    pack.js                       | 100.00 |    98.33 |  100.00 | 
+ℹ    party-interface.js            |  67.11 |    44.00 |   42.11 | 45-47 57-63 103-106 109-117 122-147
+ℹ    presentation-interface.js     |  28.13 |   100.00 |   50.00 | 8-30
+ℹ    presentation-scenes.js        |  44.78 |   100.00 |   20.00 | 9-29 35-50 56-66 72-80 86-91 97-101 107-112
+ℹ    quests.js                     | 100.00 |    75.00 |  100.00 | 
+ℹ    save-contract.js              |  99.11 |    91.63 |   95.45 | 220-223
+ℹ    save-interface.js             |  38.16 |    66.67 |   33.33 | 16-17 20-25 28-36 39-40 43-58 61-72
+ℹ    scenes.js                     |  92.79 |   100.00 |   50.00 | 104-111
+ℹ    shop-interface.js             |  81.82 |    70.00 |   80.00 | 32-39
+ℹ    sprite-clips.js               | 100.00 |   100.00 |  100.00 | 
+ℹ    starter-interface.js          |  53.66 |   100.00 |   50.00 | 17-28 33-39
+ℹ    story.js                      |  79.74 |    92.86 |   58.14 | 14-17 36-45 55-69 76-77 121-125 175-178 187-194 204 213 221-232
+ℹ    terrain-rules.js              | 100.00 |   100.00 |  100.00 | 
+ℹ    time-interface.js             | 100.00 |    73.91 |  100.00 | 
+ℹ    time.js                       | 100.00 |   100.00 |  100.00 | 
+ℹ    trainers.js                   | 100.00 |   100.00 |  100.00 | 
+ℹ    ui-shell.js                   |  85.06 |    70.41 |   77.08 | 50-55 59-63 74-75 118-120 161-162 177-178 189-211 218-220 247-248 320 363 367-375
+ℹ  plugins                         |        |          |         | 
+ℹ   actor-day-cycle.js             |  71.60 |   100.00 |   50.00 | 54-76
+ℹ   bag-notebook.js                | 100.00 |   100.00 |   83.33 | 
+ℹ   battle-burst.js                | 100.00 |   100.00 |  100.00 | 
+ℹ   canvas-gallery.js              | 100.00 |   100.00 |  100.00 | 
+ℹ   companion-care.js              |  88.27 |    59.26 |   77.78 | 49-69 133-134
+ℹ   e2e-support.js                 |  95.81 |    78.95 |   81.82 | 127 151-157
+ℹ   facility-games.js              | 100.00 |    66.67 |  100.00 | 
+ℹ   field-journal.js               |  82.69 |    93.75 |   61.54 | 76-88 128-139 150-151
+ℹ   integration-lab.js             | 100.00 |    96.43 |  100.00 | 
+ℹ   interaction-workshop.js        | 100.00 |    95.65 |  100.00 | 
+ℹ  presentation                    |        |          |         | 
+ℹ   animation-timing.js            | 100.00 |    95.65 |   75.00 | 
+ℹ   appearance-canvas.js           |  78.67 |    92.31 |  100.00 | 19-34
+ℹ   battle-canvas.js               |  53.33 |    41.03 |   75.00 | 12-13 17-19 22-38 50-67 88-92 104-107 130-150
+ℹ   battle-director.js             |  78.09 |    80.85 |   85.19 | 146-157 195 197-211 218-225 232-246 249-256 258-269
+ℹ   battle-view.js                 | 100.00 |    86.67 |   92.31 | 
+ℹ   default-presentation.js        | 100.00 |   100.00 |  100.00 | 
+ℹ   dialogue-player.js             | 100.00 |   100.00 |  100.00 | 
+ℹ   effect-registry.js             |  95.95 |    89.19 |   94.74 | 85-88 159-161
+ℹ   environment-canvas.js          |  97.78 |    50.00 |  100.00 | 40
+ℹ   environment-layers-canvas.js   | 100.00 |   100.00 |  100.00 | 
+ℹ   extension-feedback.js          | 100.00 |    87.50 |   62.50 | 
+ℹ   field-action-canvas.js         | 100.00 |    90.91 |  100.00 | 
+ℹ   field-action-director.js       | 100.00 |    93.33 |  100.00 | 
+ℹ   field-canvas.js                |  45.45 |   100.00 |    0.00 | 16-33
+ℹ   growth-director.js             | 100.00 |    64.29 |  100.00 | 
+ℹ   lighting.js                    | 100.00 |   100.00 |  100.00 | 
+ℹ   pixel-effects.js               |  92.97 |    74.14 |  100.00 | 197-204 215-216 218-225
+ℹ   scene-director.js              |  97.83 |    95.12 |   84.62 | 28-29
+ℹ   sprite-animation.js            | 100.00 |    88.24 |  100.00 | 
+ℹ   sprite-clips.js                | 100.00 |    97.37 |  100.00 | 
+ℹ   text-effects.js                | 100.00 |    93.18 |  100.00 | 
+ℹ   transition-patterns.js         |  41.25 |    80.00 |   30.00 | 6-7 10-14 17-18 21-33 36-47 50-56 65-69 75
+ℹ   travel-director.js             | 100.00 |    75.00 |  100.00 | 
+ℹ   visual-timeline.js             | 100.00 |    95.83 |  100.00 | 
+ℹ   weather-director.js            | 100.00 |    82.35 |  100.00 | 
+ℹ   weather-effects.js             | 100.00 |   100.00 |  100.00 | 
+ℹ ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ℹ all files                        |  95.74 |    87.61 |   88.88 | 
+ℹ ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ℹ end of coverage report
