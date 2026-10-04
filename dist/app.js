@@ -168,6 +168,7 @@ async function boot() {
       extensionAssets: assets,
     });
     game.attachUI(ui);
+    game.attachSound((cue) => audio.play(cue));
     if (parameters.get("control") === "1") void ui.connectControl();
     input = new BrowserInput({ game, ui });
     $("loading").hidden = true;

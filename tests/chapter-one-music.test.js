@@ -66,6 +66,11 @@ test("Every imported map keeps its original song constant and resolves to an ins
   assert.ok(maps.length >= 9);
   const seen = new Set();
   for (const map of maps) {
+    // A reference map with MUS_NONE stays silent; every other map keeps its original constant.
+    if (map.music === "MUS_NONE") {
+      assert.equal(emeraldMusic({ map }, cues), null, map.id);
+      continue;
+    }
     assert.match(map.music, /^MUS_[A-Z0-9_]+$/, map.id);
     const id = emeraldMusic({ map }, cues);
     assert.ok(id, `${map.id} has no installed track for ${map.music}`);

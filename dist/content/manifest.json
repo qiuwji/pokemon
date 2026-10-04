@@ -470,6 +470,28 @@
       "section": "stories",
       "path": "stories/dialogues.json",
       "key": "dialogues"
+    },
+    {
+      "section": "tilesets",
+      "key": "general-inside_of_truck",
+      "path": "tilesets/general-inside_of_truck.json",
+      "generated": true
+    },
+    {
+      "section": "stories",
+      "path": "stories/inside-of-truck.json",
+      "key": "inside-of-truck"
+    },
+    {
+      "section": "maps",
+      "key": "InsideOfTruck",
+      "path": "maps/InsideOfTruck/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "InsideOfTruck",
+      "path": "maps/InsideOfTruck/map.json"
     }
   ]
 }

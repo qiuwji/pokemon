@@ -100,6 +100,14 @@ export class EmeraldAdventure {
     this.camera.baseFocus = (player) => this.cameraFocus(player);
     this.bindField();
   }
+  /** The host owns the audio device; stories may only request a registered cue by id. */
+  attachSound(play) {
+    this.playSound = typeof play === "function" ? play : null;
+  }
+  playStorySound(cue) {
+    if (typeof cue !== "string" || !cue) throw new Error("Invalid story sound cue");
+    this.playSound?.(cue);
+  }
   attachUI(ui) {
     this.ui = ui;
     ui.updateSide();

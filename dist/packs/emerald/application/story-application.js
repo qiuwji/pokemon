@@ -57,6 +57,7 @@ export const STORY_PORTS = Object.freeze([
   "story",
   "storyCatalog",
   "timeline",
+  "playStorySound",
   "trainerDefinitions",
   "transitions",
   "ui",
@@ -127,6 +128,8 @@ export class StoryApplication {
             this.fieldDirector.stage(c.actors);
           }),
         wait: (c) => this.timeline.wait(c.ms),
+        // The original scripts play sound effects inline; only registered cues are reachable.
+        sound: (c) => this.playStorySound(c.cue),
         weather: (c) => this.performStoryWeather(c),
         worldPatch: (c) => this.patchWorld(c.operations),
         fieldAction: async (c) => {

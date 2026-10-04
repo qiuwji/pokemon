@@ -98,8 +98,8 @@ export const MOVEMENT_MODES = {
 export const TRAVEL_DESTINATIONS = {
   LittlerootTown: {
     name: "未白镇",
-    // The reference opens on the moving truck tile before the arrival scene moves the player.
-    position: { map: "LittlerootTown", x: 2, y: 10, dir: "down" },
+    // The dynamic warp from the truck drops the player beside the truck, not on it.
+    position: { map: "LittlerootTown", x: 3, y: 10, dir: "down" },
   },
   OldaleTown: {
     name: "古辰镇",

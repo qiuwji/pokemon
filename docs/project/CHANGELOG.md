@@ -1,5 +1,15 @@
 # 当前开发与验证记录
 
+## 2026-10-05 · 搬运车开场地图与落点校正
+
+按 `WarpToTruck()` 与 `InsideOfTruck` 原文补齐开场：导入原作 5×5 车内地图（独立图集 822 tile/550 metatile、三个纸箱对象、五处纸箱提示、纸箱精灵图 MovingBox），新增 `sound` 剧情命令（只允许已注册 cue），并按 `Task_HandleTruckSequence` 的节拍还原开场音效顺序 SE_TRUCK_MOVE/STOP/UNLOAD/DOOR（按 midi.cfg 的 `rs_sfx_2`/`rs_sfx_1` 渲染装入同一音频包）。玩家走到门前一列 (3,1)~(3,3) 后离开卡车，落到未白镇 (3,10)——这是原作 `setdynamicwarp` 的坐标，先前把玩家放在卡车格 (2,10) 是错的。未白镇落地的分支改为按 `LittlerootTown_Movement_PlayerStepOffTruck` 先播 SE_LEDGE 再跳到 (4,10)，妈妈从 (5,8) 走出两步到 (5,10) 面向玩家说原版 `OurNewHomeLetsGoInside`，随后一同进屋。
+
+管线补两处真实缺口：新地图在图集生成前无法通过内容校验，改为显式 `pendingGrid` 标记（不放宽 tileset/border 规则，由 grid 导入器清除）；指向 `MAP_DYNAMIC` 的 warp 改为按遗漏报告并由剧情接管出口。
+
+**未完成的开关**：新游戏起点仍在未白镇而非车内。原因是玩家位于该地图时，初始存档会抛 `Expected finite JSON data`（validateSave 内部，尚未定位到具体子系统；已排除地图内容、NPC/告示、连接、坐标与高度）。卡车地图、剧情、音效与落点均已落地并测试，起点切换作为明确的引擎任务挂起。
+
+核心881/881、插件26/26，`npm run check`通过。纸箱弹跳与镜头颠簸需注册场景的逐帧通道，尚未实现；女玩家分支（May 家）同样待转写。
+
 ## 2026-10-05 · 原版音效替换与卡车开场剧情
 
 按原作`midi.cfg`渲染第一批11个一次性音效（SE_SELECT/SE_SHOP/SE_EXP/SE_SAVE/SE_DOOR/SE_LEDGE/SE_BALL/SE_BALL_THROW/SE_BALL_OPEN/SE_PC_LOGIN与MUS_LEVEL_UP），全部用`rs_sfx_1`/`rs_sfx_2`/`fanfare`原作音色组与各自音量，装进同一`emerald-audio`包的`sounds/`。UI占位采样（自行车铃、收银噪声、底鼓、军鼓）全部退役：确认→SE_SELECT（src/menu.c）、购买→SE_SHOP（src/shop.c:1135）、回复→SE_EXP（src/battle_controller_player.c:1215）、升级→MUS_LEVEL_UP。招式命中与受伤音效**故意留空**：原作为每个招式配独立音效，通用采样属于替代品，须等招式音效表导入，本条记为明确缺口。

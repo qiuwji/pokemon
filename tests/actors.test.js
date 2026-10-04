@@ -217,12 +217,13 @@ function fixture(plugin = actorPlugin()) {
     checkGrowth() {},
     toast() {},
   });
-  Object.assign(game.state.position, {
-    map: "people:a",
-    x: 0,
-    y: 3,
-    dir: "up",
-  });
+  // Mid-adventure fixture: the truck opening and the town arrival already happened.
+  game.state.flags.introDone = true;
+  game.state.flags.truckLeft = true;
+  // The fixture is a save already loaded on this map: the position is arranged directly and
+  // the map-scoped visit marker is cleared, because there is no route from the new-game map.
+  Object.assign(game.state.position, { map: "people:a", x: 0, y: 3, dir: "up" });
+  game.state.fieldEffects.activeMap = null;
   game.bindField();
   const { bus } = attachEmeraldExtensions(game, c.host);
   return {

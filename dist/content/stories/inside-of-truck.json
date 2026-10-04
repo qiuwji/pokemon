@@ -1,0 +1,145 @@
+{
+  "id": "emerald:inside-of-truck",
+  "version": 1,
+  "dialogues": {
+    "box.logo": {
+      "name": "搬家纸箱",
+      "lines": [
+        "纸箱上印着宝可梦的标志。",
+        "是宝可梦品牌的搬家搬运服务呢。"
+      ]
+    }
+  },
+  "scripts": {
+    "box.read": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "box.logo"
+        }
+      ]
+    },
+    "truck.arrival": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_truck_move"
+        },
+        {
+          "type": "wait",
+          "ms": 1500
+        },
+        {
+          "type": "wait",
+          "ms": 2500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_truck_stop"
+        },
+        {
+          "type": "wait",
+          "ms": 1500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_truck_unload"
+        },
+        {
+          "type": "wait",
+          "ms": 2000
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_truck_door"
+        }
+      ]
+    },
+    "truck.exit": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_truck_door"
+        },
+        {
+          "type": "flag",
+          "key": "truckLeft",
+          "value": true
+        },
+        {
+          "type": "scene",
+          "kind": "door",
+          "position": {
+            "map": "LittlerootTown",
+            "x": 3,
+            "y": 10,
+            "dir": "down"
+          }
+        }
+      ]
+    }
+  },
+  "entries": {
+    "box.read": {
+      "trigger": "interact",
+      "selector": {
+        "map": "InsideOfTruck",
+        "script": "InsideOfTruck_EventScript_MovingBox",
+        "kind": "sign"
+      },
+      "script": "box.read"
+    },
+    "truck.arrival": {
+      "trigger": "mapEnter",
+      "priority": 20,
+      "selector": {
+        "map": "InsideOfTruck"
+      },
+      "requires": {
+        "not": {
+          "flag": "truckLeft",
+          "equals": true
+        }
+      },
+      "script": "truck.arrival"
+    },
+    "truck.exit": {
+      "trigger": "step",
+      "priority": 20,
+      "where": {
+        "map": "InsideOfTruck",
+        "x": 3,
+        "y": 1,
+        "width": 1,
+        "height": 3
+      },
+      "requires": {
+        "not": {
+          "flag": "truckLeft",
+          "equals": true
+        }
+      },
+      "script": "truck.exit"
+    }
+  },
+  "sources": [
+    {
+      "label": "InsideOfTruck_EventScript_SetIntroFlagsMale",
+      "map": "InsideOfTruck",
+      "status": "original-verified",
+      "note": "原作新游戏由 WarpToTruck() 送进 MAP_INSIDE_OF_TRUCK；玩家走到 (3,1)~(3,3) 触发 coord_event 设定 respawn、VAR_LITTLEROOT_INTRO_STATE=1、隐藏两家妈妈/兄妹与二楼精灵球，并 setdynamicwarp 到未白镇 (3,10)。本项目用 truckLeft 记录离开卡车，出口按原坐标落到未白镇 (3,10)；原作 MAP_DYNAMIC warp 由剧情接管。 原作触发格是门前一列 (3,1)~(3,3) 的 coord_event，随后玩家踏上 (4,1)~(4,3) 的 warp 离开；本项目把两步合并为门前触发即离开，落到同一未白镇坐标。"
+    },
+    {
+      "label": "ExecuteTruckSequence",
+      "map": "InsideOfTruck",
+      "status": "original-verified",
+      "note": "原作 Task_HandleTruckSequence 的节拍：t=90 帧 SE_TRUCK_MOVE 并让三个纸箱与镜头随路面颠簸，t=150 帧淡入，t>300 帧 SE_TRUCK_STOP，t=90 帧 SE_TRUCK_UNLOAD，t=120 帧把 (4,1)~(4,3) 换成出口灯 metatile 并播 SE_TRUCK_DOOR 后解锁操作。本项目按 60fps 换算为毫秒并保留四个音效与时序；纸箱弹跳与镜头颠簸需要注册场景的逐帧通道，待补。"
+    },
+    {
+      "label": "InsideOfTruck_EventScript_MovingBox",
+      "map": "InsideOfTruck",
+      "status": "original-verified",
+      "note": "原文 InsideOfTruck_Text_BoxPrintedWithMonLogo，五处纸箱共用同一脚本。"
+    }
+  ]
+}

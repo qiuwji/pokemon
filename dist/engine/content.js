@@ -20,6 +20,12 @@ export function validateContent(db) {
     const path = `maps.${id}`;
     if (map.darkness !== undefined)
       check(validDarkness(map.darkness), path + ".darkness");
+    // A map added by the map importer is explicitly staged until the grid importer builds
+    // its atlas; the flag keeps that visible instead of letting an incomplete map pass.
+    if (map.pendingGrid === true) {
+      check(map.tileset === undefined && map.border === undefined, path + ".pendingGrid");
+      continue;
+    }
     check(
       Number.isInteger(map.width) &&
         map.width > 0 &&

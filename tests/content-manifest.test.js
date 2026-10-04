@@ -22,7 +22,8 @@ test("Browser and Node assemble the same production pack from readable metadata 
   const readJSON = (url) => JSON.parse(fs.readFileSync(url));
   const db = await loadContent(CONTENT_MANIFEST, { readJSON });
   assert.deepEqual(db, loadContentSync());
-  assert.equal(Object.keys(db.maps).length, 9);
+  // The reference opening map InsideOfTruck joins the imported set.
+  assert.equal(Object.keys(db.maps).length, 10);
   assert(Object.keys(db.maps).every((id) => !id.startsWith("E2E")));
   assert(
     db.maps.LittlerootTown.warps.every((w) => !w.dest_map.startsWith("E2E")),

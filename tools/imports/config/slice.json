@@ -49,7 +49,8 @@
     "Scientist1",
     "BirchsBag",
     "Mom",
-    "LittleBoy"
+    "LittleBoy",
+    "MovingBox"
   ],
   "battleBackground": "tall_grass",
   "locale": "../locales/zh-CN.json",

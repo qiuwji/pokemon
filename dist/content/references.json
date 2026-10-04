@@ -73,7 +73,8 @@
     "Route103_EventScript_Pete": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "Route103_EventScript_Rhett": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "Route103_EventScript_Rival": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
-    "Route103_EventScript_RouteSign": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。"
+    "Route103_EventScript_RouteSign": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
+    "InsideOfTruck_EventScript_MovingBox": "原作纸箱提示脚本，已在 emerald:inside-of-truck 逐字转写；地图元素仍保留原脚本名作为来源身份。"
   },
   "ignoredScripts": {
     "0x0": "原作空脚本指针：明确无脚本，并非待转写剧情。"

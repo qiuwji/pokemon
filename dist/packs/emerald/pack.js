@@ -12,6 +12,10 @@ export const PACK = {
   travelActor: "FlyBird",
   version: 14,
   title: "绿宝石 · 丰缘序章",
+  // The reference opens inside the moving truck (WarpToTruck). The truck map, its story and
+  // its sounds are already in the pack; moving the new-game start there is blocked because a
+  // fresh state positioned on that map fails save validation ("Expected finite JSON data"),
+  // which is recorded as an open engine task. Until then the start stays in Littleroot.
   start: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   starters: ["treecko", "torchic", "mudkip"],
   rival: { treecko: "torchic", torchic: "mudkip", mudkip: "treecko" },

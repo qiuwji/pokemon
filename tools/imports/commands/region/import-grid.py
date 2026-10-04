@@ -13,7 +13,7 @@ for name in session.select('maps', db['maps']):
  m=db['maps'][name]
  source_map=R/f'data/maps/{name}/map.json'
  if not source_map.exists():raise ValueError('Map has no reference header: '+name)
- src=json.loads(source_map.read_text());layout=layouts[src['layout']];names=[re.sub(r'(?<!^)(?=[A-Z])','_',layout[k].replace('gTileset_','')).lower() for k in ['primary_tileset','secondary_tileset']];key='-'.join(names);m['tileset']=key;m['border']=words(R/layout['border_filepath']);
+ src=json.loads(source_map.read_text());layout=layouts[src['layout']];names=[re.sub(r'(?<!^)(?=[A-Z])','_',layout[k].replace('gTileset_','')).lower() for k in ['primary_tileset','secondary_tileset']];key='-'.join(names);m['tileset']=key;m['border']=words(R/layout['border_filepath']);m.pop('pendingGrid',None);
  if key in packs:continue
  dirs=[R/f'data/tilesets/{kind}/{n}' for kind,n in zip(['primary','secondary'],names)];pals=[pal(dirs[0 if i<6 else 1]/f'palettes/{i:02d}.pal') for i in range(16)];imgs=[Image.open(d/'tiles.png') for d in dirs];meta={};attrs={}
  for side,d in enumerate(dirs):

@@ -106,6 +106,26 @@
       "song": "MUS_LEVEL_UP",
       "config": "tracks/fanfare-level-up.json",
       "selection": "fanfare-level"
+    },
+    {
+      "song": "SE_TRUCK_MOVE",
+      "config": "tracks/se-truck-move.json",
+      "selection": "intro-truck-move"
+    },
+    {
+      "song": "SE_TRUCK_STOP",
+      "config": "tracks/se-truck-stop.json",
+      "selection": "intro-truck-stop"
+    },
+    {
+      "song": "SE_TRUCK_UNLOAD",
+      "config": "tracks/se-truck-unload.json",
+      "selection": "intro-truck-unload"
+    },
+    {
+      "song": "SE_TRUCK_DOOR",
+      "config": "tracks/se-truck-door.json",
+      "selection": "intro-truck-door"
     }
   ]
 }

@@ -14,8 +14,11 @@ export function manifest(id, setup, permissions = []) {
   return { id, setup, permissions, apiVersion: 1, version: "1.0.0", dataVersion: 1 };
 }
 
-/** Test arrangement only: production catalog, services and commands; no browser renderer. */
-export function session(plugins = []) {
+/**
+ * Test arrangement only: production catalog, services and commands; no browser renderer.
+ * By default it arranges a mid-adventure session; pass { fresh: true } for a new-game state.
+ */
+export function session(plugins = [], { fresh = false } = {}) {
   const base = loadContentSync();
   const { db, catalog, host } = createEmeraldPlugins(base, plugins);
   let frame = 0;
@@ -40,8 +43,12 @@ export function session(plugins = []) {
   });
   // Arrange an unlocked test scene, not an implementation of the original opening story.
   game.state.flags.rescued = true;
-  // The truck arrival scene already happened in this session; examples start mid-adventure.
-  game.state.flags.introDone = true;
+  if (!fresh) {
+    // The truck opening already happened; examples start mid-adventure in the town.
+    game.state.flags.introDone = true;
+    game.state.flags.truckLeft = true;
+    game.enter({ map: "LittlerootTown", x: 10, y: 10, dir: "up" });
+  }
   const mon = createMonster("mudkip", 10, db, game.rng);
   game.state.party.push(mon);
   const { bus } = attachEmeraldExtensions(game, host);

@@ -5,32 +5,110 @@
     "mom.welcome": {
       "name": "妈妈",
       "bindings": {
-        "who": { "query": { "id": "playerName" } }
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
       },
       "lines": [
-        { "name": "妈妈", "text": "{{who}}，我们到了哦，亲爱的！" },
-        { "name": "妈妈", "text": "东西都装在搬运卡车上，\n一路过来一定很辛苦吧。" },
-        { "name": "妈妈", "text": "这里就是未白镇。\n你喜欢这里吗？" },
-        { "name": "妈妈", "text": "以后这就是我们的新家了！\n虽然有点古朴，但好像很好住呢。" },
-        { "name": "妈妈", "text": "而且啊，{{who}}还有自己的房间哦！\n我们先进去吧。" }
+        {
+          "name": "妈妈",
+          "text": "{{who}}，我们到了哦，亲爱的！"
+        },
+        {
+          "name": "妈妈",
+          "text": "东西都装在搬运卡车上，\n一路过来一定很辛苦吧。"
+        },
+        {
+          "name": "妈妈",
+          "text": "这里就是未白镇。\n你喜欢这里吗？"
+        },
+        {
+          "name": "妈妈",
+          "text": "以后这就是我们的新家了！\n虽然有点古朴，但好像很好住呢。"
+        },
+        {
+          "name": "妈妈",
+          "text": "而且啊，{{who}}还有自己的房间哦！\n我们先进去吧。"
+        }
       ]
     }
   },
   "scripts": {
     "truck.arrival": {
       "commands": [
-        { "type": "move", "actor": "player", "path": ["right"] },
-        { "type": "wait", "ms": 420 },
-        { "type": "move", "actor": "littleroot.mom", "path": ["down"] },
-        { "type": "move", "actor": "littleroot.mom", "path": ["down"] },
-        { "type": "face", "actor": "littleroot.mom", "dir": "left" },
-        { "type": "face", "actor": "player", "dir": "right" },
-        { "type": "dialog", "dialogue": "mom.welcome" },
-        { "type": "move", "actor": "littleroot.mom", "path": ["up"] },
-        { "type": "move", "actor": "player", "path": ["right", "up"] },
-        { "type": "face", "actor": "player", "dir": "up" },
-        { "type": "hide", "actor": "littleroot.mom" },
-        { "type": "flag", "key": "introDone", "value": true },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_ledge"
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 420
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.mom",
+          "dir": "left"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "mom.welcome"
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.mom",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "up"
+        },
+        {
+          "type": "hide",
+          "actor": "littleroot.mom"
+        },
+        {
+          "type": "flag",
+          "key": "introDone",
+          "value": true
+        },
         {
           "type": "scene",
           "kind": "door",
@@ -48,8 +126,15 @@
     "truck.arrival": {
       "trigger": "mapEnter",
       "priority": 20,
-      "selector": { "map": "LittlerootTown" },
-      "requires": { "not": { "flag": "introDone", "equals": true } },
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "requires": {
+        "not": {
+          "flag": "introDone",
+          "equals": true
+        }
+      },
       "script": "truck.arrival"
     }
   },
@@ -58,7 +143,7 @@
       "label": "LittlerootTown_EventScript_StepOffTruckMale",
       "map": "LittlerootTown",
       "status": "original-verified",
-      "note": "原作由 LittlerootTown_OnFrame 的 map_script_2 VAR_LITTLEROOT_INTRO_STATE,1 触发，call GoInsideWithMom：玩家 jump_right 下车、SE_LEDGE、妈妈从 LOCALID_LITTLEROOT_MOM 走出、走到玩家旁说 LittlerootTown_Text_OurNewHomeLetsGoInside，然后两人走向门口、妈妈先进、玩家跟进，warpsilent 到 BRENDANS_HOUSE_1F 8,8，并 clearflag FAT_MAN 与 MAP_NAME_POPUP。本项目以 introDone 标记对应原作 FLAG_HIDE_LITTLEROOT_TOWN_MOM_OUTSIDE 的时机；原作出场音效 SE_LEDGE 待音效接线后补入。玩家性别分支（原作 Male/Female 走 MAYS_HOUSE）待转写，当前使用 Brendan 家。"
+      "note": "原作由 LittlerootTown_OnFrame 的 map_script_2 VAR_LITTLEROOT_INTRO_STATE,1 触发：玩家从卡车的 dynamic warp 落在 (3,10)，jump_right 跳到 (4,10)（伴 SE_LEDGE），妈妈从 LOCALID_LITTLEROOT_MOM 走出两步到 (5,10) 并面向玩家说 LittlerootTown_Text_OurNewHomeLetsGoInside，然后两人走向门口、妈妈先进、玩家跟进，warpsilent 到 BRENDANS_HOUSE_1F 8,8，并 clearflag FAT_MAN 与 MAP_NAME_POPUP。本项目以 introDone 记录该时刻；原作脚本移动可穿过门格，故妈妈进屋改为隐藏、玩家停在门前由场景转场。女玩家分支（May 家）待转写，当前使用 Brendan 家。"
     }
   ]
 }

@@ -29,6 +29,8 @@
 | 音频 `import-audio.py` | direct_sound_samples WAV → audio资源及来源记录 | 可选source、--profile；不是整部原作BGM转换器，记录实际参考修订 | 是 |
 | 剧情 `import-script-text.py` | 各地图scripts.inc的`.string` → 原作对白label参考JSON | 可选source、--maps、--out（相对路径落在--target内）；只读抽取，不写游戏内容，供逐字转写对照 | 否 |
 
+新地图分两步导入：`emerald` 写入地图数据并标记 `pendingGrid`，`grid` 补图集与 border 后清除该标记。标记是显式的未完成态，不放宽 tileset/border 校验。指向 `MAP_DYNAMIC` 的 warp 在运行时才设定，导入器按遗漏报告并交给剧情接管。
+
 表中20个入口都支持`--target /另一份/dist`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
 
 ## 推荐顺序

@@ -110,6 +110,9 @@ function fixture(style = "fortree-bridge", { lowerOnEntry = false } = {}) {
     },
     checkGrowth() {},
   });
+  // Mid-adventure fixture: the truck opening and the town arrival already happened.
+  game.state.flags.introDone = true;
+  game.state.flags.truckLeft = true;
   game.enter({ map: "Lab", x: 1, y: 1, dir: "right" });
   return {
     game,

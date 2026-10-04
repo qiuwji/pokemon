@@ -11,11 +11,21 @@ const said = (s) =>
       typeof line === "string" ? [line] : line.runs.map((run) => run.text),
     );
 
-test("A new game starts on the moving truck tile like the reference opening", () => {
-  const start = TRAVEL_DESTINATIONS.LittlerootTown.position;
-  assert.deepEqual(start, { map: "LittlerootTown", x: 2, y: 10, dir: "down" });
-  // Brendan's house truck stands at (2,10); May's at (11,10) in the original object data.
-  assert.equal(start.y, 10);
+test("The new-game start is still the town, with the truck opening recorded as blocked", () => {
+  // The reference opens inside the moving truck; that switch is held back by an open engine
+  // task (a fresh state on that map fails save validation), so the start stays here for now.
+  const s = session();
+  assert.equal(s.game.state.position.map, "LittlerootTown");
+  assert.equal(s.db.maps.InsideOfTruck.title, "搬运车内");
+});
+
+test("The town map is reached beside the truck, at the reference dynamic warp tile", () => {
+  assert.deepEqual(TRAVEL_DESTINATIONS.LittlerootTown.position, {
+    map: "LittlerootTown",
+    x: 3,
+    y: 10,
+    dir: "down",
+  });
 });
 
 test("The arrival scene walks the player off the truck, lets mom speak and enters the house", async () => {
@@ -23,6 +33,10 @@ test("The arrival scene walks the player off the truck, lets mom speak and enter
   s.game.state.playerName = "小悠";
   s.game.state.flags.introDone = false;
   s.game.enter({ ...TRAVEL_DESTINATIONS.LittlerootTown.position });
+  assert.deepEqual(
+    { x: s.game.state.position.x, y: s.game.state.position.y },
+    { x: 3, y: 10 },
+  );
   // The host flushes queued map-enter stories once per frame; headless must do it explicitly.
   for (let i = 0; i < 40 && !s.dialogs.length; i++) await s.game.flushStoryQueue();
   await s.settle();

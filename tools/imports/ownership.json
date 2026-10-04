@@ -16,7 +16,8 @@
       "species.*",
       "actors.*",
       "moves.*",
-      "typeChart.*"
+      "typeChart.*",
+      "maps.*.pendingGrid"
     ],
     "outputs": [
       "assets/actor-*.png",
@@ -33,7 +34,8 @@
       "maps.*.tileset",
       "maps.*.border",
       "tilesets.*",
-      "actors.BrendanRun.*"
+      "actors.BrendanRun.*",
+      "maps.*.pendingGrid"
     ],
     "outputs": [
       "assets/tiles-*.png",

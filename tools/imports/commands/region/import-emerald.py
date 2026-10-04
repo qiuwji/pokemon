@@ -24,7 +24,7 @@ for name,title in zip(map_names,titles):
  w,h=lay['width'],lay['height'];data=u16(R/lay['blockdata_filepath']);beh=[]
  for val in data:
   mid=val&1023;side=0 if mid<512 else 1;beh.append(attrs[side][mid if side==0 else mid-512]&255)
- output[name]={'id':name,'indoor':'_' in name,'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':m['warp_events'],'signs':m['bg_events'],'npcs':m['object_events'],'music':m['music']}
+ output[name]={'id':name,'indoor':'_' in name,'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':[w for w in m['warp_events'] if w['dest_map']!='MAP_DYNAMIC'],'signs':m['bg_events'],'npcs':m['object_events'],'music':m['music']}
 # Standard field objects, using the palettes declared by the engine.
 info=(R/'src/data/object_events/object_event_graphics_info.h').read_text(); gfx=(R/'src/data/object_events/object_event_graphics.h').read_text(); npcs={}
 for key in session.profile['actors']:
@@ -67,8 +67,17 @@ for k,v in moves.items():v['name']=cnmoves.get(k,k.replace('_',' ').title())
 existing=session.load()
 for section, records in {'maps':output,'actors':npcs,'species':species,'moves':moves}.items():
  for ident, record in records.items():
-  existing[section][ident]={**existing[section].get(ident,{}),**record}
+  previous=existing[section].get(ident,{})
+  merged={**previous,**record}
+  # A map added for the first time has no atlas yet; the grid importer clears the flag.
+  if section=='maps' and 'tileset' not in previous: merged['pendingGrid']=True
+  existing[section][ident]=merged
 existing['typeChart']=types
+for name in map_names:
+ dropped=[w for w in json.loads((R/f'data/maps/{name}/map.json').read_text())['warp_events'] if w['dest_map']=='MAP_DYNAMIC']
+ if dropped:
+  session.omit('warps','maps.'+name,'MAP_DYNAMIC',
+               'Reference warps to MAP_DYNAMIC are set at runtime; content owns the exit as a story trigger.')
 session.content(existing)
 print('Prepared',len(output),'maps,',len(species),'species,',len(moves),'moves; actors:',npcs)
 

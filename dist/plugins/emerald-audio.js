@@ -22,5 +22,9 @@ export const audioPlugin = {
     api.presentation.audio("se_ball_open", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_ball_open.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("se_pc_login", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_pc_login.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("mus_level_up", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/mus_level_up.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_truck_move", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_truck_move.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_truck_stop", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_truck_stop.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_truck_unload", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_truck_unload.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_truck_door", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_truck_door.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
   },
 };
