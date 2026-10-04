@@ -11,6 +11,8 @@ import { emeraldFieldCapabilities } from "../field-capabilities.js";
 import { isWater, BEHAVIOR } from "../../../engine/terrain.js";
 import { bindApplicationPorts } from "./ports.js";
 export const MOVEMENT_PORTS = Object.freeze([
+  "visitAppearance",
+  "visitView",
   "battle",
   "actionBusy",
   "growthBusy",
@@ -92,6 +94,8 @@ export class MovementApplication {
   }
   visitMap() {
     const id = this.state.position.map;
+    this.visitAppearance(id);
+    this.visitView(id);
     if (
       this.catalog.destinations[id] &&
       !this.state.movement.visited.includes(id)

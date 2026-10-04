@@ -1,0 +1,42 @@
+
+> emerald-web-engine@0.21.0 test:examples
+> node --test examples/*.test.js
+
+✔ plugin actor identity and memory survive save restore (119.05125ms)
+✖ registered move effect runs in a real trainer turn (83.733ms)
+✔ a plugin controls step encounters and opens a contact-owned wild battle (115.074625ms)
+✔ non-battle facility progresses and settles once (66.639125ms)
+✔ plugin field plan commits through the public command (117.109375ms)
+✔ first plugin uses registered content and public reward transaction (130.064166ms)
+✔ detail entry renders a clickable action with persistent memory (95.694833ms)
+✔ data story arrival chooses a branch and persists its variable (127.519875ms)
+✔ late invalid intent rolls back plugin memory and world money (74.199666ms)
+✔ a plugin composes appearance, camera range and independent fog (46.672875ms)
+✔ registered NPC triggers a once-only data story (41.720541ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 470.0215
+
+✖ failing tests:
+
+test at examples/battle-effect.test.js:4:1
+✖ registered move effect runs in a real trainer turn (83.733ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/battle-effect.test.js:21:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

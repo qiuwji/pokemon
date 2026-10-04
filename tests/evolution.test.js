@@ -204,6 +204,7 @@ test("Current development save contract rejects older versions without mutating 
   s.facilities = emptyFacilities();
   s.fieldEffects = emptyFieldEffects();
   s.encounters = emptyEncounterTickets();
+  s.appearances = { revision: 0, records: {} };
   s.weather = emptyWeather();
   s.registeredItem = null;
   s.party = [createMonster("mudkip", 5, db, new Random(1))];

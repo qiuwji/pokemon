@@ -65,13 +65,19 @@ async function boot() {
       matchMedia("(prefers-reduced-motion: reduce)").matches;
     let game = null;
     const timeline = new Timeline(),
-      camera = new CameraRig(timeline),
+      camera = new CameraRig(timeline, {
+        baseFocus: (player) => game?.cameraFocus(player) || player,
+      }),
       presentation = createEmeraldPresentation({
         host,
         onError: console.error,
       }),
       renderer = new Renderer($("game"), db, assets, {
-        playerActors: PACK.playerActors,
+        cameraConfiguration: () =>
+          game?.cameraConfiguration() || { columns: 20, rows: 14, zoom: 1 },
+        environmentLayers: () => game?.environmentFrames() || [],
+        appearanceView: (target, context) =>
+          game?.appearanceFrame(target, context) || null,
         fieldPriority: emeraldFieldPriority,
         travelActor: PACK.travelActor,
         cameraRig: camera,
@@ -229,10 +235,7 @@ async function boot() {
           ),
         );
         input.tick();
-        const visible = renderer.graph.visible(
-          game.state.position.map,
-          renderer.cameraAt(game.state.position, now),
-        );
+        const visible = renderer.visibleMaps(game.state.position, now);
         game.tick(now, visible);
         const battleFrame = director.sample(now);
         if (battleFrame) {

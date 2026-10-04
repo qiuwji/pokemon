@@ -458,6 +458,7 @@ test("Save owns daycare and trade identities, keeps egg clocks, and rejects dupl
   s.facilities = emptyFacilities();
   s.fieldEffects = emptyFieldEffects();
   s.encounters = emptyEncounterTickets();
+  s.appearances = { revision: 0, records: {} };
   s.daycare.slots = [{ mon: mon("mudkip"), steps: 254, initialLevel: 5 }];
   const egg = mon();
   egg.egg = {

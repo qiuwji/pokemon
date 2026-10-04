@@ -29,6 +29,7 @@ export const ACTOR_PORTS = Object.freeze([
   "timeView",
   "actorContact",
   "actorRemoved",
+  "appearanceRegistry",
 ]);
 /** Persistent actors use the existing field motion/collision. No second simulation or battle RNG stream. */
 export class ActorApplication {
@@ -73,6 +74,7 @@ export class ActorApplication {
       maps: this.db.maps,
       elevation: GEN3_ELEVATION,
       registry: new ActorTemplateRegistry(this.catalog.actorTemplates, {
+        appearances: this.appearanceRegistry,
         actors: this.db.actors,
         behaviors,
         schedules,

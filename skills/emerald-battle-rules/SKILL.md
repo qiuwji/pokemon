@@ -100,7 +100,7 @@ test("registered move effect runs in a real trainer turn", async () => {
   const battle = game.battle;
   assert(battle);
   await bus.execute("core.battle.action", { kind: "move", index: 0 });
-  assert.equal(battle.stages[0].atk, 1);
+  assert(battle.events.some(e => e.kind === "stage" && e.actorUid === mon.uid && e.targetUid === mon.uid && e.stat === "atk" && e.amount === 1));
   assert.equal(mon.moves[0].pp, 19);
   assert(mon.hp > 0);
 });

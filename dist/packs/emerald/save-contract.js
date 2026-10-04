@@ -1,3 +1,11 @@
+import {
+  AppearanceRegistry,
+  AppearanceSelections,
+} from "../../engine/appearances.js";
+import {
+  emeraldAppearances,
+  emeraldAppearanceResources,
+} from "./appearance-definitions.js";
 import { EncounterTickets } from "../../engine/encounter-tickets.js";
 import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
 import {
@@ -78,6 +86,20 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    if (!s.appearances) return false;
+    const appearances = new AppearanceRegistry(
+      catalog.appearances || emeraldAppearances(db),
+      { actors: db.actors, resources: emeraldAppearanceResources(db) },
+    );
+    new AppearanceSelections({
+      registry: appearances,
+      state: s.appearances,
+      validTarget: (t) =>
+        t.kind === "player" ||
+        (t.kind === "actor"
+          ? Object.hasOwn(s.actors?.records || {}, t.uid)
+          : Object.hasOwn(db.maps, t.map)),
+    });
     createEmeraldInventory(catalog).validate(s.bag);
     new FieldEffects({
       state: s.fieldEffects,
@@ -139,6 +161,7 @@ export function validateSave(
         maps: db.maps,
         elevation: GEN3_ELEVATION,
         registry: new ActorTemplateRegistry(catalog.actorTemplates, {
+          appearances,
           actors: db.actors,
           behaviors,
           schedules: new ActorScheduleRegistry(catalog.actorSchedules, {

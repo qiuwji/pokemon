@@ -212,22 +212,50 @@ test("Trainer sight and Fortree bicycle policy read actor height rather than the
 test("Renderer draws lower actors below the bridge overlay and higher actors above it without changing state", () => {
   const calls = [],
     m = map([15]),
-    context = { save() {}, restore() {}, fillRect() {} },
+    context = {
+      save() {},
+      restore() {},
+      fillRect() {},
+      translate() {},
+      scale() {},
+      beginPath() {},
+      rect() {},
+      clip() {},
+    },
     r = new Renderer(
-      { getContext: () => context },
+      { width: 320, height: 224, getContext: () => context },
       {
         maps: { bridge: m },
         tilesets: { small: {} },
         actors: { Low: { h: 16 }, High: { h: 16 } },
       },
       {},
-      { fieldPriority: emeraldFieldPriority },
+      {
+        fieldPriority: emeraldFieldPriority,
+        appearanceView: (target, c) => ({
+          shadow: true,
+          layers: [
+            {
+              kind: "actor",
+              actor: target.kind === "player" ? "Player" : c.actor,
+            },
+          ],
+        }),
+      },
     );
   m.tileset = "small";
   r.grid = () => {};
   r.drawMap = (id, overlay) => calls.push(overlay ? "overlay" : "base");
   r.actor = (id) => calls.push(id);
-  r.cameraAt = () => ({ x: 0, y: 0 });
+  r.cameraAt = () => ({
+    x: 0,
+    y: 0,
+    width: 320,
+    height: 224,
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+  });
   r.graph.visible = () => ["bridge"];
   r.motion.sample = () => ({
     x: 0,

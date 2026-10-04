@@ -46,9 +46,11 @@ export const e2eSupport = {
 
     for (const m of MACHINES) {
       const item = `e2e-tm-${m.id}`;
-      api.content.register("items", item, {
+      const itemId = api.content.register("items", item, {
         name: `${m.label}机`,
         pocket: "machines",
+        holdable: false,
+        learningMethod: `e2e-support:${m.id}`,
         price: 0,
         contexts: ["field"],
         target: "party",
@@ -58,7 +60,7 @@ export const e2eSupport = {
       });
       api.content.register("learningMethods", m.id, {
         move: m.move,
-        item,
+        item: itemId,
         consume: 0,
         protectMove: true,
         friendship: false,
@@ -68,9 +70,9 @@ export const e2eSupport = {
 
     // grantReward is idempotent per id, so each call needs a fresh one.
     const nextRewardId = (ctx) => {
-      const n = (ctx.store.get("unlockSeq") || 0) + 1;
-      ctx.store.set("unlockSeq", n);
-      return `e2e:unlock-${n}`;
+      const n = (ctx.store.get("unlock-seq") || 0) + 1;
+      ctx.store.set("unlock-seq", n);
+      return `e2e-support:unlock-${n}`;
     };
 
     api.actions.register("unlock", {
@@ -95,7 +97,11 @@ export const e2eSupport = {
         for (const id of input.items || []) items[id] = 1;
         const flags = {};
         for (const key of input.flags || []) flags[key] = true;
-        if (Object.keys(items).length || Object.keys(flags).length || input.money)
+        if (
+          Object.keys(items).length ||
+          Object.keys(flags).length ||
+          input.money
+        )
           ctx.intent({
             kind: "reward",
             reward: {
@@ -109,27 +115,24 @@ export const e2eSupport = {
       },
     });
 
-    api.actions.register(
-      "arm",
-      {
-        schema: objectSchema({
-          species: { type: "string", minLength: 1, maxLength: 32 },
-          level: { type: "integer", minimum: 1, maximum: 100 },
-        }),
-        network: true,
-        concurrent: true,
-        ready: () => true,
-        run(ctx, input) {
-          ctx.intent({
-            kind: "createMonster",
-            species: input.species,
-            level: input.level || 5,
-            placement: "party",
-          });
-          return { armed: input.species, level: input.level || 5 };
-        },
+    api.actions.register("arm", {
+      schema: objectSchema({
+        species: { type: "string", minLength: 1, maxLength: 32 },
+        level: { type: "integer", minimum: 1, maximum: 100 },
+      }),
+      network: true,
+      concurrent: true,
+      ready: () => true,
+      run(ctx, input) {
+        ctx.intent({
+          kind: "createMonster",
+          species: input.species,
+          level: input.level || 5,
+          placement: "party",
+        });
+        return { armed: input.species, level: input.level || 5 };
       },
-    );
+    });
   },
 };
 

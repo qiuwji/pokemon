@@ -39,6 +39,9 @@ export function registerEmeraldCommands(game, bus) {
     weather: "weather",
     crop: "crops",
     actor: "actors",
+    appearance: "appearance",
+    camera: "camera",
+    environment: "environment",
     field: "movement",
     world: "world",
     device: "world",
@@ -83,6 +86,151 @@ export function registerEmeraldCommands(game, bus) {
       ...permissionFor(name),
       ...rest,
     });
+  const screenSize = objectSchema(
+    {
+      width: { type: "number", minimum: 1, maximum: 8192 },
+      height: { type: "number", minimum: 1, maximum: 8192 },
+    },
+    ["width", "height"],
+  );
+  const viewPoint = objectSchema(
+    {
+      x: { type: "number", minimum: -1000000, maximum: 1000000 },
+      y: { type: "number", minimum: -1000000, maximum: 1000000 },
+    },
+    ["x", "y"],
+  );
+  register(
+    "camera.view",
+    objectSchema({ size: screenSize }),
+    ({ size }) => game.cameraProjection(size),
+    { concurrent: true, ready: () => true, permission: undefined },
+  );
+  register(
+    "camera.project",
+    objectSchema({ point: viewPoint, size: screenSize }, ["point"]),
+    ({ point, size }) => game.projectCamera(point, size),
+    { concurrent: true, ready: () => true, permission: undefined },
+  );
+  register(
+    "camera.unproject",
+    objectSchema({ point: viewPoint, size: screenSize }, ["point"]),
+    ({ point, size }) => game.unprojectCamera(point, size),
+    { concurrent: true, ready: () => true, permission: undefined },
+  );
+  const visualScope = { type: "string", enum: ["visit", "session"] };
+  register(
+    "camera.acquire",
+    objectSchema(
+      {
+        profile: id,
+        focus: objectSchema(
+          {
+            map: id,
+            x: { type: "integer", minimum: 0 },
+            y: { type: "integer", minimum: 0 },
+          },
+          ["map", "x", "y"],
+        ),
+        priority: { type: "integer", minimum: -10000, maximum: 10000 },
+        scope: visualScope,
+      },
+      ["profile"],
+    ),
+    (args) => game.acquireCamera(args),
+  );
+  register(
+    "camera.release",
+    objectSchema({ token: id }, ["token"]),
+    ({ token }) => game.releaseCamera(token),
+    { concurrent: true, ready: () => true },
+  );
+  register(
+    "environment.acquire",
+    objectSchema(
+      {
+        layer: id,
+        data: { type: "string", maxLength: 8192 },
+        scope: visualScope,
+      },
+      ["layer"],
+    ),
+    ({ data, ...args }) =>
+      game.acquireEnvironment({
+        ...args,
+        ...(data === undefined ? {} : { data: JSON.parse(data) }),
+      }),
+  );
+  register(
+    "environment.release",
+    objectSchema({ token: id }, ["token"]),
+    ({ token }) => game.releaseEnvironment(token),
+    { concurrent: true, ready: () => true },
+  );
+  const appearanceTarget = objectSchema(
+    {
+      kind: { type: "string", enum: ["player", "actor", "object"] },
+      uid: id,
+      map: id,
+      id,
+    },
+    ["kind"],
+  );
+  const appearanceChoice = {
+    target: appearanceTarget,
+    appearance: id,
+    data: { type: "string", maxLength: 8192 },
+  };
+  const decodeAppearance = ({ data, ...args }) => ({
+    ...args,
+    ...(data === undefined ? {} : { data: JSON.parse(data) }),
+  });
+  register(
+    "appearance.set",
+    objectSchema(appearanceChoice, ["target", "appearance"]),
+    (args) => game.setAppearance(decodeAppearance(args)),
+  );
+  register(
+    "appearance.clear",
+    objectSchema({ target: appearanceTarget }, ["target"]),
+    ({ target }) => game.clearAppearance(target),
+  );
+  register(
+    "appearance.override",
+    objectSchema(
+      {
+        ...appearanceChoice,
+        priority: { type: "integer", minimum: -10000, maximum: 10000 },
+        scope: { type: "string", enum: ["visit", "session"] },
+      },
+      ["target", "appearance"],
+    ),
+    (args) => game.overrideAppearance(decodeAppearance(args)),
+  );
+  register(
+    "appearance.release",
+    objectSchema({ token: id }, ["token"]),
+    ({ token }) => game.releaseAppearance(token),
+    { concurrent: true, ready: () => true },
+  );
+  register(
+    "appearance.preview",
+    objectSchema(
+      {
+        appearance: id,
+        data: { type: "string", maxLength: 8192 },
+        context: { type: "string", maxLength: 8192 },
+      },
+      ["appearance"],
+    ),
+    ({ appearance, data, context }) =>
+      game.previewAppearance(
+        appearance,
+        data === undefined ? undefined : JSON.parse(data),
+        context === undefined ? {} : JSON.parse(context),
+      ),
+    { concurrent: true, ready: () => true, permission: undefined },
+  );
   register(
     "random.sample",
     objectSchema(

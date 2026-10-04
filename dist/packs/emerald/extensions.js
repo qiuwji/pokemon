@@ -1,3 +1,11 @@
+import { createEmeraldPresentation } from "./animations.js";
+import { CameraProfiles } from "../../engine/camera-view.js";
+import { EnvironmentLayers } from "../../engine/environment-layers.js";
+import { AppearanceRegistry } from "../../engine/appearances.js";
+import {
+  emeraldAppearances,
+  emeraldAppearanceResources,
+} from "./appearance-definitions.js";
 import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
 import { FieldEffectRegistry } from "../../engine/field-effects.js";
 import { EMERALD_FIELD_EFFECTS } from "./field-effects.js";
@@ -68,17 +76,17 @@ import { ITEMS } from "./items.js";
 /** Content-pack adapter validates extension content using the same domain contracts as built-ins. */
 export function createEmeraldPlugins(db, plugins, onError) {
   db = emeraldDatabase(db);
-  const resources = Object.fromEntries(
-    Object.keys(db.species).map((id) => [
-      id + "-front",
-      `assets/${id}-front.png`,
-    ]),
-  );
+  const resources = emeraldAppearanceResources(db);
   const host = new PluginHost({
     permissions: EMERALD_PLUGIN_PERMISSIONS,
     base: {
       ...db,
       resources,
+      appearances: emeraldAppearances(db),
+      cameraProfiles: {
+        "emerald-default": { name: "默认视口", columns: 20, rows: 14, zoom: 1 },
+      },
+      environmentLayers: {},
       weather: GEN3_WORLD_WEATHER,
       battleWeather: GEN3_BATTLE_WEATHER,
       learningMethods: EMERALD_LEARNING_METHODS,
@@ -103,8 +111,21 @@ export function createEmeraldPlugins(db, plugins, onError) {
   });
   host.load(plugins);
   const catalog = host.seal((c) => {
+    // Materialize pack defaults against the final catalog, including registered actors/species.
+    Object.assign(c.resources, emeraldAppearanceResources(c));
+    Object.assign(c.appearances, emeraldAppearances(c));
     assertContent({ ...db, ...c });
+    new CameraProfiles(c.cameraProfiles);
+    new EnvironmentLayers(c.environmentLayers);
+    const visualRegistry = createEmeraldPresentation({ host });
+    for (const [id, d] of Object.entries(c.environmentLayers))
+      if (!visualRegistry.effects.has(d.visual))
+        throw new Error(`Unknown environment visual ${id}/${d.visual}`);
     const inventory = createEmeraldInventory(c);
+    const appearances = new AppearanceRegistry(c.appearances, {
+      actors: c.actors,
+      resources: c.resources,
+    });
     new TimeTaskRegistry(c.timeTasks);
     new CropRegistry(c.crops, { items: c.items });
     validateBerryPlots(c.berryPlots, c);
@@ -193,6 +214,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       poses: new NPCPoseRegistry(c.npcPoses, { actors: c.actors }),
     });
     new ActorTemplateRegistry(c.actorTemplates, {
+      appearances,
       actors: c.actors,
       behaviors: npcBehaviors,
       schedules: new ActorScheduleRegistry(c.actorSchedules, {

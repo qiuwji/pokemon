@@ -13,7 +13,10 @@ const exact = (o, keys) =>
 const integer = (n) => Number.isSafeInteger(n) && n >= 0;
 export const emptyActors = () => ({ sequence: 0, records: {} });
 export class ActorTemplateRegistry {
-  constructor(definitions = {}, { actors, behaviors, schedules = null }) {
+  constructor(
+    definitions = {},
+    { actors, behaviors, schedules = null, appearances = null },
+  ) {
     this.behaviors = behaviors;
     this.schedules = schedules;
     this.definitions = new Map();
@@ -23,6 +26,7 @@ export class ActorTemplateRegistry {
         !exact(d, [
           "name",
           "actor",
+          "appearance",
           "behavior",
           "config",
           "schema",
@@ -32,12 +36,18 @@ export class ActorTemplateRegistry {
         ]) ||
         typeof d.name !== "string" ||
         !d.name ||
-        !actors[d.actor] ||
+        (d.actor !== undefined && !actors[d.actor]) ||
+        (d.actor === undefined && d.appearance === undefined) ||
         !behaviors.definitions.has(d.behavior) ||
         (d.perceptionRadius !== undefined &&
           (!integer(d.perceptionRadius) || d.perceptionRadius > 32))
       )
         throw new Error(`Invalid actor template ${key}`);
+      if (d.appearance !== undefined) {
+        if (!exact(d.appearance, ["id", "data"]) || !appearances)
+          throw new Error(`Invalid actor appearance ${key}`);
+        appearances.selection(d.appearance.id, d.appearance.data);
+      }
       if (d.schedule !== undefined) {
         if (!schedules) throw new Error(`Unknown actor schedule ${d.schedule}`);
         schedules.get(d.schedule);
@@ -234,7 +244,7 @@ export class ActorRepository {
               }
             : {}),
           pose: r.pose,
-          actor: d.actor,
+          ...(d.actor ? { actor: d.actor } : {}),
           name: d.name,
           kind: "actor",
           movement: { ...d.config, mode: d.behavior },

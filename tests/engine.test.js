@@ -34,6 +34,7 @@ const state = () => ({
   facilities: { nextId: 1, results: [] },
   fieldEffects: emptyFieldEffects(),
   encounters: emptyEncounterTickets(),
+  appearances: { revision: 0, records: {} },
   position: { map: "LittlerootTown", x: 10, y: 10, dir: "up" },
   party: [],
   box: [],

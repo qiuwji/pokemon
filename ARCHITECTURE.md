@@ -33,7 +33,7 @@ dist/
   adapters/                      浏览器输入、Canvas/DOM、存储与真实资源音频
   packs/emerald/                 原作规则配置、剧情、地图业务与页面
     adventure.js                 内容配置、应用装配、生命周期和忙碌聚合
-    application/composition.js   23 个应用服务的有限依赖装配
+    application/composition.js   25 个应用服务的有限依赖装配
     application/public-ports.js  当前宿主 API 的显式字段/方法所有权表
     application/*-application.js 按领域拥有会话、协调用例
     extensions.js                通用插件合同的本作校验/默认注册
@@ -59,7 +59,7 @@ flowchart TD
 
 ## 应用服务与状态所有权
 
-`adventure.js` 当前 149 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md)。
+`adventure.js` 当前 151 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md)。
 
 - SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
 - 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。
@@ -75,7 +75,7 @@ WorldStateService 分离永久覆盖与当前访问 visit 覆盖；地图重进�
 
 FieldActionService 拥有资格、目标和可校验行动计划；应用层协调移动/世界提交/钓鱼会话与演出。FieldTerrainRegistry 管通行和强制动作政策。FieldDeviceCatalog/FieldDevices 管多格 footprint、访问激活、逻辑状态与可保存的局部延迟任务；机关计时遵循游戏暂停，不使用 RTC 驱动帧动画。薄冰、裂地板和桥面升沉是内容包政策，核心没有房间 ID 分支。见 [FIELD_ACTIONS.md](docs/engine/field/FIELD_ACTIONS.md)、[FIELD_TERRAIN.md](docs/engine/field/FIELD_TERRAIN.md)、[FIELD_DEVICES.md](docs/engine/field/FIELD_DEVICES.md)、[BRIDGES.md](docs/engine/field/BRIDGES.md)。
 
-物品绑定、对象确认与地形/受阻行动共用注册入口。通用ObjectMotion预检一格位移、跟进和占位，WorldObjectOperations协调现有世界覆盖/玩家移动，纯导演输出偏移；怪力和箱子条件只在内容中。FieldEffects单独拥有持续野外数据，定义visit/world保留政策；地图darkness与light-radius投影经纯LightingDirector形成遮罩。照明不决定可见性规则或遇敌。见同一野外合同与独立interaction-workshop例；未来遇敌政策、接触、外观和相机接口按[插件计划](docs/project/PLUGIN_ROADMAP.md)推进，不能把拟议API当成已实现。
+物品绑定、对象确认与地形/受阻行动共用注册入口。通用ObjectMotion预检一格位移、跟进和占位，WorldObjectOperations协调现有世界覆盖/玩家移动，纯导演输出偏移；怪力和箱子条件只在内容中。FieldEffects单独拥有持续野外数据，定义visit/world保留政策；地图darkness与light-radius投影经纯LightingDirector形成遮罩。照明不决定可见性规则或遇敌。见同一野外合同与独立interaction-workshop例；遇敌政策/接触见对应世界合同，外观、二维相机及独立环境层见[外观与视图](docs/engine/presentation/APPEARANCE_AND_VIEW.md)；探索可见性仍按[插件计划](docs/project/PLUGIN_ROADMAP.md)推进。
 
 MovementRegistry / MovementInputRegistry 分别描述模式和输入策略。Mach/Acro 原作控制在 Gen3 政策中，浏览器只映射逻辑输入。GridMotion / Sprite 序列负责插值和姿态帧，不决定规则。见 [MOVEMENT_INPUT.md](docs/engine/field/MOVEMENT_INPUT.md)。
 
@@ -103,14 +103,18 @@ interface.js 是页面装配器，ui-shell 提供对话/弹窗/导航/焦点，�
 
 ## 存档、复用与验证
 
-SaveStore 只接受PACK.version指定的当前开发存档格式（当前13）；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
+SaveStore 只接受PACK.version指定的当前开发存档格式（当前14）；插件数据要求当前 dataVersion。核心迁移链、插件 migrate 和旧 game-pack.js 转出口已删除。失败读取不覆盖原文，写入前校验 detached draft、UID/引用与依赖。单一状态所有权、持久合同和失败原文保护仍必须维护。
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **719 项通过，0 失败、0 跳过**，十个 Skill 入门例通过，内容/严格类型/**285 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-encounter-extensions/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **736 项通过，0 失败、0 跳过**，十一个 Skill 入门例通过，内容/严格类型/**294 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-appearance-view/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
 
 接手材料按职责组织：docs/project持有动态范围/状态/证据索引，docs/architecture解释职责，docs/engine按领域保存合同，docs/development说明业务写法与测试，history保存旧计划。九份Skill链接真实examples；check:docs校验本地链接和片段同步，不替代领域行为检查。
 
 ## 插件遇敌增量
 
-遇敌政策从Triggers移入规则包，EncounterApplication独立拥有冷却、区域抽样和唯一野生个体仓储。ContactApplication将真实位置接触在输入/帧边界发布，战斗消费一次性关联凭证而非复制Actor.data。该直接结果通道不调用剧情；保存13校验个体/Actor/内容引用与单一身份。只读查询和宿主随机选格分开，派生草格比例由插件决定。实际合同及未提供的外观/相机/环境能力边界见[遇敌与接触](docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)、[公开能力路线](docs/project/PLUGIN_ROADMAP.md)。
+遇敌政策从Triggers移入规则包，EncounterApplication独立拥有冷却、区域抽样和唯一野生个体仓储。ContactApplication将真实位置接触在输入/帧边界发布，战斗消费一次性关联凭证而非复制Actor.data。该直接结果通道不调用剧情；保存14校验个体/Actor/内容引用与单一身份。只读查询和宿主随机选格分开，派生草格比例由插件决定。实际合同与能力边界见[遇敌与接触](docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)、[公开能力路线](docs/project/PLUGIN_ROADMAP.md)。
+
+## 外观与统一视图
+
+AppearanceRegistry校验配方及资源，AppearanceSelections拥有按身份保存的选择与临时覆盖；默认玩家/Actor/物种资源策略归绿宝石包，renderer只消费图层。身体与服饰共用移动采样，不产生第二个Actor或修改碰撞。ViewApplication只装配CameraProfiles、EnvironmentLayers与VisualLeases；CameraRig独立拥有剧情时序。统一投影服务地图裁切、连通场景、角色、天气/光照和屏幕反变换，租约负责优先级、访问与重载清理。独立雾层不写逻辑天气，尚不拥有探索记忆。公开API、默认规则与限制见[合同](docs/engine/presentation/APPEARANCE_AND_VIEW.md)。

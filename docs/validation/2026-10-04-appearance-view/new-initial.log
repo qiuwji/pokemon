@@ -1,0 +1,33 @@
+✔ Appearance public commands persist a layered choice without changing creature, movement or random state (42.038208ms)
+✔ Appearance-only Actor template shares persistent identity and removals clear its selection (20.085333ms)
+✔ Appearance leases prioritize, reject ties, release to saved choice and expire on map entry/load (24.282125ms)
+✔ Appearance recipes reject invalid references, parameters, identities and asynchronous selectors before selection writes (24.099667ms)
+✔ Appearance selectors are pure and permissions reject unauthorized writes (21.607ms)
+✔ Layer drawing shares direction/pose clock, deterministic offsets, reduced motion and balanced cleanup (0.177916ms)
+✔ Saved choices validate current schemas, missing Actor identities and referenced resource dependencies (14.728375ms)
+✔ Scene object selectors accept existing dialogue IDs and restore dormant choices without modifying object state (17.945458ms)
+✔ Public camera leases change range/focus without changing world state; ties and disconnected foci fail before writes (31.68225ms)
+✔ Projection and inverse use the same letterboxed space, reject margins and preserve tile coordinates (13.770791ms)
+✔ Story camera temporarily wins over plugin focus, then restores it; visit/session leases reset at proper boundaries (21.27375ms)
+✔ Independent fog layers compose in order without replacing logical weather; schema errors and unknown drawings fail (15.405042ms)
+✔ Field renderer shares projection for tiles/actors/weather/light and environment; frame drawing leaves rules untouched (12.964459ms)
+✔ Environment drawing is deterministic, honors reduced motion and releases context on failure (0.087375ms)
+✖ Public density composition selects distinct grass cells, prepares regional individuals and displays their species without StoryRunner (35.810625ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 14
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 256.714209
+
+✖ failing tests:
+
+test at tests/view-extensions.test.js:298:1
+✖ Public density composition selects distinct grass cells, prepares regional individuals and displays their species without StoryRunner (35.810625ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.keys (<anonymous>)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/view-extensions.test.js:313:85)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

@@ -428,6 +428,7 @@ test("Save validation rejects missing or duplicated creature identities and miss
   state.facilities = { nextId: 1, results: [] };
   state.fieldEffects = emptyFieldEffects();
   state.encounters = emptyEncounterTickets();
+  state.appearances = { revision: 0, records: {} };
   state.weather = emptyWeather();
   state.registeredItem = null;
   assert(validateSave(state, db));

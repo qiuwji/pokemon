@@ -147,6 +147,16 @@ export class PluginHost {
                   : {}),
               };
             }
+            if (kind === "appearances" && value.select !== undefined) {
+              if (typeof value.select !== "function")
+                throw new Error("Invalid appearance selector");
+              const select = value.select;
+              value = {
+                ...value,
+                select: (data, context) =>
+                  evaluate(select, readOnly(data), readOnly(context)),
+              };
+            }
             if (kind === "conditionQueries") {
               const original = value;
               if (typeof original.read !== "function")

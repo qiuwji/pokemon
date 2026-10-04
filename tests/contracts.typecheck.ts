@@ -417,3 +417,28 @@ const encounterPolicy: import("../dist/engine/contracts.js").EncounterPolicyDefi
     },
   };
 void encounterPolicy;
+
+declare const visualAPI: import("../dist/engine/contracts.js").PluginAPI;
+const layeredAppearance: import("../dist/engine/contracts.js").AppearanceDefinition =
+  {
+    name: "outfit",
+    variants: {
+      default: {
+        layers: [
+          { kind: "actor", actor: "ProfBirch" },
+          {
+            kind: "image",
+            resource: "tailor:shirt",
+            size: { width: 16, height: 32 },
+          },
+        ],
+      },
+    },
+  };
+visualAPI.content.register("appearances", "outfit", layeredAppearance);
+const wideCamera: import("../dist/engine/contracts.js").CameraProfileDefinition =
+  { name: "wide", columns: 30, rows: 20 };
+visualAPI.content.register("cameraProfiles", "wide", wideCamera);
+const fogLayer: import("../dist/engine/contracts.js").EnvironmentLayerDefinition =
+  { name: "fog", visual: "weather.fog", opacity: 0.2 };
+visualAPI.content.register("environmentLayers", "mist", fogLayer);

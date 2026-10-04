@@ -1,6 +1,7 @@
 /** Portable camera focus. Coordinates are world pixels, not viewport offsets. */
 export class CameraRig {
-  constructor(timeline) {
+  constructor(timeline, { baseFocus = (player) => player } = {}) {
+    this.baseFocus = baseFocus;
     this.timeline = timeline;
     this.reset();
   }
@@ -10,11 +11,12 @@ export class CameraRig {
     this.track = null;
   }
   sample(player, now = this.timeline.now()) {
-    if (!this.track) return this.mode === "follow" ? player : this.point;
+    if (!this.track)
+      return this.mode === "follow" ? this.baseFocus(player) : this.point;
     const a = this.track;
     const t = Math.max(0, Math.min(1, (now - a.start) / a.ms));
     const eased = t * t * (3 - 2 * t);
-    const to = a.follow ? player : a.to;
+    const to = a.follow ? this.baseFocus(player) : a.to;
     return {
       x: a.from.x + (to.x - a.from.x) * eased,
       y: a.from.y + (to.y - a.from.y) * eased,

@@ -1,3 +1,6 @@
+import { cameraProjection, unprojectScreen } from "../engine/camera-view.js";
+import { drawEnvironmentLayers } from "../presentation/environment-layers-canvas.js";
+import { drawAppearance } from "../presentation/appearance-canvas.js";
 import { WeatherDirector } from "../presentation/weather-director.js";
 import { LightingDirector, drawLighting } from "../presentation/lighting.js";
 import { sampleSpriteAnimation } from "../presentation/sprite-animation.js";
@@ -17,7 +20,9 @@ export class Renderer {
     db,
     assets,
     {
-      playerActors = { walk: "Player", run: "PlayerRun" },
+      appearanceView = () => null,
+      cameraConfiguration = () => ({ columns: 20, rows: 14, zoom: 1 }),
+      environmentLayers = () => [],
       cameraRig = null,
       travelActor = null,
       environment = () => ({ weather: null, hour: 12 }),
@@ -30,7 +35,9 @@ export class Renderer {
       canvas,
       db,
       assets,
-      playerActors,
+      appearanceView,
+      cameraConfiguration,
+      environmentLayers,
       cameraRig,
       travelActor,
       environment,
@@ -167,12 +174,12 @@ export class Renderer {
     const minX = Math.max(0, Math.floor(this.camera.x / 16) - origin.x),
       maxX = Math.min(
         m.width,
-        Math.ceil((this.camera.x + 320) / 16) - origin.x,
+        Math.ceil((this.camera.x + this.camera.width) / 16) - origin.x,
       ),
       minY = Math.max(0, Math.floor(this.camera.y / 16) - origin.y),
       maxY = Math.min(
         m.height,
-        Math.ceil((this.camera.y + 224) / 16) - origin.y,
+        Math.ceil((this.camera.y + this.camera.height) / 16) - origin.y,
       );
     for (let y = minY; y < maxY; y++)
       for (let x = minX; x < maxX; x++)
@@ -188,7 +195,17 @@ export class Renderer {
   cameraAt(position, now) {
     const player = this.motion.sample(position, now);
     const focus = this.cameraRig?.sample(player, now) || player;
-    return { x: Math.round(focus.x - 152), y: Math.round(focus.y - 104) };
+    return cameraProjection(this.cameraConfiguration(), focus, {
+      width: this.canvas.width,
+      height: this.canvas.height,
+    });
+  }
+  visibleMaps(position, now) {
+    const view = this.cameraAt(position, now);
+    return this.graph.visible(position.map, view, view.width, view.height);
+  }
+  screenToWorld(point) {
+    return unprojectScreen(point, this.camera);
   }
   world(
     world,
@@ -204,194 +221,233 @@ export class Renderer {
       }),
       c = this.ctx;
     this.camera = this.cameraAt(p, now);
-    const ids = this.graph.visible(p.map, this.camera),
-      pack = this.db.tilesets[m.tileset];
-    // Borders use the same metatile grid, including animated source tiles.
-    const origin = this.graph.placements[p.map];
-    const startX = Math.floor(this.camera.x / 16),
-      startY = Math.floor(this.camera.y / 16);
-    for (let y = startY; y < startY + 15; y++)
-      for (let x = startX; x < startX + 21; x++) {
-        const bx = (((x - origin.x) % 2) + 2) % 2,
-          by = (((y - origin.y) % 2) + 2) % 2;
-        this.grid(
-          pack,
-          m.border[by * 2 + bx],
-          x * 16 - this.camera.x,
-          y * 16 - this.camera.y,
-          false,
-          now,
-        );
-      }
-    for (const id of ids) this.drawMap(id, false, now);
-    const all = ids.flatMap((id) => {
-      const o = this.graph.placements[id];
-      return npcs
-        .view(id, now, { reducedMotion: this.reducedMotion() })
-        .map((n) => {
-          const move = action?.objects?.find(
-            (e) => e.map === id && e.id === n.id,
+    c.fillStyle = "#101820";
+    c.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    c.save();
+    try {
+      c.translate(this.camera.offsetX, this.camera.offsetY);
+      c.scale(this.camera.scale, this.camera.scale);
+      c.beginPath();
+      c.rect(0, 0, this.camera.width, this.camera.height);
+      c.clip();
+      const ids = this.graph.visible(
+          p.map,
+          this.camera,
+          this.camera.width,
+          this.camera.height,
+        ),
+        pack = this.db.tilesets[m.tileset];
+      // Borders use the same metatile grid, including animated source tiles.
+      const origin = this.graph.placements[p.map];
+      const startX = Math.floor(this.camera.x / 16),
+        startY = Math.floor(this.camera.y / 16);
+      for (
+        let y = startY;
+        y < startY + Math.ceil(this.camera.height / 16) + 1;
+        y++
+      )
+        for (
+          let x = startX;
+          x < startX + Math.ceil(this.camera.width / 16) + 1;
+          x++
+        ) {
+          const bx = (((x - origin.x) % 2) + 2) % 2,
+            by = (((y - origin.y) % 2) + 2) % 2;
+          this.grid(
+            pack,
+            m.border[by * 2 + bx],
+            x * 16 - this.camera.x,
+            y * 16 - this.camera.y,
+            false,
+            now,
           );
-          return {
-            ...n,
-            map: id,
-            px: n.px + o.x * 16 + (move?.x || 0),
-            py: n.py + o.y * 16 + (move?.y || 0),
-          };
-        });
-    });
-    all.push({
-      ...player,
-      id: "player",
-      map: p.map,
-      player: true,
-      px: player.x,
-      py: player.y,
-    });
-    const priority = (n) =>
-      this.fieldPriority(n.previousElevation ?? n.elevation ?? 0);
-    all.sort((a, b) => priority(b) - priority(a) || a.py - b.py);
-    const drawActors = (actors) => {
-      for (const n of actors) {
-        const avatar = n.player ? action?.player || {} : {};
-        const x = n.px - this.camera.x + (avatar.x || 0),
-          y = n.py - this.camera.y + (avatar.y || 0);
-        if (x < -32 || x > 352 || y < -32 || y > 256) continue;
-        c.save();
-        c.globalAlpha *= avatar.opacity ?? 1;
-        if (avatar.scale !== undefined || avatar.rotation !== undefined) {
-          c.translate(x + 8, y + 8);
-          c.rotate(avatar.rotation || 0);
-          c.scale(avatar.scale ?? 1, avatar.scale ?? 1);
-          c.translate(-x - 8, -y - 8);
         }
-        // Shadows are visual poses; height never changes grid occupancy.
-        if (n.actor !== "BirchsBag") {
-          c.save();
-          c.globalAlpha *= 0.2;
-          c.fillStyle = "#182838";
-          c.fillRect(Math.round(x + 2), Math.round(y + 11), 12, 3);
-          c.fillRect(Math.round(x + 4), Math.round(y + 10), 8, 5);
-          c.restore();
-        }
-        if (n.player) {
-          if (travel?.carrier && this.travelActor)
-            this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
-          this.actor(
-            this.playerActors[
-              travel
+      for (const id of ids) this.drawMap(id, false, now);
+      const all = ids.flatMap((id) => {
+        const o = this.graph.placements[id];
+        return npcs
+          .view(id, now, { reducedMotion: this.reducedMotion() })
+          .map((n) => {
+            const move = action?.objects?.find(
+              (e) => e.map === id && e.id === n.id,
+            );
+            return {
+              ...n,
+              map: id,
+              px: n.px + o.x * 16 + (move?.x || 0),
+              py: n.py + o.y * 16 + (move?.y || 0),
+            };
+          });
+      });
+      all.push({
+        ...player,
+        id: "player",
+        map: p.map,
+        player: true,
+        px: player.x,
+        py: player.y,
+      });
+      const priority = (n) =>
+        this.fieldPriority(n.previousElevation ?? n.elevation ?? 0);
+      all.sort((a, b) => priority(b) - priority(a) || a.py - b.py);
+      const drawActors = (actors) => {
+        for (const n of actors) {
+          const avatar = n.player ? action?.player || {} : {};
+          const x = n.px - this.camera.x + (avatar.x || 0),
+            y = n.py - this.camera.y + (avatar.y || 0);
+          const target = n.player
+            ? { kind: "player" }
+            : n._actorUid
+              ? { kind: "actor", uid: n._actorUid }
+              : { kind: "object", map: n.map, id: n.id };
+          const visual = {
+            actor: n.actor,
+            species: n.species,
+            mode: n.player
+              ? travel
                 ? "walk"
                 : n.moving
-                  ? this.playerActors[n.pose]
-                    ? n.pose
-                    : n.mode
+                  ? n.mode
                   : movementMode
-            ] || this.playerActors.walk,
-            x,
-            y -
-              16 -
-              n.lift -
-              (travel?.lift || 0) +
-              (movementMode === "surf"
-                ? Math.round(Math.sin(now / 180) * 1.5)
-                : 0),
-            n.dir,
-            n.progress,
-            n.foot,
-            n.moving && !n.freezeAnimation,
-            { pose: n.pose, timeMs: n.animationTimeMs },
+              : n.movement?.mode,
+            pose: n.pose,
+            moving: !!n.moving,
+          };
+          // Omit absent optional fields before crossing the JSON/read-only boundary.
+          const frame = this.appearanceView(
+            target,
+            Object.fromEntries(
+              Object.entries(visual).filter(([, v]) => v !== undefined),
+            ),
           );
-        } else if (n.species) {
-          const image = this.assets[n.species + "-front"];
-          if (image) {
-            const hop =
-              n.movement?.mode === "jog" ? Math.sin(now / 80) * 1.3 : 0;
-            c.drawImage(
-              image,
-              0,
-              0,
-              64,
-              64,
-              x - 1,
-              y - 6 - hop - (n.lift || 0),
-              20,
-              20,
-            );
+          n.appearanceFrame = frame;
+          const lift = (n.lift || 0) + (n.player ? travel?.lift || 0 : 0),
+            bounds = frame?.bounds || {
+              left: 0,
+              top: 0,
+              right: 16,
+              bottom: 16,
+            };
+          if (
+            x + bounds.right < 0 ||
+            x + bounds.left > this.camera.width ||
+            y - lift + bounds.bottom < 0 ||
+            y - lift + bounds.top > this.camera.height
+          )
+            continue;
+          c.save();
+          c.globalAlpha *= avatar.opacity ?? 1;
+          if (avatar.scale !== undefined || avatar.rotation !== undefined) {
+            c.translate(x + 8, y + 8);
+            c.rotate(avatar.rotation || 0);
+            c.scale(avatar.scale ?? 1, avatar.scale ?? 1);
+            c.translate(-x - 8, -y - 8);
           }
-        } else
-          this.actor(
-            n.actor,
+          // Shadows are visual poses; height never changes grid occupancy.
+          if (frame?.shadow) {
+            c.save();
+            c.globalAlpha *= 0.2;
+            c.fillStyle = "#182838";
+            c.fillRect(Math.round(x + 2), Math.round(y + 11), 12, 3);
+            c.fillRect(Math.round(x + 4), Math.round(y + 10), 8, 5);
+            c.restore();
+          }
+          if (n.player && travel?.carrier && this.travelActor)
+            this.actor(this.travelActor, x, y - 24 - travel.lift, "down");
+          drawAppearance(
+            this,
+            frame,
+            {
+              dir: n.dir,
+              progress: n.progress ?? 1,
+              foot: n.foot ?? 0,
+              moving: !!n.moving,
+              freezeAnimation: !!n.freezeAnimation,
+              pose: n.pose,
+              timeMs: n.animationTimeMs ?? now,
+            },
             x,
-            y - ((this.db.actors[n.actor]?.h || 16) - 16) - (n.lift || 0),
-            n.dir,
-            n.progress,
-            n.foot,
-            n.moving,
-            { pose: n.pose, timeMs: now },
+            y - lift,
+            { reducedMotion: this.reducedMotion() },
           );
-        c.restore();
+          c.restore();
+        }
+      };
+      drawActors(all.filter((n) => priority(n) >= 2));
+      for (const id of ids) this.drawMap(id, true, now);
+      drawActors(all.filter((n) => priority(n) < 2));
+      if (action?.target.map) {
+        const p = this.graph.point(action.target);
+        drawFieldAction(
+          c,
+          action,
+          {
+            x: p.x - this.camera.x + 8,
+            y: p.y - this.camera.y + 8,
+          },
+          this.presentation,
+        );
       }
-    };
-    drawActors(all.filter((n) => priority(n) >= 2));
-    for (const id of ids) this.drawMap(id, true, now);
-    drawActors(all.filter((n) => priority(n) < 2));
-    if (action?.target.map) {
-      const p = this.graph.point(action.target);
-      drawFieldAction(
-        c,
-        action,
+      const environment = this.environment(m, now, p.map);
+      drawDaylight(c, environment.hour, {
+        indoor: m.indoor,
+        width: this.camera.width,
+        height: this.camera.height,
+      });
+      for (const layer of this.weatherDirector.sample(
+        now,
+        environment.weather,
         {
-          x: p.x - this.camera.x + 8,
-          y: p.y - this.camera.y + 8,
+          reducedMotion: this.reducedMotion(),
         },
-        this.presentation,
-      );
-    }
-    const environment = this.environment(m, now, p.map);
-    drawDaylight(c, environment.hour, { indoor: m.indoor });
-    for (const layer of this.weatherDirector.sample(now, environment.weather, {
-      reducedMotion: this.reducedMotion(),
-    }))
-      drawWeather(c, layer.visual, now, {
-        height: 224,
-        opacity: layer.opacity,
+      ))
+        drawWeather(c, layer.visual, now, {
+          width: this.camera.width,
+          height: this.camera.height,
+          opacity: layer.opacity,
+          reducedMotion: this.reducedMotion(),
+          registry: this.presentation,
+        });
+      drawEnvironmentLayers(c, this.environmentLayers(), now, {
+        width: this.camera.width,
+        height: this.camera.height,
         reducedMotion: this.reducedMotion(),
         registry: this.presentation,
       });
-    for (const cue of emotes) {
-      const n = all.find((n) => n.id === cue.actor && n.map === cue.map);
-      if (!n) continue;
-      drawFieldEmote(c, {
-        kind: cue.kind,
-        x: n.px - this.camera.x + 8,
-        y:
-          n.py -
-          this.camera.y -
-          (n.player ? 16 : (this.db.actors[n.actor]?.h || 32) - 16),
-      });
+      for (const cue of emotes) {
+        const n = all.find((n) => n.id === cue.actor && n.map === cue.map);
+        if (!n) continue;
+        drawFieldEmote(c, {
+          kind: cue.kind,
+          x: n.px - this.camera.x + 8,
+          y: n.py - this.camera.y - -(n.appearanceFrame?.emoteY ?? -16),
+        });
+      }
+      const lighting = this.lightingDirector.sample(
+        p.map,
+        now,
+        m.darkness,
+        Object.values(environment.fieldEffects?.records || {}).map(
+          (r) => r.presentation,
+        ),
+        { reducedMotion: this.reducedMotion() },
+      );
+      if (lighting)
+        drawLighting(c, {
+          width: this.camera.width,
+          height: this.camera.height,
+          opacity: lighting.opacity,
+          lights: [
+            {
+              x: player.x - this.camera.x + 8,
+              y: player.y - this.camera.y + 8,
+              radius: lighting.radius,
+            },
+          ],
+        });
+    } finally {
+      c.restore();
     }
-    const lighting = this.lightingDirector.sample(
-      p.map,
-      now,
-      m.darkness,
-      Object.values(environment.fieldEffects?.records || {}).map(
-        (r) => r.presentation,
-      ),
-      { reducedMotion: this.reducedMotion() },
-    );
-    if (lighting)
-      drawLighting(c, {
-        width: this.canvas.width,
-        height: this.canvas.height,
-        opacity: lighting.opacity,
-        lights: [
-          {
-            x: player.x - this.camera.x + 8,
-            y: player.y - this.camera.y + 8,
-            radius: lighting.radius,
-          },
-        ],
-      });
   }
   battle(frame) {
     drawBattle(this.ctx, this.assets, frame);

@@ -453,7 +453,7 @@ test("Registered weather artists are deterministic, opacity-safe and use static 
 test("Application commands, read-only queries, map visits, expiry and current save schema share one owner", async () => {
   const s = session();
   const g = s.game;
-  assert.equal(PACK.version, 13);
+  assert.equal(PACK.version, 14);
   assert.equal(
     (
       await s.bus.execute("core.weather.set", {
@@ -744,7 +744,13 @@ test("Field renderer uses the actual map key and registered indoor weather, with
   const alias = "storm:room",
     map = { ...base.maps.LittlerootTown_ProfessorBirchsLab, indoor: true },
     db = { ...base, maps: { [alias]: map } };
-  const ctx = canvas(),
+  const ctx = Object.assign(canvas(), {
+      translate() {},
+      scale() {},
+      beginPath() {},
+      rect() {},
+      clip() {},
+    }),
     seen = [];
   let drawn = 0;
   const presentation = new PresentationRegistry()
@@ -753,7 +759,7 @@ test("Field renderer uses the actual map key and registered indoor weather, with
     })
     .seal();
   const renderer = new Renderer(
-    { getContext: () => ctx },
+    { width: 320, height: 224, getContext: () => ctx },
     db,
     {},
     {

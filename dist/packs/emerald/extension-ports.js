@@ -21,6 +21,8 @@ export function attachEmeraldExtensions(game, host) {
     time: game.timeView(),
     weather: game.weatherView(),
     actors: game.actors.list(),
+    appearances: game.appearanceView(),
+    view: game.viewConfiguration(),
     actorRoutines: game.actors.routines(),
     fieldEffects: game.fieldEffectView(),
     contacts: game.contactView(),

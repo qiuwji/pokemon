@@ -365,6 +365,7 @@ test("Saved movement rejects a bike on water, a surf mode on land and unknown vi
   state.facilities = emptyFacilities();
   state.fieldEffects = emptyFieldEffects();
   state.encounters = emptyEncounterTickets();
+  state.appearances = { revision: 0, records: {} };
   state.registeredItem = null;
   state.party[0].moves[0] = { id: "surf", pp: 15 };
   assert(validateSave(state, db));

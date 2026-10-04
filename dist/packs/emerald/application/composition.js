@@ -1,3 +1,8 @@
+import { ViewApplication, VIEW_PORTS } from "./view-application.js";
+import {
+  AppearanceApplication,
+  APPEARANCE_PORTS,
+} from "./appearance-application.js";
 import { FacilityApplication, FACILITY_PORTS } from "./facility-application.js";
 import {
   EncounterApplication,
@@ -45,6 +50,12 @@ export function composeApplications(applications, read, { storage }) {
   applications.save = new SaveApplication(
     liveApplicationPorts(read, SAVE_PORTS, { storage }),
   );
+  applications.view = new ViewApplication(
+    liveApplicationPorts(read, VIEW_PORTS),
+  );
+  applications.appearance = new AppearanceApplication(
+    liveApplicationPorts(read, APPEARANCE_PORTS),
+  );
   applications.encounters = new EncounterApplication(
     liveApplicationPorts(read, ENCOUNTER_PORTS, {
       bindEncounterActor: (uid) =>
@@ -70,7 +81,10 @@ export function composeApplications(applications, read, { storage }) {
   applications.actors = new ActorApplication(
     liveApplicationPorts(read, ACTOR_PORTS, {
       actorContact: (...args) => applications.contacts.request(...args),
-      actorRemoved: (uid) => applications.encounters.removedActor(uid),
+      actorRemoved: (uid) => {
+        applications.encounters.removedActor(uid);
+        applications.appearance.removedActor(uid);
+      },
     }),
   );
   applications.crops = new CropApplication(
@@ -139,6 +153,8 @@ export function composeApplications(applications, read, { storage }) {
       bindContacts: () => {
         applications.contacts.bind();
         applications.encounters.bind();
+        applications.appearance.bind();
+        applications.view.reset();
       },
       blockedContact: (id) => applications.contacts.bump(id),
       fieldInteraction: (event) => applications.fieldActions.interaction(event),

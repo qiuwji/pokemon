@@ -6,6 +6,9 @@ export const CONTENT_KINDS = Object.freeze([
   "maps",
   "tilesets",
   "actors",
+  "appearances",
+  "cameraProfiles",
+  "environmentLayers",
   "evolutions",
   "items",
   "inventoryPockets",
@@ -121,11 +124,16 @@ export class ExtensionCatalog {
       result.tilesets[id] = { ...value, id };
     validate(result);
     this.sealed = true;
-    return freeze(result);
+    this.compiled = freeze(result);
+    return this.compiled;
   }
   dependencies(state) {
     const used = [
       state.position?.map,
+      ...Object.values(state.appearances?.records || {}).flatMap((r) => [
+        r.appearance,
+        r.target.map,
+      ]),
       ...Object.values(state.encounters?.records || {}).flatMap((t) => [
         t.map,
         t.table,
@@ -163,7 +171,11 @@ export class ExtensionCatalog {
         const definition =
           this.entries.get(`actorSchedules/${schedule}`)?.value ||
           this.base.actorSchedules?.[schedule];
+        const template =
+          this.entries.get(`actorTemplates/${r.template}`)?.value ||
+          this.base.actorTemplates?.[r.template];
         return [
+          template?.appearance?.id,
           r.template,
           r.map,
           r.pose,
@@ -213,6 +225,16 @@ export class ExtensionCatalog {
         ...m.moves.map((s) => s.id),
       ]),
     ];
+    for (const appearance of [...used]) {
+      const definition =
+        this.entries.get(`appearances/${appearance}`)?.value ||
+        this.compiled?.appearances?.[appearance] ||
+        this.base.appearances?.[appearance];
+      if (definition)
+        for (const recipe of Object.values(definition.variants))
+          for (const layer of recipe.layers)
+            used.push(layer.actor, layer.resource);
+    }
     return [...new Set(used.map((id) => this.owners.get(id)).filter(Boolean))];
   }
 }

@@ -192,7 +192,7 @@ test("Canvas chooses appearance per grid cell without changing logical map or sc
   Object.assign(renderer, {
     db: { maps: { Room: m }, tilesets: { tiny: {} } },
     graph: { placements: { Room: { x: 0, y: 0 } } },
-    camera: { x: 0, y: 0 },
+    camera: { x: 0, y: 0, width: 320, height: 224 },
     grid: (_, block) => calls.push(block),
   });
   renderer.drawMap("Room", false, 0);

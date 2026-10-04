@@ -110,6 +110,7 @@ export class EmeraldAdventure {
       return typeof value === "function" ? value.bind(this) : value;
     };
     composeApplications(this.applications, read, { storage });
+    this.camera.baseFocus = (player) => this.cameraFocus(player);
     this.bindField();
   }
   attachUI(ui) {

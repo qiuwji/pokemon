@@ -1,6 +1,6 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0时将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，当前0.17.0经学习/天气/库存装配为149行；用例由 23 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
+`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0时将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，当前0.21.0经显式外观/视口接线为151行；用例由 25 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
 
 ## 职责与状态所有权
 
@@ -60,3 +60,5 @@
 登记道具由 ItemShortcutApplication 独立协调；可登记但暂不可用的道具不缓存旧资格，使用时交还现有物品/野外行动管线。当前应用数量、入口规模与保存版本见根架构/README；详见 docs/engine/items/FIELD_ITEMS.md。InventoryApplication持有唯一库存政策；商店/奖励/采摘/持物/学习/进化/战斗控制者使用同一槽位服务。bagView/itemQuantity只查询，inventoryPreview不生成可提交计划。现行合同见 docs/engine/items/INVENTORY.md。
 
 公开地图快照、暗雷政策、宿主随机选格和接触凭证战斗见[ENCOUNTERS_AND_CONTACTS](../engine/world/ENCOUNTERS_AND_CONTACTS.md)。保存13为野生个体提供唯一仓储；Actor移除和战斗结算通过装配端口释放关联，插件不导入应用服务。
+
+AppearanceApplication拥有视觉选择，ViewApplication组合相机配置与环境层的独立所有者；二者通过有限端口接线，地图访问和读档由装配器交接清理，不向adventure增加领域实现。

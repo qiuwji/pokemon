@@ -88,7 +88,7 @@ test("detail entry renders a clickable action with persistent memory", async () 
 
 读[遇敌/接触合同](../../docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)。插件可注册encounterPolicies关闭指定地图的step暗雷，查询地图格子/有效地区表，经宿主种子无放回选格，创建Actor并prepare唯一个体凭证，最后监听稳定接触请求战斗。比例、游走和视觉属于插件业务；不要复制个体、伪造接触、在绘制中发命令，或调用剧情作为旁路。准备和结果渠道不触发原生剧情。
 
-这是独立验收例，使用原有地区表和占位标记，未实现完整可见野生宝可梦插件；外观、相机和环境组合的后续合同仍查PLUGIN_ROADMAP。ActorUID/个体UID/凭证ID是三个不同身份。
+这是独立验收例，使用原有地区表和占位标记，未实现完整可见野生宝可梦插件；外观、相机和环境组合合同见[外观与视图](../../docs/engine/presentation/APPEARANCE_AND_VIEW.md)，探索可见性后续查PLUGIN_ROADMAP。ActorUID/个体UID/凭证ID是三个不同身份。
 
 <!-- runnable-example: examples/encounter-extension.test.js -->
 ```js
@@ -119,6 +119,45 @@ test("a plugin controls step encounters and opens a contact-owned wild battle", 
   assert((await api.commands.dispatch("core.encounter.request", { ticket: ticket.id, contact })).ok);
   assert.equal(game.battle.enemy.species, ticket.species);
   assert.deepEqual(game.state.story, story);
+});
+```
+
+## 外观、相机与独立环境层
+
+先读[外观与视图合同](../../docs/engine/presentation/APPEARANCE_AND_VIEW.md)。外观配方、持久身份选择、临时覆盖租约与规则结果分开；不通过worldPatch或更换移动模式伪装玩家换装。身体/服饰共享方向与时钟，姿态图集和透明衣服素材由插件内容提供。持久Actor可使用appearance模板和emerald-species参数外观，密度明雷通过地区凭证保持个体唯一所有权。
+
+相机profile定义逻辑格数/缩放；租约选择焦点和优先级，剧情镜头覆盖后回到有效选择。绘制和指针反变换必须复用同一投影，不能另写320×224偏移计算。普通雾气使用独立environmentLayers，可与逻辑天气叠加；战争迷雾的探索记忆与视线政策尚未实现，不能承诺灰层就是探索系统。临时租约不会保存，插件需要持久偏好时用自己的store记录业务意图并在合法时机重新申请。
+
+下面是公开API的最小组合例，不安装完整换装/明雷玩法；browser真实画面与点击需另验。若源码移动，搜索`AppearanceSelections`、`core.camera.acquire`、`environmentLayers`。
+
+<!-- runnable-example: examples/visual-extension.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session } from "./helpers/session.js";
+test("a plugin composes appearance, camera range and independent fog", async () => {
+  let api;
+  const plugin = manifest("visual-demo", value => {
+    api = value;
+    api.content.register("appearances", "outfit", { name: "示例外观",
+      variants: { default: { layers: [{ kind: "actor", actor: "ProfBirch", y: -16 }] } },
+    });
+    api.content.register("cameraProfiles", "wide", { name: "远景", columns: 30, rows: 20 });
+    api.content.register("environmentLayers", "mist", { name: "雾层", visual: "weather.fog", opacity: 0.3 });
+  }, ["appearance", "camera", "environment"]);
+  const { game } = session([plugin]);
+  const before = structuredClone(game.state.position);
+  await api.commands.dispatch("core.appearance.set", { target: { kind: "player" }, appearance: "visual-demo:outfit" });
+  const camera = await api.commands.dispatch("core.camera.acquire", { profile: "visual-demo:wide" });
+  const mist = await api.commands.dispatch("core.environment.acquire", { layer: "visual-demo:mist" });
+  assert.equal((await api.commands.dispatch("core.camera.view", {})).width, 480);
+  assert.equal(api.query().view.environment.length, 1);
+  assert.deepEqual(game.state.position, before);
+  await api.commands.dispatch("core.camera.release", { token: camera.token });
+  await api.commands.dispatch("core.environment.release", { token: mist.token });
+  game.loadDocument(game.exportDocument());
+  assert.equal(api.query().view.environment.length, 0);
+  assert.equal(game.appearanceFrame({ kind: "player" }, {}).appearance, "visual-demo:outfit");
 });
 ```
 

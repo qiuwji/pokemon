@@ -1,5 +1,6 @@
 /** Explicit host API routing. Each field/method has one application owner; no legacy fallback. */
 export const APPLICATION_FIELDS = Object.freeze({
+  appearanceRegistry: "appearance",
   facilityActive: "facilities",
   learning: "party",
   weather: "weather",
@@ -40,6 +41,26 @@ export const APPLICATION_FIELDS = Object.freeze({
 });
 
 export const APPLICATION_METHODS = Object.freeze({
+  projectCamera: Object.freeze(["view", "project"]),
+  unprojectCamera: Object.freeze(["view", "unproject"]),
+  cameraProjection: Object.freeze(["view", "projection"]),
+  viewConfiguration: Object.freeze(["view", "view"]),
+  cameraConfiguration: Object.freeze(["view", "config"]),
+  cameraFocus: Object.freeze(["view", "focus"]),
+  acquireCamera: Object.freeze(["view", "acquireCamera"]),
+  releaseCamera: Object.freeze(["view", "releaseCamera"]),
+  acquireEnvironment: Object.freeze(["view", "acquireLayer"]),
+  releaseEnvironment: Object.freeze(["view", "releaseLayer"]),
+  environmentFrames: Object.freeze(["view", "frames"]),
+  visitView: Object.freeze(["view", "visit"]),
+  appearanceView: Object.freeze(["appearance", "view"]),
+  appearanceFrame: Object.freeze(["appearance", "frame"]),
+  setAppearance: Object.freeze(["appearance", "set"]),
+  clearAppearance: Object.freeze(["appearance", "clear"]),
+  overrideAppearance: Object.freeze(["appearance", "override"]),
+  releaseAppearance: Object.freeze(["appearance", "release"]),
+  previewAppearance: Object.freeze(["appearance", "preview"]),
+  visitAppearance: Object.freeze(["appearance", "visit"]),
   sampleRandom: Object.freeze(["save", "sampleRandom"]),
   encounterView: Object.freeze(["encounters", "view"]),
   prepareEncounter: Object.freeze(["encounters", "prepare"]),

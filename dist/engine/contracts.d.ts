@@ -477,6 +477,9 @@ export type ContentKind =
   | "maps"
   | "tilesets"
   | "actors"
+  | "appearances"
+  | "cameraProfiles"
+  | "environmentLayers"
   | "evolutions"
   | "items"
   | "inventoryPockets"
@@ -536,9 +539,7 @@ export interface EncounterPolicyDefinition {
   channel: string;
   priority?: number;
   when?: (context: EncounterPolicyContext) => boolean;
-  decide(
-    context: EncounterPolicyContext,
-  ): {
+  decide(context: EncounterPolicyContext): {
     area: EncounterArea;
     checkRate?: boolean;
     checkSelection?: boolean;
@@ -1297,7 +1298,8 @@ export interface ActorScheduleDefinition {
 
 export interface ActorTemplateDefinition {
   name: string;
-  actor: string;
+  actor?: string;
+  appearance?: { id: string; data?: Record<string, Json> };
   behavior: string;
   config?: Record<string, Json>;
   schema?: DataSchema;
@@ -1457,4 +1459,55 @@ export interface BattleAugmentContext {
   }>;
   turn: number;
   weather: string | null;
+}
+
+/** Appearance data controls only rendering; identity, rules and movement have separate owners. */
+export type AppearanceTarget =
+  | { kind: "player" }
+  | { kind: "actor"; uid: string }
+  | { kind: "object"; map: string; id: string };
+export type AppearanceLayer = {
+  x?: number;
+  y?: number;
+  opacity?: number;
+  bob?: { amplitude: number; periodMs: number };
+} & (
+  | { kind: "actor"; actor: string }
+  | {
+      kind: "image";
+      resource: string;
+      size: { width: number; height: number };
+      rect?: { x: number; y: number; width: number; height: number };
+    }
+);
+export interface AppearanceRecipe {
+  layers: AppearanceLayer[];
+  shadow?: boolean;
+  emoteY?: number;
+}
+export interface AppearanceDefinition {
+  name: string;
+  schema?: DataSchema;
+  initialData?: Record<string, Json>;
+  variants: Record<string, AppearanceRecipe>;
+  defaultVariant?: string;
+  select?: (
+    data: Readonly<Record<string, Json>>,
+    context: Readonly<Record<string, Json>>,
+  ) => string;
+}
+
+export interface CameraProfileDefinition {
+  name: string;
+  columns: number;
+  rows: number;
+  zoom?: number;
+}
+export interface EnvironmentLayerDefinition {
+  name: string;
+  visual: string;
+  schema?: DataSchema;
+  initialData?: Record<string, Json>;
+  opacity?: number;
+  order?: number;
 }

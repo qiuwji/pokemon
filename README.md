@@ -1,6 +1,6 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-当前工程版本 **0.20.0**，插件 API / 网络协议版本 **1**，开发存档版本 **13**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+当前工程版本 **0.21.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
@@ -18,9 +18,9 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**719 项测试通过，0 失败、0 跳过**；十个 Skill 入门例通过，当前 **285 个 JS 模块**检查通过。遇敌个体仓储升级后，旧夹具和版本断言已更新；日志与源码范围见 [检查点证据](docs/validation/2026-10-04-encounter-extensions/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**736 项测试通过，0 失败、0 跳过**；十一个 Skill 入门例通过，当前 **294 个 JS 模块**检查通过。外观当前保存及统一视口升级后，旧夹具和版本断言已更新；日志与源码范围见 [检查点证据](docs/validation/2026-10-04-appearance-view/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
-九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十个入门例已验证，系统与浏览器的结果仍按实际范围记录。
+九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十一个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
 ## 已经可玩的内容
 
@@ -51,7 +51,7 @@ npm run check:docs
 | 子系统 | 已实现的合同 | 尚未收口 |
 | --- | --- | --- |
 | 插件遇敌 | 注册step政策、格子/有效表查询、宿主随机选格、接触去重、一次性凭证及直接野生战斗 | [合同](docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)；密度生成、物种外观绑定仍为插件业务/后续接口 |
-| 应用层 | 23 个职责服务、实时有限依赖、显式公共端口、单一状态所有者 | 新业务继续放入对应服务 |
+| 应用层 | 25 个职责服务、实时有限依赖、显式公共端口、单一状态所有者 | 新业务继续放入对应服务 |
 | 剧情/世界 | 数据条件、变量、选择、区域/视线触发；永久与 visit 覆盖；统一地图入口 | 全丰缘剧情与地图导入 |
 | 野外行动/地形 | 资格与目标、砍树/碎岩/潜水/攀瀑/钓鱼；关键道具声明行动、库存/徽章资格；高度、滑动/流向规则 | 完整口袋容量/获得、特殊地图/关键道具 |
 | 招式学习 | 注册导师/机器方式、50 TM/8 HM 兼容、四槽/HM 保护、原子消费、插件事务与背包 | 正式获得剧情、学习演出与遗忘老人 |
@@ -127,3 +127,5 @@ npm run check:docs
 原作图像/地图/数据来自 [pret/pokeemerald](https://github.com/pret/pokeemerald)，导入固定修订 `731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。Pokémon、角色、地图、名称和原图权利属于 Nintendo、Creatures、GAME FREAK；本项目是非官方同人演示，不附带 ROM。新增粒子和演出由代码绘制；音频参考来源与当前临时映射见 docs/engine/presentation/AUDIO.md。
 
 中文界面使用本地 [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)，SIL OFL 1.1；许可在 `dist/assets/licenses/`。制作其他同类游戏可复用引擎和适配器，替换成自有世界、内容、名称和素材。
+
+插件现在可以组合地区表/种子选格/接触战斗、按身份切换外观与服饰图层、二维相机范围/焦点/缩放及独立雾层。见[外观与视图](docs/engine/presentation/APPEARANCE_AND_VIEW.md)和[27行公开组合示例](examples/visual-extension.test.js)。未安装完整明雷或换装业务；3D视角、探索迷雾、逐字对话及详情帧播放器仍按STATUS排期。

@@ -1,3 +1,4 @@
+import { emptyAppearances } from "../../../engine/appearances.js";
 import { sampleSelection } from "../../../engine/random-selection.js";
 import { emptyEncounterTickets } from "../../../engine/encounter-tickets.js";
 import { emptyFacilities } from "../../../engine/facilities.js";
@@ -74,6 +75,7 @@ export class SaveApplication {
     return {
       facilities: emptyFacilities(),
       encounters: emptyEncounterTickets(),
+      appearances: emptyAppearances(),
       fieldEffects: emptyFieldEffects(),
       position: { ...PACK.start },
       party: [],
