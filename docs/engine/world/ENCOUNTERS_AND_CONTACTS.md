@@ -1,6 +1,19 @@
 # 插件遇敌、格子查询与接触合同
 
-此页是实际 API 1 的增量合同，开发存档13。能力验证见 [encounter-extensions.test.js](../../../tests/encounter-extensions.test.js)，最小完整装配见 [encounter-extension.test.js](../../../examples/encounter-extension.test.js)。这不是已启用的明雷玩法；当前启动数组没有比例生成、野生精灵游走或接触自动战斗插件。
+此页是实际 API 1 的增量合同，当前保存格式以 [pack.js](../../../dist/packs/emerald/pack.js) 为准。能力验证见 [encounter-extensions.test.js](../../../tests/encounter-extensions.test.js)，最小完整装配见 [encounter-extension.test.js](../../../examples/encounter-extension.test.js)。这不是已启用的明雷玩法；当前启动数组没有比例生成、野生精灵游走或接触自动战斗插件。
+
+## 插件如何组合“每十格一只、接触才遇敌”
+
+这是一条公开接口组合路径，比例与刷新逻辑由插件拥有，核心不增加明雷专用分支：
+
+1. setup 注册 `encounterPolicies`，对目标地图的 `step` 返回 null；注册持久 `actorTemplates`，并监听 `core:field-contact`。setup 只注册，不生成实体。
+2. 在游戏就绪后的合法命令时机，查询 bounds/cells，筛选草格，排除碰撞、warp、占位和不适用的高度。大地图分块查询。
+3. 插件计算数量，通过 `core.random.sample` 无放回选位置。例如 `floor(合法草格数 / 10)`；若按全部草格计算密度，也由插件选择分母并处理可用位置不足，不把“10”写入引擎。
+4. 逐个 `core.actor.spawn`，然后 `core.encounter.prepare({actor,area:'land'})`。prepare 从当前地区有效表生成一次个体；以返回的 ticket.species 设置 `emerald-species` 外观，使用 `core.appearance.set`。不可先 sample 再 prepare 并期待两次物种一致。
+5. 接触监听只处理玩家与本插件凭证 Actor 的事实，再调用 `core.encounter.request({ticket,contact:sequence})`。未接触时不请求；该路由不调用剧情。当前接触是撞到占位实体或相邻主动互动，不是进入重叠格。
+6. 插件用自己的 store 记录刷新批次，查询当前 Actor/凭证后再补充，避免重载重复生成。逐步装配不是一笔跨命令事务：prepare 失败时清理本次新建 Actor；后续显示失败可释放未占用凭证再移除 Actor，不能清理已进入战斗的凭证。
+
+所需权限通常为 `actors`、`encounters`、`random`、`appearance`；若插件还主动移动玩家才声明 `movement`。比例选格→地区个体→物种外观→保存的真实组合见 [view-extensions.test.js](../../../tests/view-extensions.test.js)，搜索 `Public density composition`；接触监听→真实战斗见上述遇敌测试，搜索 `Plugin contact listeners`。
 
 ## 所有权与术语
 
@@ -56,9 +69,9 @@ table按照注册优先级、条件和rod选取；默认land/water回退到地�
 | core.encounter.release | `{ticket}` | 释放尚未占用的凭证，返回boolean；保留Actor，作者可另用actor.remove清理 |
 | core.encounter.request | `{ticket,contact}` | 异步开启真实野生战斗；成功`{ok:true}`，资格失败`{ok:false,reason}` |
 
-prepare在Actor当前地区有效表中选种、等级并生成一次个体；忽略暗雷概率和威吓等暗雷拦截，仍采用队伍的选种/等级/性格/性别/持物生成修饰。不得先sample再重新prepare并假定两次种类相同。界面应以ticket.species/level选择视觉；可见物种外观绑定接口仍见待办，不要复制monster到Actor.data。
+prepare在Actor当前地区有效表中选种、等级并生成一次个体；忽略暗雷概率和威吓等暗雷拦截，仍采用队伍的选种/等级/性格/性别/持物生成修饰。不得先sample再重新prepare并假定两次种类相同。界面应以ticket.species/level选择视觉；可见物种外观绑定见 [外观合同](../presentation/APPEARANCE_AND_VIEW.md)，不要复制monster到Actor.data。
 
-ticket查询只提供id/actor/map/area/table/species/level/claimed，不公开可写monster。`api.query().encounters`列出凭证，`api.query().actors`查角色。遇敌仓储持有唯一野生个体，保存13保存该仓储与Actor关联，校验未知内容、重复个体UID、缺失Actor和多个凭证关联同一Actor。相关内容依赖随档记录。Actor可以跨图，但凭证的来源map保持准备时地区；request要求角色、玩家和来源map一致。
+ticket查询只提供id/actor/map/area/table/species/level/claimed，不公开可写monster。`api.query().encounters`列出凭证，`api.query().actors`查角色。遇敌仓储持有唯一野生个体，当前保存合同保存该仓储与Actor关联，校验未知内容、重复个体UID、缺失Actor和多个凭证关联同一Actor。相关内容依赖随档记录。Actor可以跨图，但凭证的来源map保持准备时地区；request要求角色、玩家和来源map一致。
 
 ## 4. 接触与战斗生命周期
 
