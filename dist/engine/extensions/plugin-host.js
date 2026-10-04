@@ -50,6 +50,7 @@ export class PluginHost {
     this.manifests = new Map();
     this.states = new Map();
     this.actions = new Map();
+    this.queries = new Map();
     this.rules = new Map();
     this.presentation = new Map();
     this.visualEffects = new Map();
@@ -391,11 +392,22 @@ export class PluginHost {
         }),
         actions: Object.freeze({
           register: (id, definition) => {
+            if (staged.queries.has(qualified(owner, id))) throw new Error("Duplicate plugin command");
             if (typeof definition.run !== "function")
               throw new Error("Action requires a handler");
             return register(staged.actions, id, {
               ...definition,
               schema: validateSchema(definition.schema),
+            });
+          },
+        }),
+        queries: Object.freeze({
+          register: (id, definition) => {
+            if (staged.actions.has(qualified(owner, id))) throw new Error("Duplicate plugin command");
+            if (typeof definition.read !== "function")
+              throw new Error("Query requires a reader");
+            return register(staged.queries, id, {
+              ...definition, schema: validateSchema(definition.schema),
             });
           },
         }),
@@ -694,6 +706,16 @@ export class PluginHost {
                 runtime.view(definition.owner),
               )
           : undefined,
+      });
+    for (const [id, definition] of this.queries)
+      bus.register(id, {
+        schema: definition.schema,
+        network: definition.network === true,
+        concurrent: true,
+        ready: () => true,
+        run: (input) => readOnly(runtime.evaluate(
+          definition.read, runtime.view(definition.owner), readOnly(input),
+        )),
       });
     return runtime;
   }

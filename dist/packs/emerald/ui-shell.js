@@ -1,3 +1,4 @@
+import { ControlDOM } from "../../adapters/control-dom.js";
 import { dialogueDescription } from "../../engine/dialogue.js";
 import { DialogueDOM } from "../../adapters/dialogue-dom.js";
 import { ChoiceDOM } from "../../adapters/choice-dom.js";
@@ -44,6 +45,7 @@ export function createUIShell(
     reducedMotion,
     onError: (error) => disposeDialogue(error),
   });
+  const controls = new ControlDOM({ root, document: doc, dialogue: () => dialog, modalType: () => modalType });
   const escapeHTML = (s) =>
     String(s).replace(
       /[&<>"']/g,
@@ -345,6 +347,9 @@ export function createUIShell(
     if (game.battle) navigation.backBattle?.();
   }
   return {
+    controlView: () => controls.inspect(),
+    controlActivate: (id) => controls.activate(id),
+    controlConfirm: () => root.children.length ? controls.confirm() : game.interact(),
     ownModalResource,
     disposeModalResources,
     frameClock: clock,

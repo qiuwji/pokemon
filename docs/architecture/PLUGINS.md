@@ -53,7 +53,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 [页面入门例](../../examples/plugin-page.test.js)通过详情入口、按钮action和自有记忆验证最小UI扩展；[宿主合同测试](../../tests/plugins.test.js)使用独立夹具验证状态、规则修饰、核心意图、事件、反馈及失败回滚。夹具不打包到游戏。
 
-[世界剧情例](../../examples/world-story.test.js)串联地图、NPC、交互和一次奖励。当前 `dist/plugins/catalog.json` 为空；增加产品插件时登记清单即可，无需改app.js。产品插件可以独立增删，核心测试不得导入它们。具体测试分层见[测试指南](../development/TESTING.md)。
+[世界剧情例](../../examples/world-story.test.js)串联地图、NPC、交互和一次奖励。当前catalog默认启用ai-control，test-harness需显式测试环境；增加产品插件时登记清单即可，无需改app.js。产品插件可以独立增删，核心测试不得导入它们。具体测试分层见[测试指南](../development/TESTING.md)。
 
 ```js
 const plugin = {
@@ -109,3 +109,7 @@ const plugin = {
 物品可通过 registerable:true 开放已声明行动的快捷登记，多行动选择/只读预览/公共命令与存档10共用原行动管线。详见 [ITEM_SHORTCUT.md](../engine/items/FIELD_ITEMS.md)。槽位库存服务和inventoryPockets注册/引用校验、应用获得/消耗/选槽页面/保存10均已接入，数量查询只提供派生冻结投影；当前边界见 [INVENTORY.md](../engine/items/INVENTORY.md)。
 
 库存组合合同：`api.query().bag` 是冻结数量投影，`.inventory` 是完整冻结口袋视图；`core.inventory.preview` 为无写权限的组合容量预检。reward intent 整批失败会恢复库存、个体、插件数据和领取账本。新增口袋/物品已验证领取→页面→使用→保存/重载；缺失口袋或物品所属插件保护原档。插件不直接获得 InventoryService/持久容器，见 [INVENTORY.md](../engine/items/INVENTORY.md)。
+
+## 并发只读查询
+
+使用api.queries.register(localId,{schema,network?,read(view,input)})创建命名空间只读命令。view沿现有冻结query/store/states合同，回调只允许同步投影，dispatch与事务禁止；返回值冻结。查询可在领域忙碌时使用，不给修改动作提供并发旁路。与actions共享命令身份，重复名在装配前拒绝。实际用例、控制投影和测试政策见[AI控制指南](../development/AI_CONTROL.md)。

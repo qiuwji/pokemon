@@ -134,3 +134,9 @@ SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与Sprite
 通用PluginHost只接受装配方注入的publicEvents，不内置绿宝石事件；插件只能监听自有/声明依赖命名空间及公开core清单。内部命令完成事件保留完整审计数据，但插件仅获得空载荷command-settled；公开事件不增加命令权限。所有插件modify输入包括特性/持有道具均深冻结副本，返回值参与规则；核心可变数据不被插件输入冻结。完整合同见[插件规格](docs/architecture/PLUGINS.md)。
 
 导入命令按region/dex/battle/items/actors/audio分类，统一tools/import.py发现和调用；ownership声明逻辑工具名、真实入口和写入字段。选择/本地化/资源及图块动画数据由受跟踪配置提供，缺依赖与strict遗漏在写入前失败。测试场景生成器与metatile表位于tools中，只写独立fixture，不读取被忽略的work脚本或添加生产入口。操作和边界见[工具索引](docs/development/IMPORT_SCRIPTS.md)。
+
+## AI与自动化端口
+
+插件查询通过api.queries.register注册同步只读投影，由宿主并发执行并冻结输入/输出；不进入动作事务。control-ports仅组合世界网格、UI语义及network命令元数据；ControlDOM将当前可见按钮映射为可失效的ID，UI输入仍沿原按钮与对话回调。local标记的存档替换操作不开放给语义网络输入。
+
+默认AI插件只消费这些公开接口；测试插件仅在测试环境装配。PollingTransport与WebSocket遵循同一传输合同，Python本机桥只转发协议，不持有领域状态或决策。所有权与CLI见[AI控制指南](docs/development/AI_CONTROL.md)，不会增加Adventure职责或让核心导入产品插件。

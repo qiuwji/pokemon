@@ -1,0 +1,305 @@
+[
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "1b25517cea21451db5a53a8add4f1887",
+    "sequence": 1,
+    "ok": true,
+    "result": {
+      "protocol": 1,
+      "busy": false,
+      "position": {
+        "map": "LittlerootTown",
+        "x": 9,
+        "y": 10,
+        "dir": "left",
+        "elevation": 3,
+        "previousElevation": 3
+      },
+      "ui": {
+        "modal": null,
+        "dialogue": null,
+        "buttons": []
+      },
+      "party": [],
+      "money": 3000,
+      "time": {
+        "initialized": false,
+        "elapsedMs": 0,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "playSeconds": 515,
+        "tide": "high",
+        "period": "night"
+      },
+      "battle": null,
+      "pendingStory": null
+    }
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "1710b84fe40445d49d927c63e1bba4ac",
+    "sequence": 2,
+    "ok": true,
+    "result": true
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "3a18ea72200a4039a03b8ccd784fb210",
+    "sequence": 3,
+    "ok": true,
+    "result": {
+      "protocol": 1,
+      "busy": true,
+      "position": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 10,
+        "dir": "right",
+        "elevation": 3,
+        "previousElevation": 3
+      },
+      "ui": {
+        "modal": null,
+        "dialogue": null,
+        "buttons": []
+      },
+      "party": [],
+      "money": 3000,
+      "time": {
+        "initialized": false,
+        "elapsedMs": 0,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "playSeconds": 515,
+        "tide": "high",
+        "period": "night"
+      },
+      "battle": null,
+      "pendingStory": null
+    }
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "809e2e1ff949456685a1f2e5dc746641",
+    "sequence": 4,
+    "ok": true,
+    "result": true
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "083f0173c6724d84bfc57a4fb232c6cb",
+    "sequence": 5,
+    "ok": true,
+    "result": {
+      "protocol": 1,
+      "busy": false,
+      "position": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 10,
+        "dir": "right",
+        "elevation": 3,
+        "previousElevation": 3
+      },
+      "ui": {
+        "modal": "menu",
+        "dialogue": null,
+        "buttons": [
+          {
+            "id": "ui-2-0",
+            "label": "×",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-1",
+            "label": "宝可梦查看队伍与招式",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-2",
+            "label": "背包道具与精灵球",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-3",
+            "label": "宝可梦图鉴博士的礼物",
+            "disabled": true
+          },
+          {
+            "id": "ui-2-4",
+            "label": "对话记录回看已确认的对白与选择",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-5",
+            "label": "冒险时钟游戏时间与游玩时长",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-6",
+            "label": "记录冒险保存、导出与继续",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-7",
+            "label": "电脑盒子0 位寄存伙伴",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-8",
+            "label": "育成研究研究所寄存、蛋与交换",
+            "disabled": true
+          },
+          {
+            "id": "ui-2-9",
+            "label": "旅行与移动自行车、冲浪与飞行",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-10",
+            "label": "设施与活动连战与插件游戏厅",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-11",
+            "label": "场景演出可扩展演出示例",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-12",
+            "label": "扩展连接本地验证与连接服务",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-13",
+            "label": "操作与范围玩法说明",
+            "disabled": false
+          },
+          {
+            "id": "ui-2-14",
+            "label": "AI 操作接口",
+            "disabled": false
+          }
+        ]
+      },
+      "party": [],
+      "money": 3000,
+      "time": {
+        "initialized": false,
+        "elapsedMs": 0,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "playSeconds": 516,
+        "tide": "high",
+        "period": "night"
+      },
+      "battle": null,
+      "pendingStory": null
+    }
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "5e3034a1801e4346ad72613b8fdd0e5f",
+    "sequence": 6,
+    "ok": true,
+    "result": true
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "6fb4450ff988444c877f580080f84c81",
+    "sequence": 7,
+    "ok": true,
+    "result": {
+      "protocol": 1,
+      "busy": false,
+      "position": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 10,
+        "dir": "right",
+        "elevation": 3,
+        "previousElevation": 3
+      },
+      "ui": {
+        "modal": "extension",
+        "dialogue": null,
+        "buttons": [
+          {
+            "id": "ui-3-0",
+            "label": "×",
+            "disabled": false
+          }
+        ]
+      },
+      "party": [],
+      "money": 3000,
+      "time": {
+        "initialized": false,
+        "elapsedMs": 0,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "playSeconds": 516,
+        "tide": "high",
+        "period": "night"
+      },
+      "battle": null,
+      "pendingStory": null
+    }
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "f14a207e78934d13b5f368cf2fa2e5b4",
+    "sequence": 8,
+    "ok": true,
+    "result": true
+  },
+  {
+    "protocol": 1,
+    "type": "result",
+    "session": "game-91a16766-e4fe-460b-be9a-c13003dfc872",
+    "id": "3936298eff1a444e8956781914977611",
+    "sequence": 9,
+    "ok": true,
+    "result": true
+  },
+  {
+    "ok": true,
+    "name": "Read-only game control smoke",
+    "steps": [
+      {
+        "command": "ai-control:observe",
+        "ok": true,
+        "assertions": 2
+      },
+      {
+        "command": "ai-control:commands",
+        "ok": true,
+        "assertions": 1
+      }
+    ]
+  }
+]

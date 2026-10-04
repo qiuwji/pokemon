@@ -1,3 +1,4 @@
+import { controlSnapshot, registerControlCommands } from "./control-ports.js";
 import { registerEmeraldCommands } from "./application-commands.js";
 import { validateEmeraldIntent } from "./extension-intents.js";
 import { CommandBus } from "../../engine/extensions/command-bus.js";
@@ -15,6 +16,7 @@ export function attachEmeraldExtensions(game, host) {
     ...(game.state.daycare.egg ? [game.state.daycare.egg] : []),
   ];
   const query = () => ({
+    control: controlSnapshot(game),
     busy: !!game.busy || !!game.commandBus?.active,
     battle: game.battle ? game.battle.snapshot() : null,
     facilities: game.facilityView(),
@@ -130,6 +132,7 @@ export function attachEmeraldExtensions(game, host) {
       game.setLead(game.state.party.findIndex((m) => m.uid === uid)),
   });
   registerEmeraldCommands(game, bus);
+  registerControlCommands(game, bus);
   const runtime = host.attach({
     bus,
     ports: {

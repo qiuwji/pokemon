@@ -17,7 +17,7 @@
 
 ## 使用流程
 
-游戏菜单 → 扩展连接。可使用本地协议验证发送 JSON；也可连接自己提供的 ws/wss 服务。页面关闭不关闭连接，需选择断开连接。默认没有连接，打开菜单不自行向外部服务通信。连接失败/超时不锁游戏；取消连接会使稍后返回的旧连接失效。
+游戏菜单 → 扩展连接。可使用本地协议验证发送 JSON；也可连接自己提供的 ws/wss 服务。页面关闭不关闭连接，需选择断开连接。普通启动不连接；显式?control=1使用本机开发服务器的同源HTTP控制通道，普通菜单不会自行向外部服务通信。连接失败/超时不锁游戏；取消连接会使稍后返回的旧连接失效。
 
 连接建立后游戏向控制端发送：
 
@@ -86,3 +86,9 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 `core.query` 的 bag 是冻结派生数量，inventory 提供所有注册口袋的政策、占用、槽位。`core.inventory.preview {additions:[{item,count}]}` 按实际政策检查整个获得组合，只读且不可提交，网络/插件无需写权限。获得仍由奖励/购买等领域命令执行。
 
 `core.item.use`、`core.learning.teach` 和 kind:item 的 `core.battle.action` 可带 `slot:{pocket,index,item}`；使用时重新验证位置，不能把读到的下标当任意写入口。其他战斗行动不接受 slot。当前保存合同持久化槽位，不接受旧计数字典；版本查README。
+
+## 本机HTTP控制与AI插件
+
+开发服务器提供/control中转，浏览器PollingTransport与WebSocket使用同一NetworkSession/NetworkGateway合同。CLI、顺序与重试、只读状态、语义UI输入及测试插件见[AI控制指南](../development/AI_CONTROL.md)。AI插件默认装配不等于默认联网；测试内容需要独立环境。控制HTTP仅转发消息，不改CommandBus白名单、领域校验或存档事实。
+
+异步领域命令等待UI时，已声明concurrent的查询/语义输入可并发完成；普通领域修改依旧串行。所有请求继续按sequence接受并按id去重，响应完成次序可不同，需要按id/sequence关联。CLI的--submit/--result用于交互式等待，不重复发起领域操作。

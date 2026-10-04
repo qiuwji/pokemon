@@ -804,11 +804,18 @@ export interface NPCIntent {
   pose: string;
   duration?: number;
 }
+export interface PluginQueryDefinition {
+  schema: DataSchema;
+  network?: boolean;
+  /** Pure synchronous projection; no transactions or command dispatch. */
+  read(view: PluginUIView, input: Readonly<Json>): Readonly<Json>;
+}
 export interface PluginAPI {
   readonly version: 1;
   readonly id: string;
   content: { register(kind: ContentKind, id: string, value: unknown): string };
   states: { register(id: string, definition: PluginStateDefinition): string };
+  queries: { register(id: string, definition: PluginQueryDefinition): string };
   actions: {
     register(
       id: string,

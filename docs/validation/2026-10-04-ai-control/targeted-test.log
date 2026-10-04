@@ -1,0 +1,16 @@
+✔ Default AI observer exposes compact live state and commands; observation does not mutate the game (58.251583ms)
+✔ Actual catalog defaults only to AI control; test fixture requires an explicit test environment (4.090583ms)
+✔ Test harness prepares through atomic intents, retries once and exposes dialogue reward evidence (46.615333ms)
+✔ Test harness preparation rolls back its reward and memory when party creation has no capacity (22.764ms)
+✔ UI identities reject stale and disabled choices and dispatch through the actual button (1.178584ms)
+✔ Core observation shares live world cells; UI input unblocks busy dialogue without altering domain state (52.255916ms)
+✔ Read-only plugin queries remain available while busy without writing, saving or consuming RNG (55.833625ms)
+✔ Plugin query callbacks cannot dispatch commands or return promises; invalid reader is rejected (23.134375ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 279.816375

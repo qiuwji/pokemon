@@ -1,0 +1,9 @@
+{
+  "name": "Read-only game control smoke",
+  "steps": [
+    { "command": "ai-control:observe", "input": {"detail":"world"}, "assert": [
+      { "path": "protocol", "equals": 1 }, { "path": "field.region.width", "gte": 1 }
+    ] },
+    { "command": "ai-control:commands", "assert": [ { "path": "input", "equals": "core.ui.input" } ] }
+  ]
+}

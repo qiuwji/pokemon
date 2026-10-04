@@ -6,6 +6,7 @@
 
 | 接手方向 | 运行文件 | 实际证明 |
 | --- | --- | --- |
+| AI与测试插件 | [automation.test.js](automation.test.js) | 默认观察、环境隔离、原子准备、失败回滚、NPC奖励及保存 |
 | 安装清单 | [catalog.test.js](catalog.test.js) | 当前清单模块可导入、默认插件可装配、空清单也可启动与导出 |
 | 首次接手 | [handoff.test.js](handoff.test.js) | 注册物品→插件事务领取→拒绝重复→保存恢复 |
 | 野外行动 | [field-action.test.js](field-action.test.js) | 注册行动→公开命令→永久格子覆盖→重载→未知ID拒绝 |

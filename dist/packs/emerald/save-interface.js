@@ -9,7 +9,7 @@ export function createSaveInterface(
     const saved = saveStore.load();
     modal(
       "记录冒险",
-      `<div class="save-box"><strong>${game.world.map.title} · ${game.state.party.length} 位伙伴</strong><p>已探索 ${game.state.seen.length} 种宝可梦 · 游玩 ${Math.floor(game.state.playSeconds / 60)} 分钟</p><p>${saved ? "上次保存：" + new Date(saved.savedAt).toLocaleString("zh-CN") : "尚未保存"}</p></div><div class="inline-actions"><button id="save-now" class="primary-button">保存进度</button><button id="continue-save" class="secondary-button" ${!saved ? "disabled" : ""}>读取存档</button><button id="export-save" class="secondary-button">导出存档</button><button id="import-save" class="secondary-button">导入存档</button><input id="save-file" type="file" accept="application/json,.json" hidden></div><p class="notice">进度保存在当前浏览器。切换设备前，请先导出存档。</p><div class="modal-footer"><button id="new-game" class="text-button" style="color:#cbb18e">重新开始冒险</button></div>`,
+      `<div class="save-box"><strong>${game.world.map.title} · ${game.state.party.length} 位伙伴</strong><p>已探索 ${game.state.seen.length} 种宝可梦 · 游玩 ${Math.floor(game.state.playSeconds / 60)} 分钟</p><p>${saved ? "上次保存：" + new Date(saved.savedAt).toLocaleString("zh-CN") : "尚未保存"}</p></div><div class="inline-actions"><button id="save-now" class="primary-button">保存进度</button><button id="continue-save" data-control="local" class="secondary-button" ${!saved ? "disabled" : ""}>读取存档</button><button id="export-save" class="secondary-button">导出存档</button><button id="import-save" data-control="local" class="secondary-button">导入存档</button><input id="save-file" type="file" accept="application/json,.json" hidden></div><p class="notice">进度保存在当前浏览器。切换设备前，请先导出存档。</p><div class="modal-footer"><button id="new-game" data-control="local" class="text-button" style="color:#cbb18e">重新开始冒险</button></div>`,
       { back: showMenu, type: "save" },
     );
     $("save-now").onclick = () => {
@@ -60,7 +60,7 @@ export function createSaveInterface(
     $("new-game").onclick = () => {
       modal(
         "重新开始冒险",
-        `<p>当前浏览器里的进度将被新的冒险覆盖。你可以先返回菜单导出存档。</p><div class="choice-actions"><button class="secondary-button" id="keep-game">继续当前冒险</button><button class="primary-button" id="reset-game">重新开始</button></div>`,
+        `<p>当前浏览器里的进度将被新的冒险覆盖。你可以先返回菜单导出存档。</p><div class="choice-actions"><button class="secondary-button" id="keep-game">继续当前冒险</button><button class="primary-button" id="reset-game" data-control="local">重新开始</button></div>`,
         { back: showSave, type: "reset" },
       );
       $("keep-game").onclick = showSave;

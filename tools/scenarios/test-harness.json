@@ -1,0 +1,9 @@
+{
+  "name": "Explicit test harness preparation",
+  "steps": [
+    { "command": "test-harness:prepare" },
+    { "command": "test-harness:report", "assert": [
+      { "path": "prepared", "equals": true }, { "path": "partyCount", "gte": 1 }, { "path": "potions", "gte": 3 }
+    ] }
+  ]
+}

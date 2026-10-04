@@ -67,3 +67,5 @@
 ## 新地区剧情与对话
 
 内容数据放dist/content/stories并登记manifest；插件通过registerBundle，不修改app.js硬接剧情。对象绑定用selector.objectId或map+localId/script，公共call传schema参数，对话用目录及显式bindings；条件/选择结果仍由领域命令处理。持久脚本需要durable、每条稳定node、checkpoint和battle.onResult，不把动画帧或闭包写存档。完整示例、字段与错误说明读[剧情架构](../architecture/STORY_CONTENT.md)、[剧情语言](../engine/story/STORY_LANGUAGE.md)和[组合例](../../examples/story-bundle.test.js)。
+
+观察、AI控制及测试插件参考[AI控制指南](AI_CONTROL.md)。纯只读扩展注册queries，业务修改继续用actions/intent；产品模块测试放examples，核心只依赖最小测试夹具。

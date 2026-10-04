@@ -1,4 +1,22 @@
 {
   "version": 1,
-  "plugins": []
+  "plugins": [
+    {
+      "id": "ai-control",
+      "module": "./ai-control.js",
+      "export": "aiControl",
+      "enabled": true
+    },
+    {
+      "id": "test-harness",
+      "module": "./test-harness.js",
+      "export": "createTestHarness",
+      "enabled": false,
+      "environment": "test",
+      "flag": "test-harness",
+      "arguments": [
+        "content:maps.LittlerootTown_ProfessorBirchsLab"
+      ]
+    }
+  ]
 }

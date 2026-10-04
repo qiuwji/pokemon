@@ -168,6 +168,7 @@ async function boot() {
       extensionAssets: assets,
     });
     game.attachUI(ui);
+    if (parameters.get("control") === "1") void ui.connectControl();
     input = new BrowserInput({ game, ui });
     $("loading").hidden = true;
     $("save").onclick = () => game.save(true);

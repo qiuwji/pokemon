@@ -1,0 +1,1 @@
+{"ok": true, "name": "Explicit test harness preparation", "steps": [{"command": "test-harness:prepare", "ok": true, "assertions": 0}, {"command": "test-harness:report", "ok": true, "assertions": 3}]}

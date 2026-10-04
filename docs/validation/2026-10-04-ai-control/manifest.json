@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-04",
+  "baseline": "f4290cf0d29c7ca83f5f1874a1f9e3e1abdce1be",
+  "version": "0.29.0",
+  "scope": "Expand C porting Skill; default AI observer and isolated test harness; pure query, semantic UI and local HTTP protocol/CLI ports",
+  "verification": {
+    "initialTargeted": {
+      "exitCode": 0,
+      "groups": [
+        {
+          "tests": 8,
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "targeted-test.log"
+    },
+    "initialFull": {
+      "exitCode": 1,
+      "groups": [
+        {
+          "tests": 849,
+          "passed": 843,
+          "failed": 6,
+          "skipped": 0
+        }
+      ],
+      "log": "all-test.log",
+      "failure": "Six UI assembly tests lacked browser location. Network endpoint now receives the document port instead of using a global."
+    },
+    "initialCheck": {
+      "exitCode": 2,
+      "log": "check.log",
+      "failure": "The pure reader return type excluded readonly JSON, despite view.store exposing readonly JSON; corrected type without weakening the async negative check."
+    },
+    "concurrentIngress": {
+      "exitCode": 0,
+      "groups": [
+        {
+          "tests": 20,
+          "passed": 20,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "concurrent-test.log"
+    },
+    "final": {
+      "command": "npm run test:all",
+      "exitCode": 0,
+      "groups": [
+        {
+          "tests": 850,
+          "passed": 850,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "tests": 21,
+          "passed": 21,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "log": "release-test.log",
+      "note": "Core and plugin suites remain separate; includes two nested Python HTTP/relay tests."
+    },
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "log": "release-check.log",
+      "stages": [
+        "content and story references/assets",
+        "public types including synchronous query negative case",
+        "327 module syntax",
+        "75 Markdown / 699 links / 15 synchronized Skill examples",
+        "ESLint",
+        "strict JS subset"
+      ]
+    },
+    "skillValidator": {
+      "command": "python3 /Users/qiuji/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/emerald-story-reconstruction",
+      "result": "Unavailable: Python environment lacks PyYAML. Project check:docs confirmed skill metadata, references and synchronized examples instead."
+    },
+    "browser": {
+      "game": "http://127.0.0.1:5176/?control=1",
+      "testEnvironment": "?control=1&e2e=1&test-harness=1",
+      "logs": [
+        "browser-observe.json",
+        "browser-control.json",
+        "browser-harness.json",
+        "browser-harness-report.json"
+      ],
+      "observed": [
+        "HTTP hello/query exchange",
+        "Normal one-tile movement and changed position",
+        "Open menu and activate AI extension page by fresh semantic button ID",
+        "Return to field",
+        "Read-only JSON smoke scenario",
+        "Explicit test harness preparation through actual browser protocol with three assertions"
+      ],
+      "failuresResolved": [
+        "Initial browser fetch had an invalid receiver; default fetch now uses a lexical wrapper.",
+        "An initial manual QA assertion expected modal type plugin; actual ExtensionDOM type is extension. The corrected action/observe flow passed."
+      ],
+      "limitations": [
+        "Browser proof does not include full original story, test-room traversal or battle/visual/audio fidelity.",
+        "Concurrent awaited input is verified by a real CommandBus/NetworkGateway unit contract, not full original browser dialogue playback."
+      ]
+    }
+  },
+  "notExecuted": [
+    "Full original Emerald fidelity audit",
+    "Final all-domain visual/audio/browser combinations",
+    "Coverage collection",
+    "Remote CI"
+  ],
+  "invalidatedBy": [
+    "Changes to query evaluation, UI identities or concurrent ingress policies",
+    "Changes to relay/session protocol or CLI/scenario format",
+    "Changes to plugin content/preparation or catalog environment selection",
+    "Changes to source revision or porting guide tool/contracts references"
+  ],
+  "sourceHashes": {
+    "dist/engine/extensions/plugin-host.js": "f4f31e6e842b0096a1f6cd3185b91c87ea3c630ccbbadbf51ef0d35dd03c00c6",
+    "dist/engine/extensions/network-gateway.js": "e93193f6558ad13a5c815774307634981045ca813f69e51229ed709afdd93748",
+    "dist/engine/contracts.d.ts": "321f3f5428d8ed1cc649fe3229eecbf50e4a67912bfe331ea2dde23c7ac5ea17",
+    "dist/packs/emerald/control-ports.js": "6dad930fb920dc6122a06b2daa59cd7f3b2286c3081483daf37a3e453fa17202",
+    "dist/packs/emerald/extension-ports.js": "324635dbf2a4b31d40604726f475204649be3fed226879ea41b425020f855fce",
+    "dist/adapters/control-dom.js": "687a0a0eb7a5c719b78dc5c7a62338464bc42347be189397137321f5ef329a05",
+    "dist/adapters/polling-transport.js": "aeff71ad254f32e5e9d48e6a82c2ce92617d2c414a836c82ccbab8a776382d78",
+    "dist/packs/emerald/ui-shell.js": "25fe63888cb921e1e5f674f896ac7280d9ba9689d18914a1671c48ade8957528",
+    "dist/packs/emerald/network-interface.js": "c9d88ecfc41417e0eca2d5aee586613ea5866c8b964ea8d58460e5f1a6e2c5e0",
+    "dist/plugins/catalog.json": "8ab6f341801024c4bb8b7c0a840ec31083512c7be1e21cecf18b81d4451c9990",
+    "dist/plugins/ai-control.js": "7a0964dbe57a3ded17bb556ec4caf882d9262f02d6deecf5e93aa1fc3f6a5690",
+    "dist/plugins/test-harness.js": "72b1cbff13857da9ca4400f9e6255fceb66c40350e64604250ecda742692be22",
+    "tools/control.py": "102162d09f8b3581551fa18bac7aceab542178f6167d6c0944efa52195ef5406",
+    "tools/control_relay.py": "dd1d746dcf7fc5829739d03ec153149d5bede64dd09a5c9785a3d21f31e57ebb",
+    "tools/serve.py": "0b169fe6d93d3f65880cf5a8cad1f29615399f9b527ffc7c6201e390af780542",
+    "tools/scenarios/control-smoke.json": "82feea43968c91b18ad7430c68dfdb17c4c3102d7cb8a5019a7d77a3554d097c",
+    "tools/scenarios/test-harness.json": "26db9734367423c5fd737762a234f98441ed9337d0d011d75af56e5e7eb3a2da",
+    "tests/plugin-queries.test.js": "22d106b178156701ef3b4e7603725832fa176f1e8d06ae361c31e5979aa9ccac",
+    "tests/control-ports.test.js": "cd0a9fa19b79fffa24e29f54b4a3551d478170b65619fe674ebdb9736b597c0d",
+    "tests/control-relay.test.js": "2c1e21ede1706132cedf8488a8931127a525208b4a90004002b3fd7245ff8f37",
+    "tools/tests/test_control_relay.py": "1b0a127db5573905918613fb17032322766928d7476fead0a980e087d6a2056b",
+    "examples/automation.test.js": "441614416ce22acc99d7334dd4f374719fbad83bb0b8a0463014595c7f26b0c5",
+    "skills/emerald-story-reconstruction/SKILL.md": "47f861a6ea44f06e0567ed55cbef241f68f5debcb3e7c54e982783959cae65ba",
+    "skills/emerald-story-reconstruction/references/c-porting.md": "aa4bddb7e41595018fd0f62dc4f7f42d204fa4604b9155329e9055311f25bc9a"
+  }
+}

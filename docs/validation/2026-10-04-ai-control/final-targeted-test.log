@@ -1,0 +1,42 @@
+✔ Default AI observer exposes compact live state and commands; observation does not mutate the game (68.902916ms)
+✔ Actual catalog defaults only to AI control; test fixture requires an explicit test environment (4.470375ms)
+✔ Test harness prepares through atomic intents, retries once and exposes dialogue reward evidence (58.733833ms)
+✔ Test harness preparation rolls back its reward and memory when party creation has no capacity (24.554584ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (37.472084ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (3.49125ms)
+✔ Composition root does not own story, inventory or damage rules (0.2815ms)
+✔ Every local ES module import resolves after refactors (28.283083ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (2.067708ms)
+✔ Example plugins depend only on public extension utilities (0.328917ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (12.167125ms)
+✔ Core tests and fixtures do not import installed plugins or authoring examples (19.947333ms)
+✔ UI identities reject stale and disabled choices and dispatch through the actual button (1.3385ms)
+✔ Core observation shares live world cells; UI input unblocks busy dialogue without altering domain state (68.875833ms)
+✔ Pure dialogue sampling preserves grapheme clusters and exact leading/interior/trailing pause boundaries (2.413083ms)
+✔ Instant/reduced-motion/skip reveal all text and pauses; a new line starts clean and invalid clocks fail (0.264917ms)
+✔ Structured dialogue rejects invalid speed/shape/markup style/pauses before an effect callback runs (0.723375ms)
+✔ Text effects are registered pure samples, bounded, synchronous and centrally disabled for reduced motion (0.349833ms)
+✔ DOM player safely creates text, types without layout rewrites, shows confirmation only after complete and ignores cancelled callbacks (1.675666ms)
+✔ Shared shell uses first confirm to reveal, second to advance; final acknowledgement resolves once and clears animation (64.451375ms)
+✔ Timed shell advances only after actual display duration and reader announcement stays complete (29.965209ms)
+✔ Dialogue disposal and replacement reject the old wait, stop effects and prevent stale visual writes (22.183083ms)
+✔ Reduced motion displays immediately, suppresses text animation loop and still waits for acknowledgement (21.066042ms)
+✔ Registered plugin text samples receive frozen parameters and cannot submit core commands from a read-only callback (21.318083ms)
+✔ Whole story preflight rejects bad dialogue/effect parameters before any reward and forwards speed through the real application (21.377834ms)
+✔ A text-effect failure during confirm rejects the active wait and unlocks without completion callbacks (17.99225ms)
+✔ Read-only plugin queries remain available while busy without writing, saving or consuming RNG (67.287416ms)
+✔ Plugin query callbacks cannot dispatch commands or return promises; invalid reader is rejected (35.036209ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (44.064ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (6.216792ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (6.226792ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (4.772083ms)
+✔ Clock page submits setup through a command and renders live saved time (6.23825ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (7.793375ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 388.351916

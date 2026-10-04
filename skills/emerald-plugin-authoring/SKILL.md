@@ -216,7 +216,7 @@ test("a registered detail clip is selected, sampled and cleaned up by the real p
 
 按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)注册presentation视觉，再在页面/区域/HUD返回canvas节点。树仅保存visual、尺寸和schema参数，不能塞draw函数；draw使用冻结frame和第三参数assets，循环由宿主帧驱动。点击由宿主产生pointer坐标并调用action，schema须声明context/input/pointer。不要在绘制里发命令、取游戏RNG或自行启动计时器。隐藏页签暂停，页面重建重新挂载，关闭释放；循环定义不能用于一次性play/feedback。
 
-[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。当前游戏装配清单为空；需要浏览器验收时按作者指南注册自己的示例，生产插件放dist/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
+[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。当前默认插件清单查catalog和STATUS；需要浏览器验收时按作者指南注册自己的示例，生产插件放dist/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
 
 <!-- runnable-example: examples/plugin-canvas.test.js -->
 ```js
@@ -278,3 +278,7 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 ## 浏览器装配入口
 
 受信任本地插件在dist/plugins/catalog.json登记模块/导出名/默认启用及工厂输入；不再向app.js增加逐插件分支。见[内容管线的插件部分](../../docs/development/CONTENT_PIPELINE.md)。新增后验证实际host装配；仅登记文件不证明功能。E2E插件必须显式测试环境启用，不能默认暴露发奖命令。此处没有热卸载或远程沙箱。
+
+## 只读查询与AI消费方
+
+纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件、测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。

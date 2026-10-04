@@ -1,0 +1,39 @@
+✔ Application dependencies are explicit, live across state replacement, and cannot be overwritten or broadened (3.418333ms)
+✔ Application fields forward to one owning service, including the explicitly writable host story lock (0.560125ms)
+✔ Adventure remains a composition facade; application services cannot import it or reach sibling services (5.481917ms)
+✔ Every public method uses its declared owner, preserves receivers/results and follows replacement services (5.089708ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (24.513792ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (2.240959ms)
+✔ Composition root does not own story, inventory or damage rules (0.3855ms)
+✔ Every local ES module import resolves after refactors (29.268583ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.50525ms)
+✔ Example plugins depend only on public extension utilities (0.995708ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (25.509917ms)
+✔ Core tests and fixtures do not import installed plugins or authoring examples (12.406834ms)
+✔ Wire decoder rejects malformed, oversized, unsupported and prototype-bearing messages without mutation (2.670584ms)
+✔ Completed and pending duplicate requests execute exactly once; conflicts and out-of-order requests are explicit (0.889292ms)
+✔ Unknown/private commands and invalid parameters are rejected on the shared registry; failures consume accepted sequence (0.340209ms)
+✔ Reject and bounded wait busy policies use readiness only; handler busy errors never replay (1.98925ms)
+✔ Queue bounds and disconnect cancel pending work while a committed asynchronous action releases its own lock (0.536833ms)
+✔ Retry fingerprints ignore object key order and expired cache cannot replay an old sequence (0.645ms)
+✔ Loopback transport carries hello, encoded commands, results and disconnect without protocol-specific game logic (9.810958ms)
+✔ WebSocket adapter and loopback are interchangeable; binary input and disconnection are handled by the wire boundary (58.177333ms)
+✔ UI facade, plugin action and network use one registry; stable UIDs survive reordering and disabled commands cannot replace saves (112.565209ms)
+✔ Core actions enforce UID/custody/selection constraints and UI evolution commands rebuild a valid domain plan (126.1785ms)
+✔ Real loopback WebSocket handshake and encoded retry reach the same CommandBus once (30.787958ms)
+✔ Readiness callbacks cannot leave locks overwritten and completion observers cannot report a committed command as failed (0.831292ms)
+✔ Command completion is delivered after lock release, allowing a committed listener to submit follow-up work (0.484792ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (29.487625ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (16.145958ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (13.888833ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (21.543333ms)
+✔ Clock page submits setup through a command and renders live saved time (9.758875ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (16.230333ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 670.929

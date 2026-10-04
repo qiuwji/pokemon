@@ -12,6 +12,7 @@
 | 内容在哪里、导入怎么运行？ | [内容管线](development/CONTENT_PIPELINE.md)、[导入索引](development/IMPORT_SCRIPTS.md) |
 | 怎么分层、该改哪个模块？ | [ARCHITECTURE](../ARCHITECTURE.md)、[作者指南](development/AUTHORING.md) |
 | 新AI怎么接手一个领域？ | [Skill路由](project/SKILLS.md)及[examples](../examples/README.md) |
+| AI怎样观察、操作和测试游戏？ | [AI控制指南](development/AI_CONTROL.md) |
 | 怎么测试、哪些证明可以复用？ | [测试指南](development/TESTING.md)、[VALIDATION](project/VALIDATION.md) |
 | 最近改动及历史决策？ | [CHANGELOG](project/CHANGELOG.md)、[history](history/engine-roadmap-a-e.md) |
 

@@ -26,6 +26,12 @@ const plugin: PluginManifest = {
   dataVersion: 1,
   permissions: [],
   setup(api) {
+    api.queries.register("snapshot", { schema: { type: "object", properties: {}, additionalProperties: false },
+      network: true, read: view => view.store.get("counter") });
+    api.queries.register("async-snapshot", { schema: { type: "object", properties: {}, additionalProperties: false },
+      // @ts-expect-error Query readers are synchronous and cannot return a Promise.
+      read: async () => ({ count: 1 }) });
+
     const fieldEffect: FieldEffectDefinition = {
       scope: "world",
       schema: {

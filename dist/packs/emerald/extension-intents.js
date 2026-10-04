@@ -20,6 +20,7 @@ export const EMERALD_PLUGIN_PERMISSIONS = Object.freeze([
   "reward",
   "createMonster",
   "movement",
+  "uiControl",
   "battle",
   "starter",
   "buyItem",

@@ -1,0 +1,33 @@
+✔ UI identities reject stale and disabled choices and dispatch through the actual button (1.066208ms)
+✔ Core observation shares live world cells; UI input unblocks busy dialogue without altering domain state (57.094541ms)
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.615s
+
+OK
+✔ Local HTTP control relay handles real HTTP, sequencing, deduplication and scenario assertions (698.231125ms)
+✔ Polling transport sends hello before responses and closes on a broken relay (1.347125ms)
+✔ Concurrent ingress observes and confirms an awaited domain action while ordinary mutations remain ordered (3.675542ms)
+✔ Wire decoder rejects malformed, oversized, unsupported and prototype-bearing messages without mutation (1.227625ms)
+✔ Completed and pending duplicate requests execute exactly once; conflicts and out-of-order requests are explicit (0.632792ms)
+✔ Unknown/private commands and invalid parameters are rejected on the shared registry; failures consume accepted sequence (0.255958ms)
+✔ Reject and bounded wait busy policies use readiness only; handler busy errors never replay (0.356292ms)
+✔ Queue bounds and disconnect cancel pending work while a committed asynchronous action releases its own lock (0.207125ms)
+✔ Retry fingerprints ignore object key order and expired cache cannot replay an old sequence (0.316209ms)
+✔ Loopback transport carries hello, encoded commands, results and disconnect without protocol-specific game logic (4.148667ms)
+✔ WebSocket adapter and loopback are interchangeable; binary input and disconnection are handled by the wire boundary (34.034583ms)
+✔ UI facade, plugin action and network use one registry; stable UIDs survive reordering and disabled commands cannot replace saves (49.657916ms)
+✔ Core actions enforce UID/custody/selection constraints and UI evolution commands rebuild a valid domain plan (25.147417ms)
+✔ Real loopback WebSocket handshake and encoded retry reach the same CommandBus once (16.294833ms)
+✔ Readiness callbacks cannot leave locks overwritten and completion observers cannot report a committed command as failed (0.135667ms)
+✔ Command completion is delivered after lock release, allowing a committed listener to submit follow-up work (0.059ms)
+✔ Read-only plugin queries remain available while busy without writing, saving or consuming RNG (57.916ms)
+✔ Plugin query callbacks cannot dispatch commands or return promises; invalid reader is rejected (26.559625ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 789.378625

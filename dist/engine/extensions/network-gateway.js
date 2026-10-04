@@ -7,7 +7,7 @@ import {
   requestFingerprint,
 } from "./network-protocol.js";
 import { readOnly } from "./values.js";
-/** Ordered, bounded single-session ingress. Owns protocol state only, never domain locks or rules. */
+/** Ordered mutations with bounded concurrent queries/input. Owns protocol state only, never domain locks or rules. */
 export class NetworkGateway {
   constructor({
     bus,
@@ -35,6 +35,7 @@ export class NetworkGateway {
     this.requests = new Map();
     this.queue = [];
     this.running = false;
+    this.concurrent = 0;
     this.closed = false;
   }
   receive(raw) {
@@ -56,7 +57,7 @@ export class NetworkGateway {
           "out_of_order",
           `Expected sequence ${this.nextSequence}`,
         );
-      if (this.queue.length + (this.running ? 1 : 0) >= this.limits.queued)
+      if (this.queue.length + (this.running ? 1 : 0) + this.concurrent >= this.limits.queued)
         throw new CommandError("queue_full");
       let resolve;
       const promise = new Promise((r) => {
@@ -64,8 +65,14 @@ export class NetworkGateway {
       });
       this.requests.set(request.id, { fingerprint, promise, settled: false });
       this.nextSequence++;
-      this.queue.push({ request, resolve });
-      void this.drain();
+      const job = { request, resolve };
+      if (this.running && this.bus.definition(request.command)?.concurrent === true) {
+        this.concurrent++;
+        void this.executeJob(job).finally(() => { this.concurrent--; });
+      } else {
+        this.queue.push(job);
+        void this.drain();
+      }
       return promise;
     } catch (error) {
       return Promise.resolve(
@@ -108,20 +115,20 @@ export class NetworkGateway {
       if (record.settled) this.requests.delete(id);
     }
   }
+  async executeJob(job) {
+    try {
+      this.settle(job, { ok: true, result: (await this.run(job.request)) ?? null });
+    } catch (error) {
+      this.settle(job, { ok: false, error: errorResult(error) });
+    }
+  }
   async drain() {
     if (this.running) return;
     this.running = true;
     try {
       while (this.queue.length) {
         const job = this.queue.shift();
-        try {
-          this.settle(job, {
-            ok: true,
-            result: (await this.run(job.request)) ?? null,
-          });
-        } catch (error) {
-          this.settle(job, { ok: false, error: errorResult(error) });
-        }
+        await this.executeJob(job);
       }
     } finally {
       this.running = false;

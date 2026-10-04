@@ -1,11 +1,15 @@
 ---
 name: emerald-story-reconstruction
-description: 结合现有网页绿宝石架构和只读pret/pokeemerald固定修订，逐区域转写原作地图剧情、条件分支、移动演出与领域调用，记录还原依据并让其他模型持续接手。
+description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写为现有网页绿宝石内容和领域调用；说明导入工具、代码落点、异步结果、测试与持续交接，适用于完整原作的逐区域复刻。
 ---
 
 # 完整绿宝石剧情复刻接手
 
 这份Skill用于长期补全原作业务，不能把当前序章切片当作全作已完成。目标是在现有自研网页引擎上复刻默认Gen3《Pokémon Emerald》，不是执行ROM或直接解释C脚本。先读[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)、[总接手指南](../emerald-project-handoff/SKILL.md)；实际地区/ROM修订和中文逐字文本要求按范围及任务确认，不凭记忆指定版本。
+
+## C代码复刻入口
+
+首次从C版接手先读[从C/脚本到网页的完整流程](references/c-porting.md)：区分机械导入与行为转写，按来源依赖追踪、分支表、代码落点、命令映射、工具和验证推进。该参考覆盖地图/剧情及special调用到战斗、成长、设施等领域的路由；具体规则仍由各领域Skill负责，不将所有C逻辑搬进剧情。
 
 ## 本领域核心名词
 
