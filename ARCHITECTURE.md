@@ -91,7 +91,7 @@ ActorRepository 保存全局身份与模板状态；ActorApplication 提供动�
 
 Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多回合/延迟行动、结算和快照服务。MoveEffectRegistry 是唯一效果描述入口；未知效果报错，明确未支持的效果不能花费 PP 或随机数。规则扩展通过阶段/操作/状态合同，而不是 UI 分支。运行目录有 354 个第三世代招式，完整语义仍待逐项核对。见 [docs/architecture/BATTLE.md](docs/architecture/BATTLE.md)、[机制矩阵](docs/engine/battle/MECHANISM_MATRIX.md)、[MOVE_AUDIT.md](docs/engine/battle/MOVE_AUDIT.md)。
 
-StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/story/STORY_LANGUAGE.md) 和 [docs/architecture/CUTSCENES.md](docs/architecture/CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。
+StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/story/STORY_LANGUAGE.md) 和 [docs/architecture/CUTSCENES.md](docs/architecture/CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。完整复刻的后续设计见[剧情内容架构](docs/architecture/STORY_CONTENT.md)：地区剧情包、明确脚本绑定、公共子脚本、领域结果与稳定暂停点；这些新增合同尚未实现。
 
 精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT已接入；槽位库存服务/注册政策及插件启动校验已实现，游戏获得/消耗、容量、选槽页面使用当前保存合同，拒绝旧格式，见 [INVENTORY.md](docs/engine/items/INVENTORY.md)。见 [ITEM_ACTIONS.md](docs/engine/items/FIELD_ITEMS.md)。见 [MOVE_LEARNING.md](docs/engine/items/MOVE_LEARNING.md)。见 [docs/architecture/GROWTH.md](docs/architecture/GROWTH.md)、[CREATURE_FORMS.md](docs/engine/creatures/FORMS.md)。现代 Mega/Z 可复用当前形态、行动增强、资格/消费/限次合同；完整世代规则和内容仍需独立业务验证，不能以形态动画宣称完整玩法完成。
 

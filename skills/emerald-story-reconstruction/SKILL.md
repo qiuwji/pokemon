@@ -41,7 +41,7 @@ description: 结合现有网页绿宝石架构和只读pret/pokeemerald固定修
 1. 为本次切片列出触发入口、参与角色、前置状态、各分支、奖励/费用、结束状态、取消/背包满/失败及重入行为。追踪特殊函数直到知道谁产生结果、何时解锁。
 2. 记录来源文件、label、固定修订和依赖；画出分支或用表表示即可，不复制整套C代码。对话本地化与规则还原分开验收。
 3. 地图使用metatile网格、碰撞/高度、connections与warps；原对象放地图元素，新运行期角色走Actor身份。入口校验合法落点，不用整场景PNG。
-4. 原作内容按现有`dist/packs/emerald/story.js`及对应内容定义装配；独立实验/扩展写`dist/plugins/`，setup通过`api.story.register`注册。增长后按地区拆故事定义并由story.js汇合，不能在World/adventure加地图名switch。
+4. 原作内容按现有`dist/packs/emerald/story.js`及对应内容定义装配；独立实验/扩展写`dist/plugins/`，setup通过`api.story.register`注册。完整复刻先读[剧情内容架构](../../docs/architecture/STORY_CONTENT.md)：地区包、对象绑定、公共子脚本、地图回调和稳定暂停点是后续改造方向；检查STATUS及实际合同，不能调用尚未实现的registerBundle或假设battle会等待胜负。新机制交给明确的框架任务，已有机制的内容按地区组织，不在World/adventure加地图名switch。
 5. 把条件转成requires/after/if和已注册只读查询；变量转setVariable/choice；对话、行走、镜头及领域动作转现有命令。参数见[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，世界合同见[world-content](../emerald-world-content/SKILL.md)。领域结果确实无法表达时登记接口缺口，作为框架任务处理，不能直接改队伍/库存。
 6. 显式映射寿命：永久领取/推进标记、地图visit覆盖、原FLAG_TEMP清理、对象可见性各归所属服务。原作TEMP寿命须追C确认，不能默认等于本引擎visit，更不能统统永久化。
 7. 演出走move/approach/face/escort/camera和必要门转场；跨相邻道路走连接。不要用teleport跳过本该自动行走的过程；不能并行争抢角色或镜头。finally释放锁由现有导演负责。

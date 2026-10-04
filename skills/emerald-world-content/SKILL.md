@@ -18,7 +18,7 @@ description: 给现有绿宝石工程添加网格地图、连接、动态对象�
 
 ## 按任务读取
 
-地图/对象读[WORLD_STATE](../../docs/engine/world/STATE_AND_LIFECYCLE.md)和[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)；剧情读[STORY_LANGUAGE](../../docs/engine/story/STORY_LANGUAGE.md)；机关读[FIELD_DEVICES](../../docs/engine/field/FIELD_DEVICES.md)；时间/天气读[WORLD_TIME](../../docs/engine/world/WORLD_TIME.md)、[WEATHER](../../docs/engine/world/WEATHER.md)。高度或交通另读对应规格，不默认加载全部。
+地图/对象读[WORLD_STATE](../../docs/engine/world/STATE_AND_LIFECYCLE.md)和[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)；剧情读[STORY_LANGUAGE](../../docs/engine/story/STORY_LANGUAGE.md)，涉及全作组织或新增核心机制另读[剧情内容架构方案](../../docs/architecture/STORY_CONTENT.md)，计划接口不能当现有API；机关读[FIELD_DEVICES](../../docs/engine/field/FIELD_DEVICES.md)；时间/天气读[WORLD_TIME](../../docs/engine/world/WORLD_TIME.md)、[WEATHER](../../docs/engine/world/WEATHER.md)。高度或交通另读对应规格，不默认加载全部。
 
 实际参考：[field-journal插件](../../dist/plugins/field-journal.js)新增房间、warp、NPC、奖励、菜单/HUD。验证：[world-state](../../tests/world-state.test.js)、[story-language](../../tests/story-language.test.js)、[field-devices](../../tests/field-devices.test.js)。
 
