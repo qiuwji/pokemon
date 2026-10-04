@@ -11,11 +11,9 @@ const said = (s) =>
       typeof line === "string" ? [line] : line.runs.map((run) => run.text),
     );
 
-test("The new-game start is still the town, with the truck opening recorded as blocked", () => {
-  // The reference opens inside the moving truck; that switch is held back by an open engine
-  // task (a fresh state on that map fails save validation), so the start stays here for now.
-  const s = session();
-  assert.equal(s.game.state.position.map, "LittlerootTown");
+test("A new game starts in the reference truck interior before arriving in town", () => {
+  const s = session([], { fresh: true });
+  assert.equal(s.game.state.position.map, "InsideOfTruck");
   assert.equal(s.db.maps.InsideOfTruck.title, "搬运车内");
 });
 

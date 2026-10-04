@@ -72,6 +72,9 @@ function gameWith(
   game.state.party.push(createMonster("mudkip", 6, db, game.rng));
   game.state.flags.rescued = true;
   game.state.flags.pokedex = true;
+  game.state.flags.introDone = true;
+  game.state.flags.truckLeft = true;
+  assert(game.enter({ map: "LittlerootTown", x: 10, y: 10, dir: "up" }));
   return { game, host, catalog, db, errors, presentation, ...ports };
 }
 

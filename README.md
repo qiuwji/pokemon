@@ -4,7 +4,7 @@
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
-最新局部改动：已有NPC/告示牌查询与对白修改、有效地图读取和修改反馈已接入；启动问题已修复，全量核心/插件测试通过，实际浏览器进入游戏并验证菜单。用法见[世界编辑合同](docs/engine/world/STATE_AND_LIFECYCLE.md)，证据见[启动修复记录](docs/validation/2026-10-04-world-startup-repair/manifest.json)。
+最新改动：新游戏正式从搬运车内开始，修复初始飞行目的地记录导致的存档拒绝；空队伍车内存档可保存恢复。第一章原作音频包默认启用，开场仍有未完成演出和剧情分支。范围及证据见[当前进度](docs/project/STATUS.md)，已有世界编辑用法见[世界编辑合同](docs/engine/world/STATE_AND_LIFECYCLE.md)。
 
 ## 运行与验证
 
@@ -21,9 +21,9 @@ npm run test:plugins
 npm run check:docs
 ```
 
-`npm test`仅运行核心合同测试（含插件宿主API），当前 **864/864通过**；`npm run test:plugins`独立运行插件作者示例和当前装配清单检查，**25/25通过**，均无失败/跳过。`npm run test:all`显式运行两组；`npm run test:coverage`仅统计核心测试。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。本轮[实际证据](docs/validation/2026-10-04-world-startup-repair/manifest.json)覆盖启动、读取现有存档和菜单；此前[AI控制证据](docs/validation/2026-10-04-ai-control-v2/manifest.json)覆盖长轮询连续三步移动及附带状态/事件。完整浏览器组合、持续循环听音、原作音频对照、覆盖率和远端CI未新增验收。可部署dist/到静态HTTP服务，ES模块与fetch需要HTTP。
+`npm test`仅运行核心合同测试（含插件宿主API），当前 **881/881通过**；`npm run test:plugins`独立运行插件作者示例和当前装配清单检查，**26/26通过**，均无失败/跳过。`npm run test:all`显式运行两组；`npm run test:coverage`仅统计核心测试。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。本轮[实际证据](docs/validation/2026-10-05-truck-start/manifest.json)覆盖车内新游戏、保存刷新恢复，以及正常出车后妈妈带玩家自动进屋；此前[AI控制证据](docs/validation/2026-10-04-ai-control-v2/manifest.json)覆盖长轮询连续三步移动及附带状态/事件。完整浏览器组合、持续循环听音、原作音频对照、覆盖率和远端CI未新增验收。可部署dist/到静态HTTP服务，ES模块与fetch需要HTTP。
 
-九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前插件示例组25项已验证，系统与浏览器的结果仍按实际范围记录。
+九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前插件示例组26项已验证，系统与浏览器的结果仍按实际范围记录。
 
 最新应用层复审已补结算失败收尾、旗标预检、捕获入库确认和共享货币模块；故障测试已随此次全量通过。实现范围与后续待办见[当前进度](docs/project/STATUS.md)。
 

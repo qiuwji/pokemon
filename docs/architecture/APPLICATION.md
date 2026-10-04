@@ -82,3 +82,7 @@ AppearanceApplication拥有视觉选择，ViewApplication组合相机配置与�
 ControlApplication通过显式CONTROL_PORTS读取当前领域对象，提供行动条件、真实移动回执、连续执行及观察记录；control-observation负责目录关联和只读投影，产品ai-control插件只选择字段。新增模块不接管碰撞、剧情、奖励、战斗或存档规则。
 
 World在阻挡时留下权威原因，FieldSession区分逻辑步接受与动画完成；应用层保留触发物体行动的accepted语义，公共移动回执另报moved。连续执行器复用原领域入口，等待实际野外结算，并在控制边界返回部分结果。剧情领域将确认对象对白写入story.interactions，控制事件缓冲仍是瞬时观察数据，两者不复制领域状态。
+
+## 新游戏位置与旅行记录
+
+PACK.start由绿宝石内容包选择地图与合法坐标，SaveApplication只创建领域状态。movement.visited是已到达的可飞行目的地，不是所有地图访问历史；初始为空，绑定/入图时统一由MovementApplication.visitMap按catalog.destinations登记。室内、车内或插件地图可以是起点，不必成为飞行目的地。保存合同仍拒绝visited中的未知目的地；不得为了切换起点放宽引用或JSON校验。相关验收见tests/inside-of-truck.test.js，文件移动时搜索“centred on the truck interior”。

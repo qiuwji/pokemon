@@ -104,6 +104,9 @@ function session(plugins = [], records = {}, wallStart = 100000) {
   game.state.party = [createMonster("mudkip", 15, game.db, game.rng)];
   // These cases run mid-adventure; the truck arrival scene is not under test here.
   game.state.flags.introDone = true;
+  game.state.flags.truckLeft = true;
+  if (!game.lastSave)
+    assert(game.enter({ map: "LittlerootTown", x: 10, y: 10, dir: "up" }));
   return {
     game,
     ...compiled,
@@ -681,6 +684,8 @@ test("Weather intents join transactions, roll back a partial change and emit no 
   };
   const s = session([plugin]),
     g = s.game;
+  // Ignore the fixture's completed arrival; only this transaction's facts are under test.
+  facts.length = 0;
   const before = structuredClone(g.state.weather);
   let writes = 0;
   const owner = g.applications.weather,

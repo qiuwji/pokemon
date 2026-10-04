@@ -279,6 +279,9 @@ function adventure(
   const { bus } = attachEmeraldExtensions(game, compiled.host);
   // Clock cases run mid-adventure; the truck arrival scene is not under test here.
   game.state.flags.introDone = true;
+  game.state.flags.truckLeft = true;
+  if (!savedDocument)
+    assert(game.enter({ map: "LittlerootTown", x: 10, y: 10, dir: "up" }));
   return {
     game,
     bus,

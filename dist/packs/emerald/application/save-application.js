@@ -115,7 +115,9 @@ export class SaveApplication {
       crops: emptyCrops(),
       actors: emptyActors(),
       friendshipSteps: 0,
-      movement: { mode: "walk", visited: [PACK.start.map] },
+      // visitMap records eligible travel destinations during field binding.
+      // The starting map may be an interior with no travel destination.
+      movement: { mode: "walk", visited: [] },
       growth: { hatchTick: 0 },
       daycare: { slots: [], egg: null, steps: 0 },
       tradePartner: [],

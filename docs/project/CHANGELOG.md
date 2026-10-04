@@ -1,5 +1,13 @@
 # 当前开发与验证记录
 
+## 2026-10-05 · 车内新游戏起点与存档修复
+
+新游戏已正式从InsideOfTruck中心(2,2)、朝下开始，复用此前导入的地图、剧情和原声音效。确定根因是SaveApplication.newState把PACK.start.map无条件写入movement.visited；该字段记录可飞行目的地，车内未在destinations登记，因此validateSave返回false。初始visited改为空，首次绑定与之后入图均由既有MovementApplication.visitMap登记合法目的地。没有把车内伪装成飞行目的地，也没有放宽JSON或存档校验。交接所述Expected finite JSON data在当前提交未复现，应与这次确定的目的地引用错误区分。
+
+新增空队伍/空旗标车内状态的保存恢复断言，反向确认把车内加入visited仍被拒绝。插件、天气与时钟测试夹具明确完成开场后进入未白镇，不再依赖产品默认起点；天气事务只统计准备场景之后的事实。核心881/881、插件26/26全部通过，主质量检查通过（333模块语法、内容引用、类型、文档及ESLint）。证据见[本轮记录](../validation/2026-10-05-truck-start/manifest.json)。独立5191浏览器验证空队伍车内开始→按钮保存→刷新恢复→正常右移出车→确认妈妈对白→自动进入小悠家一楼(8,8)，结束时truckLeft/introDone为true、恢复exploration，控制台无错误/警告。原玩家存档未重置；实际听音和逐帧保真未新增验收。
+
+后续仍需：纸箱弹跳与镜头颠簸的逐帧表现；屋内妈妈→调钟→电视/跑步鞋剧情链；女玩家的May家分支。当前出口仍沿用上一轮门前事件直接切图的项目简化，不能称原作完整开场。第一章音频/地图/剧情导入的历史工作见CHANGELOG，之前起点暂缓的记录保留为历史，本条取代其阻塞状态。
+
 ## 2026-10-05 · 搬运车开场地图与落点校正
 
 按 `WarpToTruck()` 与 `InsideOfTruck` 原文补齐开场：导入原作 5×5 车内地图（独立图集 822 tile/550 metatile、三个纸箱对象、五处纸箱提示、纸箱精灵图 MovingBox），新增 `sound` 剧情命令（只允许已注册 cue），并按 `Task_HandleTruckSequence` 的节拍还原开场音效顺序 SE_TRUCK_MOVE/STOP/UNLOAD/DOOR（按 midi.cfg 的 `rs_sfx_2`/`rs_sfx_1` 渲染装入同一音频包）。玩家走到门前一列 (3,1)~(3,3) 后离开卡车，落到未白镇 (3,10)——这是原作 `setdynamicwarp` 的坐标，先前把玩家放在卡车格 (2,10) 是错的。未白镇落地的分支改为按 `LittlerootTown_Movement_PlayerStepOffTruck` 先播 SE_LEDGE 再跳到 (4,10)，妈妈从 (5,8) 走出两步到 (5,10) 面向玩家说原版 `OurNewHomeLetsGoInside`，随后一同进屋。

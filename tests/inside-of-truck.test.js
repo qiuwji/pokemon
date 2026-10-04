@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
+import { validateSave } from "../dist/packs/emerald/save-contract.js";
 
 /** The host flushes queued map-enter stories once per frame; headless must do it explicitly. */
 async function flush(s, predicate) {
@@ -24,7 +25,10 @@ const said = (s) =>
     );
 
 test("The reference opening map is present and centred on the truck interior", () => {
-  const s = session();
+  const s = session([], { fresh: true });
+  // Remove the helper's battle arrangement to validate the real empty-party opening state.
+  s.game.state.party = [];
+  s.game.state.flags = {};
   const map = s.db.maps.InsideOfTruck;
   // WarpToTruck() warps a new game into MAP_INSIDE_OF_TRUCK, and SetPlayerCoordsFromWarp
   // puts the player in the map centre when the reference passes no coordinates.
@@ -32,8 +36,18 @@ test("The reference opening map is present and centred on the truck interior", (
   assert.equal(Math.floor(map.height / 2), 2);
   // The reference declares MAP_TYPE_INDOOR; the importer derives `indoor` from the map name.
   assert.equal(map.indoor, false);
-  // The start itself stays in Littleroot until the save-validation blocker is resolved.
-  assert.equal(s.game.db.maps.LittlerootTown.title, "未白镇");
+  assert.deepEqual(s.game.state.position, {
+    map: "InsideOfTruck", x: 2, y: 2, dir: "down", elevation: 3, previousElevation: 3,
+  });
+  assert.deepEqual(s.game.state.movement.visited, []);
+  const document = s.game.exportDocument();
+  const invalid = structuredClone(document.state);
+  invalid.movement.visited.push("InsideOfTruck");
+  assert.equal(validateSave(invalid, s.db, s.catalog, s.host), false);
+  assert(validateSave(document.state, s.db, s.catalog, s.host));
+  s.game.loadDocument(document);
+  assert.equal(s.game.state.position.map, "InsideOfTruck");
+  assert.deepEqual(s.game.state.movement.visited, []);
 });
 
 test("The truck map is the real reference map with its boxes, signs and door tiles", () => {

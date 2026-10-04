@@ -1,0 +1,636 @@
+{
+  "url": "http://127.0.0.1:5191/?control=1",
+  "final": {
+    "time": {
+      "initialized": false,
+      "elapsedMs": 0,
+      "day": 0,
+      "hour": 0,
+      "minute": 0,
+      "second": 0,
+      "playSeconds": 341,
+      "tide": "high",
+      "period": "night"
+    },
+    "weather": {
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "kind": "none",
+      "selection": "none",
+      "source": "map",
+      "label": "无天气",
+      "visual": null,
+      "battle": null,
+      "day": 0,
+      "revision": 3
+    },
+    "location": "我的家 · 一楼",
+    "movement": {
+      "mode": "walk",
+      "capabilities": {
+        "run": true,
+        "mach-bike": false,
+        "acro-bike": false,
+        "surf": false,
+        "fly": false,
+        "dive": false,
+        "waterfall": false
+      }
+    },
+    "position": {
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "x": 8,
+      "y": 8,
+      "dir": "down",
+      "elevation": 0,
+      "previousElevation": 0
+    },
+    "mode": "exploration",
+    "quest": {
+      "id": "rescue",
+      "destination": {
+        "map": "Route101",
+        "kind": "bag"
+      },
+      "number": "01",
+      "title": "草丛里的求救声",
+      "description": "沿未白镇北边的小路前往 101 号道路，调查博士的背包。",
+      "complete": {
+        "flag": "rescued"
+      }
+    },
+    "flags": {
+      "truckLeft": true,
+      "introDone": true
+    },
+    "dialogue": null,
+    "nearby": [
+      {
+        "name": "妈妈",
+        "kind": "healMom",
+        "x": 2,
+        "y": 6
+      }
+    ],
+    "tiles": [
+      [
+        {
+          "x": 1,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 4,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 6,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 7,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 8,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 9,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 10,
+          "y": 3,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "x": 1,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "collision": 1,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "collision": 1,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "collision": 1,
+          "behavior": 134,
+          "warp": false
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 8,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 9,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 10,
+          "y": 4,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "x": 1,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 8,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 9,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 10,
+          "y": 5,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "x": 1,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 2,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 3,
+          "y": 6,
+          "collision": 1,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "collision": 1,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 5,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 6,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 7,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 8,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 9,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 10,
+          "y": 6,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "x": 1,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 2,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 3,
+          "y": 7,
+          "collision": 1,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 4,
+          "y": 7,
+          "collision": 1,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 5,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 6,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 7,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 8,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 9,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 10,
+          "y": 7,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "x": 1,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 2,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 3,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 4,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 5,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 6,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 7,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        {
+          "x": 8,
+          "y": 8,
+          "collision": 0,
+          "behavior": 101,
+          "warp": true
+        },
+        {
+          "x": 9,
+          "y": 8,
+          "collision": 0,
+          "behavior": 101,
+          "warp": true
+        },
+        {
+          "x": 10,
+          "y": 8,
+          "collision": 0,
+          "behavior": 0,
+          "warp": false
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    ],
+    "party": [],
+    "bag": {},
+    "battle": null
+  },
+  "console": [],
+  "steps": [
+    "New game rendered inside truck with empty party",
+    "Saved through visible game button",
+    "Reloaded and restored truck",
+    "Moved right normally to trigger truck exit",
+    "Confirmed mother dialogue normally",
+    "Automatic arrival sequence ended inside BrendansHouse_1F"
+  ]
+}

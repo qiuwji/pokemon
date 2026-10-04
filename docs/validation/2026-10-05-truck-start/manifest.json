@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-05",
+  "version": "0.30.0",
+  "baseCommit": "298bb16",
+  "scope": "New-game truck start and travel destination save invariant",
+  "cause": "newState seeded movement.visited with a map that is not a registered travel destination",
+  "tests": {
+    "core": {
+      "passed": 881,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 26,
+      "failed": 0
+    },
+    "log": "tests.log"
+  },
+  "quality": {
+    "result": "Main quality checks passed; final documentation links and synchronized examples also passed.",
+    "log": "check.log",
+    "documentationLog": "docs.log"
+  },
+  "browser": {
+    "url": "http://127.0.0.1:5191/?control=1",
+    "screenshot": "truck-saved.png",
+    "result": "A new empty-party game rendered in InsideOfTruck; saved through the visible button and reloaded correctly. A normal right step triggered truck exit; confirming the mother dialogue completed the automatic walk/transfer into BrendansHouse_1F at (8,8), with truckLeft/introDone true and exploration mode. Console errors/warnings empty. A separate origin preserved the player original save.",
+    "record": "browser.json",
+    "arrivalScreenshot": "arrival-house.png"
+  },
+  "limitations": [
+    "The reported Expected finite JSON data exception did not reproduce on the current baseline; strict validation was not relaxed.",
+    "Box bounce/camera shake, the indoor mom/clock/shoes chain and female-player branch remain unimplemented.",
+    "No new original-audio listening or timing-fidelity acceptance."
+  ]
+}
