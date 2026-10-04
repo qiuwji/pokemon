@@ -1,0 +1,11 @@
+✔ Shared modal lifecycle disposes page resources exactly once on replacement, close and explicit host disposal (30.949959ms)
+✔ Real detail page mounts the registered clip and shared shell releases its playback on page navigation (15.037083ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (8.610709ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 143.440125

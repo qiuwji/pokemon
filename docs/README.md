@@ -26,7 +26,7 @@
 | 精灵/物品/育成 | [形态](engine/creatures/FORMS.md)、[育成](architecture/GROWTH.md)、[库存](engine/items/INVENTORY.md)、[野外物品](engine/items/FIELD_ITEMS.md)、[招式学习](engine/items/MOVE_LEARNING.md) |
 | Actor | [ACTORS](engine/actors/ACTORS.md) |
 | 设施及非战斗活动 | [FACILITIES](engine/facilities/FACILITIES.md)；完整开拓区、选美、游戏厅仍是后续业务 |
-| 视觉/声音 | [表现架构](architecture/PRESENTATION.md)、[外观/相机/环境](engine/presentation/APPEARANCE_AND_VIEW.md)、[动画合同](engine/presentation/ANIMATION_CONTRACT.md)、[真实音频](engine/presentation/AUDIO.md)、[插件UI](engine/presentation/UI_CONTRACT.md) |
+| 视觉/声音 | [表现架构](architecture/PRESENTATION.md)、[外观/相机/环境](engine/presentation/APPEARANCE_AND_VIEW.md)、[动画合同](engine/presentation/ANIMATION_CONTRACT.md)、[资源帧片段](engine/presentation/SPRITE_CLIPS.md)、[真实音频](engine/presentation/AUDIO.md)、[插件UI](engine/presentation/UI_CONTRACT.md) |
 | 插件后续接口需求 | [PLUGIN_ROADMAP](project/PLUGIN_ROADMAP.md)；计划不能当现有能力 |
 
 ## 每种文档只负责一件事

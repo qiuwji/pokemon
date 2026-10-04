@@ -161,6 +161,45 @@ test("a plugin composes appearance, camera range and independent fog", async () 
 });
 ```
 
+## 资源帧动画
+
+按[帧片段合同](../../docs/engine/presentation/SPRITE_CLIPS.md)注册 `api.presentation.sprite`。片段是已注册resource、裁切和帧时长，不是绘制函数或规则行为；species/view绑定用于详情页替换。不要在UI按物种添加分支或重复加载图片。缺多帧素材时保持单帧，不凭资源高度宣称原作动画时序已还原。
+
+真实组合例：[examples/sprite-clip.test.js](../../examples/sprite-clip.test.js)，项目根执行 `node --test examples/sprite-clip.test.js`。它使用Canvas/时钟端口，验证真实插件→选择→播放器→停止；浏览器视觉、缩放与页面关闭须另验。宿主清理由ownModalResource管理，不让插件自己握住页面节点。
+
+<!-- runnable-example: examples/sprite-clip.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session } from "./helpers/session.js";
+import { SpriteCanvas } from "../dist/adapters/sprite-canvas.js";
+test("a registered detail clip is selected, sampled and cleaned up by the real player", () => {
+  const plugin = manifest("sprite-demo", api => {
+    api.presentation.sprite("detail", {
+      width: 64, height: 64, loop: true,
+      match: { species: "mudkip", view: "detail" },
+      frames: [0, 64].map(y => ({ resource: "poochyena-front",
+        rect: { x: 0, y, width: 64, height: 64 }, durationMs: 50 })),
+    });
+  });
+  const { game } = session([plugin]), before = structuredClone(game.state);
+  let now = 0, pending = null;
+  const draws = [], canvas = { width: 64, height: 64, getContext: () => ({
+    clearRect() {}, drawImage: (...args) => draws.push(args),
+  }) };
+  const player = new SpriteCanvas({ canvas,
+    assets: { "poochyena-front": { width: 64, height: 256 } },
+    clock: { now: () => now, request: fn => { pending = fn; return 1; },
+      cancel: () => { pending = null; } },
+  });
+  player.play(game.spriteClips.find("mudkip", "detail"));
+  assert.equal(draws.at(-1)[2], 0); now = 50; pending();
+  assert.equal(draws.at(-1)[2], 64); player.stop();
+  assert.equal(pending, null);
+  assert.deepEqual(game.state, before);
+});
+```
+
 ## 常见错误与排查
 
 报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。

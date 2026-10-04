@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | 首次接手 | [handoff.test.js](handoff.test.js) | 注册物品→插件事务领取→拒绝重复→保存恢复 |
 | 野外行动 | [field-action.test.js](field-action.test.js) | 注册行动→公开命令→永久格子覆盖→重载→未知ID拒绝 |
+| 资源帧动画 | [sprite-clip.test.js](sprite-clip.test.js) | 注册片段→详情绑定→真实播放器帧切换→停止；Canvas/时钟为端口替身 |
 | 对话表现 | [dialogue.test.js](dialogue.test.js) | 注册文字效果→NPC触发→结构化文本/速度转发→确认后奖励；UI替身不证明动画 |
 | 世界剧情 | [world-story.test.js](world-story.test.js) | 注册地图NPC→真实交互触发→对话/一次奖励→重试 |
 | 战斗 | [battle-effect.test.js](battle-effect.test.js) | 注册效果/招式→真实训练家回合→能力阶段和PP |

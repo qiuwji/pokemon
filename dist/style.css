@@ -472,6 +472,7 @@ footer {
   z-index: 12;
   white-space: pre-line;
 }
+.detail-sprite { width: 25%; height: auto; flex: none; image-rendering: pixelated; }
 .dialogue-glyph {
   white-space: pre-wrap;
 }

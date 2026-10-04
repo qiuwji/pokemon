@@ -1,3 +1,4 @@
+import { createEmeraldSpriteClips } from "./sprite-clips.js";
 import { createEmeraldPresentation } from "./animations.js";
 import { CameraProfiles } from "../../engine/camera-view.js";
 import { EnvironmentLayers } from "../../engine/environment-layers.js";
@@ -115,6 +116,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     Object.assign(c.resources, emeraldAppearanceResources(c));
     Object.assign(c.appearances, emeraldAppearances(c));
     assertContent({ ...db, ...c });
+    createEmeraldSpriteClips(c, host);
     new CameraProfiles(c.cameraProfiles);
     new EnvironmentLayers(c.environmentLayers);
     const visualRegistry = createEmeraldPresentation({ host });

@@ -5,7 +5,7 @@ export function createPartyInterface(
   game,
   {
     document: doc,
-    spriteURL,
+    mountSprite,
     modal,
     closeModal,
     showMenu,
@@ -63,7 +63,7 @@ export function createPartyInterface(
     }
     modal(
       s.name,
-      `<div class="detail-row"><img src="${escapeHTML(spriteURL(m.species))}" alt="${s.name}"><div><p>Lv.${m.level} · ${m.gender} · ${s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</p><p>${NATURES[m.nature]}性格 · 特性：${ABILITIES[m.ability] || m.ability}</p><p>持有：${ITEMS[m.heldItem]?.name || "无"}</p><p>HP ${m.hp} / ${m.stats.hp} ${m.status ? " · " + STATUS_NAMES[m.status] : ""}</p><p>距离升级还需 ${Math.max(0, experienceAt(m.level + 1, s.growth) - m.exp)} 点经验</p></div></div><div class="detail-stats">${Object.entries(
+      `<div class="detail-row"><canvas id="detail-sprite" class="detail-sprite" width="64" height="64" role="img" aria-label="${escapeHTML(s.name)}"></canvas><div><p>Lv.${m.level} · ${m.gender} · ${s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</p><p>${NATURES[m.nature]}性格 · 特性：${ABILITIES[m.ability] || m.ability}</p><p>持有：${ITEMS[m.heldItem]?.name || "无"}</p><p>HP ${m.hp} / ${m.stats.hp} ${m.status ? " · " + STATUS_NAMES[m.status] : ""}</p><p>距离升级还需 ${Math.max(0, experienceAt(m.level + 1, s.growth) - m.exp)} 点经验</p></div></div><div class="detail-stats">${Object.entries(
         {
           hp: "体力",
           atk: "攻击",
@@ -84,6 +84,7 @@ export function createPartyInterface(
         )}</div><div class="inline-actions"><button class="secondary-button" id="growth-options">伙伴的成长</button><button class="secondary-button" id="held-item">持有道具</button><button class="secondary-button" id="lead" ${index === 0 ? "disabled" : ""}>设为首发</button><button class="secondary-button" id="use-potion" ${!game.itemQuantity("potion") || m.hp <= 0 || m.hp === m.stats.hp ? "disabled" : ""}>使用伤药 (${game.itemQuantity("potion")})</button></div>`,
       { back: () => showParty(), type: "detail" },
     );
+    mountSprite($("detail-sprite"), game.spriteClips.find(m.species, "detail"));
     game.ui?.extensions?.mountSlot(
       "monster.detail",
       root.querySelector(".inline-actions"),

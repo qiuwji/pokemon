@@ -1,0 +1,92 @@
+✔ Application dependencies are explicit, live across state replacement, and cannot be overwritten or broadened (1.403209ms)
+✔ Application fields forward to one owning service, including the explicitly writable host story lock (0.421166ms)
+✔ Adventure remains a composition facade; application services cannot import it or reach sibling services (5.111834ms)
+✔ Every public method uses its declared owner, preserves receivers/results and follows replacement services (1.637542ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (18.302209ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (2.622958ms)
+✔ Composition root does not own story, inventory or damage rules (0.308709ms)
+✔ Every local ES module import resolves after refactors (11.752ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (0.943875ms)
+✔ Example plugins depend only on public extension utilities (0.292833ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (7.282334ms)
+✔ Plugin startup orders dependencies, rejects versions/cycles/duplicates, and failed setup leaks no registration (2.987959ms)
+✔ JSON and schema boundaries reject prototypes, cycles, non-finite data, extra keys and unsupported schema options (1.652208ms)
+✔ Two independent plugins register pages and slots without modifying the built-in catalogs (47.855958ms)
+✔ Detail interaction composes action, core item/friendship, saved memory, lifecycle and presentation once (345.9915ms)
+✔ Failed feeding rolls back memory, states, inventory, friendship, events and feedback (14.656667ms)
+✔ Custom states tick and expire once with transactional lifecycle callbacks; stale context cannot write later (20.104334ms)
+✔ Plugin numeric rules enter the same battle pipeline and cannot mutate snapshot or dispatch commands (15.982875ms)
+✔ Core permission and namespace boundaries reject foreign status writes and undeclared intents (12.24125ms)
+✔ Plugin memory survives lead changes, box custody and omission; content references report missing dependency (33.586833ms)
+✔ Event failures are isolated and recursive cascades are bounded (0.170834ms)
+✔ Command bus serializes asynchronous work, validates network declarations, and releases locks on failure (0.191042ms)
+✔ New species, moves, traits, movement and growth predicates are registered as content and validated before play (21.851958ms)
+✔ Async status callbacks are rejected and late callbacks cannot modify committed records (14.737916ms)
+✔ A state fault restores its clock and memory and missing plugin core content is never silently loaded (26.597834ms)
+✔ Two live sessions cannot silently overwrite each other and read-only save inspection does not adopt a changed baseline (0.307167ms)
+✔ Extension map references and grid values fail before play, including patched connections (9.435ms)
+✔ Intent shapes reject extra fields before writes and observer failures cannot undo committed actions (12.770708ms)
+✔ Themes and world feedback use bounded public definitions; invalid scopes and asynchronous validation fail (24.387375ms)
+✔ Domain permissions are supplied by the content pack and queued observation steps flush after asynchronous command completion (20.526458ms)
+✔ Authorized plugins can use exposed domain commands and equipment removal remains a validated intent (18.947958ms)
+✔ Clip validation rejects invalid timing, dimensions, shape and binding; definitions are deeply immutable (2.130959ms)
+✔ Pure frame sampling uses exact boundaries, loop modulo, finite clocks and reduced-motion first frame (1.3765ms)
+✔ Registry rejects unknown resources/species and conflicting explicit bindings while allowing replacement of native defaults (0.571042ms)
+✔ Canvas player crops actual frames, draws only changes, letterboxes and cancels stale callbacks on replacement (0.589458ms)
+✔ Missing/oversized resource frames fail before the first draw, and asynchronous drawing failures release the loop (0.233292ms)
+✔ Reduced motion and single frames draw once; non-loop clips finish without a lingering timer (0.134ms)
+✔ Public plugin clip registration replaces only presentation; duplicates and bad references fail at startup (37.106458ms)
+✔ Every generated native clip has real asset rectangles; current single and multiple sheets select correct metadata (20.414875ms)
+✖ Shared modal lifecycle disposes page resources exactly once on replacement, close and explicit host disposal (13.9225ms)
+✖ Real detail page mounts the registered clip and shared shell releases its playback on page navigation (12.379666ms)
+✖ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (31.446417ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (1.71575ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (3.22825ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (2.220541ms)
+✔ Clock page submits setup through a command and renders live saved time (3.390958ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (3.945125ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 44
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 778.766
+
+✖ failing tests:
+
+test at tests/sprite-clips.test.js:275:1
+✖ Shared modal lifecycle disposes page resources exactly once on replacement, close and explicit host disposal (13.9225ms)
+  TypeError: ui.ownModalResource is not a function
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/sprite-clips.test.js:280:22)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/sprite-clips.test.js:294:1
+✖ Real detail page mounts the registered clip and shared shell releases its playback on page navigation (12.379666ms)
+  TypeError: game.ui?.extensions?.unmountRegions is not a function
+      at modal (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/ui-shell.js:268:26)
+      at Object.showMonster (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/party-interface.js:65:5)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/sprite-clips.test.js:321:6)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/ui-composition.test.js:152:1
+✖ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (31.446417ms)
+  TypeError: shell.ownModalResource is not a function
+      at mountSprite (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/interface.js:43:13)
+      at Object.showMonster (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/party-interface.js:88:5)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/ui-composition.test.js:192:6)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)

@@ -1,3 +1,4 @@
+import { SpriteCanvas } from "../../adapters/sprite-canvas.js";
 import { createFacilityInterface } from "./facility-interface.js";
 import { createCropInterface } from "./crop-interface.js";
 import { createTimeInterface } from "./time-interface.js";
@@ -31,6 +32,18 @@ export function createEmeraldInterface(
   const deps = {
     ...shell,
     document: doc,
+    mountSprite: (canvas, clip) => {
+      const player = new SpriteCanvas({
+        canvas,
+        assets: extensionAssets,
+        clock: shell.frameClock,
+        reducedMotion: shell.reducedMotion,
+        onError: (error) => shell.toast(error.message),
+      });
+      shell.ownModalResource(() => player.stop());
+      player.play(clip);
+      return player;
+    },
     showMenu: () => showMenu(),
     showParty: (...args) => shell.showParty(...args),
     showBag: (...args) => shell.showBag(...args),

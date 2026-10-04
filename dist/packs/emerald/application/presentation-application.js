@@ -1,7 +1,9 @@
+import { createEmeraldSpriteClips } from "../sprite-clips.js";
 import { createTextEffects } from "../../../presentation/text-effects.js";
 import { dialogueDescription } from "../../../engine/dialogue.js";
 import { bindApplicationPorts } from "./ports.js";
 export const PRESENTATION_PORTS = Object.freeze([
+  "db",
   "plugins",
   "battle",
   "busy",
@@ -14,6 +16,7 @@ export class PresentationApplication {
   constructor(ports) {
     bindApplicationPorts(this, ports, PRESENTATION_PORTS);
     this.textEffects = createTextEffects(this.plugins);
+    this.spriteClips = createEmeraldSpriteClips(this.db, this.plugins);
   }
   validateDialogue(command) {
     return dialogueDescription(command, (id, data) =>

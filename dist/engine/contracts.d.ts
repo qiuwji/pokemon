@@ -818,6 +818,7 @@ export interface PluginAPI {
     theme(id: string, definition: UITheme): string;
   };
   presentation: {
+    sprite(id: string, definition: SpriteClipDefinition): string;
     textEffect(id: string, definition: TextEffectDefinition): string;
     register(
       id: string,
@@ -1539,4 +1540,17 @@ export interface TextEffectDefinition {
       reducedMotion: boolean;
     }>,
   ) => { x?: number; y?: number; opacity?: number };
+}
+
+/** Registered frame resources and durations. The host owns rendering and lifecycle. */
+export interface SpriteClipDefinition {
+  width: number;
+  height: number;
+  loop?: boolean;
+  match?: { species: string; view: string };
+  frames: {
+    resource: string;
+    rect?: { x: number; y: number; width: number; height: number };
+    durationMs: number;
+  }[];
 }

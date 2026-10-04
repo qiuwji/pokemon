@@ -1,3 +1,5 @@
+import { createEmeraldSpriteClips } from "../dist/packs/emerald/sprite-clips.js";
+import { emeraldAppearanceResources } from "../dist/packs/emerald/appearance-definitions.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import {
   createBag,
@@ -29,6 +31,7 @@ function documentPort() {
         replaceChildren(...nodes) {
           this.children = nodes;
         },
+        getContext: () => ({ clearRect() {}, drawImage() {} }),
         classList: { add() {}, remove() {} },
         focus() {
           doc.activeElement = this;
@@ -78,6 +81,10 @@ function fixture() {
     busy: false,
     battle: null,
     plugins: null,
+    spriteClips: createEmeraldSpriteClips({
+      ...db,
+      resources: emeraldAppearanceResources(db),
+    }),
     world: { map: { title: "未白镇" } },
     itemDefinitions: ITEMS,
     bagView: () => fixtureInventory().view(state.bag),
@@ -135,7 +142,10 @@ function fixture() {
     travel: { list: () => [] },
     fieldCapabilities: () => ({ surf: true }),
   };
-  const ui = createEmeraldInterface(game, { document: doc });
+  const ui = createEmeraldInterface(game, {
+    document: doc,
+    extensionAssets: { "mudkip-front": { width: 64, height: 64 } },
+  });
   game.ui = ui;
   return { game, doc, ui, calls };
 }

@@ -26,6 +26,7 @@ export function createUIShell(
     modalType = null,
     modalFocus = null,
     toastTimer;
+  const modalResources = new Set();
   const frameHost = doc.defaultView;
   const clock = dialogueClock || {
     now: () => game.timeline?.now() ?? performance.now(),
@@ -259,6 +260,7 @@ export function createUIShell(
     body,
     { back = null, type = "generic", close = true } = {},
   ) {
+    disposeModalResources();
     game.ui?.extensions?.unmountRegions();
     if (!root.children.length) modalFocus = doc.activeElement;
     modalBack = back;
@@ -275,6 +277,7 @@ export function createUIShell(
   }
 
   function closeModal() {
+    disposeModalResources();
     game.ui?.extensions?.unmountRegions();
     root.innerHTML = "";
     modalType = null;
@@ -283,6 +286,20 @@ export function createUIShell(
     modalFocus?.focus();
     modalFocus = null;
     canvas.focus({ preventScroll: true });
+  }
+  function ownModalResource(dispose) {
+    let active = true;
+    const release = () => {
+      if (!active) return;
+      active = false;
+      modalResources.delete(release);
+      dispose();
+    };
+    modalResources.add(release);
+    return release;
+  }
+  function disposeModalResources() {
+    for (const release of [...modalResources]) release();
   }
   function back() {
     if (
@@ -303,6 +320,10 @@ export function createUIShell(
     if (game.battle) navigation.backBattle?.();
   }
   return {
+    ownModalResource,
+    disposeModalResources,
+    frameClock: clock,
+    reducedMotion,
     document: doc,
     root,
     canvas,

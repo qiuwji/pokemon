@@ -61,6 +61,19 @@ const plugin: PluginManifest = {
         allowDuplicates: true,
       };
     api.content.register("inventoryPockets", "materials", pocket);
+    api.presentation.sprite("detail", {
+      width: 64,
+      height: 64,
+      loop: true,
+      match: { species: "mudkip", view: "detail" },
+      frames: [
+        {
+          resource: "mudkip-front",
+          durationMs: 125,
+          rect: { x: 0, y: 0, width: 64, height: 64 },
+        },
+      ],
+    });
     api.presentation.textEffect("float", {
       sample(parameters, context) {
         // @ts-expect-error Visual contexts cannot be rewritten by plugins.

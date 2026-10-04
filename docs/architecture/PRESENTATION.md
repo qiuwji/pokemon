@@ -53,3 +53,5 @@ environment-canvas 仅分发注册天气画师；WeatherDirector 按注入时钟
 外观图层、二维视口/投影和独立环境叠层的注册、生命周期及当前边界集中见[外观与视图](../engine/presentation/APPEARANCE_AND_VIEW.md)。
 
 逐字对话采用描述→字素时间轨道→纯采样→DOM宿主，文字效果独立注册；确认/取消的领域等待由UI shell拥有。详见[对话合同](../engine/presentation/DIALOGUE.md)。当前验证见[进度](../project/STATUS.md)，历史检查点不代表本轮全部浏览器验收。
+
+资源帧片段独立于野外方向动画：SpriteClips保存资源/裁切/时长与显式绑定，SpriteCanvas消费时间采样并负责Canvas播放，共享UI宿主清理页面资源。原生详情页与插件共用接口，资源统计与原作时序边界见[帧片段合同](../engine/presentation/SPRITE_CLIPS.md)。

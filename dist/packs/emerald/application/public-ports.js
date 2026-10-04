@@ -1,6 +1,7 @@
 /** Explicit host API routing. Each field/method has one application owner; no legacy fallback. */
 export const APPLICATION_FIELDS = Object.freeze({
   textEffects: "presentation",
+  spriteClips: "presentation",
   appearanceRegistry: "appearance",
   facilityActive: "facilities",
   learning: "party",

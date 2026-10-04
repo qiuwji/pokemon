@@ -1,3 +1,4 @@
+import { validateSpriteClip } from "./sprite-clip-contracts.js";
 import { validateAudioCue } from "./audio-contracts.js";
 import { ExtensionCatalog, safeTrait, ruleContext } from "./catalog.js";
 import { PluginUIRegistry } from "./ui-registry.js";
@@ -34,6 +35,7 @@ export class PluginHost {
     this.presentation = new Map();
     this.visualEffects = new Map();
     this.textEffects = new Map();
+    this.spriteClips = new Map();
     this.moveAnimations = new Map();
     this.battleAnimations = new Map();
     this.presentationScenes = new Map();
@@ -437,6 +439,8 @@ export class PluginHost {
             staged.ui.register(owner, "components", id, def),
         }),
         presentation: Object.freeze({
+          sprite: (id, definition) =>
+            register(staged.spriteClips, id, validateSpriteClip(definition)),
           transition: (id, definition) => {
             if (typeof definition.draw !== "function")
               throw new Error("Transition requires draw");

@@ -1,0 +1,31 @@
+✔ a registered detail clip is selected, sampled and cleaned up by the real player (32.429458ms)
+✔ Pure dialogue sampling preserves grapheme clusters and exact leading/interior/trailing pause boundaries (1.372709ms)
+✔ Instant/reduced-motion/skip reveal all text and pauses; a new line starts clean and invalid clocks fail (0.1775ms)
+✔ Structured dialogue rejects invalid speed/shape/markup style/pauses before an effect callback runs (0.143875ms)
+✔ Text effects are registered pure samples, bounded, synchronous and centrally disabled for reduced motion (0.300542ms)
+✔ DOM player safely creates text, types without layout rewrites, shows confirmation only after complete and ignores cancelled callbacks (0.46175ms)
+✔ Shared shell uses first confirm to reveal, second to advance; final acknowledgement resolves once and clears animation (37.412917ms)
+✔ Timed shell advances only after actual display duration and reader announcement stays complete (17.082083ms)
+✔ Dialogue disposal and replacement reject the old wait, stop effects and prevent stale visual writes (16.712542ms)
+✔ Reduced motion displays immediately, suppresses text animation loop and still waits for acknowledgement (15.969667ms)
+✔ Registered plugin text samples receive frozen parameters and cannot submit core commands from a read-only callback (16.69375ms)
+✔ Whole story preflight rejects bad dialogue/effect parameters before any reward and forwards speed through the real application (17.481958ms)
+✔ A text-effect failure during confirm rejects the active wait and unlocks without completion callbacks (14.472709ms)
+✔ Declarative layouts reject bad field types, duplicate names, nested forms and unbounded style before any command (31.450167ms)
+✔ Component schemas and recursive expansion are bounded; primitive factories cover every resolved kind (14.9655ms)
+✔ Bad region slots, component schemas and theme values fail during production plugin assembly (3.803125ms)
+✔ Real bag page mounts a plugin form; typed submit saves plugin memory without changing inventory and reloads (29.740584ms)
+✔ Region refresh preserves unsaved text, focus and tab choice, while unmount removes its drafts (15.697791ms)
+✔ Form duplicate submission is locked; closing before completion cannot remount a removed region (14.180917ms)
+✔ Native editable controls retain game keys, Escape returns, and widget-handled arrows do not navigate the game (0.643791ms)
+✔ A late old-page submission cannot refresh a different page, and component callbacks receive frozen props and queries (12.011542ms)
+✔ Disabled forms block submission and a rejected command retains editable drafts (0.200916ms)
+✔ Successful standalone input refreshes the normalized committed value rather than an old local draft (14.907833ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 242.741458
