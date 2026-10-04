@@ -125,7 +125,7 @@
       "flag": "FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_BRENDAN"
     }
   ],
-  "music": "emerald-first-bgm:mus_littleroot",
+  "music": "MUS_LITTLEROOT",
   "tileset": "building-brendans_mays_house",
   "indoor": true
 }

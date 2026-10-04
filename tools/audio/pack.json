@@ -1,0 +1,19 @@
+{
+  "id": "emerald-audio",
+  "title": "绿宝石原声",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+  "defaultEnabled": true,
+  "music": [
+    { "song": "MUS_LITTLEROOT", "config": "tracks/littleroot.json", "selection": "map-music" },
+    { "song": "MUS_ROUTE101", "config": "tracks/route101.json", "selection": "map-music" },
+    { "song": "MUS_OLDALE", "config": "tracks/oldale.json", "selection": "map-music" },
+    { "song": "MUS_BIRCH_LAB", "config": "tracks/birch_lab.json", "selection": "map-music" },
+    { "song": "MUS_POKE_CENTER", "config": "tracks/poke_center.json", "selection": "map-music" },
+    { "song": "MUS_POKE_MART", "config": "tracks/poke_mart.json", "selection": "map-music" },
+    { "song": "MUS_VS_WILD", "config": "tracks/vs_wild.json", "selection": "battle-wild" },
+    { "song": "MUS_VS_TRAINER", "config": "tracks/vs_trainer.json", "selection": "battle-trainer" },
+    { "song": "MUS_VS_RIVAL", "config": "tracks/vs_rival.json", "selection": "battle-rival" }
+  ],
+  "sounds": []
+}

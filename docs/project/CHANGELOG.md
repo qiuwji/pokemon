@@ -1,5 +1,15 @@
 # 当前开发与验证记录
 
+## 2026-10-05 · 第一章原作音乐成包、战斗选曲与未白镇广场逐字还原
+
+按固定poryaaaa修订重建渲染器（项目内原本没有可执行文件），用原作`midi.cfg`各自音量渲染第一章6首地图曲（MUS_LITTLEROOT/ROUTE101/OLDALE/BIRCH_LAB/POKE_CENTER/POKE_MART）与3首战斗曲（MUS_VS_WILD/VS_TRAINER/VS_RIVAL）。发现并修复两个真实缺陷：地图内容写的是原作`MUS_*`常量而运行时只认已注册cue，导致6张地图长期静默；通用对白兜底只念对象文本第一行，原作多行对白被截断。地图现保留原作常量，由`ORIGINAL_SONG_CUES`唯一映射解析；战斗按原作`GetBattleBGM`的三类选择，劲敌走`MUS_VS_RIVAL`。
+
+音频装配收拢为单一包：曲目配置移到`tools/audio/tracks/`，`tools/audio/pack.json`是唯一装配清单，`bundle-audio.py`校验修订/哈希后统一写入`dist/assets/audio/emerald-audio/{music,sounds}/`与单个插件`emerald-audio`（默认启用），并删除被取代的单曲插件与资源目录；仓库根的生成包与压缩包已移出Git并加入忽略。曲包声明默认启用，安装器修好了“已存在条目时enabled不写回”的真实bug。
+
+未白镇广场按原作`LittlerootTown_EventScript_Twin`的四分支顺序还原（冒险开始优先于已救博士），胖男人、男孩与四块告示牌换成原作文本，玩家家告示牌用`playerName`绑定；邻居家按原作标为博士家。新增`import-script-text.py`按地图抽取原作对白label（全书299张图3733条），供后续逐字转写对照。
+
+核心871/871、插件26/26，`npm run check`全通过。浏览器实测开启声音后请求`assets/audio/emerald-audio/music/mus_littleroot.wav`返回200。未验证：原声实际听感与固定原作对照、战斗/剧情切曲与恢复、SE替换（原作269个SE全为MIDI，渲染能力待补）、卡车开场剧情与屋内流程尚未转写。
+
 ## 2026-10-04 · 世界编辑启动修复与回归
 
 修复world-query对象字面量的非法默认赋值，恢复ES模块加载；为两个原创练习员补固定身份，保留原创对象必须声明ID的校验。公开对白预览改用具体DialogueDescription类型，避免DeepReadonly<Json>触发递归类型错误。插件示例补movement权限并同步两份Skill；外观测试改用稳定原生身份，不再依赖坐标字符串。

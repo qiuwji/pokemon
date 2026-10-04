@@ -1,0 +1,76 @@
+{
+  "id": "emerald:littleroot-town",
+  "version": 1,
+  "dialogues": {
+    "you-saved-birch": {
+      "name": "邻居家的小孩",
+      "lines": [
+        "你救下了小田卷博士！",
+        "太好了！"
+      ]
+    },
+    "good-luck": {
+      "name": "邻居家的小孩",
+      "lines": [
+        "你要去捕捉宝可梦吗？",
+        "祝你好运！"
+      ]
+    }
+  },
+  "scripts": {
+    "you-saved-birch": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "you-saved-birch"
+        }
+      ]
+    },
+    "good-luck": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "good-luck"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "you-saved-birch": {
+      "trigger": "interact",
+      "priority": 10,
+      "selector": {
+        "map": "LittlerootTown",
+        "script": "LittlerootTown_EventScript_Twin",
+        "kind": "talk"
+      },
+      "requires": {
+        "flag": "rescued",
+        "equals": true
+      },
+      "script": "you-saved-birch"
+    },
+    "good-luck": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "map": "LittlerootTown",
+        "script": "LittlerootTown_EventScript_Twin",
+        "kind": "talk"
+      },
+      "requires": {
+        "flag": "pokedex",
+        "equals": true
+      },
+      "script": "good-luck"
+    }
+  },
+  "sources": [
+    {
+      "label": "LittlerootTown_EventScript_Twin",
+      "map": "LittlerootTown",
+      "status": "original-verified",
+      "note": "原作四分支按 FLAG_ADVENTURE_STARTED / FLAG_RESCUED_BIRCH / VAR_LITTLEROOT_TOWN_STATE 排列；本项目以 pokedex 对应冒险开始、rescued 对应 FLAG_RESCUED_BIRCH。VAR_LITTLEROOT_TOWN_STATE 依赖原作出门前同伴托付场景，当前序章无该入口，故 CanYouGoSeeWhatsHappening 分支待转写。文本逐句取自 LittlerootTown_Text_YouSavedBirch 与 LittlerootTown_Text_GoodLuckCatchingPokemon。"
+    }
+  ]
+}

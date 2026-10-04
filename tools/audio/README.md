@@ -40,16 +40,27 @@ python3 tools/audio/render-bgm.py --renderer /tmp/poryaaaa_render --output /tmp/
 
 ## 装到游戏
 
-在项目根对生成包先预演：
+游戏只装**一个**音频包。每首曲子先用上面的渲染器单独渲成曲目包，再由合并安装器统一装配：
 
 ```sh
-python3 emerald-littleroot-bgm/install.py --check
-python3 emerald-littleroot-bgm/install.py
+python3 tools/audio/render-bgm.py --config tools/audio/tracks/route101.json \
+  --renderer /tmp/poryaaaa_render --output /tmp/audio-build/bgm-route101
+python3 tools/audio/bundle-audio.py --build /tmp/audio-build --check
+python3 tools/audio/bundle-audio.py --build /tmp/audio-build
 ```
 
-安装器校验音频哈希，复制资源/插件，通过现有内容manifest找music等于MUS_LITTLEROOT的元数据并绑定注册cue；登记的插件默认关闭。已有其他曲目不覆盖，重复安装无修改，写入异常回滚已替换文件。它是明确的内容安装操作，不给mapExtensions虚构修改music字段的能力，不修改引擎。重新导入地图恢复原作常量后需再安装。
+`tools/audio/pack.json`是唯一的装配清单：`music`逐首列出原曲常量、对应曲目配置和选曲用途（`map-music`/`battle-wild`/`battle-trainer`/`battle-rival`），`sounds`留给一次性音效。安装结果固定为：
 
-游戏打开`?plugins=emerald-first-bgm`，正常进入未白镇或相同原曲的已导入房屋，点击♪开启声音；安装后刷新页面。若端口为5175，地址为`http://127.0.0.1:5175/?plugins=emerald-first-bgm`。测试包不影响领域/RNG，其他场景的曲目及完整战斗/剧情恢复不由本单曲包补齐。
+```text
+dist/assets/audio/emerald-audio/music/<原曲常量小写>.wav
+dist/assets/audio/emerald-audio/sounds/<音效常量小写>.wav   # 音效渲染后才有
+dist/assets/audio/emerald-audio/manifest.json                # 来源、循环帧、哈希、验证状态
+dist/plugins/emerald-audio.js                               # 一个插件注册全部 cue
+```
+
+合并安装器逐首校验参考修订、渲染器修订与音频哈希，把资源复制到统一目录，重写catalog只保留`emerald-audio`（默认启用），并删除被取代的单曲插件模块与资源目录。重复安装无改动，`--check`不写盘，写入异常回滚。地图内容始终保留原作常量（如`MUS_ROUTE101`），运行时按原曲身份解析cue，因此重新导入地图不需要再装一次。
+
+选曲政策在`dist/packs/emerald/audio-library.js`：`ORIGINAL_SONG_CUES`是常量到cue的唯一映射，`emeraldMusic`先读地图`music`，战斗时按`emeraldBattleSong`取`MUS_VS_WILD`/`MUS_VS_TRAINER`/`MUS_VS_RIVAL`，与原作`GetBattleBGM`一致。声音仍由玩家点击♪开启。
 
 ## 验证边界
 

@@ -219,7 +219,7 @@ async function boot() {
         audio.setMusic(
           emeraldMusic(
             {
-              battle: !!game.battle,
+              battle: game.battle,
               map: { ...game.world.map, id: game.state.position.map },
             },
             audio.cues,

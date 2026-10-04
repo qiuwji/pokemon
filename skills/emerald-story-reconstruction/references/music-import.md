@@ -57,13 +57,13 @@ profile的audio是“输出文件名 → sound/direct_sound_samples下源文件�
 
 本项目选用[poryaaaa](https://github.com/huderlem/poryaaaa)，固定修订`4000591de6c397b6c80adc07af17144e26b30dfd`，只编译命令行poryaaaa_render。它读取原作voicegroup/采样并模拟m4a音频；产物尚未证明硬件逐位一致。完整获取/编译命令见[音频工具说明](../../../tools/audio/README.md)，在只读参考之外构建，不要求全局安装或GUI子模块。传入显式--renderer路径，不依赖上一模型留下的/tmp可执行文件。
 
-未白镇配置见[littleroot.json](../../../tools/audio/littleroot.json)：音量100、混响50来自midi.cfg，5声部和13379Hz混音来自m4aSoundInit；44100Hz输出与cueVolume是项目配置。新增曲目复制配置，按其实际来源修改song/title/midi/voicegroup及参数，不在生成器里硬编码地图或乐器分支。只有确实使用-X的原曲才考虑对应扩展时钟能力，不能默认改全部曲目；当前生成器没有这项配置，需明确补接口后再用。
+未白镇配置见[tracks/littleroot.json](../../../tools/audio/tracks/littleroot.json)：音量100、混响50来自midi.cfg，5声部和13379Hz混音来自m4aSoundInit；44100Hz输出与cueVolume是项目配置。新增曲目复制配置，按其实际来源修改song/title/midi/voicegroup及参数，不在生成器里硬编码地图或乐器分支。只有确实使用-X的原曲才考虑对应扩展时钟能力，不能默认改全部曲目；当前生成器没有这项配置，需明确补接口后再用。
 
 在项目根按以下流程生产到一个尚不存在的目录：
 
 ```sh
-python3 tools/audio/render-bgm.py --config tools/audio/littleroot.json --output /tmp/littleroot-review --check
-python3 tools/audio/render-bgm.py --config tools/audio/littleroot.json --renderer /tmp/poryaaaa_render --output /tmp/littleroot-review
+python3 tools/audio/render-bgm.py --config tools/audio/tracks/littleroot.json --output /tmp/littleroot-review --check
+python3 tools/audio/render-bgm.py --config tools/audio/tracks/littleroot.json --renderer /tmp/poryaaaa_render --output /tmp/littleroot-review
 python3 /tmp/littleroot-review/install.py --project /实际项目根 --check
 python3 /tmp/littleroot-review/install.py --project /实际项目根
 ```
@@ -72,7 +72,7 @@ python3 /tmp/littleroot-review/install.py --project /实际项目根
 
 **命名规则**：保留原作常量身份，例如MUS_LITTLEROOT对应文件`mus_littleroot.wav`、本地cue ID `mus_littleroot`；注册后为`<pack-id>:mus_littleroot`，部署路径`assets/audio/<pack-id>/mus_littleroot.wav`。title单独保存中文名。不要用bgm.wav、music1.wav或场景截图编号命名；若后续增加编码/版本，来源身份、区别及映射须明确记录，不能悄悄覆盖同名已验收资源。将来SE工具同样保留其原作SE常量身份。
 
-包内有具名WAV、plugin.js、manifest.json、install.py、preview.html和README。安装器仅复制包资源、登记默认关闭的插件，并按当前内容清单中相同原曲常量绑定地图；**现有mapExtensions不支持修改music**，不要发明该字段或直接修改冻结db。安装是明确的内容写入，播放器和核心规则不变。根目录现成包以README命令安装，游戏用`?plugins=emerald-first-bgm`启用未白镇试听并点击♪；地图重新导入恢复原曲常量后再安装绑定。
+包内有具名WAV、plugin.js、manifest.json、install.py、preview.html和README。安装器仅复制包资源、登记默认关闭的插件，并按当前内容清单中相同原曲常量绑定地图；**现有mapExtensions不支持修改music**，不要发明该字段或直接修改冻结db。安装是明确的内容写入，播放器和核心规则不变。根目录现成包以README命令安装，游戏用游戏默认启用合并后的单一音频包`emerald-audio`（见[音频工具说明](../../../tools/audio/README.md)），玩家点击♪开启声音；地图内容保留原作常量，由运行时按原曲身份解析cue。
 
 生成器目前预渲染三遍，部署保留引子与两遍曲身，游戏用`loop:true`重复第二遍。MIDI的[ / ]标记配合tempo推导整数PCM帧，再除采样率得到loopStart/loopEnd；不手写近似秒数、不给循环资源加渐隐。持续循环由AudioBufferSourceNode的音频时钟处理，不用setTimeout重播、JS轮询跳转或ended后从头播放。普通试听播放器播到文件末尾停止，不代表游戏没有循环。
 

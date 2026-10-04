@@ -1,0 +1,17 @@
+{
+  "id": "emerald-bgm-vs-rival",
+  "title": "劲敌对战",
+  "song": "MUS_VS_RIVAL",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+  "midi": "sound/songs/midi/mus_vs_rival.mid",
+  "voicegroup": "vs_rival",
+  "sampleRate": 44100,
+  "songVolume": 80,
+  "reverb": 50,
+  "polyphony": 5,
+  "pcmMixRate": 13379,
+  "cueVolume": 0.6,
+  "defaultEnabled": true,
+  "selection": "battle-rival"
+}

@@ -32,7 +32,7 @@ AI插件已迁至[独立目录](../../dist/plugins/ai-control/README.md)，默�
 
 ## 2026-10-04 · 未白镇首个成品BGM包
 
-根目录[音乐包](../../emerald-littleroot-bgm/README.md)已生成并装到当前内容，文件为mus_littleroot.wav，cue为emerald-first-bgm:mus_littleroot。使用固定poryaaaa修订读取原作MIDI、voicegroup和采样，来源参数、循环帧及哈希见包内manifest。默认关闭的音频插件以?plugins=emerald-first-bgm启用，同原曲的未白镇及已导入小悠家房屋绑定同一cue；不修改通用播放器、规则或存档。
+单曲安装方式已被合并包取代（见本文件顶部2026-10-05条目）；此处保留当时事实：曲目文件mus_littleroot.wav，cue曾为emerald-first-bgm:mus_littleroot。使用固定poryaaaa修订读取原作MIDI、voicegroup和采样，来源参数、循环帧及哈希见包内manifest。默认关闭的音频插件以?plugins=emerald-first-bgm启用，同原曲的未白镇及已导入小悠家房屋绑定同一cue；不修改通用播放器、规则或存档。
 
 用户确认“音乐好了”，记为游戏内可听。循环采用AudioBufferSourceNode.loop，引子与两遍曲身后重复第二遍，约54.167→107.500秒；新增实际包专项验证持续使用同一声源和后台续播折返，不重播引子。持续循环实际听音、固定原作对照、硬件逐位保真及完整战斗/剧情选曲恢复仍未验收，不能把本单曲当成全作音乐完成。
 

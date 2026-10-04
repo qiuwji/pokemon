@@ -1,0 +1,16 @@
+{
+  "id": "emerald-bgm-route101",
+  "title": "101号道路",
+  "song": "MUS_ROUTE101",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+  "midi": "sound/songs/midi/mus_route101.mid",
+  "voicegroup": "route101",
+  "sampleRate": 44100,
+  "songVolume": 80,
+  "reverb": 50,
+  "polyphony": 5,
+  "pcmMixRate": 13379,
+  "cueVolume": 0.6,
+  "defaultEnabled": true
+}

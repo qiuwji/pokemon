@@ -196,5 +196,11 @@
     ],
     "entry": "tools/imports/commands/audio/import-audio.py",
     "category": "audio"
+  },
+  "import-script-text.py": {
+    "content": [],
+    "outputs": [],
+    "entry": "tools/imports/commands/region/import-script-text.py",
+    "category": "region"
   }
 }

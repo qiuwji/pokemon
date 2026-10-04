@@ -4,11 +4,15 @@
   "dialogues": {
     "scenes.1": {
       "name": "远处传来的声音",
-      "lines": ["救命啊！"]
+      "lines": [
+        "救命啊！"
+      ]
     },
     "scenes.2": {
       "name": "小田卷博士",
-      "lines": ["那边的包里有精灵球，快选一只来帮我！"]
+      "lines": [
+        "那边的包里有精灵球，快选一只来帮我！"
+      ]
     },
     "scenes.3": {
       "name": "小田卷博士",
@@ -26,11 +30,15 @@
     },
     "scenes.5": {
       "name": "乔伊小姐",
-      "lines": ["你被送到了宝可梦中心。伙伴们已经恢复体力，重新出发吧！"]
+      "lines": [
+        "你被送到了宝可梦中心。伙伴们已经恢复体力，重新出发吧！"
+      ]
     },
     "scenes.6": {
       "name": "{{speaker}}",
-      "lines": ["{{line0}}"],
+      "lines": [
+        "{{line0}}"
+      ],
       "bindings": {
         "speaker": {
           "param": "speaker"
@@ -42,7 +50,9 @@
     },
     "scenes.7": {
       "name": "{{speaker}}",
-      "lines": ["好了！宝可梦的体力和招式 PP 都恢复了。欢迎随时再来！"],
+      "lines": [
+        "好了！宝可梦的体力和招式 PP 都恢复了。欢迎随时再来！"
+      ],
       "bindings": {
         "speaker": {
           "param": "speaker"
@@ -51,7 +61,9 @@
     },
     "training.1": {
       "name": "{{speaker}}",
-      "lines": ["需要两位还能战斗的伙伴。先捕捉伙伴并恢复体力，再来挑战吧！"],
+      "lines": [
+        "需要两位还能战斗的伙伴。先捕捉伙伴并恢复体力，再来挑战吧！"
+      ],
       "bindings": {
         "speaker": {
           "param": "speaker"
@@ -60,7 +72,9 @@
     },
     "training.2": {
       "name": "{{speaker}}",
-      "lines": ["{{line0}}"],
+      "lines": [
+        "{{line0}}"
+      ],
       "bindings": {
         "speaker": {
           "param": "speaker"
@@ -72,7 +86,9 @@
     },
     "training.4": {
       "name": "{{speaker}}",
-      "lines": ["{{line0}}"],
+      "lines": [
+        "{{line0}}"
+      ],
       "bindings": {
         "speaker": {
           "param": "speaker"
@@ -96,7 +112,9 @@
     },
     "training.6": {
       "name": "练习训练家",
-      "lines": ["这次配合得也很好！有空再来练习吧。"]
+      "lines": [
+        "这次配合得也很好！有空再来练习吧。"
+      ]
     },
     "regions.littleroot.1": {
       "name": "小田卷博士",
@@ -108,15 +126,21 @@
     },
     "regions.littleroot.2": {
       "name": "研究所留言",
-      "lines": ["博士去 101 号道路做野外调查了。"]
+      "lines": [
+        "博士去 101 号道路做野外调查了。"
+      ]
     },
     "regions.littleroot.3": {
       "name": "小田卷博士",
-      "lines": ["小遥正在 103 号道路做调查。去见见她吧！"]
+      "lines": [
+        "小遥正在 103 号道路做调查。去见见她吧！"
+      ]
     },
     "regions.littleroot.4": {
       "name": "小田卷博士",
-      "lines": ["已经捕获了 {{line0.0}} 种宝可梦！每个伙伴都值得好好培养。"],
+      "lines": [
+        "已经捕获了 {{line0.0}} 种宝可梦！每个伙伴都值得好好培养。"
+      ],
       "bindings": {
         "line0.0": {
           "param": "line0.0"
@@ -125,11 +149,15 @@
     },
     "regions.littleroot.5": {
       "name": "蛇纹熊",
-      "lines": ["蛇纹熊正追着博士跑！快去调查旁边的背包。"]
+      "lines": [
+        "蛇纹熊正追着博士跑！快去调查旁边的背包。"
+      ]
     },
     "regions.route103.1": {
       "name": "小遥",
-      "lines": ["{{line0}}"],
+      "lines": [
+        "{{line0}}"
+      ],
       "bindings": {
         "line0": {
           "param": "line0"
@@ -138,7 +166,9 @@
     },
     "regions.route103.2": {
       "name": "小遥",
-      "lines": ["你的搭档呢？先去 101 号道路找我爸爸吧。"]
+      "lines": [
+        "你的搭档呢？先去 101 号道路找我爸爸吧。"
+      ]
     },
     "regions.route103.3": {
       "name": "小遥",
@@ -154,7 +184,9 @@
     },
     "common.interactions.1": {
       "name": "{{speaker}}",
-      "lines": ["{{line0}}"],
+      "lines": [
+        "{{line0}}"
+      ],
       "bindings": {
         "speaker": {
           "param": "speaker"
@@ -166,7 +198,9 @@
     },
     "common.interactions.2": {
       "name": "尚未转写的告示",
-      "lines": ["{{line0}}"],
+      "lines": [
+        "{{line0}}"
+      ],
       "bindings": {
         "line0": {
           "param": "line0"
@@ -175,15 +209,24 @@
     },
     "npc.talk.1": {
       "name": "小女孩",
-      "lines": ["北边就是 101 号道路。刚才好像传来了求救声！"]
+      "lines": [
+        "这个、这个、这个！",
+        "要是跑到外面草丛里，野生宝可梦就会跳出来！"
+      ]
     },
     "npc.talk.2": {
       "name": "居民",
-      "lines": ["小田卷博士经常到野外研究宝可梦。研究所就在西南边。"]
+      "lines": [
+        "用PC就能把道具和宝可梦收放起来。",
+        "科学的力量真是伟大！"
+      ]
     },
     "npc.talk.3": {
       "name": "男孩",
-      "lines": ["草丛里有野生宝可梦。等你有了搭档，就能踏上冒险了。"]
+      "lines": [
+        "小田卷博士整天泡在研究所里研究，一转身又跑到野外去研究…",
+        "博士什么时候才回家啊？"
+      ]
     },
     "npc.practice.4.after": {
       "name": "练习训练家",
@@ -193,7 +236,9 @@
     },
     "npc.practice.4.before": {
       "name": "练习训练家",
-      "lines": ["在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！"]
+      "lines": [
+        "在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！"
+      ]
     },
     "npc.arena.5": {
       "name": "双打练习员",
@@ -203,31 +248,45 @@
     },
     "npc.arena.6": {
       "name": "混战练习员",
-      "lines": ["三支队伍各自为战。你可以选择任意对方席位，也可以用群体招式。"]
+      "lines": [
+        "三支队伍各自为战。你可以选择任意对方席位，也可以用群体招式。"
+      ]
     },
     "npc.rescue.7": {
       "name": "小田卷博士",
-      "lines": ["救命啊！那边的包里有精灵球，快选一只来帮我！"]
+      "lines": [
+        "救命啊！那边的包里有精灵球，快选一只来帮我！"
+      ]
     },
     "npc.starter.8": {
       "name": "博士的背包",
-      "lines": [""]
+      "lines": [
+        ""
+      ]
     },
     "npc.wildobject.9": {
       "name": "蛇纹熊",
-      "lines": [""]
+      "lines": [
+        ""
+      ]
     },
     "npc.talk.10": {
       "name": "女孩",
-      "lines": ["红色屋顶的宝可梦中心可以免费恢复体力和招式 PP。"]
+      "lines": [
+        "红色屋顶的宝可梦中心可以免费恢复体力和招式 PP。"
+      ]
     },
     "npc.giftpotion.11": {
       "name": "商店店员",
-      "lines": ["欢迎来到古辰镇！这是友好商店送你的伤药。"]
+      "lines": [
+        "欢迎来到古辰镇！这是友好商店送你的伤药。"
+      ]
     },
     "npc.talk.12": {
       "name": "研究足迹的人",
-      "lines": ["我在调查珍稀宝可梦的足迹。向北走可以到 103 号道路。"]
+      "lines": [
+        "我在调查珍稀宝可梦的足迹。向北走可以到 103 号道路。"
+      ]
     },
     "npc.rival.13": {
       "name": "小遥",
@@ -237,7 +296,9 @@
     },
     "npc.professor.14": {
       "name": "小田卷博士",
-      "lines": [""]
+      "lines": [
+        ""
+      ]
     },
     "npc.practice.15": {
       "name": "研究员",
@@ -247,27 +308,39 @@
     },
     "npc.healmom.16": {
       "name": "妈妈",
-      "lines": ["一路辛苦了！先在家休息一下吧。"]
+      "lines": [
+        "一路辛苦了！先在家休息一下吧。"
+      ]
     },
     "npc.heal.17": {
       "name": "乔伊小姐",
-      "lines": ["欢迎来到宝可梦中心！我会让你的宝可梦恢复精神。"]
+      "lines": [
+        "欢迎来到宝可梦中心！我会让你的宝可梦恢复精神。"
+      ]
     },
     "npc.talk.18": {
       "name": "绅士",
-      "lines": ["招式有使用次数。没有 PP 的时候，就去找乔伊小姐吧。"]
+      "lines": [
+        "招式有使用次数。没有 PP 的时候，就去找乔伊小姐吧。"
+      ]
     },
     "npc.talk.19": {
       "name": "少年",
-      "lines": ["不同属性之间有克制关系。选对招式，能让战斗轻松很多！"]
+      "lines": [
+        "不同属性之间有克制关系。选对招式，能让战斗轻松很多！"
+      ]
     },
     "npc.shop.20": {
       "name": "店员",
-      "lines": [""]
+      "lines": [
+        ""
+      ]
     },
     "npc.talk.21": {
       "name": "顾客",
-      "lines": ["我喜欢多带几瓶伤药。战斗中使用道具也会占用一回合。"]
+      "lines": [
+        "我喜欢多带几瓶伤药。战斗中使用道具也会占用一回合。"
+      ]
     },
     "training.victory": {
       "name": "{{speaker}}",
@@ -279,7 +352,9 @@
           "param": "prize"
         }
       },
-      "lines": ["全队获胜！获得了 ¥{{prize}}。"]
+      "lines": [
+        "全队获胜！获得了 ¥{{prize}}。"
+      ]
     },
     "training.repeat": {
       "name": "{{speaker}}",
@@ -288,7 +363,9 @@
           "param": "speaker"
         }
       },
-      "lines": ["配合得很好！这次练习就到这里。"]
+      "lines": [
+        "配合得很好！这次练习就到这里。"
+      ]
     },
     "capture.party": {
       "name": "捕捉成功",
@@ -297,11 +374,15 @@
           "param": "species"
         }
       },
-      "lines": ["{{species}} 加入了你的队伍！"]
+      "lines": [
+        "{{species}} 加入了你的队伍！"
+      ]
     },
     "capture.box": {
       "name": "捕捉成功",
-      "lines": ["队伍已经有 6 位伙伴。新宝可梦已传送到电脑盒子。"]
+      "lines": [
+        "队伍已经有 6 位伙伴。新宝可梦已传送到电脑盒子。"
+      ]
     }
   }
 }

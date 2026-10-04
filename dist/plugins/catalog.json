@@ -19,10 +19,10 @@
       ]
     },
     {
-      "id": "emerald-first-bgm",
-      "module": "./emerald-first-bgm.js",
-      "export": "bgmPlugin",
-      "enabled": false
+      "id": "emerald-audio",
+      "module": "./emerald-audio.js",
+      "export": "audioPlugin",
+      "enabled": true
     }
   ]
 }

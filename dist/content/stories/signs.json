@@ -246,123 +246,191 @@
   "dialogues": {
     "littleroottown.0": {
       "name": "路边的告示",
-      "lines": ["未白镇 · 每一段旅程都从小镇开始。"]
+      "lines": [
+        "未白镇",
+        "“一座连色调都无法为其增色的城镇。”"
+      ]
     },
     "littleroottown.1": {
       "name": "路边的告示",
-      "lines": ["小田卷博士研究所 · 宝可梦野外研究"]
+      "lines": [
+        "小田卷博士的宝可梦研究所"
+      ]
     },
     "littleroottown.2": {
       "name": "路边的告示",
-      "lines": ["小悠的家"]
+      "lines": [
+        "{{who}}的家"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
     },
     "littleroottown.3": {
       "name": "路边的告示",
-      "lines": ["小遥的家"]
+      "lines": [
+        "小田卷博士的家"
+      ]
     },
     "route101.0": {
       "name": "路边的告示",
-      "lines": ["101 号道路 · 请小心草丛里的野生宝可梦。"]
+      "lines": [
+        "101 号道路 · 请小心草丛里的野生宝可梦。"
+      ]
     },
     "oldaletown.0": {
       "name": "路边的告示",
-      "lines": ["古辰镇 · 每一段旅程都从小镇开始。"]
+      "lines": [
+        "古辰镇 · 每一段旅程都从小镇开始。"
+      ]
     },
     "oldaletown.1": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "oldaletown.2": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "oldaletown.3": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "oldaletown.4": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "route103.0": {
       "name": "路边的告示",
-      "lines": ["103 号道路 · 请小心草丛里的野生宝可梦。"]
+      "lines": [
+        "103 号道路 · 请小心草丛里的野生宝可梦。"
+      ]
     },
     "littleroottown_professorbirchslab.0": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.1": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.2": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.3": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.4": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.5": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.6": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.7": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.8": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.9": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.10": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.11": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.12": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.13": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_professorbirchslab.14": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_brendanshouse_2f.0": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_brendanshouse_2f.1": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_brendanshouse_2f.2": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     },
     "littleroottown_brendanshouse_2f.3": {
       "name": "路边的告示",
-      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+      "lines": [
+        "丰缘地区 · 与宝可梦一起旅行。"
+      ]
     }
   },
   "entries": {

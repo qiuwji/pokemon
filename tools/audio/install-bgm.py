@@ -27,11 +27,16 @@ def install(pack, project, check=False):
         raise ValueError('Cue source must match the pack audio filename')
     catalog_path = root / 'plugins/catalog.json'
     catalog = json.loads(catalog_path.read_text())
-    entry = {'id': identifier, 'module': './' + identifier + '.js', 'export': 'bgmPlugin', 'enabled': False}
     previous = next((e for e in catalog['plugins'] if e['id'] == identifier), None)
-    if previous and (previous['module'] != entry['module'] or previous['export'] != entry['export']):
-        raise ValueError('Existing plugin identity belongs to a different module')
-    if not previous:
+    default_enabled = bool(metadata.get('defaultEnabled', False))
+    entry = {'id': identifier, 'module': './' + identifier + '.js', 'export': 'bgmPlugin', 'enabled': default_enabled}
+    if previous:
+        if previous['module'] != entry['module'] or previous['export'] != entry['export']:
+            raise ValueError('Existing plugin identity belongs to a different module')
+        # The pack declares its own default; an already enabled plugin is never turned back off.
+        entry['enabled'] = default_enabled or previous.get('enabled', False)
+        catalog['plugins'][catalog['plugins'].index(previous)] = entry
+    else:
         catalog['plugins'].append(entry)
     changes = {asset: audio, root / 'plugins' / (identifier + '.js'): (pack / 'plugin.js').read_bytes(),
                catalog_path: (json.dumps(catalog, ensure_ascii=False, indent=2) + '\n').encode()}
@@ -49,11 +54,13 @@ def install(pack, project, check=False):
         data['music'] = metadata['cueId']
         maps.append(record['key'])
         changes[path] = (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode()
-    if not maps:
+    if not maps and not metadata.get('selection'):
         raise ValueError('No current map uses this original song; no installation performed')
     changes = {p: b for p, b in changes.items() if not p.exists() or p.read_bytes() != b}
     report = {'maps': maps, 'files': [str(p.relative_to(project.resolve())) for p in changes],
-              'pluginDefault': 'disabled', 'enableQuery': '?plugins=' + identifier, 'check': check}
+              'selection': metadata.get('selection', 'map-music'),
+              'pluginDefault': 'enabled' if entry['enabled'] else 'disabled',
+              'enableQuery': '?plugins=' + identifier, 'check': check}
     if not check:
         before = {p: p.read_bytes() if p.exists() else None for p in changes}
         committed = []

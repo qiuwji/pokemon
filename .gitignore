@@ -6,3 +6,8 @@ __pycache__/
 work/
 
 node_modules/
+
+# 音频渲染/打包中间产物不入库：安装后的成品在 dist/assets/audio/emerald-audio/
+work/audio-build/
+emerald-*-bgm/
+emerald-*-bgm.zip

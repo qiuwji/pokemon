@@ -27,12 +27,13 @@
 | 人物 `import-actor-animations.py` | object_event_anims及现有Acro PNG → Acro动画/帧数 | 可选source、--profile；先导入movement素材，姿态/序列映射来自配置 | 是 |
 | 孵化 `import-egg-assets.py` | egg目录的四张PNG → egg-front/icon/hatch/shard.png | 可选source、--profile；只导入图像，不生成成长规则 | 是 |
 | 音频 `import-audio.py` | direct_sound_samples WAV → audio资源及来源记录 | 可选source、--profile；不是整部原作BGM转换器，记录实际参考修订 | 是 |
+| 剧情 `import-script-text.py` | 各地图scripts.inc的`.string` → 原作对白label参考JSON | 可选source、--maps、--out（相对路径落在--target内）；只读抽取，不写游戏内容，供逐字转写对照 | 否 |
 
-表中19个入口都支持`--target /另一份/dist`；所有入口共用ImportSession，不是只跳过最后一次JSON写入。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
+表中20个入口都支持`--target /另一份/dist`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
 
 ## 推荐顺序
 
-成品音乐另见[音频生产工具](../../tools/audio/README.md)：`tools/audio/render-bgm.py --config ... --renderer ... --output ... --check`预演单曲MIDI/voicegroup转换计划，去掉--check生成可安装包；`install.py --check`预演内容安装。此链不归上表19个采样/内容导入入口，不把完整BGM生产混进import-audio.py。参考只读，使用固定渲染器构建，资源保留原曲身份且loop按PCM帧计算；当前仅完成未白镇代表曲，完整SE/汇编/fanfare政策仍待开发。
+成品音乐另见[音频生产工具](../../tools/audio/README.md)：`tools/audio/render-bgm.py --config ... --renderer ... --output ... --check`预演单曲MIDI/voicegroup转换计划，去掉--check生成可安装包；`install.py --check`预演内容安装。此链不归上表20个采样/内容导入入口，不把完整BGM生产混进import-audio.py。参考只读，使用固定渲染器构建，资源保留原曲身份且loop按PCM帧计算；第一章6首地图曲（MUS_LITTLEROOT/ROUTE101/OLDALE/BIRCH_LAB/POKE_CENTER/POKE_MART）已按midi.cfg各自音量渲染并默认启用安装；战斗曲、剧情切曲与SE/汇编/fanfare政策仍待开发。
 
 A：区域与野外资源
 

@@ -177,7 +177,7 @@
       "flag": "FLAG_HIDE_LITTLEROOT_TOWN_BIRCH"
     }
   ],
-  "music": "emerald-first-bgm:mus_littleroot",
+  "music": "MUS_LITTLEROOT",
   "tileset": "general-petalburg",
   "indoor": false
 }
