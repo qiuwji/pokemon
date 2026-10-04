@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -7,7 +8,6 @@ import {
 import { BreedingService } from "../dist/engine/growth/breeding.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { MoveLearningService } from "../dist/engine/growth/move-learning.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { learnPendingMove } from "../dist/engine/party.js";
@@ -27,9 +27,7 @@ import { createBagInterface } from "../dist/packs/emerald/bag-interface.js";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const db = emeraldDatabase(base);
 function fixture({ friendship, methods = EMERALD_LEARNING_METHODS } = {}) {
   const rng = new Random(123),

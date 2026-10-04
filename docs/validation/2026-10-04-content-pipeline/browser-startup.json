@@ -1,0 +1,15 @@
+{
+  "url": "http://127.0.0.1:5181/",
+  "position": {
+    "map": "LittlerootTown",
+    "x": 10,
+    "y": 10,
+    "dir": "up",
+    "elevation": 3,
+    "previousElevation": 3
+  },
+  "mode": "exploration",
+  "partyCount": 0,
+  "console": [],
+  "observed": "Loading indicator cleared; LittlerootTown and native quest UI present. Read-only structured inspection; no input or animation parity claim."
+}

@@ -1,0 +1,104 @@
+{
+  "name": "蜥蜴王",
+  "dex": 254,
+  "types": [
+    "grass"
+  ],
+  "stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 65,
+    "spe": 120,
+    "spa": 105,
+    "spd": 85
+  },
+  "catchRate": 45,
+  "expYield": 208,
+  "growth": "medium_slow",
+  "femaleRatio": 0.125,
+  "abilities": [
+    "overgrow"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 3,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "pound"
+    },
+    {
+      "level": 1,
+      "move": "leer"
+    },
+    {
+      "level": 1,
+      "move": "absorb"
+    },
+    {
+      "level": 1,
+      "move": "quick_attack"
+    },
+    {
+      "level": 6,
+      "move": "absorb"
+    },
+    {
+      "level": 11,
+      "move": "quick_attack"
+    },
+    {
+      "level": 16,
+      "move": "fury_cutter"
+    },
+    {
+      "level": 17,
+      "move": "pursuit"
+    },
+    {
+      "level": 23,
+      "move": "screech"
+    },
+    {
+      "level": 29,
+      "move": "leaf_blade"
+    },
+    {
+      "level": 35,
+      "move": "agility"
+    },
+    {
+      "level": 43,
+      "move": "slam"
+    },
+    {
+      "level": 51,
+      "move": "detect"
+    },
+    {
+      "level": 59,
+      "move": "false_swipe"
+    }
+  ],
+  "eggGroups": [
+    "monster",
+    "dragon"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "earthquake",
+    "double_team",
+    "aerial_ace",
+    "rest"
+  ]
+}

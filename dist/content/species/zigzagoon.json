@@ -1,0 +1,99 @@
+{
+  "name": "蛇纹熊",
+  "dex": 263,
+  "types": [
+    "normal"
+  ],
+  "stats": {
+    "hp": 38,
+    "atk": 30,
+    "def": 41,
+    "spe": 60,
+    "spa": 30,
+    "spd": 41
+  },
+  "catchRate": 255,
+  "expYield": 60,
+  "growth": "medium_fast",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "pickup"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 1,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 5,
+      "move": "tail_whip"
+    },
+    {
+      "level": 9,
+      "move": "headbutt"
+    },
+    {
+      "level": 13,
+      "move": "sand_attack"
+    },
+    {
+      "level": 17,
+      "move": "odor_sleuth"
+    },
+    {
+      "level": 21,
+      "move": "mud_sport"
+    },
+    {
+      "level": 25,
+      "move": "pin_missile"
+    },
+    {
+      "level": 29,
+      "move": "covet"
+    },
+    {
+      "level": 33,
+      "move": "flail"
+    },
+    {
+      "level": 37,
+      "move": "rest"
+    },
+    {
+      "level": 41,
+      "move": "belly_drum"
+    }
+  ],
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "heldItems": {
+    "rare": "oran_berry"
+  },
+  "eggMoves": [
+    "pursuit"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

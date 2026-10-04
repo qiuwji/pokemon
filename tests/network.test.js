@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   CommandBus,
   CommandError,
@@ -278,9 +278,7 @@ test("WebSocket adapter and loopback are interchangeable; binary input and disco
   );
 });
 function adventure() {
-  const base = JSON.parse(
-      fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-    ),
+  const base = loadContentSync(),
     { host, db, catalog } = createEmeraldPlugins(base, [companionCare]);
   const timeline = new Timeline({ now: () => 0, wait: async () => {} }),
     game = new EmeraldAdventure({

@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { manifest, session } from "../examples/helpers/session.js";
 import { ActorScheduleRegistry } from "../dist/engine/actor-schedules.js";
 import { NPCBehaviorRegistry } from "../dist/engine/npc-behaviors.js";
@@ -10,9 +10,7 @@ import {
   DAY_MS,
 } from "../dist/engine/world-clock.js";
 import { actorDayCycle } from "../dist/plugins/actor-day-cycle.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const position = (map, x = 2, y = 1) => ({
   map: `routine:${map}`,
   x,

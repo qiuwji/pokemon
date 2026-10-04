@@ -1,0 +1,60 @@
+{
+  "runs": [
+    {
+      "script": "emerald",
+      "exitCode": 0,
+      "log": "preview-emerald.log"
+    },
+    {
+      "script": "grid",
+      "exitCode": 0,
+      "log": "preview-grid.log"
+    },
+    {
+      "script": "encounters",
+      "exitCode": 0,
+      "log": "preview-encounters.log"
+    },
+    {
+      "script": "water-encounters",
+      "exitCode": 0,
+      "log": "preview-water-encounters.log"
+    },
+    {
+      "script": "species",
+      "exitCode": 0,
+      "log": "preview-species.log"
+    },
+    {
+      "script": "species-metadata",
+      "exitCode": 0,
+      "log": "preview-species-metadata.log"
+    },
+    {
+      "script": "move-metadata",
+      "exitCode": 0,
+      "log": "preview-move-metadata.log"
+    },
+    {
+      "script": "evolutions",
+      "exitCode": 0,
+      "log": "preview-evolutions.log"
+    },
+    {
+      "script": "movement",
+      "exitCode": 0,
+      "log": "preview-movement.log"
+    },
+    {
+      "script": "actor-animations",
+      "exitCode": 0,
+      "log": "preview-actor-animations.log"
+    },
+    {
+      "script": "detail-sprites",
+      "exitCode": 0,
+      "log": "preview-detail-sprites.log"
+    }
+  ],
+  "outputHashesUnchanged": true
+}

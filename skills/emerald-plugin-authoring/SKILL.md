@@ -266,3 +266,7 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 | [dist/plugins/companion-care.js](../../dist/plugins/companion-care.js) | `rg -n "monster.detail" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
+
+## 浏览器装配入口
+
+受信任本地插件在dist/plugins/catalog.json登记模块/导出名/默认启用及工厂输入；不再向app.js增加逐插件分支。见[内容管线的插件部分](../../docs/development/CONTENT_PIPELINE.md)。新增后验证实际host装配；仅登记文件不证明功能。E2E插件必须显式测试环境启用，不能默认暴露发奖命令。此处没有热卸载或远程沙箱。

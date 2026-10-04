@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { World } from "../dist/engine/world.js";
 import { ElevationPolicy } from "../dist/engine/elevation.js";
 import { GEN3_ELEVATION as height } from "../dist/engine/rules/gen3/elevation.js";
@@ -295,9 +295,7 @@ test("Renderer draws lower actors below the bridge overlay and higher actors abo
   assert.deepEqual(p, before);
 });
 test("Public actor commands permit two bridge planes, restore saved heights and reject invalid plane writes atomically", async () => {
-  const base = JSON.parse(
-      fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-    ),
+  const base = loadContentSync(),
     m = map(Array(20).fill(15), 5);
   m.blocks[15] = 3 << 12;
   m.tileset = base.maps.Route101.tileset;

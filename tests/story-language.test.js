@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { ConditionQueries } from "../dist/engine/condition-queries.js";
 import {
   matchesCondition,
@@ -181,9 +181,7 @@ test("Trainer sight uses facing/range, collision and blockers without moving act
   assert.equal(findWatchingTrainer(context), null);
 });
 test("Data-only plugin story and custom readonly query execute choices through UI and persist progress", async () => {
-  const base = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const base = loadContentSync();
   const plugin = {
     id: "story-demo",
     version: "1.0.0",

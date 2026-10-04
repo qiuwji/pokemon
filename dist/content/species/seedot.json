@@ -1,0 +1,79 @@
+{
+  "name": "橡实果",
+  "dex": 273,
+  "types": [
+    "grass"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 40,
+    "def": 50,
+    "spe": 30,
+    "spa": 30,
+    "spd": 30
+  },
+  "catchRate": 255,
+  "expYield": 74,
+  "growth": "medium_slow",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "chlorophyll",
+    "early_bird"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 1,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "bide"
+    },
+    {
+      "level": 3,
+      "move": "harden"
+    },
+    {
+      "level": 7,
+      "move": "growth"
+    },
+    {
+      "level": 13,
+      "move": "nature_power"
+    },
+    {
+      "level": 21,
+      "move": "synthesis"
+    },
+    {
+      "level": 31,
+      "move": "sunny_day"
+    },
+    {
+      "level": 43,
+      "move": "explosion"
+    }
+  ],
+  "eggGroups": [
+    "field",
+    "grass"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "eggMoves": [
+    "quick_attack",
+    "take_down",
+    "false_swipe"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "double_team",
+    "rest"
+  ]
+}

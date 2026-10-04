@@ -1,0 +1,91 @@
+{
+  "name": "脱壳忍者",
+  "dex": 292,
+  "types": [
+    "bug",
+    "ghost"
+  ],
+  "stats": {
+    "hp": 1,
+    "atk": 90,
+    "def": 45,
+    "spa": 30,
+    "spd": 30,
+    "spe": 40
+  },
+  "evYield": {
+    "hp": 2,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 95,
+  "growth": "erratic",
+  "abilities": [
+    "wonder_guard"
+  ],
+  "femaleRatio": 0,
+  "genderless": true,
+  "eggGroups": [
+    "mineral"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 9,
+      "move": "sand_attack"
+    },
+    {
+      "level": 14,
+      "move": "fury_swipes"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 5,
+      "move": "leech_life"
+    },
+    {
+      "level": 19,
+      "move": "mind_reader"
+    },
+    {
+      "level": 25,
+      "move": "spite"
+    },
+    {
+      "level": 31,
+      "move": "confuse_ray"
+    },
+    {
+      "level": 38,
+      "move": "shadow_ball"
+    },
+    {
+      "level": 45,
+      "move": "grudge"
+    }
+  ],
+  "fixedHP": 1,
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

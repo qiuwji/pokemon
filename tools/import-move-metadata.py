@@ -1,8 +1,9 @@
 """Merge original target and contact metadata without overwriting custom content or assets."""
+from imports.context import ImportSession, arguments
 import argparse, json, re
 from pathlib import Path
-parser=argparse.ArgumentParser(); parser.add_argument('source'); args=parser.parse_args()
-root=Path(__file__).resolve().parents[1]; path=root/'dist/content.json'; data=json.loads(path.read_text())
+parser=argparse.ArgumentParser(); parser.add_argument('source'); args=arguments(parser);session=ImportSession(args,"import-move-metadata.py")
+root=Path(__file__).resolve().parents[1];  data=session.load()
 source=(Path(args.source)/'src/data/battle_moves.h').read_text()
 sound_source=(Path(args.source)/'src/battle_util.c').read_text()
 sound_block=re.search(r'sSoundMovesTable\[\].*?\{(.*?)\}',sound_source,re.S)[1]
@@ -15,5 +16,7 @@ for name, block in re.findall(r'\[MOVE_(\w+)\]\s*=\s*\{(.*?)\}',source,re.S):
     data['moves'][key]['contact']='FLAG_MAKES_CONTACT' in block
     data['moves'][key]['sound']=key in sounds
     data['moves'][key]['flags']=re.search(r'\.flags\s*=\s*([^,]+)',block)[1].strip().split(' | ')
-path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')))
+session.content(data)
 print('Imported targets/contact metadata for', len(data['moves']), 'moves')
+
+session.finish()

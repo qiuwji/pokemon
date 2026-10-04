@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -5,7 +6,6 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { createMonster, Random, damage } from "../dist/engine/model.js";
 import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
@@ -16,9 +16,7 @@ import {
 import { RulePipeline } from "../dist/engine/rule-pipeline.js";
 import { EffectRegistry } from "../dist/engine/effects.js";
 import { EquipmentService } from "../dist/engine/equipment.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function setup({
   ability = "overgrow",
   enemyAbility = "pickup",

@@ -1,0 +1,175 @@
+"""Manifest-based import I/O. Scripts describe changes; this owner checks and commits them."""
+import fnmatch
+import io
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
+PROJECT = Path(__file__).resolve().parents[2]
+SECTIONS = ('maps', 'tilesets', 'species', 'moves', 'actors', 'evolutions', 'typeChart', 'references')
+GRID_FIELDS = {'blocks', 'behavior', 'border'}
+
+
+def arguments(parser):
+    parser.add_argument('--check', action='store_true', help='Compute and report changes without writing any output')
+    parser.add_argument('--target', type=Path, default=PROJECT / 'dist', help='Existing output pack directory')
+    args = parser.parse_args()
+    if hasattr(args, 'source'):
+        args.source = str(Path(args.source).expanduser().resolve())
+    return args
+
+
+def changed_paths(before, after, prefix=''):
+    if before == after:
+        return []
+    if isinstance(after, dict) and (isinstance(before, dict) or before is None):
+        before = before or {}
+        result = []
+        for key in before.keys() | after.keys():
+            path = prefix + ('.' if prefix else '') + key
+            result.extend(changed_paths(before.get(key), after.get(key), path))
+        return result
+    return [prefix]
+
+
+def encoded(value):
+    return (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode()
+
+
+class ImportSession:
+    def __init__(self, args, owner):
+        self.dist = args.target.resolve()
+        self.source = Path(getattr(args, 'source', PROJECT / 'work/pokeemerald')).resolve()
+        self.check = args.check
+        self.owner = owner
+        self.pending = {}
+        self.changes = []
+        self.policy = json.loads((PROJECT / 'tools/imports/ownership.json').read_text())[owner]
+
+    def load(self):
+        self.manifest = json.loads((self.dist / 'content/manifest.json').read_text())
+        if self.manifest.get('version') != 1:
+            raise ValueError('Unsupported content manifest')
+        self.original = {key: {} for key in SECTIONS}
+        self.fragments = {}
+        for entry in self.manifest['files']:
+            path = Path(entry['path'])
+            if path.is_absolute() or '..' in path.parts:
+                raise ValueError('Unsafe content path: ' + str(path))
+            fragment = json.loads((self.dist / 'content' / path).read_text())
+            target = self.original[entry['section']]
+            if 'key' in entry:
+                target = target.setdefault(entry['key'], {})
+            if target.keys() & fragment.keys():
+                raise ValueError('Duplicate content fields: ' + str(path))
+            target.update(fragment)
+            self.fragments[entry['path']] = fragment
+        return json.loads(json.dumps(self.original))
+
+    def _path(self, path):
+        path = Path(path).resolve()
+        try:
+            relative = path.relative_to(PROJECT / 'dist')
+            path = self.dist / relative
+        except ValueError:
+            pass
+        if not path.is_relative_to(self.dist):
+            raise ValueError('Output outside target: ' + str(path))
+        return path
+
+    def text(self, path, text):
+        self.pending[self._path(path)] = text.encode()
+
+    def image(self, image, path):
+        output = io.BytesIO()
+        image.save(output, format='PNG')
+        self.pending[self._path(path)] = output.getvalue()
+
+    def content(self, data):
+        data = json.loads(json.dumps(data))
+        self.changes = sorted(changed_paths(self.original, data))
+        for path in self.changes:
+            if not any(fnmatch.fnmatchcase(path, pattern) for pattern in self.policy['content']):
+                raise ValueError(f'{self.owner} cannot modify {path}')
+        # Validate the complete proposed pack before any content or image is written.
+        validation = subprocess.run(['node', str(PROJECT / 'tools/validate-import.mjs')],
+                                    input=json.dumps(data), text=True, capture_output=True)
+        if validation.returncode:
+            raise ValueError('Invalid imported content: ' + validation.stderr.strip())
+        manifest = json.loads(json.dumps(self.manifest))
+        handled = {key: set() for key in SECTIONS}
+        for entry in manifest['files']:
+            section = entry['section']
+            if 'key' not in entry:
+                value = data[section]
+                handled[section].update(value)
+            else:
+                ident = entry['key']
+                if ident not in data[section]:
+                    raise ValueError('Imports cannot silently remove records: ' + section + '.' + ident)
+                value = data[section][ident]
+                handled[section].add(ident)
+                fields = self.fragments[entry['path']]
+                if section == 'maps':
+                    value = {key: item for key, item in value.items()
+                             if (key in GRID_FIELDS) == entry.get('generated', False)}
+                else:
+                    value = {key: value[key] for key in fields if key in value} | {
+                        key: item for key, item in value.items() if key not in fields}
+            self.pending[self.dist / 'content' / entry['path']] = encoded(value)
+        for section in SECTIONS:
+            for ident in data[section].keys() - handled[section]:
+                if not ident.replace('_', '').replace('-', '').isalnum():
+                    raise ValueError('Unsafe content ID: ' + ident)
+                variants = [('grid', True), ('map', False)] if section == 'maps' else [(None, section == 'tilesets')]
+                for variant, generated in variants:
+                    path = f'{section}/{ident}/{variant}.json' if variant else f'{section}/{ident}.json'
+                    value = data[section][ident]
+                    if variant:
+                        value = {key: item for key, item in value.items() if (key in GRID_FIELDS) == generated}
+                    entry = {'section': section, 'key': ident, 'path': path}
+                    if generated:
+                        entry['generated'] = True
+                    manifest['files'].append(entry)
+                    self.pending[self.dist / 'content' / path] = encoded(value)
+        self.pending[self.dist / 'content/manifest.json'] = encoded(manifest)
+
+    def finish(self):
+        pending = {path: data for path, data in self.pending.items()
+                   if not path.exists() or path.read_bytes() != data}
+        for path in pending:
+            relative = path.relative_to(self.dist).as_posix()
+            if not relative.startswith('content/') and not any(fnmatch.fnmatchcase(relative, rule) for rule in self.policy['outputs']):
+                raise ValueError(f'{self.owner} cannot write {relative}')
+        print(json.dumps({'script': self.owner, 'check': self.check,
+                          'files': [str(path.relative_to(self.dist)) for path in sorted(pending)],
+                          'contentChanges': self.changes}, ensure_ascii=False, indent=2))
+        if self.check or not pending:
+            return
+        # Stage every byte first. Each replacement is atomic; ordinary commit errors
+        # restore previous bytes. A process/machine crash across files is not a DB transaction.
+        originals = {path: path.read_bytes() if path.exists() else None for path in pending}
+        staged = {}
+        replaced = []
+        try:
+            for path, data in pending.items():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                handle, name = tempfile.mkstemp(prefix='.import-', dir=path.parent)
+                staged[path] = Path(name)
+                with os.fdopen(handle, 'wb') as output:
+                    output.write(data)
+            for path, temporary in staged.items():
+                os.replace(temporary, path)
+                replaced.append(path)
+        except BaseException:
+            for path in reversed(replaced):
+                if originals[path] is None:
+                    path.unlink(missing_ok=True)
+                else:
+                    path.write_bytes(originals[path])
+            raise
+        finally:
+            for temporary in staged.values():
+                temporary.unlink(missing_ok=True)

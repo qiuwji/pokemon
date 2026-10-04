@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   MovementInputRegistry,
   MovementInputSession,
@@ -220,9 +220,7 @@ test("Pausing or changing modes clears Acro input and idle pose while preserving
   assert(s.field.busy);
 });
 test("Native Acro frame metadata is validated and sampled without browser, RNG or directional leakage", () => {
-  const db = JSON.parse(
-      fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-    ),
+  const db = loadContentSync(),
     actor = db.actors.BrendanAcroBike;
   validateSpriteAnimations(actor);
   assert.equal(actor.frameCount, 27);

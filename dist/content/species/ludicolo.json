@@ -1,0 +1,67 @@
+{
+  "name": "乐天河童",
+  "dex": 272,
+  "types": [
+    "water",
+    "grass"
+  ],
+  "stats": {
+    "hp": 80,
+    "atk": 70,
+    "def": 70,
+    "spa": 90,
+    "spd": 100,
+    "spe": 70
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 3,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 181,
+  "growth": "medium_slow",
+  "abilities": [
+    "swift_swim",
+    "rain_dish"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1",
+    "grass"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "astonish"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "absorb"
+    },
+    {
+      "level": 1,
+      "move": "nature_power"
+    }
+  ],
+  "unavailableLearnset": [],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "giga_drain",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

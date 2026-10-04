@@ -1,0 +1,93 @@
+{
+  "name": "月亮伊布",
+  "dex": 197,
+  "types": [
+    "dark"
+  ],
+  "stats": {
+    "hp": 95,
+    "atk": 65,
+    "def": 110,
+    "spa": 60,
+    "spd": 130,
+    "spe": 65
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 2,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 197,
+  "growth": "medium_fast",
+  "abilities": [
+    "synchronize"
+  ],
+  "femaleRatio": 0.125,
+  "genderless": false,
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 35,
+  "friendship": 35,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "tail_whip"
+    },
+    {
+      "level": 8,
+      "move": "sand_attack"
+    },
+    {
+      "level": 16,
+      "move": "pursuit"
+    },
+    {
+      "level": 23,
+      "move": "quick_attack"
+    },
+    {
+      "level": 47,
+      "move": "screech"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "helping_hand"
+    },
+    {
+      "level": 30,
+      "move": "confuse_ray"
+    },
+    {
+      "level": 36,
+      "move": "faint_attack"
+    },
+    {
+      "level": 42,
+      "move": "mean_look"
+    },
+    {
+      "level": 52,
+      "move": "moonlight"
+    }
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "taunt",
+    "protect",
+    "rain_dance",
+    "psychic",
+    "double_team",
+    "rest"
+  ]
+}

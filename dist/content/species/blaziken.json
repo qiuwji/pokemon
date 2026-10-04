@@ -1,0 +1,113 @@
+{
+  "name": "火焰鸡",
+  "dex": 257,
+  "types": [
+    "fire",
+    "fighting"
+  ],
+  "stats": {
+    "hp": 80,
+    "atk": 120,
+    "def": 70,
+    "spe": 80,
+    "spa": 110,
+    "spd": 70
+  },
+  "catchRate": 45,
+  "expYield": 209,
+  "growth": "medium_slow",
+  "femaleRatio": 0.125,
+  "abilities": [
+    "blaze"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 3,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "fire_punch"
+    },
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "focus_energy"
+    },
+    {
+      "level": 1,
+      "move": "ember"
+    },
+    {
+      "level": 7,
+      "move": "focus_energy"
+    },
+    {
+      "level": 13,
+      "move": "ember"
+    },
+    {
+      "level": 16,
+      "move": "double_kick"
+    },
+    {
+      "level": 17,
+      "move": "peck"
+    },
+    {
+      "level": 21,
+      "move": "sand_attack"
+    },
+    {
+      "level": 28,
+      "move": "bulk_up"
+    },
+    {
+      "level": 32,
+      "move": "quick_attack"
+    },
+    {
+      "level": 36,
+      "move": "blaze_kick"
+    },
+    {
+      "level": 42,
+      "move": "slash"
+    },
+    {
+      "level": 49,
+      "move": "mirror_move"
+    },
+    {
+      "level": 59,
+      "move": "sky_uppercut"
+    }
+  ],
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "machineMoves": [
+    "roar",
+    "bulk_up",
+    "sunny_day",
+    "protect",
+    "earthquake",
+    "double_team",
+    "flamethrower",
+    "aerial_ace",
+    "rest"
+  ]
+}

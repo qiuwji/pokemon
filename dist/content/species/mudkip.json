@@ -1,0 +1,93 @@
+{
+  "name": "水跃鱼",
+  "dex": 258,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 50,
+    "atk": 70,
+    "def": 50,
+    "spe": 40,
+    "spa": 50,
+    "spd": 50
+  },
+  "catchRate": 45,
+  "expYield": 65,
+  "growth": "medium_slow",
+  "femaleRatio": 0.125,
+  "abilities": [
+    "torrent"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 1,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 6,
+      "move": "mud_slap"
+    },
+    {
+      "level": 10,
+      "move": "water_gun"
+    },
+    {
+      "level": 15,
+      "move": "bide"
+    },
+    {
+      "level": 19,
+      "move": "foresight"
+    },
+    {
+      "level": 24,
+      "move": "mud_sport"
+    },
+    {
+      "level": 28,
+      "move": "take_down"
+    },
+    {
+      "level": 33,
+      "move": "whirlpool"
+    },
+    {
+      "level": 37,
+      "move": "protect"
+    },
+    {
+      "level": 42,
+      "move": "hydro_pump"
+    },
+    {
+      "level": 46,
+      "move": "endeavor"
+    }
+  ],
+  "eggGroups": [
+    "monster",
+    "water_1"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "eggMoves": [],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

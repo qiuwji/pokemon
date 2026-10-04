@@ -1,3 +1,4 @@
+import { loadContentSync } from "./content-io.mjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,7 +13,7 @@ const [constants, moves, content] = await Promise.all([
     "utf8",
   ),
   fs.readFile(path.join(source, "src/data/battle_moves.h"), "utf8"),
-  fs.readFile(path.join(root, "dist/content.json"), "utf8").then(JSON.parse),
+  Promise.resolve(loadContentSync()),
 ]);
 const original = [
   ...moves.matchAll(/\[MOVE_([A-Z0-9_]+)\]\s*=\s*\{([\s\S]*?)\n\s*\},/g),

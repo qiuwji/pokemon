@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -6,7 +7,6 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   ItemActionService,
   validateItemActions,
@@ -26,9 +26,7 @@ import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { BEHAVIOR } from "../dist/engine/terrain.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const action = {
   name: "Paint",
   duration: 100,

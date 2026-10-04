@@ -1,0 +1,102 @@
+{
+  "name": "飞腿郎",
+  "dex": 106,
+  "types": [
+    "fighting"
+  ],
+  "stats": {
+    "hp": 50,
+    "atk": 120,
+    "def": 53,
+    "spa": 35,
+    "spd": 110,
+    "spe": 87
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 2,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 139,
+  "growth": "medium_fast",
+  "abilities": [
+    "limber"
+  ],
+  "femaleRatio": 0,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 25,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "double_kick"
+    },
+    {
+      "level": 21,
+      "move": "focus_energy"
+    },
+    {
+      "level": 36,
+      "move": "foresight"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "revenge"
+    },
+    {
+      "level": 6,
+      "move": "meditate"
+    },
+    {
+      "level": 11,
+      "move": "rolling_kick"
+    },
+    {
+      "level": 16,
+      "move": "jump_kick"
+    },
+    {
+      "level": 20,
+      "move": "brick_break"
+    },
+    {
+      "level": 26,
+      "move": "hi_jump_kick"
+    },
+    {
+      "level": 31,
+      "move": "mind_reader"
+    },
+    {
+      "level": 41,
+      "move": "endure"
+    },
+    {
+      "level": 46,
+      "move": "mega_kick"
+    },
+    {
+      "level": 51,
+      "move": "reversal"
+    }
+  ],
+  "machineMoves": [
+    "bulk_up",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "earthquake",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

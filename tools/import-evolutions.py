@@ -1,8 +1,9 @@
 """Translate original evolution methods into generic conditions, retaining only imported species."""
+from imports.context import ImportSession, arguments
 import argparse,json,re
 from pathlib import Path
-parser=argparse.ArgumentParser();parser.add_argument('source');args=parser.parse_args()
-p=Path(__file__).resolve().parents[1]/'dist/content.json';data=json.loads(p.read_text());source=(Path(args.source)/'src/data/pokemon/evolution.h').read_text();result={}
+parser=argparse.ArgumentParser();parser.add_argument('source');args=arguments(parser);session=ImportSession(args,"import-evolutions.py")
+data=session.load();source=(Path(args.source)/'src/data/pokemon/evolution.h').read_text();result={}
 for name,body in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*\{(.*?)(?=\n\s*\[SPECIES_|\n\};)',source,re.S):
     origin=name.lower()
     if origin not in data['species']:continue
@@ -34,5 +35,7 @@ for name,body in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*\{(.*?)(?=\n\s*\[SPECIES_|
 if not result:raise ValueError('No evolution content parsed')
 data['evolutions']=result
 if 'azurill'in data['species']:data['species']['azurill']['offspring']={'incense':{'item':'sea_incense','without':'marill'}}
-p.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')))
+session.content(data)
 print('Imported',sum(map(len,result.values())),'evolution rules in',len(result),'families')
+
+session.finish()

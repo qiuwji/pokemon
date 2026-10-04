@@ -1,0 +1,15 @@
+✔ Browser and Node assemble the same production pack from readable metadata and generated grids (11.904584ms)
+✔ Content deployment prefixes are preserved and file failures identify the failing fragment (210.232708ms)
+✔ Manifest rejects missing sections, duplicate paths, escapes and unsafe identities (0.498125ms)
+✔ Fragments cannot overwrite existing fields or succeed with an unfilled file (3.683583ms)
+✔ A missing or malformed local fragment cannot silently produce a partial pack (16.254583ms)
+✔ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (758.805083ms)
+✔ Browser scenario-support machine IDs resolve and a granted machine teaches through the production inventory route (44.24175ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1075.324792

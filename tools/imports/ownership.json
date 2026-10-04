@@ -1,0 +1,113 @@
+{
+  "import-emerald.py": {
+    "content": [
+      "maps.*.id",
+      "maps.*.indoor",
+      "maps.*.title",
+      "maps.*.width",
+      "maps.*.height",
+      "maps.*.blocks",
+      "maps.*.behavior",
+      "maps.*.connections",
+      "maps.*.warps",
+      "maps.*.signs",
+      "maps.*.npcs",
+      "maps.*.music",
+      "species.*",
+      "actors.*",
+      "moves.*",
+      "typeChart.*"
+    ],
+    "outputs": [
+      "assets/actor-*.png",
+      "assets/*-front.png",
+      "assets/*-back.png",
+      "assets/*-icon.png",
+      "assets/battle-bg.png"
+    ]
+  },
+  "import-grid.py": {
+    "content": [
+      "maps.*.tileset",
+      "maps.*.border",
+      "tilesets.*",
+      "actors.BrendanRun.*"
+    ],
+    "outputs": [
+      "assets/tiles-*.png",
+      "assets/actor-BrendanRun.png"
+    ]
+  },
+  "import-species.py": {
+    "content": [
+      "species.*"
+    ],
+    "outputs": [
+      "assets/*-front.png",
+      "assets/*-back.png",
+      "assets/*-icon.png"
+    ]
+  },
+  "import-species-metadata.py": {
+    "content": [
+      "species.*.eggGroups",
+      "species.*.eggCycles",
+      "species.*.friendship",
+      "species.*.heldItems*",
+      "species.*.eggMoves",
+      "species.*.machineMoves"
+    ],
+    "outputs": []
+  },
+  "import-encounters.py": {
+    "content": [
+      "maps.*.encounters",
+      "maps.*.encounterRate"
+    ],
+    "outputs": []
+  },
+  "import-water-encounters.py": {
+    "content": [
+      "maps.*.waterEncounters",
+      "maps.*.waterEncounterRate"
+    ],
+    "outputs": []
+  },
+  "import-move-metadata.py": {
+    "content": [
+      "moves.*.target",
+      "moves.*.contact",
+      "moves.*.sound",
+      "moves.*.flags"
+    ],
+    "outputs": []
+  },
+  "import-evolutions.py": {
+    "content": [
+      "evolutions.*",
+      "species.azurill.offspring*"
+    ],
+    "outputs": []
+  },
+  "import-movement.py": {
+    "content": [
+      "actors.*"
+    ],
+    "outputs": [
+      "assets/actor-*.png"
+    ]
+  },
+  "import-actor-animations.py": {
+    "content": [
+      "actors.BrendanAcroBike.animations*",
+      "actors.BrendanAcroBike.frameCount"
+    ],
+    "outputs": []
+  },
+  "import-detail-sprites.py": {
+    "content": [],
+    "outputs": [
+      "packs/emerald/detail-sprite-frames.js"
+    ]
+  }
+}

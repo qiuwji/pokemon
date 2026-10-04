@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
 import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
@@ -15,9 +15,7 @@ import { createTrainerEncounter } from "../dist/engine/trainer-encounters.js";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 function session(plugins = [], records = new Map()) {
   let now = 0;
   const compiled = createEmeraldPlugins(structuredClone(base), plugins);

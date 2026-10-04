@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -8,15 +9,12 @@ import { createItemService } from "../dist/engine/items.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { BattleStrategyRegistry } from "../dist/engine/battle/strategy-registry.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { analyzeCandidate } from "../dist/engine/battle/analysis.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 function fixture(definitions = {}) {
   const { db } = createEmeraldPlugins(base, []),
     rng = new Random(66),

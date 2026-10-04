@@ -1,0 +1,501 @@
+{
+  "abra": [
+    {
+      "id": "abra.evo_level.kadabra",
+      "to": "kadabra",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 16
+        }
+      ]
+    }
+  ],
+  "kadabra": [
+    {
+      "id": "kadabra.evo_trade.alakazam",
+      "to": "alakazam",
+      "trigger": "trade",
+      "conditions": []
+    }
+  ],
+  "tentacool": [
+    {
+      "id": "tentacool.evo_level.tentacruel",
+      "to": "tentacruel",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 30
+        }
+      ]
+    }
+  ],
+  "eevee": [
+    {
+      "id": "eevee.evo_item.jolteon",
+      "to": "jolteon",
+      "trigger": "item",
+      "conditions": [
+        {
+          "type": "item",
+          "id": "thunder_stone"
+        }
+      ]
+    },
+    {
+      "id": "eevee.evo_item.vaporeon",
+      "to": "vaporeon",
+      "trigger": "item",
+      "conditions": [
+        {
+          "type": "item",
+          "id": "water_stone"
+        }
+      ]
+    },
+    {
+      "id": "eevee.evo_item.flareon",
+      "to": "flareon",
+      "trigger": "item",
+      "conditions": [
+        {
+          "type": "item",
+          "id": "fire_stone"
+        }
+      ]
+    },
+    {
+      "id": "eevee.evo_friendship_day.espeon",
+      "to": "espeon",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "friendship",
+          "value": 220
+        },
+        {
+          "type": "time",
+          "period": "day"
+        }
+      ]
+    },
+    {
+      "id": "eevee.evo_friendship_night.umbreon",
+      "to": "umbreon",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "friendship",
+          "value": 220
+        },
+        {
+          "type": "time",
+          "period": "night"
+        }
+      ]
+    }
+  ],
+  "marill": [
+    {
+      "id": "marill.evo_level.azumarill",
+      "to": "azumarill",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 18
+        }
+      ]
+    }
+  ],
+  "tyrogue": [
+    {
+      "id": "tyrogue.evo_level_atk_lt_def.hitmonchan",
+      "to": "hitmonchan",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 20
+        },
+        {
+          "type": "statCompare",
+          "left": "atk",
+          "right": "def",
+          "relation": "lt"
+        }
+      ]
+    },
+    {
+      "id": "tyrogue.evo_level_atk_gt_def.hitmonlee",
+      "to": "hitmonlee",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 20
+        },
+        {
+          "type": "statCompare",
+          "left": "atk",
+          "right": "def",
+          "relation": "gt"
+        }
+      ]
+    },
+    {
+      "id": "tyrogue.evo_level_atk_eq_def.hitmontop",
+      "to": "hitmontop",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 20
+        },
+        {
+          "type": "statCompare",
+          "left": "atk",
+          "right": "def",
+          "relation": "eq"
+        }
+      ]
+    }
+  ],
+  "treecko": [
+    {
+      "id": "treecko.evo_level.grovyle",
+      "to": "grovyle",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 16
+        }
+      ]
+    }
+  ],
+  "grovyle": [
+    {
+      "id": "grovyle.evo_level.sceptile",
+      "to": "sceptile",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 36
+        }
+      ]
+    }
+  ],
+  "torchic": [
+    {
+      "id": "torchic.evo_level.combusken",
+      "to": "combusken",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 16
+        }
+      ]
+    }
+  ],
+  "combusken": [
+    {
+      "id": "combusken.evo_level.blaziken",
+      "to": "blaziken",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 36
+        }
+      ]
+    }
+  ],
+  "mudkip": [
+    {
+      "id": "mudkip.evo_level.marshtomp",
+      "to": "marshtomp",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 16
+        }
+      ]
+    }
+  ],
+  "marshtomp": [
+    {
+      "id": "marshtomp.evo_level.swampert",
+      "to": "swampert",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 36
+        }
+      ]
+    }
+  ],
+  "poochyena": [
+    {
+      "id": "poochyena.evo_level.mightyena",
+      "to": "mightyena",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 18
+        }
+      ]
+    }
+  ],
+  "zigzagoon": [
+    {
+      "id": "zigzagoon.evo_level.linoone",
+      "to": "linoone",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 20
+        }
+      ]
+    }
+  ],
+  "wurmple": [
+    {
+      "id": "wurmple.evo_level_silcoon.silcoon",
+      "to": "silcoon",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 7
+        },
+        {
+          "type": "personality",
+          "min": 0,
+          "max": 4
+        }
+      ]
+    },
+    {
+      "id": "wurmple.evo_level_cascoon.cascoon",
+      "to": "cascoon",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 7
+        },
+        {
+          "type": "personality",
+          "min": 5,
+          "max": 9
+        }
+      ]
+    }
+  ],
+  "silcoon": [
+    {
+      "id": "silcoon.evo_level.beautifly",
+      "to": "beautifly",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 10
+        }
+      ]
+    }
+  ],
+  "cascoon": [
+    {
+      "id": "cascoon.evo_level.dustox",
+      "to": "dustox",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 10
+        }
+      ]
+    }
+  ],
+  "lotad": [
+    {
+      "id": "lotad.evo_level.lombre",
+      "to": "lombre",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 14
+        }
+      ]
+    }
+  ],
+  "lombre": [
+    {
+      "id": "lombre.evo_item.ludicolo",
+      "to": "ludicolo",
+      "trigger": "item",
+      "conditions": [
+        {
+          "type": "item",
+          "id": "water_stone"
+        }
+      ]
+    }
+  ],
+  "seedot": [
+    {
+      "id": "seedot.evo_level.nuzleaf",
+      "to": "nuzleaf",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 14
+        }
+      ]
+    }
+  ],
+  "nuzleaf": [
+    {
+      "id": "nuzleaf.evo_item.shiftry",
+      "to": "shiftry",
+      "trigger": "item",
+      "conditions": [
+        {
+          "type": "item",
+          "id": "leaf_stone"
+        }
+      ]
+    }
+  ],
+  "nincada": [
+    {
+      "id": "nincada.evo_level_ninjask.ninjask",
+      "to": "ninjask",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 20
+        }
+      ],
+      "extra": "shedinja"
+    }
+  ],
+  "taillow": [
+    {
+      "id": "taillow.evo_level.swellow",
+      "to": "swellow",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 22
+        }
+      ]
+    }
+  ],
+  "wingull": [
+    {
+      "id": "wingull.evo_level.pelipper",
+      "to": "pelipper",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 25
+        }
+      ]
+    }
+  ],
+  "feebas": [
+    {
+      "id": "feebas.evo_beauty.milotic",
+      "to": "milotic",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "beauty",
+          "value": 170
+        }
+      ]
+    }
+  ],
+  "azurill": [
+    {
+      "id": "azurill.evo_friendship.marill",
+      "to": "marill",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "friendship",
+          "value": 220
+        }
+      ]
+    }
+  ],
+  "clamperl": [
+    {
+      "id": "clamperl.evo_trade_item.huntail",
+      "to": "huntail",
+      "trigger": "trade",
+      "conditions": [
+        {
+          "type": "heldItem",
+          "id": "deep_sea_tooth"
+        }
+      ],
+      "consumeHeld": true
+    },
+    {
+      "id": "clamperl.evo_trade_item.gorebyss",
+      "to": "gorebyss",
+      "trigger": "trade",
+      "conditions": [
+        {
+          "type": "heldItem",
+          "id": "deep_sea_scale"
+        }
+      ],
+      "consumeHeld": true
+    }
+  ],
+  "ralts": [
+    {
+      "id": "ralts.evo_level.kirlia",
+      "to": "kirlia",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 20
+        }
+      ]
+    }
+  ],
+  "kirlia": [
+    {
+      "id": "kirlia.evo_level.gardevoir",
+      "to": "gardevoir",
+      "trigger": "level",
+      "conditions": [
+        {
+          "type": "level",
+          "value": 30
+        }
+      ]
+    }
+  ]
+}

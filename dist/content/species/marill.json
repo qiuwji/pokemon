@@ -1,0 +1,89 @@
+{
+  "name": "玛力露",
+  "dex": 183,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 70,
+    "atk": 20,
+    "def": 50,
+    "spa": 20,
+    "spd": 50,
+    "spe": 40
+  },
+  "evYield": {
+    "hp": 2,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 190,
+  "expYield": 58,
+  "growth": "fast",
+  "abilities": [
+    "thick_fat",
+    "huge_power"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1",
+    "fairy"
+  ],
+  "eggCycles": 10,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 6,
+      "move": "tail_whip"
+    },
+    {
+      "level": 10,
+      "move": "water_gun"
+    },
+    {
+      "level": 36,
+      "move": "rain_dance"
+    },
+    {
+      "level": 45,
+      "move": "hydro_pump"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 3,
+      "move": "defense_curl"
+    },
+    {
+      "level": 15,
+      "move": "rollout"
+    },
+    {
+      "level": 21,
+      "move": "bubble_beam"
+    },
+    {
+      "level": 28,
+      "move": "double_edge"
+    }
+  ],
+  "eggMoves": [
+    "future_sight",
+    "belly_drum",
+    "supersonic"
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

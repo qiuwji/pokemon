@@ -1,0 +1,103 @@
+{
+  "name": "土狼犬",
+  "dex": 261,
+  "types": [
+    "dark"
+  ],
+  "stats": {
+    "hp": 35,
+    "atk": 55,
+    "def": 35,
+    "spe": 35,
+    "spa": 30,
+    "spd": 30
+  },
+  "catchRate": 255,
+  "expYield": 55,
+  "growth": "medium_fast",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "run_away"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 1,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 5,
+      "move": "howl"
+    },
+    {
+      "level": 9,
+      "move": "sand_attack"
+    },
+    {
+      "level": 13,
+      "move": "bite"
+    },
+    {
+      "level": 17,
+      "move": "odor_sleuth"
+    },
+    {
+      "level": 21,
+      "move": "roar"
+    },
+    {
+      "level": 25,
+      "move": "swagger"
+    },
+    {
+      "level": 29,
+      "move": "scary_face"
+    },
+    {
+      "level": 33,
+      "move": "take_down"
+    },
+    {
+      "level": 37,
+      "move": "taunt"
+    },
+    {
+      "level": 41,
+      "move": "crunch"
+    },
+    {
+      "level": 45,
+      "move": "thief"
+    }
+  ],
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "heldItems": {
+    "rare": "pecha_berry"
+  },
+  "eggMoves": [
+    "astonish",
+    "covet",
+    "leer"
+  ],
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "taunt",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "name": "沙奈朵",
+  "dex": 282,
+  "types": [
+    "psychic"
+  ],
+  "stats": {
+    "hp": 68,
+    "atk": 65,
+    "def": 65,
+    "spa": 125,
+    "spd": 115,
+    "spe": 80
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 3,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 208,
+  "growth": "slow",
+  "abilities": [
+    "synchronize",
+    "trace"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "amorphous"
+  ],
+  "eggCycles": 20,
+  "friendship": 35,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "confusion"
+    },
+    {
+      "level": 1,
+      "move": "double_team"
+    },
+    {
+      "level": 1,
+      "move": "teleport"
+    },
+    {
+      "level": 6,
+      "move": "confusion"
+    },
+    {
+      "level": 11,
+      "move": "double_team"
+    },
+    {
+      "level": 16,
+      "move": "teleport"
+    },
+    {
+      "level": 21,
+      "move": "calm_mind"
+    },
+    {
+      "level": 26,
+      "move": "psychic"
+    },
+    {
+      "level": 33,
+      "move": "imprison"
+    },
+    {
+      "level": 42,
+      "move": "future_sight"
+    },
+    {
+      "level": 51,
+      "move": "hypnosis"
+    },
+    {
+      "level": 60,
+      "move": "dream_eater"
+    }
+  ],
+  "unavailableLearnset": [],
+  "machineMoves": [
+    "calm_mind",
+    "sunny_day",
+    "taunt",
+    "protect",
+    "rain_dance",
+    "psychic",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "name": "凯西",
+  "dex": 63,
+  "types": [
+    "psychic"
+  ],
+  "stats": {
+    "hp": 25,
+    "atk": 20,
+    "def": 15,
+    "spa": 105,
+    "spd": 55,
+    "spe": 90
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 1,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 200,
+  "expYield": 73,
+  "growth": "medium_slow",
+  "abilities": [
+    "synchronize",
+    "inner_focus"
+  ],
+  "femaleRatio": 0.25,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "teleport"
+    }
+  ],
+  "unavailableLearnset": [],
+  "heldItems": {
+    "rare": "twisted_spoon"
+  },
+  "eggMoves": [
+    "fire_punch"
+  ],
+  "machineMoves": [
+    "calm_mind",
+    "sunny_day",
+    "taunt",
+    "protect",
+    "rain_dance",
+    "psychic",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

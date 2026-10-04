@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   WorldClock,
   emptyWorldClock,
@@ -22,9 +22,7 @@ import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 function setupClock(options = {}) {
   let wall = 100000;
   const clock = new WorldClock({

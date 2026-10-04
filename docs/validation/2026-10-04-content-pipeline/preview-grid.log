@@ -1,0 +1,17 @@
+general-petalburg 900 8x8 tiles 656 metatiles
+building-lab 243 8x8 tiles 166 metatiles
+building-brendans_mays_house 302 8x8 tiles 204 metatiles
+building-pokemon_center 356 8x8 tiles 240 metatiles
+building-shop 324 8x8 tiles 297 metatiles
+{
+  "script": "import-grid.py",
+  "check": true,
+  "files": [
+    "assets/actor-BrendanRun.png",
+    "assets/tiles-building-brendans_mays_house.png",
+    "assets/tiles-building-lab.png",
+    "assets/tiles-building-pokemon_center.png",
+    "assets/tiles-general-petalburg.png"
+  ],
+  "contentChanges": []
+}

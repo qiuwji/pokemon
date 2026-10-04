@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -7,7 +8,6 @@ import { createItemService } from "../dist/engine/items.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { teamRoster } from "../dist/engine/battle/roster.js";
@@ -17,9 +17,7 @@ import {
 } from "../dist/packs/emerald/trainers.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { Timeline } from "../dist/engine/timeline.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function setup({ reserve = false, rules = {}, effects = {} } = {}) {
   const rng = new Random(87),
     party = ["mudkip", "treecko", ...(reserve ? ["torchic"] : [])].map((id) =>

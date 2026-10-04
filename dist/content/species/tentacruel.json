@@ -1,0 +1,94 @@
+{
+  "name": "毒刺水母",
+  "dex": 73,
+  "types": [
+    "water",
+    "poison"
+  ],
+  "stats": {
+    "hp": 80,
+    "atk": 70,
+    "def": 65,
+    "spa": 80,
+    "spd": 120,
+    "spe": 100
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 2,
+    "spe": 0
+  },
+  "catchRate": 60,
+  "expYield": 205,
+  "growth": "slow",
+  "abilities": [
+    "clear_body",
+    "liquid_ooze"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_3"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "poison_sting"
+    },
+    {
+      "level": 1,
+      "move": "supersonic"
+    },
+    {
+      "level": 6,
+      "move": "supersonic"
+    },
+    {
+      "level": 47,
+      "move": "screech"
+    },
+    {
+      "level": 55,
+      "move": "hydro_pump"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "constrict"
+    },
+    {
+      "level": 12,
+      "move": "constrict"
+    },
+    {
+      "level": 19,
+      "move": "acid"
+    },
+    {
+      "level": 25,
+      "move": "bubble_beam"
+    },
+    {
+      "level": 30,
+      "move": "wrap"
+    },
+    {
+      "level": 38,
+      "move": "barrier"
+    }
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "giga_drain",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

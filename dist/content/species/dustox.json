@@ -1,0 +1,94 @@
+{
+  "name": "毒粉蛾",
+  "dex": 269,
+  "types": [
+    "bug",
+    "poison"
+  ],
+  "stats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 70,
+    "spa": 50,
+    "spd": 90,
+    "spe": 65
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 3,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 160,
+  "growth": "medium_fast",
+  "abilities": [
+    "shield_dust"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "bug"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "confusion"
+    },
+    {
+      "level": 10,
+      "move": "confusion"
+    },
+    {
+      "level": 17,
+      "move": "protect"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 13,
+      "move": "gust"
+    },
+    {
+      "level": 20,
+      "move": "moonlight"
+    },
+    {
+      "level": 24,
+      "move": "psybeam"
+    },
+    {
+      "level": 27,
+      "move": "whirlwind"
+    },
+    {
+      "level": 31,
+      "move": "light_screen"
+    },
+    {
+      "level": 34,
+      "move": "silver_wind"
+    },
+    {
+      "level": 38,
+      "move": "toxic"
+    }
+  ],
+  "heldItems": {
+    "rare": "silver_powder"
+  },
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "psychic",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

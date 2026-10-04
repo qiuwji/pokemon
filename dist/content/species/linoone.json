@@ -1,0 +1,106 @@
+{
+  "name": "直冲熊",
+  "dex": 264,
+  "types": [
+    "normal"
+  ],
+  "stats": {
+    "hp": 78,
+    "atk": 70,
+    "def": 61,
+    "spe": 100,
+    "spa": 50,
+    "spd": 61
+  },
+  "catchRate": 90,
+  "expYield": 128,
+  "growth": "medium_fast",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "pickup"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 2,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "tail_whip"
+    },
+    {
+      "level": 1,
+      "move": "headbutt"
+    },
+    {
+      "level": 5,
+      "move": "tail_whip"
+    },
+    {
+      "level": 9,
+      "move": "headbutt"
+    },
+    {
+      "level": 13,
+      "move": "sand_attack"
+    },
+    {
+      "level": 17,
+      "move": "odor_sleuth"
+    },
+    {
+      "level": 23,
+      "move": "mud_sport"
+    },
+    {
+      "level": 29,
+      "move": "fury_swipes"
+    },
+    {
+      "level": 35,
+      "move": "covet"
+    },
+    {
+      "level": 41,
+      "move": "slash"
+    },
+    {
+      "level": 47,
+      "move": "rest"
+    },
+    {
+      "level": 53,
+      "move": "belly_drum"
+    }
+  ],
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "heldItems": {
+    "common": "oran_berry",
+    "rare": "sitrus_berry"
+  },
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

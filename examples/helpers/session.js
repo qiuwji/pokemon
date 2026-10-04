@@ -1,6 +1,6 @@
+import { loadContentSync } from "../../tools/content-io.mjs";
 import { SceneDirector } from "../../dist/presentation/scene-director.js";
 import { createEmeraldSceneDefinitions } from "../../dist/packs/emerald/presentation-scenes.js";
-import fs from "node:fs";
 import { createEmeraldPlugins } from "../../dist/packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "../../dist/packs/emerald/extension-ports.js";
 import { EmeraldAdventure } from "../../dist/packs/emerald/adventure.js";
@@ -16,7 +16,7 @@ export function manifest(id, setup, permissions = []) {
 
 /** Test arrangement only: production catalog, services and commands; no browser renderer. */
 export function session(plugins = []) {
-  const base = JSON.parse(fs.readFileSync(new URL("../../dist/content.json", import.meta.url)));
+  const base = loadContentSync();
   const { db, catalog, host } = createEmeraldPlugins(base, plugins);
   let frame = 0;
   const saved = new Map(), dialogs = [];

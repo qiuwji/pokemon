@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
@@ -9,7 +10,6 @@ import { emptyWeather } from "../dist/engine/weather.js";
 import { emptyFacilities } from "../dist/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { Battle } from "../dist/engine/battle.js";
 import { EffectRegistry } from "../dist/engine/effects.js";
@@ -35,9 +35,7 @@ import {
   interaction,
   battleOutcome,
 } from "../dist/packs/emerald/story.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function setup(options = {}) {
   const rng = new Random(123);
   const player = createMonster("mudkip", 5, db, rng);

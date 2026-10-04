@@ -1,0 +1,79 @@
+{
+  "name": "樱花鱼",
+  "dex": 368,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 55,
+    "atk": 84,
+    "def": 105,
+    "spa": 114,
+    "spd": 75,
+    "spe": 52
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 2,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 60,
+  "expYield": 178,
+  "growth": "erratic",
+  "abilities": [
+    "swift_swim"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "whirlpool"
+    },
+    {
+      "level": 8,
+      "move": "confusion"
+    },
+    {
+      "level": 15,
+      "move": "agility"
+    },
+    {
+      "level": 36,
+      "move": "psychic"
+    },
+    {
+      "level": 50,
+      "move": "hydro_pump"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 22,
+      "move": "water_pulse"
+    },
+    {
+      "level": 29,
+      "move": "amnesia"
+    },
+    {
+      "level": 43,
+      "move": "baton_pass"
+    }
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "psychic",
+    "double_team",
+    "rest"
+  ]
+}

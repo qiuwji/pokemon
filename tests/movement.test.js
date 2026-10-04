@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import { createBag } from "./helpers/inventory-fixture.js";
@@ -313,9 +314,7 @@ test("Flight covers the old map before committing, renders departure/arrival and
 });
 
 test("Imported mode frames have valid native grid sizes and fly destinations resolve to unobstructed land", () => {
-  const db = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const db = loadContentSync();
   for (const d of Object.values(TRAVEL_DESTINATIONS)) {
     const m = db.maps[d.position.map],
       i = d.position.y * m.width + d.position.x;
@@ -346,9 +345,7 @@ test("Imported mode frames have valid native grid sizes and fly destinations res
 });
 
 test("Saved movement rejects a bike on water, a surf mode on land and unknown visit destinations", () => {
-  const db = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const db = loadContentSync();
   const state = {
     position: { map: "Route103", x: 22, y: 9, dir: "right" },
     party: [createMonster("mudkip", 10, db, new Random(3))],

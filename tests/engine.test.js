@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
@@ -10,7 +11,6 @@ import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   Random,
   createMonster,
@@ -25,9 +25,7 @@ import {
 import { Battle } from "../dist/engine/battle.js";
 import { World, SaveStore } from "../dist/engine/world.js";
 import { objectsFor, validateSave } from "../dist/packs/emerald/pack.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 const state = () => ({
   weather: emptyWeather(),
   registeredItem: null,

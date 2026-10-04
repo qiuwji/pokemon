@@ -1,0 +1,93 @@
+{
+  "name": "大王燕",
+  "dex": 277,
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "stats": {
+    "hp": 60,
+    "atk": 85,
+    "def": 60,
+    "spa": 50,
+    "spd": 50,
+    "spe": 125
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 2
+  },
+  "catchRate": 45,
+  "expYield": 162,
+  "growth": "medium_slow",
+  "abilities": [
+    "guts"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "flying"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "peck"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "focus_energy"
+    },
+    {
+      "level": 1,
+      "move": "quick_attack"
+    },
+    {
+      "level": 4,
+      "move": "focus_energy"
+    },
+    {
+      "level": 8,
+      "move": "quick_attack"
+    },
+    {
+      "level": 13,
+      "move": "wing_attack"
+    },
+    {
+      "level": 19,
+      "move": "double_team"
+    },
+    {
+      "level": 28,
+      "move": "endeavor"
+    },
+    {
+      "level": 38,
+      "move": "aerial_ace"
+    },
+    {
+      "level": 49,
+      "move": "agility"
+    }
+  ],
+  "unavailableLearnset": [],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

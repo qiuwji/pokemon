@@ -1,0 +1,98 @@
+{
+  "name": "快拳郎",
+  "dex": 107,
+  "types": [
+    "fighting"
+  ],
+  "stats": {
+    "hp": 50,
+    "atk": 105,
+    "def": 79,
+    "spa": 35,
+    "spd": 110,
+    "spe": 76
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 2,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 140,
+  "growth": "medium_fast",
+  "abilities": [
+    "keen_eye"
+  ],
+  "femaleRatio": 0,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 25,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 7,
+      "move": "agility"
+    },
+    {
+      "level": 13,
+      "move": "pursuit"
+    },
+    {
+      "level": 26,
+      "move": "fire_punch"
+    },
+    {
+      "level": 32,
+      "move": "sky_uppercut"
+    },
+    {
+      "level": 44,
+      "move": "detect"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "revenge"
+    },
+    {
+      "level": 1,
+      "move": "comet_punch"
+    },
+    {
+      "level": 20,
+      "move": "mach_punch"
+    },
+    {
+      "level": 26,
+      "move": "thunder_punch"
+    },
+    {
+      "level": 26,
+      "move": "ice_punch"
+    },
+    {
+      "level": 38,
+      "move": "mega_punch"
+    },
+    {
+      "level": 50,
+      "move": "counter"
+    }
+  ],
+  "machineMoves": [
+    "bulk_up",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "earthquake",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

@@ -1,8 +1,6 @@
-import fs from "node:fs";
+import { loadContentSync } from "../../tools/content-io.mjs";
 import { manifest, session } from "../../examples/helpers/session.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 export function encounterFixture({
   permissions = ["actors", "encounters", "movement"],
   decide = () => null,

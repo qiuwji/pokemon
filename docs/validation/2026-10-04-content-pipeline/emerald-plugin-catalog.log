@@ -1,0 +1,21 @@
+✖ Default data catalog composes actual plugins without loading scenario rewards or fixture maps (19.399ms)
+✔ Explicit test environment loads isolated fixture maps through real registration (9.03675ms)
+✔ Additional enabled plugins and explicit disabling use the catalog without editing app.js (8.193125ms)
+✔ Dependency errors fail before importing code; enabled dependencies load in order (0.203541ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 158.494834
+
+✖ failing tests:
+
+test at tests/plugin-loader.test.js:10:1
+✖ Default data catalog composes actual plugins without loading scenario rewards or fixture maps (19.399ms)
+  TypeError: Cannot read properties of undefined (reading 'commands')
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/plugin-loader.test.js:15:25)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)

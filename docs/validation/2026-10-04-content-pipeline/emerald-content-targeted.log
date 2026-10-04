@@ -1,0 +1,50 @@
+✔ Mach input accelerates through original 16/8/4-frame steps and coasts through 4/8/16 on release (3.81025ms)
+✔ Mach standing turns first, moving turns retain acceleration and blocked feedback resets inertia (0.497459ms)
+✔ Motion busy does not advance Mach speed; pause and mode change clear transient input state (0.797459ms)
+✔ Rail-facing constraints prevent illegal idle turns and respect moving deceleration (0.41175ms)
+✔ Control policies must be synchronous and read-only; invalid actions cannot commit memory (0.573583ms)
+✔ Fractional frame motion finishes at its deadline without a floating-point extra frame (0.197667ms)
+✔ Browser maps held and released logical input, preserves field/menu paths and clears on blur (0.228041ms)
+✔ Scene commit occurs at full coverage exactly once; duplicate transition is refused (2.368666ms)
+✔ Transition failures release the input lock (0.151583ms)
+✔ HP interpolation is visual only; a zero-HP actor remains visible until faint finishes (1.293541ms)
+✔ Capture shakes follow domain result; failed capture restores opponent and successful capture seals ball (1.385625ms)
+✔ Combat session rejects repeated actions while presenting the previous turn (0.265041ms)
+✔ A different tiny content pack reuses the field session without Emerald names or DOM (1.492125ms)
+✔ Story commands await dialogue before applying later rewards; unknown commands fail explicitly (0.800959ms)
+✔ Reduced motion removes shaking while preserving HP timing and blackout commit (0.351583ms)
+✔ Content contract rejects missing grid tiles, invalid learnsets and dimensions (6.079916ms)
+✔ Battle events expose semantic animation metadata and immutable health snapshots (9.506125ms)
+✔ Party commands reject invalid use and evolution never revives a fainted member (1.584542ms)
+✔ Pack application rejects out-of-context inventory commands and preserves compatible saves (20.855ms)
+✔ Versioned storage accepts only the current save format without rewriting rejected source (0.269167ms)
+✔ Completed combat returns at dialogue boundary without waiting for the next user confirmation (13.15825ms)
+✔ Missed moves identify the failed hit so presentation does not draw an impact (1.8955ms)
+✖ Browser scenario-support machine IDs resolve and a granted machine teaches through the production inventory route (6.446417ms)
+✔ Upper-layer plugin composes real map travel, device, branch, trainer bench, once reward and a fresh saved session (103.319917ms)
+✔ The author plugin rejects distant device use and can cancel challenge without rewards or battle (23.665625ms)
+✔ Integration content coexists with the journal and its HUD consumes the actual public view shape (21.249709ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 25
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 272.61375
+
+✖ failing tests:
+
+test at tests/startup-plugins.test.js:6:1
+✖ Browser scenario-support machine IDs resolve and a granted machine teaches through the production inventory route (6.446417ms)
+  Error: Invalid extension identifier
+      at qualified (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:43:11)
+      at Object.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/catalog.js:65:21)
+      at Object.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/plugin-host.js:366:28)
+      at setup (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/plugins/e2e-support.js:153:21)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/values.js:189:18)
+      at PluginHost.load (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/extensions/plugin-host.js:597:7)
+      at createEmeraldPlugins (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/extensions.js:113:8)
+      at session (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/helpers/session.js:21:33)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/startup-plugins.test.js:7:30)
+      at Test.runInAsyncScope (node:async_hooks:226:14)

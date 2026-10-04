@@ -1,9 +1,9 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import { Renderer } from "../dist/adapters/canvas-renderer.js";
 import { PresentationRegistry } from "../dist/presentation/effect-registry.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   WeatherRegistry,
   WorldWeather,
@@ -31,9 +31,7 @@ import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { PACK } from "../dist/packs/emerald/pack.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const registry = () =>
   new WeatherRegistry(GEN3_WORLD_WEATHER, {
     defaultWeather: "clear",

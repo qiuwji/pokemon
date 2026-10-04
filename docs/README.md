@@ -9,6 +9,7 @@
 | 项目是什么、怎么启动？ | [README](../README.md) |
 | 本轮做什么、什么留给后续？ | [SCOPE](project/SCOPE.md)、[ENGINE_ROADMAP](../ENGINE_ROADMAP.md) |
 | 已完成什么、还差什么、下一步？ | [STATUS](project/STATUS.md)；必须对照代码和验证证据 |
+| 内容在哪里、导入怎么运行？ | [内容管线](development/CONTENT_PIPELINE.md)、[导入索引](development/IMPORT_SCRIPTS.md) |
 | 怎么分层、该改哪个模块？ | [ARCHITECTURE](../ARCHITECTURE.md)、[作者指南](development/AUTHORING.md) |
 | 新AI怎么接手一个领域？ | [Skill路由](project/SKILLS.md)及[examples](../examples/README.md) |
 | 怎么测试、哪些证明可以复用？ | [测试指南](development/TESTING.md)、[VALIDATION](project/VALIDATION.md) |

@@ -1,0 +1,7 @@
+Imported 37 evolution rules in 29 families
+{
+  "script": "import-evolutions.py",
+  "check": true,
+  "files": [],
+  "contentChanges": []
+}

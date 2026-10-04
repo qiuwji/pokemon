@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   WorldStateService,
   emptyWorldState,
@@ -124,9 +124,7 @@ test("Object spawn/hide and changed positions invalidate autonomous and scene-pi
   n.endScene();
 });
 test("Public world command and story worldPatch persist a created actor and grid update; load uses the same overlay", async () => {
-  const base = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const base = loadContentSync();
   const { db, catalog, host } = createEmeraldPlugins(base, []);
   let raw = null;
   const storage = {

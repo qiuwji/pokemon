@@ -1,16 +1,14 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { BATTLE_RULES } from "../dist/engine/battle-rules.js";
 import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
 import { HELD_ITEM_METADATA } from "../dist/engine/rules/gen3/held-catalog.js";
-const original = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const original = loadContentSync();
 function setup({
   ability = "overgrow",
   enemyAbility = "pickup",

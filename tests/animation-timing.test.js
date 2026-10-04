@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   ANIMATION_EASINGS,
   validateMoveAnimation,
@@ -216,9 +216,7 @@ test("Battle event registration picks specific selectors, rejects duplicates and
   );
 });
 test("A form plugin controls injected-clock choreography while battle snapshots and reduced-motion facts remain intact", async () => {
-  const db = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const db = loadContentSync();
   const host = new PluginHost({ base: db }).load([
     {
       id: "visual",

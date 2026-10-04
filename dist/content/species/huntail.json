@@ -1,0 +1,78 @@
+{
+  "name": "猎斑鱼",
+  "dex": 367,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 55,
+    "atk": 104,
+    "def": 105,
+    "spa": 94,
+    "spd": 75,
+    "spe": 52
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 1,
+    "def": 1,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 60,
+  "expYield": 178,
+  "growth": "erratic",
+  "abilities": [
+    "swift_swim"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "whirlpool"
+    },
+    {
+      "level": 8,
+      "move": "bite"
+    },
+    {
+      "level": 15,
+      "move": "screech"
+    },
+    {
+      "level": 29,
+      "move": "scary_face"
+    },
+    {
+      "level": 36,
+      "move": "crunch"
+    },
+    {
+      "level": 50,
+      "move": "hydro_pump"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 22,
+      "move": "water_pulse"
+    },
+    {
+      "level": 43,
+      "move": "baton_pass"
+    }
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

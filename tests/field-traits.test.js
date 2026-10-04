@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { EncounterService } from "../dist/engine/encounters.js";
 import { PartyTraits } from "../dist/engine/rules/party-traits.js";
 import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
@@ -14,9 +14,7 @@ import {
   damage,
 } from "../dist/engine/model.js";
 import { Battle } from "../dist/engine/battle.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 const creationRng = new Random(1);
 const mon = (species = "treecko", level = 10) =>
   createMonster(species, level, db, creationRng);

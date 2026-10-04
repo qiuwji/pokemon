@@ -1,8 +1,8 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { manualStoryClock as manualClock } from "./helpers/story-clock.js";
 import { inventoryQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { CameraRig } from "../dist/engine/camera.js";
 import {
@@ -22,9 +22,7 @@ import {
   OPEN_BAG,
   RETURN_TO_CENTER,
 } from "../dist/packs/emerald/scenes.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function makeGame(position = { map: "Route101", x: 6, y: 14, dir: "right" }) {
   const clock = manualClock(),
     writes = [],

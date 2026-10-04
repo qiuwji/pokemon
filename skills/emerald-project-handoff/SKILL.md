@@ -39,6 +39,10 @@ description: 接手现有绿宝石网页复刻工程，定位项目、确认范�
 
 更新STATUS和DEVELOPMENT_LOG，必要时更新对应规格/证据；写改动、验证结果、未验证部分、问题、失效条件及下一步。已实现未验证不标已验证。保留持久数据唯一所有权、失败原文保护及分层依赖。交付代码、文档、资源与Skill，不依赖聊天历史。
 
+## 分类内容与导入入口
+
+基础内容从[manifest](../../dist/content/manifest.json)及其分类文件装配，不再读取旧content.json。地图属性与网格分离；Node消费者统一loadContentSync，浏览器统一loadContent。修改原作资料先读[内容管线](../../docs/development/CONTENT_PIPELINE.md)和[导入索引](../../docs/development/IMPORT_SCRIPTS.md)，运行支持的--check再正式导入；不得越过字段所有权。未实现地图/脚本在references中明确分类，不能据此宣称已实现。原始npcs资料仍不等于全部运行时Actor；运行时扩展继续走mapExtensions。
+
 ## 最小完整示例
 
 接口锚点：插件 API 1；此示例与仓库可执行文件同步。当前工程版本查 package.json，完成度查 STATUS，不能据本段推断全作已完成。

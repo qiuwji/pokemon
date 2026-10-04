@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
@@ -10,7 +11,6 @@ import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { BattleRoster, duelRoster } from "../dist/engine/battle/roster.js";
 import { Random, createMonster } from "../dist/engine/model.js";
@@ -24,9 +24,7 @@ import {
   grantReward,
   completeEvent,
 } from "../dist/engine/story.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function setup(overrides = {}) {
   const rng = new Random(1234);
   const party = [

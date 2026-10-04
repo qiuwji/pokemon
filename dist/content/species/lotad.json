@@ -1,0 +1,82 @@
+{
+  "name": "莲叶童子",
+  "dex": 270,
+  "types": [
+    "water",
+    "grass"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 30,
+    "def": 30,
+    "spe": 30,
+    "spa": 40,
+    "spd": 50
+  },
+  "catchRate": 255,
+  "expYield": 74,
+  "growth": "medium_slow",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "swift_swim",
+    "rain_dish"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 1
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "astonish"
+    },
+    {
+      "level": 3,
+      "move": "growl"
+    },
+    {
+      "level": 7,
+      "move": "absorb"
+    },
+    {
+      "level": 13,
+      "move": "nature_power"
+    },
+    {
+      "level": 21,
+      "move": "mist"
+    },
+    {
+      "level": 31,
+      "move": "rain_dance"
+    },
+    {
+      "level": 43,
+      "move": "mega_drain"
+    }
+  ],
+  "eggGroups": [
+    "water_1",
+    "grass"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "eggMoves": [
+    "synthesis",
+    "flail",
+    "water_gun"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "giga_drain",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

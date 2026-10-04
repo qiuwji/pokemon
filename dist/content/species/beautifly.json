@@ -1,0 +1,94 @@
+{
+  "name": "狩猎凤蝶",
+  "dex": 267,
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "stats": {
+    "hp": 60,
+    "atk": 70,
+    "def": 50,
+    "spa": 90,
+    "spd": 50,
+    "spe": 65
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 3,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 161,
+  "growth": "medium_fast",
+  "abilities": [
+    "swarm"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "bug"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "absorb"
+    },
+    {
+      "level": 10,
+      "move": "absorb"
+    },
+    {
+      "level": 24,
+      "move": "mega_drain"
+    },
+    {
+      "level": 38,
+      "move": "giga_drain"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 13,
+      "move": "gust"
+    },
+    {
+      "level": 17,
+      "move": "stun_spore"
+    },
+    {
+      "level": 20,
+      "move": "morning_sun"
+    },
+    {
+      "level": 27,
+      "move": "whirlwind"
+    },
+    {
+      "level": 31,
+      "move": "attract"
+    },
+    {
+      "level": 34,
+      "move": "silver_wind"
+    }
+  ],
+  "heldItems": {
+    "rare": "silver_powder"
+  },
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "psychic",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

@@ -1,16 +1,14 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { Random, createMonster } from "../dist/engine/model.js";
 import {
   createTrainerEncounter,
   TRAINERS,
 } from "../dist/packs/emerald/trainers.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function config() {
   const rng = new Random(1);
   return {

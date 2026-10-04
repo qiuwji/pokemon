@@ -1,4 +1,5 @@
 """Import named Acro timelines from the read-only C reference; leave pixel sheets untouched."""
+from imports.context import ImportSession, arguments
 import argparse
 import json
 import re
@@ -6,11 +7,12 @@ import struct
 from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument('source')
-args = parser.parse_args()
+args = arguments(parser)
+session = ImportSession(args, "import-actor-animations.py")
 root = Path(args.source)
-dist = Path(__file__).resolve().parents[1] / 'dist'
+dist = session.dist
 text = (root / 'src/data/object_events/object_event_anims.h').read_text()
-data = json.loads((dist / 'content.json').read_text())
+data = session.load()
 actor = data['actors']['BrendanAcroBike']
 header = (dist / 'assets/actor-BrendanAcroBike.png').read_bytes()[:24]
 width = struct.unpack('>I', header[16:20])[0]
@@ -38,5 +40,7 @@ actor['animations'] = {
     'wheelie': {'idle': raised, 'move': sequence('MovingWheelie')},
     'hop': {'idle': rise, 'move': rise},
 }
-(dist / 'content.json').write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
+session.content(data)
 print('Imported Acro sprite timelines from C; frames:', actor['frameCount'])
+
+session.finish()

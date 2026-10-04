@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
 import { emptyFieldEffects } from "../dist/engine/field-effects.js";
 import {
@@ -10,16 +11,13 @@ import { ITEMS } from "../dist/packs/emerald/items.js";
 import { emptyWeather } from "../dist/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { validCreatureValues } from "../dist/engine/creature-contract.js";
 import { createItemService, ItemService } from "../dist/engine/items.js";
 import { EffectRegistry } from "../dist/engine/effects.js";
 import { CREATION_POLICY } from "../dist/engine/rule-policy.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 const state = () => ({
   weather: emptyWeather(),
   registeredItem: null,

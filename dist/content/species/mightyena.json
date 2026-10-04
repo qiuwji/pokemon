@@ -1,0 +1,110 @@
+{
+  "name": "大狼犬",
+  "dex": 262,
+  "types": [
+    "dark"
+  ],
+  "stats": {
+    "hp": 70,
+    "atk": 90,
+    "def": 70,
+    "spe": 70,
+    "spa": 60,
+    "spd": 60
+  },
+  "catchRate": 127,
+  "expYield": 128,
+  "growth": "medium_fast",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "intimidate"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 2,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "howl"
+    },
+    {
+      "level": 1,
+      "move": "sand_attack"
+    },
+    {
+      "level": 1,
+      "move": "bite"
+    },
+    {
+      "level": 5,
+      "move": "howl"
+    },
+    {
+      "level": 9,
+      "move": "sand_attack"
+    },
+    {
+      "level": 13,
+      "move": "bite"
+    },
+    {
+      "level": 17,
+      "move": "odor_sleuth"
+    },
+    {
+      "level": 22,
+      "move": "roar"
+    },
+    {
+      "level": 27,
+      "move": "swagger"
+    },
+    {
+      "level": 32,
+      "move": "scary_face"
+    },
+    {
+      "level": 37,
+      "move": "take_down"
+    },
+    {
+      "level": 42,
+      "move": "taunt"
+    },
+    {
+      "level": 47,
+      "move": "crunch"
+    },
+    {
+      "level": 52,
+      "move": "thief"
+    }
+  ],
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "heldItems": {
+    "rare": "pecha_berry"
+  },
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "taunt",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

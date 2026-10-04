@@ -1,0 +1,88 @@
+{
+  "name": "傲骨燕",
+  "dex": 276,
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 55,
+    "def": 30,
+    "spe": 85,
+    "spa": 30,
+    "spd": 30
+  },
+  "catchRate": 200,
+  "expYield": 59,
+  "growth": "medium_slow",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "guts"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 1,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "peck"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 4,
+      "move": "focus_energy"
+    },
+    {
+      "level": 8,
+      "move": "quick_attack"
+    },
+    {
+      "level": 13,
+      "move": "wing_attack"
+    },
+    {
+      "level": 19,
+      "move": "double_team"
+    },
+    {
+      "level": 26,
+      "move": "endeavor"
+    },
+    {
+      "level": 34,
+      "move": "aerial_ace"
+    },
+    {
+      "level": 43,
+      "move": "agility"
+    }
+  ],
+  "eggGroups": [
+    "flying"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "eggMoves": [
+    "pursuit",
+    "supersonic",
+    "mirror_move"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "name": "长鼻叶",
+  "dex": 274,
+  "types": [
+    "grass",
+    "dark"
+  ],
+  "stats": {
+    "hp": 70,
+    "atk": 70,
+    "def": 40,
+    "spa": 60,
+    "spd": 40,
+    "spe": 60
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 2,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 120,
+  "expYield": 141,
+  "growth": "medium_slow",
+  "abilities": [
+    "chlorophyll",
+    "early_bird"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "field",
+    "grass"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "pound"
+    },
+    {
+      "level": 3,
+      "move": "harden"
+    },
+    {
+      "level": 7,
+      "move": "growth"
+    },
+    {
+      "level": 13,
+      "move": "nature_power"
+    },
+    {
+      "level": 43,
+      "move": "swagger"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 19,
+      "move": "fake_out"
+    },
+    {
+      "level": 25,
+      "move": "torment"
+    },
+    {
+      "level": 31,
+      "move": "faint_attack"
+    },
+    {
+      "level": 37,
+      "move": "razor_wind"
+    },
+    {
+      "level": 49,
+      "move": "extrasensory"
+    }
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { WorldStateService } from "../dist/engine/world-state.js";
 import { World } from "../dist/engine/world.js";
 import {
@@ -16,9 +16,7 @@ import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { Renderer } from "../dist/adapters/canvas-renderer.js";
 const frames = (n) => (n * 1000) / 60;
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 function fixture(style = "fortree-bridge", { lowerOnEntry = false } = {}) {
   let now = 0,
     saved = null;

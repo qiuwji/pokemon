@@ -1,0 +1,103 @@
+{
+  "name": "勇基拉",
+  "dex": 64,
+  "types": [
+    "psychic"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 35,
+    "def": 30,
+    "spa": 120,
+    "spd": 70,
+    "spe": 105
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 2,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 100,
+  "expYield": 145,
+  "growth": "medium_slow",
+  "abilities": [
+    "synchronize",
+    "inner_focus"
+  ],
+  "femaleRatio": 0.25,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "teleport"
+    },
+    {
+      "level": 1,
+      "move": "confusion"
+    },
+    {
+      "level": 16,
+      "move": "confusion"
+    },
+    {
+      "level": 30,
+      "move": "future_sight"
+    },
+    {
+      "level": 36,
+      "move": "psychic"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "kinesis"
+    },
+    {
+      "level": 18,
+      "move": "disable"
+    },
+    {
+      "level": 21,
+      "move": "psybeam"
+    },
+    {
+      "level": 23,
+      "move": "reflect"
+    },
+    {
+      "level": 25,
+      "move": "recover"
+    },
+    {
+      "level": 33,
+      "move": "role_play"
+    },
+    {
+      "level": 43,
+      "move": "trick"
+    }
+  ],
+  "heldItems": {
+    "rare": "twisted_spoon"
+  },
+  "machineMoves": [
+    "calm_mind",
+    "sunny_day",
+    "taunt",
+    "protect",
+    "rain_dance",
+    "psychic",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

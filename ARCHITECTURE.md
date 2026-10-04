@@ -39,7 +39,9 @@ dist/
     extensions.js                通用插件合同的本作校验/默认注册
     interface.js / ui-shell.js   页面装配与共用交互基础设施
     *-interface.js               独立页面，只查询和提交命令
-  content.json                   基础地图、图集、物种与招式数据
+  content/manifest.json          分类数据装配清单；地图属性/网格分离
+  fixtures/                      显式测试环境的独立地图，不进入正式清单
+  plugins/catalog.json           受信任插件装配配置，不在app逐个接线
   assets/                        共享图块、精灵、字体、真实音频与来源记录
 ```
 
@@ -124,3 +126,5 @@ AppearanceRegistry校验配方及资源，AppearanceSelections拥有按身份保
 SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与SpriteCanvas分开；UI shell统一登记页面资源并在替换/关闭/卸载时释放。绿宝石包只提供默认素材布局及时序，插件覆盖绑定无需改详情页。见[帧片段合同](docs/engine/presentation/SPRITE_CLIPS.md)。
 
 内嵌Canvas使用声明式visual引用和严格payload：引擎只校验，VisualTimeline拥有纯时间取样，VisualCanvas拥有绘制隔离，LayoutDOM拥有作用域内实例，ExtensionDOM沿宿主统一帧驱动。文档隐藏事件暂停时间，即使后台不再提供帧也不会计入循环；关闭/替换/构建失败释放，HUD生命周期独立于模态页面。点击坐标交给既有action事务，不从绘制提交领域行为。实际合同见[UI_CONTRACT](docs/engine/presentation/UI_CONTRACT.md)。
+
+内容加载、文件归属和导入候选提交见[内容管线](docs/development/CONTENT_PIPELINE.md)；导入工具入口见[脚本索引](docs/development/IMPORT_SCRIPTS.md)。清单纯装配合同与浏览器/Node/Python I/O分离；不保留旧聚合文件读取分支。

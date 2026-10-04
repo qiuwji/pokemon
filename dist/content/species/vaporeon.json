@@ -1,0 +1,92 @@
+{
+  "name": "水伊布",
+  "dex": 134,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 130,
+    "atk": 65,
+    "def": 60,
+    "spa": 110,
+    "spd": 95,
+    "spe": 65
+  },
+  "evYield": {
+    "hp": 2,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 196,
+  "growth": "medium_fast",
+  "abilities": [
+    "water_absorb"
+  ],
+  "femaleRatio": 0.125,
+  "genderless": false,
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 35,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "tail_whip"
+    },
+    {
+      "level": 8,
+      "move": "sand_attack"
+    },
+    {
+      "level": 16,
+      "move": "water_gun"
+    },
+    {
+      "level": 23,
+      "move": "quick_attack"
+    },
+    {
+      "level": 30,
+      "move": "bite"
+    },
+    {
+      "level": 52,
+      "move": "hydro_pump"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "helping_hand"
+    },
+    {
+      "level": 36,
+      "move": "aurora_beam"
+    },
+    {
+      "level": 42,
+      "move": "haze"
+    },
+    {
+      "level": 47,
+      "move": "acid_armor"
+    }
+  ],
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

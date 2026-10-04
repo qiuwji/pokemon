@@ -6,7 +6,7 @@
 
 | 任务 | 代码位置 | 修改边界 |
 | --- | --- | --- |
-| 原作地图、事件、训练家、物种、道具与默认政策 | dist/packs/emerald的对应定义文件、dist/content.json、dist/assets | 使用已有领域注册；原作剧情集合当前入口story.js，不往world或battle里加地图ID分支 |
+| 原作地图、事件、训练家、物种、道具与默认政策 | dist/packs/emerald的对应定义文件、dist/content/manifest.json及对应分类文件、dist/assets | 使用已有领域注册；原作剧情集合当前入口story.js，不往world或battle里加地图ID分支 |
 | 独立玩法/现代机制/新页面 | dist/plugins/中的独立模块 | 导出manifest，setup注册；通过查询/命令/intent运行；禁止导入adventure、应用服务或抓window.game |
 | 新资源/导出流程 | dist/assets及tools | 以grid/metatile组织地图；保留来源；不能写回work/pokeemerald或sources |
 | 必要的新通用规则/生命周期 | dist/engine和明确的应用所有者 | 先写缺口合同及验收例，作为框架任务；核心不依赖内容包、DOM、Canvas |
@@ -54,8 +54,8 @@
 | `npm run check:docs` | 本地文档链接及Skill代码片段同步；不执行游戏规则 |
 | `npm run check` | 内容启动引用、公开类型和dist语法；阶段合并/收口或相关合同改变时执行 |
 | `node tools/audit-mechanisms.mjs work/pokeemerald` | 读取固定C参考，更新docs/engine/battle下生成审计；登记/无引用不等于规则已验证 |
-| `python3 tools/import-emerald.py work/pokeemerald` | 需要Pillow，会重写content.json及资源，并调用import-grid；仅包含脚本列出的地图/物种，不是完整剧情导入器，不能直接覆盖当前内容 |
-| `python3 tools/import-encounters.py work/pokeemerald` | 写content.json遭遇及该脚本内进化表；先读覆盖范围，避免丢失手工扩展 |
+| `python3 tools/import-emerald.py work/pokeemerald` | 先加--check预演；通过内容清单及字段所有权合并选定内容，不自动调用grid；详见[导入索引](IMPORT_SCRIPTS.md) |
+| `python3 tools/import-encounters.py work/pokeemerald` | 先加--check预演；只写地图陆地遭遇字段，禁止触碰进化；详见[内容管线](CONTENT_PIPELINE.md) |
 | `python3 tools/import-audio.py work/pokeemerald` | 复制选定真实WAV并记录来源hash，写dist/assets/audio；不是整部原作BGM自动转换 |
 
 其他导入工具按`tools/`实际参数解析和输出路径读取，不根据名字猜用法。宽导入器需要在临时**项目副本**中生成、比较和挑选本次数据，不在参考目录创建输出，也不对主树整包覆盖。不需要重新下载已提供资料；缺参考时按[项目导航](../../skills/emerald-project-handoff/references/project-map.md)的固定修订获取。

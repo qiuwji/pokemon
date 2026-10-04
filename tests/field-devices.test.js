@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   FieldDeviceCatalog,
   FieldDevices,
@@ -20,9 +20,7 @@ import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { FieldActionDirector } from "../dist/presentation/field-action-director.js";
 import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
 import { createMonster } from "../dist/engine/model.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const destination = { map: "Landing", x: 1, y: 1, dir: "down" };
 function engine(
   policy,

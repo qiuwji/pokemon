@@ -1,0 +1,67 @@
+{
+  "name": "狡猾天狗",
+  "dex": 275,
+  "types": [
+    "grass",
+    "dark"
+  ],
+  "stats": {
+    "hp": 90,
+    "atk": 100,
+    "def": 60,
+    "spa": 90,
+    "spd": 60,
+    "spe": 80
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 3,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 181,
+  "growth": "medium_slow",
+  "abilities": [
+    "chlorophyll",
+    "early_bird"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "field",
+    "grass"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "pound"
+    },
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 1,
+      "move": "growth"
+    },
+    {
+      "level": 1,
+      "move": "nature_power"
+    }
+  ],
+  "unavailableLearnset": [],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

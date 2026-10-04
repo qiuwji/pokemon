@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown/map.json",
+      "key": "LittlerootTown"
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown/grid.json",
+      "key": "LittlerootTown",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/Route101/map.json",
+      "key": "Route101"
+    },
+    {
+      "section": "maps",
+      "path": "maps/Route101/grid.json",
+      "key": "Route101",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/OldaleTown/map.json",
+      "key": "OldaleTown"
+    },
+    {
+      "section": "maps",
+      "path": "maps/OldaleTown/grid.json",
+      "key": "OldaleTown",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/Route103/map.json",
+      "key": "Route103"
+    },
+    {
+      "section": "maps",
+      "path": "maps/Route103/grid.json",
+      "key": "Route103",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown_ProfessorBirchsLab/map.json",
+      "key": "LittlerootTown_ProfessorBirchsLab"
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown_ProfessorBirchsLab/grid.json",
+      "key": "LittlerootTown_ProfessorBirchsLab",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown_BrendansHouse_1F/map.json",
+      "key": "LittlerootTown_BrendansHouse_1F"
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown_BrendansHouse_1F/grid.json",
+      "key": "LittlerootTown_BrendansHouse_1F",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown_BrendansHouse_2F/map.json",
+      "key": "LittlerootTown_BrendansHouse_2F"
+    },
+    {
+      "section": "maps",
+      "path": "maps/LittlerootTown_BrendansHouse_2F/grid.json",
+      "key": "LittlerootTown_BrendansHouse_2F",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/OldaleTown_PokemonCenter_1F/map.json",
+      "key": "OldaleTown_PokemonCenter_1F"
+    },
+    {
+      "section": "maps",
+      "path": "maps/OldaleTown_PokemonCenter_1F/grid.json",
+      "key": "OldaleTown_PokemonCenter_1F",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "path": "maps/OldaleTown_Mart/map.json",
+      "key": "OldaleTown_Mart"
+    },
+    {
+      "section": "maps",
+      "path": "maps/OldaleTown_Mart/grid.json",
+      "key": "OldaleTown_Mart",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "path": "tilesets/general-petalburg.json",
+      "key": "general-petalburg",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "path": "tilesets/building-lab.json",
+      "key": "building-lab",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "path": "tilesets/building-brendans_mays_house.json",
+      "key": "building-brendans_mays_house",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "path": "tilesets/building-pokemon_center.json",
+      "key": "building-pokemon_center",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "path": "tilesets/building-shop.json",
+      "key": "building-shop",
+      "generated": true
+    },
+    {
+      "section": "species",
+      "path": "species/treecko.json",
+      "key": "treecko"
+    },
+    {
+      "section": "species",
+      "path": "species/grovyle.json",
+      "key": "grovyle"
+    },
+    {
+      "section": "species",
+      "path": "species/sceptile.json",
+      "key": "sceptile"
+    },
+    {
+      "section": "species",
+      "path": "species/torchic.json",
+      "key": "torchic"
+    },
+    {
+      "section": "species",
+      "path": "species/combusken.json",
+      "key": "combusken"
+    },
+    {
+      "section": "species",
+      "path": "species/blaziken.json",
+      "key": "blaziken"
+    },
+    {
+      "section": "species",
+      "path": "species/mudkip.json",
+      "key": "mudkip"
+    },
+    {
+      "section": "species",
+      "path": "species/marshtomp.json",
+      "key": "marshtomp"
+    },
+    {
+      "section": "species",
+      "path": "species/swampert.json",
+      "key": "swampert"
+    },
+    {
+      "section": "species",
+      "path": "species/poochyena.json",
+      "key": "poochyena"
+    },
+    {
+      "section": "species",
+      "path": "species/mightyena.json",
+      "key": "mightyena"
+    },
+    {
+      "section": "species",
+      "path": "species/zigzagoon.json",
+      "key": "zigzagoon"
+    },
+    {
+      "section": "species",
+      "path": "species/linoone.json",
+      "key": "linoone"
+    },
+    {
+      "section": "species",
+      "path": "species/wurmple.json",
+      "key": "wurmple"
+    },
+    {
+      "section": "species",
+      "path": "species/wingull.json",
+      "key": "wingull"
+    },
+    {
+      "section": "species",
+      "path": "species/pelipper.json",
+      "key": "pelipper"
+    },
+    {
+      "section": "species",
+      "path": "species/lotad.json",
+      "key": "lotad"
+    },
+    {
+      "section": "species",
+      "path": "species/seedot.json",
+      "key": "seedot"
+    },
+    {
+      "section": "species",
+      "path": "species/ralts.json",
+      "key": "ralts"
+    },
+    {
+      "section": "species",
+      "path": "species/taillow.json",
+      "key": "taillow"
+    },
+    {
+      "section": "species",
+      "path": "species/tentacool.json",
+      "key": "tentacool"
+    },
+    {
+      "section": "species",
+      "path": "species/nincada.json",
+      "key": "nincada"
+    },
+    {
+      "section": "species",
+      "path": "species/ninjask.json",
+      "key": "ninjask"
+    },
+    {
+      "section": "species",
+      "path": "species/shedinja.json",
+      "key": "shedinja"
+    },
+    {
+      "section": "species",
+      "path": "species/silcoon.json",
+      "key": "silcoon"
+    },
+    {
+      "section": "species",
+      "path": "species/beautifly.json",
+      "key": "beautifly"
+    },
+    {
+      "section": "species",
+      "path": "species/cascoon.json",
+      "key": "cascoon"
+    },
+    {
+      "section": "species",
+      "path": "species/dustox.json",
+      "key": "dustox"
+    },
+    {
+      "section": "species",
+      "path": "species/eevee.json",
+      "key": "eevee"
+    },
+    {
+      "section": "species",
+      "path": "species/vaporeon.json",
+      "key": "vaporeon"
+    },
+    {
+      "section": "species",
+      "path": "species/jolteon.json",
+      "key": "jolteon"
+    },
+    {
+      "section": "species",
+      "path": "species/flareon.json",
+      "key": "flareon"
+    },
+    {
+      "section": "species",
+      "path": "species/espeon.json",
+      "key": "espeon"
+    },
+    {
+      "section": "species",
+      "path": "species/umbreon.json",
+      "key": "umbreon"
+    },
+    {
+      "section": "species",
+      "path": "species/clamperl.json",
+      "key": "clamperl"
+    },
+    {
+      "section": "species",
+      "path": "species/huntail.json",
+      "key": "huntail"
+    },
+    {
+      "section": "species",
+      "path": "species/gorebyss.json",
+      "key": "gorebyss"
+    },
+    {
+      "section": "species",
+      "path": "species/tyrogue.json",
+      "key": "tyrogue"
+    },
+    {
+      "section": "species",
+      "path": "species/hitmonlee.json",
+      "key": "hitmonlee"
+    },
+    {
+      "section": "species",
+      "path": "species/hitmonchan.json",
+      "key": "hitmonchan"
+    },
+    {
+      "section": "species",
+      "path": "species/hitmontop.json",
+      "key": "hitmontop"
+    },
+    {
+      "section": "species",
+      "path": "species/feebas.json",
+      "key": "feebas"
+    },
+    {
+      "section": "species",
+      "path": "species/milotic.json",
+      "key": "milotic"
+    },
+    {
+      "section": "species",
+      "path": "species/ditto.json",
+      "key": "ditto"
+    },
+    {
+      "section": "species",
+      "path": "species/azurill.json",
+      "key": "azurill"
+    },
+    {
+      "section": "species",
+      "path": "species/marill.json",
+      "key": "marill"
+    },
+    {
+      "section": "species",
+      "path": "species/azumarill.json",
+      "key": "azumarill"
+    },
+    {
+      "section": "species",
+      "path": "species/abra.json",
+      "key": "abra"
+    },
+    {
+      "section": "species",
+      "path": "species/kadabra.json",
+      "key": "kadabra"
+    },
+    {
+      "section": "species",
+      "path": "species/alakazam.json",
+      "key": "alakazam"
+    },
+    {
+      "section": "species",
+      "path": "species/lombre.json",
+      "key": "lombre"
+    },
+    {
+      "section": "species",
+      "path": "species/ludicolo.json",
+      "key": "ludicolo"
+    },
+    {
+      "section": "species",
+      "path": "species/nuzleaf.json",
+      "key": "nuzleaf"
+    },
+    {
+      "section": "species",
+      "path": "species/shiftry.json",
+      "key": "shiftry"
+    },
+    {
+      "section": "species",
+      "path": "species/kirlia.json",
+      "key": "kirlia"
+    },
+    {
+      "section": "species",
+      "path": "species/gardevoir.json",
+      "key": "gardevoir"
+    },
+    {
+      "section": "species",
+      "path": "species/swellow.json",
+      "key": "swellow"
+    },
+    {
+      "section": "species",
+      "path": "species/tentacruel.json",
+      "key": "tentacruel"
+    },
+    {
+      "section": "actors",
+      "path": "actors.json"
+    },
+    {
+      "section": "moves",
+      "path": "moves.json"
+    },
+    {
+      "section": "evolutions",
+      "path": "evolutions.json"
+    },
+    {
+      "section": "typeChart",
+      "path": "type-chart.json",
+      "generated": true
+    },
+    {
+      "section": "references",
+      "path": "references.json"
+    }
+  ]
+}

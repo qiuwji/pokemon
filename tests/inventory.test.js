@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { InventoryRegistry } from "../dist/engine/inventory-registry.js";
 import { InventoryService, emptyInventory } from "../dist/engine/inventory.js";
 import { GEN3_INVENTORY_POCKETS } from "../dist/engine/rules/gen3/inventory.js";
@@ -270,9 +270,7 @@ test("Native normal items can exceed 99 across slots while berries and machines 
 });
 
 test("Plugins register custom pockets and items through the real catalog validator and reuse the same slot service", () => {
-  const db = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const db = loadContentSync();
   const plugin = {
     id: "garden",
     apiVersion: 1,

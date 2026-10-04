@@ -14,7 +14,7 @@
 
 `tools/import-machine-learning.py` 只读参考，生成 `rules/gen3/machine-learning.js`：58 机器、411 个参考表条目（含原作特殊/旧字母占位，不等于 411 个可玩物种），保存来源与修订。`tools/import-item-metadata.py` 导入 309 个原作道具及 pocket/holdable；本包加蓝色能量方块，当前目录 **310 道具**。目录不是主动使用覆盖率。
 
-`packs/emerald/database.js` 是浏览器/插件与无浏览器会话共用的数据装配：合并 354 招式；原作物种的 machineMoves 使用完整参考表。基础 content.json 的旧机器列表受 87 招式切片限制，不能作为完整兼容资格。新插件物种自行声明 machineMoves；引用/重复项启动时校验。该字段也供既有遗传服务使用，规则来源只有一份。
+`packs/emerald/database.js` 是浏览器/插件与无浏览器会话共用的数据装配：合并 354 招式；原作物种的 machineMoves 使用完整参考表。基础 content/species 中的切片机器列表受 87 招式切片限制，不能作为完整兼容资格。新插件物种自行声明 machineMoves；引用/重复项启动时校验。该字段也供既有遗传服务使用，规则来源只有一份。
 
 ## 职责与提交
 

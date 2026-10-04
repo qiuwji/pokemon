@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
@@ -13,9 +13,7 @@ import { Battle } from "../dist/engine/battle.js";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const plugin = (setup) => ({
   id: "trainer-pack",
   apiVersion: 1,

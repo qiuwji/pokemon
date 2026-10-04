@@ -1,0 +1,92 @@
+{
+  "name": "火稚鸡",
+  "dex": 255,
+  "types": [
+    "fire"
+  ],
+  "stats": {
+    "hp": 45,
+    "atk": 60,
+    "def": 40,
+    "spe": 45,
+    "spa": 70,
+    "spd": 50
+  },
+  "catchRate": 45,
+  "expYield": 65,
+  "growth": "medium_slow",
+  "femaleRatio": 0.125,
+  "abilities": [
+    "blaze"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 0,
+    "spa": 1,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 7,
+      "move": "focus_energy"
+    },
+    {
+      "level": 10,
+      "move": "ember"
+    },
+    {
+      "level": 16,
+      "move": "peck"
+    },
+    {
+      "level": 19,
+      "move": "sand_attack"
+    },
+    {
+      "level": 25,
+      "move": "fire_spin"
+    },
+    {
+      "level": 28,
+      "move": "quick_attack"
+    },
+    {
+      "level": 34,
+      "move": "slash"
+    },
+    {
+      "level": 37,
+      "move": "mirror_move"
+    },
+    {
+      "level": 43,
+      "move": "flamethrower"
+    }
+  ],
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "eggMoves": [
+    "swagger"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "double_team",
+    "flamethrower",
+    "aerial_ace",
+    "rest"
+  ]
+}

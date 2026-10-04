@@ -1,0 +1,94 @@
+{
+  "name": "战舞郎",
+  "dex": 237,
+  "types": [
+    "fighting"
+  ],
+  "stats": {
+    "hp": 50,
+    "atk": 95,
+    "def": 95,
+    "spa": 35,
+    "spd": 110,
+    "spe": 70
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 2,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 138,
+  "growth": "medium_fast",
+  "abilities": [
+    "intimidate"
+  ],
+  "femaleRatio": 0,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 25,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 7,
+      "move": "focus_energy"
+    },
+    {
+      "level": 13,
+      "move": "pursuit"
+    },
+    {
+      "level": 19,
+      "move": "quick_attack"
+    },
+    {
+      "level": 37,
+      "move": "agility"
+    },
+    {
+      "level": 43,
+      "move": "detect"
+    },
+    {
+      "level": 49,
+      "move": "endeavor"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "revenge"
+    },
+    {
+      "level": 1,
+      "move": "rolling_kick"
+    },
+    {
+      "level": 20,
+      "move": "triple_kick"
+    },
+    {
+      "level": 25,
+      "move": "rapid_spin"
+    },
+    {
+      "level": 31,
+      "move": "counter"
+    }
+  ],
+  "machineMoves": [
+    "bulk_up",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "earthquake",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

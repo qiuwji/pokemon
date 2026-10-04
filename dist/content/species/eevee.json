@@ -1,0 +1,86 @@
+{
+  "name": "伊布",
+  "dex": 133,
+  "types": [
+    "normal"
+  ],
+  "stats": {
+    "hp": 55,
+    "atk": 55,
+    "def": 50,
+    "spa": 45,
+    "spd": 65,
+    "spe": 55
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 1,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 92,
+  "growth": "medium_fast",
+  "abilities": [
+    "run_away"
+  ],
+  "femaleRatio": 0.125,
+  "genderless": false,
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 35,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "tail_whip"
+    },
+    {
+      "level": 8,
+      "move": "sand_attack"
+    },
+    {
+      "level": 16,
+      "move": "growl"
+    },
+    {
+      "level": 23,
+      "move": "quick_attack"
+    },
+    {
+      "level": 30,
+      "move": "bite"
+    },
+    {
+      "level": 42,
+      "move": "take_down"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "helping_hand"
+    },
+    {
+      "level": 36,
+      "move": "baton_pass"
+    }
+  ],
+  "eggMoves": [
+    "flail"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

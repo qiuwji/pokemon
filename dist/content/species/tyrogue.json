@@ -1,0 +1,54 @@
+{
+  "name": "无畏小子",
+  "dex": 236,
+  "types": [
+    "fighting"
+  ],
+  "stats": {
+    "hp": 35,
+    "atk": 35,
+    "def": 35,
+    "spa": 35,
+    "spd": 35,
+    "spe": 35
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 1,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 75,
+  "expYield": 91,
+  "growth": "medium_fast",
+  "abilities": [
+    "guts"
+  ],
+  "femaleRatio": 0,
+  "genderless": false,
+  "eggGroups": [
+    "no_eggs_discovered"
+  ],
+  "eggCycles": 25,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    }
+  ],
+  "unavailableLearnset": [],
+  "eggMoves": [],
+  "machineMoves": [
+    "bulk_up",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "earthquake",
+    "double_team",
+    "rest",
+    "thief"
+  ]
+}

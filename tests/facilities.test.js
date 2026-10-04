@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   FacilityRegistry,
   FacilitySession,
@@ -17,9 +17,7 @@ import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
 import { facilityGames } from "../dist/plugins/facility-games.js";
 import { validateSave } from "../dist/packs/emerald/pack.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 function fixture(plugins = [], storage = new Map()) {
   const { db, catalog, host } = createEmeraldPlugins(
       structuredClone(base),

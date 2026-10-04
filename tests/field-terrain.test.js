@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   FieldTerrainRegistry,
   FieldTerrainService,
@@ -341,9 +341,7 @@ test("Faulty post-step policies release the lock while invalid pre-step output c
   assert.equal(bad.progress.length, 0);
 });
 test("Plugins register terrain policies without altering the executor and receive only immutable terrain metadata", () => {
-  const db = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const db = loadContentSync();
   let observed = false;
   const { catalog } = createEmeraldPlugins(db, [
     {
@@ -386,9 +384,7 @@ test("Application commands select techniques; a paused cutscene stops current dr
   const { attachEmeraldExtensions } = await import(
     "../dist/packs/emerald/extension-ports.js"
   );
-  const base = JSON.parse(
-    fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-  );
+  const base = loadContentSync();
   const lab = {
     ...base.maps.Route101,
     ...map([0, B.ICE, B.ICE, 0]),

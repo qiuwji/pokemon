@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   session,
   manifest,
@@ -23,9 +23,7 @@ import { validateContent } from "../dist/engine/content.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { planObjectMotion } from "../dist/engine/object-motion.js";
 import { setQuantity, inventoryQuantity } from "./helpers/inventory-fixture.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const room = "interaction-workshop:room";
 function workshop() {
   const s = session([

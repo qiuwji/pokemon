@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -11,10 +12,7 @@ import { Timeline } from "../dist/engine/timeline.js";
 import { PluginHost } from "../dist/engine/extensions/plugin-host.js";
 import { Battle } from "../dist/engine/battle.js";
 import { Random, createMonster } from "../dist/engine/model.js";
-import fs from "node:fs";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function canvas() {
   const calls = [];
   return new Proxy(

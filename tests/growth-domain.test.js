@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -6,7 +7,6 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Random, createMonster } from "../dist/engine/model.js";
 import { GEN3_ABILITIES as abilities } from "../dist/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS as heldItems } from "../dist/engine/rules/gen3/held-items.js";
@@ -15,9 +15,7 @@ import { HatchService } from "../dist/engine/growth/hatching.js";
 import { EvolutionService } from "../dist/engine/growth/evolution.js";
 import { BreedingService } from "../dist/engine/growth/breeding.js";
 import { DaycareService } from "../dist/engine/growth/daycare.js";
-const original = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const original = loadContentSync();
 const rng = new Random(671);
 const mon = (id = "treecko", level = 20) =>
   createMonster(id, level, original, rng);

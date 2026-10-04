@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createEmeraldSpriteClips } from "../dist/packs/emerald/sprite-clips.js";
 import { emeraldAppearanceResources } from "../dist/packs/emerald/appearance-definitions.js";
 import { layoutDocument } from "./helpers/layout-document.js";
@@ -8,7 +9,6 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { createEmeraldInterface } from "../dist/packs/emerald/interface.js";
 import { createUIShell } from "../dist/packs/emerald/ui-shell.js";
 import { createMonster, Random } from "../dist/engine/model.js";
@@ -59,9 +59,7 @@ function documentPort() {
   return doc;
 }
 function fixture() {
-  const db = JSON.parse(
-      fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-    ),
+  const db = loadContentSync(),
     doc = documentPort(),
     calls = [];
   const state = readOnly({

@@ -1,12 +1,10 @@
+import { loadContentSync } from "../../tools/content-io.mjs";
 import { createBag } from "./inventory-fixture.js";
-import fs from "node:fs";
 import { Battle } from "../../dist/engine/battle.js";
 import { Random, createMonster } from "../../dist/engine/model.js";
 import { GEN3_ABILITIES } from "../../dist/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../../dist/engine/rules/gen3/held-items.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 /** Real creature values and complete default attachments; individual tests override only relevant rules. */
 export function battleFixture({
   moves = {},

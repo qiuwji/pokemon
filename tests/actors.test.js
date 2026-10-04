@@ -1,6 +1,6 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   ActorRepository,
   ActorTemplateRegistry,
@@ -143,9 +143,7 @@ test("Navigation uses common walls and reservations and selects an adjacent goal
     null,
   );
 });
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const memorySchema = objectSchema({ ticks: { type: "integer", minimum: 0 } }, [
   "ticks",
 ]);

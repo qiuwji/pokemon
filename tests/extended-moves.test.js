@@ -1,15 +1,13 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Battle } from "../dist/engine/battle.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { MoveEffectRegistry } from "../dist/engine/move-effects.js";
 import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const move = (effect, power = 0, type = "normal") => ({
   name: effect,
   effect,

@@ -1,8 +1,5 @@
-import { bagNotebook } from "./plugins/bag-notebook.js";
-import { canvasGallery } from "./plugins/canvas-gallery.js";
-import { createIntegrationLab } from "./plugins/integration-lab.js";
-import { actorDayCycle } from "./plugins/actor-day-cycle.js";
-import { battleBurst } from "./plugins/battle-burst.js";
+import { loadContent } from "./adapters/content-loader.js";
+import { loadPluginCatalog } from "./adapters/plugin-loader.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
 import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
@@ -16,10 +13,6 @@ import { createEmeraldSceneDefinitions } from "./packs/emerald/presentation-scen
 import { createEmeraldCommandFacade } from "./packs/emerald/command-facade.js";
 import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "./packs/emerald/extension-ports.js";
-import { facilityGames } from "./plugins/facility-games.js";
-import { companionCare } from "./plugins/companion-care.js";
-import { createFieldJournal } from "./plugins/field-journal.js";
-import { e2eSupport } from "./plugins/e2e-support.js";
 import { PACK } from "./packs/emerald/pack.js";
 import { assertPackContent } from "./packs/emerald/content.js";
 import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
@@ -40,32 +33,19 @@ import { ANIMATION_PROFILES } from "./packs/emerald/story.js";
 const $ = (id) => document.getElementById(id);
 async function boot() {
   try {
-    const response = await fetch("content.json");
-    if (!response.ok) throw new Error("内容未能载入");
-    const base = assertPackContent(await response.json());
+    const base = assertPackContent(
+      await loadContent(new URL("./content/manifest.json", import.meta.url)),
+    );
+    const parameters = new URLSearchParams(location.search);
+    const plugins = await loadPluginCatalog({
+      url: new URL("./plugins/catalog.json", import.meta.url),
+      parameters,
+      content: base,
+      environment: parameters.get("e2e") === "1" ? "test" : "production",
+    });
     const { host, catalog, db } = createEmeraldPlugins(
       base,
-      [
-        companionCare,
-        facilityGames,
-        ...(new URLSearchParams(location.search).get("battle-burst") === "1"
-          ? [battleBurst]
-          : []),
-        ...(new URLSearchParams(location.search).get("bag-notebook") === "1"
-          ? [bagNotebook]
-          : []),
-        ...(new URLSearchParams(location.search).get("canvas-gallery") === "1"
-          ? [canvasGallery]
-          : []),
-        ...(new URLSearchParams(location.search).get("actor-day-cycle") === "1"
-          ? [actorDayCycle]
-          : []),
-        ...(new URLSearchParams(location.search).get("integration-lab") === "1"
-          ? [createIntegrationLab(base.maps.LittlerootTown)]
-          : []),
-        createFieldJournal(base.maps.LittlerootTown_ProfessorBirchsLab),
-        e2eSupport,
-      ],
+      plugins,
       console.error,
     );
     const assets = await loadAssets(db);

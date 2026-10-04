@@ -1,7 +1,9 @@
 """Merge species field/growth data from original Emerald without changing imported tiles or existing stats."""
-import re,json
+from imports.context import ImportSession, arguments
 from pathlib import Path
-path=Path('dist/content.json');data=json.loads(path.read_text());source=Path('work/pokeemerald/src/data/pokemon/species_info.h').read_text()
+import re,json,argparse
+parser=argparse.ArgumentParser();parser.add_argument("source",nargs="?",default=str(Path(__file__).resolve().parents[1]/"work/pokeemerald"));args=arguments(parser);session=ImportSession(args,"import-species-metadata.py")
+data=session.load();source=(session.source/'src/data/pokemon/species_info.h').read_text()
 for name,body in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*\{(.*?)\n    \}',source,re.S):
     ident=name.lower()
     if ident not in data['species']:continue
@@ -11,13 +13,15 @@ for name,body in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*\{(.*?)\n    \}',source,re
     for field,prop in [('itemCommon','common'),('itemRare','rare')]:
         item=re.search(r'\.'+field+r'\s*=\s*ITEM_(\w+)',body)[1].lower()
         if item!='none':s.setdefault('heldItems',{})[prop]='pokeball' if item=='poke_ball' else item
-eggs=Path('work/pokeemerald/src/data/pokemon/egg_moves.h').read_text()
+eggs=(session.source/'src/data/pokemon/egg_moves.h').read_text()
 for name,body in re.findall(r'egg_moves\((\w+),(.*?)\)',eggs,re.S):
     if name.lower() in data['species']:
         data['species'][name.lower()]['eggMoves']=[m.lower() for m in re.findall(r'MOVE_(\w+)',body) if m.lower() in data['moves']]
-machines=Path('work/pokeemerald/src/data/pokemon/tmhm_learnsets.h').read_text()
+machines=(session.source/'src/data/pokemon/tmhm_learnsets.h').read_text()
 for name,body in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*\{\s*\.learnset\s*=\s*\{(.*?)\}',machines,re.S):
     if name.lower() in data['species']:
         data['species'][name.lower()]['machineMoves']=[m.lower() for m in re.findall(r'\.(\w+)\s*=\s*TRUE',body) if m.lower() in data['moves']]
-path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')))
+session.content(data)
 print('Species field/growth metadata imported')
+
+session.finish()

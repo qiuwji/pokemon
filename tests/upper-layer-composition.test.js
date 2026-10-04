@@ -1,14 +1,12 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { session } from "../examples/helpers/session.js";
 import { createMonster } from "../dist/engine/model.js";
 import { createIntegrationLab } from "../dist/plugins/integration-lab.js";
 import { createFieldJournal } from "../dist/plugins/field-journal.js";
 
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const room = "integration-lab:room",
   lever = "integration-lab:lever";
 const trainer = "integration-lab:researcher",

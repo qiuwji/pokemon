@@ -1,0 +1,95 @@
+{
+  "name": "木守宫",
+  "dex": 252,
+  "types": [
+    "grass"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 35,
+    "spe": 70,
+    "spa": 65,
+    "spd": 55
+  },
+  "catchRate": 45,
+  "expYield": 65,
+  "growth": "medium_slow",
+  "femaleRatio": 0.125,
+  "abilities": [
+    "overgrow"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 1,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "pound"
+    },
+    {
+      "level": 1,
+      "move": "leer"
+    },
+    {
+      "level": 6,
+      "move": "absorb"
+    },
+    {
+      "level": 11,
+      "move": "quick_attack"
+    },
+    {
+      "level": 16,
+      "move": "pursuit"
+    },
+    {
+      "level": 21,
+      "move": "screech"
+    },
+    {
+      "level": 26,
+      "move": "mega_drain"
+    },
+    {
+      "level": 31,
+      "move": "agility"
+    },
+    {
+      "level": 36,
+      "move": "slam"
+    },
+    {
+      "level": 41,
+      "move": "detect"
+    },
+    {
+      "level": 46,
+      "move": "giga_drain"
+    }
+  ],
+  "eggGroups": [
+    "monster",
+    "dragon"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "eggMoves": [
+    "crunch",
+    "mud_sport",
+    "endeavor"
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "double_team",
+    "aerial_ace",
+    "rest"
+  ]
+}

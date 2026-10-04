@@ -1,0 +1,135 @@
+✖ Browser and Node assemble the same production pack from readable metadata and generated grids (7.119459ms)
+✖ Content deployment prefixes are preserved and file failures identify the failing fragment (153.681084ms)
+✔ Manifest rejects missing sections, duplicate paths, escapes and unsafe identities (0.602542ms)
+✔ Fragments cannot overwrite existing fields or succeed with an unfilled file (3.262667ms)
+✔ A missing or malformed local fragment cannot silently produce a partial pack (17.579667ms)
+✖ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (538.876084ms)
+file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/content-manifest.js:44
+  if (errors.length) throw new Error("Invalid content references: " + errors.slice(0, 12).join(", "));
+                           ^
+
+Error: Invalid content references: maps.OldaleTown.connections[2]: invalid reference, maps.Route103.connections[1]: invalid reference
+    at assembleContent (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/content-manifest.js:44:28)
+    at loadContentSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/content-io.mjs:12:10)
+    at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/plugin-loader.test.js:9:17
+    at ModuleJob.run (node:internal/modules/esm/module_job:437:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:642:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.0.0
+✖ tests/plugin-loader.test.js (104.801458ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 3
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 790.087041
+
+✖ failing tests:
+
+test at tests/content-manifest.test.js:13:1
+✖ Browser and Node assemble the same production pack from readable metadata and generated grids (7.119459ms)
+  Error: Invalid content references: maps.OldaleTown.connections[2]: invalid reference, maps.Route103.connections[1]: invalid reference
+      at assembleContent (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/content-manifest.js:44:28)
+      at loadContent (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/adapters/content-loader.js:17:10)
+      at async TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/content-manifest.test.js:15:14)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+
+test at tests/content-manifest.test.js:25:1
+✖ Content deployment prefixes are preserved and file failures identify the failing fragment (153.681084ms)
+  Error: Invalid content references: maps.OldaleTown.connections[2]: invalid reference, maps.Route103.connections[1]: invalid reference
+      at assembleContent (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/content-manifest.js:44:28)
+      at loadContent (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/adapters/content-loader.js:17:10)
+      at async TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/content-manifest.test.js:33:20)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/content-manifest.test.js:73:1
+✖ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (538.876084ms)
+  AssertionError [ERR_ASSERTION]: EE..E
+  ======================================================================
+  ERROR: test_check_reports_changes_without_any_writes (test_content_store.ContentStoreTests)
+  ----------------------------------------------------------------------
+  Traceback (most recent call last):
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/tests/test_content_store.py", line 38, in test_check_reports_changes_without_any_writes
+      session.content(self.edit(session))
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/imports/context.py", line 100, in content
+      raise ValueError('Invalid imported content: ' + validation.stderr.strip())
+  ValueError: Invalid imported content: file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/validate-import.mjs:7
+  if (errors.length) throw new Error(errors.join("\n"));
+                           ^
+  
+  Error: maps.OldaleTown.connections[2]: invalid reference
+  maps.Route103.connections[1]: invalid reference
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/validate-import.mjs:7:26
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+  Node.js v26.0.0
+  
+  ======================================================================
+  ERROR: test_commit_only_changes_owned_map_metadata (test_content_store.ContentStoreTests)
+  ----------------------------------------------------------------------
+  Traceback (most recent call last):
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/tests/test_content_store.py", line 48, in test_commit_only_changes_owned_map_metadata
+      session.content(self.edit(session))
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/imports/context.py", line 100, in content
+      raise ValueError('Invalid imported content: ' + validation.stderr.strip())
+  ValueError: Invalid imported content: file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/validate-import.mjs:7
+  if (errors.length) throw new Error(errors.join("\n"));
+                           ^
+  
+  Error: maps.OldaleTown.connections[2]: invalid reference
+  maps.Route103.connections[1]: invalid reference
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/validate-import.mjs:7:26
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+  Node.js v26.0.0
+  
+  ======================================================================
+  ERROR: test_replacement_failure_restores_previous_bytes (test_content_store.ContentStoreTests)
+  ----------------------------------------------------------------------
+  Traceback (most recent call last):
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/tests/test_content_store.py", line 75, in test_replacement_failure_restores_previous_bytes
+      session.content(self.edit(session))
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/imports/context.py", line 100, in content
+      raise ValueError('Invalid imported content: ' + validation.stderr.strip())
+  ValueError: Invalid imported content: file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/validate-import.mjs:7
+  if (errors.length) throw new Error(errors.join("\n"));
+                           ^
+  
+  Error: maps.OldaleTown.connections[2]: invalid reference
+  maps.Route103.connections[1]: invalid reference
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/validate-import.mjs:7:26
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  
+  Node.js v26.0.0
+  
+  ----------------------------------------------------------------------
+  Ran 5 tests in 0.472s
+  
+  FAILED (errors=3)
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/content-manifest.test.js:77:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/plugin-loader.test.js:1:1
+✖ tests/plugin-loader.test.js (104.801458ms)
+  'test failed'

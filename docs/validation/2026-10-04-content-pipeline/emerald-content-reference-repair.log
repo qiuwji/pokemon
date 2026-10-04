@@ -1,0 +1,15 @@
+✔ Browser and Node assemble the same production pack from readable metadata and generated grids (15.341167ms)
+✔ Content deployment prefixes are preserved and file failures identify the failing fragment (147.988459ms)
+✔ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (660.741458ms)
+✔ Default data catalog composes actual plugins without loading scenario rewards or fixture maps (18.918542ms)
+✔ Explicit test environment loads isolated fixture maps through real registration (9.04475ms)
+✔ Additional enabled plugins and explicit disabling use the catalog without editing app.js (8.048417ms)
+✔ Dependency errors fail before importing code; enabled dependencies load in order (0.226917ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 888.414291

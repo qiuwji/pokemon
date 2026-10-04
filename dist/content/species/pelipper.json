@@ -1,0 +1,99 @@
+{
+  "name": "大嘴鸥",
+  "dex": 279,
+  "types": [
+    "water",
+    "flying"
+  ],
+  "stats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 100,
+    "spe": 65,
+    "spa": 85,
+    "spd": 70
+  },
+  "catchRate": 45,
+  "expYield": 164,
+  "growth": "medium_fast",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "keen_eye"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 2,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 1,
+      "move": "water_sport"
+    },
+    {
+      "level": 1,
+      "move": "wing_attack"
+    },
+    {
+      "level": 3,
+      "move": "water_gun"
+    },
+    {
+      "level": 7,
+      "move": "supersonic"
+    },
+    {
+      "level": 13,
+      "move": "wing_attack"
+    },
+    {
+      "level": 21,
+      "move": "mist"
+    },
+    {
+      "level": 25,
+      "move": "protect"
+    },
+    {
+      "level": 33,
+      "move": "stockpile"
+    },
+    {
+      "level": 33,
+      "move": "swallow"
+    },
+    {
+      "level": 47,
+      "move": "spit_up"
+    },
+    {
+      "level": 61,
+      "move": "hydro_pump"
+    }
+  ],
+  "eggGroups": [
+    "water_1",
+    "flying"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

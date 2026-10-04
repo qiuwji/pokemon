@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { PluginHost } from "../dist/engine/extensions/plugin-host.js";
 import { CommandBus } from "../dist/engine/extensions/command-bus.js";
 import { EventBus } from "../dist/engine/extensions/event-bus.js";
@@ -25,9 +25,7 @@ import { Random, createMonster } from "../dist/engine/model.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { Battle } from "../dist/engine/battle.js";
 import { GEN3_GLOBAL_HOOKS } from "../dist/engine/rules/gen3/global-rules.js";
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const manifest = (id, setup, rest = {}) => ({
   id,
   apiVersion: 1,

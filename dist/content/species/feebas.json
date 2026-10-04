@@ -1,0 +1,63 @@
+{
+  "name": "丑丑鱼",
+  "dex": 349,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 20,
+    "atk": 15,
+    "def": 20,
+    "spa": 10,
+    "spd": 55,
+    "spe": 80
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 1
+  },
+  "catchRate": 255,
+  "expYield": 61,
+  "growth": "erratic",
+  "abilities": [
+    "swift_swim"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1",
+    "dragon"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 15,
+      "move": "tackle"
+    },
+    {
+      "level": 30,
+      "move": "flail"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "splash"
+    }
+  ],
+  "eggMoves": [
+    "mud_sport",
+    "hypnosis"
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

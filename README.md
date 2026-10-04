@@ -1,6 +1,6 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-当前工程版本 **0.25.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+当前工程版本 **0.26.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
@@ -18,7 +18,7 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**783项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**308个JS模块**检查通过。上层区域组合及相关回归的日志和范围见[检查点证据](docs/validation/2026-10-04-upper-layer-composition/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**795项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**312个JS模块**检查通过。本轮内容拆分及回归的日志和范围见[检查点证据](docs/validation/2026-10-04-content-pipeline/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
@@ -109,13 +109,13 @@ npm run check:docs
 
 精灵、招式、道具通过内容数据注册。新效果由唯一操作/招式效果表与规则阶段组合；道具在受限草稿上试算，再校验字段、库存和目标后提交。未知效果明确报错；基础内容中已没有显式禁用效果，但完整语义仍须按机制清单逐项核对。表现独立通过 effect/move/scene/transition/audio 注册，新增视觉不修改绘制分支。
 
-转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；重新导入会覆盖生成内容，定制扩展宜放内容包或插件。
+转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；内容通过[分类清单](dist/content/manifest.json)装配，导入先预演、按字段所有权更新。详见[内容管线](docs/development/CONTENT_PIPELINE.md)与[脚本索引](docs/development/IMPORT_SCRIPTS.md)。测试地图只在显式?e2e=1环境加载。
 
 #天气合同、插件示例和原作映射见 [WEATHER.md](docs/engine/world/WEATHER.md)。
 
 ## 存档
 
-格式 `{version,savedAt,state}`，导出另带 pack。当前版本 10；写入前校验全份有界 JSON、个体 UID、能力/IV/EV/状态、物种/招式、库存、地图、育成、剧情账本和插件依赖。错误、缺失插件或不支持的版本保护原文，自动保存不能覆盖；玩家可导出原档或明确重新开始。
+格式 `{version,savedAt,state}`，导出另带 pack。当前保存版本见上方版本说明；写入前校验全份有界 JSON、个体 UID、能力/IV/EV/状态、物种/招式、库存、地图、育成、剧情账本和插件依赖。错误、缺失插件或不支持的版本保护原文，自动保存不能覆盖；玩家可导出原档或明确重新开始。
 
 按用户授权不兼容旧开发档。核心和插件迁移入口已删除；仅接受当前存档格式和已加载插件的当前 dataVersion，不保留旧版本回退。本地与上线来源各有独立存储，转移进度须导出/导入。
 

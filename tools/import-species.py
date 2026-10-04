@@ -1,9 +1,10 @@
 """Merge selected original species into the slice. Unimported moves remain explicit metadata."""
+from imports.context import ImportSession, arguments
 import argparse, json, re
 from pathlib import Path
 from PIL import Image
-parser=argparse.ArgumentParser();parser.add_argument('source');parser.add_argument('entries',nargs='+',help='species-id:localized-name:dex-number');args=parser.parse_args()
-r=Path(args.source);d=Path(__file__).resolve().parents[1]/'dist';data=json.loads((d/'content.json').read_text())
+parser=argparse.ArgumentParser();parser.add_argument('source');parser.add_argument('entries',nargs='+',help='species-id:localized-name:dex-number');args=arguments(parser);session=ImportSession(args,"import-species.py")
+r=Path(args.source);d=session.dist;data=session.load()
 source=(r/'src/data/pokemon/species_info.h').read_text();learnsets=(r/'src/data/pokemon/level_up_learnsets.h').read_text()
 for entry in args.entries:
     ident,name,dex=entry.split(':');key=ident.upper()
@@ -30,6 +31,8 @@ for entry in args.entries:
         if item!='none':species.setdefault('heldItems',{})[prop]='pokeball'if item=='poke_ball'else item
     palette=[tuple(map(int,v.split()))for v in (r/f'graphics/pokemon/{ident}/normal.pal').read_text().splitlines()[3:19]]
     for side in ['front','back','icon']:
-        image=Image.open(r/f'graphics/pokemon/{ident}/{side}.png');out=Image.new('RGBA',image.size);out.putdata([(*palette[int(v)%16],255 if int(v)%16 else 0)for v in image.getdata()]);out.save(d/f'assets/{ident}-{side}.png')
-    data['species'][ident]=species;print(ident,len(species['learnset']),'available learn entries;',len(species['unavailableLearnset']),'pending')
-(d/'content.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')))
+        image=Image.open(r/f'graphics/pokemon/{ident}/{side}.png');out=Image.new('RGBA',image.size);out.putdata([(*palette[int(v)%16],255 if int(v)%16 else 0)for v in image.getdata()]);session.image(out,d/f'assets/{ident}-{side}.png')
+    data['species'][ident]={**data['species'].get(ident,{}),**species};print(ident,len(species['learnset']),'available learn entries;',len(species['unavailableLearnset']),'pending')
+session.content(data)
+
+session.finish()

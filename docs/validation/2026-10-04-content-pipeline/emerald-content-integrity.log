@@ -1,0 +1,10 @@
+✔ Missing map/script references and duplicate warps are rejected unless explicitly classified (27.134917ms)
+✔ Atlas metadata and frame indices must match actual PNG dimensions (2.85925ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 94.263041

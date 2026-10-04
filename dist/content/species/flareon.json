@@ -1,0 +1,93 @@
+{
+  "name": "火伊布",
+  "dex": 136,
+  "types": [
+    "fire"
+  ],
+  "stats": {
+    "hp": 65,
+    "atk": 130,
+    "def": 60,
+    "spa": 95,
+    "spd": 110,
+    "spe": 65
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 2,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 45,
+  "expYield": 198,
+  "growth": "medium_fast",
+  "abilities": [
+    "flash_fire"
+  ],
+  "femaleRatio": 0.125,
+  "genderless": false,
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 35,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "tail_whip"
+    },
+    {
+      "level": 8,
+      "move": "sand_attack"
+    },
+    {
+      "level": 16,
+      "move": "ember"
+    },
+    {
+      "level": 23,
+      "move": "quick_attack"
+    },
+    {
+      "level": 30,
+      "move": "bite"
+    },
+    {
+      "level": 36,
+      "move": "fire_spin"
+    },
+    {
+      "level": 47,
+      "move": "leer"
+    },
+    {
+      "level": 52,
+      "move": "flamethrower"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "helping_hand"
+    },
+    {
+      "level": 42,
+      "move": "smog"
+    }
+  ],
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "flamethrower",
+    "rest"
+  ]
+}

@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import {
   FieldActionRegistry,
   FieldActionService,
@@ -25,9 +25,7 @@ import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
 import { drawFieldAction } from "../dist/presentation/field-action-canvas.js";
 
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 const definition = {
   name: "Paint",
   cue: "paint",

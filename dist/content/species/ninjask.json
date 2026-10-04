@@ -1,0 +1,110 @@
+{
+  "name": "铁面忍者",
+  "dex": 291,
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "stats": {
+    "hp": 61,
+    "atk": 90,
+    "def": 45,
+    "spa": 50,
+    "spd": 50,
+    "spe": 160
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 2
+  },
+  "catchRate": 120,
+  "expYield": 155,
+  "growth": "erratic",
+  "abilities": [
+    "speed_boost"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "bug"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "scratch"
+    },
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 1,
+      "move": "sand_attack"
+    },
+    {
+      "level": 9,
+      "move": "sand_attack"
+    },
+    {
+      "level": 14,
+      "move": "fury_swipes"
+    },
+    {
+      "level": 20,
+      "move": "double_team"
+    },
+    {
+      "level": 20,
+      "move": "fury_cutter"
+    },
+    {
+      "level": 20,
+      "move": "screech"
+    },
+    {
+      "level": 31,
+      "move": "slash"
+    },
+    {
+      "level": 38,
+      "move": "agility"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "leech_life"
+    },
+    {
+      "level": 5,
+      "move": "leech_life"
+    },
+    {
+      "level": 19,
+      "move": "mind_reader"
+    },
+    {
+      "level": 25,
+      "move": "swords_dance"
+    },
+    {
+      "level": 45,
+      "move": "baton_pass"
+    }
+  ],
+  "machineMoves": [
+    "sunny_day",
+    "protect",
+    "giga_drain",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

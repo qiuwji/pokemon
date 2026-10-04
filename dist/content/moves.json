@@ -1,0 +1,1519 @@
+{
+  "pound": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "hit",
+    "name": "拍击",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "leer": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "defense_down",
+    "name": "瞪眼",
+    "target": "opponents",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "absorb": {
+    "power": 20,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "absorb",
+    "name": "吸取",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "quick_attack": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 1,
+    "chance": 0,
+    "type": "normal",
+    "effect": "quick_attack",
+    "name": "电光一闪",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "pursuit": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "dark",
+    "effect": "pursuit",
+    "name": "追打",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "screech": {
+    "power": 0,
+    "accuracy": 85,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "defense_down_2",
+    "name": "刺耳声",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": true
+  },
+  "mega_drain": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "absorb",
+    "name": "超级吸取",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "agility": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "speed_up_2",
+    "name": "高速移动",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "slam": {
+    "power": 80,
+    "accuracy": 75,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "hit",
+    "name": "摔打",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "detect": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 5,
+    "priority": 3,
+    "chance": 0,
+    "type": "fighting",
+    "effect": "protect",
+    "name": "看穿",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "giga_drain": {
+    "power": 60,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "absorb",
+    "name": "终极吸取",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "fury_cutter": {
+    "power": 10,
+    "accuracy": 95,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "bug",
+    "effect": "fury_cutter",
+    "name": "连斩",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "leaf_blade": {
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "high_critical",
+    "name": "叶刃",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "false_swipe": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "false_swipe",
+    "name": "False Swipe",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "scratch": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "hit",
+    "name": "抓",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "growl": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "attack_down",
+    "name": "叫声",
+    "target": "opponents",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": true
+  },
+  "focus_energy": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "focus_energy",
+    "name": "聚气",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "ember": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0,
+    "chance": 10,
+    "type": "fire",
+    "effect": "burn_hit",
+    "name": "火花",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "peck": {
+    "power": 35,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0,
+    "chance": 0,
+    "type": "flying",
+    "effect": "hit",
+    "name": "啄",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "sand_attack": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "ground",
+    "effect": "accuracy_down",
+    "name": "泼沙",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "fire_spin": {
+    "power": 15,
+    "accuracy": 70,
+    "pp": 15,
+    "priority": 0,
+    "chance": 100,
+    "type": "fire",
+    "effect": "trap",
+    "name": "火焰旋涡",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "slash": {
+    "power": 70,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "high_critical",
+    "name": "劈开",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "mirror_move": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "flying",
+    "effect": "mirror_move",
+    "name": "鹦鹉学舌",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "flamethrower": {
+    "power": 95,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 10,
+    "type": "fire",
+    "effect": "burn_hit",
+    "name": "喷射火焰",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "double_kick": {
+    "power": 30,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "fighting",
+    "effect": "double_hit",
+    "name": "二连踢",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "bulk_up": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "fighting",
+    "effect": "bulk_up",
+    "name": "健美",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "sky_uppercut": {
+    "power": 85,
+    "accuracy": 90,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "fighting",
+    "effect": "sky_uppercut",
+    "name": "冲天拳",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "fire_punch": {
+    "power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 10,
+    "type": "fire",
+    "effect": "burn_hit",
+    "name": "Fire Punch",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "blaze_kick": {
+    "power": 85,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0,
+    "chance": 10,
+    "type": "fire",
+    "effect": "blaze_kick",
+    "name": "火焰踢",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "tackle": {
+    "power": 35,
+    "accuracy": 95,
+    "pp": 35,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "hit",
+    "name": "撞击",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "mud_slap": {
+    "power": 20,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 100,
+    "type": "ground",
+    "effect": "accuracy_down_hit",
+    "name": "掷泥",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "water_gun": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0,
+    "chance": 0,
+    "type": "water",
+    "effect": "hit",
+    "name": "水枪",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "bide": {
+    "power": 1,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "bide",
+    "name": "忍耐",
+    "target": "self",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "foresight": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "foresight",
+    "name": "识破",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "mud_sport": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "ground",
+    "effect": "mud_sport",
+    "name": "玩泥巴",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "take_down": {
+    "power": 90,
+    "accuracy": 85,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "recoil",
+    "name": "猛撞",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "whirlpool": {
+    "power": 15,
+    "accuracy": 70,
+    "pp": 15,
+    "priority": 0,
+    "chance": 100,
+    "type": "water",
+    "effect": "trap",
+    "name": "潮旋",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "protect": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "priority": 3,
+    "chance": 0,
+    "type": "normal",
+    "effect": "protect",
+    "name": "守住",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "hydro_pump": {
+    "power": 120,
+    "accuracy": 80,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "water",
+    "effect": "hit",
+    "name": "水炮",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "endeavor": {
+    "power": 1,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "endeavor",
+    "name": "蛮干",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "mud_shot": {
+    "power": 55,
+    "accuracy": 95,
+    "pp": 15,
+    "priority": 0,
+    "chance": 100,
+    "type": "ground",
+    "effect": "speed_down_hit",
+    "name": "泥巴射击",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "muddy_water": {
+    "power": 95,
+    "accuracy": 85,
+    "pp": 10,
+    "priority": 0,
+    "chance": 30,
+    "type": "water",
+    "effect": "accuracy_down_hit",
+    "name": "浊流",
+    "target": "opponents",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "earthquake": {
+    "power": 100,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "ground",
+    "effect": "earthquake",
+    "name": "地震",
+    "target": "all-others",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "howl": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "attack_up",
+    "name": "Howl",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "bite": {
+    "power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0,
+    "chance": 30,
+    "type": "dark",
+    "effect": "flinch_hit",
+    "name": "咬住",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "odor_sleuth": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "foresight",
+    "name": "气味侦测",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "roar": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": -6,
+    "chance": 0,
+    "type": "normal",
+    "effect": "roar",
+    "name": "吼叫",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": true
+  },
+  "swagger": {
+    "power": 0,
+    "accuracy": 90,
+    "pp": 15,
+    "priority": 0,
+    "chance": 100,
+    "type": "normal",
+    "effect": "swagger",
+    "name": "虚张声势",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "scary_face": {
+    "power": 0,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "speed_down_2",
+    "name": "鬼面",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "taunt": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "dark",
+    "effect": "taunt",
+    "name": "挑衅",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED"
+    ],
+    "sound": false
+  },
+  "crunch": {
+    "power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 20,
+    "type": "dark",
+    "effect": "special_defense_down_hit",
+    "name": "咬碎",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "thief": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 100,
+    "type": "dark",
+    "effect": "thief",
+    "name": "小偷",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "tail_whip": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "defense_down",
+    "name": "摇尾巴",
+    "target": "opponents",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "headbutt": {
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 30,
+    "type": "normal",
+    "effect": "flinch_hit",
+    "name": "头锤",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "pin_missile": {
+    "power": 14,
+    "accuracy": 85,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "bug",
+    "effect": "multi_hit",
+    "name": "飞弹针",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "covet": {
+    "power": 40,
+    "accuracy": 100,
+    "pp": 40,
+    "priority": 0,
+    "chance": 100,
+    "type": "normal",
+    "effect": "thief",
+    "name": "渴望",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "flail": {
+    "power": 1,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "flail",
+    "name": "Flail",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "rest": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "rest",
+    "name": "睡觉",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "belly_drum": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "belly_drum",
+    "name": "腹鼓",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "fury_swipes": {
+    "power": 18,
+    "accuracy": 80,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "multi_hit",
+    "name": "Fury Swipes",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "string_shot": {
+    "power": 0,
+    "accuracy": 95,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "bug",
+    "effect": "speed_down",
+    "name": "吐丝",
+    "target": "opponents",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "poison_sting": {
+    "power": 15,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0,
+    "chance": 30,
+    "type": "poison",
+    "effect": "poison_hit",
+    "name": "毒针",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "supersonic": {
+    "power": 0,
+    "accuracy": 55,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "confuse",
+    "name": "超音波",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": true
+  },
+  "wing_attack": {
+    "power": 60,
+    "accuracy": 100,
+    "pp": 35,
+    "priority": 0,
+    "chance": 0,
+    "type": "flying",
+    "effect": "hit",
+    "name": "翅膀攻击",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "mist": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "ice",
+    "effect": "mist",
+    "name": "白雾",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "water_sport": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "water",
+    "effect": "water_sport",
+    "name": "Water Sport",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "stockpile": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "stockpile",
+    "name": "Stockpile",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "swallow": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "swallow",
+    "name": "Swallow",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "spit_up": {
+    "power": 100,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "spit_up",
+    "name": "Spit Up",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "astonish": {
+    "power": 30,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 30,
+    "type": "ghost",
+    "effect": "flinch_minimize_hit",
+    "name": "惊吓",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "nature_power": {
+    "power": 0,
+    "accuracy": 95,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "nature_power",
+    "name": "自然之力",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "rain_dance": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "water",
+    "effect": "rain_dance",
+    "name": "求雨",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "harden": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "defense_up",
+    "name": "变硬",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "growth": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "special_attack_up",
+    "name": "Growth",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "synthesis": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "synthesis",
+    "name": "光合作用",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "sunny_day": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "fire",
+    "effect": "sunny_day",
+    "name": "大晴天",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "explosion": {
+    "power": 250,
+    "accuracy": 100,
+    "pp": 5,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "explosion",
+    "name": "Explosion",
+    "target": "all-others",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  },
+  "confusion": {
+    "power": 50,
+    "accuracy": 100,
+    "pp": 25,
+    "priority": 0,
+    "chance": 10,
+    "type": "psychic",
+    "effect": "confuse_hit",
+    "name": "念力",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "double_team": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "evasion_up",
+    "name": "影子分身",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "teleport": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "teleport",
+    "name": "瞬间移动",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "calm_mind": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "calm_mind",
+    "name": "冥想",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_SNATCH_AFFECTED"
+    ],
+    "sound": false
+  },
+  "psychic": {
+    "power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 10,
+    "type": "psychic",
+    "effect": "special_defense_down_hit",
+    "name": "精神强念",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "imprison": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "imprison",
+    "name": "Imprison",
+    "target": "self",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED"
+    ],
+    "sound": false
+  },
+  "future_sight": {
+    "power": 80,
+    "accuracy": 90,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "future_sight",
+    "name": "Future Sight",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "0"
+    ],
+    "sound": false
+  },
+  "hypnosis": {
+    "power": 0,
+    "accuracy": 60,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "sleep",
+    "name": "催眠术",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MAGIC_COAT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "dream_eater": {
+    "power": 100,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "psychic",
+    "effect": "dream_eater",
+    "name": "食梦",
+    "target": "selected",
+    "contact": false,
+    "flags": [
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED"
+    ],
+    "sound": false
+  },
+  "aerial_ace": {
+    "power": 60,
+    "accuracy": 0,
+    "pp": 20,
+    "priority": 0,
+    "chance": 0,
+    "type": "flying",
+    "effect": "always_hit",
+    "name": "燕返",
+    "target": "selected",
+    "contact": true,
+    "flags": [
+      "FLAG_MAKES_CONTACT",
+      "FLAG_PROTECT_AFFECTED",
+      "FLAG_MIRROR_MOVE_AFFECTED",
+      "FLAG_KINGS_ROCK_AFFECTED"
+    ],
+    "sound": false
+  }
+}

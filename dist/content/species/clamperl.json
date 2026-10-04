@@ -1,0 +1,69 @@
+{
+  "name": "珍珠贝",
+  "dex": 366,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 35,
+    "atk": 64,
+    "def": 85,
+    "spa": 74,
+    "spd": 55,
+    "spe": 32
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 1,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 255,
+  "expYield": 142,
+  "growth": "erratic",
+  "abilities": [
+    "shell_armor"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 1,
+      "move": "whirlpool"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "clamp"
+    },
+    {
+      "level": 1,
+      "move": "iron_defense"
+    }
+  ],
+  "heldItems": {
+    "rare": "blue_shard"
+  },
+  "eggMoves": [
+    "mud_sport",
+    "supersonic"
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

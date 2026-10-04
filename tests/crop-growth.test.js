@@ -1,7 +1,7 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { CropRegistry, CropService } from "../dist/engine/crop-growth.js";
 import {
   EMERALD_CROP_POLICY,
@@ -138,9 +138,7 @@ test("Stage graphs are replaceable without changes to the growth driver", () => 
   s.advance(360);
   assert.equal(s.view("plot").stage, "seed");
 });
-const base = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const base = loadContentSync();
 function gardenPlugin() {
   return {
     id: "garden",

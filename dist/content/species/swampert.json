@@ -1,0 +1,107 @@
+{
+  "name": "巨沼怪",
+  "dex": 260,
+  "types": [
+    "water",
+    "ground"
+  ],
+  "stats": {
+    "hp": 100,
+    "atk": 110,
+    "def": 90,
+    "spe": 60,
+    "spa": 85,
+    "spd": 90
+  },
+  "catchRate": 45,
+  "expYield": 210,
+  "growth": "medium_slow",
+  "femaleRatio": 0.125,
+  "abilities": [
+    "torrent"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 3,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "mud_slap"
+    },
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 6,
+      "move": "mud_slap"
+    },
+    {
+      "level": 10,
+      "move": "water_gun"
+    },
+    {
+      "level": 15,
+      "move": "bide"
+    },
+    {
+      "level": 16,
+      "move": "mud_shot"
+    },
+    {
+      "level": 20,
+      "move": "foresight"
+    },
+    {
+      "level": 25,
+      "move": "mud_sport"
+    },
+    {
+      "level": 31,
+      "move": "take_down"
+    },
+    {
+      "level": 39,
+      "move": "muddy_water"
+    },
+    {
+      "level": 46,
+      "move": "protect"
+    },
+    {
+      "level": 52,
+      "move": "earthquake"
+    },
+    {
+      "level": 61,
+      "move": "endeavor"
+    }
+  ],
+  "eggGroups": [
+    "monster",
+    "water_1"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "machineMoves": [
+    "roar",
+    "protect",
+    "rain_dance",
+    "earthquake",
+    "double_team",
+    "rest"
+  ]
+}

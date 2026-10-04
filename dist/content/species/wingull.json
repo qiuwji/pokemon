@@ -1,0 +1,84 @@
+{
+  "name": "长翅鸥",
+  "dex": 278,
+  "types": [
+    "water",
+    "flying"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 30,
+    "def": 30,
+    "spe": 85,
+    "spa": 55,
+    "spd": 30
+  },
+  "catchRate": 190,
+  "expYield": 64,
+  "growth": "medium_fast",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "keen_eye"
+  ],
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spe": 1,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 7,
+      "move": "supersonic"
+    },
+    {
+      "level": 13,
+      "move": "wing_attack"
+    },
+    {
+      "level": 21,
+      "move": "mist"
+    },
+    {
+      "level": 31,
+      "move": "quick_attack"
+    },
+    {
+      "level": 43,
+      "move": "pursuit"
+    },
+    {
+      "level": 55,
+      "move": "agility"
+    }
+  ],
+  "eggGroups": [
+    "water_1",
+    "flying"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "eggMoves": [
+    "mist",
+    "agility",
+    "water_sport"
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "aerial_ace",
+    "rest",
+    "thief"
+  ]
+}

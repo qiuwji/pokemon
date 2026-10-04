@@ -1,0 +1,7 @@
+Imported targets/contact metadata for 87 moves
+{
+  "script": "import-move-metadata.py",
+  "check": true,
+  "files": [],
+  "contentChanges": []
+}

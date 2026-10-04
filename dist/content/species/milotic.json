@@ -1,0 +1,91 @@
+{
+  "name": "美纳斯",
+  "dex": 350,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 95,
+    "atk": 60,
+    "def": 79,
+    "spa": 100,
+    "spd": 125,
+    "spe": 81
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 2,
+    "spe": 0
+  },
+  "catchRate": 60,
+  "expYield": 213,
+  "growth": "erratic",
+  "abilities": [
+    "marvel_scale"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_1",
+    "dragon"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 10,
+      "move": "water_sport"
+    },
+    {
+      "level": 35,
+      "move": "rain_dance"
+    },
+    {
+      "level": 40,
+      "move": "hydro_pump"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 5,
+      "move": "wrap"
+    },
+    {
+      "level": 15,
+      "move": "refresh"
+    },
+    {
+      "level": 20,
+      "move": "water_pulse"
+    },
+    {
+      "level": 25,
+      "move": "twister"
+    },
+    {
+      "level": 30,
+      "move": "recover"
+    },
+    {
+      "level": 45,
+      "move": "attract"
+    },
+    {
+      "level": 50,
+      "move": "safeguard"
+    }
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

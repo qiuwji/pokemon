@@ -1,0 +1,92 @@
+{
+  "name": "雷伊布",
+  "dex": 135,
+  "types": [
+    "electric"
+  ],
+  "stats": {
+    "hp": 65,
+    "atk": 65,
+    "def": 60,
+    "spa": 110,
+    "spd": 95,
+    "spe": 130
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 2
+  },
+  "catchRate": 45,
+  "expYield": 197,
+  "growth": "medium_fast",
+  "abilities": [
+    "volt_absorb"
+  ],
+  "femaleRatio": 0.125,
+  "genderless": false,
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 35,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "tail_whip"
+    },
+    {
+      "level": 8,
+      "move": "sand_attack"
+    },
+    {
+      "level": 23,
+      "move": "quick_attack"
+    },
+    {
+      "level": 30,
+      "move": "double_kick"
+    },
+    {
+      "level": 36,
+      "move": "pin_missile"
+    },
+    {
+      "level": 47,
+      "move": "agility"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "helping_hand"
+    },
+    {
+      "level": 16,
+      "move": "thunder_shock"
+    },
+    {
+      "level": 42,
+      "move": "thunder_wave"
+    },
+    {
+      "level": 52,
+      "move": "thunder"
+    }
+  ],
+  "machineMoves": [
+    "roar",
+    "sunny_day",
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

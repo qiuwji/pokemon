@@ -1,0 +1,80 @@
+{
+  "name": "露力丽",
+  "dex": 298,
+  "types": [
+    "normal"
+  ],
+  "stats": {
+    "hp": 50,
+    "atk": 20,
+    "def": 40,
+    "spa": 20,
+    "spd": 40,
+    "spe": 20
+  },
+  "evYield": {
+    "hp": 1,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 150,
+  "expYield": 33,
+  "growth": "fast",
+  "abilities": [
+    "thick_fat",
+    "huge_power"
+  ],
+  "femaleRatio": 0.75,
+  "genderless": false,
+  "eggGroups": [
+    "no_eggs_discovered"
+  ],
+  "eggCycles": 10,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 6,
+      "move": "tail_whip"
+    },
+    {
+      "level": 15,
+      "move": "slam"
+    },
+    {
+      "level": 21,
+      "move": "water_gun"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "splash"
+    },
+    {
+      "level": 3,
+      "move": "charm"
+    },
+    {
+      "level": 10,
+      "move": "bubble"
+    }
+  ],
+  "offspring": {
+    "incense": {
+      "item": "sea_incense",
+      "without": "marill"
+    }
+  },
+  "eggMoves": [
+    "slam"
+  ],
+  "machineMoves": [
+    "protect",
+    "rain_dance",
+    "double_team",
+    "rest"
+  ]
+}

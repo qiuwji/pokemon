@@ -1,0 +1,6 @@
+{
+  "script": "import-encounters.py",
+  "check": true,
+  "files": [],
+  "contentChanges": []
+}

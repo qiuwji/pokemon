@@ -15,11 +15,35 @@
 import { objectSchema } from "../engine/extensions/values.js";
 
 const SCENES = [
-  { id: "terrain", map: "E2ETestField", name: "地形测试场", x: 8, y: 1 },
-  { id: "bike", map: "E2EBikeField", name: "自行车测试场", x: 8, y: 1 },
-  { id: "surf", map: "E2ESurfField", name: "冲浪测试场", x: 8, y: 1 },
-  { id: "fly", map: "E2EFlyField", name: "飞行测试场", x: 8, y: 1 },
-  { id: "hub", map: "E2ETestHub", name: "测试中枢", x: 8, y: 8 },
+  {
+    id: "terrain",
+    map: "e2e-support:e2e-test-field",
+    name: "地形测试场",
+    x: 8,
+    y: 1,
+  },
+  {
+    id: "bike",
+    map: "e2e-support:e2e-bike-field",
+    name: "自行车测试场",
+    x: 8,
+    y: 1,
+  },
+  {
+    id: "surf",
+    map: "e2e-support:e2e-surf-field",
+    name: "冲浪测试场",
+    x: 8,
+    y: 1,
+  },
+  {
+    id: "fly",
+    map: "e2e-support:e2e-fly-field",
+    name: "飞行测试场",
+    x: 8,
+    y: 1,
+  },
+  { id: "hub", map: "e2e-support:e2e-test-hub", name: "测试中枢", x: 8, y: 8 },
 ];
 
 // One machine per field move; `machines` pocket, reusable so repeated drills are free.
@@ -30,7 +54,7 @@ const MACHINES = [
   { id: "waterfall", move: "waterfall", label: "攀瀑" },
 ];
 
-export const e2eSupport = {
+const e2eSupport = {
   id: "e2e-support",
   apiVersion: 1,
   version: "1.1.0",
@@ -138,3 +162,30 @@ export const e2eSupport = {
 
 export const E2E_SCENES = SCENES;
 export const E2E_MACHINES = MACHINES;
+
+/** Test-only factory: fixtures are supplied by the host, not imported into production. */
+export function createE2ESupport(fixtures) {
+  const mapIds = Object.fromEntries(
+    Object.keys(fixtures).map((id) => [
+      id,
+      "e2e-support:" +
+        id
+          .replace(/^E2E/, "e2e-")
+          .replace(/([a-z])([A-Z])/g, "$1-$2")
+          .toLowerCase(),
+    ]),
+  );
+  return {
+    ...e2eSupport,
+    setup(api) {
+      for (const [id, source] of Object.entries(fixtures)) {
+        const map = structuredClone(source);
+        map.id = mapIds[id];
+        for (const warp of map.warps)
+          warp.dest_map = mapIds[warp.dest_map] || warp.dest_map;
+        api.content.register("maps", map.id.split(":")[1], map);
+      }
+      e2eSupport.setup(api);
+    },
+  };
+}

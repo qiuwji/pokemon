@@ -1,3 +1,4 @@
+import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
   fixtureInventory,
@@ -5,7 +6,6 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { BattleSession } from "../dist/engine/battle-session.js";
@@ -21,9 +21,7 @@ import { EvolutionService } from "../dist/engine/growth/evolution.js";
 import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
 import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-const db = JSON.parse(
-  fs.readFileSync(new URL("../dist/content.json", import.meta.url)),
-);
+const db = loadContentSync();
 function manualClock() {
   let time = 0;
   const waits = [];

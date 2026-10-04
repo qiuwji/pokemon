@@ -1,0 +1,47 @@
+{
+  "name": "百变怪",
+  "dex": 132,
+  "types": [
+    "normal"
+  ],
+  "stats": {
+    "hp": 48,
+    "atk": 48,
+    "def": 48,
+    "spa": 48,
+    "spd": 48,
+    "spe": 48
+  },
+  "evYield": {
+    "hp": 1,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 35,
+  "expYield": 61,
+  "growth": "medium_fast",
+  "abilities": [
+    "limber"
+  ],
+  "femaleRatio": 0,
+  "genderless": true,
+  "eggGroups": [
+    "ditto"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "transform"
+    }
+  ],
+  "heldItems": {
+    "rare": "metal_powder"
+  },
+  "machineMoves": []
+}

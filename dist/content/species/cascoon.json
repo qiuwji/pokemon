@@ -1,0 +1,48 @@
+{
+  "name": "盾甲茧",
+  "dex": 268,
+  "types": [
+    "bug"
+  ],
+  "stats": {
+    "hp": 50,
+    "atk": 35,
+    "def": 55,
+    "spa": 25,
+    "spd": 25,
+    "spe": 15
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 2,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 120,
+  "expYield": 72,
+  "growth": "medium_fast",
+  "abilities": [
+    "shed_skin"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "bug"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 7,
+      "move": "harden"
+    }
+  ],
+  "unavailableLearnset": [],
+  "machineMoves": []
+}
