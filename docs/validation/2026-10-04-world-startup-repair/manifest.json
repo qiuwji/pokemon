@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-04",
+  "version": "0.30.0",
+  "baseCommit": "3e3e373",
+  "scope": "World editing syntax, pack startup, contract typing, sample permissions and stable identity regression",
+  "tests": {
+    "core": {
+      "passed": 864,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 25,
+      "failed": 0
+    },
+    "log": "tests.log"
+  },
+  "quality": {
+    "result": "All check components passed: content references, public contracts, 333 JS module syntax checks, documentation, ESLint and strict engine types.",
+    "log": "check.log",
+    "note": "The combined check initially stopped at documentation links while this manifest was being written. After adding it, documentation, lint and engine types completed successfully; earlier passing components were not repeated."
+  },
+  "browser": {
+    "url": "http://127.0.0.1:5181/?control=1&plugins=emerald-first-bgm",
+    "record": "browser.json",
+    "screenshot": "game.png",
+    "result": "Existing save loaded into OldaleTown; map, player and party visible; menu opened and closed normally; player save not reset or overwritten"
+  },
+  "limitations": [
+    "Browser proof covers startup and menu only; full story/battle and music listening were not newly exercised.",
+    "Captured console retains two failed startup errors from before the arena identity fix.",
+    "Original content remains a prologue slice."
+  ]
+}

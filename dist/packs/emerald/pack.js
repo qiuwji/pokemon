@@ -114,11 +114,13 @@ function baseObjects(state, db) {
         ? [
             {
               ...obj(18, 8, "Boy1", "arena", "npc.arena.5"),
+              id: "emerald:arena.doubles",
               trainerId: "doubles",
               movement: { mode: "still", dir: "down", rangeX: 0, rangeY: 0 },
             },
             {
               ...obj(18, 10, "Boy2", "arena", "npc.arena.6"),
+              id: "emerald:arena.freeForAll",
               trainerId: "freeForAll",
               movement: { mode: "still", dir: "down", rangeX: 0, rangeY: 0 },
             },

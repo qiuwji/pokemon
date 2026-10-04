@@ -1,0 +1,20 @@
+{
+  "capturedAt": "2026-10-04T15:39:19.669Z",
+  "url": "http://127.0.0.1:5181/?control=1&plugins=emerald-first-bgm",
+  "state": "Browser tab: 2, Title: \"口袋妖怪 · 绿宝石\", URL: \"http://127.0.0.1:5181/?control=1&plugins=emerald-first-bgm\".\nThe following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 16\n+\t\t\t68 text 晴朗 · 时钟未设定\nThe focused UI element is 18 image Description: 宝可梦游戏。方向键或 WASD 移动，Z 或回车确认，X 返回。, ID: game",
+  "console": [
+    {
+      "level": "error",
+      "message": "Error: Authored NPC needs an identity: arena:18,8\n    at http://127.0.0.1:5181/packs/emerald/pack.js:194:24\n    at Array.map (<anonymous>)\n    at objectsFor (http://127.0.0.1:5181/packs/emerald/pack.js:191:33)\n    at assertPackContent (http://127.0.0.1:5181/packs/emerald/content.js:34:9)\n    at boot (http://127.0.0.1:5181/app.js:36:18)",
+      "timestamp": "2026-10-04T15:32:19.544Z",
+      "url": "http://127.0.0.1:5181/app.js"
+    },
+    {
+      "level": "error",
+      "message": "Error: Authored NPC needs an identity: arena:18,8\n    at http://127.0.0.1:5181/packs/emerald/pack.js:194:24\n    at Array.map (<anonymous>)\n    at objectsFor (http://127.0.0.1:5181/packs/emerald/pack.js:191:33)\n    at assertPackContent (http://127.0.0.1:5181/packs/emerald/content.js:34:9)\n    at boot (http://127.0.0.1:5181/app.js:36:18)",
+      "timestamp": "2026-10-04T15:32:47.963Z",
+      "url": "http://127.0.0.1:5181/app.js"
+    }
+  ],
+  "note": "Console retains two arena identity errors from before the fix; the successful reload displays the saved OldaleTown scene and the menu opens/closes normally."
+}

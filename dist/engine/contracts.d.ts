@@ -579,7 +579,7 @@ export interface WorldObjectView {
   readonly dir: Direction | null;
   readonly script: string | null;
   readonly dialogue: string | null;
-  readonly dialoguePreview?: DeepReadonly<Json> | null;
+  readonly dialoguePreview?: DeepReadonly<DialogueDescription> & { readonly source?: string } | null;
   readonly dialogueError?: string | null;
   readonly text: string | null;
   readonly availability: "active" | "inactive" | "not-instantiated";

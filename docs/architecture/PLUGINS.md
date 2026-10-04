@@ -116,4 +116,4 @@ const plugin = {
 
 ## 已有世界查询与修改
 
-使用`core.world.objects`取得稳定对象ID和capabilities，不用观察坐标拼ID。普通NPC/sign的dialogue绑定、按ID对白预览、patch的feedback、地块appearance/revision及存档依赖见[统一世界合同](../engine/world/STATE_AND_LIFECYCLE.md)。raw NPC资料未自动变成Actor；not-instantiated不可修改。持续Actor走actor命令，商店/治疗等领域交互不允许对白字段覆盖。本轮接口已接入但未运行验证；无撤销、所有权仲裁、跨批事务和跨图集修改承诺。
+使用`core.world.objects`取得稳定对象ID和capabilities，不用观察坐标拼ID。普通NPC/sign的dialogue绑定、按ID对白预览、patch的feedback、地块appearance/revision及存档依赖见[统一世界合同](../engine/world/STATE_AND_LIFECYCLE.md)。raw NPC资料未自动变成Actor；not-instantiated不可修改。持续Actor走actor命令，商店/治疗等领域交互不允许对白字段覆盖。接口已通过全量核心/插件测试，实际浏览器验收范围见STATUS；无撤销、所有权仲裁、跨批事务和跨图集修改承诺。

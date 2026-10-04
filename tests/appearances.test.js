@@ -362,13 +362,14 @@ test("Saved choices validate current schemas, missing Actor identities and refer
   assert.equal(JSON.stringify(game.state), before);
 });
 
-test("Scene object selectors accept existing dialogue IDs and restore dormant choices without modifying object state", async () => {
+test("Scene object selectors accept stable native IDs and restore dormant choices without modifying object state", async () => {
   let api;
   const { game } = session([wardrobe((v) => (api = v))]);
   const object = game
       .baseWorldObjects("LittlerootTown")
-      .find((n) => n.id.includes(",")),
-    target = { kind: "object", map: "LittlerootTown", id: object.id };
+      .find((n) => n.kind === "talk" && n.id.startsWith("core:npc."));
+  assert(object, "The pack must expose a stable native NPC identity");
+  const target = { kind: "object", map: "LittlerootTown", id: object.id };
   const before = structuredClone(game.worldState.record("LittlerootTown"));
   assert(
     (

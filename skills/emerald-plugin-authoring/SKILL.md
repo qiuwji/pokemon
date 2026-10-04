@@ -289,7 +289,7 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 
 普通talk/sign可以绑定注册的对白，按id查询可看到dialoguePreview及解析错误。商店/治疗/主线使用对应领域入口；对白模板必须能独立解析，不传调用parameters。feedback:true可附有效对象/地块；反馈报错但ok:true时不可重试已提交的写入。对白与图集来源纳入存档依赖，但不支持任意跨图集铺设、撤销、冲突所有权或跨批事务。
 
-完整链路例：[world-editing](../../examples/world-editing.test.js)，在项目根运行`node --test examples/world-editing.test.js`。本次仅编写，验证状态查STATUS，不把示例存在当成已通过。它修改原生告示牌而非新增旁边的对象。失败边界见tests/world-editing.test.js；文件移动后搜索`core.world.objects`、`inspectWorldObjects`和`world.dialogue`。
+完整链路例：[world-editing](../../examples/world-editing.test.js)，在项目根运行`node --test examples/world-editing.test.js`。验证状态与证据查STATUS；不把示例存在当成已通过。它修改原生告示牌而非新增旁边的对象。失败边界见tests/world-editing.test.js；文件移动后搜索`core.world.objects`、`inspectWorldObjects`和`world.dialogue`。
 
 <!-- runnable-example: examples/world-editing.test.js -->
 ```js
@@ -306,7 +306,7 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
       scripts: {}, entries: {},
     });
     dialogue = exports.dialogues.greeting;
-  }, ["world"]);
+  }, ["world", "movement"]);
   const s = session([plugin]), map = "LittlerootTown";
   const listing = await api.commands.dispatch("core.world.objects", { map });
   const sign = listing.objects.find(o => o.kind === "sign" && o.x === 15 && o.y === 13);

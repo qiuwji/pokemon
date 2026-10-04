@@ -89,7 +89,7 @@ await api.commands.dispatch("core.world.patch", { operations: JSON.stringify([
 
 ## 修改已有NPC与告示牌（2026-10-04）
 
-本轮局部接口增强已写入，尚未运行测试或浏览器验收；完成状态见STATUS，之前的验证不覆盖本次改动。
+局部接口增强及后续启动修复已通过全量核心/插件测试和实际浏览器启动验收；完成状态、边界和证据见STATUS。
 
 ### 发现对象与修改资格
 
@@ -111,7 +111,7 @@ capabilities.fields是允许更改的字段列表，capabilities.hidden表明可
 
 公开修改增加可选`feedback:true`，成功回执中的changes逐项包含对象读回或1×1有效区域。读取反馈异常时返回`ok:true,revision,feedbackError`，表示业务已提交；不能重放这次修改。默认不展开反馈。`core.world.cells`补revision、appearance、tileset和resource（渲染资源键）；appearance是有效metatile索引，不改变逻辑block。它证明资源引用和碰撞数据，不证明像素画面已经验收。
 
-完整例：[world-editing](../../../examples/world-editing.test.js)。从插件注册到查询、修改、实际告示交互及保存读回；本次仅编写，执行结果尚未记录。修改失败、特殊对象资格和依赖另见[核心合同](../../../tests/world-editing.test.js)。
+完整例：[world-editing](../../../examples/world-editing.test.js)。从插件注册到查询、修改、实际告示交互及保存读回；该示例已执行通过，具体结果见STATUS。修改失败、特殊对象资格和依赖另见[核心合同](../../../tests/world-editing.test.js)。
 
 ### 有效地图与依赖
 

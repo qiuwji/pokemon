@@ -2,7 +2,7 @@ import { readOnly } from "./extensions/values.js";
 /** Detached grid projection. No renderer, traversal side effects, story or RNG. */
 export class WorldQuery {
   constructor({ maps, objects, player, playerSource, elevation, revision = () => 0 }) {
-    Object.assign(this, { maps, objects, player, playerSource, elevation, revision = () => 0 });
+    Object.assign(this, { maps, objects, player, playerSource, elevation, revision });
   }
   map(id) {
     if (!Object.hasOwn(this.maps, id)) throw new Error("Unknown query map");

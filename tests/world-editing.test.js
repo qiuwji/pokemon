@@ -6,6 +6,19 @@ import { WorldStateService } from "../dist/engine/world-state.js";
 import { nextActorDirection } from "../dist/engine/actor-navigation.js";
 import { BEHAVIOR } from "../dist/engine/terrain.js";
 import { ExtensionCatalog } from "../dist/engine/extensions/catalog.js";
+import { loadContentSync } from "../tools/content-io.mjs";
+import { assertPackContent } from "../dist/packs/emerald/content.js";
+import { objectsFor } from "../dist/packs/emerald/pack.js";
+
+test("Browser startup validates the complete pack, including authored arena identities", () => {
+  const db = loadContentSync();
+  assert.equal(assertPackContent(db), db);
+  const arena = objectsFor({ position: { map: "Route101" }, flags: { rescued: true } }, db)
+    .filter(o => o.kind === "arena");
+  assert.equal(arena.length, 2);
+  assert.equal(new Set(arena.map(o => o.id)).size, 2);
+  assert(arena.every(o => typeof o.id === "string" && o.id.length > 0));
+});
 
 function fixture() {
   let dialogue;

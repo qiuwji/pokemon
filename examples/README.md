@@ -5,7 +5,7 @@
 在项目根执行`npm run test:plugins`，或只执行表中的一个文件。首次使用先`npm ci`；Node需支持node:test、structuredClone及本项目ES模块。复制例子时放在examples/下，让相对导入保持正确。
 
 | 接手方向 | 运行文件 | 实际证明 |
-| 已有世界编辑 | [world-editing.test.js](world-editing.test.js) | 注册对白→查已有sign→替换→读回→交互→保存；本轮尚未运行 |
+| 已有世界编辑 | [world-editing.test.js](world-editing.test.js) | 注册对白→查已有sign→替换→读回→交互→保存；2026-10-04插件测试组通过 |
 | --- | --- | --- |
 | AI与测试插件 | [automation.test.js](automation.test.js) | 默认观察、环境隔离、原子准备、失败回滚、NPC奖励及保存 |
 | 安装清单 | [catalog.test.js](catalog.test.js) | 当前清单模块可导入、默认插件可装配、空清单也可启动与导出 |

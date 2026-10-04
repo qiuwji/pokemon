@@ -11,7 +11,7 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
       scripts: {}, entries: {},
     });
     dialogue = exports.dialogues.greeting;
-  }, ["world"]);
+  }, ["world", "movement"]);
   const s = session([plugin]), map = "LittlerootTown";
   const listing = await api.commands.dispatch("core.world.objects", { map });
   const sign = listing.objects.find(o => o.kind === "sign" && o.x === 15 && o.y === 13);
