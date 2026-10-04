@@ -1,0 +1,104 @@
+{
+  "runs": [
+    {
+      "script": "import-weather.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-weather.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-weather.py.log"
+    },
+    {
+      "script": "import-map-cycling.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-map-cycling.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-map-cycling.py.log"
+    },
+    {
+      "script": "import-item-metadata.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-item-metadata.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-item-metadata.py.log"
+    },
+    {
+      "script": "import-held-items.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-held-items.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-held-items.py.log"
+    },
+    {
+      "script": "import-machine-learning.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-machine-learning.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-machine-learning.py.log"
+    },
+    {
+      "script": "import-rule-metadata.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-rule-metadata.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-rule-metadata.py.log"
+    },
+    {
+      "script": "import-egg-assets.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-egg-assets.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-egg-assets.py.log"
+    },
+    {
+      "script": "import-audio.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-audio.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-audio.py.log"
+    },
+    {
+      "script": "import-move-metadata.py",
+      "command": [
+        "python3",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/import-move-metadata.py",
+        "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/work/pokeemerald",
+        "--check"
+      ],
+      "exitCode": 0,
+      "log": "import-move-metadata.py.log"
+    }
+  ],
+  "outputsUnchanged": true
+}

@@ -18,7 +18,7 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法和文档。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。当前阶段全量回归：**795项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**312个JS模块**检查通过。本轮内容拆分及回归的日志和范围见[检查点证据](docs/validation/2026-10-04-content-pipeline/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法和文档。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。当前阶段全量回归：**795项测试通过，0失败、0跳过**；十五个Skill入门例通过，当前**312个JS模块**检查通过。最新工具回归见[检查点证据](docs/validation/2026-10-04-import-tools/manifest.json)，内容拆分的启动证明见[内容证据](docs/validation/2026-10-04-content-pipeline/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
@@ -109,7 +109,7 @@ npm run check:docs
 
 精灵、招式、道具通过内容数据注册。新效果由唯一操作/招式效果表与规则阶段组合；道具在受限草稿上试算，再校验字段、库存和目标后提交。未知效果明确报错；基础内容中已没有显式禁用效果，但完整语义仍须按机制清单逐项核对。表现独立通过 effect/move/scene/transition/audio 注册，新增视觉不修改绘制分支。
 
-转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；内容通过[分类清单](dist/content/manifest.json)装配，导入先预演、按字段所有权更新。详见[内容管线](docs/development/CONTENT_PIPELINE.md)与[脚本索引](docs/development/IMPORT_SCRIPTS.md)。测试地图只在显式?e2e=1环境加载。
+转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；内容通过[分类清单](dist/content/manifest.json)装配，全部19个导入入口支持预演和独立目标，按字段/产物所有权更新。详见[内容管线](docs/development/CONTENT_PIPELINE.md)与[脚本索引](docs/development/IMPORT_SCRIPTS.md)。测试地图只在显式?e2e=1环境加载。
 
 #天气合同、插件示例和原作映射见 [WEATHER.md](docs/engine/world/WEATHER.md)。
 

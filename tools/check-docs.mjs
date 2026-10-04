@@ -45,6 +45,20 @@ for (const entry of fs.readdirSync(path.join(root, "skills"), { withFileTypes: t
   if (!source.startsWith(`---\nname: ${entry.name}\ndescription: `)) errors.push(`skills/${entry.name}: invalid metadata header`);
   if (!source.includes("<!-- runnable-example:")) errors.push(`skills/${entry.name}: missing executable example`);
 }
+// Keep the human workflow index tied to the actual owned entry points, including renames.
+const ownership = JSON.parse(fs.readFileSync(path.join(root, "tools/imports/ownership.json"), "utf8"));
+const index = fs.readFileSync(path.join(root, "docs/development/IMPORT_SCRIPTS.md"), "utf8");
+const documented = [...index.matchAll(/^\|[^\n]*?`(import-[^`]+)`/gm)].map(match => match[1]);
+for (const name of Object.keys(ownership)) {
+  if (!fs.existsSync(path.join(root, "tools", name))) errors.push(`Import ownership: missing ${name}`);
+  if (documented.filter(value => value === name).length !== 1) errors.push(`Import index: expected exactly one row for ${name}`);
+}
+for (const name of documented) {
+  if (!Object.hasOwn(ownership, name)) errors.push(`Import index: undeclared writer ${name}`);
+}
+for (const name of fs.readdirSync(path.join(root, "tools"))) {
+  if (/^import-.*\.(?:py|mjs)$/.test(name) && !Object.hasOwn(ownership, name)) errors.push(`Import ownership: undeclared entry point ${name}`);
+}
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exitCode = 1;

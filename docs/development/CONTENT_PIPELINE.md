@@ -52,7 +52,7 @@ const db = loadContentSync(); // 示例位置：tests/helpers/；其他位置调
 
 ## 导入如何保护数据
 
-Python内容脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，输出归dist；`--target`可指向另一份现有内容包，便于隔离验证。
+所有受支持导入脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，输出归dist；`--target`可指向另一份输出目录。内容脚本需要现有清单，独立规则/资源生成器可写空的临时目标。
 
 ```sh
 python3 tools/import-encounters.py /绝对路径/pokeemerald --check
@@ -77,6 +77,6 @@ python3 tools/import-encounters.py /绝对路径/pokeemerald
 
 ## 验证与维护
 
-[content-manifest.test.js](../../tests/content-manifest.test.js)验证浏览器/Node一致、部署前缀、缺文件/坏JSON、重复字段、引用与PNG尺寸；[Python写入测试](../../tools/tests/test_content_store.py)验证不写预演、所属范围、无关文件保留和提交故障回滚。[插件加载测试](../../tests/plugin-loader.test.js)使用真实模块及目录验证默认隔离、显式测试环境和依赖排序。
+[content-manifest.test.js](../../tests/content-manifest.test.js)验证浏览器/Node一致、部署前缀、缺文件/坏JSON、重复字段、引用与PNG尺寸；[Python写入测试](../../tools/tests/test_content_store.py)验证不写预演、所属范围、无关文件保留和提交故障回滚。[独立输出与共享解析测试](../../tools/tests/test_import_outputs.py)验证二进制预演、输出归属、空表拒绝、配置失败不落盘及原作解析。[插件加载测试](../../tests/plugin-loader.test.js)使用真实模块及目录验证默认隔离、显式测试环境和依赖排序。
 
 接口改变时同次更新本页、导入索引、相关Skill和测试。当前数字/执行结果只以[STATUS](../project/STATUS.md)及[VALIDATION](../project/VALIDATION.md)为准。

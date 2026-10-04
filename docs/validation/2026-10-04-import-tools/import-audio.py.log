@@ -1,0 +1,7 @@
+Imported real WAV samples: 7
+{
+  "script": "import-audio.py",
+  "check": true,
+  "files": [],
+  "contentChanges": []
+}

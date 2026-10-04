@@ -109,5 +109,54 @@
     "outputs": [
       "packs/emerald/detail-sprite-frames.js"
     ]
+  },
+  "import-weather.py": {
+    "content": [],
+    "outputs": [
+      "engine/rules/gen3/map-weather.js"
+    ]
+  },
+  "import-map-cycling.py": {
+    "content": [],
+    "outputs": [
+      "engine/rules/gen3/map-cycling.js"
+    ]
+  },
+  "import-item-metadata.py": {
+    "content": [],
+    "outputs": [
+      "engine/rules/gen3/item-metadata.js"
+    ]
+  },
+  "import-held-items.py": {
+    "content": [],
+    "outputs": [
+      "engine/rules/gen3/held-catalog.js"
+    ]
+  },
+  "import-machine-learning.py": {
+    "content": [],
+    "outputs": [
+      "engine/rules/gen3/machine-learning.js"
+    ]
+  },
+  "import-rule-metadata.py": {
+    "content": [],
+    "outputs": [
+      "engine/rules/gen3/reference-metadata.js"
+    ]
+  },
+  "import-egg-assets.py": {
+    "content": [],
+    "outputs": [
+      "assets/egg-*.png"
+    ]
+  },
+  "import-audio.py": {
+    "content": [],
+    "outputs": [
+      "assets/audio/*.wav",
+      "assets/audio/provenance.json"
+    ]
   }
 }

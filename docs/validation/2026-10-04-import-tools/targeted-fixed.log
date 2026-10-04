@@ -1,0 +1,46 @@
+✖ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (693.769459ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 753.873084
+
+✖ failing tests:
+
+test at tests/content-manifest.test.js:122:1
+✖ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (693.769459ms)
+  AssertionError [ERR_ASSERTION]: .........F.
+  ======================================================================
+  FAIL: test_shared_parser_matches_full_existing_reference (test_import_outputs.ImportOutputTests)
+  ----------------------------------------------------------------------
+  Traceback (most recent call last):
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/tests/test_import_outputs.py", line 68, in test_shared_parser_matches_full_existing_reference
+      self.assertEqual(moves['curse']['target'], 'user-or-selected')
+  AssertionError: 'selected' != 'user-or-selected'
+  - selected
+  + user-or-selected
+  
+  
+  ----------------------------------------------------------------------
+  Ran 11 tests in 0.634s
+  
+  FAILED (failures=1)
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/content-manifest.test.js:139:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

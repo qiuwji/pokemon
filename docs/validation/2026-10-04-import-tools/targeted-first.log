@@ -1,0 +1,55 @@
+✔ Browser and Node assemble the same production pack from readable metadata and generated grids (16.196416ms)
+✔ Content deployment prefixes are preserved and file failures identify the failing fragment (141.592ms)
+✔ Manifest rejects missing sections, duplicate paths, escapes and unsafe identities (0.618875ms)
+✔ Fragments cannot overwrite existing fields or succeed with an unfilled file (3.127917ms)
+✔ A missing or malformed local fragment cannot silently produce a partial pack (15.808667ms)
+✖ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (665.075375ms)
+✔ Missing map/script references and duplicate warps are rejected unless explicitly classified (12.99225ms)
+✔ Atlas metadata and frame indices must match actual PNG dimensions (3.103833ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 926.693
+
+✖ failing tests:
+
+test at tests/content-manifest.test.js:122:1
+✖ Python content writers enforce ownership, no-write previews, changed-file scope and rollback (665.075375ms)
+  AssertionError [ERR_ASSERTION]: ........F.
+  ======================================================================
+  FAIL: test_shared_parser_matches_full_existing_reference (test_import_outputs.ImportOutputTests)
+  ----------------------------------------------------------------------
+  Traceback (most recent call last):
+    File "/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tools/tests/test_import_outputs.py", line 52, in test_shared_parser_matches_full_existing_reference
+      self.assertEqual(moves['earthquake']['target'], 'opponents')
+  AssertionError: 'all-others' != 'opponents'
+  - all-others
+  + opponents
+  
+  
+  ----------------------------------------------------------------------
+  Ran 10 tests in 0.599s
+  
+  FAILED (failures=1)
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/content-manifest.test.js:139:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

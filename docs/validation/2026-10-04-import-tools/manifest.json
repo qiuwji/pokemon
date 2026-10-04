@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-04",
+  "baseline": "4363116",
+  "version": "0.26.0",
+  "scope": "All 19 import entry points share guarded outputs and no-write previews; source paths, generated provenance, machine count configuration and shared original move parsing",
+  "verification": {
+    "full": {
+      "command": "npm test",
+      "passed": 810,
+      "failed": 0,
+      "skipped": 0,
+      "log": "full.log",
+      "nestedPythonCases": 11
+    },
+    "targeted": {
+      "command": "node --test --test-name-pattern=\"Python content writers\" tests/content-manifest.test.js",
+      "passed": 1,
+      "nestedPythonCases": 11,
+      "log": "targeted-final.log"
+    },
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "modules": 312,
+      "log": "check.log"
+    },
+    "previews": {
+      "runs": 9,
+      "workingDirectory": "/tmp",
+      "outputsUnchanged": true,
+      "record": "previews.json"
+    },
+    "parity": {
+      "method": "Generate 6 original rule modules into an isolated temporary target; import old/new exports and assert deep equality",
+      "passed": true,
+      "log": "generated-parity.log"
+    }
+  },
+  "productionChanges": "Six generated module comment headers only; rule exports, base content and assets unchanged",
+  "firstFailures": [
+    "New source test assumed Earthquake targets only opponents; fixed against original FOES_AND_ALLY reference",
+    "New source test assumed Curse uses DEPENDS; original move header is SELECTED; assertion corrected against source. Complete generated export parity passed independently."
+  ],
+  "unimplemented": [
+    "Complete importer directory/category restructuring",
+    "Full region/species/localization configuration",
+    "Shared terrain animation range source",
+    "Complete omission/dependency audits for breeding/evolution",
+    "Lint and broader JS type coverage",
+    "Full dialogue data reconstruction and browser flow acceptance"
+  ],
+  "reuse": "Previous content assembly and browser startup evidence remains applicable; no game behavior changes in this tool batch. Earlier coverage statistics retain their own baseline.",
+  "invalidatedBy": [
+    "Changes to import outputs, ownership, shared parser, config, source revision or test discovery"
+  ],
+  "sourceHashes": {
+    "tools/import-movement.py": "4e7009c30524407265fea0113e80c238ae475862795004dba6f9cb2192df1b7d",
+    "tools/import-audio.py": "51b2cd641b935b2a5f2bc7f6d2f038511c7fb4b4738fbebd33c5ae1f093272cf",
+    "tools/import-held-items.py": "85aadcd82cd44bdc310ae316dd3439d8deb4fad61c26d2e9ffe6d79a91925c48",
+    "tools/import-map-cycling.py": "3f46005978baa04741329d5fc176afbb9f70ad492be68d2031a46699e614db66",
+    "tools/import-rule-metadata.py": "66af91cc5fb97321172c642b654381428b612388f537eecdd1c1cea55a4d1dfd",
+    "tools/import-item-metadata.py": "64474a7b665a3ab460c843d17254b0e051c27b42d7af5f784ac1e12169957145",
+    "tools/import-species-metadata.py": "b93344e3398eea47c471f1fb700f4c0108862f6c412d9d9d79928be51b60ca3e",
+    "tools/import-evolutions.py": "0af6c138a5a1ba05d983428f51578fb679081f1316fbb81e518d31f1df875131",
+    "tools/import-water-encounters.py": "dea89cb643a1f6b35886a9275362bd934f52b5a2f9318fb9900dee5ea547d681",
+    "tools/import-move-metadata.py": "e39a41d9d793dfb18d61dddc122aff02a0b2eb0fc7efa5f2a26506406570e346",
+    "tools/import-weather.py": "d2a60eebcaa62fda09b6ca3fff9727d489a86e7aa13e5315d3af6f487ad737a7",
+    "tools/import-machine-learning.py": "0fa6e86a99402256a6a1f9867d736af8bd7ba7175642857bc1396886ea13c2f6",
+    "tools/import-emerald.py": "0e5eba6bd439479dc747a038ba8547bd08912398fc0da4f5518d626654befc93",
+    "tools/import-grid.py": "35d382200d051d52b16ec182985e52fb310ec9bdfb6d74e85e7ae827b15dcbf7",
+    "tools/import-actor-animations.py": "7ae5d6de62165b21fffdaf4322f1f04f4c4dd69f12159a010bfd137ddf14263c",
+    "tools/import-species.py": "d15b2972c0b5e2ba7d22e4fc7958e0bedc08496a883aa7fc599681ca01455ed7",
+    "tools/import-encounters.py": "b2eae5e267a9dfdf6e31a2bdfc043f671afd56b8d0d03ed738f06920d8a99c0f",
+    "tools/import-detail-sprites.py": "365b95400eb401748f97ec75617264da5a2180d9e7775f44664c593325fd0e64",
+    "tools/import-egg-assets.py": "f7eae7b8b87058483b91c70cea596b9d2f3f29aca9ece2a26a839c894d286113",
+    "tools/imports/context.py": "bff6cb044f4e8925729bca53cab261a175c6b19adab47fb61b8686c3b25df099",
+    "tools/imports/battle_moves.py": "b4333cf47c2bba5149e76c6abb3b448ad1c266b4fcabeddcc50c5221a1d7720b",
+    "tools/imports/ownership.json": "c97b38a4223c2b778490a190b046998f58efcb6699d93df3e7f74fe9c8d59a53",
+    "tools/imports/config/gen3.json": "df376d882a1db3f201f5648082aa69ddafe4276be8f8a62fb5b9929d38ec7855",
+    "tools/tests/test_content_store.py": "d575363c4a716be919dd6f3ac72d67e5fe0095358640a42c09d7bf8ae23f37c4",
+    "tools/tests/test_import_outputs.py": "d4a236331c024153fa5ff88ad862ce2ccf38eeab5eabbf82feeda69df1c9d366",
+    "tools/check-docs.mjs": "86906a73b6784a8c152694703522f1ea4976b004f8700607db99cfc64ce73e60",
+    "tests/content-manifest.test.js": "4f1f71b868d783c728fe5030d50979cc8542377ba1c87b8252c8ec14ac4163bf",
+    "dist/engine/rules/gen3/machine-learning.js": "fb39e4e1208a7fc347e5fb15f36eae9c5180ad94b3f37af43f31f3e0094ba310",
+    "dist/engine/rules/gen3/abilities.js": "bc9ee1f65c60202ebbbfc1375599483aeac26e799d50f26f49251866c8c3be51",
+    "dist/engine/rules/gen3/continuous-states.js": "44b35e6b121e6d49e7a85ef91ccb623241cdcf8808c6b4b9a34a5bc959bf13fb",
+    "dist/engine/rules/gen3/weather.js": "d9a9c49ea3d03fd098eb8b37241d1257fb99410417235b386543347f8f5fbd34",
+    "dist/engine/rules/gen3/elevation.js": "2869f31124fc07518f7d4cbb7f77a2f4090a23d5c8dad1d0ad3e87bff4f106c1",
+    "dist/engine/rules/gen3/extended-move-effects.js": "0dda721d7d453624fc521c1b6737a3bbf4f5a135a2d35d6d2f67d0f65d236680",
+    "dist/engine/rules/gen3/fishing.js": "7943ce9e56fccc304bc48438c4d409e2c237d2ca39c39cd8ab76695ca7f2124a",
+    "dist/engine/rules/gen3/held-items.js": "f144de24d33c44342079e501eab575ef035d46ab4b6c15ffc9bd3d9ba2031185",
+    "dist/engine/rules/gen3/tactical-strategy.js": "376baf04e10a803d0e9c9eb8d04ce6b1a38b3df30da638241e03ab262a178de3",
+    "dist/engine/rules/gen3/battle-states.js": "9eaf3e3239887245a2cf274ce14b9e4999a9ea242c88666dd2be12155f3eb344",
+    "dist/engine/rules/gen3/inventory.js": "dfe410ea0649f250055c791d0a677923074659969726e866eb7d334b30cc97c1",
+    "dist/engine/rules/gen3/bike-input.js": "e5dabfae6b1dd009df341d1a2cfa6ab9d5c4eba1613e69a8d87ccec60ee51d7d",
+    "dist/engine/rules/gen3/control-states.js": "4eb178141936b8e1daa7bfda54f85dba28c0ab87f71eadb5024cb0f020493a45",
+    "dist/engine/rules/gen3/held-catalog.js": "83d977a9cf52d936665f5ef510cbfeb95e3606362d208ddcf1fd8bb7f6c09bdc",
+    "dist/engine/rules/gen3/global-rules.js": "292b7aefdd85ef66cdf498d29bb698681100f816768fccccf6c59c9731ab71f0",
+    "dist/engine/rules/gen3/item-metadata.js": "8d9c65345f97c0049233dd60252c865aa0a335d3349409569e5dd5ae96fa2f3f",
+    "dist/engine/rules/gen3/reference-metadata.js": "d546df129bcf1dd7d907264362658daa675918fc56579aadbbc2b64d2c1a06cf",
+    "dist/engine/rules/gen3/map-cycling.js": "4c2d5a92b1b30f88ab7ea3c8f045df92e7d3838b1470d94e34aed493871d9662",
+    "dist/engine/rules/gen3/bike-input-helpers.js": "ba531eb2f141ffe0c007c822f6224d76b00acc64d653acfdb41bb3aff554eaa9",
+    "dist/engine/rules/gen3/map-weather.js": "3277da39bd4327dd25e9837f0f62291769f36dbdb682c2016f4e6203faf48e2a",
+    "dist/engine/rules/gen3/support-states.js": "054471ab5df26775e4e8a9fa81ef50d612e631e65869bb9c1915c65179a55a21",
+    "dist/engine/rules/gen3/numeric.js": "8e3e4ee726aba4c7eb80ed6754719abff62ee9475607dc3a4dfbc85da306ec4b",
+    "dist/engine/rules/gen3/acro-input.js": "03aeedef9acb8910e6131fbb49e6f975da0288b3d8a1b290f7befe4500fec738",
+    "dist/engine/rules/gen3/ability-catalog.js": "72437776937fd320cdd6fc4354a726836b2eb6934c9930c44deb358b3a96e20d"
+  }
+}

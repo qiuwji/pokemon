@@ -1,0 +1,16 @@
+{
+  "expectedTMCount": 50,
+  "expectedHMCount": 8,
+  "expectedMoveCount": 354,
+  "naturePowerMoves": [
+    "stun_spore",
+    "razor_leaf",
+    "earthquake",
+    "hydro_pump",
+    "surf",
+    "bubble_beam",
+    "rock_slide",
+    "shadow_ball",
+    "swift"
+  ]
+}

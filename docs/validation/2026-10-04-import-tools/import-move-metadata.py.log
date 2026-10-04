@@ -1,0 +1,22 @@
+Imported target/contact metadata for 87 moves
+{
+  "script": "import-move-metadata.py",
+  "check": true,
+  "files": [
+    "content/moves.json"
+  ],
+  "contentChanges": [
+    "moves.detect.flags",
+    "moves.future_sight.flags",
+    "moves.mirror_move.flags",
+    "moves.mirror_move.target",
+    "moves.mud_sport.flags",
+    "moves.nature_power.flags",
+    "moves.nature_power.target",
+    "moves.protect.flags",
+    "moves.rain_dance.flags",
+    "moves.sunny_day.flags",
+    "moves.teleport.flags",
+    "moves.water_sport.flags"
+  ]
+}

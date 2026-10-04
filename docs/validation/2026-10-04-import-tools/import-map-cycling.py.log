@@ -1,0 +1,9 @@
+518 map cycling permissions
+{
+  "script": "import-map-cycling.py",
+  "check": true,
+  "files": [
+    "engine/rules/gen3/map-cycling.js"
+  ],
+  "contentChanges": []
+}

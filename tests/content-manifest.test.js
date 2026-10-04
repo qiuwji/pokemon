@@ -122,15 +122,7 @@ test("A missing or malformed local fragment cannot silently produce a partial pa
 test("Python content writers enforce ownership, no-write previews, changed-file scope and rollback", () => {
   const result = spawnSync(
     "python3",
-    [
-      "-m",
-      "unittest",
-      "discover",
-      "-s",
-      "tools/tests",
-      "-p",
-      "test_content_store.py",
-    ],
+    ["-m", "unittest", "discover", "-s", "tools/tests", "-p", "test_*.py"],
     {
       cwd: new URL("../", import.meta.url),
       encoding: "utf8",
