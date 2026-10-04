@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-04",
+  "baseline": "25e8ccd5606d22b429674695d6b79f833470be71",
+  "version": "0.27.1",
+  "scope": "Capacity-safe capture, durable Pokédex milestone, explicit native NPC binding, finite loss money and single trainer prize identity",
+  "verification": {
+    "firstTargeted": {
+      "passed": 81,
+      "failed": 4,
+      "log": "targeted-first.log",
+      "classification": "New test arrangements: existing report dialogue, cloning runtime callback catalogs (two cases), omitted save port"
+    },
+    "newCases": {
+      "command": "node --test tests/progression-safety.test.js",
+      "passed": 14,
+      "failed": 0,
+      "log": "targeted-fixed.log"
+    },
+    "full": {
+      "command": "npm test",
+      "passed": 829,
+      "failed": 0,
+      "skipped": 0,
+      "examplesIncluded": 15,
+      "nestedPythonCases": 20,
+      "log": "full.log"
+    },
+    "checkFirst": {
+      "command": "npm run check",
+      "passedStages": [
+        "content/assets/bindings",
+        "public contract types",
+        "313 module syntax",
+        "documentation"
+      ],
+      "failedStage": "lint",
+      "reason": "Unused session binding in new negative test",
+      "log": "check-first.log"
+    },
+    "finalStaticStages": {
+      "lint": {
+        "command": "npm run check:lint",
+        "exitCode": 0,
+        "log": "lint-final.log"
+      },
+      "strictJS": {
+        "command": "npm run check:engine-types",
+        "exitCode": 0,
+        "log": "types-final.log"
+      },
+      "docs": {
+        "command": "npm run check:docs",
+        "exitCode": 0,
+        "markdownFiles": 72,
+        "localLinks": 616,
+        "synchronizedExamples": 15,
+        "log": "docs-final.log"
+      }
+    }
+  },
+  "findings": {
+    "storyCapture": "Confirmed capacity bypass; fixed through PartyStorageService and battle capture rule intersection. Native capture custody now commits before announcement.",
+    "pokedex": "Confirmed interrupted post-reward presentation could lock after prerequisite. Reward inventory failure itself is atomic and cannot write that same reward flag before rejecting; use the durable rival.prize fact instead of final presentation completion.",
+    "npcs": "Three missing coordinate joins reproduced: two custom arena actors and mother. Mother source has local identity and coordinates 2,6/facing right; custom actors explicitly declare movement. Missing/ambiguous native references fail clearly.",
+    "lossPenalty": "Confirmed empty max could produce Infinity, although normal start rejects empty teams. Seed max with zero and validate output before assignment.",
+    "trainerRewards": "Confirmed mismatched prize IDs and missing practice trainerId. Story rewards, fallback and sight use trainerRewardId."
+  },
+  "limits": [
+    "Save corruption previously caused write refusal; existing stored raw data is protected, so total disk-save deletion is not demonstrated.",
+    "No automatic long-story continuation or presentation-completion forgery introduced.",
+    "No old save/ledger compatibility path.",
+    "No browser, remote CI or new coverage collection.",
+    "This fixes declared slice policy, not complete original battle loss/plot content reconstruction."
+  ],
+  "reuse": "One full regression after runtime changes. Then only unused test setup and release/docs metadata changed; rerun unfinished static stages, not the full tests.",
+  "invalidatedBy": [
+    "Storage/capture rule or settlement changes",
+    "Story milestone/ledger conditions",
+    "Trainer prize/eligibility IDs",
+    "Native source identity/behavior mapping",
+    "Loss settlement formula"
+  ],
+  "fingerprints": {
+    "README.md": "68d15d4ac102308c44025ff77734710025fe5eba2a10a67fd0049c95c171f8f3",
+    "dist/content/maps/LittlerootTown_BrendansHouse_1F/map.json": "f6b9201241246c4414d7703eee22ce5fe67c96a5d98b9efc056d25e9a9db21a2",
+    "dist/engine/battle-session.js": "017e972b03d5c4643038987c537ae37078709d625f96a53822415353cd30e090",
+    "dist/engine/battle/actions.js": "728222416f4b3ab2b1ef0284667fa39dd7783948dfaf199aafcc4051e21395bb",
+    "dist/engine/conditions.js": "2653f24fdce6916239bc1a4350bd9469d4ee8deb41558dc86bdd6f654904ebc8",
+    "dist/engine/party-storage.js": "8dfdd2661ca6cba389ddf7e253584b9db335d0a7f150fca915fc1517039dabaf",
+    "dist/engine/story.js": "10dc8e5ec28be991cbb41651c60f0e6e50f33da628f62ea108ee91181375c1a5",
+    "dist/packs/emerald/application/battle-application.js": "6f24d6c622fefa9520a254de2e2e81b3bd4f20e56f34c7dd31f62646e38087c2",
+    "dist/packs/emerald/application/story-application.js": "cdc17d264a845f7475a3bed92a560d83649811a84e27764e4af0975823bbaad9",
+    "dist/packs/emerald/application/triggers-application.js": "9fae6ea72d6ee168f51095459cabc9b93b61db1f1e1eb0febf3dfb58c37bc7f8",
+    "dist/packs/emerald/content.js": "faa8ef703c717a478ba7fb4219ec9a5feb37c0717b15858689020dcf4da1fbb3",
+    "dist/packs/emerald/pack.js": "816e36bef87023b6c138d631dfb1ea7b3ce288120c0fce5b18229f8c9cfd9a17",
+    "dist/packs/emerald/save-contract.js": "9d09adae7913292caf1ae76356d0d2252eb4f3a8bcd9b48de22be50554562512",
+    "dist/packs/emerald/story.js": "e2ef7caff5f101b635606629b82ad1deb9a493f43713c359209e3db593e12cb3",
+    "dist/packs/emerald/trainers.js": "078a7ff8411482038b1a73d2d83ed9a7bd754c93554c3d221c075328a4f8b7ad",
+    "docs/engine/battle/STATES_AND_ACTIONS.md": "c94ee1c64cd2dee0c56c016e20c092819032d38243f070fa819d52f61c49860e",
+    "docs/engine/story/STORY_LANGUAGE.md": "fb00085ee03982dd864e7f692cc29e26f68048c048e15f301900711ec0d0799b",
+    "docs/engine/world/STATE_AND_LIFECYCLE.md": "c8c50c12e9b7ecead2b0a38456a003a16dce846935a3ef246209903ee2024d10",
+    "docs/project/CHANGELOG.md": "de0759c5888b76b31dc183ccc160e970f928a7b86adf6cac04fa1dc70e1f9673",
+    "docs/project/STATUS.md": "b3db841a77e5c2d685424e59872f7e10f870584262a4176d239f096ba0748cd6",
+    "docs/project/VALIDATION.md": "3220dae825a07f0dbd9eac3244e35a4f5582b9ee3e13a0473de71fa630440d32",
+    "package-lock.json": "5ea6323525750aa909276aa73d6eff380562a1e07237a45f6646af0e8cbfbf87",
+    "package.json": "eb15d71912b9ffa3683c8e477226571ae92e21dc723f00daabde6411541d6661",
+    "skills/emerald-world-content/SKILL.md": "2a621ea3d0bfb66d5c58ffb4aad77aa41ef2db394882e9921d15bd1169e2b6bc",
+    "tests/evolution.test.js": "91c0ee9f42f4afa3dbd7676552a451ab3cd823e3bdea530a3bd0ccf81288305d",
+    "tests/progression-safety.test.js": "0e9b8e4862385804cc7086e8e5279971b73650594db8c40e049297e70639641a",
+    "tests/team-battle.test.js": "3df51787a844c36128af857e1a0e51ce7196c26c0c6c9a59359a4e2553e13260"
+  }
+}

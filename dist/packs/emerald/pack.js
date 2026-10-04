@@ -114,16 +114,19 @@ function baseObjects(state, db) {
     ];
   if (map === "Route101")
     return [
-      obj(
-        16,
-        8,
-        "Youngster",
-        flag.rescued ? "trainer" : "talk",
-        "练习训练家",
-        flag.rescued
-          ? "我有两位伙伴。来打一场练习赛吧！击败第一只之后，对战还会继续。"
-          : "在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！",
-      ),
+      {
+        ...obj(
+          16,
+          8,
+          "Youngster",
+          flag.rescued ? "trainer" : "talk",
+          "练习训练家",
+          flag.rescued
+            ? "我有两位伙伴。来打一场练习赛吧！击败第一只之后，对战还会继续。"
+            : "在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！",
+        ),
+        ...(flag.rescued ? { trainerId: "youngster" } : {}),
+      },
       ...(flag.rescued
         ? [
             {
@@ -136,6 +139,7 @@ function baseObjects(state, db) {
                 "双打中，两位伙伴先分别选择行动，再一起结算。准备好两位伙伴再来挑战！",
               ),
               trainerId: "doubles",
+              movement: { mode: "still", dir: "down", rangeX: 0, rangeY: 0 },
             },
             {
               ...obj(
@@ -147,6 +151,7 @@ function baseObjects(state, db) {
                 "三支队伍各自为战。你可以选择任意对方席位，也可以用群体招式。",
               ),
               trainerId: "freeForAll",
+              movement: { mode: "still", dir: "down", rangeX: 0, rangeY: 0 },
             },
           ]
         : []),
@@ -229,7 +234,17 @@ function baseObjects(state, db) {
     ];
   if (map === "LittlerootTown_BrendansHouse_1F")
     return [
-      obj(4, 4, "Mom", "healMom", "妈妈", "一路辛苦了！先在家休息一下吧。"),
+      {
+        ...obj(
+          2,
+          6,
+          "Mom",
+          "healMom",
+          "妈妈",
+          "一路辛苦了！先在家休息一下吧。",
+        ),
+        sourceLocalId: "LOCALID_PLAYERS_HOUSE_1F_MOM",
+      },
     ];
   if (map === "OldaleTown_PokemonCenter_1F")
     return [
@@ -275,10 +290,20 @@ function baseObjects(state, db) {
 // Ambient behavior is declared per actor from the original map's movement/range data.
 export function objectsFor(state, db) {
   return baseObjects(state, db).map((n) => {
-    const source = db.maps[state.position.map].npcs.find(
-      (o) => o.x === n.x && o.y === n.y,
+    const id = n.id || `${n.kind}:${n.x},${n.y}`;
+    if (n.movement) return { ...n, id };
+    const map = state.position.map;
+    const matches = db.maps[map].npcs.filter((o) =>
+      n.sourceLocalId
+        ? o.local_id === n.sourceLocalId
+        : o.x === n.x && o.y === n.y,
     );
-    const type = source?.movement_type || "MOVEMENT_TYPE_FACE_DOWN";
+    if (matches.length !== 1 || !matches[0].movement_type)
+      throw new Error(
+        `Native NPC binding failed: ${map}/${n.sourceLocalId || id}`,
+      );
+    const source = matches[0];
+    const type = source.movement_type;
     const direction = type.includes("RIGHT")
       ? "right"
       : type.includes("LEFT")
@@ -304,10 +329,12 @@ export function objectsFor(state, db) {
     if (n.kind === "rival") mode = "look";
     return {
       ...n,
-      ...(source?.elevation !== undefined
+      x: source.x,
+      y: source.y,
+      ...(source.elevation !== undefined
         ? { elevation: source.elevation }
         : {}),
-      id: n.id || `${n.kind}:${n.x},${n.y}`,
+      id,
       dir: n.kind === "wildObject" ? "left" : direction,
       movement: {
         mode,

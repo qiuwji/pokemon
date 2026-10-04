@@ -80,3 +80,9 @@ await api.commands.dispatch("core.world.patch", { operations: JSON.stringify([
 只有覆盖结构、入图/重绑、碰撞/预约、保存/依赖、野外/剧情/飞行接线变化时，对应证据失效。新增合规地图或剧情仅验证引用和实际流程；最终浏览器组合验收留到 E。
 
 后续高度接线：入口恢复/世界批量覆盖按 FIELD_ELEVATION.md 的当前平面与预约高度保护角色；不同平面的对象可共享多层桥格。该接线的针对性证据记录于 docs/project/CHANGELOG.md。
+
+## 原作NPC行为绑定
+
+绿宝石切片objectsFor将原作NPC行为映射到运行对象。native来源必须恰好匹配一个条目且有movement_type；缺失/歧义在包内容校验及运行时明确抛出Native NPC binding failed，不以默认朝下静止隐藏错误。已有坐标绑定保持严格匹配；妈妈改用sourceLocalId=LOCALID_PLAYERS_HOUSE_1F_MOM，坐标、朝向、范围由原条目派生（当前2,6、朝右、范围0）。
+
+原创练习员显式声明movement并与原作来源绑定分开；新增原创对象或插件元素必须提供自己的行为，不能利用join失败当默认配置。底层NPC/Actor模块不增加地图名或人物名分支。后续新内容应优先使用稳定原作身份；本次未把整个序章对象目录改为原作脚本解释器，也未修改只读C资料。

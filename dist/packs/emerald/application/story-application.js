@@ -32,6 +32,7 @@ export const STORY_PORTS = Object.freeze([
   "itemDefinitions",
   "inventory",
   "patchWorld",
+  "partyStorage",
   "performStoryFieldAction",
   "rng",
   "save",
@@ -131,18 +132,19 @@ export class StoryApplication {
           )
             return;
           const mon = structuredClone(c.monster);
-          (this.state.party.length < 6
-            ? this.state.party
-            : this.state.box
-          ).push(mon);
+          if (!this.partyStorage.receive(this.state, mon))
+            throw new Error("Capture storage unavailable");
           this.seen(mon.species, true);
         },
         lossPenalty: () => {
-          this.state.money = Math.max(
+          const money = Math.max(
             0,
             this.state.money -
-              Math.max(...this.state.party.map((m) => m.level)) * 8,
+              Math.max(0, ...this.state.party.map((m) => m.level)) * 8,
           );
+          if (!Number.isSafeInteger(money))
+            throw new Error("Invalid loss currency settlement");
+          this.state.money = money;
         },
       },
       {

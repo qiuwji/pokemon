@@ -122,7 +122,7 @@ test("Reusable story dependencies gate branches and completion; cyclic/missing d
   );
 });
 
-test("Emerald story selection is pure; completed rival event unlocks graph-driven Pokédex gift", () => {
+test("Emerald story selection is pure; committed rival reward unlocks the Pokédex gift", () => {
   const s = state();
   s.flags = { rescued: true, rivalWon: true };
   const before = structuredClone(s);
@@ -131,6 +131,8 @@ test("Emerald story selection is pure; completed rival event unlocks graph-drive
   assert.equal(result[0].type, "reward");
   assert.deepEqual(s, before);
   completeEvent(s, "rival.victory");
+  assert.deepEqual(interaction(s, { kind: "professor" }, "lab"), []);
+  grantReward(s, result[0], { inventory: fixtureInventory(), items: ITEMS });
   const gift = interaction(s, { kind: "professor" }, "lab");
   assert.equal(gift.find((c) => c.type === "reward").items.pokeball, 5);
   assert.equal(EMERALD_STORY.quest(s).id, "pokedex");

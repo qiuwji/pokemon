@@ -346,10 +346,18 @@ test("Practice prize is committed once after the full win; rematches do not gran
     money: 3000,
   };
   assert.equal(
-    battleOutcome(s, { script: "practice", result: null }, db).length,
+    battleOutcome(
+      s,
+      { trainerId: "youngster", script: "practice", result: null },
+      db,
+    ).length,
     0,
   );
-  const commands = battleOutcome(s, { script: "practice", result: "win" }, db);
+  const commands = battleOutcome(
+    s,
+    { trainerId: "youngster", script: "practice", result: "win" },
+    db,
+  );
   for (const c of commands) {
     if (c.type === "reward")
       grantReward(s, c, { inventory: fixtureInventory() });
@@ -358,9 +366,11 @@ test("Practice prize is committed once after the full win; rematches do not gran
   assert.equal(s.money, 3160);
   assert.equal(s.flags.practiceWon, true);
   assert(
-    !battleOutcome(s, { script: "practice", result: "win" }, db).some(
-      (c) => c.type === "reward",
-    ),
+    !battleOutcome(
+      s,
+      { trainerId: "youngster", script: "practice", result: "win" },
+      db,
+    ).some((c) => c.type === "reward"),
   );
 });
 test("Invalid battle construction precedes transition, and result plans are not created twice on exit retry", async () => {

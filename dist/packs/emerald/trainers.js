@@ -48,3 +48,10 @@ export const TRAINERS = {
     ],
   },
 };
+
+/** One persistent prize identity for story rewards, generic settlement and trainer sight. */
+export function trainerRewardId(id) {
+  if (typeof id !== "string" || !id)
+    throw new Error("Trainer reward requires an ID");
+  return `trainer.${id}.prize`;
+}

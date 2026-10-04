@@ -1,0 +1,160 @@
+✔ Entire command tree is validated before rewards or movement; parallel pose conflicts fail early (1.4105ms)
+✔ Parallel choreography joins every track and drains in-flight movement before reporting failure (1.801209ms)
+✔ Camera pans independently of player state, holds focus, then returns smoothly to live follow (0.5835ms)
+✔ A different content pack reuses scripted walking, NPC tracks, camera and emotes without field triggers (2.148333ms)
+✔ Rescue choreography from bag side 6,14 approaches before travel and enters lab under blackout (88.344667ms)
+✔ Rescue choreography from bag side 7,13 approaches before travel and enters lab under blackout (55.93325ms)
+✔ Rescue choreography from bag side 8,14 approaches before travel and enters lab under blackout (50.309833ms)
+✔ Rescue choreography from bag side 7,15 approaches before travel and enters lab under blackout (76.570916ms)
+✔ Intro plays independent NPC tracks, keeps progress incomplete until dialogue finishes, and releases camera (10.552959ms)
+✔ Bag investigation walks to its interaction position and waits before opening selection (10.715708ms)
+✔ Failed scene clears input ownership, camera, actor overrides and transient effects without saving partial choreography (61.741375ms)
+✔ Defeat return uses the shared entrance choreography and finishes on reachable center floor (10.398375ms)
+✔ Route planning honors connected-map destination NPCs and rejects unreachable targets (0.318375ms)
+✔ Malformed choreography is rejected before earlier rewards, positions or save state are changed (4.659416ms)
+✔ Movement automation returns at a story/dialogue boundary without waiting for acknowledgement (4.507625ms)
+✔ Dialogue confirmation gates later actor movement and flags, and input stays locked between commands (7.948125ms)
+✔ Scripted battle handoff releases field input ownership and redraws a ready combat menu (8.960125ms)
+✔ Channel policies select one eligible priority and explicit suppression never falls through (1.007583ms)
+✔ Disabled native step encounters consume no random samples and remain independent of StoryRunner (51.497166ms)
+✔ Regional queries merge registered and embedded sources without random draws; sample yields no individual custody (29.111833ms)
+✔ Policy callbacks are pure and sampling permission is separate from free read-only queries (32.389875ms)
+✔ World region queries reflect overlays and true/reserved occupancy with detached snapshots and bounded regions (19.362041ms)
+✔ Contact edges deduplicate held and reversed requests; movement, separation and distinct planes invalidate proofs (0.24875ms)
+✔ Real field collisions publish one stable contact after commands and accept a fresh contact after separation (25.74075ms)
+✔ NPC active interactions bridge into the same contact facts at frame boundary (15.509625ms)
+✔ Prepared individuals have one saved custodian and actor dependency; duplicate or corrupt references are rejected (51.634542ms)
+✔ A ticket starts exactly one real wild battle on published contact; capture transfers custody and never runs a story (56.347875ms)
+✔ Plugin contact listeners can request battle at the stable boundary and a failed start keeps the ticket reusable (24.68725ms)
+✔ Encounter win, escape and loss share release lifecycle without story rewards, dialogues or duplicate actors (75.578625ms)
+✔ Reserved actor source cells are visible to queries but never count as actual contact (13.891458ms)
+✔ Stale and different-actor contact proofs cannot consume a prepared ticket, and dead-party requests do not spend it (27.4415ms)
+✔ The native encounter cooldown has one owner and is reset during field rebinding (19.066542ms)
+✔ Failed individual preparation restores the random source and ticket state before any notification (13.803459ms)
+✔ Full capture storage rejects before claiming or starting a wild battle (20.637541ms)
+✔ Plugins choose distinct grass cells proportionally through the seeded random permission, then save the resulting source (35.09875ms)
+✔ Reusable story dependencies gate branches and completion; cyclic/missing dependencies reject (3.206083ms)
+✔ Emerald story selection is pure; committed rival reward unlocks the Pokédex gift (1.2595ms)
+✔ Reward commits atomically, is idempotent, persists ledger, rejects malformed partial gifts (2.672875ms)
+✔ A dialogue failure after reward can replay without duplicate money or items (1.38325ms)
+✔ Current development save contract rejects older versions without mutating their data (8.478666ms)
+✔ Field items use effects, reject dead/full/wrong targets, and stale/double commits do not consume (6.516375ms)
+✔ New data-only item composes healing and curing through the same operations (4.828084ms)
+✔ Invalid battle item and depleted move leave turn, HP, PP and RNG unchanged (6.46825ms)
+✔ Successful battle medicine consumes one turn; all capture items share restrictions and bonus rule (13.273292ms)
+✔ Effect names and descriptors validate before battle; unsupported moves do not spend PP (6.443291ms)
+✔ A custom move definition uses existing operations without changing battle orchestration (6.65ms)
+✔ Move phases preserve drain, recoil immunity, false swipe and bide setup (10.697167ms)
+✔ Fury Cutter power modifications survive phase execution and snapshots exclude private data (1.749041ms)
+✔ Monster creation policy is injectable and NPC caches belong to a disposable session (0.34425ms)
+✔ Native directional walk frames never mix south, north or west poses (1.240125ms)
+✔ Town to route and route to town are exactly one grid step in a shared world (0.424667ms)
+✔ Crossing a map boundary interpolates instead of resetting and locks direction (0.329417ms)
+✔ Run and walk finish at the same grid destination with matching animation clocks (0.138583ms)
+✔ Original town NPCs wander within declared ranges, reserve cells and interpolate (3.133917ms)
+✔ NPCs respect player collision, dialogue pause and face player after interaction (0.246583ms)
+✔ Every map uses 8x8 tile atlas definitions, not pre-rendered scene files (2.582708ms)
+✔ Story capture rejects full storage without changing custody, Pokédex, RNG or a valid save (62.540959ms)
+✔ Story capture uses the last box slot and duplicate delivery does not exceed limits (35.2665ms)
+✔ Story capture uses the last party slot and duplicate delivery does not exceed limits (35.759417ms)
+✔ Full storage blocks native wild capture before item cost, turn or RNG even with a permissive capture rule (26.389125ms)
+✔ Native capture commits custody before dialogue; a failed capture announcement cannot lose the monster (36.672834ms)
+✖ Interrupted rival victory cannot lock the Pokédex gift; the durable reward survives save/reload (59.647042ms)
+✔ Full ball pocket rejects the Pokédex reward atomically and freeing space allows the same interaction to retry (27.664708ms)
+✔ Loss settlement handles an empty party and rejects a non-finite calculation before touching money (27.603792ms)
+✖ Mother binds by original local identity and uses original coordinates/facing; custom practice NPCs explicitly declare behavior (20.471375ms)
+✖ Missing or ambiguous native NPC bindings fail in content validation rather than silently standing still (18.643291ms)
+✔ Trainer youngster victory writes the same prize identity used by sight eligibility and does not pay twice (22.629458ms)
+✔ Trainer doubles victory writes the same prize identity used by sight eligibility and does not pay twice (22.321ms)
+✔ Trainer freeForAll victory writes the same prize identity used by sight eligibility and does not pay twice (21.070333ms)
+✖ Practice trainer sight triggers before victory and stops after the actual story prize is received (17.517291ms)
+✔ Trainer defeat is party-based: each faint awards once, replacement waits until the round ends (12.955666ms)
+✔ Experience participation belongs to each opponent encounter, identified by creature UID (4.64125ms)
+✔ Voluntary switching consumes a turn; forced replacement consumes neither turn nor RNG (4.464625ms)
+✔ Invalid actions are side-effect free and do not reuse the previous action ID (3.811917ms)
+✔ Residual damage completes before the opponent reserve enters; capture remains forbidden after replacement (3.577334ms)
+✔ Simultaneous fainting leaves reserves available; exhaustion of both teams follows the explicit loss policy (4.681875ms)
+✔ Paralysis action check uses its own rule, independently of thawing (2.844666ms)
+✔ Domain events contain detached seat collections and stable IDs, with only presentation fields (2.657875ms)
+✔ Topology expresses doubles, shared controllers, multiple controllers and three alliances without changing UID (1.944416ms)
+✔ Topology validation rejects duplicate UIDs, bad targets and double occupation before any external mutation (1.594583ms)
+✔ Enemy replacement animation releases the enemy silhouette and preserves team HUD metadata (10.670375ms)
+✔ Trainer content validates the complete team before creating any creature or consuming RNG (0.304375ms)
+✔ Practice prize is committed once after the full win; rematches do not grant another reward (0.549333ms)
+✔ Invalid battle construction precedes transition, and result plans are not created twice on exit retry (0.300292ms)
+✔ Save validation rejects missing or duplicated creature identities and missing story ledger (15.471209ms)
+ℹ tests 85
+ℹ suites 0
+ℹ pass 81
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 665.473458
+
+✖ failing tests:
+
+test at tests/progression-safety.test.js:124:1
+✖ Interrupted rival victory cannot lock the Pokédex gift; the durable reward survives save/reload (59.647042ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     lines: [
+  +       '已经捕获了 0 种宝可梦！每个伙伴都值得好好培养。'
+  +     ],
+  +     name: '小田卷博士',
+  +     type: 'dialog'
+  +   },
+  +   {
+  +     id: 'professor.report',
+  +     type: 'completeEvent'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/progression-safety.test.js:149:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { type: 'dialog', name: '小田卷博士', lines: [Array] }, { type: 'completeEvent', id: 'professor.report' } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/progression-safety.test.js:210:1
+✖ Mother binds by original local identity and uses original coordinates/facing; custom practice NPCs explicitly declare behavior (20.471375ms)
+  DataCloneError: (_, c) => (modes.includes(c.mode) ? c.mode : "walk") could not be cloned.
+      at new DOMException (node:internal/per_context/domexception:79:18)
+      at structuredClone (node:internal/worker/js_transferable:126:26)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/progression-safety.test.js:220:20)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/progression-safety.test.js:244:1
+✖ Missing or ambiguous native NPC bindings fail in content validation rather than silently standing still (18.643291ms)
+  DataCloneError: (_, c) => (modes.includes(c.mode) ? c.mode : "walk") could not be cloned.
+      at new DOMException (node:internal/per_context/domexception:79:18)
+      at structuredClone (node:internal/worker/js_transferable:126:26)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/progression-safety.test.js:265:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/progression-safety.test.js:289:1
+✖ Practice trainer sight triggers before victory and stops after the actual story prize is received (17.517291ms)
+  TypeError: this.save is not a function
+      at TriggersApplication.step (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/triggers-application.js:59:43)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/progression-safety.test.js:325:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

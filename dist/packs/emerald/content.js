@@ -11,7 +11,7 @@ import { assertContent } from "../../engine/content.js";
 import { MoveEffectRegistry } from "../../engine/move-effects.js";
 import { createItemService } from "../../engine/items.js";
 import { validateCondition } from "../../engine/conditions.js";
-import { PACK } from "./pack.js";
+import { PACK, objectsFor } from "./pack.js";
 import { ITEMS } from "./items.js";
 import { EMERALD_STORY } from "./story.js";
 /** Pack composition validates names, references and capabilities before assets are loaded. */
@@ -28,6 +28,10 @@ export function assertPackContent(db) {
       throw new Error(`pack: missing movement actor ${mode.actor}`);
   if (!db.actors[PACK.travelActor])
     throw new Error("pack: missing flight actor");
+  for (const map of Object.keys(db.maps))
+    for (const rescued of [false, true])
+      for (const pokedex of [false, true])
+        objectsFor({ position: { map }, flags: { rescued, pokedex } }, db);
   validateTrainers(TRAINERS, db);
   new MoveEffectRegistry().validateMoves(db.moves);
   createItemService(ITEMS);

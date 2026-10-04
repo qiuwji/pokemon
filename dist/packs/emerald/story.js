@@ -1,4 +1,4 @@
-import { TRAINERS } from "./trainers.js";
+import { TRAINERS, trainerRewardId } from "./trainers.js";
 import { PACK } from "./pack.js";
 import {
   RESCUE_INTRO,
@@ -50,19 +50,19 @@ export const STORY_EVENTS = [
     id: "trainer.arena.result",
     trigger: "battleResult",
     match: ({ battle: b }) =>
-      b.script?.startsWith("arena:") && b.result === "win",
+      ["doubles", "freeForAll"].includes(b.trainerId) && b.result === "win",
     build: (s, { battle: b }) => {
-      const id = b.script.slice(6),
+      const id = b.trainerId,
         trainer = TRAINERS[id];
       return [
         {
           type: "reward",
-          id: `arena.${id}.prize`,
+          id: trainerRewardId(id),
           money: trainer.prize * (b.prizeMultiplier || 1),
         },
         dialog(
           trainer.name,
-          s.story.rewards.includes(`arena.${id}.prize`)
+          s.story.rewards.includes(trainerRewardId(id))
             ? "配合得很好！这次练习就到这里。"
             : `全队获胜！获得了 ¥${trainer.prize * (b.prizeMultiplier || 1)}。`,
         ),
@@ -74,7 +74,7 @@ export const STORY_EVENTS = [
     "trainer",
     (s, { object }) => [
       dialog(object.name, object.text),
-      { type: "battle", trainerId: "youngster" },
+      { type: "battle", trainerId: object.trainerId },
     ],
     flag("rescued"),
   ),
@@ -83,11 +83,11 @@ export const STORY_EVENTS = [
     trigger: "battleResult",
     once: true,
     requires: not("practiceWon"),
-    match: ({ battle: b }) => b.script === "practice" && b.result === "win",
+    match: ({ battle: b }) => b.trainerId === "youngster" && b.result === "win",
     build: (s, { battle: b }) => [
       {
         type: "reward",
-        id: "trainer.practice.prize",
+        id: trainerRewardId(b.trainerId),
         flags: { practiceWon: true },
         money: TRAINERS.youngster.prize * (b.prizeMultiplier || 1),
       },
@@ -102,7 +102,7 @@ export const STORY_EVENTS = [
     id: "trainer.practice.rematch",
     trigger: "battleResult",
     requires: flag("practiceWon"),
-    match: ({ battle: b }) => b.script === "practice" && b.result === "win",
+    match: ({ battle: b }) => b.trainerId === "youngster" && b.result === "win",
     build: () => [dialog("练习训练家", "这次配合得也很好！有空再来练习吧。")],
   },
   {
@@ -151,10 +151,9 @@ export const STORY_EVENTS = [
           items: { pokeball: 5 },
         },
       ],
-      all(flag("rescued"), flag("rivalWon"), not("pokedex")),
+      all(flag("rescued"), { reward: "rival.prize" }, not("pokedex")),
     ),
     once: true,
-    after: ["rival.victory"],
   },
   talkEvent(
     "professor.away",

@@ -1,3 +1,4 @@
+import { trainerRewardId } from "../trainers.js";
 import { findWatchingTrainer } from "../../../engine/field-triggers.js";
 import { bindApplicationPorts } from "./ports.js";
 export const TRIGGERS_PORTS = Object.freeze([
@@ -45,7 +46,7 @@ export class TriggersApplication {
       position: s.position,
       objects: (map) => this.field.npcs.objects(map),
       eligible: (o) =>
-        !s.story.rewards.includes(`trainer.${o.trainerId}.prize`) &&
+        !s.story.rewards.includes(trainerRewardId(o.trainerId)) &&
         s.party.filter((m) => m.hp > 0 && !m.egg).length >=
           (this.trainerDefinitions[o.trainerId]?.format === "doubles" ? 2 : 1),
     });

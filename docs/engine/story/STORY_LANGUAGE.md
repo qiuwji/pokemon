@@ -35,6 +35,14 @@ api.story.register('gate', {
 
 条件的常见结构：`{flag:'key',equals:true}`、`{event:'owner:id'}`、`{reward:'owner:gift'}`，以及`{all:[条件,...]}`、`{any:[...]}`、`{not:条件}`。compare查询输入须符合该查询schema；读取变量用`{query:{id:'variable',input:{name:'变量名'}},op:'eq',value:'值'}`。
 
+### 演出完成与业务里程碑
+
+`story.completed`表示整段事件执行到末尾；`story.rewards`表示一次原子奖励已经提交，两者不能互换。`after`仅用于必须完整执行前置事件的顺序约束。若业务旗标/奖励先于对话提交，不要再要求该对话的completeEvent来解锁唯一的后续入口，否则表现失败会令业务前进、入口却关闭。此类后续条件应依赖`{reward:'稳定奖励ID'}`或相应领域事实；失败的演出不能补记为完成。
+
+序章图鉴资格依赖`rival.prize`已领取，胜利对话失败或重载不阻塞博士；教授礼物容量失败时旗标/奖励账本/完成账本均不改变，腾出空间可以重试。`Reward inventory plan expired`发生在reward提交之前，不能据此认定同一奖励的旗标已写入；更早已提交的命令仍保留。
+
+训练家奖励统一用[trainerRewardId](../../../dist/packs/emerald/trainers.js)：`trainer.<trainerId>.prize`，包括练习、双打、混战和通用结算。视线资格读取同一ID，交互重战仍可开放但不重复付奖。事件ID如`trainer.practice.prize`另属completed，不是奖励账本的别名。
+
 每行均需`type`；表中省略它，仅列其余参数。角色ID是当前场景对象ID或持久Actor UID，player是保留角色名；精灵UID不是角色ID。
 
 | type | 参数与行为 |
@@ -46,6 +54,8 @@ api.story.register('gate', {
 | setVariable | name，value有限数值/字符串/布尔/null；operation为set/add（默认set），add仅数值 |
 | flag | key，value；写当前旗标，只应用于明确持久业务，不代替TEMP生命周期 |
 | reward | id稳定奖励ID，money可选非负安全整数，items可选{itemID:正整数}，flags可选布尔表；容量失败不记账 |
+| captureMonster | monster完整精灵；通过统一PartyStorageService接收，队伍6/盒子200容量失败在写入前拒绝，重复UID不再次接收 |
+| lossPenalty | 无参数；现有切片按最高队伍等级×8扣款，空队扣0，非法数值在写入前拒绝；这不是全原作罚金规则还原声明 |
 | completeEvent | id已注册事件ID；正常resolve在末尾自动追加，不需要重复写 |
 | battle | trainerId引用已登记训练家；或species、level（1–100）及可选options；同一会话规则，非任意C trainerbattle模式 |
 | worldPatch | operations数组；每项按WorldState合同定义kind/map/坐标/变更及scope，不直接改地图数据 |

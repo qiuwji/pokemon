@@ -1,0 +1,22 @@
+✔ Story capture rejects full storage without changing custody, Pokédex, RNG or a valid save (47.944792ms)
+✔ Story capture uses the last box slot and duplicate delivery does not exceed limits (34.650625ms)
+✔ Story capture uses the last party slot and duplicate delivery does not exceed limits (32.454542ms)
+✔ Full storage blocks native wild capture before item cost, turn or RNG even with a permissive capture rule (24.398375ms)
+✔ Native capture commits custody before dialogue; a failed capture announcement cannot lose the monster (32.8455ms)
+✔ Interrupted rival victory cannot lock the Pokédex gift; the durable reward survives save/reload (71.030625ms)
+✔ Full ball pocket rejects the Pokédex reward atomically and freeing space allows the same interaction to retry (47.444709ms)
+✔ Loss settlement handles an empty party and rejects a non-finite calculation before touching money (26.864458ms)
+✔ Mother binds by original local identity and uses original coordinates/facing; custom practice NPCs explicitly declare behavior (18.09975ms)
+✔ Missing or ambiguous native NPC bindings fail in content validation rather than silently standing still (24.1915ms)
+✔ Trainer youngster victory writes the same prize identity used by sight eligibility and does not pay twice (21.021458ms)
+✔ Trainer doubles victory writes the same prize identity used by sight eligibility and does not pay twice (20.353875ms)
+✔ Trainer freeForAll victory writes the same prize identity used by sight eligibility and does not pay twice (20.918709ms)
+✔ Practice trainer sight triggers before victory and stops after the actual story prize is received (19.74475ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 583.067

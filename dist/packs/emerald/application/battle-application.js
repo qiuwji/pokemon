@@ -1,10 +1,11 @@
+import { BATTLE_RULES } from "../../../engine/battle-rules.js";
 import { GEN3_GLOBAL_HOOKS } from "../../../engine/rules/gen3/global-rules.js";
 import { healMonster } from "../../../engine/model.js";
 import { BattleSession } from "../../../engine/battle-session.js";
 import { ITEMS } from "../pack.js";
 import { EncounterService } from "../../../engine/encounters.js";
 import { isWater } from "../../../engine/terrain.js";
-import { createTrainerEncounter } from "../trainers.js";
+import { createTrainerEncounter, trainerRewardId } from "../trainers.js";
 import { bindApplicationPorts } from "./ports.js";
 export const BATTLE_PORTS = Object.freeze([
   "facilityActive",
@@ -18,6 +19,7 @@ export const BATTLE_PORTS = Object.freeze([
   "inventory",
   "moveEffects",
   "plugins",
+  "partyStorage",
   "rng",
   "ruleHooks",
   "runStory",
@@ -196,6 +198,12 @@ export class BattleApplication {
         hooks: [...GEN3_GLOBAL_HOOKS, ...this.ruleHooks],
       },
       ...options,
+      rules: {
+        ...options.rules,
+        canCapture: (battle) =>
+          (options.rules?.canCapture || BATTLE_RULES.canCapture)(battle) &&
+          (!!context || this.partyStorage.canReceive(this.state)),
+      },
     });
   }
   async turn(action) {
@@ -234,12 +242,12 @@ export class BattleApplication {
       const trainer = this.trainerDefinitions[b.trainerId];
       const amount = trainer.prize * (b.prizeMultiplier || 1);
       commands = [
-        { type: "reward", id: `trainer.${b.trainerId}.prize`, money: amount },
+        { type: "reward", id: trainerRewardId(b.trainerId), money: amount },
         {
           type: "dialog",
           name: trainer.name,
           lines: [
-            this.state.story.rewards.includes(`trainer.${b.trainerId}.prize`)
+            this.state.story.rewards.includes(trainerRewardId(b.trainerId))
               ? "这次挑战已经完成。"
               : `全队获胜！获得了 ¥${amount}。`,
           ],
@@ -258,6 +266,8 @@ export class BattleApplication {
           : this.state.money;
         if (!Number.isSafeInteger(money) || money < 0)
           throw new Error("Invalid currency settlement");
+        if (b.result === "caught" && !this.partyStorage.canReceive(this.state))
+          throw new Error("Capture storage unavailable");
         if (b.result !== "loss")
           this.encounterService().afterBattle(
             this.state.party,
@@ -270,6 +280,11 @@ export class BattleApplication {
                 ],
               }),
           );
+        if (b.result === "caught") {
+          if (!this.partyStorage.receive(this.state, structuredClone(b.enemy)))
+            throw new Error("Captured monster could not be received");
+          this.seen(b.enemy.species, true);
+        }
         this.state.money = money;
         committed = true;
       },
