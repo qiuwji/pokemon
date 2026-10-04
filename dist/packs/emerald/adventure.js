@@ -9,11 +9,9 @@ import { exposeApplicationPorts } from "./application/public-ports.js";
 import { ConditionQueries } from "../../engine/condition-queries.js";
 import { EncounterTableRegistry } from "../../engine/encounter-tables.js";
 import { BattleStrategyRegistry } from "../../engine/battle/strategy-registry.js";
-import { StoryEngine } from "../../engine/story.js";
-import { StoryCatalog } from "../../engine/story-catalog.js";
+import { createEmeraldStory } from "./story/runtime.js";
 import { CameraRig } from "../../engine/camera.js";
 import { ITEMS } from "./pack.js";
-import { EMERALD_STORY } from "./story.js";
 import { MoveEffectRegistry } from "../../engine/move-effects.js";
 import { validateCondition } from "../../engine/conditions.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
@@ -77,40 +75,9 @@ export class EmeraldAdventure {
       catalog.battleStrategies,
     );
     this.encounterTables = new EncounterTableRegistry(catalog.encounters, db);
-    this.storyCatalog = new StoryCatalog(
-      [
-        ...Object.values(db.stories || {}),
-        ...(plugins?.storyBundles.values() || []),
-      ],
-      {
-        queries: this.conditionQueries,
-        maps: db.maps,
-        eventIds: new Set(
-          [...EMERALD_STORY.events, ...(plugins?.story.values() || [])].map(
-            (event) => event.id,
-          ),
-        ),
-      },
-    );
-    this.story = new StoryEngine(
-      [
-        ...this.storyCatalog.events,
-        ...(plugins?.story.values() || []),
-        ...EMERALD_STORY.events,
-      ],
-      EMERALD_STORY.quests,
-      { queries: this.conditionQueries },
-    );
-    for (const event of this.story.events)
-      if (event.where) {
-        const m = db.maps[event.where.map];
-        if (
-          !m ||
-          event.where.x + event.where.width > m.width ||
-          event.where.y + event.where.height > m.height
-        )
-          throw new Error(`Story region outside map: ${event.id}`);
-      }
+    Object.assign(this, createEmeraldStory({
+      db, plugins, queries: this.conditionQueries,
+    }));
     this.moveEffects = new MoveEffectRegistry({
       definitions: catalog.moveEffects,
     });

@@ -184,7 +184,13 @@ class ImportSession:
                 else:
                     value = {key: value[key] for key in fields if key in value} | {
                         key: item for key, item in value.items() if key not in fields}
-            self.pending[self.dist / 'content' / entry['path']] = encoded(value)
+            path = self.dist / 'content' / entry['path']
+            # JSON formatting belongs to its author, not an unrelated importer.
+            # Remove earlier staging too when a later proposal reverts a change.
+            if value != self.fragments[entry['path']]:
+                self.pending[path] = encoded(value)
+            else:
+                self.pending.pop(path, None)
         for section in SECTIONS:
             for ident in data[section].keys() - handled[section]:
                 if not ident.replace('_', '').replace('-', '').isalnum():
@@ -200,7 +206,11 @@ class ImportSession:
                         entry['generated'] = True
                     manifest['files'].append(entry)
                     self.pending[self.dist / 'content' / path] = encoded(value)
-        self.pending[self.dist / 'content/manifest.json'] = encoded(manifest)
+        manifest_path = self.dist / 'content/manifest.json'
+        if manifest != self.manifest:
+            self.pending[manifest_path] = encoded(manifest)
+        else:
+            self.pending.pop(manifest_path, None)
 
     def finish(self):
         self.audit()

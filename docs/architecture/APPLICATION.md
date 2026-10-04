@@ -1,6 +1,6 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js` 是 EmeraldAdventure 组合入口：内容配置、UI 挂接、忙碌状态聚合和会话重绑顺序。0.15.0时将逐方法转发改为 `application/public-ports.js` 的显式所有权表，入口转发收口时 382→136 行，当前0.21.0经显式外观/视口接线为151行；用例由 25 个应用服务拥有。新能力登记端口，不在入口追加转发方法。
+`dist/packs/emerald/adventure.js`是EmeraldAdventure组合入口，连接内容服务、UI、忙碌状态和会话重绑顺序。应用用例归各自所有者，公共端口由`application/public-ports.js`显式登记。剧情内容装配由`story/runtime.js`的`createEmeraldStory`负责：合并原生/插件目录、创建StoryCatalog与StoryEngine、检查事件区域引用；入口不再承担这段装配细节。门面规模守卫保持少于160行，不通过放宽阈值容纳新功能。
 
 ## 职责与状态所有权
 

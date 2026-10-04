@@ -52,6 +52,33 @@ class ContentStoreTests(unittest.TestCase):
         self.assertEqual([path for path in before if before[path] != after[path]], ['content/maps/Route101/map.json'])
         self.assertEqual(self.session().load()['maps']['Route101']['encounterRate'], 21)
 
+    def test_noop_preserves_noncanonical_fragments_and_manifest_bytes(self):
+        for path in self.dist.rglob('*.json'):
+            path.write_text(json.dumps(json.loads(path.read_text()),
+                                       ensure_ascii=False, separators=(',', ':')) + '\n\n')
+        before = self.hashes()
+        for check in (True, False):
+            with self.subTest(check=check):
+                session = self.session(check=check)
+                session.content(session.load())
+                with redirect_stdout(io.StringIO()) as output:
+                    session.finish()
+                self.assertEqual(json.loads(output.getvalue())['files'], [])
+                self.assertEqual(before, self.hashes())
+
+    def test_reverted_proposal_discards_previously_staged_content(self):
+        session = self.session()
+        data = session.load()
+        before = self.hashes()
+        changed = json.loads(json.dumps(data))
+        changed['maps']['Route101']['encounterRate'] += 1
+        session.content(changed)
+        session.content(data)
+        with redirect_stdout(io.StringIO()) as output:
+            session.finish()
+        self.assertEqual(json.loads(output.getvalue())['files'], [])
+        self.assertEqual(before, self.hashes())
+
     def test_other_domain_changes_reject_before_writes(self):
         session = self.session()
         data = session.load()

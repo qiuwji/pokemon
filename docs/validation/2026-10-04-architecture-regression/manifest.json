@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-04",
+  "baseline": "40a6c0bc02c09ed658dd3d10951a4a3cd0e872eb",
+  "version": "0.28.0",
+  "scope": "Composition facade size and importer changed-file ownership regression; full coverage of preceding settlement fixes",
+  "environment": {
+    "node": "v26.0.0",
+    "python": "3.9.6"
+  },
+  "verification": {
+    "firstTargeted": {
+      "command": "node --test tests/architecture.test.js tests/application-services.test.js tests/application-settlement.test.js tests/story-session.test.js tests/team-battle.test.js tests/facilities.test.js tests/encounter-extensions.test.js",
+      "passed": 76,
+      "failed": 1,
+      "log": null,
+      "note": "Output inspected in tool response; no stored log for this first targeted run"
+    },
+    "baselineFull": {
+      "command": "npm test",
+      "passed": 862,
+      "failed": 2,
+      "nestedPythonFailures": 3,
+      "log": "baseline-test.log"
+    },
+    "targeted": {
+      "command": "node --test tests/application-services.test.js tests/architecture.test.js tests/content-manifest.test.js tests/story-content.test.js tests/story-session.test.js",
+      "passed": 43,
+      "failed": 0,
+      "skipped": 0,
+      "log": "targeted-test.log"
+    },
+    "full": {
+      "command": "npm test",
+      "passed": 864,
+      "failed": 0,
+      "skipped": 0,
+      "nestedPythonCases": 22,
+      "examplesIncluded": 15,
+      "log": "full-test.log"
+    },
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "passedStages": [
+        "content and story references/assets",
+        "public contract types",
+        "332 module syntax",
+        "73 Markdown/666 links/15 synchronized examples",
+        "ESLint",
+        "strict JS subset"
+      ],
+      "log": "check.log"
+    }
+  },
+  "sourceHashes": {
+    "dist/packs/emerald/adventure.js": "ace80d5cdf72e67dd561a2281cb9bbf49a395252340ae03263acc01a160ee838",
+    "dist/packs/emerald/story/runtime.js": "9bec3b47a964b79f393c3c7f20d431415d320ddc95470f03cabcea9fb91be083",
+    "tools/imports/context.py": "bab254d19b021150d8cd20ccebcbbc2f9502080882332378ea0a7d0ef4217745",
+    "tools/tests/test_content_store.py": "1a248ec29b0931989486de9a4120bc160003539ba57a1e21b93979acea32c3ee"
+  },
+  "notExecuted": [
+    "Browser/input/presentation combinations",
+    "Coverage collection",
+    "Remote CI",
+    "Full original Emerald fidelity audit"
+  ],
+  "invalidatedBy": [
+    "Changes to story assembly or application lifecycle",
+    "Changes to importer staging, serialization or content ownership",
+    "Changes to content manifest or validation contracts"
+  ]
+}

@@ -19,11 +19,11 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。最近一次阶段全量记录为 **844项通过，0失败、0跳过**；其后新增/受影响剧情与对话专项 **22项通过**，一次静态检查覆盖330个JS模块。**这些是此前阶段结果，不是最终提交的全量验收**；按用户要求，文档同步与提交阶段不再运行检查，最终回归暂缓。日志、范围和浏览器观察见[本轮记录](docs/validation/2026-10-04-story-dialogue/manifest.json)，历史检查见[验证记录](docs/project/VALIDATION.md)。严格JS类型目前只覆盖剧情变量与两个纯动画采样模块，不代表全工程类型覆盖。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。最近一次全量为**864项通过，0失败、0跳过**，包含上一提交的结算故障测试与22项内嵌Python测试；此前两项架构/导入回归已复现并修复。主检查结果及真实范围见[本轮证据](docs/validation/2026-10-04-architecture-regression/manifest.json)。浏览器组合、覆盖率和远端CI未重跑；历史记录见[验证记录](docs/project/VALIDATION.md)。严格JS类型目前只覆盖剧情变量与两个纯动画采样模块，不代表全工程类型覆盖。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
-最新应用层复审已补结算失败收尾、旗标预检、捕获入库确认和共享货币模块；新故障测试尚未运行。最新实现与待验范围见[当前进度](docs/project/STATUS.md)，此前通过数不覆盖这些变更。
+最新应用层复审已补结算失败收尾、旗标预检、捕获入库确认和共享货币模块；故障测试已随此次全量通过。实现范围与后续待办见[当前进度](docs/project/STATUS.md)。
 
 ## 已经可玩的内容
 

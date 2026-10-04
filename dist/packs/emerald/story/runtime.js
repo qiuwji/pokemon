@@ -1,0 +1,38 @@
+import { StoryEngine } from "../../../engine/story.js";
+import { StoryCatalog } from "../../../engine/story-catalog.js";
+import { EMERALD_STORY } from "../story.js";
+
+/** Assemble native/plugin story content and validate its world references. */
+export function createEmeraldStory({ db, plugins, queries }) {
+  const events = [
+    ...EMERALD_STORY.events,
+    ...(plugins?.story.values() || []),
+  ];
+  const storyCatalog = new StoryCatalog(
+    [
+      ...Object.values(db.stories || {}),
+      ...(plugins?.storyBundles.values() || []),
+    ],
+    { queries, maps: db.maps, eventIds: new Set(events.map((e) => e.id)) },
+  );
+  const story = new StoryEngine(
+    [
+      ...storyCatalog.events,
+      ...(plugins?.story.values() || []),
+      ...EMERALD_STORY.events,
+    ],
+    EMERALD_STORY.quests,
+    { queries },
+  );
+  for (const event of story.events) {
+    if (!event.where) continue;
+    const map = db.maps[event.where.map];
+    if (
+      !map ||
+      event.where.x + event.where.width > map.width ||
+      event.where.y + event.where.height > map.height
+    )
+      throw new Error(`Story region outside map: ${event.id}`);
+  }
+  return { storyCatalog, story };
+}

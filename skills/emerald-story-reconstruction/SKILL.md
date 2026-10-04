@@ -135,6 +135,8 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 
 接口变化时更新规格、Skill和对应可执行例；`npm run check:docs`验证链接及片段一致，行为例运行一次并记录。项目代码、文档、Skill、资源及固定参考必须一起交接。
 
+剧情目录/事件引擎的接线与区域预检位于`dist/packs/emerald/story/runtime.js`（搜索`createEmeraldStory`）。新增地区通常只改内容清单/地区包，不把目录装配搬回adventure.js；职责见[剧情架构](../../docs/architecture/STORY_CONTENT.md)。
+
 ## 长剧情接手时的具体约束
 
 声明durable:true后，用稳定node而不是数组下标描述检查点。battle前保存ready游标，onResult接确定结果后自动续接；不能把未声明durable的短battle当作等待命令。checkpoint只在演员/领域操作稳定完成处使用；不能放parallel，嵌套公共流程用call，不再创建script会话。保存不包含动画时钟、DOM或战斗中间态。
