@@ -2,6 +2,7 @@ import { validateTrainerSight } from "./field-triggers.js";
 import { ConditionQueries } from "./condition-queries.js";
 import { jsonValue, readOnly } from "./extensions/values.js";
 import { validateCondition } from "./conditions.js";
+import { WORLD_OBJECT_FIELDS, nativeSigns } from "./world-object-index.js";
 
 export const emptyWorldState = () => ({
   revision: 0,
@@ -14,21 +15,6 @@ const identifier = (value) =>
   /^[a-zA-Z0-9_.:-]{1,128}$/.test(value) &&
   !["__proto__", "constructor", "prototype"].includes(value);
 const directions = ["up", "down", "left", "right"];
-const objectFields = [
-  "x",
-  "y",
-  "actor",
-  "dir",
-  "elevation",
-  "previousElevation",
-  "kind",
-  "name",
-  "text",
-  "trainerId",
-  "sightRange",
-  "movement",
-  "requires",
-];
 const exact = (value, keys) =>
   value &&
   typeof value === "object" &&
@@ -37,8 +23,8 @@ const exact = (value, keys) =>
 
 /** Immutable content plus saved overlays. Runtime maps are read projections, never the source catalog. */
 export class WorldStateService {
-  constructor({ db, state = emptyWorldState(), objects = () => [] }) {
-    Object.assign(this, { db, state, objects });
+  constructor({ db, state = emptyWorldState(), objects = () => [], dialogues = new Set() }) {
+    Object.assign(this, { db, state, objects, dialogues });
     this.queries = new ConditionQueries(db.conditionQueries);
     this.cache = new Map();
     this.cacheRevision = -1;
@@ -87,7 +73,7 @@ export class WorldStateService {
     }
   }
   object(map, id, value, { full = false } = {}) {
-    if (!identifier(id) || !exact(value, objectFields))
+    if (!identifier(id) || !exact(value, WORLD_OBJECT_FIELDS))
       throw new Error("Invalid world object patch");
     const m = this.db.maps[map];
     for (const key of ["elevation", "previousElevation"])
@@ -119,6 +105,8 @@ export class WorldStateService {
         (typeof value[key] !== "string" || value[key].length > 4096)
       )
         throw new Error("Invalid object text");
+    if (value.dialogue != null && !this.dialogues.has(value.dialogue))
+      throw new Error(`Unknown world dialogue: ${value.dialogue}`);
     if (value.trainerId !== undefined && !this.db.trainers?.[value.trainerId])
       throw new Error("Unknown world trainer");
     if (value.sightRange !== undefined)
@@ -248,6 +236,8 @@ export class WorldStateService {
         blocks: Object.freeze(blocks),
         behavior: Object.freeze(behavior),
         appearances: Object.freeze(appearances),
+        signs: Object.freeze(this.projectObjects(id, nativeSigns(id, base), state)
+          .filter((object) => object.kind === "sign").map(Object.freeze)),
       });
       if (state !== this.state) return projected;
       this.cache.set(id, projected);
@@ -269,6 +259,7 @@ export class WorldStateService {
         ...entry.changes,
         id,
         _worldVersion: JSON.stringify(entry),
+        _dialogueOverride: entry.changes.dialogue != null,
       });
     }
     return [...output.values()];

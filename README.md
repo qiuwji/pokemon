@@ -4,6 +4,8 @@
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
+最新局部改动：已有NPC/告示牌查询与对白修改、有效地图读取和修改反馈已接入，**尚未验证**。用法见[世界编辑合同](docs/engine/world/STATE_AND_LIFECYCLE.md)，示例见[world-editing](examples/world-editing.test.js)；下方测试数字是此前检查点，不覆盖这些改动。
+
 ## 运行与验证
 
 需要 Node.js 22.13+ 和 Python 3.9+。浏览器运行无前端框架或运行时 npm 依赖；TypeScript/ESLint用于开发检查，导入与场景生成使用固定Pillow依赖。
@@ -19,9 +21,9 @@ npm run test:plugins
 npm run check:docs
 ```
 
-`npm test`仅运行核心合同测试（含插件宿主API），本次 **858/858通过**；`npm run test:plugins`独立运行插件作者示例和当前装配清单检查，**24/24通过**，均无失败/跳过。`npm run test:all`显式运行两组；`npm run test:coverage`仅统计核心测试。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。实际范围见[本轮AI控制证据](docs/validation/2026-10-04-ai-control-v2/manifest.json)；本轮实际浏览器通过长轮询完成连续三步移动，并附带最终状态和事件记录；音乐可听沿用上一轮用户确认。用户要求停止测试后未追加验证，最后的文档同步未重跑质量检查。完整浏览器组合、持续循环听音、原作音频对照、覆盖率和远端CI未新增验收。可部署dist/到静态HTTP服务，ES模块与fetch需要HTTP。
+`npm test`仅运行核心合同测试（含插件宿主API），此前检查点 **858/858通过**；`npm run test:plugins`独立运行插件作者示例和当前装配清单检查，**24/24通过**，均无失败/跳过。`npm run test:all`显式运行两组；`npm run test:coverage`仅统计核心测试。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。实际范围见[本轮AI控制证据](docs/validation/2026-10-04-ai-control-v2/manifest.json)；本轮实际浏览器通过长轮询完成连续三步移动，并附带最终状态和事件记录；音乐可听沿用上一轮用户确认。用户要求停止测试后未追加验证，最后的文档同步未重跑质量检查。完整浏览器组合、持续循环听音、原作音频对照、覆盖率和远端CI未新增验收。可部署dist/到静态HTTP服务，ES模块与fetch需要HTTP。
 
-九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前插件示例组24项已验证，系统与浏览器的结果仍按实际范围记录。
+九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。此前插件示例组24项已验证，系统与浏览器的结果仍按实际范围记录。
 
 最新应用层复审已补结算失败收尾、旗标预检、捕获入库确认和共享货币模块；故障测试已随此次全量通过。实现范围与后续待办见[当前进度](docs/project/STATUS.md)。
 

@@ -1,3 +1,4 @@
+import { storyDialogueIds } from "../../engine/story-catalog.js";
 import {
   AppearanceRegistry,
   AppearanceSelections,
@@ -233,7 +234,9 @@ export function validateSave(
     )
       return false;
     if (s.worldState !== undefined)
-      new WorldStateService({ db, state: s.worldState });
+      new WorldStateService({ db, state: s.worldState, dialogues: storyDialogueIds([
+        ...Object.values(db.stories || {}), ...(plugins?.storyBundles.values() || []),
+      ]) });
   } catch {
     return false;
   }

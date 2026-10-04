@@ -17,7 +17,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 | 能力 | 提供的入口 | 使用范围 |
 | --- | --- | --- |
 | 内容注册 | `api.content.register(kind,id,definition)` | species/moves/items/inventoryPockets/learningMethods/weather/battleWeather/abilities/heldItems/moveEffects/actors/resources/tilesets 等 |
-| 世界扩展 | maps/mapExtensions/movement/destinations | 网格地图、NPC 元素、门和连接；已有地图仅追加元素/门/连接 |
+| 世界扩展 | maps/mapExtensions/movement/destinations | 网格地图、NPC 元素、门和连接；静态扩展追加元素/门/连接；运行时world.patch修改有效地形及已接入NPC/告示牌 |
 | 状态定义 | `api.states.register`，`ctx.states` | 按精灵 UID 保存，自定义 schema，step/round/manual/permanent 生命周期 |
 | 行为注入 | `api.actions.register`，`api.rules.register`，`api.story.register/registerBundle` | 事务行动、标准规则阶段、短事件及数据剧情包 |
 | 数值修饰 | rules 的 phase/priority/when/modify | 与原特性、道具共用规则管线；value与上下文均为脱离领域对象的深冻结值 |
@@ -113,3 +113,7 @@ const plugin = {
 ## 并发只读查询
 
 使用api.queries.register(localId,{schema,network?,read(view,input)})创建命名空间只读命令。view沿现有冻结query/store/states合同，回调只允许同步投影，dispatch与事务禁止；返回值冻结。查询可在领域忙碌时使用，不给修改动作提供并发旁路。与actions共享命令身份，重复名在装配前拒绝。实际用例、控制投影和测试政策见[AI控制指南](../development/AI_CONTROL.md)。
+
+## 已有世界查询与修改
+
+使用`core.world.objects`取得稳定对象ID和capabilities，不用观察坐标拼ID。普通NPC/sign的dialogue绑定、按ID对白预览、patch的feedback、地块appearance/revision及存档依赖见[统一世界合同](../engine/world/STATE_AND_LIFECYCLE.md)。raw NPC资料未自动变成Actor；not-instantiated不可修改。持续Actor走actor命令，商店/治疗等领域交互不允许对白字段覆盖。本轮接口已接入但未运行验证；无撤销、所有权仲裁、跨批事务和跨图集修改承诺。

@@ -6,7 +6,9 @@ import {
 } from "../../../engine/world-state.js";
 import { NPCBehaviorRegistry } from "../../../engine/npc-behaviors.js";
 import { FieldSession } from "../../../engine/field-session.js";
+import { readOnly } from "../../../engine/extensions/values.js";
 import { WorldQuery } from "../../../engine/world-query.js";
+import { nativeSigns, objectCapabilities, inspectWorldObjects } from "../../../engine/world-object-index.js";
 import { FieldDirector } from "../../../engine/field-director.js";
 import { objectsFor } from "../pack.js";
 import { matchesCondition } from "../../../engine/conditions.js";
@@ -20,6 +22,7 @@ import { EMERALD_TERRAIN_RULES } from "../terrain-rules.js";
 import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "control",
+  "bindActorMaps",
   "advanceTravelClocks",
   "storyCatalog",
   "storyMapEntered",
@@ -78,20 +81,40 @@ export class WorldApplication {
     bindApplicationPorts(this, ports, WORLD_PORTS);
   }
   baseWorldObjects(map) {
-    return this.storyCatalog.projectObjects(
-      map,
-      [
-        ...objectsFor(
-          { ...this.state, position: { ...this.state.position, map } },
-          this.db,
-        ),
-        ...(this.db.maps[map].elements || []),
-        ...this.actorObjects(map),
-      ],
-      this.state,
-    );
+    return [
+      ...this.storyCatalog.projectObjects(
+        map,
+        [
+          ...objectsFor(
+            { ...this.state, position: { ...this.state.position, map } },
+            this.db,
+          ),
+          ...(this.db.maps[map].elements || []),
+          ...this.actorObjects(map),
+        ],
+        this.state,
+      ),
+      ...nativeSigns(map, this.db.maps[map]),
+    ];
   }
-  patchWorld(operations) {
+  objects({ map = this.state.position.map, id } = {}) {
+    if (!this.db.maps[map]) throw new Error("Unknown query map");
+    const listing = inspectWorldObjects({
+      map, id, source: this.db.maps[map], definitions: this.baseWorldObjects(map),
+      objects: [...this.field.npcs.occupants(map), ...this.worldState.maps[map].signs],
+      record: this.worldState.record(map), revision: this.worldState.state.revision,
+    });
+    if (!id || !listing.objects[0].dialogue) return listing;
+    const object = listing.objects[0];
+    let dialoguePreview = null, dialogueError = null;
+    try {
+      dialoguePreview = this.storyCatalog.resolveDialogue({ type: "dialog", dialogue: object.dialogue }, this.state);
+    } catch (error) {
+      dialogueError = error.message;
+    }
+    return readOnly({ ...listing, objects: [{ ...object, dialoguePreview, dialogueError }] });
+  }
+  patchWorld(operations, { feedback = false } = {}) {
     const draft = this.prepareWorldPatch(operations);
     const result = this.worldState.commit(draft);
     for (const operation of operations)
@@ -103,7 +126,20 @@ export class WorldApplication {
     });
     this.ui?.updateSide();
     if (!this.storyBusy) this.save();
-    return result;
+    if (!feedback) return result;
+    try {
+      return readOnly({
+        ...result,
+        changes: operations.map((operation) => ({
+          kind: operation.kind, map: operation.map,
+          ...(operation.kind === "tile"
+            ? { region: this.cells({ map: operation.map, x: operation.x, y: operation.y, width: 1, height: 1 }) }
+            : { object: this.objects({ map: operation.map, id: operation.id }).objects[0] }),
+        })),
+      });
+    } catch (error) {
+      return { ...result, feedbackError: error.message };
+    }
   }
   prepareWorldPatch(operations) {
     if (
@@ -116,6 +152,21 @@ export class WorldApplication {
       if (operation.kind === "object")
         GEN3_ELEVATION.validate(operation.changes || {});
     const draft = this.worldState.prepare(operations);
+    for (const operation of operations) {
+      if (operation.kind !== "object") continue;
+      const original = this.baseWorldObjects(operation.map).find((o) => o.id === operation.id);
+      const stored = this.worldState.record(operation.map, draft).objects[operation.id];
+      const object = { ...original, ...stored.changes, id: operation.id };
+      const capabilities = objectCapabilities(original || object);
+      const finalCapabilities = objectCapabilities(object);
+      if (Object.keys(operation.changes || {}).some((key) =>
+        !capabilities.fields.includes(key) || !finalCapabilities.fields.includes(key)))
+        throw new Error(`Unsupported world object field: ${operation.map}/${operation.id}`);
+      if (operation.changes?.dialogue != null)
+        this.storyCatalog.resolveDialogue({ type: "dialog", dialogue: operation.changes.dialogue }, this.state);
+      if (original && (original.kind === "sign") !== (object.kind === "sign"))
+        throw new Error("Changing an object between NPC and sign is unsupported");
+    }
     this.assertOccupants(
       draft,
       new Set(operations.map((o) => o.map)),
@@ -131,7 +182,7 @@ export class WorldApplication {
           ...this.worldState.record(id).objects,
           ...this.worldState.record(id, draft).objects,
         },
-        objects = this.worldState.projectObjects(id, undefined, draft),
+        objects = this.worldState.projectObjects(id, undefined, draft).filter((o) => o.kind !== "sign"),
         actors = this.field.npcs
           .occupants(id)
           .filter((n) => /^core:actor\.\d+$/.test(n.id));
@@ -179,6 +230,7 @@ export class WorldApplication {
       projected = this.worldState.projectObjects(map, undefined, draft),
       runtime = new Map(this.field.npcs.occupants(map).map((o) => [o.id, o]));
     const objects = projected
+      .filter((e) => e.kind !== "sign")
       .filter((e) =>
         matchesCondition(e.requires, this.state, this.conditionQueries),
       )
@@ -357,7 +409,9 @@ export class WorldApplication {
       db: this.db,
       state: this.state.worldState,
       objects: (map) => this.baseWorldObjects(map),
+      dialogues: this.storyCatalog.dialogues,
     });
+    this.bindActorMaps(this.worldState.maps);
     const resumeVisit =
       this.state.worldState.activeMap === this.state.position.map;
     const visit = this.worldState.prepareVisit(this.state.position.map, {
@@ -415,6 +469,7 @@ export class WorldApplication {
       objects: (map) =>
         this.worldState
           .projectObjects(map)
+          .filter((e) => e.kind !== "sign")
           .filter((e) =>
             matchesCondition(e.requires, this.state, this.conditionQueries),
           ),
@@ -479,6 +534,7 @@ export class WorldApplication {
           ? this.motion.sourcePosition
           : null,
       elevation: this.world.elevation,
+      revision: () => this.worldState.state.revision,
     });
     this.visitMap();
     this.plugins?.rebind();

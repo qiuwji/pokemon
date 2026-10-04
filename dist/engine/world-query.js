@@ -1,8 +1,8 @@
 import { readOnly } from "./extensions/values.js";
 /** Detached grid projection. No renderer, traversal side effects, story or RNG. */
 export class WorldQuery {
-  constructor({ maps, objects, player, playerSource, elevation }) {
-    Object.assign(this, { maps, objects, player, playerSource, elevation });
+  constructor({ maps, objects, player, playerSource, elevation, revision = () => 0 }) {
+    Object.assign(this, { maps, objects, player, playerSource, elevation, revision = () => 0 });
   }
   map(id) {
     if (!Object.hasOwn(this.maps, id)) throw new Error("Unknown query map");
@@ -12,6 +12,7 @@ export class WorldQuery {
     const m = this.map(id);
     return readOnly({
       id,
+      revision: this.revision(),
       width: m.width,
       height: m.height,
       indoor: !!m.indoor,
@@ -77,6 +78,9 @@ export class WorldQuery {
           x: cx,
           y: cy,
           block,
+          appearance: m.appearances?.[index] ?? (block & 1023),
+          tileset: m.tileset,
+          resource: `tiles-${m.tileset}`,
           behavior: m.behavior[index],
           collision: (block >> 10) & 3,
           elevation: level,
@@ -84,6 +88,6 @@ export class WorldQuery {
           occupants: buckets.get(`${cx}:${cy}`) || [],
         });
       }
-    return readOnly({ map, x, y, width, height, cells });
+    return readOnly({ map, revision: this.revision(), x, y, width, height, cells });
   }
 }

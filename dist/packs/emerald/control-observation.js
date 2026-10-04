@@ -1,3 +1,4 @@
+import { objectCapabilities } from "../../engine/world-object-index.js";
 import { matchesCondition } from "../../engine/conditions.js";
 import { NATURES } from "./pack.js";
 /** Read projections only: catalog joins do not calculate or mutate battle rules. */
@@ -42,11 +43,12 @@ export function objectDetails(o, { world, story, state, talked, frontId }) {
   const object = JSON.parse(JSON.stringify(o));
   const candidates = story.candidates("interact", state, { map: state.position.map, object, mapTitle: world.map.title });
   const canTalk = candidates.length > 0 || !!o.trainerId;
-  return { id: o.id || `sign:${o.x},${o.y}`, name: o.name || o.kind || o.id || "对象", kind: o.kind || "npc", x: o.x, y: o.y, dir: o.dir || null,
-    actor: o.actor || null, script: o.script || null, canTalk,
+  return { id: o.id, name: o.name || o.kind || o.id || "对象", kind: o.kind || "npc", x: o.x, y: o.y, dir: o.dir || null,
+    actor: o.actor || null, script: o.script || null, dialogue: o.dialogue || null,
+    capabilities: objectCapabilities(o), canTalk,
     canInteract: canTalk || ["berryPlot", "daycare"].includes(o.kind),
     interactionReason: canTalk ? null : "no-active-dialogue",
-    talkedBefore: talked(o.id || `sign:${o.x},${o.y}`), blocksMovement: world.occupied(world.map, o, o.x, o.y),
+    talkedBefore: talked(o.id), blocksMovement: o.kind !== "sign" && world.occupied(world.map, o, o.x, o.y),
     inFront: frontId === o.id,
     distance: Math.abs(o.x - state.position.x) + Math.abs(o.y - state.position.y) };
 }

@@ -566,10 +566,42 @@ export interface EncounterPolicyDefinition {
     checkPermission?: boolean;
   } | null;
 }
+export interface WorldObjectView {
+  readonly id: string;
+  readonly map: string;
+  readonly sourceId: string | null;
+  readonly origin: "source" | "runtime";
+  readonly kind: string;
+  readonly x: number;
+  readonly y: number;
+  readonly name: string | null;
+  readonly actor: string | null;
+  readonly dir: Direction | null;
+  readonly script: string | null;
+  readonly dialogue: string | null;
+  readonly dialoguePreview?: DeepReadonly<Json> | null;
+  readonly dialogueError?: string | null;
+  readonly text: string | null;
+  readonly availability: "active" | "inactive" | "not-instantiated";
+  readonly hidden: boolean;
+  readonly capabilities: {
+    readonly fields: readonly string[];
+    readonly hidden: boolean;
+    readonly reason: "actor-commands-required" | "not-instantiated" | null;
+  };
+}
+export interface WorldObjectListing {
+  readonly map: string;
+  readonly revision: number;
+  readonly objects: readonly WorldObjectView[];
+}
 export interface WorldCellView {
   readonly x: number;
   readonly y: number;
   readonly block: number;
+  readonly appearance: number;
+  readonly tileset: string;
+  readonly resource: string;
   readonly behavior: number;
   readonly collision: number;
   readonly elevation: number;
@@ -582,6 +614,7 @@ export interface WorldCellView {
 }
 export interface WorldRegionView {
   readonly map: string;
+  readonly revision: number;
   readonly x: number;
   readonly y: number;
   readonly width: number;

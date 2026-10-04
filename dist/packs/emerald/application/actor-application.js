@@ -81,6 +81,9 @@ export class ActorApplication {
       }),
     });
   }
+  useMaps(maps) {
+    this.repository.maps = maps;
+  }
   objects(map) {
     return this.repository.objects(map).map((n) => {
       const r = this.repository.record(n.id),
@@ -107,7 +110,7 @@ export class ActorApplication {
     return entry
       ? readOnly({
           ...entry,
-          arrived: actorAtRoutine(record, entry, GEN3_ELEVATION, this.db.maps),
+          arrived: actorAtRoutine(record, entry, GEN3_ELEVATION, this.repository.maps),
         })
       : null;
   }

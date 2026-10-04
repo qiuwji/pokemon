@@ -282,3 +282,43 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 ## 只读查询与AI消费方
 
 纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件位于dist/plugins/ai-control，真实移动回执、连续执行、事件游标和命令附状态见[插件指南](../../dist/plugins/ai-control/README.md)。以moved判断移动，不把accepted或网络ok当作走动；查询用detail选择字段并保存nextCursor，gap时刷新状态。长轮询由传输承担，不能在插件事务里嵌套异步路线。测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。
+
+## 修改已有世界
+
+先读[现行世界编辑合同](../../docs/engine/world/STATE_AND_LIFECYCLE.md)，用core.world.objects取得对象ID、availability与capabilities，再通过world.patch修改；写命令需要world权限。不要用坐标临时拼ID或直接改地图/剧情目录。原作来源槽位是身份，导入不能重排；已命名业务对象保留ID。not-instantiated是待转写资料，不可当成已实现NPC；持续Actor使用actor命令。
+
+普通talk/sign可以绑定注册的对白，按id查询可看到dialoguePreview及解析错误。商店/治疗/主线使用对应领域入口；对白模板必须能独立解析，不传调用parameters。feedback:true可附有效对象/地块；反馈报错但ok:true时不可重试已提交的写入。对白与图集来源纳入存档依赖，但不支持任意跨图集铺设、撤销、冲突所有权或跨批事务。
+
+完整链路例：[world-editing](../../examples/world-editing.test.js)，在项目根运行`node --test examples/world-editing.test.js`。本次仅编写，验证状态查STATUS，不把示例存在当成已通过。它修改原生告示牌而非新增旁边的对象。失败边界见tests/world-editing.test.js；文件移动后搜索`core.world.objects`、`inspectWorldObjects`和`world.dialogue`。
+
+<!-- runnable-example: examples/world-editing.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session } from "../tests/helpers/session.js";
+
+test("a mod discovers, replaces and reads back an existing sign dialogue", async () => {
+  let api, dialogue;
+  const plugin = manifest("sign-mod", value => {
+    api = value;
+    const exports = api.story.registerBundle("speech", { version: 1,
+      dialogues: { greeting: { name: "告示牌", lines: ["桥梁维修中。"] } },
+      scripts: {}, entries: {},
+    });
+    dialogue = exports.dialogues.greeting;
+  }, ["world"]);
+  const s = session([plugin]), map = "LittlerootTown";
+  const listing = await api.commands.dispatch("core.world.objects", { map });
+  const sign = listing.objects.find(o => o.kind === "sign" && o.x === 15 && o.y === 13);
+  assert(sign.capabilities.fields.includes("dialogue"));
+  const result = await api.commands.dispatch("core.world.patch", { feedback: true,
+    operations: JSON.stringify([{ kind: "object", map, id: sign.id, changes: { dialogue } }]),
+  });
+  assert.equal(result.changes[0].object.dialogue, dialogue);
+  assert(s.game.enter({ map, x: 15, y: 14, dir: "up" }));
+  await api.commands.dispatch("core.field.interact", {}); await s.settle();
+  assert.equal(s.dialogs.at(-1).lines[0].runs[0].text, "桥梁维修中。");
+  s.game.loadDocument(s.game.exportDocument());
+  assert.equal((await api.commands.dispatch("core.world.objects", { map, id: sign.id })).objects[0].dialogue, dialogue);
+});
+```

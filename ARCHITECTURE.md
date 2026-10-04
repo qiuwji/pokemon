@@ -4,6 +4,8 @@
 
 首先阅读 [README.md](README.md) 的运行入口和[文档导航](docs/README.md)；当前框架范围看[SCOPE](docs/project/SCOPE.md)，任务与欠账看[STATUS](docs/project/STATUS.md)，按需选择[领域Skill](docs/project/SKILLS.md)。原路线保留在 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md)，验证与历史看 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md)。本文定义当前结构，不把历史里程碑当作当前能力。
 
+已有世界编辑复用WorldStateService、WorldQuery和StoryCatalog。world-object-index只负责稳定来源身份、对象目录与能力描述，应用服务负责字段资格和领域提交；告示牌独立投影，不加入NPC占位。运行时Actor/机关接有效地图，详情见[世界状态合同](docs/engine/world/STATE_AND_LIFECYCLE.md)。该局部增强尚未验证，状态见STATUS。
+
 ## 层次与依赖方向
 
 ```text

@@ -1,5 +1,6 @@
 import { StoryEngine } from "../../../engine/story.js";
 import { StoryCatalog } from "../../../engine/story-catalog.js";
+import { dialogueInteraction } from "../../../engine/world-object-index.js";
 import { EMERALD_STORY } from "../story.js";
 
 /** Assemble native/plugin story content and validate its world references. */
@@ -17,6 +18,11 @@ export function createEmeraldStory({ db, plugins, queries }) {
   );
   const story = new StoryEngine(
     [
+      {
+        id: "world.dialogue", trigger: "interact", priority: 100,
+        match: ({ object }) => !!object?._dialogueOverride && dialogueInteraction(object),
+        build: (_state, { object }) => [{ type: "dialog", dialogue: object.dialogue }],
+      },
       ...storyCatalog.events,
       ...(plugins?.story.values() || []),
       ...EMERALD_STORY.events,

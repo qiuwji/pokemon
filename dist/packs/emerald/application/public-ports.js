@@ -72,6 +72,7 @@ export const APPLICATION_METHODS = Object.freeze({
   encounterTable: Object.freeze(["encounters", "table"]),
   encounterPolicy: Object.freeze(["encounters", "inspect"]),
   sampleEncounter: Object.freeze(["encounters", "sample"]),
+  worldObjects: Object.freeze(["world", "objects"]),
   worldBounds: Object.freeze(["world", "bounds"]),
   worldCells: Object.freeze(["world", "cells"]),
   flushContacts: Object.freeze(["contacts", "flush"]),

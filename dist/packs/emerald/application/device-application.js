@@ -38,7 +38,7 @@ export class DeviceApplication {
       catalog: new FieldDeviceCatalog({
         mechanisms: this.catalog.fieldMechanisms || EMERALD_FIELD_MECHANISMS,
         devices: this.catalog.fieldDevices,
-        maps: this.db.maps,
+        maps: this.worldState.maps,
         actions: new FieldActionRegistry(
           this.catalog.fieldActions || EMERALD_FIELD_ACTIONS,
         ),

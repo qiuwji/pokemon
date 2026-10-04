@@ -259,10 +259,16 @@ export function registerEmeraldCommands(game, bus) {
     ({ id, team }) => game.enterFacility(id, team),
   );
   register(
+    "world.objects", objectSchema({ map: id, id }),
+    (options) => game.worldObjects(options),
+    { concurrent: true, query: true, ready: () => true, permission: undefined },
+  );
+  register(
     "world.bounds",
     objectSchema({ map: id }),
     ({ map }) => game.worldBounds(map),
     {
+      query: true,
       concurrent: true,
       ready: () => true,
       permission: undefined,
@@ -281,7 +287,7 @@ export function registerEmeraldCommands(game, bus) {
       ["x", "y", "width", "height"],
     ),
     (region) => game.worldCells(region),
-    { concurrent: true, ready: () => true, permission: undefined },
+    { query: true, concurrent: true, ready: () => true, permission: undefined },
   );
   register(
     "encounter.table",
@@ -472,10 +478,10 @@ export function registerEmeraldCommands(game, bus) {
   );
   register(
     "world.patch",
-    objectSchema({ operations: { type: "string", maxLength: 65536 } }, [
+    objectSchema({ operations: { type: "string", maxLength: 65536 }, feedback: { type: "boolean" } }, [
       "operations",
     ]),
-    ({ operations }) => game.patchWorld(JSON.parse(operations)),
+    ({ operations, feedback }) => game.patchWorld(JSON.parse(operations), { feedback }),
   );
   register(
     "presentation.play",

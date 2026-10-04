@@ -1,5 +1,16 @@
 # 当前开发与验证记录
 
+## 2026-10-04 · 已有世界编辑的局部接口增强（未验证）
+
+按缩减范围补对象索引与对话绑定：匿名原作NPC改用原作local ID/固定来源槽位，保留已命名剧情身份；告示牌在世界投影中得到稳定ID及有效覆盖，交互/观察读同一结果，并与NPC占位隔离。新增core.world.objects，返回来源、可修改字段、当前绑定及active/inactive/not-instantiated状态；尚未转写的原始NPC明确无运行时修改资格。
+
+普通talk/sign可通过world.patch更换已注册对白；静态引用、解析和字段资格在提交前检查，商店/治疗/主线特殊交互保持领域入口。按ID读回包含当前对白预览，patch可选feedback附有效对象/地块；观察失败单独报告，不重放已提交操作。cells补实际appearance、tileset/资源键与revision。Actor剩余的位置/高度与日程到达读取接有效地图，机关绑定读取同一投影；现有寻路本就读取有效地图，没有重写Actor引擎。
+
+存档依赖补覆盖中的对白和地图图集引用。没有实现跨图集铺设、撤销/冲突仲裁、跨批事务或地图扩容；没有自动实现其余原作NPC剧情。新增[核心合同](../../tests/world-editing.test.js)与[插件示例](../../examples/world-editing.test.js)，同步[现行规格](../engine/world/STATE_AND_LIFECYCLE.md)、根文档、插件文档与两份Skill。遵照用户“别测试”要求，本次未运行测试、静态检查、Skill校验或浏览器验收，全部记为已实现未验证，旧结果不能作为本次回归依据。
+
+下一次获准验证时先运行新增核心/示例，再按影响范围检查世界状态、剧情内容、Actor日程、机关、控制观察和保存；系统阶段再跑全量。当前工程版本保持0.30.0，API/协议与存档包络未改；匿名对象身份变化不提供旧开发存档迁移。
+
+
 ## 2026-10-04 · 0.30.0 · AI控制完整回执与详细观察
 
 AI插件已迁至[独立目录](../../dist/plugins/ai-control/README.md)，默认启用，入口和操作说明同目录。公开移动命令返回moved/blocked/animating/busy/interacted，区分被接受的交互与真实走动；UI适配器继续使用accepted驱动输入反馈。ControlApplication只编排控制与投影，通用ControlWalk逐格等待野外结算，ObservationJournal提供有界编号事实。没有向Adventure增加业务逻辑，也没有把规则写进插件。

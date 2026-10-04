@@ -137,6 +137,7 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.world = new WorldApplication(
     liveApplicationPorts(read, WORLD_PORTS, {
+      bindActorMaps: maps => applications.actors.useMaps(maps),
       enterWeather: (map) => applications.weather.enter(map),
       stepWeather: (position) => applications.weather.step(position),
       bindMovement: () => applications.movement.bind(),

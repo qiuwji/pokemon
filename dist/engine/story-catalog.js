@@ -315,3 +315,9 @@ export function storyBundleExports(id, bundle) {
     ),
   });
 }
+
+/** Reference-only index for world-overlay validation; content itself is validated at registration. */
+export function storyDialogueIds(bundles) {
+  return new Set(bundles.flatMap(bundle =>
+    Object.keys(bundle.dialogues || {}).map(id => reference(bundle.id, id))));
+}

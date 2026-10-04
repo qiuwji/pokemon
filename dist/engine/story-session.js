@@ -213,6 +213,8 @@ export function validateStoryResume(catalog, record, events = []) {
 export function storyDependencies(state, host) {
   const refs = [
     state.story?.session?.script,
+    ...[...Object.values(state.worldState?.maps || {}), ...Object.values(state.worldState?.visits || {})]
+      .flatMap(record => Object.values(record.objects || {}).map(entry => entry.changes?.dialogue)),
     ...(state.story?.completed || []),
     ...(state.story?.rewards || []),
   ];

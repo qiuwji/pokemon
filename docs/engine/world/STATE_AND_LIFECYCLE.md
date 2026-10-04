@@ -18,7 +18,7 @@ WorldStateService 独立拥有持久覆盖层，基础地图/图块目录保持�
 ]
 ```
 
-block 保留原作 16 位 metatile/碰撞/高度编码，必须引用该 tileset 中已有图块。对象只允许定义明确的坐标、角色、方向、互动文字、训练家、移动和条件字段。新对象需要坐标与已注册角色。隐藏不销毁记录，再设 hidden:false 可恢复；永久移动不等同于剧情临时 pose。
+block 保留原作 16 位 metatile/碰撞/高度编码，必须引用该 tileset 中已有图块。对象只允许定义明确的坐标、角色、方向、互动文字/对白绑定、训练家、移动和条件字段。新对象需要坐标与已注册角色。隐藏不销毁记录，再设 hidden:false 可恢复；永久移动不等同于剧情临时 pose。
 
 对象变化使该对象的自主/剧情固定姿态失效，下一次查询重建，避免碰撞、画面和保存落点不同。不可阻挡或覆盖玩家当前落点。剧情整树预检只检查形状与静态引用，执行时再检查对象存在条件，从而允许先生成、后移动同一对象。worldPatch 不能和角色/场景轨道并行。
 
@@ -86,3 +86,37 @@ await api.commands.dispatch("core.world.patch", { operations: JSON.stringify([
 绿宝石切片objectsFor将原作NPC行为映射到运行对象。native来源必须恰好匹配一个条目且有movement_type；缺失/歧义在包内容校验及运行时明确抛出Native NPC binding failed，不以默认朝下静止隐藏错误。已有坐标绑定保持严格匹配；妈妈改用sourceLocalId=LOCALID_PLAYERS_HOUSE_1F_MOM，坐标、朝向、范围由原条目派生（当前2,6、朝右、范围0）。
 
 原创练习员显式声明movement并与原作来源绑定分开；新增原创对象或插件元素必须提供自己的行为，不能利用join失败当默认配置。底层NPC/Actor模块不增加地图名或人物名分支。后续新内容应优先使用稳定原作身份；本次未把整个序章对象目录改为原作脚本解释器，也未修改只读C资料。
+
+## 修改已有NPC与告示牌（2026-10-04）
+
+本轮局部接口增强已写入，尚未运行测试或浏览器验收；完成状态见STATUS，之前的验证不覆盖本次改动。
+
+### 发现对象与修改资格
+
+公开只读命令`core.world.objects({map?,id?})`返回`{map,revision,objects}`，未指定map使用当前地图；指定id只返回该对象，未知ID明确报错。查询可以在忙碌时执行，不要求world写权限。`core.query.objects`也使用同一对象目录。
+
+每项包含稳定id、sourceId、origin、位置、kind、actor、script、dialogue、text、availability、hidden和capabilities。availability区分active（当前投影存在）、inactive（本次条件/覆盖下未显示）、not-instantiated（只有原始NPC资料，未接入运行时）。原始资料尚未实现的对象无修改资格，不能把查到一条来源当作已经实现原作剧情。持续Actor使用actor命令，目录中返回actor-commands-required。
+
+匿名原作NPC采用`core:npc.<地图键>.<原作local_id或原始槽位序号>`；已有业务命名ID保留。原作没有local_id时，使用源列表中从1开始的槽位，即隐式来源身份；移动、改名不改变ID。导入时不得重排这些原始槽位来重新编号；需要重组内容时显式提供固定id/local_id。告示牌使用同样的`core:sign`身份，与NPC占位分开。不要自行拼坐标ID，使用查询返回的ID。
+
+capabilities.fields是允许更改的字段列表，capabilities.hidden表明可否隐藏；它不授予权限，写入仍需manifest.permissions中的world。NPC和sign不能通过kind互相转换。告示牌支持位置、方向、高度、name/text/dialogue及隐藏，不支持NPC移动/训练家字段。这里的位置/隐藏修改的是告示交互区域；原作牌子的画面属于metatile，需要在同一批次另改对应tile，不能把事件移动误认为图块自动移动。
+
+### 对话绑定与读回
+
+普通talk对象和sign允许`changes:{dialogue:注册返回的完整对白ID}`。提交前检查引用及当前状态下的插值；绑定需能独立解析，要求调用parameters的模板不能直接使用。引用的对白通过现有剧情/逐字/历史系统播放。修改层中非空绑定对应明确优先级100的world.dialogue事件，覆盖普通对白与原生告示文本；若另有同级匹配剧情，沿用既有冲突报错规则。商店、治疗、主线特殊对象不允许此字段；它们继续使用原有领域/剧情操作。
+
+`dialogue:null`关闭此次绑定覆盖，之后按既有互动事件处理；它不是撤销整层修改。批量修改仍最多128项，非法对象、对白或字段整批不提交。
+
+按id查询时，如对象有dialogue，额外返回dialoguePreview（按当前状态解析的name/lines/source）和dialogueError；出现解析错误仍能查看其余对象信息。无id的清单只返回引用和原始text，避免整张地图展开大量对白。text不代表对白绑定后的实际台词。后续读回会重新读取当前游戏状态，变量变化可以改变预览。
+
+公开修改增加可选`feedback:true`，成功回执中的changes逐项包含对象读回或1×1有效区域。读取反馈异常时返回`ok:true,revision,feedbackError`，表示业务已提交；不能重放这次修改。默认不展开反馈。`core.world.cells`补revision、appearance、tileset和resource（渲染资源键）；appearance是有效metatile索引，不改变逻辑block。它证明资源引用和碰撞数据，不证明像素画面已经验收。
+
+完整例：[world-editing](../../../examples/world-editing.test.js)。从插件注册到查询、修改、实际告示交互及保存读回；本次仅编写，执行结果尚未记录。修改失败、特殊对象资格和依赖另见[核心合同](../../../tests/world-editing.test.js)。
+
+### 有效地图与依赖
+
+Actor的运行时位置初始化、高度、日程到达判定使用WorldStateService.maps；实际路径、感知和每步通行原先已读取有效世界，不另建缓存或导航系统。机关目录在会话绑定时也使用该投影，原有运行时地形上下文继续读取它。日程的注册阶段校验使用基础目录；运行时每步重新判断，地形修改不自动改变日程目标或遭遇表。
+
+世界对象的dialogue引用纳入storyDependencies；保存与导出均记录其插件命名空间，缺失插件先分类为missing_dependency并保护原档。地块覆盖使用该地图所属tileset，保存依赖补记注册tileset及其资源的所有者。当前patch不能给已有地图更换tileset，也不能把数字索引解释成任意插件的地块；跨图集铺设仍属于未实现的结构扩展。
+
+本轮没有增加修改层、撤销、跨批事务、所有权仲裁、地图扩容或区域复制。仍使用permanent/visit、单批原子提交与revision检查，物品布局使用ROOM_LAYOUTS设计中的独立领域提交。

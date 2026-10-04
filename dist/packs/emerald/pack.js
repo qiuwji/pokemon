@@ -1,3 +1,4 @@
+import { sourceObjectId, sourceLocalId } from "../../engine/world-object-index.js";
 // The Emerald slice is a content pack. Engine classes know nothing about these characters.
 export const PACK = {
   id: "emerald-hoenn-01",
@@ -188,8 +189,11 @@ function baseObjects(state, db) {
 // Ambient behavior is declared per actor from the original map's movement/range data.
 export function objectsFor(state, db) {
   return baseObjects(state, db).map((n) => {
-    const id = n.id || `${n.kind}:${n.x},${n.y}`;
-    if (n.movement) return { ...n, id };
+    const binding = n.id || `${n.kind}:${n.x},${n.y}`;
+    if (n.movement) {
+      if (!n.id) throw new Error(`Authored NPC needs an identity: ${binding}`);
+      return n;
+    }
     const map = state.position.map;
     const matches = db.maps[map].npcs.filter((o) =>
       n.sourceLocalId
@@ -198,9 +202,11 @@ export function objectsFor(state, db) {
     );
     if (matches.length !== 1 || !matches[0].movement_type)
       throw new Error(
-        `Native NPC binding failed: ${map}/${n.sourceLocalId || id}`,
+        `Native NPC binding failed: ${map}/${n.sourceLocalId || binding}`,
       );
     const source = matches[0];
+    const index = db.maps[map].npcs.indexOf(source);
+    const id = n.id || sourceObjectId(map, "npc", source, index);
     const type = source.movement_type;
     const direction = type.includes("RIGHT")
       ? "right"
@@ -228,7 +234,7 @@ export function objectsFor(state, db) {
     return {
       ...n,
       x: source.x,
-      sourceLocalId: source.local_id,
+      sourceLocalId: sourceLocalId(source, index),
       script: source.script,
       y: source.y,
       ...(source.elevation !== undefined

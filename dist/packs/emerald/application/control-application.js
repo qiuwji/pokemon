@@ -71,7 +71,7 @@ export class ControlApplication {
     return null;
   }
   beginInteraction(object) {
-    const token = { map: this.state.position.map, id: object.id || `sign:${object.x},${object.y}` };
+    const token = { map: this.state.position.map, id: object.id };
     this.interaction = token; this.record("interaction.started", token); return token;
   }
   endInteraction(token) { if (this.interaction === token) this.interaction = null; }

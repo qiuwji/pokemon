@@ -225,6 +225,15 @@ export class ExtensionCatalog {
         ...m.moves.map((s) => s.id),
       ]),
     ];
+    // Tile indices belong to their map's registered tileset. Track its owner and image resource.
+    for (const [mapId, record] of [
+      ...Object.entries(state.worldState?.maps || {}), ...Object.entries(state.worldState?.visits || {}),
+    ]) {
+      if (!Object.keys(record.tiles || {}).length) continue;
+      const map = this.compiled?.maps[mapId] || this.base.maps?.[mapId];
+      const tileset = this.compiled?.tilesets[map?.tileset] || this.base.tilesets?.[map?.tileset];
+      used.push(map?.tileset, tileset?.resource);
+    }
     for (const appearance of [...used]) {
       const definition =
         this.entries.get(`appearances/${appearance}`)?.value ||
