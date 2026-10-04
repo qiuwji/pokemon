@@ -1,5 +1,9 @@
 # 当前开发与验证记录
 
+## 2026-10-05 · 剧情提取与审阅流程
+
+按用户要求暂停开场修复，新增tools/story只读来源提取、依赖/C/宏定位、证据重建和人工审阅校验；旧script-text复用标签解析。提供开场选择配置、地区入口及[标准流程](../development/STORY_EXTRACTION.md)，同步原作接手Skill与切片模板。专项Node1/1（内含Python9项）、真实固定来源回校验及无写入预演通过，[证据](../validation/2026-10-05-story-extraction/manifest.json)保存输入指纹；文档检查通过（78份Markdown、771本地链接、17同步示例），提取工具语法及新增Node测试的ESLint通过。地区旧稿不恢复，用户截图问题与此前开场未完成改动统一记在[STATUS](STATUS.md)，不把提取检查当游戏还原验收。
+
 ## 2026-10-05 · 车内新游戏起点与存档修复
 
 新游戏已正式从InsideOfTruck中心(2,2)、朝下开始，复用此前导入的地图、剧情和原声音效。确定根因是SaveApplication.newState把PACK.start.map无条件写入movement.visited；该字段记录可飞行目的地，车内未在destinations登记，因此validateSave返回false。初始visited改为空，首次绑定与之后入图均由既有MovementApplication.visitMap登记合法目的地。没有把车内伪装成飞行目的地，也没有放宽JSON或存档校验。交接所述Expected finite JSON data在当前提交未复现，应与这次确定的目的地引用错误区分。

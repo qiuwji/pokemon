@@ -15,7 +15,8 @@
 | AI怎样观察、操作和测试游戏？ | [AI控制指南](development/AI_CONTROL.md) |
 | 怎么测试、哪些证明可以复用？ | [测试指南](development/TESTING.md)、[VALIDATION](project/VALIDATION.md) |
 | 最近改动及历史决策？ | [CHANGELOG](project/CHANGELOG.md)、[history](history/engine-roadmap-a-e.md) |
-| 序章某一段的原作站位/台词/状态怎么走？ | [未白镇序章场景脚本](regions/littleroot-opening.md)（逐场站位、朝向与原文台词） |
+| 如何提取和核对原作脚本、动作、原文及翻译？ | [地区参考入口](regions/README.md)、[提取与回校验](development/STORY_EXTRACTION.md) |
+| 序章某一段的原作站位/台词/状态怎么走？ | [地区参考入口](regions/README.md)，按切片配置从固定参考提取；旧稿不能代替来源核实 |
 
 ## 按领域找规格
 

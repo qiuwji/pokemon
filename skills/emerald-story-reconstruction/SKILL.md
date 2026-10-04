@@ -31,6 +31,16 @@ description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写�
 
 原作确认事实、本项目设计选择及待验证猜测分开记录；参考目录有素材不等于可以无来源批量导入。公式、动作顺序和旗标时机来自实际脚本/C实现及验证，不由模型记忆补齐。
 
+## 地区文档与机械提取
+
+开始转写地区前，读取 [地区参考入口](../../docs/regions/README.md) 及本次地区文档，再按 [提取与回校验标准](../../docs/development/STORY_EXTRACTION.md) 获取固定来源证据。地区文档是定位线索，台词翻译与动作说明可能不准确；原始脚本/C 和核实证据优先，不能以文档写“全部场景”就视为全分支已核实或已实现。
+
+使用 `python3 tools/story/extract.py extract --profile tools/story/slices/littleroot-opening.json --out docs/regions/evidence/littleroot-opening --check` 预演，再去掉 --check。其他地区复制 profile 选择 maps/entries/functions；默认地图全量入口，显式 entries 只代表限定切片。packet.json/source.md 由工具生成，review.json 由提取者填写；不手改原码和原文。
+
+交接前运行 extract.py verify --packet 加 --review，审阅完成再 --ready。检查来源哈希、完整标签、入口清单、原文及占位符；C 特殊函数、任务回调、宏等待和译文含义仍须读源码判断。校验通过只证明提取稿与来源一致及审阅结构齐全，不证明网页演出正确。真实触发/逐格朝向/门及对象遮挡/音频/保存恢复另验收。
+
+逐场记录触发条件、状态轴、每个演员的起点/逐格动作/原地朝向/并行组/等待/终点/可见性；单独列男/女、玩家方向、取消/失败与重入。不得用“走过来”“动画完成”概括有决定性次序的步骤，不把 setobjectxyperm 的状态摆位当作可见行走，也不把 applymovement 的结束位置当作实际演出已实现。
+
 ## 从原作资料找到业务
 
 | 要查什么 | 起始路径 / 继续追踪 |

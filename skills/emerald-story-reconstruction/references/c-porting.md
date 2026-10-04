@@ -28,6 +28,10 @@ python3 tools/import.py --list
 
 参考修订应为`731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。`work/pokeemerald/`、`sources/`只读；所有新增代码、记录和资源放在其外。参考缺失时按project-map取得固定修订，再读源码；不使用最新分支冒充固定来源。不会写C也能转写数据切片，但必须追踪它调用的C函数，而不是凭宝可梦常识补齐。
 
+## 自动提取证据再编写说明
+
+具体命令、产物合同、review模板与能/不能自动验证的范围见[提取与回校验](../../../docs/development/STORY_EXTRACTION.md)。地区笔记先读docs/regions，但必须用固定原码核准；新工具统一处理单/双冒号标签并保留入口、Movement、跨文件引用、指令宏、special及C位置。extract预演后生成packet/source/review；verify重建来源比较，--ready检查审阅是否遗留pending。不会自动翻译C、推导动态分支或证明动画流畅。
+
 ## 一条切片的完整流程
 
 1. **选可验证入口**：例如“古辰镇员工介绍商店并赠药，满包可以重试”。记录地图、对象local_id/script、坐标、入图回调、前置flag/var和最终事实。

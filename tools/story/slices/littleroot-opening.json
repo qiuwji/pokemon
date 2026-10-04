@@ -1,0 +1,37 @@
+{
+  "maps": [
+    "InsideOfTruck",
+    "LittlerootTown",
+    "LittlerootTown_BrendansHouse_1F",
+    "LittlerootTown_BrendansHouse_2F",
+    "LittlerootTown_MaysHouse_1F",
+    "LittlerootTown_MaysHouse_2F"
+  ],
+  "entries": [
+    "InsideOfTruck_MapScripts",
+    "InsideOfTruck_EventScript_SetIntroFlagsMale",
+    "InsideOfTruck_EventScript_SetIntroFlagsFemale",
+    "LittlerootTown_BrendansHouse_1F_MapScripts",
+    "LittlerootTown_MaysHouse_1F_MapScripts",
+    "LittlerootTown_BrendansHouse_2F_MapScripts",
+    "LittlerootTown_MaysHouse_2F_MapScripts",
+    "LittlerootTown_BrendansHouse_2F_EventScript_WallClock",
+    "LittlerootTown_MaysHouse_2F_EventScript_WallClock",
+    "LittlerootTown_MapScripts",
+    "InsideOfTruck_EventScript_MovingBox",
+    "LittlerootTown_EventScript_GoInsideWithMom"
+  ],
+  "functions": [
+    "ExecuteTruckSequence",
+    "Task_HandleTruckSequence",
+    "Task_Truck1",
+    "Task_Truck2",
+    "Task_Truck3",
+    "EndTruckSequence",
+    "GetTruckCameraBobbingY",
+    "GetTruckBoxYMovement",
+    "StartWallClock",
+    "Special_ViewWallClock",
+    "CB2_StartWallClock"
+  ]
+}

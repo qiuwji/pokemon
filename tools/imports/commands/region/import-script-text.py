@@ -13,7 +13,9 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from imports.context import arguments, source_argument, source_revision  # noqa: E402
 
-LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):\s*$')
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+from story.source_parser import parse_blocks  # noqa: E402
+
 STRING = re.compile(r'\.string\s+"((?:[^"\\]|\\.)*)"')
 ESCAPES = (('\\n', '\n'), ('\\p', '\n\n'), ('\\l', '\n'), ('\\n\n', '\n\n'))
 CONTROL = re.compile(r'\{[A-Z_]+\}')
@@ -30,25 +32,9 @@ def extract(path):
     """Return the label/text pairs declared in one scripts.inc body."""
     if not path.is_file():
         return {}
-    result = {}
-    label = None
-    buffer = []
-    for line in path.read_text(encoding='utf-8', errors='replace').splitlines():
-        match = LABEL.match(line)
-        if match:
-            if label and buffer:
-                text = decode('\n'.join(buffer))
-                if text:
-                    result[label] = text
-            label, buffer = match.group(1), []
-            continue
-        if label and '.string' in line:
-            buffer.append(line)
-    if label and buffer:
-        text = decode('\n'.join(buffer))
-        if text:
-            result[label] = text
-    return result
+    return {block['label']: decode(block['raw'])
+            for block in parse_blocks(path.read_text(encoding='utf-8'), str(path))
+            if block['kind'] == 'text'}
 
 
 def text_labels(text):

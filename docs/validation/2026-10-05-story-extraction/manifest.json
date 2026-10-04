@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-05",
+  "scope": "Read-only source extraction and review validation; not gameplay/translation fidelity",
+  "referenceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "commands": [
+    {
+      "command": "node --test tests/story-reference-tools.test.js",
+      "result": "1/1 passed; embedded Python 9 cases",
+      "log": "test.log"
+    },
+    {
+      "command": "python3 tools/story/extract.py extract --profile tools/story/slices/littleroot-opening.json --out /tmp/emerald-opening-evidence-v1",
+      "result": "12 roots, 185 blocks, 58 map-entry inventory rows, 16 C definition groups, 51 macros; 0 unresolved script references",
+      "log": "extract.log"
+    },
+    {
+      "command": "python3 tools/story/extract.py verify --packet /tmp/emerald-opening-evidence-v1/packet.json",
+      "result": "sourceMatches=true; no problems",
+      "log": "verify.log"
+    },
+    {
+      "command": "python3 tools/story/extract.py extract --maps InsideOfTruck --out /tmp/emerald-extraction-preview-only --check",
+      "result": "Preview counts; output directory was not created",
+      "log": "preview.log"
+    },
+    {
+      "command": "node tools/check-docs.mjs",
+      "result": "78 Markdown files, 771 local links, 17 synchronized examples valid",
+      "log": "docs.log"
+    },
+    {
+      "command": "npx eslint tests/story-reference-tools.test.js",
+      "result": "passed",
+      "log": "lint.log"
+    },
+    {
+      "command": "python3 -m py_compile tools/story/*.py tools/imports/commands/region/import-script-text.py",
+      "result": "passed"
+    }
+  ],
+  "packetSha256": "fbe5a736ff1a5843a11d4135d57e24402bac733a97aa86a21c1574d46c5ef58f",
+  "files": {
+    "tests/story-reference-tools.test.js": "9aa5e21b5ecc04ae97c1699151c9ed8d59042dc587a3952f6ea890ae4643222c",
+    "tools/imports/commands/region/import-script-text.py": "133c7a58f1fd536df687d17dbd4efceea5f71d2789354ee351f50f9b5e34d6e9",
+    "tools/story/extract.py": "261dcdaa0bfba00dc7bbc959a503e3804dd4275f012ef459a0d98abb22d88964",
+    "tools/story/reference.py": "635bbb8fa33b638ef6833d0a32e8e5ac81a28e0d7c2cbd7a7b6d77ebc9a57219",
+    "tools/story/review.py": "668467e4c5ff59659f174fa192e32c20dc58e11e5eb51a7d842657398f918974",
+    "tools/story/slices/littleroot-opening.json": "0b4db4f28b0a8db76a8945b0668f15a3d17a761b5295f0f1877f3ef2d4d1fed5",
+    "tools/story/source_parser.py": "44ceccc5240588e004216f753e7d056d8acb31ba9804181eb30c7a5c3427fd7b",
+    "tools/story/test_reference.py": "6f0301edf6ff80312cc42f0b1edc7abb787b8ba2e22e7893fbef3b0bcbce2ecc"
+  },
+  "notVerified": [
+    "Chinese translation meaning",
+    "Natural-language claim correctness",
+    "Complete Emerald script semantics",
+    "Browser opening fidelity and reported bugs",
+    "Full working-tree regression after paused opening changes"
+  ],
+  "limitations": [
+    "C references are lexical candidates, not an interpreted call graph",
+    "Ready checks review structure, not gameplay completion"
+  ],
+  "evidenceInvalidatedBy": [
+    "Extractor/parser/review changes",
+    "Reference revision or selected source changes",
+    "Selection/profile changes"
+  ],
+  "skillValidation": {
+    "portableInstalledCopies": "identical",
+    "nameDescriptionFrontmatter": "checked",
+    "bundledQuickValidator": "unavailable: PyYAML missing; metadata and project documentation checks used"
+  }
+}

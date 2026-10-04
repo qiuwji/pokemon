@@ -2,6 +2,8 @@
 
 从需要的产物找脚本，而不是重跑所有导入。原C参考`work/pokeemerald/`和`sources/`只读，固定修订与获取信息见[项目位置](../../skills/emerald-project-handoff/references/project-map.md)。Python图像转换需要Pillow；内容候选检查需要Node。所有路径均从项目根描述。统一入口为`python3 tools/import.py COMMAND [SOURCE] [OPTIONS]`；`--list`按领域列出命令。实现位于tools/imports/commands/{region,dex,battle,items,actors,audio}，不保留旧的平铺脚本入口。表中的脚本名称为ownership的逻辑ID。
 
+剧情规格的原文、入口、移动及 special/C 追踪另用[提取与回校验流程](STORY_EXTRACTION.md)。该工具不导入游戏内容，不能用一次文本抽取证明动画/分支还原。
+
 ## 分类、输入、输出和参数
 
 下表“预演”是实际支持`--check`的脚本。内容读写机制及字段所有权见[内容管线](CONTENT_PIPELINE.md)和[机器可读声明](../../tools/imports/ownership.json)。生成文件和PNG会被替换，正式运行前先看预演、保留Git差异。
