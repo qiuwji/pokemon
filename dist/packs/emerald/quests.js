@@ -1,6 +1,7 @@
 import { matchesCondition } from "../../engine/conditions.js";
 export const QUESTS = [
   { id: "clock", requires: { not: { flag: "rescued" } }, number: "00", title: "安顿新家", description: "到自己家二楼调查墙上的时钟，设定时间。", complete: { compare: { query: { id: "clockSet" }, op: "eq", value: true } } },
+  { id: "tv", number: "00", title: "回到妈妈身边", description: "下楼找妈妈，看看电视里的道馆转播。", requires: { compare: { query: { id: "clockSet" }, op: "eq", value: true } }, complete: { flag: "tvWatched" } },
   { id: "neighbor", number: "00", title: "认识新邻居", description: "回一楼看电视，再去隔壁二楼调查精灵球。", requires: { flag: "tvWatched" }, complete: { flag: "neighborMet" } },
   {
     id: "rescue",

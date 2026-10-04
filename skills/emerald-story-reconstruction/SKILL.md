@@ -172,3 +172,5 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 新增切片至少验证真实入口→参数化公共对白→领域成功/满包→重入，以及长剧情的战斗后续接或失败重载。恢复节点改名须明确开发存档失效；不得为了兼容未发布旧节点增加散落回退。实际测试参考story-content.test.js、story-session.test.js，路径改名搜索`Stable story checkpoints`、`Battle receipts are correlated`。
 
 本地化写对白目录；多角色用每句name/portrait/expression，插值声明bindings，条件台词用入口requires/if而非播放器读状态。记录只收最终确认dialog及已选项，历史回看不触发奖励。内容来源保持原作确认/项目演绎/pending三类，不能把换了数据格式当作原作完整还原。
+
+接手调钟或其他special后续剧情时，检查“旧任务已完成、新任务尚未解锁”的空隙；侧栏必须支持无当前任务，不能让进度查询导致启动失败。原作4bpp灰度PNG不等同于索引PNG：复用tools/imports/pixel_assets.py的gbagfx截断/反色语义，验证透明背景及帧裁切；只检查图像尺寸不证明素材正确。

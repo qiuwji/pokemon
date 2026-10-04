@@ -293,6 +293,23 @@ test("Clock page submits setup through a command and renders live saved time", (
   assert.match(doc.getElementById("weather").textContent, /09:04/);
 });
 
+test("Loaded clock-before-TV state renders the real sidebar and continues through later opening tasks", () => {
+  const { game, doc, ui } = fixture();
+  game.state = readOnly({ ...game.state, flags: {}, clock: { initialized: true } });
+  ui.updateSide();
+  assert.equal(doc.getElementById("quest-title").textContent, "回到妈妈身边");
+  // Content packs may legitimately have no eligible task; it cannot prevent boot.
+  game.state = readOnly({ ...game.state, flags: { rescued: true }, clock: { initialized: false } });
+  ui.updateSide();
+  assert.equal(doc.getElementById("quest-title").textContent, "与小遥初次交手");
+  game.state = readOnly({ ...game.state, flags: { rescued: true, rivalWon: true, pokedex: false } });
+  ui.updateSide();
+  assert.equal(doc.getElementById("quest-title").textContent, "属于你的宝可梦图鉴");
+  game.state = readOnly({ ...game.state, flags: { tvWatched: true, neighborMet: true }, clock: { initialized: true } });
+  ui.updateSide();
+  assert.equal(doc.getElementById("quest-title").textContent, "草丛里的求救声");
+});
+
 test("Facility page renders frozen plugin data and submits entry/action through application commands", async () => {
   const { game, doc, ui, calls } = fixture();
   ui.showFacility();

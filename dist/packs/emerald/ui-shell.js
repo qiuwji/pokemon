@@ -82,7 +82,9 @@ export function createUIShell(
     game.ui?.updateTime?.(game.timeView());
     updateWeather(game.weatherView());
     game.ui?.extensions?.refreshHUD();
-    const q = questFor(game.state);
+    const q = questFor(game.state) || {
+      title: "自由探索", description: "当前没有待办任务，可以继续探索丰缘。", number: "—",
+    };
     $("quest-title").textContent = q.title;
     $("quest-description").textContent = q.description;
     $("quest-number").textContent = q.number;

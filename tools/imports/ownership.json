@@ -212,6 +212,7 @@
     ],
     "outputs": [
       "assets/wallclock-*.png",
+      "packs/emerald/generated/wall-clock.js",
       "assets/tiles-general-petalburg.png",
       "assets/opening-art-source.json"
     ],

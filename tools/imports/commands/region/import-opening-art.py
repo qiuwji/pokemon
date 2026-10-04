@@ -7,9 +7,11 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import struct
 from PIL import Image
-from imports.context import ImportSession, arguments, source_argument, source_revision
+from imports.context import ImportSession, arguments, source_argument, source_revision, generated_header
+from imports.pixel_assets import paint_4bpp as paint
 
 parser = argparse.ArgumentParser(description=__doc__)
 source_argument(parser)
@@ -28,13 +30,6 @@ def read(path):
 
 def palette(path):
     return [tuple(map(int, line.split())) for line in read(path).read_text().splitlines()[3:19]]
-
-
-def paint(image, pal, transparent=False):
-    output = Image.new('RGBA', image.size)
-    output.putdata([(*pal[int(v) % 16], 0 if transparent and int(v) % 16 == 0 else 255)
-                    for v in image.getdata()])
-    return output
 
 
 clock = Image.open(read('graphics/wallclock/clock.png'))
@@ -60,6 +55,19 @@ for gender in ('male', 'female'):
                 screen.paste(tile, (x * 8, y * 8))
         session.image(screen, session.dist / f'assets/wallclock-{gender}-{mode}.png')
     session.image(paint(hands, palette('graphics/wallclock/male.pal'), True), session.dist / f'assets/wallclock-{gender}-hands.png')
+
+native = read('src/wallclock.c').read_text()
+table = re.search(r'sClockHandCoords\[\]\[2\]\s*=\s*\{(.*?)\n\};', native, re.S)
+if not table:
+    raise ValueError('Missing native clock hand coordinates')
+coordinates = [[int(x, 0), int(y, 0)] for x, y in re.findall(
+    r'\{\s*(-?0x[0-9a-fA-F]+),\s*(-?0x[0-9a-fA-F]+)\s*\}', table[1])]
+if len(coordinates) != 360:
+    raise ValueError('Expected 360 native clock hand offsets')
+session.text(session.dist / 'packs/emerald/generated/wall-clock.js',
+             generated_header('import-opening-art.py', source) +
+             'export const WALL_CLOCK_HAND_OFFSETS = Object.freeze(' +
+             json.dumps(coordinates, separators=(',', ':')) + '.map(Object.freeze));\n')
 
 # These IDs are reserved for this derived animation in the pack, never in the source.
 pack = data['tilesets']['general-petalburg']

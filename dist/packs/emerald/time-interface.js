@@ -1,4 +1,5 @@
 import { WallClockDial, drawWallClock } from "../../presentation/wall-clock-dial.js";
+import { WALL_CLOCK_HAND_OFFSETS } from "./generated/wall-clock.js";
 /** A pixel menu observes the saved world clock; initial setup is an application command. */
 export function createTimeInterface(
   game,
@@ -27,7 +28,7 @@ export function createTimeInterface(
     const canvas = root.querySelector("[data-clock-dial]"), ctx = canvas.getContext("2d");
     const hour = root.querySelector("[data-clock-hour]"), minute = root.querySelector("[data-clock-minute]");
     const ImageClass = doc.defaultView?.Image;
-    const art = {};
+    const art = { handOffsets: WALL_CLOCK_HAND_OFFSETS };
     const gender = game.state.playerGender || 'male';
     const mode = view.initialized ? 'view' : 'start';
     if (ImageClass) for (const [key, suffix] of [['background', mode], ['hands', 'hands']]) {
@@ -76,7 +77,10 @@ export function createTimeInterface(
     } else root.querySelector("[data-clock-return]").onclick = () => finish("viewed");
     ownModalResource(() => {
       renderClock = null;
-      for (const image of Object.values(art)) image.onload = image.onerror = null;
+      for (const key of ['background', 'hands']) {
+        const image = art[key];
+        if (image) image.onload = image.onerror = null;
+      }
       canvas.onkeydown = canvas.onpointerdown = canvas.onpointermove = canvas.onpointerup = null;
       if (!settled) { settled = true; resolve({ status: "cancelled" }); }
     });

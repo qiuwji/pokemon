@@ -37,6 +37,10 @@
     {
       "path": "graphics/wallclock/male.pal",
       "sha256": "bec80cd474b57f736cb7fffc82efa8dd84fc1898a14a9246a269155fdcfcf77c"
+    },
+    {
+      "path": "src/wallclock.c",
+      "sha256": "7a1227697bce57b72a7e5a4a3cdb1af55eaa127484d5b94f01afadfb7cf5548e"
     }
   ],
   "doorMetatiles": [
