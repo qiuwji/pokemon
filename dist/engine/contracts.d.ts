@@ -1477,6 +1477,7 @@ export interface FacilityActivityDefinition {
       label: string;
       schema: DataSchema;
       draws?: number[];
+      when?(context: DeepReadonly<{ data: Json; parameters: Json }>): boolean;
       decide(context: Readonly<FacilityActivityContext>): FacilityTransition;
     }
   >;

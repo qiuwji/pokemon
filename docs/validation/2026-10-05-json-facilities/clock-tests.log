@@ -1,0 +1,25 @@
+✔ Opening male: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (182.043584ms)
+✔ Opening female: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (148.321541ms)
+✔ Wall clock dial wraps midnight, accepts touch geometry and computes coherent hands (0.504083ms)
+✔ Object presentation transforms are bounded, frozen and neutral under reduced motion (0.503625ms)
+✔ Story clock confirmation expires with its screen and fanfare waits for the voice rather than a guessed delay (38.9845ms)
+✔ Opening male: entrance pose persists; exit coordinate intercepts its warp; movers use source sprites (39.253875ms)
+✔ Opening female: entrance pose persists; exit coordinate intercepts its warp; movers use source sprites (25.996625ms)
+✔ Scripted walking tolerates early fractional timer callbacks and NPC refresh ticks during the clock visit (21.29525ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (36.030542ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (4.327209ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (5.363458ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (3.710417ms)
+✔ Clock page submits setup through a command and renders live saved time (4.840083ms)
+✔ Loaded clock-before-TV state and taskless progress both render the real sidebar (3.737042ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (7.08325ms)
+✔ Native wall-clock assets keep transparent hand backgrounds and both period indicators (75.11725ms)
+✔ Loaded clock sheets use native angle offsets, ten-minute hour ticks and the correct PM tile (1.369875ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 584.322917

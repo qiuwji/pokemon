@@ -4,7 +4,7 @@
 
 设施是一个有身份、局部状态、玩家行动、结果和结算的活动会话。公共层不判断开拓区、华丽大赛或游戏厅名称。连战、评审和转轮各有独立注册规则；它们共用进入/退出、冻结查询、事务、事件和保存边界。
 
-当前实装见[STATUS](../../project/STATUS.md)：两场连战练习、启动插件的转轮示例，以及测试中的三轮表演插件。后两者证明非战斗规则可以运行；表演测试不是完整华丽大赛，转轮示例不是原作老虎机还原。全作规则与资源后续交给业务作者。
+当前实装见[STATUS](../../project/STATUS.md)：本体两场连战练习，以及可选[JSON设施插件](../../../dist/plugins/facility-content/README.md)的连战、轮次表演与转轮模板。它们可以只改JSON配置运行，均不是完整原作开拓区、选美、老虎机规则；完整规则和资源仍需按原作依据逐步补充。
 
 ## 代码职责
 
@@ -23,7 +23,7 @@
 
 `api.content.register('facilityActivities', id, activity)`定义活动规则；`api.content.register('facilities', id, definition)`定义某个设施。
 
-活动字段：parameters参数schema、state局部状态schema、initial初值、actions行动表，可选validate定义/引用检查，可选onBattle战后规则。每个行动有label、schema、可选draws和同步decide。
+活动字段：parameters参数schema、state局部状态schema、initial初值、actions行动表，可选validate定义/引用检查，可选onBattle战后规则。每个行动有label、schema、可选draws、when和同步decide。when接收深冻结的{data,parameters}，同步返回布尔；查询只列出当前合法行动，命令提交复查同一条件。插件when和decide均在宿主规则评估守卫内运行，不能发事件或递归操作；UI隐藏按钮不能代替命令校验。
 
 `decide`收到深冻结的parameters/data/input/rolls/world。world含金钱、旗标、队伍、时钟和位置，不提供可写游戏对象或RNG。draws声明每个样本的上界n，宿主提供[0,n)整数。禁止回调异步、直接写状态或递归发命令。
 
@@ -38,6 +38,12 @@
 设施字段：name、activity、parameters、可选requires和team。无team的活动不选队；team规定min/max、levelCap、物种/装备重复限制、禁止物种、装备/背包可用性和场间恢复。参赛个体UID与活动局部参赛顺序不要混为地图对象ID。
 
 自定义输入与复杂舞台通过已有插件页面/action/表现注册构建，页面读facilities查询并发下列公共命令；通用菜单只提交空输入行动。完整选美的appeal/jam、评审顺序、类别、排名和资源等需要自己的业务规则与界面，本框架没有自动提供这些原作算法。
+
+## JSON模板路径
+
+`registerFacilityContent(api,pack)`编译纯数据包为已有facilityActivities/facilities/trainer注册，支持battle-sequence、score-contest、reel-machine；每个设施生成独立活动，轮带长度决定本活动宿主RNG采样范围，没有动态执行字符串。三个模板在engine/extensions/facility-templates中各自负责一种规则，只返回状态/成本/奖励/战斗计划。原生连战也复用同一battleSequence策略，避免两份结算规则；app.js不认识设施名称。
+
+JSON字段、上限、启用入口、实装边界及错误排查集中在[插件作者说明](../../../dist/plugins/facility-content/README.md)。核心测试tests/facility-content.test.js验证编译器和失败路径；examples/facility-content.test.js单独验可选插件装配。只读校验：`node tools/check-facility-content.mjs [文件]`，引用和规则语义走真实注册器，不仅JSON解析。新增不同算法须注册新活动/扩展独立模板；不向通用设施类添加识别本作名字的分支。
 
 ## 命令、查询与事件
 

@@ -2,6 +2,13 @@
   "version": 1,
   "plugins": [
     {
+      "id": "facility-content",
+      "module": "./facility-content/index.js",
+      "export": "createFacilityContent",
+      "enabled": false,
+      "arguments": ["json:./facility-content/content.json"]
+    },
+    {
       "id": "ai-control",
       "module": "./ai-control/index.js",
       "export": "aiControl",

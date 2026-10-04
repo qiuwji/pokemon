@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-05",
+  "version": "0.32.0",
+  "saveVersion": 15,
+  "baseCommit": "fed9656",
+  "scope": "Post-clock startup repair, native clock pixels/geometry and three JSON facility templates; no browser operation",
+  "inputFingerprint": "475a66eeb6bc7b3cd922a3b4c80df9a010a058762cce0a200c26bdae64782e4e",
+  "tests": {
+    "core": {
+      "passed": 900,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 27,
+      "failed": 0
+    },
+    "log": "tests.log"
+  },
+  "quality": {
+    "result": "Main check passed: content references/assets, 345 JS module syntax, strict contracts, docs, ESLint and configured engine types",
+    "log": "check.log",
+    "supplemental": {
+      "contracts": "Passed after adding the typed JSON template authoring contract",
+      "documentation": "79 Markdown files, 793 local links, 17 synchronized examples passed before final navigation/source notes"
+    }
+  },
+  "browser": {
+    "status": "pending-user",
+    "reason": "User requested no Computer Use; end-to-end and visual/audio acceptance owned by user"
+  },
+  "limitations": [
+    "Contest template is configurable round scoring, not the full native contest algorithm.",
+    "Reel template uses money and sampled stops, not native coins/timing/jackpot control.",
+    "Trainer sequences do not implement the seven Frontier facilities special rules/BP/symbols.",
+    "Active facilities cannot be saved; finished/quit results are saved under the existing contract."
+  ]
+}

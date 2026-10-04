@@ -59,3 +59,5 @@ crop-growth 10 个场景分别验证四段浇水/成熟/再生/离线/停止/保
 `players-house`地区bundle调查墙钟，通过等待式screen进入页面。首次确认提交初始时间，取消不初始化；设置完成才执行妈妈上楼、退出和下一次一楼电视剧情。再次调查只查看已保存时间。页面使用原作wallclock tilemap/男女背景调色板及手针素材，纯WallClockDial负责编辑/取样；UI不能写clock/state。左右调整分针，上下调整小时，触屏按钮/拖动共用同一编辑状态。页面持有资源和输入清理，时钟提交回调仅在此screen寿命内有效。
 
 资源通过`python3 tools/import.py opening-art --check`预演，去掉--check导入；原作只有时针/分针，未虚构秒针。源码来源和用户待验场景见[开场切片](../../regions/LITTLEROOT_OPENING.md)。
+
+钟针灰度输入使用gbagfx的4bpp截断/反色规则，索引PNG保持索引；透明零不能画成黑色方块。AM/PM来自tile128/132，时针按原作十分钟五度步进；偏移表从只读src/wallclock.c提取到packs/emerald/generated/wall-clock.js，再作为资源参数交给纯绘制器。测试包含真实PNG透明像素及不同角度裁切，页面实际观感仍需用户验收。

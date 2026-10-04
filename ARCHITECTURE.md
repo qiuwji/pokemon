@@ -147,3 +147,5 @@ SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与Sprite
 默认AI插件只消费这些公开接口；测试插件仅在测试环境装配。PollingTransport与WebSocket遵循同一传输合同，Python本机桥只转发协议，不持有领域状态或决策。所有权与CLI见[AI控制指南](docs/development/AI_CONTROL.md)，不会增加Adventure职责或让核心导入产品插件。
 
 AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用架构](docs/architecture/APPLICATION.md)和[网络架构](docs/architecture/NETWORK.md)，操作字段与实例见[插件指南](dist/plugins/ai-control/README.md)。
+
+设施的纯JSON作者路径：registerFacilityContent编译独立的battle-sequence/score-contest/reel-machine策略，策略返回计划，FacilityApplication继续唯一持有RNG、临时队伍与经济提交。原生连战复用同一策略；可选插件只加载JSON并通过公开API注册，app.js不增加设施分支。动作when由查询和执行共用，插件回调受规则守卫和深冻结约束。配置范围及原作欠账见[JSON作者说明](dist/plugins/facility-content/README.md)。

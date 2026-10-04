@@ -3,70 +3,9 @@ import {
   experienceAt,
   healMonster,
 } from "../../engine/model.js";
-import { objectSchema } from "../../engine/extensions/values.js";
-const id = { type: "string", minLength: 1, maxLength: 128 };
-const progress = objectSchema(
-  { round: { type: "integer", minimum: 0, maximum: 100 } },
-  ["round"],
-);
+import { battleSequence } from "../../engine/extensions/facility-templates/battle-sequence.js";
 export const EMERALD_FACILITY_ACTIVITIES = {
-  "core:battle-sequence": {
-    parameters: objectSchema(
-      {
-        trainers: { type: "array", minItems: 1, maxItems: 100, items: id },
-        money: { type: "integer", minimum: 0 },
-        item: id,
-      },
-      ["trainers", "money"],
-    ),
-    state: progress,
-    initial: { round: 0 },
-    validate(definition, refs) {
-      if (!definition.team)
-        throw new Error("Battle facility requires a team policy");
-      for (const id of definition.parameters.trainers) {
-        const trainer = refs.trainers[id];
-        if (
-          !trainer ||
-          definition.team.min <
-            (trainer.requiresPartners || (trainer.format === "doubles" ? 2 : 1))
-        )
-          throw new Error("Invalid facility trainer or team size");
-      }
-      if (definition.parameters.item && !refs.items[definition.parameters.item])
-        throw new Error("Unknown facility reward item");
-    },
-    actions: {
-      next: {
-        label: "开始下一场",
-        schema: objectSchema(),
-        decide: ({ data, parameters }) => {
-          if (data.round >= parameters.trainers.length)
-            throw new Error("Facility sequence already completed");
-          return {
-            data,
-            battle: {
-              trainerId: parameters.trainers[data.round],
-              weather: null,
-            },
-          };
-        },
-      },
-    },
-    onBattle({ data, parameters }, result) {
-      if (result === "loss") return { data, outcome: "loss" };
-      const next = { round: data.round + 1 };
-      return next.round === parameters.trainers.length
-        ? {
-            data: next,
-            pendingReward: {
-              money: parameters.money,
-              ...(parameters.item ? { items: { [parameters.item]: 1 } } : {}),
-            },
-          }
-        : { data: next };
-    },
-  },
+  "core:battle-sequence": battleSequence({ trainers: ["youngster", "youngster"], money: 240, item: "potion" }),
 };
 export const EMERALD_FACILITIES = {
   "practice-series": {

@@ -12,7 +12,7 @@
 | --- | --- | --- | --- |
 | 区域 `import-emerald.py` | maps/layouts、物种/招式/属性表、对象和精灵图 → 选定地图/物种/招式/actor字段及PNG | 可选source、--maps/--species/--profile；现有包。区域/中文名来自slice及locale | 是 |
 | 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | 可选source、--maps/--profile；先地图导入，动画区间从配置读取 | 是 |
-| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、门帧 → 男女时钟资源、门metatile 900–905及来源哈希 | source/--target/--strict；先grid；重新生成图集后重跑，重复运行不累加派生帧 | 是 |
+| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、src/wallclock.c偏移表、门帧 → 男女时钟资源、生成的wall-clock.js、门metatile 900–905及来源哈希 | source/--target/--strict；先grid；重新生成图集后重跑，重复运行不累加派生帧 | 是 |
 | 区域 `import-encounters.py` | wild_encounters.json陆地表 → 地图陆地遭遇字段 | 可选source、--maps；所需物种先导入，校验槽位数，不再写进化 | 是 |
 | 区域 `import-water-encounters.py` | 同上水上表 → 地图水上遭遇字段 | 可选source、--maps；所需水上物种先导入，校验槽位数 | 是 |
 | 区域 `import-weather.py` | 所有地图header/坐标事件 → rules/gen3/map-weather.js | 可选source；原作地图header不能为空，不依赖可玩地图数量 | 是 |

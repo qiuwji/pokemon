@@ -153,6 +153,11 @@ export class PluginHost {
                     id,
                     {
                       ...action,
+                      ...(action.when !== undefined ? {
+                        when: typeof action.when === "function"
+                          ? (context) => evaluate(action.when, readOnly(context))
+                          : action.when,
+                      } : {}),
                       decide: (context) =>
                         evaluate(action.decide, readOnly(context)),
                     },

@@ -29,7 +29,7 @@
 | 战斗 | [架构](architecture/BATTLE.md)、[机制矩阵](engine/battle/MECHANISM_MATRIX.md)、[状态与行动](engine/battle/STATES_AND_ACTIONS.md)、[插件行动增强](engine/battle/AUGMENTS.md)、[语义审计](engine/battle/MOVE_AUDIT.md)、[规则覆盖](engine/battle/GEN3_RULE_COVERAGE.md) |
 | 精灵/物品/育成 | [形态](engine/creatures/FORMS.md)、[育成](architecture/GROWTH.md)、[库存](engine/items/INVENTORY.md)、[野外物品](engine/items/FIELD_ITEMS.md)、[招式学习](engine/items/MOVE_LEARNING.md) |
 | Actor | [ACTORS](engine/actors/ACTORS.md) |
-| 设施及非战斗活动 | [FACILITIES](engine/facilities/FACILITIES.md)；完整开拓区、选美、游戏厅仍是后续业务 |
+| 设施及非战斗活动 | [FACILITIES](engine/facilities/FACILITIES.md)；[JSON模板作者指南](../dist/plugins/facility-content/README.md)；完整原作特殊规则仍是后续业务 |
 | 视觉/声音 | [表现架构](architecture/PRESENTATION.md)、[外观/相机/环境](engine/presentation/APPEARANCE_AND_VIEW.md)、[动画合同](engine/presentation/ANIMATION_CONTRACT.md)、[资源帧片段](engine/presentation/SPRITE_CLIPS.md)、[真实音频](engine/presentation/AUDIO.md)、[插件UI](engine/presentation/UI_CONTRACT.md) |
 | 插件后续接口需求 | [PLUGIN_ROADMAP](project/PLUGIN_ROADMAP.md)；计划不能当现有能力 |
 | 玩家联线（可选） | [PLAYER_LINK](architecture/PLAYER_LINK.md)为待实现设计；现有[NETWORK](architecture/NETWORK.md)只控制一份单机会话 |

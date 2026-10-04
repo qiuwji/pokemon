@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "trainers": [
+    { "id": "tower-first", "definition": { "name": "连战练习员", "script": "facility-content:tower-first", "prize": 0, "party": [{ "species": "zigzagoon", "level": 5 }] } }
+  ],
+  "facilities": [
+    {
+      "id": "tower", "template": "battle-sequence", "name": "开拓区连战模板（示例）",
+      "team": { "min": 1, "max": 3, "levelCap": 50, "uniqueSpecies": true, "uniqueHeldItems": true, "heldItems": true, "items": false, "healBetween": true },
+      "parameters": { "trainers": ["facility-content:tower-first", "youngster"], "money": 240, "item": "potion" }
+    },
+    {
+      "id": "contest", "template": "score-contest", "name": "华丽大赛评分模板（示例）",
+      "team": { "min": 1, "max": 1 },
+      "parameters": {
+        "rounds": 3, "crowdThreshold": 3, "crowdBonus": 3,
+        "appeals": [
+          { "id": "charm", "label": "魅力表演", "points": 3, "crowd": 1, "repeatPenalty": 2 },
+          { "id": "finish", "label": "组合收尾", "points": 2, "jam": 1, "comboFrom": ["charm"], "comboBonus": 4 }
+        ],
+        "opponents": [{ "name": "选手甲", "scores": [3, 3, 3] }, { "name": "选手乙", "scores": [2, 4, 2] }],
+        "prizes": [{ "rank": 1, "reward": { "money": 120, "items": [{ "id": "potion", "count": 1 }] } }]
+      }
+    },
+    {
+      "id": "slots", "template": "reel-machine", "name": "老虎机转轮模板（示例）",
+      "parameters": {
+        "stake": 10,
+        "reels": [["cherry", "seven", "bar"], ["seven", "bar", "cherry"], ["bar", "cherry", "seven"]],
+        "lines": [[0, 0, 0]],
+        "payouts": [{ "pattern": ["seven", "seven", "seven"], "multiplier": 10 }, { "pattern": ["cherry", "*", "*"], "multiplier": 2 }]
+      }
+    }
+  ]
+}

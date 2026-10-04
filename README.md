@@ -1,10 +1,12 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-工程版本 **0.31.0**，插件 API / 网络协议版本 **1**，开发存档版本 **15**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；游戏内容仍是绿宝石序章切片。
+工程版本 **0.32.0**，插件 API / 网络协议版本 **1**，开发存档版本 **15**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；游戏内容仍是绿宝石序章切片。
 
 开场已补男女角色、搬家车内演出、下车与妈妈带路、调钟/房间/电视及邻居分支、跑步鞋等待。当前代码测试通过；本轮未操作浏览器，画面、听音和真实游玩验收由用户完成，见[开场说明](docs/regions/LITTLEROOT_OPENING.md)。
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
+
+新增可选[JSON设施插件](dist/plugins/facility-content/README.md)：连战、轮次表演评分和老虎机转轮可配置；启用 `?plugins=facility-content` 后从菜单进入。它们是业务模板，完整原作特殊规则仍待补充。
 
 最新改动：修复迎门后妈妈位置被重置、搬家过动猿静止、调钟前离家未拦截；装配原作卡车与门帧，导入原作调钟资源。移动按时钟等待真正结束，剧情演员在控制期保持身份；不放宽碰撞或存档校验。
 
@@ -23,7 +25,7 @@ npm run test:plugins
 npm run check:docs
 ```
 
-`npm test`仅运行核心合同测试（含插件宿主API），当前 **892/892通过**；`npm run test:plugins`独立运行插件作者示例和当前装配清单检查，**26/26通过**，均无失败/跳过。`npm run test:all`显式运行两组；`npm run test:coverage`仅统计核心测试。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。本轮[代码检查证据](docs/validation/2026-10-05-opening-code/manifest.json)记录892项核心、26项插件示例及质量检查；历史[车内起点证据](docs/validation/2026-10-05-truck-start/manifest.json)不能替代本轮开场的画面验收；此前[AI控制证据](docs/validation/2026-10-04-ai-control-v2/manifest.json)覆盖长轮询连续三步移动及附带状态/事件。完整浏览器组合、持续循环听音、原作音频对照、覆盖率和远端CI未新增验收。可部署dist/到静态HTTP服务，ES模块与fetch需要HTTP。
+`npm test`仅运行核心合同测试（含插件宿主API），当前 **900/900通过**；`npm run test:plugins`独立运行插件作者示例和当前装配清单检查，**27/27通过**，均无失败/跳过。`npm run test:all`显式运行两组；`npm run test:coverage`仅统计核心测试。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。本轮[代码检查证据](docs/validation/2026-10-05-json-facilities/manifest.json)记录900项核心、27项插件示例及质量检查；历史[车内起点证据](docs/validation/2026-10-05-truck-start/manifest.json)不能替代本轮开场的画面验收；此前[AI控制证据](docs/validation/2026-10-04-ai-control-v2/manifest.json)覆盖长轮询连续三步移动及附带状态/事件。完整浏览器组合、持续循环听音、原作音频对照、覆盖率和远端CI未新增验收。可部署dist/到静态HTTP服务，ES模块与fetch需要HTTP。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前插件示例组26项已验证，系统与浏览器的结果仍按实际范围记录。
 

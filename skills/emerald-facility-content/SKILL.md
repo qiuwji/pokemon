@@ -24,6 +24,14 @@ description: 在绿宝石工程中编写选美、游戏厅、狩猎区、对战�
 
 持久房间装修/秘密基地不使用临时设施会话保存布局；先由world-content按[布局合同](../../docs/engine/world/ROOM_LAYOUTS.md)确认状态与空间所有者。设施可以承担装修比赛等活动，但布局、库存与活动成绩仍分别由各领域持有；该布局合同目前是设计，不是可调用API。
 
+## 内容作者先走 JSON
+
+已有连战、轮次评分和转轮模板时，先读[JSON设施作者说明](../../dist/plugins/facility-content/README.md)，编辑dist/plugins/facility-content/content.json。不要修改app.js、FacilitySession或应用服务来添加一个训练家、一条赔付线或一个表演按钮。新训练家写trainers条目并引用完整插件身份；新设施写facilities条目，template选择battle-sequence、score-contest或reel-machine。轮次、组合、妨害、排名、轮带、赔付及选队限制按说明的参数合同填写。
+
+执行`node tools/check-facility-content.mjs [JSON文件]`先查真实注册和引用；通过后启用`?plugins=facility-content`，从菜单进入。可执行装配例见[JSON插件示例](../../examples/facility-content.test.js)，核心合同见[编译器测试](../../tests/facility-content.test.js)。模板在dist/engine/extensions/facility-templates分文件，生成现有公开注册，不执行JSON内脚本字符串。动作when与decide同受冻结输入/同步评估守卫约束，条件在菜单与提交端都生效。
+
+**区分框架与原作还原**：score-contest是明确的配置评分算法，不是完整原作评审；reel-machine使用金钱与预抽停位，不是游戏币/按键计时/原作中奖控制；battle-sequence覆盖临时选队及连战，不覆盖开拓区七设施的租借、探索、自主行动、特殊判定和BP/象征。如果当前切片需要这些算法，先追C实现，设计独立业务模板及合同，补测试后再让后续作者只填JSON；不能给缺失规则起个原作名字就报完成。新核心规则测试不依赖可删除的可选插件文件，插件装配测试留examples测试链。
+
 ## 开发顺序
 
 按规格找实际注册器、会话所有者、公开命令、查询、事件和保存合同。现有facilityActivities注册局部状态和同步行动，facilities注册参数/资格/可选选队政策；不是必须开战的框架。无team定义允许零只精灵，适合游戏厅等活动。确实表达不了的业务列出合同缺口，不能在Skill里编造API。

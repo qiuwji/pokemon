@@ -52,10 +52,11 @@ export class FacilityRegistry {
       for (const [key, action] of Object.entries(a.actions)) {
         if (
           !/^[a-z][a-z0-9_.-]{0,63}$/.test(key) ||
-          !record(action, ["label", "schema", "draws", "decide"]) ||
+          !record(action, ["label", "schema", "draws", "decide", "when"]) ||
           typeof action.label !== "string" ||
           !action.label ||
           typeof action.decide !== "function" ||
+          (action.when !== undefined && typeof action.when !== "function") ||
           (action.draws !== undefined &&
             (!Array.isArray(action.draws) ||
               action.draws.length > 32 ||
@@ -180,7 +181,8 @@ export class FacilitySession {
       this.#active?.phase === "ready"
         ? Object.entries(
             this.registry.activity(this.#active.facility).actions,
-          ).map(([id, a]) => ({ id, label: a.label, schema: a.schema }))
+          ).filter(([, a]) => this.available(a))
+            .map(([id, a]) => ({ id, label: a.label, schema: a.schema }))
         : [];
     return readOnly({
       active: this.#active,
@@ -245,7 +247,17 @@ export class FacilitySession {
       throw new Error("Facility is not ready");
     const a = this.registry.activity(this.#active.facility).actions[id];
     if (!a) throw new Error("Unknown facility action");
+    if (!this.available(a)) throw new Error("Facility action is not available");
     return a;
+  }
+  available(action) {
+    if (!action.when) return true;
+    const result = callSync(action.when, [readOnly({
+      data: this.#active.data,
+      parameters: this.registry.get(this.#active.facility).parameters,
+    })]);
+    if (typeof result !== "boolean") throw new Error("Facility availability must return a boolean");
+    return result;
   }
   context(world, input, rolls = []) {
     return readOnly({

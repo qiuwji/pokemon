@@ -1,0 +1,12 @@
+{
+  "script": "import-opening-art.py",
+  "check": true,
+  "files": [
+    "assets/opening-art-source.json",
+    "assets/wallclock-female-hands.png",
+    "assets/wallclock-male-hands.png",
+    "packs/emerald/generated/wall-clock.js"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

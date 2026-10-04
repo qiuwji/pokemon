@@ -1,0 +1,27 @@
+✔ JSON-only facility plugin loads through the catalog and runs all three authored templates (110.303542ms)
+✔ Facility activity registration rejects missing references, asynchronous rules and invalid state schemas (58.124292ms)
+✔ Non-battle plugin activity controls independent appeal state, public inputs, reward and saved result (33.42975ms)
+✔ Two registered trainer rounds use isolated selected team, suppress normal prizes, and settle once (33.52125ms)
+✔ Facility admission and active-session boundaries reject party changes, field motion, saving and importing (25.435959ms)
+✔ Failed facility action restores RNG/economy/session; slot plugin runs without any combat (20.584708ms)
+✔ Unauthorized plugin cannot drive facilities and invalid transitions leave state intact (35.188083ms)
+✔ Facility transition stamps and battle tickets reject repeated or foreign results (0.286375ms)
+✔ Reward capacity rejection keeps an earned facility claim pending without partially awarding (19.71575ms)
+✔ UI facade routes facilities through the shared bus and save validation rejects forged ledgers (19.475ms)
+✔ Presentation failure after a non-battle commit preserves its economy, progress and consumed RNG (16.629334ms)
+✔ Losing an isolated facility battle releases the session without blackout, party damage or normal settlement (28.355666ms)
+✔ Completed activity results reload with their plugin, while a missing activity plugin protects the original save (55.27475ms)
+✔ Failed facility battle settlement releases its wait and permits quitting without writing a result (19.419208ms)
+✔ JSON contest compiles moves, combos, jam and ranking; final reward and saved result settle once (75.659083ms)
+✔ JSON reels expose only legal controls, charge once, reject repeated stops and settle matching paylines (29.628ms)
+✔ Failed reel stake rolls back RNG/state; losing and quitting release the facility (28.046625ms)
+✔ Bad JSON templates, combo references, payout dimensions and trainer references fail at startup (29.059708ms)
+✔ Facility action availability executes under the plugin guard with deep frozen inputs (21.553958ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 490.120208

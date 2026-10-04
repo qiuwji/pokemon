@@ -500,3 +500,15 @@ visualAPI.content.register("cameraProfiles", "wide", wideCamera);
 const fogLayer: import("../dist/engine/contracts.js").EnvironmentLayerDefinition =
   { name: "fog", visual: "weather.fog", opacity: 0.2 };
 visualAPI.content.register("environmentLayers", "mist", fogLayer);
+
+const jsonFacility: import("../dist/engine/extensions/facility-content.js").FacilityContentPack = {
+  version: 1, facilities: [{ id: "tower", name: "Tower", template: "battle-sequence",
+    parameters: { trainers: ["mod:trainer"], money: 10 }, team: { min: 1,max: 3 } }],
+};
+void jsonFacility;
+const wrongJSONFacility: import("../dist/engine/extensions/facility-content.js").JSONFacilityDefinition = {
+  id: "slots", name: "Slots", template: "reel-machine",
+  // @ts-expect-error Reel parameters cannot use battle-sequence fields.
+  parameters: { trainers: ["trainer"], money: 20 },
+};
+void wrongJSONFacility;
