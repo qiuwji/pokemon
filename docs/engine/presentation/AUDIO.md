@@ -42,9 +42,15 @@ source 必须是 assets 下的 wav/ogg/mp3/m4a 文件。volume 为 0..1；loop �
 
 `packs/emerald/audio-library.js` 提供具名 confirm/purchase/attack/hurt/heal/reward 与三个初始精灵 cry。页面用 sound(id) 而非频率参数。地图的 music/battleMusic 直接引用已注册 music cue；缺少资源时为安静，不用示范旋律代替。插件地图同样可指定这些字段。
 
-`tools/import-audio.py work/pokeemerald` 复制只读参考 sound/direct_sound_samples 中 7 个 WAV。原始 bytes 不重采样/合成，路径、SHA256、时长与修订记在 dist/assets/audio/provenance.json。初始三精灵使用对应原采样；UI/战斗通用音效当前是临时采样映射，**不等于原作 SE 序列**。原参考 MIDI/voicegroups 是编曲与采样配置，浏览器不能将 MIDI 当完整 BGM 音频文件播放；完整原作曲目/音效需后续资源导入与听感验收。API 已能接入成品音频，不把缺少 BGM 宣称音画复刻完成。
+`python3 tools/import.py audio work/pokeemerald --check`预演复制profile所选的真实WAV；审阅后去掉--check执行。当前默认profile选择sound/direct_sound_samples中的7个文件。原始bytes不重采样/合成，路径、SHA256、时长与修订记在dist/assets/audio/provenance.json。初始三精灵使用对应原采样；UI/战斗通用音效是临时采样映射，**不等于原作SE序列**。参数、写入归属见[导入索引](../../development/IMPORT_SCRIPTS.md)。
+
+完整BGM/SE按[音乐导入Skill指南](../../../skills/emerald-story-reconstruction/references/music-import.md)继续：从固定参考的歌曲常量、序列/构建参数、voicegroup/采样追踪，离线转换成品、记录引子/循环和来源，再注册及听感验收。现有工具没有完整BGM转换能力，mid2agb和wav2agb也不是整曲音频渲染器。离线原作音色渲染属于资源生产，运行时仍只播放成品音频；不能用通用MIDI音色或占位旋律声称完成原作音乐。
+
+当前emeraldMusic只按map.music/map.battleMusic选择，冲浪/骑车、剧情特殊切曲、fanfare等待及BGM恢复等完整原作政策需追调用分别补齐。API能播放成品不等于这些业务已还原，曲目完成状态归[STATUS](../../project/STATUS.md)。
 
 ## 验证和变更边界
+
+以下数量是初次音频API交付时的历史证据，不是当前全工程通过数；最新阶段检查与未验收项见STATUS。
 
 audio-scene 共 11 项分别验证通过：资源切换/缓存/暂停续播、异步失效、严格资源合同/失败重试、声部/通道/结束释放/宿主失败、实际 WAV 文件/内容选曲、插件所有权/评价边界、旧插件版本拒绝、stopAll/启动失败、解码重试/循环范围，以及既有场景与命令。调整 stopAll 世代取消后，仅重查两个受影响异步/音乐项通过。
 

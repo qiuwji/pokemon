@@ -1,0 +1,99 @@
+# 从原作资料导入绿宝石音乐
+
+这是原作复刻Skill的音频分流指南。接手者需要能读取源码、运行转换工具、修改内容并在浏览器听音。先读[范围](../../../docs/project/SCOPE.md)、[进度](../../../docs/project/STATUS.md)和[音频合同](../../../docs/engine/presentation/AUDIO.md)。本页保存流程和质量约束；曲目完成清单、转换工具选择和实际验收结果归项目文档与资源来源记录。
+
+## 核心名词
+
+- **序列**：音符、节奏、音量、声像、控制及循环指令；MIDI或AGB汇编不是浏览器可播放的成品音频。
+- **voicegroup**：原作音色表，引用采样、键位分区、鼓组与方波等硬件音色；不能替换成通用MIDI乐器并声称原作还原。
+- **采样 / 整曲**：单个乐器或叫声WAV与完整混音不同，复制采样不会产生BGM或原作SE序列。
+- **引子 / 循环段**：可能先播放一次引子，再重复指定区间；循环点由序列和实际渲染帧推导，不凭听感猜数。
+- **fanfare**：获得道具等短乐句，须追踪暂停、恢复BGM和剧情等待，不默认等同普通背景音乐切换。
+
+## 已有工具和缺口
+
+`tools/import.py audio`只复制profile所选WAV，记录来源修订、SHA256和时长；不是完整BGM/SE转换器。播放器能接入成品音频、循环、淡变和后台续播。完整原作音乐转换链尚未经过验证，不能把“API能播放”写成“原作音乐完成”。
+
+在项目根执行：
+
+```sh
+python3 tools/import.py audio --help
+python3 tools/import.py audio work/pokeemerald --profile tools/imports/config/slice.json --check
+# 审阅预演后去掉 --check，执行相同选择。
+```
+
+profile的audio是“输出文件名 → sound/direct_sound_samples下源文件”映射。输出归dist/assets/audio；现有provenance.json描述采样，不能冒充BGM清单。入口见[采样导入器](../../../tools/imports/commands/audio/import-audio.py)，写入归属见[ownership.json](../../../tools/imports/ownership.json)。文件移动后搜索`Copy selected real WAV samples`、`session.profile['audio']`。
+
+当前UI/战斗提示音是临时真实采样映射，初始精灵叫声使用相应采样；整曲BGM、原作SE序列和完整叫声处理需分别补齐。新增BGM转换器属于工具任务，本指南没有虚构已经可用的import-bgm命令。
+
+## 从固定参考追踪曲目
+
+参考修订为`731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。work/pokeemerald与sources只读，不能在其中编译或生成汇编/音频。需要原构建工具时，将必要输入/工具复制到参考目录之外的临时工作区。最终生成器、参数、产物及来源记录纳入版本控制，不能依赖被忽略的work脚本。
+
+| 要确认什么 | 参考入口 / 搜索词 |
+| --- | --- |
+| 地图音乐与特殊覆盖 | data/maps/地图/map.json的music；src/overworld.c的Overworld_PlaySpecialMapMusic及剧情调用 |
+| 数字ID与序列身份 | include/constants/songs.h、sound/song_table.inc；MUS_LITTLEROOT / mus_littleroot |
+| MIDI构建参数 | sound/songs/midi/midi.cfg、根Makefile及tools/mid2agb；文件名、-G、-V、-R |
+| 乐器与采样依赖 | sound/voice_groups.inc、sound/voicegroups及keysplits/drumsets；追DirectSoundWaveData到实际采样 |
+| 序列和硬件音色行为 | sound/programmable_wave_data.inc、src/m4a.c、src/m4a_1.s及关联表/宏 |
+| BGM/SE/短乐句时机 | src/sound.c的PlayNewMapMusic、PlayBGM、PlaySE、PlayFanfare及调用者；脚本继续追src/scrcmd.c |
+
+真实切片：LittlerootTown引用MUS_LITTLEROOT，songs.h定义为405，song_table引用mus_littleroot。midi.cfg对mus_littleroot.mid指定`-E -R50 -G_littleroot -V100`。对应voicegroup含鼓组/键位分区、DirectSound和方波音色；仅用默认MIDI音色渲染会丢失原作配置。
+
+```sh
+git -C work/pokeemerald rev-parse HEAD
+rg -n 'MUS_LITTLEROOT|mus_littleroot' work/pokeemerald/data/maps/LittlerootTown work/pokeemerald/include/constants/songs.h work/pokeemerald/sound/song_table.inc work/pokeemerald/sound/songs/midi/midi.cfg
+rg -n 'voice_keysplit|voice_directsound|voice_square' work/pokeemerald/sound/voicegroups/littleroot.inc
+rg -n 'PlayNewMapMusic|PlayFanfare|PlayBGM|PlaySE' work/pokeemerald/src/sound.c work/pokeemerald/src/overworld.c
+```
+
+按实际song_table和构建依赖区分MIDI生成与直接维护的汇编，不假设每个SE/BGM都有同名.mid。mid2agb输出AGB汇编，wav2agb输出GBA采样数据，二者都不是整曲转WAV工具。GBA的m4a驱动名与浏览器接受的.m4a音频容器也不是一回事。
+
+## 成品音频导入工作流
+
+先选一首有引子/循环的地图BGM和一条有限长度SE或fanfare验证，再扩大批量清单。离线渲染器应支持原作序列指令、采样/voicegroup、硬件声部、速度、音量、声像、混响与循环。缺支持必须报告，不静默换音色。根据原作资料离线生成波形属于资源生产，游戏运行时仍播放成品文件，不加入临时振荡器旋律回退。
+
+1. **声明输入**：配置曲目符号、来源路径、依赖、类型、转换参数和输出相对路径；不在解析器里硬编码曲目白名单或中文长常量。unused/test曲目保留身份，不默认加入正常游戏。
+2. **推导循环**：由序列控制流和速度变化得到引子及循环时刻，转换为实际PCM帧。跨循环延音/混响需验证重复段与边界状态，不直接裁剪第一遍造成截音或接缝。
+3. **离线渲染**：在隔离工作区输出无损WAV主文件，再选择部署编码。核对压缩后实际解码时长和循环点；不假设编码前后完全一致，未验证压缩边界时优先使用已验证WAV。
+4. **来源记录**：每曲保存符号、固定修订、全部输入及哈希、转换器版本/配置、采样率、帧数、循环起止帧、部署文件哈希和验证状态。cue秒数由对应资源的帧与采样率计算；一次性短曲不伪设无限循环。
+5. **原子导入**：接统一工具入口、所有权、--check、选择参数、遗漏报告与严格失败；全部预检再提交。缺采样、未知音色/指令、错误循环要写前失败，不生成静音占位骗过引用检查。不覆盖其他作者文件或现有采样provenance。
+6. **注册绑定**：成品放dist/assets/audio并带来源记录，生成cue模块标记@generated。默认包在现有audio-library装配，独立音乐包走插件audio注册。地图music/battleMusic引用真正的cue ID；播放器不认识地图名，不在AudioAdapter硬编码曲目规则。
+7. **还原选曲**：分别追地图、冲浪/骑车、遇敌、训练家、胜利、获得道具和特殊剧情的调用及恢复。当前emeraldMusic只读map.music/map.battleMusic，不完整覆盖这些语境；短曲恢复/等待等合同不足时补窄接口并验证，不用定时器猜领域结束。
+
+转换器应输出机器可读清单，预演报告新增/改变/遗漏。具体渲染工具、依赖安装及命令在选定并执行验证后写进[导入索引](../../../docs/development/IMPORT_SCRIPTS.md)，不能让接手模型照抄不存在的命令。产物不依赖本机绝对路径。
+
+## 接入现有播放合同
+
+插件setup中`api.presentation.audio(localId, cue)`返回owner命名空间ID，注册不会自动播放。source为assets下相对路径，支持wav/ogg/mp3/m4a；music类型和loop显式声明，loopStart/loopEnd成对、单位秒。以下track代表转换器的**已验证元数据，不是当前已有文件或原作循环常量**：
+
+```js
+// 音乐插件setup内；track来自完成转换并验证的产物元数据。
+const music = api.presentation.audio("littleroot", {
+  kind: "music", source: track.asset, volume: 0.6, loop: true,
+  loopStart: track.loopStartFrame / track.sampleRate,
+  loopEnd: track.loopEndFrame / track.sampleRate,
+  fadeInMs: 0, fadeOutMs: 0,
+});
+// 新增地图在music字段引用music；给已有地图配曲先核对扩展合同，
+// 不直接修改只读db/map对象。
+```
+
+上例音量/淡变值不是原作测量结果。切换是立即、淡变还是短曲恢复须查来源，不给所有曲目默认加交叉淡化。默认包使用既有cue装配；接口见[AUDIO](../../../docs/engine/presentation/AUDIO.md)。实现改名时搜索validateAudioCue、AudioAdapter、emeraldMusic。
+
+## 验证与排错
+
+工具测试覆盖已知曲目、依赖缺失、未知指令、错误循环、预演不写、同输入重导不改和失败不覆盖。报告选中/成功/遗漏，不只断言文件存在。资源检查确认引用、哈希、真实解码、声道/采样率/时长及循环与元数据一致。
+
+运行时复用音频合同测试，只补受影响选择/恢复。浏览器打开声音，听引子→至少两次循环→切图/战斗→返回，检查后台/静音恢复；SE/短曲查结束及BGM恢复。对照固定参考比较旋律、音色、节奏、音量关系与接缝。自动测试不证明听感；“文件导入”“播放器通过”“原作听感通过”分别记。
+
+| 症状 | 排查 |
+| --- | --- |
+| 注册成功却无声 | 默认静音/未手势解锁、后台、未选择cue、文件加载失败；注册不是播放 |
+| 像普通MIDI乐器 | voicegroup、鼓组/键位分区、硬件音色或转换参数丢失 |
+| 接缝、重复引子、截尾音 | 实际解码帧、循环位置、延音/混响边界、编码延迟 |
+| 地图没有BGM | MUS常量尚未映射到已注册music cue；不以示例旋律补位 |
+| 短曲结束BGM不恢复 | fanfare恢复/等待政策未转写，不能全部当作普通setMusic |
+
+完成后同步STATUS、资源来源/验收记录及音频规格。接口变动同步Skill与作者例；文档修改只跑check:docs，代码/工具/资源改动查相应专项，阶段收口再全量回归，复用未变领域证据。

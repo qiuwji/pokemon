@@ -10,6 +10,7 @@
 | scripts.inc中的条件、标签、文本、移动数组 | 先展开流程图，再转地区bundle与现有命令 | 触发时机、临时变量寿命、取消/失败/重入 |
 | C special、任务回调与战斗结算 | 追踪读写和等待点，映射到领域公开接口 | 谁拥有状态、何时提交、如何恢复、是否真有框架缺口 |
 | GBA显存、OAM、DMA、硬件输入与任务调度 | 保留可观察表现，使用网页适配器/导演 | 不迁移硬件内存布局，不拿动画决定规则 |
+| BGM/SE序列、voicegroup、采样及音频调用 | 按[音乐导入流程](music-import.md)生产成品并转写选择/恢复政策 | WAV采样不等于整曲，保留音色、速度、引子/循环与等待语义 |
 
 批量表导入可以机械化；涉及special或异步结果的剧情不能靠正则翻译保证正确。出现未知命令时保留pending来源记录，不用空实现、忽略条件或直接teleport声称完成。
 
@@ -94,6 +95,8 @@ npm run check:docs
 ```
 
 大切片可复制tools/imports/config/slice.json，按其中真实字段改maps/species/locale，再--profile指定它。本地化放tools/imports/locales或对白目录，不写长中文常量进解析器。--target可用于临时dist，但需先准备它所需的内容清单/现有依赖；它不会自动复制完整工程。
+
+音频分两条链：`python3 tools/import.py audio work/pokeemerald --check`复制profile所选WAV；原作整曲BGM/SE需要序列与音色离线转换。[音乐指南](music-import.md)列出真实参考路径、工具缺口、产物归属、播放绑定与验收，不能用mid2agb或wav2agb冒充成品音乐导入器。
 
 ## 测试与质量边界
 
