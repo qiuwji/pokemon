@@ -101,3 +101,9 @@ test("first plugin uses registered content and public reward transaction", async
 | [dist/packs/emerald/extension-ports.js](../../dist/packs/emerald/extension-ports.js) | `rg -n "attachEmeraldExtensions" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
+
+## 剧情与对话任务的路由
+
+新增原作剧情先读story-reconstruction，新增地图/事件组合读world-content；接口统一在剧情语言/剧情架构，对话字段在对话合同。原生数据放content/stories并登记manifest，插件用registerBundle；既有动态短事件分地区装配。不要沿旧聊天重新把全部事件写回story.js，或假定普通battle会等待结果。当前验证/待办仅查STATUS，不在本Skill维护易变测试数。
+
+若当前任务明确要求暂缓验证，只记录未执行范围和已有阶段证据；不能为了补齐模板自动重跑，也不能把未执行写成通过。恢复开发时依据变更范围决定受影响检查，阶段回归和浏览器验收分别记录。

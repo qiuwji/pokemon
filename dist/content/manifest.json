@@ -440,6 +440,26 @@
     {
       "section": "references",
       "path": "references.json"
+    },
+    {
+      "section": "stories",
+      "path": "stories/signs.json",
+      "key": "signs"
+    },
+    {
+      "section": "stories",
+      "path": "stories/oldale.json",
+      "key": "oldale"
+    },
+    {
+      "section": "stories",
+      "path": "stories/clock.json",
+      "key": "clock"
+    },
+    {
+      "section": "stories",
+      "path": "stories/dialogues.json",
+      "key": "dialogues"
     }
   ]
 }

@@ -64,6 +64,7 @@ function fixture() {
     calls = [];
   const state = readOnly({
     flags: { rescued: true, pokedex: true },
+    story: { completed: [], rewards: [], history: [] },
     party: [createMonster("mudkip", 6, db, new Random(123))],
     box: [],
     seen: ["mudkip"],

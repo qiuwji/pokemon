@@ -4,7 +4,7 @@
 
 ## 依赖方向与生命周期
 
-`app.js` 选择插件 → `PluginHost` 校验 manifest/依赖并暂存注册 → `ExtensionCatalog.seal()` 校验领域引用 → 创建游戏 → `attachEmeraldExtensions()` 注入应用端口 → 创建界面。
+`plugins/catalog.json`声明插件，`app.js`统一加载 → `PluginHost` 校验 manifest/依赖并暂存注册 → `ExtensionCatalog.seal()` 校验领域引用 → 创建游戏 → `attachEmeraldExtensions()` 注入应用端口 → 创建界面。
 
 manifest 包含 `id / apiVersion / version / dataVersion / permissions / dependencies / setup`。ID 为小写命名空间，注册局部 ID 得到 `plugin-id:local-id`。API 版本必须为 1，插件版本为三段数字，依赖声明指定主版本。重复、缺依赖、环依赖和失败的 setup 都中止启动，失败的暂存不污染基础内容。
 
@@ -19,7 +19,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 | 内容注册 | `api.content.register(kind,id,definition)` | species/moves/items/inventoryPockets/learningMethods/weather/battleWeather/abilities/heldItems/moveEffects/actors/resources/tilesets 等 |
 | 世界扩展 | maps/mapExtensions/movement/destinations | 网格地图、NPC 元素、门和连接；已有地图仅追加元素/门/连接 |
 | 状态定义 | `api.states.register`，`ctx.states` | 按精灵 UID 保存，自定义 schema，step/round/manual/permanent 生命周期 |
-| 行为注入 | `api.actions.register`，`api.rules.register`，`api.story.register` | 事务行动、标准规则阶段、剧情命令构建 |
+| 行为注入 | `api.actions.register`，`api.rules.register`，`api.story.register/registerBundle` | 事务行动、标准规则阶段、短事件及数据剧情包 |
 | 数值修饰 | rules 的 phase/priority/when/modify | 与原特性、道具共用规则管线；value与上下文均为脱离领域对象的深冻结值 |
 | 事件 | `api.events.on`，`ctx.emit` | 提交后发布事实；监听自有/显式依赖命名空间及内容包声明的公开事件，发射限自有命名空间 |
 | 查询 | `api.query()` / `view.query()` / `ctx.query()` | 脱离领域对象且深冻结的世界、队伍、背包、剧情、育成和战斗投影 |
@@ -33,9 +33,15 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 地图来自 16px 网格和 8px tile/metatile 图集，不是整张场景截图。注册地图可引用既有 tileset/actor；新图集、角色和宝可梦位图通过资源文件供应。基础内容、地图引用、网格尺寸、招式效果、道具效果和进化条件在启动时统一校验。
 
+## 剧情内容包
+
+`api.story.registerBundle(localId,{version:1,scripts,dialogues,entries,projections?,sources?})`注册不可变数据，返回完整脚本/对白/入口引用，与原生content/stories共用目录。局部引用在所属包解析，call接受schema参数；selector显式绑定对象或原label，priority解决候选竞争，同级命中报错。字段、参数和最小组合见[剧情语言](../engine/story/STORY_LANGUAGE.md)及[story-bundle例](../../examples/story-bundle.test.js)。
+
+新bundle直接写的flag/变量/reward使用自有命名空间；领域后果走现有受控处理，不由文字表现提交。剧情命令逐项执行，不承诺整段回滚。需要稳定续接时声明durable/node/checkpoint及battle.onResult；普通短battle仅发起，活跃战斗不保存。对话与选择确认后保存有界历史，回看不执行命令。完整C脚本/任意返回调用帧/全作业务尚未实现；详见[架构和恢复边界](STORY_CONTENT.md)。旧高级register仍是既有合同，不能据新bundle约束宣称它的权限已全面重设。
+
 ## 事务、查询和失败处理
 
-所有状态写入由同步事务执行：读取冻结输入 → 修改自有数据草稿 → 暂存状态/核心意图 → 校验 → 一起提交 → 发事件/反馈/刷新/保存。失败时用 StateCheckpoint 恢复原对象身份、核心数据与规则随机数。自定义数据是有界 JSON，禁止函数、原型键、循环、无限数值和超大嵌套。
+插件事务内的状态写入由同步事务执行：读取冻结输入 → 修改自有数据草稿 → 暂存状态/核心意图 → 校验 → 一起提交 → 发事件/反馈/刷新/保存。失败时用 StateCheckpoint 恢复原对象身份、核心数据与规则随机数。自定义数据是有界 JSON，禁止函数、原型键、循环、无限数值和超大嵌套。
 
 插件不能直接修改核心亲密度、库存或装备。权限词汇由内容包注入通用宿主。manifest 先声明权限，再通过 `ctx.intent` 请求 friendship/useItem/equip/setLead/reward/createMonster/learnMove/weather。绿宝石适配器逐项校验形状、范围、UID、库存及容量，调用原领域服务。权限不是操作系统沙箱，只是受信任插件协作合同。
 

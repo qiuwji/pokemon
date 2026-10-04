@@ -1,0 +1,16 @@
+export const ANIMATION_PROFILES = {
+  tackle: "contact",
+  scratch: "contact",
+  pound: "contact",
+  quick_attack: "contact",
+  ember: "projectile",
+  water_gun: "projectile",
+  mud_slap: "projectile",
+  poison_sting: "projectile",
+  gust: "projectile",
+  confusion: "projectile",
+  absorb: "projectile",
+  growl: "status",
+  leer: "status",
+  tail_whip: "status",
+};

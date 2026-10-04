@@ -1,0 +1,822 @@
+{
+  "id": "emerald:signs",
+  "version": 1,
+  "scripts": {
+    "littleroottown.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.0"
+        }
+      ]
+    },
+    "littleroottown.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.1"
+        }
+      ]
+    },
+    "littleroottown.2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.2"
+        }
+      ]
+    },
+    "littleroottown.3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.3"
+        }
+      ]
+    },
+    "route101.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route101.0"
+        }
+      ]
+    },
+    "oldaletown.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.0"
+        }
+      ]
+    },
+    "oldaletown.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.1"
+        }
+      ]
+    },
+    "oldaletown.2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.2"
+        }
+      ]
+    },
+    "oldaletown.3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.3"
+        }
+      ]
+    },
+    "oldaletown.4": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.4"
+        }
+      ]
+    },
+    "route103.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route103.0"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.0"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.1"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.2"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.3"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.4": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.4"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.5": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.5"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.6": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.6"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.7": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.7"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.8": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.8"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.9": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.9"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.10": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.10"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.11": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.11"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.12": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.12"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.13": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.13"
+        }
+      ]
+    },
+    "littleroottown_professorbirchslab.14": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_professorbirchslab.14"
+        }
+      ]
+    },
+    "littleroottown_brendanshouse_2f.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_brendanshouse_2f.0"
+        }
+      ]
+    },
+    "littleroottown_brendanshouse_2f.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_brendanshouse_2f.1"
+        }
+      ]
+    },
+    "littleroottown_brendanshouse_2f.2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_brendanshouse_2f.2"
+        }
+      ]
+    },
+    "littleroottown_brendanshouse_2f.3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown_brendanshouse_2f.3"
+        }
+      ]
+    }
+  },
+  "dialogues": {
+    "littleroottown.0": {
+      "name": "路边的告示",
+      "lines": ["未白镇 · 每一段旅程都从小镇开始。"]
+    },
+    "littleroottown.1": {
+      "name": "路边的告示",
+      "lines": ["小田卷博士研究所 · 宝可梦野外研究"]
+    },
+    "littleroottown.2": {
+      "name": "路边的告示",
+      "lines": ["小悠的家"]
+    },
+    "littleroottown.3": {
+      "name": "路边的告示",
+      "lines": ["小遥的家"]
+    },
+    "route101.0": {
+      "name": "路边的告示",
+      "lines": ["101 号道路 · 请小心草丛里的野生宝可梦。"]
+    },
+    "oldaletown.0": {
+      "name": "路边的告示",
+      "lines": ["古辰镇 · 每一段旅程都从小镇开始。"]
+    },
+    "oldaletown.1": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "oldaletown.2": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "oldaletown.3": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "oldaletown.4": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "route103.0": {
+      "name": "路边的告示",
+      "lines": ["103 号道路 · 请小心草丛里的野生宝可梦。"]
+    },
+    "littleroottown_professorbirchslab.0": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.1": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.2": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.3": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.4": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.5": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.6": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.7": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.8": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.9": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.10": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.11": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.12": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.13": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_professorbirchslab.14": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_brendanshouse_2f.0": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_brendanshouse_2f.1": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_brendanshouse_2f.2": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    },
+    "littleroottown_brendanshouse_2f.3": {
+      "name": "路边的告示",
+      "lines": ["丰缘地区 · 与宝可梦一起旅行。"]
+    }
+  },
+  "entries": {
+    "littleroottown.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown",
+        "script": "LittlerootTown_EventScript_TownSign",
+        "kind": "sign"
+      },
+      "script": "littleroottown.0"
+    },
+    "littleroottown.1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown",
+        "script": "LittlerootTown_EventScript_BirchsLabSign",
+        "kind": "sign"
+      },
+      "script": "littleroottown.1"
+    },
+    "littleroottown.2": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown",
+        "script": "LittlerootTown_EventScript_BrendansHouseSign",
+        "kind": "sign"
+      },
+      "script": "littleroottown.2"
+    },
+    "littleroottown.3": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown",
+        "script": "LittlerootTown_EventScript_MaysHouseSign",
+        "kind": "sign"
+      },
+      "script": "littleroottown.3"
+    },
+    "route101.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "Route101",
+        "script": "Route101_EventScript_RouteSign",
+        "kind": "sign"
+      },
+      "script": "route101.0"
+    },
+    "oldaletown.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "script": "OldaleTown_EventScript_TownSign",
+        "kind": "sign"
+      },
+      "script": "oldaletown.0"
+    },
+    "oldaletown.1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "script": "Common_EventScript_ShowPokemonCenterSign",
+        "kind": "sign"
+      },
+      "script": "oldaletown.1"
+    },
+    "oldaletown.2": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "script": "Common_EventScript_ShowPokemartSign",
+        "kind": "sign"
+      },
+      "script": "oldaletown.2"
+    },
+    "oldaletown.3": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "script": "Common_EventScript_ShowPokemonCenterSign",
+        "kind": "sign"
+      },
+      "script": "oldaletown.3"
+    },
+    "oldaletown.4": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "script": "Common_EventScript_ShowPokemartSign",
+        "kind": "sign"
+      },
+      "script": "oldaletown.4"
+    },
+    "route103.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "Route103",
+        "script": "Route103_EventScript_RouteSign",
+        "kind": "sign"
+      },
+      "script": "route103.0"
+    },
+    "littleroottown_professorbirchslab.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.0"
+    },
+    "littleroottown_professorbirchslab.1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.1"
+    },
+    "littleroottown_professorbirchslab.2": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Book",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.2"
+    },
+    "littleroottown_professorbirchslab.3": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Book",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.3"
+    },
+    "littleroottown_professorbirchslab.4": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.4"
+    },
+    "littleroottown_professorbirchslab.5": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.5"
+    },
+    "littleroottown_professorbirchslab.6": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.6"
+    },
+    "littleroottown_professorbirchslab.7": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.7"
+    },
+    "littleroottown_professorbirchslab.8": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.8"
+    },
+    "littleroottown_professorbirchslab.9": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.9"
+    },
+    "littleroottown_professorbirchslab.10": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.10"
+    },
+    "littleroottown_professorbirchslab.11": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.11"
+    },
+    "littleroottown_professorbirchslab.12": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.12"
+    },
+    "littleroottown_professorbirchslab.13": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.13"
+    },
+    "littleroottown_professorbirchslab.14": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_professorbirchslab.14"
+    },
+    "littleroottown_brendanshouse_2f.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "LittlerootTown_BrendansHouse_2F_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "littleroottown_brendanshouse_2f.0"
+    },
+    "littleroottown_brendanshouse_2f.1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "PlayersHouse_2F_EventScript_Notebook",
+        "kind": "sign"
+      },
+      "script": "littleroottown_brendanshouse_2f.1"
+    },
+    "littleroottown_brendanshouse_2f.2": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock",
+        "kind": "sign"
+      },
+      "script": "littleroottown_brendanshouse_2f.2"
+    },
+    "littleroottown_brendanshouse_2f.3": {
+      "trigger": "interact",
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "PlayersHouse_2F_EventScript_GameCube",
+        "kind": "sign"
+      },
+      "script": "littleroottown_brendanshouse_2f.3"
+    }
+  },
+  "sources": [
+    {
+      "label": "LittlerootTown_EventScript_TownSign",
+      "map": "LittlerootTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_EventScript_BirchsLabSign",
+      "map": "LittlerootTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_EventScript_BrendansHouseSign",
+      "map": "LittlerootTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_EventScript_MaysHouseSign",
+      "map": "LittlerootTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "Route101_EventScript_RouteSign",
+      "map": "Route101",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "OldaleTown_EventScript_TownSign",
+      "map": "OldaleTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "Common_EventScript_ShowPokemonCenterSign",
+      "map": "OldaleTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "Common_EventScript_ShowPokemartSign",
+      "map": "OldaleTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "Common_EventScript_ShowPokemonCenterSign",
+      "map": "OldaleTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "Common_EventScript_ShowPokemartSign",
+      "map": "OldaleTown",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "Route103_EventScript_RouteSign",
+      "map": "Route103",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Book",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Book",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_BrendansHouse_2F_EventScript_PC",
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "PlayersHouse_2F_EventScript_Notebook",
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock",
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    },
+    {
+      "label": "PlayersHouse_2F_EventScript_GameCube",
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "status": "project-adaptation",
+      "note": "迁移现有中文演绎文案；原作逐字和分支仍待转写。"
+    }
+  ]
+}

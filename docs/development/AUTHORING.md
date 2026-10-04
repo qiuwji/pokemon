@@ -6,7 +6,7 @@
 
 | 任务 | 代码位置 | 修改边界 |
 | --- | --- | --- |
-| 原作地图、事件、训练家、物种、道具与默认政策 | dist/packs/emerald的对应定义文件、dist/content/manifest.json及对应分类文件、dist/assets | 使用已有领域注册；原作剧情集合当前入口story.js，不往world或battle里加地图ID分支 |
+| 原作地图、事件、训练家、物种、道具与默认政策 | dist/packs/emerald的对应定义文件、dist/content/manifest.json及对应分类文件、dist/assets | 使用已有领域注册；原生地区数据放content/stories，动态短事件由story.js装配；不往world或battle里加地图ID分支 |
 | 独立玩法/现代机制/新页面 | dist/plugins/中的独立模块 | 导出manifest，setup注册；通过查询/命令/intent运行；禁止导入adventure、应用服务或抓window.game |
 | 新资源/导出流程 | dist/assets及tools | 以grid/metatile组织地图；保留来源；不能写回work/pokeemerald或sources |
 | 必要的新通用规则/生命周期 | dist/engine和明确的应用所有者 | 先写缺口合同及验收例，作为框架任务；核心不依赖内容包、DOM、Canvas |
@@ -21,7 +21,7 @@
 
 1. 在`dist/plugins/my-feature.js`导出manifest。setup只注册，不开始战斗、查询未就绪游戏或写存档。
 2. `api.content.register(kind,"local-id",definition)`返回带插件命名空间的ID。后续引用保存返回值，避免把局部ID当成全局引用。故事、页面、行为和视觉用各自注册入口。
-3. 在`dist/app.js`的启动插件数组导入并添加该对象。这里只有装配；不要移入规则、库存或剧情分支。宿主创建目录并seal校验，然后建立EmeraldAdventure并attach扩展端口。
+3. 在`dist/plugins/catalog.json`登记模块路径和装配配置；app.js统一加载目录，不逐个导入插件。不要把规则、库存或剧情分支移入启动入口。宿主创建目录并seal校验，然后建立EmeraldAdventure并attach扩展端口。
 4. 玩家点击布局控件或菜单时，通过已注册action执行。插件外部使用`api.commands.dispatch(id,input)`；action内部通过ctx.store、ctx.states及ctx.intent提交，**不能在事务中再次dispatch**。
 5. 查询快照只读；完整个体UID随精灵而保持，不能用席位/队伍数组下标替代。插件保存自有记忆，已有队伍/背包/位置仍由原领域所有者保存。
 6. 页签、HUD及表现根据已提交事实更新。等待动画不能改变命中、伤害或奖励结果。真实UI可用性和资源音频需另做浏览器观察。
@@ -63,3 +63,7 @@
 ## 提交一个可接手结果
 
 实现一个完整行为链，按[测试指南](TESTING.md)证明它以及重要失败边界。更新STATUS、受影响规格和CHANGELOG；有接口变化时同步Skill及实际示例。记录未执行项及下一步，不以测试通过泛称完整原作已完成。交接须包含代码、资源、docs、skills和参考获取信息，不能只发Skill文件。
+
+## 新地区剧情与对话
+
+内容数据放dist/content/stories并登记manifest；插件通过registerBundle，不修改app.js硬接剧情。对象绑定用selector.objectId或map+localId/script，公共call传schema参数，对话用目录及显式bindings；条件/选择结果仍由领域命令处理。持久脚本需要durable、每条稳定node、checkpoint和battle.onResult，不把动画帧或闭包写存档。完整示例、字段与错误说明读[剧情架构](../architecture/STORY_CONTENT.md)、[剧情语言](../engine/story/STORY_LANGUAGE.md)和[组合例](../../examples/story-bundle.test.js)。

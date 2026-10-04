@@ -27,7 +27,7 @@ import { TransitionDOM } from "./presentation/transition-dom.js";
 import { EmeraldAdventure } from "./packs/emerald/adventure.js";
 import { createEmeraldInterface } from "./packs/emerald/interface.js";
 import { createEmeraldPresentation } from "./packs/emerald/animations.js";
-import { ANIMATION_PROFILES } from "./packs/emerald/story.js";
+import { ANIMATION_PROFILES } from "./packs/emerald/animation-profiles.js";
 
 // Composition root: chooses a content pack, adapters and services; no gameplay rules.
 const $ = (id) => document.getElementById(id);

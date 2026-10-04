@@ -8,7 +8,7 @@ import tempfile
 from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parents[2]
-SECTIONS = ('maps', 'tilesets', 'species', 'moves', 'actors', 'evolutions', 'typeChart', 'references')
+SECTIONS = ('maps', 'tilesets', 'species', 'moves', 'actors', 'evolutions', 'typeChart', 'references', 'stories')
 GRID_FIELDS = {'blocks', 'behavior', 'border'}
 
 

@@ -1,4 +1,5 @@
 import { validateSpriteClip } from "./sprite-clip-contracts.js";
+import { storyBundleExports } from "../story-catalog.js";
 import {
   validatePresentation,
   presentationPayload,
@@ -60,6 +61,7 @@ export class PluginHost {
     this.audioCues = new Map();
     this.transitionPatterns = new Map();
     this.story = new Map();
+    this.storyBundles = new Map();
     this.events = new EventBus({ onError });
     this.onError = onError;
     this.runtime = null;
@@ -429,6 +431,10 @@ export class PluginHost {
           },
         }),
         story: Object.freeze({
+          registerBundle: (id, bundle) => {
+            const key = register(staged.storyBundles, id, readOnly(bundle));
+            return storyBundleExports(key, bundle);
+          },
           register: (id, definition) => {
             if (
               (typeof definition.build === "function") ===

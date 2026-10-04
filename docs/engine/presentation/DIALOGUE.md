@@ -4,11 +4,11 @@
 
 ## 描述与接口
 
-剧情命令为 `{type:'dialog',name,lines,speed?,mode?}`。`name` 是说话人字符串（可为空，最多128个字符）；`lines` 为1–128句。每句可以是字符串，或 `{runs:[...]}`。run 二选一：
+剧情命令为 `{type:'dialog',name,lines,speed?,mode?}`。`name` 是说话人字符串（可为空，最多128个字符）；`lines` 为1–128句。每句可以是字符串，或 `{text,name?,portrait?,expression?}` / `{runs:[...],name?,portrait?,expression?}`（text/runs二选一）。run 二选一：
 
 | run | 字段及限制 |
 | --- | --- |
-| 文字 | `{text,color?,effect?,parameters?}`；text最多4096个UTF-16代码单元，color仅六位十六进制，如 `#ee8866`；effect引用已注册文字效果，parameters是符合它schema的JSON对象 |
+| 文字 | `{text,color?,bold?,effect?,parameters?}`；text最多4096个UTF-16代码单元，color仅六位十六进制，如 `#ee8866`；effect引用已注册文字效果，parameters是符合它schema的JSON对象 |
 | 停顿 | `{pauseMs}`；0–5000整数毫秒，每句累计不超过60000毫秒 |
 
 每句1–512个run，整段文字最多8192个UTF-16代码单元。显示按Unicode字素分组，组合字符及emoji不会拆半。文本用textContent绘制，不解释HTML。颜色、偏移和透明度是表现，不修改语言内容、对话选项或领域结果。
@@ -55,3 +55,17 @@
 | `A dialogue is already active` | 等待当前say完成；多段文字放入同一lines，不并行占用同一对话UI |
 
 文件更名时搜索 `dialogueDescription`、`class DialoguePlayer`、`class DialogueDOM`、`textEffect:`。当前验收范围以 [STATUS](../../project/STATUS.md)和相应manifest为准；本合同不宣称原作字库、音效节奏或全部文本已经还原。
+
+## 对话目录、说话人和历史
+
+`dialog.dialogue`引用bundle内对白，根name可被每句name覆盖。portrait是{src,alt}，src限定assets/下相对PNG/WebP/GIF路径，禁止上跳及远程HTML；expression是≤64字符的表现标签，当前DOM输出data-expression供风格/表现使用，不自动选择未提供的表情素材。
+
+文本简写支持[b]...[/b]、[color=#rrggbb]...[/color]、[effect=已注册ID]...[/effect]与[pause=整数毫秒]。标签必须配对、可嵌套；效果和停顿继续经过原有校验。HTML始终是普通文字。
+
+目录bindings将名字映射为标量常量、{param:"参数名"}或{query:{id,input?}}；文本及说话人用{{名字}}读取。玩家名用playerName查询（未设置时为“训练家”），队伍/物品/旗标或变量通过已登记查询读取，不开放任意对象路径。替换发生在标签解析之后，所以玩家输入的[b]不会产生新样式；显式runs.text同样支持字面插值。缺参数/绑定明确报错。
+
+已最终确认的整个dialog，以及已选择的prompt/选项文字，写入story.history；半途失败的未完成dialog不记为完整记录。最多128段/65536文字代码单元，超过时删除最旧段。保存与重新加载保留逐行说话人及纯文本，回看不执行命令、插值、动画或奖励。菜单“对话记录”使用冻结查询dialogueHistory。
+
+ChoiceDOM接收应用层已过滤/标记禁用的选项，真实button支持点击、触屏和键盘；默认焦点、取消及超时的政策由StoryApplication提供。时钟注入、替换/关闭清理和reducedMotion沿用宿主约定。reducedMotion只影响文字表现，不自动替用户选择。
+
+新能力验证见[story-content](../../../tests/story-content.test.js)、[story-session](../../../tests/story-session.test.js)及[组合示例](../../../examples/story-bundle.test.js)。本轮真实浏览器覆盖原生告示牌→键盘确认→菜单点击回看；多角色立绘及条件/超时选项是端口和领域测试，未宣称全组合浏览器验收。

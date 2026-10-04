@@ -13,6 +13,7 @@ export function createEmeraldCommandFacade(
     to: plan.to,
   });
   const routes = {
+    resumeStory: () => ["story.resume", {}],
     enterFacility: (id, team) => ["facility.enter", { id, team }],
     facilityAction: (action, input = {}) => [
       "facility.action",

@@ -1,6 +1,6 @@
 # 架构与扩展约定
 
-当前工程 0.17.0：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
+本工程：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
 
 首先阅读 [README.md](README.md) 的运行入口和[文档导航](docs/README.md)；当前框架范围看[SCOPE](docs/project/SCOPE.md)，任务与欠账看[STATUS](docs/project/STATUS.md)，按需选择[领域Skill](docs/project/SKILLS.md)。原路线保留在 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md)，验证与历史看 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md)。本文定义当前结构，不把历史里程碑当作当前能力。
 
@@ -61,7 +61,7 @@ flowchart TD
 
 ## 应用服务与状态所有权
 
-`adventure.js` 当前 151 行；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md)。
+`adventure.js` 是组合入口；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md)。
 
 - SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
 - 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。
@@ -91,7 +91,7 @@ ActorRepository 保存全局身份与模板状态；ActorApplication 提供动�
 
 Battle 组合队伍、联盟/席位、行动与目标、状态生命周期、多回合/延迟行动、结算和快照服务。MoveEffectRegistry 是唯一效果描述入口；未知效果报错，明确未支持的效果不能花费 PP 或随机数。规则扩展通过阶段/操作/状态合同，而不是 UI 分支。运行目录有 354 个第三世代招式，完整语义仍待逐项核对。见 [docs/architecture/BATTLE.md](docs/architecture/BATTLE.md)、[机制矩阵](docs/engine/battle/MECHANISM_MATRIX.md)、[MOVE_AUDIT.md](docs/engine/battle/MOVE_AUDIT.md)。
 
-StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/story/STORY_LANGUAGE.md) 和 [docs/architecture/CUTSCENES.md](docs/architecture/CUTSCENES.md)。剧情运行中途恢复不是当前存档合同。完整复刻的后续设计见[剧情内容架构](docs/architecture/STORY_CONTENT.md)：地区剧情包、明确脚本绑定、公共子脚本、领域结果与稳定暂停点；这些新增合同尚未实现。
+StoryEngine 的事件、条件、依赖、变量、完成账本与奖励账本分离。数据化剧情可选择/分支/查询，CommandRunner 校验整树后按顺序/并行执行；同一角色/镜头不能被并行争抢。FieldDirector 用领域移动规则驱动剧情，场景入口在完全遮盖时提交，失败后释放控制。见 [STORY_LANGUAGE.md](docs/engine/story/STORY_LANGUAGE.md) 和 [docs/architecture/CUTSCENES.md](docs/architecture/CUTSCENES.md)。地区数据统一由StoryCatalog注册/编译，入口按priority与显式selector解析，公共call接受typed参数；StorySession保存稳定节点并通过关联战斗结果续接。对话目录、逐行说话人/立绘、标量插值、条件/超时选项和有界历史分别拥有者，详见[剧情内容架构](docs/architecture/STORY_CONTENT.md)。活跃战斗不保存，完整C脚本/任意返回调用帧仍不支持。
 
 精灵创建、学习、友情、遗传、孵化、交易、进化和形态各有领域边界。道具服务只提交允许的草稿字段，不把任意对象修改当效果。注册学习方式、50 TM/8 HM 的兼容/槽位/库存/插件事务已针对性验证；五个正式关键道具已声明行动并检查实际库存，异步执行复用野外计划/导演；默认示范道具与特定药品/球命令别名已删除，登记/C/触屏SELECT已接入；槽位库存服务/注册政策及插件启动校验已实现，游戏获得/消耗、容量、选槽页面使用当前保存合同，拒绝旧格式，见 [INVENTORY.md](docs/engine/items/INVENTORY.md)。见 [ITEM_ACTIONS.md](docs/engine/items/FIELD_ITEMS.md)。见 [MOVE_LEARNING.md](docs/engine/items/MOVE_LEARNING.md)。见 [docs/architecture/GROWTH.md](docs/architecture/GROWTH.md)、[CREATURE_FORMS.md](docs/engine/creatures/FORMS.md)。现代 Mega/Z 可复用当前形态、行动增强、资格/消费/限次合同；完整世代规则和内容仍需独立业务验证，不能以形态动画宣称完整玩法完成。
 

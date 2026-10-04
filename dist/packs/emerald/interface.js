@@ -1,4 +1,5 @@
 import { SpriteCanvas } from "../../adapters/sprite-canvas.js";
+import { createDialogueHistoryInterface } from "./dialogue-history-interface.js";
 import { createFacilityInterface } from "./facility-interface.js";
 import { createCropInterface } from "./crop-interface.js";
 import { createTimeInterface } from "./time-interface.js";
@@ -51,7 +52,8 @@ export function createEmeraldInterface(
     showEvolutionOptions: (index) => shell.showEvolutionOptions(index),
     checkGrowth: () => shell.checkGrowth(),
   };
-  const partyUI = createPartyInterface(game, deps),
+  const historyUI = createDialogueHistoryInterface(game, deps),
+    partyUI = createPartyInterface(game, deps),
     bagUI = createBagInterface(game, deps),
     dexUI = createDexInterface(game, deps),
     saveUI = createSaveInterface(game, deps),
@@ -69,6 +71,7 @@ export function createEmeraldInterface(
     battleUI = createBattleInterface(game, deps);
   Object.assign(
     shell,
+    historyUI,
     partyUI,
     bagUI,
     dexUI,
@@ -115,7 +118,7 @@ export function createEmeraldInterface(
     }
     modal(
       "冒险菜单",
-      `<div class="menu-grid"><button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="clock">冒险时钟<small>游戏时间与游玩时长</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="daycare" ${game.canUseDaycare() ? "" : "disabled"}>育成研究<small>研究所寄存、蛋与交换</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="facility">设施与活动<small>连战与插件游戏厅</small></button><button class="menu-tile" data-page="presentation">场景演出<small>可扩展演出示例</small></button><button class="menu-tile" data-page="network">扩展连接<small>本地验证与连接服务</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
+      `<div class="menu-grid">${game.state.story.session?.status === "ready" ? '<button class="menu-tile" data-page="resume">继续剧情<small>从当前稳定节点恢复</small></button>' : ""}<button class="menu-tile" data-page="party">宝可梦<small>查看队伍与招式</small></button><button class="menu-tile" data-page="bag">背包<small>道具与精灵球</small></button><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? "disabled" : ""}>宝可梦图鉴<small>${game.state.flags.pokedex ? "已发现 " + game.state.seen.length + " 种" : "博士的礼物"}</small></button><button class="menu-tile" data-page="history">对话记录<small>回看已确认的对白与选择</small></button><button class="menu-tile" data-page="clock">冒险时钟<small>游戏时间与游玩时长</small></button><button class="menu-tile" data-page="save">记录冒险<small>保存、导出与继续</small></button><button class="menu-tile" data-page="box">电脑盒子<small>${game.state.box.length} 位寄存伙伴</small></button><button class="menu-tile" data-page="daycare" ${game.canUseDaycare() ? "" : "disabled"}>育成研究<small>研究所寄存、蛋与交换</small></button><button class="menu-tile" data-page="movement">旅行与移动<small>自行车、冲浪与飞行</small></button><button class="menu-tile" data-page="facility">设施与活动<small>连战与插件游戏厅</small></button><button class="menu-tile" data-page="presentation">场景演出<small>可扩展演出示例</small></button><button class="menu-tile" data-page="network">扩展连接<small>本地验证与连接服务</small></button><button class="menu-tile" data-page="help">操作与范围<small>玩法说明</small></button></div><div class="modal-footer">X / Esc 返回冒险</div>`,
       { type: "menu" },
     );
     game.ui?.extensions?.mountSlot(
@@ -132,6 +135,11 @@ export function createEmeraldInterface(
       clock: timeUI.showTime,
       box: shell.showBox,
       help: shell.showHelp,
+      history: historyUI.showDialogueHistory,
+      resume: () => {
+        shell.closeModal();
+        void game.resumeStory();
+      },
       network: networkUI.showNetwork,
       facility: facilityUI.showFacility,
       presentation: presentationUI.showPresentation,

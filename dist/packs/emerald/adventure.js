@@ -10,6 +10,7 @@ import { ConditionQueries } from "../../engine/condition-queries.js";
 import { EncounterTableRegistry } from "../../engine/encounter-tables.js";
 import { BattleStrategyRegistry } from "../../engine/battle/strategy-registry.js";
 import { StoryEngine } from "../../engine/story.js";
+import { StoryCatalog } from "../../engine/story-catalog.js";
 import { CameraRig } from "../../engine/camera.js";
 import { ITEMS } from "./pack.js";
 import { EMERALD_STORY } from "./story.js";
@@ -76,8 +77,27 @@ export class EmeraldAdventure {
       catalog.battleStrategies,
     );
     this.encounterTables = new EncounterTableRegistry(catalog.encounters, db);
+    this.storyCatalog = new StoryCatalog(
+      [
+        ...Object.values(db.stories || {}),
+        ...(plugins?.storyBundles.values() || []),
+      ],
+      {
+        queries: this.conditionQueries,
+        maps: db.maps,
+        eventIds: new Set(
+          [...EMERALD_STORY.events, ...(plugins?.story.values() || [])].map(
+            (event) => event.id,
+          ),
+        ),
+      },
+    );
     this.story = new StoryEngine(
-      [...(plugins?.story.values() || []), ...EMERALD_STORY.events],
+      [
+        ...this.storyCatalog.events,
+        ...(plugins?.story.values() || []),
+        ...EMERALD_STORY.events,
+      ],
       EMERALD_STORY.quests,
       { queries: this.conditionQueries },
     );

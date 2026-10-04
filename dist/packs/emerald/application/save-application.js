@@ -15,6 +15,10 @@ import { Random } from "../../../engine/model.js";
 import { SaveStore } from "../../../engine/save-store.js";
 import { PACK, validateSave } from "../pack.js";
 import { emptyStoryProgress } from "../../../engine/story.js";
+import {
+  validateStoryResume,
+  storyDependencies,
+} from "../../../engine/story-session.js";
 import { bindApplicationPorts } from "./ports.js";
 export const SAVE_PORTS = Object.freeze([
   "facilityActive",
@@ -31,6 +35,8 @@ export const SAVE_PORTS = Object.freeze([
   "plugins",
   "storage",
   "storyBusy",
+  "storyCatalog",
+  "story",
   "ui",
 ]);
 /** save use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
@@ -40,7 +46,20 @@ export class SaveApplication {
     this.saveStore = new SaveStore(
       this.storage,
       PACK.id,
-      (s) => validateSave(s, this.db, this.catalog, this.plugins),
+      (s) =>
+        validateSave(s, this.db, this.catalog, this.plugins) &&
+        s.story.session?.status !== "battle" &&
+        (s.story.session?.actors || []).every(
+          (actor) =>
+            this.db.actors[actor.actor] &&
+            actor.x < this.db.maps[s.position.map].width &&
+            actor.y < this.db.maps[s.position.map].height,
+        ) &&
+        validateStoryResume(
+          this.storyCatalog,
+          s.story.session,
+          this.story.events,
+        ),
       PACK.version,
       {
         diagnose: (state) => {
@@ -139,9 +158,12 @@ export class SaveApplication {
       this.syncTime();
       this.state.randomSeed = this.rng.seed;
       if (this.plugins)
-        this.state.contentDependencies = this.plugins.catalog.dependencies(
-          this.state,
-        );
+        this.state.contentDependencies = [
+          ...new Set([
+            ...this.plugins.catalog.dependencies(this.state),
+            ...storyDependencies(this.state, this.plugins),
+          ]),
+        ];
       this.lastSave = this.saveStore.save(this.state);
       this.onSave(this.lastSave);
       if (show) this.ui.toast("进度已保存在当前浏览器。");
@@ -172,6 +194,8 @@ export class SaveApplication {
     this.bindField();
   }
   exportDocument() {
+    if (this.state.story.session?.status === "battle")
+      throw new Error("请在剧情战斗结束后导出，当前可恢复检查点位于战斗前。");
     if (this.facilityActive)
       throw new Error("请先完成或退出设施，再导出存档。");
     if (this.saveProtected && !this.saveConflict) {
@@ -188,7 +212,12 @@ export class SaveApplication {
     const state = structuredClone(this.state);
     state.randomSeed = this.rng.seed;
     if (this.plugins)
-      state.contentDependencies = this.plugins.catalog.dependencies(state);
+      state.contentDependencies = [
+        ...new Set([
+          ...this.plugins.catalog.dependencies(state),
+          ...storyDependencies(state, this.plugins),
+        ]),
+      ];
     return { version: PACK.version, pack: PACK.id, savedAt: Date.now(), state };
   }
   reset() {

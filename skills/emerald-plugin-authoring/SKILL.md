@@ -30,6 +30,14 @@ manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。se
 
 当前宿主区域/布局节点/主题能力以代码和规格为准；不能给未知slot/节点编造支持。大型现代机制同时核对资格、行动增强、资源/PP、限次、清理和事件；不能把形态变换当整个Mega/Z系统。一次招式增强可用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)和[battle-burst插件](../../dist/plugins/battle-burst.js)，搜索`core.battle.augments`定位查询；替换范围、消费点及不支持项按该规格。实际公开合同缺口归框架任务，不让插件导入核心绕过。
 
+## 插件剧情与对话
+
+扩展地区、NPC或告示牌时，用api.story.registerBundle注册同一目录合同，返回完整脚本/对白/入口引用；不向app.js逐剧情加分支。真实组合例见[story-bundle](../../examples/story-bundle.test.js)，字段见[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，职责/恢复边界见[剧情架构](../../docs/architecture/STORY_CONTENT.md)。
+
+selector绑定对象/原label，priority明确竞争关系；公共call使用schema参数，对话bindings只读取声明标量。直接旗标/变量/奖励写用自身命名空间。选择后果由领域命令提交，不放文字效果/渲染回调；reward.onResult处理真实容量结果，不能提前标记领取。
+
+需要战后自动继续时，脚本声明durable并为每条分支命令设稳定node，checkpoint只放稳定点，battle.onResult接确认结果；短battle只发起，不能假定等待胜负。调用复用用call，不创建嵌套会话；活跃战斗不保存，未知节点/缺依赖不静默跳过。原作业务转写另用剧情Skill，不把框架能力视为全部原作已完成。
+
 ## 既有页面与复杂交互
 
 使用 `api.ui.region(id,{slot,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。真实锚点是[bag-notebook](../../dist/plugins/bag-notebook.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。

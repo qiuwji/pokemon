@@ -1,0 +1,44 @@
+✔ Story bundle binds an exact NPC, calls a parameterized script and persists dialogue without touching app imports (49.865333ms)
+✔ Missing dialogue/script references and recursive calls are rejected with content identity (0.310583ms)
+✔ Priority is independent of registration order and equal-priority overlapping entrances fail explicitly (0.124666ms)
+✔ Shorthand nesting and literal interpolation cannot inject styles or arbitrary object expressions (0.408417ms)
+✔ Portrait, per-line speaker and expression update with safe DOM nodes and retain reduced-motion control (0.471167ms)
+✔ Choice policies filter visibility, explain disabled items and reject impossible defaults (0.21075ms)
+✔ Choice DOM shares click/default input, disabled controls stay inert and cancellation invalidates late clock callbacks (0.220916ms)
+✔ Oldale native data handles full inventory, retry and repeat interaction without a false reward claim (31.641875ms)
+✔ Native signs use explicit script data and unimplemented signs are visibly pending (21.624375ms)
+✔ Registered story bundles cannot write another owner's flags, variables or reward ledger (38.821375ms)
+✔ Map arrival is queued until field control is available and state projections rebuild without mutating content (17.595333ms)
+✔ Structured runs interpolate literal scalars and malformed templates fail while constructing their catalog (0.189375ms)
+file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/story-session.test.js:115
+  assert.throws(()=>session([manifest("story-suspend",api=>api.story.registerBundle("chapter",{version:1,scripts:{entry:{durable:true,commands:[{node:"fight",type:"battle",species:"zigzagoon",level:2,onResult:{win:[]}}]}}))]).game.loadDocument(checkpoint),/Invalid save/);
+                                                                                                                                                                                                                             ^
+
+SyntaxError: Unexpected token ')'
+    at compileSourceTextModule (node:internal/modules/esm/utils:354:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:91:18)
+    at #translate (node:internal/modules/esm/loader:454:20)
+    at afterLoad (node:internal/modules/esm/loader:510:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:515:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:558:36)
+    at afterResolve (node:internal/modules/esm/loader:606:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:612:12)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:631:32)
+    at TracingChannel.tracePromise (node:diagnostics_channel:363:22)
+
+Node.js v26.0.0
+✖ tests/story-session.test.js (44.246792ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 309.173792
+
+✖ failing tests:
+
+test at tests/story-session.test.js:1:1
+✖ tests/story-session.test.js (44.246792ms)
+  'test failed'

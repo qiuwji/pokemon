@@ -167,7 +167,14 @@ test("Full ball pocket rejects the Pokédex reward atomically and freeing space 
   await assert.rejects(
     s.game.runStory(interaction(s.game.state, { kind: "professor" }, "研究所")),
   );
-  assert.deepEqual(s.game.state, before);
+  assert(s.game.state.story.history.length > before.story.history.length);
+  assert.deepEqual(
+    {
+      ...s.game.state,
+      story: { ...s.game.state.story, history: before.story.history },
+    },
+    before,
+  );
   assert(!s.game.state.flags.pokedex);
   assert(!s.game.state.story.completed.includes("professor.pokedex"));
   assert(

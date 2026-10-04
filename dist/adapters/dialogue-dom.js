@@ -34,7 +34,14 @@ export class DialogueDOM {
     this.player.start(track, this.now());
     this.container.hidden = false;
     const title = this.doc.createElement("strong");
-    title.textContent = name;
+    title.textContent = line.name ?? name;
+    title.setAttribute("data-expression", line.expression || "");
+    const portrait = line.portrait && this.doc.createElement("img");
+    if (portrait) {
+      portrait.className = "dialogue-portrait";
+      portrait.src = line.portrait.src;
+      portrait.alt = line.portrait.alt;
+    }
     const body = this.doc.createElement("span");
     body.className = "dialogue-body";
     body.setAttribute("aria-hidden", "true");
@@ -43,6 +50,7 @@ export class DialogueDOM {
       n.textContent = g.text;
       n.className = "dialogue-glyph";
       if (g.style.color) n.style.color = g.style.color;
+      if (g.style.bold) n.style.fontWeight = "bold";
       if (g.style.effect) n.style.display = "inline-block";
       return n;
     });
@@ -55,7 +63,12 @@ export class DialogueDOM {
     this.prompt = this.doc.createElement("span");
     this.prompt.className = "continue";
     this.prompt.textContent = "▼ Z / 确认";
-    this.container.replaceChildren(title, body, this.prompt);
+    this.container.replaceChildren(
+      ...(portrait ? [portrait] : []),
+      title,
+      body,
+      this.prompt,
+    );
     this.update();
   }
   get complete() {

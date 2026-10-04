@@ -8,6 +8,7 @@ import {
 } from "./extensions/values.js";
 const id = { type: "string", minLength: 1, maxLength: 128 };
 export const CONDITION_QUERIES = {
+  playerName: { schema: objectSchema(), read: (s) => s.playerName || "训练家" },
   worldHour: {
     schema: objectSchema(),
     read: (s) => Math.floor((s.clock?.localMs || 0) / 3600000) % 24,

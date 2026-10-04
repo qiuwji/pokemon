@@ -21,6 +21,21 @@ export type Condition =
   | { event: string }
   | { reward: string };
 export interface StoryProgress {
+  history?: {
+    name: string;
+    source?: string;
+    lines: { name: string; text: string }[];
+  }[];
+  session?: {
+    script: string;
+    input: Record<string, Json>;
+    cursor: string | null;
+    status: "ready" | "battle";
+    steps: number;
+    event?: string;
+    token?: string;
+    actors?: Json[];
+  } | null;
   variables?: Record<string, string | number | boolean | null>;
   completed: string[];
   rewards: string[];
@@ -814,7 +829,13 @@ export interface PluginAPI {
     dispatch(id: string, input?: Record<string, Json>): Promise<unknown>;
   };
   rules: { register(id: string, definition: unknown): string };
-  story: { register(id: string, definition: unknown): string };
+  story: {
+    register(id: string, definition: unknown): string;
+    registerBundle(
+      id: string,
+      definition: StoryBundleDefinition,
+    ): StoryBundleExports;
+  };
   ui: {
     page(id: string, definition: unknown): string;
     entry(id: string, definition: unknown): string;
@@ -1534,13 +1555,77 @@ export type DialogueRun =
       color?: string;
       effect?: string;
       parameters?: Record<string, Json>;
+      bold?: boolean;
     }
   | { pauseMs: number };
 export interface DialogueDescription {
   name: string;
-  lines: (string | { runs: DialogueRun[] })[];
+  lines: (string | DialogueLine)[];
   speed?: number;
   mode?: "typewriter" | "instant";
+}
+export type DialogueLine = (
+  | { runs: DialogueRun[]; text?: never }
+  | { text: string; runs?: never }
+) & {
+  name?: string;
+  portrait?: { src: string; alt: string };
+  expression?: string;
+};
+export interface StoryBundleDefinition {
+  version: 1;
+  scripts?: Record<
+    string,
+    {
+      parameters?: DataSchema;
+      durable?: boolean;
+      commands: Record<string, Json>[];
+    }
+  >;
+  dialogues?: Record<
+    string,
+    DialogueDescription & { bindings?: Record<string, Json> }
+  >;
+  entries?: Record<
+    string,
+    {
+      trigger: string;
+      script: string;
+      selector?: {
+        map?: string;
+        objectId?: string;
+        script?: string;
+        kind?: string;
+        reason?: string;
+        localId?: string;
+      };
+      requires?: Condition;
+      priority?: number;
+      once?: boolean;
+      input?: Record<string, Json>;
+      contextParameters?: Record<string, "id" | "name" | "text">;
+    }
+  >;
+  projections?: {
+    map: string;
+    objectId: string;
+    requires?: Condition;
+    changes: {
+      x?: number;
+      y?: number;
+      dir?: Direction;
+      hidden?: boolean;
+      name?: string;
+      text?: string;
+    };
+  }[];
+  sources?: Record<string, Json>[];
+}
+export interface StoryBundleExports {
+  id: string;
+  scripts: Readonly<Record<string, string>>;
+  dialogues: Readonly<Record<string, string>>;
+  entries: Readonly<Record<string, string>>;
 }
 export interface TextEffectDefinition {
   schema?: DataSchema;

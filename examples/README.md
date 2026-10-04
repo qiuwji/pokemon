@@ -19,9 +19,10 @@
 | 遇敌插件 | [encounter-extension.test.js](encounter-extension.test.js) | 关闭step→查询格子→Actor与凭证→接触→真实野生战斗，不经过剧情 |
 | 外观/相机/环境插件 | [visual-extension.test.js](visual-extension.test.js) | 外观选择→可见格数租约→独立雾层→释放与重载 |
 | Actor | [actor.test.js](actor.test.js) | 模板→公开创建/更新→持久UID和记忆→移除 |
+| 地区剧情包 | [story-bundle.test.js](story-bundle.test.js) | 注册NPC→包绑定→公共call→逐行角色/插值→选择后果→历史保存 |
 | 原作剧情转写入门 | [story-reconstruction.test.js](story-reconstruction.test.js) | 数据剧情到达触发→选择分支/变量→奖励→重载去重 |
 | 失败与验收 | [validation.test.js](validation.test.js) | 后段意图失败→记忆/钱/账本/RNG回滚→只读→重载 |
 
 [helpers/session.js](helpers/session.js)只用于测试：固定时钟、内存存储及无浏览器UI，准备已解锁场景和一只精灵。对话立即完成、选择取首项，未播放真实Canvas/DOM/音频。原作剧情例注入与FieldSession相同的到达回调，不证明玩家行走；页面例dispatch与点击相同的action，不证明鼠标和焦点。夹具的直接赋值是场景安排，禁止复制成生产插件写法。
 
-浏览器插件是普通manifest对象，放到dist/plugins并加入dist/app.js启动数组，具体见[作者指南](../docs/development/AUTHORING.md)。示例中的bus代表玩家/测试入口；插件运行时dispatch同一核心命令仍须声明该命令权限，直接bus通过不能证明权限通过。测试写法、复用证据和最终验收见[测试指南](../docs/development/TESTING.md)。Skill代码块由`npm run check:docs`与真实文件比对，修改时同步二者。
+浏览器插件是普通manifest对象，放到dist/plugins并加入dist/plugins/catalog.json装配清单，具体见[作者指南](../docs/development/AUTHORING.md)。示例中的bus代表玩家/测试入口；插件运行时dispatch同一核心命令仍须声明该命令权限，直接bus通过不能证明权限通过。测试写法、复用证据和最终验收见[测试指南](../docs/development/TESTING.md)。Skill代码块由`npm run check:docs`与真实文件比对，修改时同步二者。

@@ -41,7 +41,7 @@ description: 结合现有网页绿宝石架构和只读pret/pokeemerald固定修
 1. 为本次切片列出触发入口、参与角色、前置状态、各分支、奖励/费用、结束状态、取消/背包满/失败及重入行为。追踪特殊函数直到知道谁产生结果、何时解锁。
 2. 记录来源文件、label、固定修订和依赖；画出分支或用表表示即可，不复制整套C代码。对话本地化与规则还原分开验收。
 3. 地图使用metatile网格、碰撞/高度、connections与warps；原对象放地图元素，新运行期角色走Actor身份。入口校验合法落点，不用整场景PNG。
-4. 原作内容按现有`dist/packs/emerald/story.js`及对应内容定义装配；独立实验/扩展写`dist/plugins/`，setup通过`api.story.register`注册。完整复刻先读[剧情内容架构](../../docs/architecture/STORY_CONTENT.md)：地区包、对象绑定、公共子脚本、地图回调和稳定暂停点是后续改造方向；检查STATUS及实际合同，不能调用尚未实现的registerBundle或假设battle会等待胜负。新机制交给明确的框架任务，已有机制的内容按地区组织，不在World/adventure加地图名switch。
+4. 原生地区优先写`dist/content/stories/`的bundle，在现有manifest声明stories片段；`dist/packs/emerald/story.js`只装配现有地区/公共事件，动态短构建放story/regions或common。独立扩展setup通过`api.story.registerBundle`登记同一合同，不改app按地区接线。先读[剧情内容架构](../../docs/architecture/STORY_CONTENT.md)和[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，核对真实字段。普通短battle只发起；需要战后续接必须用durable脚本、稳定node及battle.onResult。已有call是typed词法输入展开，不是任意C返回值/可变调用帧。
 5. 把条件转成requires/after/if和已注册只读查询；变量转setVariable/choice；对话、行走、镜头及领域动作转现有命令。参数见[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，世界合同见[world-content](../emerald-world-content/SKILL.md)。领域结果确实无法表达时登记接口缺口，作为框架任务处理，不能直接改队伍/库存。
 6. 显式映射寿命：永久领取/推进标记、地图visit覆盖、原FLAG_TEMP清理、对象可见性各归所属服务。原作TEMP寿命须追C确认，不能默认等于本引擎visit，更不能统统永久化。
 7. 演出走move/approach/face/escort/camera和必要门转场；跨相邻道路走连接。不要用teleport跳过本该自动行走的过程；不能并行争抢角色或镜头。finally释放锁由现有导演负责。
@@ -59,46 +59,44 @@ description: 结合现有网页绿宝石架构和只读pret/pokeemerald固定修
 - 商店介绍后`giveitem ITEM_POTION`，检查`VAR_RESULT`；背包满走BagIsFull，**不设置已领取flag**；成功才设置`FLAG_RECEIVED_POTION_OLDALE`并结束。
 - 入图MapScripts还会调整对象位置/阻路状态；不能只补这一段对话就声称此区域完整。
 
-转写应先做来源分支表，再映射角色、方向、移动路径、奖励与容量结果。本引擎reward失败当前会抛错，没有通用“reward结果写变量后分支”命令；原作背包满对话不能靠原样reward数组自动得到。核对现有库存preview/可注册查询能否表达预检；若需要执行结果分支，提出具体框架合同并验证竞态，禁止提前设置领取flag或删容量校验。
+转写应先做来源分支表，再映射角色、方向、移动路径、奖励与容量结果。本引擎可用`reward.onResult`明确写ok/alreadyGranted/inventoryFull三种分支，提交仍由库存领域原子执行。不要先preview再提前写领取flag；其他错误继续抛出。当前Oldale数据代表例只覆盖赠药结果，并未转写原作方向移动、入图位置及音乐；应继续补这些业务而不是重写库存或导演。
 
 当前core剧情切片是否包含这个完整过程只看代码与STATUS；此段是下一位作者的原作转写方法和差异说明，不是已实现声明。保存来源记录可用[切片模板](references/story-slice.md)。
 
 ## 最小完整示例
 
-接口锚点：插件API 1，示例按现有StoryEngine/CommandRunner合同。文件：[story-reconstruction.test.js](../../examples/story-reconstruction.test.js)，在项目根执行`node --test examples/story-reconstruction.test.js`。这是项目分支演示，**没有声称逐字还原上述员工事件**。
+接口锚点：插件API 1，示例使用现有registerBundle/StoryCatalog与执行合同。文件：[story-bundle.test.js](../../examples/story-bundle.test.js)，在项目根执行`node --test examples/story-bundle.test.js`。这是项目分支演示，**没有声称逐字还原上述员工事件**。
 
-[session夹具](../../examples/helpers/session.js)装配真实插件、应用服务和命令，固定时钟/存储、模拟UI取第一个选项。这里注入与FieldSession相同的到达回调，测试移动另用现有世界证据；复制到examples/下的新测试才有正确相对导入。
+[session夹具](../../examples/helpers/session.js)装配真实插件、应用服务和命令，固定时钟/存储、模拟UI取第一个选项。示例通过game.enter后game.interact触发实际对象绑定，浏览器UI由夹具立即确认；它不证明自动移动或动画观感。复制到examples/下的新测试才有正确相对导入。
 
-<!-- runnable-example: examples/story-reconstruction.test.js -->
+<!-- runnable-example: examples/story-bundle.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
-test("data story arrival chooses a branch and persists its variable", async () => {
-  const plugin = manifest("branch-demo", api => {
-    api.story.register("arrival", { trigger: "step", once: true,
-      where: { map: "LittlerootTown", x: 8, y: 10, width: 1, height: 1 },
-      commands: [{ type: "choice", name: "向导", prompt: "领取示例奖励？",
-        variable: "branch-demo.answer", cancel: "leave", options: [
-          { id: "yes", label: "领取", commands: [
-            { type: "reward", id: "branch-demo:gift", money: 20 },
-          ] },
-          { id: "leave", label: "离开", commands: [] },
-        ],
-      }],
+import { manifest, session, objectSchema } from "./helpers/session.js";
+test("bundle registers an NPC, shared dialogue and choice with durable reward", async () => {
+  const plugin = manifest("story-bundle", api => {
+    api.content.register("mapExtensions", "guide", { map: "LittlerootTown",
+      elements: [{id:"story-bundle:guide",x:8,y:9,actor:"Boy1",dir:"down",
+        kind:"talk",name:"向导",text:"",movement:{mode:"still",rangeX:0,rangeY:0}}] });
+    api.story.registerBundle("village", {version:1,
+      dialogues:{hello:{name:"向导",bindings:{who:{query:{id:"playerName"}}},
+        lines:[{name:"向导",text:"欢迎，{{who}}！"},{name:"助手",text:"领取旅行礼物吗？"}]}},
+      scripts:{hello:{parameters:objectSchema(),commands:[{type:"dialog",dialogue:"hello"}]},
+        gift:{commands:[{type:"call",script:"hello"},
+          {type:"choice",name:"向导",prompt:"请选择",cancel:"leave",options:[
+            {id:"yes",label:"领取",commands:[{type:"reward",id:"story-bundle:gift",money:20}]},
+            {id:"leave",label:"离开",commands:[]}]}]}},
+      entries:{guide:{trigger:"interact",selector:{objectId:"story-bundle:guide"},script:"gift"}},
     });
   });
-  const s = session([plugin]), before = s.game.state.money;
-  assert(s.game.enter({ map: "LittlerootTown", x: 8, y: 10, dir: "down" }));
-  // Inject the same arrival callback used by FieldSession; movement is tested separately.
-  s.game.step(s.game.world.cell(8, 10));
-  await s.settle();
-  assert.equal(s.game.state.story.variables["branch-demo.answer"], "yes");
-  assert.equal(s.game.state.money, before + 20);
+  const s=session([plugin]), before=s.game.state.money;
+  s.game.enter({map:"LittlerootTown",x:8,y:10,dir:"up"});
+  s.game.interact(); await s.settle();
+  assert.equal(s.game.state.money,before+20);
+  assert.equal(s.game.dialogueHistory()[0].lines[1].name,"助手");
   s.game.loadDocument(s.game.exportDocument());
-  s.game.step(s.game.world.cell(8, 10));
-  await s.settle();
-  assert.equal(s.game.state.money, before + 20);
+  assert.equal(s.game.dialogueHistory().length,2);
 });
 ```
 
@@ -111,6 +109,8 @@ test("data story arrival chooses a branch and persists its variable", async () =
 | Story dependency cycle at | 事件前置环；重画状态图，不通过删除校验继续运行 |
 | Unknown story command: | C命令名被直接当JS命令或拼错；按StoryApplication.handlers/CommandRunner现有合同映射 |
 | Scripted actor movement blocked: | 路径碰撞/高度/角色预约不合法；核对方向分支及实际grid，不用teleport绕开 |
+
+Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；Story call cycle拒绝递归；Stable story node required要求持久脚本每个分支有稳定node；Story state namespace denied检查owner前缀。未知读档节点不得删校验强行恢复。
 
 奖励容量失败保留具体reason，修正剧情分支而不关容量策略。choice.cancel必须是options中的ID；界面返回未知选项会报Invalid story choice result。若检索不到错误全文，查关键部分和对应校验器，错误路径会随命令树层级变化。
 
@@ -126,10 +126,19 @@ test("data story arrival chooses a branch and persists its variable", async () =
 
 | 首选文件 | 搜索词 |
 | --- | --- |
-| [story.js](../../dist/packs/emerald/story.js) | `STORY_EVENTS`、`talkEvent` |
+| [story.js](../../dist/packs/emerald/story.js) / [内容目录](../../dist/content/stories/dialogues.json) | `STORY_EVENTS`、`emerald:dialogues` |
+| [StoryCatalog](../../dist/engine/story-catalog.js) / [StorySession](../../dist/engine/story-session.js) | `registerBundle`、`class StorySession`、`Stable story node required` |
 | [StoryApplication](../../dist/packs/emerald/application/story-application.js) | `class StoryApplication`、`runStory` |
 | [StoryEngine](../../dist/engine/story.js) | `class StoryEngine`、`unknown prerequisite` |
 | [触发端](../../dist/packs/emerald/application/triggers-application.js) | `story.resolve("step"` |
 | [现有示例测试](../../tests/story-language.test.js) | `Data-only plugin story` |
 
 接口变化时更新规格、Skill和对应可执行例；`npm run check:docs`验证链接及片段一致，行为例运行一次并记录。项目代码、文档、Skill、资源及固定参考必须一起交接。
+
+## 长剧情接手时的具体约束
+
+声明durable:true后，用稳定node而不是数组下标描述检查点。battle前保存ready游标，onResult接确定结果后自动续接；不能把未声明durable的短battle当作等待命令。checkpoint只在演员/领域操作稳定完成处使用；不能放parallel，嵌套公共流程用call，不再创建script会话。保存不包含动画时钟、DOM或战斗中间态。
+
+新增切片至少验证真实入口→参数化公共对白→领域成功/满包→重入，以及长剧情的战斗后续接或失败重载。恢复节点改名须明确开发存档失效；不得为了兼容未发布旧节点增加散落回退。实际测试参考story-content.test.js、story-session.test.js，路径改名搜索`Stable story checkpoints`、`Battle receipts are correlated`。
+
+本地化写对白目录；多角色用每句name/portrait/expression，插值声明bindings，条件台词用入口requires/if而非播放器读状态。记录只收最终确认dialog及已选项，历史回看不触发奖励。内容来源保持原作确认/项目演绎/pending三类，不能把换了数据格式当作原作完整还原。

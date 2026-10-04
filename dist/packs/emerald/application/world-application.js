@@ -20,6 +20,8 @@ import { EMERALD_TERRAIN_RULES } from "../terrain-rules.js";
 import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "advanceTravelClocks",
+  "storyCatalog",
+  "storyMapEntered",
   "timeView",
   "weatherView",
   "enterWeather",
@@ -75,14 +77,18 @@ export class WorldApplication {
     bindApplicationPorts(this, ports, WORLD_PORTS);
   }
   baseWorldObjects(map) {
-    return [
-      ...objectsFor(
-        { ...this.state, position: { ...this.state.position, map } },
-        this.db,
-      ),
-      ...(this.db.maps[map].elements || []),
-      ...this.actorObjects(map),
-    ];
+    return this.storyCatalog.projectObjects(
+      map,
+      [
+        ...objectsFor(
+          { ...this.state, position: { ...this.state.position, map } },
+          this.db,
+        ),
+        ...(this.db.maps[map].elements || []),
+        ...this.actorObjects(map),
+      ],
+      this.state,
+    );
   }
   patchWorld(operations) {
     const draft = this.prepareWorldPatch(operations);
@@ -188,6 +194,7 @@ export class WorldApplication {
     return {
       map: this.worldState.map(map, draft),
       entered: () => {
+        this.storyMapEntered(map, options.reason || "travel");
         this.enterWeather(map);
         this.deviceEvent("activate", this.state.position);
         this.plugins?.events.emit("core:world-visit", {
@@ -245,6 +252,7 @@ export class WorldApplication {
     if (
       this.battle ||
       this.storyBusy ||
+      this.state.story.session ||
       this.ui?.blocked ||
       this.busy ||
       this.devicePending() ||
@@ -273,6 +281,10 @@ export class WorldApplication {
       return;
     }
     if (this.ui.blocked || this.facilityActive) return;
+    if (this.state.story.session) {
+      this.ui.toast("当前有暂停的剧情，请从菜单继续剧情。");
+      return;
+    }
     const action = this.fieldInteraction("interact");
     if (action) {
       this.ui.showFieldAction(action.id);
@@ -288,12 +300,6 @@ export class WorldApplication {
       );
       if (isWater(cell?.behavior) && this.state.movement.mode !== "surf")
         this.ui.showSurf();
-      return;
-    }
-    if (
-      object.script === "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
-    ) {
-      this.ui.showTime();
       return;
     }
     if (object.kind === "berryPlot") {
@@ -462,5 +468,9 @@ export class WorldApplication {
     this.visitMap();
     this.plugins?.rebind();
     this.onMap(this.world.map.title, this.state.position.map);
+    this.storyMapEntered(
+      this.state.position.map,
+      resumeVisit ? "restore" : "start",
+    );
   }
 }

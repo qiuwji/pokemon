@@ -79,7 +79,7 @@ export class BattleApplication {
       context,
     );
   }
-  async startTrainerBattle(id) {
+  async startTrainerBattle(id, resultOwner = null) {
     if (this.facilityActive) return false;
     const trainer = this.trainerDefinitions[id];
     if (!trainer) throw new Error("Unknown trainer encounter");
@@ -91,10 +91,15 @@ export class BattleApplication {
       strategies: this.battleStrategies,
       inventory: this.inventory,
     });
-    return this.startBattle(encounter.enemyParty, {
-      ...encounter,
-      trainerId: id,
-    });
+    return this.startBattle(
+      encounter.enemyParty,
+      {
+        ...encounter,
+        trainerId: id,
+      },
+      null,
+      resultOwner,
+    );
   }
   async startEncounterBattle(monster, resultPlan) {
     return this.startBattle(monster, {}, null, (b) =>
@@ -231,13 +236,15 @@ export class BattleApplication {
       hooks: this.ruleHooks,
     });
   }
-  resultPlan(b) {
+  resultPlan(b, { story = true } = {}) {
     const drops = [];
     let committed = false;
-    let commands = this.story.resolve("battleResult", this.state, {
-      battle: b,
-      db: this.db,
-    });
+    let commands = story
+      ? this.story.resolve("battleResult", this.state, {
+          battle: b,
+          db: this.db,
+        })
+      : [];
     if (!commands.length && b.result === "win" && b.trainerId) {
       const trainer = this.trainerDefinitions[b.trainerId];
       const amount = trainer.prize * (b.prizeMultiplier || 1);

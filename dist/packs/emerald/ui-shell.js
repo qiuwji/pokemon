@@ -1,5 +1,6 @@
 import { dialogueDescription } from "../../engine/dialogue.js";
 import { DialogueDOM } from "../../adapters/dialogue-dom.js";
+import { ChoiceDOM } from "../../adapters/choice-dom.js";
 import { createTextEffects } from "../../presentation/text-effects.js";
 import { PACK, TYPE_NAMES, STATUS_NAMES, questFor } from "./pack.js";
 /** Shared UI services. Domain mutations use the supplied application command facade. */
@@ -185,28 +186,47 @@ export function createUIShell(
     previous?.reject(reason);
   }
 
-  function choose(name, prompt, options, cancel) {
-    return new Promise((resolve) => {
+  function choose(name, prompt, options, cancel, policy = {}) {
+    return new Promise((resolve, reject) => {
+      let settled = false;
       const complete = (id) => {
+        if (settled || !options.some((o) => o.id === id && !o.disabled)) return;
+        settled = true;
         closeModal();
         resolve(id);
       };
-      modal(
-        name,
-        `<p>${escapeHTML(prompt)}</p><div class="menu-grid">${options.map((o) => `<button class="menu-tile" data-choice="${escapeHTML(o.id)}">${escapeHTML(o.label)}</button>`).join("")}</div>`,
-        {
-          type: "story-choice",
-          close: false,
-          back: () => {
-            if (cancel) complete(cancel);
-          },
+      const fail = (error) => {
+        if (settled) return;
+        settled = true;
+        closeModal();
+        reject(error);
+      };
+      modal(name, `<div id="story-choice-content"></div>`, {
+        type: "story-choice",
+        close: false,
+        back: () => {
+          if (cancel) complete(cancel);
         },
-      );
-      root
-        .querySelectorAll("[data-choice]")
-        .forEach(
-          (button) => (button.onclick = () => complete(button.dataset.choice)),
-        );
+      });
+      const view = new ChoiceDOM({
+        document: doc,
+        container: $("story-choice-content"),
+        clock,
+        onSelect: complete,
+        onError: fail,
+      });
+      ownModalResource(() => {
+        view.dispose();
+        if (!settled) {
+          settled = true;
+          reject(new Error("Story choice disposed"));
+        }
+      });
+      try {
+        view.mount(prompt, options, policy);
+      } catch (error) {
+        fail(error);
+      }
     });
   }
   function renderDialogue() {
@@ -218,10 +238,14 @@ export function createUIShell(
       dialogueView.update();
       return;
     }
-    dialogueView.show(dialog.name, dialog.lines[dialog.index], {
-      speed: dialog.speed,
-      mode: dialog.mode,
-    });
+    dialogueView.show(
+      dialog.lines[dialog.index].name ?? dialog.name,
+      dialog.lines[dialog.index],
+      {
+        speed: dialog.speed,
+        mode: dialog.mode,
+      },
+    );
     dialog.renderedIndex = dialog.index;
   }
 
@@ -269,11 +293,12 @@ export function createUIShell(
     root.innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
     if ($("modal-close"))
       $("modal-close").onclick = () => (back ? back() : closeModal());
-    requestFrame(() =>
-      (
-        root.querySelector(".menu-tile") || root.querySelector("button")
-      )?.focus(),
-    );
+    requestFrame(() => {
+      const buttons = [...root.querySelectorAll("button")].filter(
+        (button) => !button.disabled,
+      );
+      if (!buttons.includes(doc.activeElement)) buttons[0]?.focus();
+    });
   }
 
   function closeModal() {

@@ -2,11 +2,19 @@ import { matchesRegion, validateRegion } from "./field-triggers.js";
 import { validStoryVariables } from "./story-variables.js";
 import { DEFAULT_CONDITION_QUERIES } from "./condition-queries.js";
 import { matchesCondition, validateCondition } from "./conditions.js";
+import { validDialogueHistory } from "./dialogue-history.js";
+import { validStorySession } from "./story-session.js";
 
-export const emptyStoryProgress = () => ({ completed: [], rewards: [] });
+export const emptyStoryProgress = () => ({
+  completed: [],
+  rewards: [],
+  history: [],
+});
 export function validStoryProgress(progress) {
   return (
     !!progress &&
+    validDialogueHistory(progress.history) &&
+    validStorySession(progress.session) &&
     validStoryVariables(progress.variables) &&
     [progress.completed, progress.rewards].every(
       (v) =>
@@ -25,12 +33,37 @@ export class StoryEngine {
   ) {
     this.queries = queries;
     this.events = events;
+    this.byTrigger = Map.groupBy(events, (e) => e.trigger);
     this.quests = quests;
     const ids = new Set(events.map((e) => e.id));
     if (ids.size !== events.length) throw new Error("Duplicate story event ID");
     for (const event of events) {
       if (!event.id || !event.trigger || typeof event.build !== "function")
         throw new Error(`Invalid event ${event.id}`);
+      if (
+        event.priority !== undefined &&
+        (!Number.isSafeInteger(event.priority) ||
+          Math.abs(event.priority) > 10000)
+      )
+        throw new Error(`Invalid event priority ${event.id}`);
+      if (
+        event.selector &&
+        (Object.keys(event.selector).some(
+          (key) =>
+            ![
+              "map",
+              "reason",
+              "objectId",
+              "script",
+              "kind",
+              "localId",
+            ].includes(key),
+        ) ||
+          Object.values(event.selector).some(
+            (value) => typeof value !== "string" || !value,
+          ))
+      )
+        throw new Error(`Invalid event selector ${event.id}`);
       if (event.where) validateRegion(event.where, `events.${event.id}.where`);
       validateCondition(
         event.requires,
@@ -57,7 +90,7 @@ export class StoryEngine {
     }
   }
   resolve(trigger, state, context = {}) {
-    const event = this.events.find(
+    const candidates = (this.byTrigger.get(trigger) || []).filter(
       (e) =>
         e.trigger === trigger &&
         (!e.where ||
@@ -65,12 +98,35 @@ export class StoryEngine {
         (!e.once || !state.story?.completed.includes(e.id)) &&
         (e.after || []).every((id) => state.story?.completed.includes(id)) &&
         matchesCondition(e.requires, state, this.queries) &&
-        (!e.match || e.match(context, state)),
+        (!e.match || e.match(context, state)) &&
+        Object.entries(e.selector || {}).every(
+          ([key, value]) =>
+            (key === "map"
+              ? context.map || state.position?.map
+              : key === "reason"
+                ? context.reason
+                : key === "localId"
+                  ? context.object?.sourceLocalId
+                  : key === "objectId"
+                    ? context.object?.id
+                    : context.object?.[key]) === value,
+        ),
     );
+    candidates.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+    const event = candidates[0];
     if (!event) return [];
+    if (
+      candidates[1] &&
+      (candidates[1].priority || 0) === (event.priority || 0)
+    )
+      throw new Error(
+        `Ambiguous story trigger: ${event.id}, ${candidates[1].id}`,
+      );
     const commands = event.build(state, context);
     if (!Array.isArray(commands))
       throw new Error(`events.${event.id}: commands must be an array`);
+    if (commands.length === 1 && commands[0].type === "script")
+      return [{ ...commands[0], event: event.id }];
     return [...commands, { type: "completeEvent", id: event.id }];
   }
   quest(state) {
@@ -113,10 +169,19 @@ export function validateReward(reward, items = {}) {
 }
 /** Atomic, idempotent persistent reward. Animation failures cannot grant it twice. */
 export function grantReward(state, reward, { items = {}, inventory } = {}) {
+  const result = grantRewardResult(state, reward, { items, inventory });
+  if (result.status === "inventoryFull") throw new Error(result.reason);
+  return result.status === "ok";
+}
+export function grantRewardResult(
+  state,
+  reward,
+  { items = {}, inventory } = {},
+) {
   validateReward(reward, items);
   const progress = state.story || emptyStoryProgress();
   if (!validStoryProgress(progress)) throw new Error("Invalid story progress");
-  if (progress.rewards.includes(reward.id)) return false;
+  if (progress.rewards.includes(reward.id)) return { status: "alreadyGranted" };
   const draft = {
     flags: { ...state.flags },
     money: state.money,
@@ -133,12 +198,16 @@ export function grantReward(state, reward, { items = {}, inventory } = {}) {
   );
   if (operations.length) {
     const plan = inventory.prepare(state.bag, operations);
-    if (!plan.ok) throw new Error(plan.reason);
+    if (!plan.ok) {
+      if (plan.code === "full")
+        return { status: "inventoryFull", reason: plan.reason };
+      throw new Error(plan.reason);
+    }
     if (!inventory.commit(plan, state.bag))
       throw new Error("Reward inventory plan expired");
   }
   Object.assign(state, draft);
-  return true;
+  return { status: "ok" };
 }
 export function completeEvent(state, id) {
   state.story ??= emptyStoryProgress();

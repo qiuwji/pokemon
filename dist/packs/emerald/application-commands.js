@@ -12,6 +12,13 @@ export function registerEmeraldCommands(game, bus) {
     !game.facilityActive && !game.busy && !game.battle && !game.ui?.dialog;
   const facilityReady = () => !game.busy && !game.battle && !game.ui?.dialog;
   const partyIndex = (uid) => game.state.party.findIndex((m) => m.uid === uid);
+  bus.register("core.story.resume", {
+    schema: empty,
+    mode: "async",
+    ready: field,
+    network: true,
+    run: () => game.resumeStory(),
+  });
   const boxIndex = (uid) => game.state.box.findIndex((m) => m.uid === uid);
   bus.register("core.inventory.preview", {
     schema: objectSchema(

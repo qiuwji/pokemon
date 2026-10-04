@@ -19,3 +19,5 @@
 每份Skill有核心名词、一个实际20–30行示例、常见报错及搜索兜底。统一写法及工具说明见[作者指南](../development/AUTHORING.md)，验证与证据复用见[测试指南](../development/TESTING.md)。例子见[examples](../../examples/README.md)，`npm run check:docs`防止片段与文件脱节。
 
 秘密基地/房间编辑先用world-content读取[持久布局设计](../engine/world/ROOM_LAYOUTS.md)，其中多格占位、原子编辑与保存属于尚未实现的框架任务，不是设施活动的局部data。玩家联线先用plugin-authoring读取[会话/所有权设计](../architecture/PLAYER_LINK.md)；单机控制接口不能证明跨存档交换。两类完整业务后续按STATUS分派，不能把设计里的名字当可调用API。
+
+剧情相关任务：原生地区包与对白放content/stories，插件用registerBundle；脚本/对白/入口字段在剧情语言，长剧情稳定恢复边界在剧情架构。总接手、世界、原作转写及插件Skill已指向这些入口；当前完成/未验证/下一步仍只维护STATUS，不把版本和测试数量复制到Skill。

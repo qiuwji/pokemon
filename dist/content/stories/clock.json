@@ -1,0 +1,23 @@
+{
+  "id": "emerald:clock",
+  "version": 1,
+  "scripts": {
+    "open": {
+      "commands": [
+        {
+          "type": "screen",
+          "id": "clock"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "clock": {
+      "trigger": "interact",
+      "selector": {
+        "script": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
+      },
+      "script": "open"
+    }
+  }
+}

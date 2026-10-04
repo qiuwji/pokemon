@@ -1310,3 +1310,5 @@ button.extension-canvas:focus-visible {outline:3px solid var(--extension-accent,
 .extension-list {padding-left:24px;text-align:left;}
 .extension-divider {border:0;border-top:2px solid var(--extension-border,#788875);}
 .extension-form[aria-busy=true] {opacity:.6;}
+
+.dialogue-portrait { float: left; width: 48px; height: 48px; margin-right: 8px; object-fit: contain; image-rendering: pixelated; }

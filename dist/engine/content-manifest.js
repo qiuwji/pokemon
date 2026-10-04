@@ -9,6 +9,7 @@ export const CONTENT_SECTIONS = Object.freeze([
   "evolutions",
   "typeChart",
   "references",
+  "stories",
 ]);
 const record = (value) =>
   value !== null && typeof value === "object" && !Array.isArray(value);
@@ -50,7 +51,7 @@ export function contentFiles(manifest) {
     sections.add(entry.section);
   }
   for (const section of CONTENT_SECTIONS)
-    if (!sections.has(section))
+    if (section !== "stories" && !sections.has(section))
       throw new Error(`Missing content section: ${section}`);
   return manifest.files;
 }

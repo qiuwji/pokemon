@@ -1,6 +1,6 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-当前工程版本 **0.27.1**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+当前工程版本 **0.28.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
@@ -19,7 +19,7 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。当前工作树全量回归：**829项通过，0失败、0跳过**（含十五个Skill示例，Python管线另含20项嵌套证明）；**313个JS模块**语法通过。捕捉容量、主线恢复及训练家记账修复见[最新证据](docs/validation/2026-10-04-progression-safety/manifest.json)，范围与复用条件见[验证记录](docs/project/VALIDATION.md)。严格JS类型目前只覆盖剧情变量与两个纯动画采样模块，不代表全工程类型覆盖。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm test`包含tests和examples；`npm run check`检查内容引用、真实图集、公开合同类型、全部JS语法、文档、ESLint及首批三个JS模块的严格类型。`npm run test:coverage`执行同一测试组并统计运行时覆盖率。最近一次阶段全量记录为 **844项通过，0失败、0跳过**；其后新增/受影响剧情与对话专项 **22项通过**，一次静态检查覆盖330个JS模块。**这些是此前阶段结果，不是最终提交的全量验收**；按用户要求，文档同步与提交阶段不再运行检查，最终回归暂缓。日志、范围和浏览器观察见[本轮记录](docs/validation/2026-10-04-story-dialogue/manifest.json)，历史检查见[验证记录](docs/project/VALIDATION.md)。严格JS类型目前只覆盖剧情变量与两个纯动画采样模块，不代表全工程类型覆盖。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十五个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
@@ -52,6 +52,12 @@ npm run check:docs
 
 关键道具绑定与内容作者示例见 [ITEM_ACTIONS.md](docs/engine/items/FIELD_ITEMS.md)；道具只声明入口，资格/计划/动画/提交复用既有领域。背包支持登记到 C / 触屏 SELECT，保存及公共命令见 [ITEM_SHORTCUT.md](docs/engine/items/FIELD_ITEMS.md)。
 
+## 剧情与对话扩充
+
+原生地区包放`dist/content/stories/`，同一manifest装配；插件通过`api.story.registerBundle`注册。支持显式对象/原脚本绑定、参数化公共call、领域结果分支、条件选项，以及durable稳定节点和战斗结果关联续接。对白按行定义角色、立绘/表情与标量插值，确认后的记录可以保存回看。
+
+字段与用法见[剧情语言](docs/engine/story/STORY_LANGUAGE.md)、[对话合同](docs/engine/presentation/DIALOGUE.md)，职责与限制见[剧情架构](docs/architecture/STORY_CONTENT.md)，完整组合见[story-bundle示例](examples/story-bundle.test.js)。普通短battle不等待胜负；持久脚本必须声明durable与稳定node，不支持活跃战斗中途存档。新增机制不等于原作全部NPC/剧情已经转写。
+
 ## 当前引擎机制与进度入口
 
 | 子系统 | 已实现的合同 | 尚未收口 |
@@ -69,7 +75,7 @@ npm run check:docs
 | 动画/音频 | 纯关键帧/缓动/片段/分支取样、可注册战斗事件演出；真实资源音频 API | 多渲染宿主生命周期、完整 BGM/SE、原作动画素材 |
 | 战斗/插件 | 多队伍/席位、状态/延迟行动、形态投影、行动增强、受控规则、表单/组件/Canvas界面扩展 | 战斗保真、完整设施与现代玩法、任意UI宿主/原生内容替换 |
 
-**接手顺序**：先读 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md) 的当前顺序，再读 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md) 和受影响规格，最后核对代码。根文档介绍稳定结构；路线记录待办；日志记录变更与验证，不能把历史阶段验收当作当前完整复刻完成。已通过且未受影响的证据沿用，模块变更使对应证据失效；最终 E 阶段另做系统与浏览器验收。
+**接手顺序**：先读 [当前范围](docs/project/SCOPE.md) 和 [真实进度](docs/project/STATUS.md)，再读 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md) 和受影响规格，最后核对代码。根文档介绍稳定结构；路线记录待办；日志记录变更与验证，不能把历史阶段验收当作当前完整复刻完成。已通过且未受影响的证据沿用，模块变更使对应证据失效；最终 E 阶段另做系统与浏览器验收。
 
 内部模块的可扩展合同已陆续实现，尚未达到“任何上层业务都无需补核心接口”。现有缺口明确保留，见 [机制矩阵](docs/engine/battle/MECHANISM_MATRIX.md) 和 [插件演进](docs/project/PLUGIN_ROADMAP.md)。
 

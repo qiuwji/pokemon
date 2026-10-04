@@ -76,41 +76,26 @@ export { validateSave } from "./save-contract.js";
 function baseObjects(state, db) {
   const map = state.position.map,
     flag = state.flags;
-  const obj = (x, y, actor, kind, name, text = "") => ({
-    x,
-    y,
-    actor,
-    kind,
-    name,
-    text,
-    dir: "down",
-  });
+  const obj = (x, y, actor, kind, dialogueId) => {
+    const definition = db.stories.dialogues.dialogues[dialogueId];
+    if (!definition)
+      throw new Error(`Unknown native NPC dialogue: ${dialogueId}`);
+    return {
+      x,
+      y,
+      actor,
+      kind,
+      name: definition.name,
+      text: definition.lines[0],
+      dialogue: `emerald:dialogues.${dialogueId}`,
+      dir: "down",
+    };
+  };
   if (map === "LittlerootTown")
     return [
-      obj(
-        16,
-        10,
-        "Twin",
-        "talk",
-        "小女孩",
-        "北边就是 101 号道路。刚才好像传来了求救声！",
-      ),
-      obj(
-        12,
-        13,
-        "FatMan",
-        "talk",
-        "居民",
-        "小田卷博士经常到野外研究宝可梦。研究所就在西南边。",
-      ),
-      obj(
-        14,
-        17,
-        "Boy2",
-        "talk",
-        "男孩",
-        "草丛里有野生宝可梦。等你有了搭档，就能踏上冒险了。",
-      ),
+      obj(16, 10, "Twin", "talk", "npc.talk.1"),
+      obj(12, 13, "FatMan", "talk", "npc.talk.2"),
+      obj(14, 17, "Boy2", "talk", "npc.talk.3"),
     ];
   if (map === "Route101")
     return [
@@ -120,36 +105,19 @@ function baseObjects(state, db) {
           8,
           "Youngster",
           flag.rescued ? "trainer" : "talk",
-          "练习训练家",
-          flag.rescued
-            ? "我有两位伙伴。来打一场练习赛吧！击败第一只之后，对战还会继续。"
-            : "在草丛里行走会遇到野生宝可梦。先削弱它，再用精灵球！",
+          flag.rescued ? "npc.practice.4.after" : "npc.practice.4.before",
         ),
         ...(flag.rescued ? { trainerId: "youngster" } : {}),
       },
       ...(flag.rescued
         ? [
             {
-              ...obj(
-                18,
-                8,
-                "Boy1",
-                "arena",
-                "双打练习员",
-                "双打中，两位伙伴先分别选择行动，再一起结算。准备好两位伙伴再来挑战！",
-              ),
+              ...obj(18, 8, "Boy1", "arena", "npc.arena.5"),
               trainerId: "doubles",
               movement: { mode: "still", dir: "down", rangeX: 0, rangeY: 0 },
             },
             {
-              ...obj(
-                18,
-                10,
-                "Boy2",
-                "arena",
-                "混战练习员",
-                "三支队伍各自为战。你可以选择任意对方席位，也可以用群体招式。",
-              ),
+              ...obj(18, 10, "Boy2", "arena", "npc.arena.6"),
               trainerId: "freeForAll",
               movement: { mode: "still", dir: "down", rangeX: 0, rangeY: 0 },
             },
@@ -158,22 +126,15 @@ function baseObjects(state, db) {
       ...(!flag.rescued
         ? [
             {
-              ...obj(
-                9,
-                13,
-                "ProfBirch",
-                "rescue",
-                "小田卷博士",
-                "救命啊！那边的包里有精灵球，快选一只来帮我！",
-              ),
+              ...obj(9, 13, "ProfBirch", "rescue", "npc.rescue.7"),
               id: "birch",
             },
             {
-              ...obj(7, 14, "BirchsBag", "starter", "博士的背包"),
+              ...obj(7, 14, "BirchsBag", "starter", "npc.starter.8"),
               id: "birchBag",
             },
             {
-              ...obj(10, 13, null, "wildObject", "蛇纹熊"),
+              ...obj(10, 13, null, "wildObject", "npc.wildobject.9"),
               species: "zigzagoon",
               id: "pursuer",
             },
@@ -182,108 +143,45 @@ function baseObjects(state, db) {
     ];
   if (map === "OldaleTown")
     return [
-      obj(
-        16,
-        11,
-        "Girl1",
-        "talk",
-        "女孩",
-        "红色屋顶的宝可梦中心可以免费恢复体力和招式 PP。",
-      ),
-      obj(
-        13,
-        7,
-        "Man3",
-        "giftPotion",
-        "商店店员",
-        "欢迎来到古辰镇！这是友好商店送你的伤药。",
-      ),
-      obj(
-        8,
-        9,
-        "FatMan",
-        "talk",
-        "研究足迹的人",
-        "我在调查珍稀宝可梦的足迹。向北走可以到 103 号道路。",
-      ),
+      obj(16, 11, "Girl1", "talk", "npc.talk.10"),
+      obj(13, 7, "Man3", "giftPotion", "npc.giftpotion.11"),
+      obj(8, 9, "FatMan", "talk", "npc.talk.12"),
     ];
   if (map === "Route103")
     return !flag.rivalWon
-      ? [
-          obj(
-            10,
-            3,
-            "MayNormal",
-            "rival",
-            "小遥",
-            "你就是爸爸说的新训练家吧！来对战一下，看看你和搭档配合得怎么样！",
-          ),
-        ]
+      ? [obj(10, 3, "MayNormal", "rival", "npc.rival.13")]
       : [];
   if (map === "LittlerootTown_ProfessorBirchsLab")
     return [
-      { ...obj(6, 4, "ProfBirch", "professor", "小田卷博士"), id: "birch" },
+      {
+        ...obj(6, 4, "ProfBirch", "professor", "npc.professor.14"),
+        id: "birch",
+      },
       obj(
         9,
         8,
         "Scientist1",
         flag.pokedex ? "daycare" : "talk",
-        "研究员",
-        "博士研究宝可梦在自然环境中的生活。发现新宝可梦，就用图鉴记录下来。",
+        "npc.practice.15",
       ),
     ];
   if (map === "LittlerootTown_BrendansHouse_1F")
     return [
       {
-        ...obj(
-          2,
-          6,
-          "Mom",
-          "healMom",
-          "妈妈",
-          "一路辛苦了！先在家休息一下吧。",
-        ),
+        ...obj(2, 6, "Mom", "healMom", "npc.healmom.16"),
         sourceLocalId: "LOCALID_PLAYERS_HOUSE_1F_MOM",
       },
     ];
   if (map === "OldaleTown_PokemonCenter_1F")
     return [
-      obj(
-        7,
-        2,
-        "Nurse",
-        "heal",
-        "乔伊小姐",
-        "欢迎来到宝可梦中心！我会让你的宝可梦恢复精神。",
-      ),
-      obj(
-        4,
-        4,
-        "Gentleman",
-        "talk",
-        "绅士",
-        "招式有使用次数。没有 PP 的时候，就去找乔伊小姐吧。",
-      ),
-      obj(
-        10,
-        6,
-        "Boy1",
-        "talk",
-        "少年",
-        "不同属性之间有克制关系。选对招式，能让战斗轻松很多！",
-      ),
+      obj(7, 2, "Nurse", "heal", "npc.heal.17"),
+      obj(4, 4, "Gentleman", "talk", "npc.talk.18"),
+      obj(10, 6, "Boy1", "talk", "npc.talk.19"),
     ];
   if (map === "OldaleTown_Mart")
     return [
-      obj(1, 3, "Man3", "shop", "店员"),
-      obj(
-        5,
-        5,
-        "Woman1",
-        "talk",
-        "顾客",
-        "我喜欢多带几瓶伤药。战斗中使用道具也会占用一回合。",
-      ),
+      obj(1, 3, "Man3", "shop", "npc.shop.20"),
+      obj(5, 5, "Woman1", "talk", "npc.talk.21"),
     ];
   return [];
 }
@@ -330,6 +228,8 @@ export function objectsFor(state, db) {
     return {
       ...n,
       x: source.x,
+      sourceLocalId: source.local_id,
+      script: source.script,
       y: source.y,
       ...(source.elevation !== undefined
         ? { elevation: source.elevation }

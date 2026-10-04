@@ -5,6 +5,7 @@ export const FRAME_PORTS = Object.freeze([
   "tickDevices",
   "tickActors",
   "flushContacts",
+  "flushStoryQueue",
   "playActive",
   "facilityActive",
   "battle",
@@ -81,5 +82,6 @@ export class FrameApplication {
       playerFrom: this.motion.moving(now) ? this.motion.sourcePosition : null,
     });
     this.flushContacts();
+    if (!this.busy && !this.facilityActive) void this.flushStoryQueue();
   }
 }

@@ -1,0 +1,109 @@
+{
+  "id": "emerald:oldale",
+  "version": 1,
+  "dialogues": {
+    "welcome": {
+      "name": "商店员工",
+      "lines": ["友好商店欢迎你！"]
+    },
+    "full": {
+      "name": "商店员工",
+      "lines": ["背包里已经放不下了。腾出空间后再来领取伤药吧。"]
+    },
+    "received": {
+      "name": "商店员工",
+      "lines": ["获得了 1 瓶伤药！"]
+    },
+    "greeting": {
+      "name": "商店员工",
+      "lines": ["需要道具的话，欢迎到蓝色屋顶的友好商店来。"]
+    }
+  },
+  "scripts": {
+    "gift": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "welcome"
+        },
+        {
+          "type": "reward",
+          "id": "shop.gift",
+          "flags": {
+            "potionGift": true
+          },
+          "items": {
+            "potion": 1
+          },
+          "onResult": {
+            "ok": [
+              {
+                "type": "emote",
+                "actor": "player",
+                "kind": "exclamation",
+                "ms": 450
+              },
+              {
+                "type": "dialog",
+                "dialogue": "received"
+              }
+            ],
+            "alreadyGranted": [
+              {
+                "type": "dialog",
+                "dialogue": "greeting"
+              }
+            ],
+            "inventoryFull": [
+              {
+                "type": "dialog",
+                "dialogue": "full"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "greeting": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "greeting"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "gift": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "kind": "giftPotion"
+      },
+      "requires": {
+        "not": {
+          "flag": "potionGift"
+        }
+      },
+      "script": "gift"
+    },
+    "greeting": {
+      "trigger": "interact",
+      "selector": {
+        "map": "OldaleTown",
+        "kind": "giftPotion"
+      },
+      "requires": {
+        "flag": "potionGift"
+      },
+      "script": "greeting"
+    }
+  },
+  "sources": [
+    {
+      "label": "OldaleTown_EventScript_MartEmployee",
+      "status": "project-adaptation",
+      "note": "保留现有切片并补容量分支；原作方向移动和入图配置尚待业务转写。"
+    }
+  ]
+}

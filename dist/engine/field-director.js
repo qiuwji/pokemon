@@ -14,6 +14,21 @@ export class FieldDirector {
     this.field.npcs.beginScene();
     this.active = true;
   }
+  snapshotActors() {
+    if (!this.active) return [];
+    return [...this.field.npcs.scene.pins.entries()]
+      .filter(([key]) => key.startsWith(this.field.position.map + ":"))
+      .map(([key, n]) => ({
+        id: n.id,
+        x: n.x,
+        y: n.y,
+        dir: n.dir,
+        actor: n.actor,
+        ...(n.name !== undefined ? { name: n.name } : {}),
+        ...(n.kind !== undefined ? { kind: n.kind } : {}),
+        hidden: this.field.npcs.scene.hidden.has(key),
+      }));
+  }
   async end({ failed = false } = {}) {
     try {
       if (!failed && this.camera.mode === "hold")
@@ -263,6 +278,7 @@ export class FieldDirector {
 
 /** Parallel tracks may share a scene, but cannot fight over the same pose/UI/camera. */
 export function storyResources(c) {
+  if (["script", "checkpoint", "screen"].includes(c.type)) return ["*"];
   if (["move", "face", "approach", "hide"].includes(c.type))
     return [`actor:${c.actor || "player"}`];
   if (c.type === "escort")

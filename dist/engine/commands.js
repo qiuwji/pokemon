@@ -1,4 +1,5 @@
 /** Ordered story commands with explicit handlers supplied by each game. */
+export const STORY_SUSPENDED = Symbol("story-suspended");
 export class CommandRunner {
   constructor(
     handlers,
@@ -67,7 +68,14 @@ export class CommandRunner {
         }
       } else if (!this.handlers[c.type]) {
         throw new Error(`Unknown story command: ${c.type}`);
-      } else this.validateCommand(c);
+      } else {
+        this.validateCommand(c);
+        if (c.onResult) {
+          if (typeof c.onResult !== "object" || Array.isArray(c.onResult))
+            throw new Error("Invalid story result branches");
+          for (const branch of Object.values(c.onResult)) this.validate(branch);
+        }
+      }
     }
   }
   claims(command) {
@@ -86,16 +94,22 @@ export class CommandRunner {
       ]);
     if (command.type === "sequence" || command.type === "parallel")
       return new Set(command.commands.flatMap((c) => [...this.claims(c)]));
-    return new Set(this.resources(command));
+    return new Set([
+      ...this.resources(command),
+      ...Object.values(command.onResult || {}).flatMap((branch) =>
+        branch.flatMap((c) => [...this.claims(c)]),
+      ),
+    ]);
   }
   async run(commands) {
     // Validate the entire tree before the first side effect.
     this.validate(commands);
-    await this.sequence(commands);
+    return this.sequence(commands);
   }
   async sequence(commands) {
     for (const command of commands) {
-      await this.execute(command);
+      if ((await this.execute(command)) === STORY_SUSPENDED)
+        return STORY_SUSPENDED;
     }
   }
   async execute(c) {
@@ -119,6 +133,14 @@ export class CommandRunner {
       if (failed) throw failed.reason;
       return;
     }
-    return this.handlers[c.type](c);
+    const result = await this.handlers[c.type](c);
+    if (result === STORY_SUSPENDED) return result;
+    if (c.onResult) {
+      const branch = c.onResult[result?.status];
+      if (!branch) throw new Error(`Unhandled story result: ${result?.status}`);
+      if ((await this.sequence(branch)) === STORY_SUSPENDED)
+        return STORY_SUSPENDED;
+    }
+    return result;
   }
 }

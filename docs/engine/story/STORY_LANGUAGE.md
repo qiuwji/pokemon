@@ -1,6 +1,6 @@
 # 数据化剧情接口
 
-本页描述当前可调用合同。完整原作剧情的地区内容包、显式绑定、子脚本及长剧情恢复改造见[剧情内容架构](../../architecture/STORY_CONTENT.md)；该方案的新增API尚未实现，不能照计划字段直接编写生产剧情。
+本页描述当前可调用合同。地区内容包、显式绑定、子脚本及稳定点恢复见[剧情内容架构](../../architecture/STORY_CONTENT.md)。原作完整内容仍需按地区转写。
 
 剧情注册支持 `build(state, context)` 或 `commands` 数组，二者必须选一个。简单剧情优先数组；构建器只读取冻结快照。执行器在执行第一条命令前检查整棵命令树。
 
@@ -33,7 +33,7 @@ api.story.register('gate', {
 
 ## 注册参数与常用命令
 
-公开注册：`api.story.register(localId,definition)`返回完整事件ID；definition提供trigger及commands/build二选一，可选match、where、requires、after、once。match和build只读冻结上下文。after是完整事件ID数组，引用必须存在且不能成环。执行器每次resolve选择**第一个**满足条件的事件，不会自动执行所有重叠触发；检查注册顺序和互斥条件。
+公开注册：`api.story.register(localId,definition)`返回完整事件ID；definition提供trigger及commands/build二选一，可选match、where、requires、after、once。match和build只读冻结上下文。after是完整事件ID数组，引用必须存在且不能成环。执行器按trigger索引并选择满足条件的最高priority入口，默认0；同优先级重叠报Ambiguous story trigger。通用兜底显式-100，不能依赖注册顺序覆盖。selector可匹配map/objectId/script/kind/reason/localId。
 
 条件的常见结构：`{flag:'key',equals:true}`、`{event:'owner:id'}`、`{reward:'owner:gift'}`，以及`{all:[条件,...]}`、`{any:[...]}`、`{not:条件}`。compare查询输入须符合该查询schema；读取变量用`{query:{id:'variable',input:{name:'变量名'}},op:'eq',value:'值'}`。
 
@@ -77,6 +77,38 @@ api.story.register('gate', {
 
 更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../dist/packs/emerald/application/story-application.js)、[CommandRunner](../../../dist/engine/commands.js)、[FieldDirector](../../../dist/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
 
-预检全部树不等于整段剧情原子回滚；已经成功提交的奖励/世界操作不会因后续演出失败自动撤销。once控制重触发，completed与实际领取账本分开。背包满的原作专用分支需明确结果/容量政策，不能因为事件一次性就提前标记领取。当前语言还没有自动翻译C特殊函数、离图回调、通用奖励结果分支或设施启动命令；按实际缺口单独演进，不能在内容中伪造。
+预检全部树不等于整段剧情原子回滚；已经成功提交的奖励/世界操作不会因后续演出失败自动撤销。once控制重触发，completed与实际领取账本分开。背包满的原作专用分支需明确结果/容量政策，不能因为事件一次性就提前标记领取。当前语言还没有自动翻译C特殊函数、完整离图回调或任意设施启动命令；按实际缺口单独演进，不能在内容中伪造。
 
 端到端真实交互例见[world-story.test.js](../../../examples/world-story.test.js)，原作转写工作流见[剧情Skill](../../../skills/emerald-story-reconstruction/SKILL.md)。
+
+## 地区剧情包与公共调用
+
+`api.story.registerBundle(localId,bundle)`存入不可变数据，返回完整{id,scripts,dialogues,entries}引用；bundle.version为1。原生通过manifest的stories section登记同一形状。bundle不含执行函数。
+
+| 字段 | 结构 |
+| --- | --- |
+| scripts | 局部ID→{parameters?:对象DataSchema,durable?:boolean,commands:[]} |
+| dialogues | 局部ID→{name,lines,speed?,mode?,bindings?}，完整文本合同见对话规格 |
+| entries | 局部ID→{trigger,script,selector?,requires?,priority?,once?,input?,contextParameters?}；contextParameters仅可引用object.id/name/text |
+| projections | {map,objectId,requires?,changes:{x?,y?,dir?,hidden?,name?,text?}}数组；对象必须在实际投影中存在 |
+| sources | JSON来源记录数组；固定修订/label/项目演绎分类，不自动表示还原完成 |
+
+局部引用在所属bundle中解析：注册owner的area，welcome完整引用为owner:area.welcome。跨包使用完整引用；不能拿对话ID当脚本ID。参数默认空对象schema，传多余字段也会拒绝。
+
+| 新命令 | 字段 / 行为 |
+| --- | --- |
+| script | id完整脚本引用、input可选对象；数据入口使用它，持久脚本可暂停整个命令树 |
+| call | script局部或完整引用、input可选对象；仅在bundle中编译展开，用`{$param:"key"}`传递typed参数 |
+| dialog | dialogue局部/完整引用替代name/lines，parameters由调用输入提供；不在运行时嗅探原label字符串 |
+| checkpoint | 持久脚本稳定保存点；非动画计时；短事件中不会自动创建会话 |
+| screen | id为clock/berry/daycare，input按所属页面需要；界面返回不是自动领域结果 |
+| reward.onResult | {ok:[],alreadyGranted:[],inventoryFull:[]}；按实际返回status执行；未知结果报错，无此字段保留直接失败语义 |
+| battle.onResult | durable脚本声明win/loss/escaped/caught所需分支；普通短battle仅发起，不承诺等待胜负 |
+
+choice另支持default选项ID、timeoutMs（1–60000，必须配default）；option增加visibleWhen/enabledWhen/disabledReason。所有选项仍需2–16条原始定义；过滤后必须至少一条可选，cancel/default必须可见可用。选择确认后重新检查条件，写variable并执行对应commands；超时和点击共用一次完成通道。取消只在声明cancel时成立，替换/关闭模态框拒绝旧等待并清理定时器。
+
+持久脚本声明durable:true，每条命令必须有稳定node（含分支和call的子脚本命令）；node在同一脚本中唯一。call展开前缀包含调用点，两个调用不共享游标。最多2048展开命令、16层调用、10000运行步骤。会话存于story.session，checkpoint与战斗前/结果后保存ready游标；不能并行暂停，不能在持久脚本内再启动script会话。`core.story.resume`是宿主菜单/网络的空参数恢复命令。
+
+新插件bundle直接写的flag.key、setVariable.name、choice.variable、reward.id/flags使用owner:或owner.命名空间；核心业务调用走现有领域命令，不借文本/渲染修改核心。旧高级register仍是已有合同，不据此宣称整个插件权限模型已全面重设。
+
+示例：[story-bundle.test.js](../../../examples/story-bundle.test.js)。测试：[story-content](../../../tests/story-content.test.js)、[story-session](../../../tests/story-session.test.js)。搜索锚点：registerBundle、class StoryCatalog、class StorySession、STORY_SUSPENDED。长剧情恢复边界详见架构，不能把当前短序章当作全作持久剧情已转写。

@@ -14,6 +14,7 @@ dist/content/
   actors.json / moves.json          Actor素材描述与切片招式表
   evolutions.json / type-chart.json  进化定义与属性表
   references.json                  未实现地图/脚本与明确空脚本的分类
+  stories/*.json                   手写剧情包/对白/绑定；可选stories分类
 ```
 
 没有旧content.json回退，也不生成另一份可写聚合JSON。运行时仍得到原来的db对象形状，所以战斗/世界/剧情领域不需要了解文件组织。新增的references仅用于源资料完整性审计，不是可执行剧情注册器。
@@ -22,7 +23,7 @@ dist/content/
 
 ## 清单与加载合同
 
-清单每项含`section/path`，可选`key/generated`。路径相对manifest，仅允许本地JSON相对路径；禁止上跳、绝对路径、重复文件、未知字段和原型键。八个section必须全部声明。`key`指定单条记录，没有key则文件是一张完整表。
+清单每项含`section/path`，可选`key/generated`。路径相对manifest，仅允许本地JSON相对路径；禁止上跳、绝对路径、重复文件、未知字段和原型键。原八个section必须全部声明；stories为可选第九分类，key是包记录键（包内id另有命名空间）。`key`指定单条记录，没有key则文件是一张完整表。
 
 同一地图的两个片段这样登记：
 
@@ -80,3 +81,7 @@ python3 tools/import.py encounters /绝对路径/pokeemerald
 [content-manifest.test.js](../../tests/content-manifest.test.js)验证浏览器/Node一致、部署前缀、缺文件/坏JSON、重复字段、引用与PNG尺寸；[Python写入测试](../../tools/tests/test_content_store.py)验证不写预演、所属范围、无关文件保留和提交故障回滚。[独立输出与共享解析测试](../../tools/tests/test_import_outputs.py)验证二进制预演、输出归属、空表拒绝、配置失败不落盘及原作解析。[插件加载测试](../../tests/plugin-loader.test.js)使用真实模块及目录验证默认隔离、显式测试环境和依赖排序。
 
 接口改变时同次更新本页、导入索引、相关Skill和测试。当前数字/执行结果只以[STATUS](../project/STATUS.md)及[VALIDATION](../project/VALIDATION.md)为准。
+
+## 剧情内容所有权
+
+stories由内容作者维护，现有十九个导入器不拥有它；统一Python/Node/浏览器装配保留这一分类。新增片段必须登记manifest，目录/局部引用校验由StoryCatalog完成，check-content同时检查原生目录。NPC来源script的pending清单独立说明原作还原债，不因为新增项目对白自动删除。写法、结果和稳定节点见[剧情合同](../engine/story/STORY_LANGUAGE.md)。

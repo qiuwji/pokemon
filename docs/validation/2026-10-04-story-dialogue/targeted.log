@@ -1,0 +1,30 @@
+✔ Story bundle binds an exact NPC, calls a parameterized script and persists dialogue without touching app imports (50.138042ms)
+✔ Missing dialogue/script references and recursive calls are rejected with content identity (0.355375ms)
+✔ Priority is independent of registration order and equal-priority overlapping entrances fail explicitly (0.138542ms)
+✔ Shorthand nesting and literal interpolation cannot inject styles or arbitrary object expressions (0.45925ms)
+✔ Portrait, per-line speaker and expression update with safe DOM nodes and retain reduced-motion control (0.685583ms)
+✔ Choice policies filter visibility, explain disabled items and reject impossible defaults (0.168042ms)
+✔ Choice DOM shares click/default input, disabled controls stay inert and cancellation invalidates late clock callbacks (0.218291ms)
+✔ Oldale native data handles full inventory, retry and repeat interaction without a false reward claim (35.7195ms)
+✔ Native signs use explicit script data and unimplemented signs are visibly pending (24.588166ms)
+✔ Registered story bundles cannot write another owner's flags, variables or reward ledger (48.150208ms)
+✔ Map arrival is queued until field control is available and state projections rebuild without mutating content (19.627458ms)
+✔ Structured runs interpolate literal scalars and malformed templates fail while constructing their catalog (0.24ms)
+✔ Dialogue history trims oldest confirmed entries within both persistence limits (2.286834ms)
+✔ Stable story checkpoints survive a failed presentation and reload without replaying domain rewards (60.673708ms)
+✔ A story battle transfers control and automatically continues only its confirmed result branch (39.973083ms)
+✔ Battle receipts are correlated, duplicate delivery is inert and unexpected outcomes do not advance state (0.799208ms)
+✔ Unknown saved cursor, removed plugin and missing stable IDs are rejected before resuming effects (61.16625ms)
+✔ Execution budget failures leave a valid save-shaped record rather than writing an out-of-range counter (0.173584ms)
+✔ A suspended durable script cannot leak into trailing commands, and waiting battle documents cannot load (39.028167ms)
+✔ Parallel result branches claim resources and durable programs reject suspension inside parallel tracks (0.447708ms)
+✔ A moved scene actor is restored at the saved stable checkpoint before resumed dialogue (28.447583ms)
+✔ Losing a session-owned trainer battle does not grant its victory prize (29.27925ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 403.878833

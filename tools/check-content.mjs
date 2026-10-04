@@ -5,6 +5,8 @@ import { assertPackContent } from "../dist/packs/emerald/content.js";
 import { MOVE_EFFECTS } from "../dist/engine/move-effects.js";
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import { STORY_EVENTS } from "../dist/packs/emerald/story.js";
+import { StoryCatalog } from "../dist/engine/story-catalog.js";
+import { ConditionQueries } from "../dist/engine/condition-queries.js";
 const db = assertPackContent(loadContentSync());
 assertContentAssets(db);
 console.log(
@@ -21,6 +23,8 @@ console.log(
 );
 
 const { catalog } = createEmeraldPlugins(db, []);
+const stories = new StoryCatalog(Object.values(db.stories || {}), {maps:db.maps,queries:new ConditionQueries(catalog.conditionQueries),eventIds:new Set(STORY_EVENTS.map(event=>event.id))});
+console.log(`Story content valid: ${stories.scripts.size} scripts, ${stories.dialogues.size} dialogues, ${stories.events.length} bindings.`);
 console.log(
   `Runtime content valid: ${Object.keys(catalog.moves).length} moves, ${Object.keys(catalog.learningMethods).length} learning methods, ${Object.keys(catalog.items).length} items.`,
 );

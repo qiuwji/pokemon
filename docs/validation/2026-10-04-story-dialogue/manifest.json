@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-04",
+  "baseline": "144ec73",
+  "version": "0.28.0",
+  "saveVersion": 14,
+  "pluginApiVersion": 1,
+  "scope": "Shared story bundle directory, explicit bindings and calls, per-line dialogue and conditional choices, saved history, stable story/battle continuation",
+  "currentPolicy": {
+    "finalRegression": "deferred at explicit user request",
+    "finalDocsCheck": "not run after final documentation synchronization",
+    "runtimeChangesDuringDocumentationTask": false
+  },
+  "previousRuns": {
+    "stageFull": {
+      "command": "npm test",
+      "passed": 844,
+      "failed": 0,
+      "skipped": 0,
+      "log": "stage-full.log",
+      "limit": "Run before subsequent session/actor/result-branch hardening and additional boundary tests; not evidence for the final tree"
+    },
+    "latestTargeted": {
+      "command": "node --test tests/story-session.test.js tests/story-content.test.js",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "log": "targeted.log",
+      "limit": "Affected story/dialogue behavior only; later source formatting and documentation synchronization were not re-tested"
+    },
+    "stageStatic": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "moduleSyntaxFiles": 330,
+      "log": "stage-check.log",
+      "limit": "Earlier source/doc stage; final Markdown and Skill synchronization did not run this check again"
+    },
+    "firstBoundaries": {
+      "passed": 12,
+      "failed": 1,
+      "log": "boundaries-first.log",
+      "reason": "New test source had an unmatched parenthesis; corrected in the subsequent passing targeted run"
+    }
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:5175/",
+    "observed": [
+      "Ordinary movement to Littleroot house sign",
+      "Open sign dialogue and confirm with Z",
+      "Open menu and click dialogue history; recorded house text visible"
+    ],
+    "capturedWarningsAndErrors": [],
+    "screenshot": "history.png",
+    "notObserved": [
+      "Per-line portrait/expression sequence",
+      "Conditional/default/timeout choice input combination",
+      "Touch and reducedMotion combination",
+      "Long-story restoration visual continuity"
+    ]
+  },
+  "limits": [
+    "No complete original story/NPC/MapScripts reconstruction",
+    "Oldale gift result example omits original direction paths, map placement and music",
+    "Short legacy story battles do not automatically become durable sessions",
+    "No arbitrary return/local-frame interpreter or active battle save",
+    "No final full regression, final docs validator, new coverage collection or remote CI in the documentation/submission task"
+  ],
+  "reuse": "Keep these separate stage scopes; do not sum their counts or claim final-tree acceptance. Changed runtime or contracts invalidate affected evidence; defer further execution until the user resumes validation."
+}

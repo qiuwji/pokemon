@@ -1,8 +1,12 @@
 // Declarative choreography: actor IDs, grid positions and commands only. No rendering code.
-const dialog = (name, ...lines) => ({ type: "dialog", name, lines });
+const dialog = (dialogue, parameters = {}) => ({
+  type: "dialog",
+  dialogue,
+  parameters,
+});
 
 export const RESCUE_INTRO = [
-  dialog("远处传来的声音", "救命啊！"),
+  dialog("emerald:dialogues.scenes.1", {}),
   { type: "cameraTo", actor: "birch", ms: 420 },
   {
     type: "parallel",
@@ -13,7 +17,7 @@ export const RESCUE_INTRO = [
     ],
   },
   { type: "face", actor: "birch", dir: "right" },
-  dialog("小田卷博士", "那边的包里有精灵球，快选一只来帮我！"),
+  dialog("emerald:dialogues.scenes.2", {}),
   { type: "cameraFollow", ms: 420 },
   { type: "flag", key: "heardBirch", value: true },
 ];
@@ -36,11 +40,7 @@ export const RETURN_WITH_BIRCH = [
     ],
   },
   { type: "emote", actor: "birch", kind: "exclamation", ms: 450 },
-  dialog(
-    "小田卷博士",
-    "你救了我！真是太感谢你了。",
-    "这里说话不方便，跟我到研究所来吧！",
-  ),
+  dialog("emerald:dialogues.scenes.3", {}),
   { type: "heal" },
   { type: "cameraFollow", ms: 220 },
   { type: "escort", actor: "birch", to: { map: "Route101", x: 10, y: 17 } },
@@ -81,11 +81,7 @@ export const RETURN_WITH_BIRCH = [
   },
   { type: "wait", ms: 200 },
   { type: "flag", key: "rescued", value: true },
-  dialog(
-    "小田卷博士",
-    "这只宝可梦就送给你，成为你的搭档吧。",
-    "小遥在 103 号道路做野外调查。沿 101 号道路向北，穿过古辰镇去找她吧！",
-  ),
+  dialog("emerald:dialogues.scenes.4", {}),
 ];
 
 export const RETURN_TO_CENTER = [
@@ -97,15 +93,18 @@ export const RETURN_TO_CENTER = [
   { type: "move", actor: "player", to: { x: 7, y: 5 } },
   { type: "emote", actor: "player", kind: "heart", ms: 650 },
   { type: "heal" },
-  dialog("乔伊小姐", "你被送到了宝可梦中心。伙伴们已经恢复体力，重新出发吧！"),
+  dialog("emerald:dialogues.scenes.5", {}),
 ];
 
 export function healingScene(object) {
   return [
-    dialog(object.name, object.text),
+    dialog("emerald:dialogues.scenes.6", {
+      speaker: object.name,
+      line0: object.text,
+    }),
     { type: "emote", actor: "player", kind: "heart", ms: 650 },
     { type: "heal" },
     { type: "wait", ms: 200 },
-    dialog(object.name, "好了！宝可梦的体力和招式 PP 都恢复了。欢迎随时再来！"),
+    dialog("emerald:dialogues.scenes.7", { speaker: object.name }),
   ];
 }

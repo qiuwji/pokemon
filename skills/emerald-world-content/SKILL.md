@@ -18,7 +18,7 @@ description: 给现有绿宝石工程添加网格地图、连接、动态对象�
 
 ## 按任务读取
 
-地图/对象读[WORLD_STATE](../../docs/engine/world/STATE_AND_LIFECYCLE.md)和[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)；剧情读[STORY_LANGUAGE](../../docs/engine/story/STORY_LANGUAGE.md)，涉及全作组织或新增核心机制另读[剧情内容架构方案](../../docs/architecture/STORY_CONTENT.md)，计划接口不能当现有API；机关读[FIELD_DEVICES](../../docs/engine/field/FIELD_DEVICES.md)；时间/天气读[WORLD_TIME](../../docs/engine/world/WORLD_TIME.md)、[WEATHER](../../docs/engine/world/WEATHER.md)。高度或交通另读对应规格，不默认加载全部。
+地图/对象读[WORLD_STATE](../../docs/engine/world/STATE_AND_LIFECYCLE.md)和[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)；剧情读[STORY_LANGUAGE](../../docs/engine/story/STORY_LANGUAGE.md)，涉及全作组织或新增核心机制另读[剧情内容架构方案](../../docs/architecture/STORY_CONTENT.md)，新增内容优先用registerBundle，同一目录校验；完整原作业务仍按STATUS确认；机关读[FIELD_DEVICES](../../docs/engine/field/FIELD_DEVICES.md)；时间/天气读[WORLD_TIME](../../docs/engine/world/WORLD_TIME.md)、[WEATHER](../../docs/engine/world/WEATHER.md)。高度或交通另读对应规格，不默认加载全部。
 
 实际参考：[field-journal插件](../../dist/plugins/field-journal.js)新增房间、warp、NPC、奖励、菜单/HUD。验证：[world-state](../../tests/world-state.test.js)、[story-language](../../tests/story-language.test.js)、[field-devices](../../tests/field-devices.test.js)。
 
@@ -185,3 +185,11 @@ test("a registered field scene focuses the view and gates a subsequent reward", 
 | [tests/story-language.test.js](../../tests/story-language.test.js) | `rg -n "Data-only plugin story" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
+
+## 地区包的写入位置
+
+原生对白/脚本/绑定放dist/content/stories并登记manifest；插件用api.story.registerBundle(localId,{version:1,scripts,dialogues,entries,projections?,sources?})。最小组合见[story-bundle例](../../examples/story-bundle.test.js)，参数和限制统一读剧情语言，不另维护一套字段表。局部脚本/对白引用在bundle内解析，跨包用注册返回的完整ID。
+
+地图准备对象用纯projections；进入自动剧情用mapEnter，selector.reason区分start/travel/restore。触发后由宿主排队，不在渲染时执行命令。条件重叠用明确priority，默认0、通用兜底-100；同级同时命中报错，不依赖注册顺序。长剧情需durable+稳定node，公共call词法展开；稳定checkpoint和battle.onResult恢复规则见架构。旧短事件不自动获得战斗等待能力。
+
+新bundle直接写的旗标/变量/奖励使用自身owner命名空间；领域操作使用已有公开合同。原始来源npcs和运行时Actor仍不是全部自动统一，未转写script继续明确pending。
