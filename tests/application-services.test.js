@@ -112,7 +112,7 @@ test("Every public method uses its declared owner, preserves receivers/results a
     };
   }
   exposeApplicationPorts(target, applications);
-  for (const [name, [owner, method]] of Object.entries(APPLICATION_METHODS)) {
+  for (const [name, [owner]] of Object.entries(APPLICATION_METHODS)) {
     assert(Object.isFrozen(APPLICATION_METHODS[name]));
     const input = { name },
       result = target[name](input, 42);

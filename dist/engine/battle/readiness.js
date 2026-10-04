@@ -1,6 +1,6 @@
 /** Conditions preventing action; separate from PP, accuracy, effects and scheduling. */
 export function canAct(c) {
-  const { battle: b, mon, opponent, selfState: state, side, other } = c;
+  const { battle: b, mon, selfState: state, side, other } = c;
   const permission = { ...c, allowed: true };
   b.traits?.run("action-permission", permission);
   if (!permission.allowed) return false;

@@ -16,7 +16,7 @@ import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
 import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
 import { createEmeraldCommandFacade } from "../dist/packs/emerald/command-facade.js";
 import { createBagInterface } from "../dist/packs/emerald/bag-interface.js";
-import { PACK } from "../dist/packs/emerald/pack.js";
+
 import { ITEMS } from "../dist/packs/emerald/items.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { createMonster } from "../dist/engine/model.js";

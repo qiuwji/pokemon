@@ -260,9 +260,8 @@ test("Custom states tick and expire once with transactional lifecycle callbacks;
 });
 
 test("Plugin numeric rules enter the same battle pipeline and cannot mutate snapshot or dispatch commands", () => {
-  let apiRef, snapshot;
+  let snapshot;
   const plugin = manifest("rules", (api) => {
-    apiRef = api;
     api.rules.register("boost", {
       phase: "attack",
       modify: (value, c) => {
@@ -275,7 +274,7 @@ test("Plugin numeric rules enter the same battle pipeline and cannot mutate snap
       },
     });
   });
-  const { game, host, db } = gameWith([plugin]),
+  const { game, db } = gameWith([plugin]),
     rng = new Random(42),
     enemy = createMonster("zigzagoon", 5, db, rng);
   const battle = new Battle({
@@ -455,21 +454,20 @@ test("New species, moves, traits, movement and growth predicates are registered 
 
 test("Async status callbacks are rejected and late callbacks cannot modify committed records", async () => {
   let release;
-  const errors = [],
-    plugin = manifest("async-status", (api) => {
-      const status = api.states.register("bad", {
-        clock: "step",
-        schema: objectSchema(),
-        onTick: async (ctx) => {
-          await new Promise((resolve) => (release = resolve));
-          ctx.store.set("late", true);
-        },
-      });
-      api.actions.register("start", {
-        schema: objectSchema({ uid: { type: "string" } }, ["uid"]),
-        run: (ctx, { uid }) => ctx.states.attach(status, uid, { duration: 2 }),
-      });
+  const plugin = manifest("async-status", (api) => {
+    const status = api.states.register("bad", {
+      clock: "step",
+      schema: objectSchema(),
+      onTick: async (ctx) => {
+        await new Promise((resolve) => (release = resolve));
+        ctx.store.set("late", true);
+      },
     });
+    api.actions.register("start", {
+      schema: objectSchema({ uid: { type: "string" } }, ["uid"]),
+      run: (ctx, { uid }) => ctx.states.attach(status, uid, { duration: 2 }),
+    });
+  });
   const { game, host, bus } = gameWith([plugin]);
   await bus.execute("async-status:start", { uid: game.state.party[0].uid });
   const before = structuredClone(game.state.extensions);

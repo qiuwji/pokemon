@@ -1,5 +1,12 @@
+/**
+ * @typedef {'linear'|'in-quad'|'out-quad'|'in-out-quad'|'smoothstep'|'step-end'} EasingName
+ * @typedef {{at:number,easing?:EasingName,values:Record<string,number>}} AnimationKeyframe
+ * @typedef {{start:number,end:number,easing?:EasingName,when?:'hit'|'miss',parameters?:Record<string,unknown>,keyframes?:AnimationKeyframe[]}} AnimationTrack
+ */
+/** @param {number} t */
 const clamp = (t) => Math.max(0, Math.min(1, t));
 /** Pure timing functions. No clocks, render targets, random stream or game state. */
+/** @type {Readonly<Record<EasingName,(t:number)=>number>>} */
 export const EASINGS = Object.freeze({
   linear: (t) => t,
   "in-quad": (t) => t * t,
@@ -8,6 +15,7 @@ export const EASINGS = Object.freeze({
   smoothstep: (t) => t * t * (3 - 2 * t),
   "step-end": (t) => (t === 1 ? 1 : 0),
 });
+/** @param {AnimationTrack} track @param {number} time @param {{successful?:boolean}} options */
 export function sampleAnimationTrack(track, time, { successful = true } = {}) {
   if (
     time < track.start ||

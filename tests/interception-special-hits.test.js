@@ -258,7 +258,7 @@ test("Interception metadata rejects malformed flags at registration before they 
   });
 });
 test("Interception ownership, coin storage and per-hit mutations all roll back after a registered rule fault", () => {
-  const { b, p, e, use, rng } = battleFixture({
+  const { b, p, e, rng } = battleFixture({
     moves,
     hooks: [
       {

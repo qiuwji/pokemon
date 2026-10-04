@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
+  "include": [
+    "dist/engine/story-variables.js",
+    "dist/presentation/animation-timing.js",
+    "dist/presentation/sprite-animation.js",
+    "tests/engine.typecheck.ts"
+  ]
+}

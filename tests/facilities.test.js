@@ -320,7 +320,7 @@ test("Failed facility action restores RNG/economy/session; slot plugin runs with
 });
 test("Unauthorized plugin cannot drive facilities and invalid transitions leave state intact", async () => {
   const plugin = contestPlugin([]),
-    { game, bus } = fixture([plugin]);
+    { game } = fixture([plugin]);
   await assert.rejects(
     plugin.api.commands.dispatch("core.facility.enter", {
       id: "showcase:stage",

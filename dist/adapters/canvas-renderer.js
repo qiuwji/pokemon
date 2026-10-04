@@ -59,7 +59,7 @@ export class Renderer {
     return this.motion.moving(now);
   }
   moved(from, to, jump = false, { running = false } = {}) {
-    const smooth = this.motion.begin(from, to, performance.now(), {
+    this.motion.begin(from, to, performance.now(), {
       running,
       jump,
     });

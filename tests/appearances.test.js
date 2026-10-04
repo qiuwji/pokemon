@@ -2,15 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   AppearanceRegistry,
-  AppearanceSelections,
   emptyAppearances,
 } from "../dist/engine/appearances.js";
 import { drawAppearance } from "../dist/presentation/appearance-canvas.js";
-import {
-  session,
-  manifest,
-  objectSchema,
-} from "../examples/helpers/session.js";
+import { session, manifest } from "../examples/helpers/session.js";
 const definition = {
   name: "Layered",
   variants: {

@@ -21,7 +21,7 @@ import { RANDOM_POWER_OPERATIONS } from "../dist/engine/battle/random-power-oper
 import { Random, createMonster } from "../dist/engine/model.js";
 import { WeatherDirector } from "../dist/presentation/weather-director.js";
 import { drawWeather } from "../dist/presentation/environment-canvas.js";
-import { createDefaultPresentation } from "../dist/presentation/default-presentation.js";
+
 import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";

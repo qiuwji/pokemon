@@ -11,7 +11,6 @@ import {
 import {
   WorldSchedule,
   TimeTaskRegistry,
-  emptyWorldSchedule,
 } from "../dist/engine/world-schedule.js";
 import { ConditionQueries } from "../dist/engine/condition-queries.js";
 import { emeraldTide } from "../dist/packs/emerald/time.js";

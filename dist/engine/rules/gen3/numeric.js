@@ -114,7 +114,6 @@ export const NUMERIC_ABILITIES = {
     {
       phase: "accuracy",
       role: "target",
-      priority: 20,
       priority: 10,
       modify: (v, c) => (c.weather === "sand" ? Math.floor(v * 0.8) : v),
     },

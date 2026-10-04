@@ -3,7 +3,7 @@ import { manualStoryClock as manualClock } from "./helpers/story-clock.js";
 import { inventoryQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
+import { TransitionController } from "../dist/engine/timeline.js";
 import { CameraRig } from "../dist/engine/camera.js";
 import {
   FieldDirector,

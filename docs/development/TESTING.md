@@ -32,6 +32,12 @@
 
 `npm test`统一执行tests和examples；`npm run test:examples`用于只查示例。`npm run check:docs`检查Skill代码块与文件完全一致，并检查项目本地Markdown链接、导入索引/所有权/入口文件的一致性；示例改动后必须同步Skill。元数据校验使用接手工具已有Skill校验器，或按普通YAML frontmatter确认name/description；不要把流程绑定到某个模型专属工具。
 
+## 静态质量检查
+
+`npm run check`已串联`check:lint`与`check:engine-types`，CI沿用同一入口。ESLint覆盖dist、测试、示例和工具MJS，检查未定义名称、未使用导入/局部变量、重复键等；浏览器和Node全局按目录区分。未使用参数/捕获异常、主动拆除字段的rest绑定及以下划线命名的弃值是显式政策，不通过批量禁用规则掩盖缺陷。删除未使用绑定时必须保留有副作用的调用、随机数消费与测试断言。
+
+`tsconfig.engine.json`当前以checkJs/strict检查剧情变量、动画轨道和精灵帧采样三个真实JS模块。`tests/engine.typecheck.ts`含正确用法与`@ts-expect-error`反例；若接口误放宽，反例会因不再报错而失败。新增范围逐模块补JSDoc，不改为any或关闭strict换取通过，也不把消费方d.ts检查宣称为全部JS已检查。
+
 ## 证据记录
 
 写到`docs/validation/日期-主题/manifest.json`及同目录日志。至少包括：

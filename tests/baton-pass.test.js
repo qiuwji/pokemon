@@ -226,7 +226,7 @@ test("A resumed enemy rule failure rolls back the replacement, transferred sourc
   assert.equal(b.states.lookup("mean_look", b.awaySeat).source.uid, r.uid);
 });
 test("Registered creature-scoped state can opt into handoff and rebinds to the new UID, while ordinary leave still removes it", () => {
-  const { b, p, r } = fixture({
+  const { b, r } = fixture({
     states: {
       "demo:carry": {
         scope: "creature",

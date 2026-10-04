@@ -86,7 +86,7 @@ export function createBattleInterface(
     const multi = frame.combatants.length > 2,
       home = frame.combatants.filter((c) => friendly(frame, c)),
       away = frame.combatants.filter((c) => !friendly(frame, c));
-    let options = "",
+    let options,
       prompt =
         message || `${b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;
     if (game.busy) options = "";

@@ -14,7 +14,6 @@ export const STRUGGLE = Object.freeze({
   contact: true,
 });
 export function selectedMove(b, seat, index) {
-  const mon = b.monster(seat);
   return index < 0 ? STRUGGLE : b.db.moves[b.movesFor(seat)[index].id];
 }
 /** Already prepared augmentation keeps source PP while ordering/targets use the replacement. */

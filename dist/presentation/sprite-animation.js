@@ -1,4 +1,16 @@
-/** Pure timeline sampler; the drawing host chooses the texture and never derives gameplay. */
+/**
+ * @typedef {{index:number,durationMs:number}} SpriteFrame
+ * @typedef {{loop:boolean,directions:Record<string,readonly SpriteFrame[]>}} SpriteSequence
+ * @typedef {Record<string,{idle:SpriteSequence,move?:SpriteSequence}>} SpriteAnimations
+ */
+/**
+ * @param {SpriteAnimations | undefined} animations
+ * @param {string} pose
+ * @param {string} direction
+ * @param {number} elapsedMs
+ * @param {boolean} moving
+ * @param {{reducedMotion?:boolean}} options
+ */
 export function sampleSpriteAnimation(
   animations,
   pose,
@@ -22,5 +34,6 @@ export function sampleSpriteAnimation(
       t -= f.durationMs;
       return t < 0;
     }) || frames.at(-1);
+  if (!frame) return null;
   return { index: frame.index, flip: direction === "right" };
 }

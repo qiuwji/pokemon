@@ -9,7 +9,7 @@ import {
 } from "../dist/engine/field-devices.js";
 import { FieldActionRegistry } from "../dist/engine/field-actions.js";
 import { objectSchema } from "../dist/engine/extensions/values.js";
-import { EMERALD_FIELD_MECHANISMS } from "../dist/packs/emerald/field-mechanisms.js";
+
 import { EMERALD_FIELD_ACTIONS } from "../dist/packs/emerald/field-actions.js";
 import { BEHAVIOR as B } from "../dist/engine/terrain.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";

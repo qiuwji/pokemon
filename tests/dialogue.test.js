@@ -275,11 +275,10 @@ test("Reduced motion displays immediately, suppresses text animation loop and st
   assert.equal(done, true);
 });
 test("Registered plugin text samples receive frozen parameters and cannot submit core commands from a read-only callback", async () => {
-  let api, denied;
+  let denied;
   const p = manifest(
     "speech",
     (a) => {
-      api = a;
       a.presentation.textEffect("float", {
         sample: (_, c) => {
           assert(Object.isFrozen(c));

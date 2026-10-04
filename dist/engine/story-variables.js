@@ -1,12 +1,20 @@
+/**
+ * @typedef {null | boolean | string | number} StoryScalar
+ * @typedef {{name:string,operation?:'set'|'add',value:StoryScalar}} StoryVariableCommand
+ * @typedef {{variables?:Record<string,StoryScalar>}} StoryProgress
+ */
+/** @param {unknown} name */
 const nameValid = (name) =>
   typeof name === "string" &&
   /^[a-zA-Z0-9_.:-]{1,128}$/.test(name) &&
   !["__proto__", "constructor", "prototype"].includes(name);
+/** @param {unknown} value */
 const scalarValid = (value) =>
   value === null ||
   typeof value === "boolean" ||
   (typeof value === "string" && value.length <= 4096) ||
   (typeof value === "number" && Number.isFinite(value));
+/** @param {unknown} variables */
 export function validStoryVariables(variables) {
   return (
     variables === undefined ||
@@ -19,6 +27,7 @@ export function validStoryVariables(variables) {
       ))
   );
 }
+/** @param {StoryVariableCommand} command */
 export function validateVariableCommand(command) {
   if (
     !nameValid(command.name) ||
@@ -28,20 +37,21 @@ export function validateVariableCommand(command) {
   )
     throw new Error("Invalid story variable command");
 }
+/** @param {StoryProgress} progress @param {StoryVariableCommand} command */
 export function changeStoryVariable(progress, command) {
   validateVariableCommand(command);
-  const variables = progress.variables || {},
-    value =
-      command.operation === "add"
-        ? (variables[command.name] ?? 0) + command.value
-        : command.value;
-  if (
-    (command.operation === "add" &&
-      typeof variables[command.name] !== "number" &&
-      variables[command.name] !== undefined) ||
-    !scalarValid(value)
-  )
-    throw new Error("Invalid story variable result");
+  const variables = progress.variables || {};
+  let value = command.value;
+  if (command.operation === "add") {
+    const previous = variables[command.name];
+    if (
+      (previous !== undefined && typeof previous !== "number") ||
+      typeof command.value !== "number"
+    )
+      throw new Error("Invalid story variable result");
+    value = (previous ?? 0) + command.value;
+  }
+  if (!scalarValid(value)) throw new Error("Invalid story variable result");
   const next = { ...variables, [command.name]: value };
   if (!validStoryVariables(next)) throw new Error("Story variable limit");
   progress.variables = next;

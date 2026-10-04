@@ -8,7 +8,7 @@ import {
   FieldDeviceCatalog,
 } from "../dist/engine/field-devices.js";
 import { BEHAVIOR as B } from "../dist/engine/terrain.js";
-import { EMERALD_FIELD_MECHANISMS } from "../dist/packs/emerald/field-mechanisms.js";
+
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";

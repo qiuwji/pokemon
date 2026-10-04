@@ -243,7 +243,7 @@ test("Choice Band floors before Hustle, and Thick Fat before Plus/Minus", () => 
   );
 });
 test("Flash Fire remembers the boost for fire only; Color Change changes projected types until leave", () => {
-  const { b, p, e } = setup({ enemyAbility: "flash_fire" });
+  const { b, e } = setup({ enemyAbility: "flash_fire" });
   const c = { ...ctx(b), move: { type: "fire", power: 50 }, allowed: true };
   b.traits.run("immunity", c);
   assert.equal(c.allowed, false);
@@ -332,7 +332,7 @@ for (const [ability, type, free] of [
   ["arena_trap", "normal", false],
 ])
   test(`${ability} switch boundary for ${type}`, () => {
-    const { b, db, p } = setup({ enemyAbility: ability });
+    const { b, p } = setup({ enemyAbility: ability });
     b.conditions.get(b.homeSeat).types = [type];
     const c = { actorSeat: b.homeSeat, allowed: true };
     b.traits.run("switch-check", c);
@@ -465,7 +465,7 @@ for (const [id, key] of [
     assert.equal(b.conditions.get(b.homeSeat).stages[key], 1);
     assert.equal(b.events.filter((e) => e.kind === "item").length, 1);
   });
-for (const [id, stat, nature] of [
+for (const [id, , nature] of [
   ["figy_berry", "atk", 5],
   ["wiki_berry", "spa", 3],
   ["mago_berry", "spe", 2],
@@ -636,7 +636,7 @@ for (const [ability, type] of [
   });
 
 test("A new held item reuses a canonical effect with its own parameter and no canonical-ID lookup", () => {
-  const { b, p } = setup();
+  const { b } = setup();
   const remove = b.traits.pipeline.register({
     id: "test-entry",
     phase: "entry",

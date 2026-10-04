@@ -2,7 +2,7 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ConditionQueries } from "../dist/engine/condition-queries.js";
+
 import {
   matchesCondition,
   validateCondition,

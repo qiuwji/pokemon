@@ -11,11 +11,7 @@ import { emptyWeather } from "../dist/engine/weather.js";
 import { emptyFacilities } from "../dist/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
-  Random,
-  createMonster,
-  grantExperience,
-} from "../dist/engine/model.js";
+import { Random, createMonster } from "../dist/engine/model.js";
 import { GEN3_ABILITIES as abilities } from "../dist/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS as heldItems } from "../dist/engine/rules/gen3/held-items.js";
 import { GrowthSession } from "../dist/engine/growth/session.js";
@@ -301,12 +297,11 @@ test("Evolution faults during staged move learning leave the live creature, inve
     m = mon("eevee", 10),
     bag = createBag({ water_stone: 1 }),
     service = evolution(data);
-  const plan = service.prepare(m, {
-      trigger: "item",
-      item: "water_stone",
-      bag,
-    }),
-    before = structuredClone(m);
+  service.prepare(m, {
+    trigger: "item",
+    item: "water_stone",
+    bag,
+  });
   data.species.vaporeon.learnset.push({ level: 10, move: "missing" });
   m.moves = m.moves.slice(0, 1);
   // Refresh the plan after changing the source creature, then fault only target content.
