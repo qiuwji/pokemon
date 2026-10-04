@@ -11,7 +11,7 @@ import { DETAIL_SPRITE_FRAMES } from "../dist/packs/emerald/detail-sprite-frames
 import { createUIShell } from "../dist/packs/emerald/ui-shell.js";
 import { createPartyInterface } from "../dist/packs/emerald/party-interface.js";
 import { layoutDocument } from "./helpers/layout-document.js";
-import { manifest, session } from "../examples/helpers/session.js";
+import { manifest, session } from "./helpers/session.js";
 const clip = () =>
   validateSpriteClip({
     width: 64,

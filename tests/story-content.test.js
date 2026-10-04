@@ -17,7 +17,7 @@ import {
   session,
   manifest,
   objectSchema,
-} from "../examples/helpers/session.js";
+} from "./helpers/session.js";
 import { validateSave } from "../dist/packs/emerald/save-contract.js";
 
 test("Story bundle binds an exact NPC, calls a parameterized script and persists dialogue without touching app imports", async () => {

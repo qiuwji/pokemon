@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-04",
+  "baseline": "f33107fe06bdf573657de16efeea843948df1c4b",
+  "scope": "Preserve removed product plugins; isolate core contracts from installed modules; separate plugin authoring suite",
+  "verification": {
+    "targeted": {
+      "passed": 114,
+      "failed": 0,
+      "skipped": 0,
+      "log": "targeted-test.log",
+      "command": "node --test tests/plugins.test.js tests/plugin-loader.test.js tests/plugin-ui.test.js tests/plugin-canvas.test.js tests/facilities.test.js tests/field-interactions.test.js tests/battle-augments.test.js tests/actor-schedules.test.js tests/network.test.js tests/architecture.test.js",
+      "exitCode": 0
+    },
+    "core": {
+      "command": "npm test",
+      "passed": 843,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "log": "core-test.log"
+    },
+    "plugins": {
+      "command": "npm run test:plugins",
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "log": "plugin-test.log"
+    },
+    "baseline": {
+      "command": "npm test (previous combined entry after product deletions)",
+      "passed": 753,
+      "failed": 13,
+      "skipped": 0,
+      "exitCode": 1,
+      "log": "baseline-test.log",
+      "note": "Missing imports prevent entire test files from discovering their cases, so these totals are not comparable to the repaired suites."
+    },
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "log": "check.log",
+      "passedStages": [
+        "content, story references and assets",
+        "public contract types",
+        "322 JS modules syntax",
+        "73 Markdown / 674 links / 15 synchronized Skill examples",
+        "ESLint",
+        "strict JS subset"
+      ]
+    }
+  },
+  "notExecuted": [
+    "Browser UI",
+    "Coverage collection",
+    "Remote CI"
+  ],
+  "sourceHashes": {
+    "package.json": "c2e21e3f33fd712958db4117ca78807470e804afffa6c2b155ba7fad7e77559a",
+    ".github/workflows/checks.yml": "6e6cd73839b680b28299ff61fdfb0b0be0a643291317d38861407ece5631e06c",
+    "dist/plugins/catalog.json": "0f8ed9b57b5c2d60e5c7c033a757459e9be36e0c0c15c81477a7e8ceeeedd3a5",
+    "tests/helpers/session.js": "8d657b77d39032bde16aeebcdf1c03f234295ca5586f156a0302816227f61936",
+    "tests/architecture.test.js": "266d86be7884f0edf32eba88dd0ac538543dac3468a722ed428ff261dcf12b0c",
+    "tests/plugin-loader.test.js": "e3203721e1decee51337d9f7d79b50ea4f00cfd8b1586020597435cb113de3da",
+    "examples/catalog.test.js": "9f470e38abee77af1fe92200f92d26642b423c49f398cf873f05a9250d9e291a",
+    "tests/fixtures/extensions/augment.js": "cc02b23a1b9dcaf8a0e6c58d9c3d80857b713c1f4a27e9e6802341978a3ac74f",
+    "tests/fixtures/extensions/world.js": "27b9d281cc6eec26e61ea101fff286f7c0931a8ed70fab0af6d327646ee11eed",
+    "tests/fixtures/extensions/field.js": "fd7b973facd77e3594d322b9cd7bbe01d087e9acdeda36d01a5d3f876f3dc3af",
+    "tests/fixtures/extensions/interaction.js": "fb359438f6d171b58641b0315813f1e1f8f856dfa452b262a474e7f09ede22bb",
+    "tests/fixtures/extensions/form.js": "7a8d5d7b6c2795ff89b4b36ae519fb4ee088bedc123d0f9342fec735c9af6817",
+    "tests/fixtures/extensions/facility.js": "4cce34aae56c28009c55377e52f0e2a14d7c2eb1a63abf2e20259fc25aba5b3c"
+  },
+  "retiredProductCases": [
+    "tests/startup-plugins.test.js",
+    "tests/upper-layer-composition.test.js",
+    "day-cycle business assembly case in tests/actor-schedules.test.js",
+    "canvas-gallery business assembly case in tests/plugin-canvas.test.js"
+  ],
+  "testPolicy": "Core plugin host contracts use minimal non-deployed fixtures. Installed catalog and authoring examples run separately; no skipped tests, restored product modules or weakened existing guards.",
+  "invalidatedBy": [
+    "Changes to core test fixture composition or loader contracts",
+    "Changes to installed catalog invalidate its plugin suite evidence",
+    "Changes to command, lifecycle, save or permissions contracts invalidate affected cases"
+  ]
+}

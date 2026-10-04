@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("a plugin controls step encounters and opens a contact-owned wild battle", async () => {
   let api;
   const plugin = manifest("visible-demo", value => {

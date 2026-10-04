@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("registered NPC triggers a once-only data story", async () => {
   const plugin = manifest("story-demo", api => {
     api.content.register("mapExtensions", "guide", {

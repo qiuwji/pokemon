@@ -2,10 +2,11 @@
 
 每份领域Skill都嵌入对应文件的完整20–30行代码。这些例子使用生产插件注册、应用服务和公开命令，证明一条最小行为链；不是完整绿宝石内容，也不是浏览器验收。
 
-在项目根执行`npm run test:examples`，或只执行表中的一个文件。首次使用先`npm ci`；Node需支持node:test、structuredClone及本项目ES模块。复制例子时放在examples/下，让相对导入保持正确。
+在项目根执行`npm run test:plugins`，或只执行表中的一个文件。首次使用先`npm ci`；Node需支持node:test、structuredClone及本项目ES模块。复制例子时放在examples/下，让相对导入保持正确。
 
 | 接手方向 | 运行文件 | 实际证明 |
 | --- | --- | --- |
+| 安装清单 | [catalog.test.js](catalog.test.js) | 当前清单模块可导入、默认插件可装配、空清单也可启动与导出 |
 | 首次接手 | [handoff.test.js](handoff.test.js) | 注册物品→插件事务领取→拒绝重复→保存恢复 |
 | 野外行动 | [field-action.test.js](field-action.test.js) | 注册行动→公开命令→永久格子覆盖→重载→未知ID拒绝 |
 | 注册剧情镜头 | [scene-story.test.js](scene-story.test.js) | 注册纯field场景→剧情等待→临时缩放→结束恢复→奖励 |
@@ -23,6 +24,6 @@
 | 原作剧情转写入门 | [story-reconstruction.test.js](story-reconstruction.test.js) | 数据剧情到达触发→选择分支/变量→奖励→重载去重 |
 | 失败与验收 | [validation.test.js](validation.test.js) | 后段意图失败→记忆/钱/账本/RNG回滚→只读→重载 |
 
-[helpers/session.js](helpers/session.js)只用于测试：固定时钟、内存存储及无浏览器UI，准备已解锁场景和一只精灵。对话立即完成、选择取首项，未播放真实Canvas/DOM/音频。原作剧情例注入与FieldSession相同的到达回调，不证明玩家行走；页面例dispatch与点击相同的action，不证明鼠标和焦点。夹具的直接赋值是场景安排，禁止复制成生产插件写法。
+[共享装配夹具](../tests/helpers/session.js)只用于测试：固定时钟、内存存储及无浏览器UI，准备已解锁场景和一只精灵。对话立即完成、选择取首项，未播放真实Canvas/DOM/音频。原作剧情例注入与FieldSession相同的到达回调，不证明玩家行走；页面例dispatch与点击相同的action，不证明鼠标和焦点。夹具的直接赋值是场景安排，禁止复制成生产插件写法。
 
 浏览器插件是普通manifest对象，放到dist/plugins并加入dist/plugins/catalog.json装配清单，具体见[作者指南](../docs/development/AUTHORING.md)。示例中的bus代表玩家/测试入口；插件运行时dispatch同一核心命令仍须声明该命令权限，直接bus通过不能证明权限通过。测试写法、复用证据和最终验收见[测试指南](../docs/development/TESTING.md)。Skill代码块由`npm run check:docs`与真实文件比对，修改时同步二者。

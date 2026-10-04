@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("registered text effect reaches an NPC dialogue through the story application", async () => {
   const plugin = manifest("speech-demo", api => {
     const effect = api.presentation.textEffect("float", {

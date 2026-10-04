@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 import { SpriteCanvas } from "../dist/adapters/sprite-canvas.js";
 test("a registered detail clip is selected, sampled and cleaned up by the real player", () => {
   const plugin = manifest("sprite-demo", api => {

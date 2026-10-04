@@ -31,7 +31,7 @@ description: 对绿宝石工程做针对性验证、框架阶段系统和浏览�
 
 组合验收让上层内容完成“新区域→机关→分支剧情→训练家→奖励→保存重载”，记录被迫改核心的接口缺口。原作全内容和音画仍可暂缓，但必须明确哪些没有验收。
 
-可复用[独立研究区插件](../../dist/plugins/integration-lab.js)和[公开组合测试](../../tests/upper-layer-composition.test.js)，搜索`Upper-layer plugin composes`；在项目根运行`node --test tests/upper-layer-composition.test.js`。它以真实移动/机关/条件/训练家后备/奖励和全新会话恢复验证业务链，只准备强队并替代时钟及UI确认；不会mock战斗结果。浏览器入口`?integration-lab=1`从未白镇的新增入口进入，操作路线查README，不能拿领域测试当实际点击或原作地图还原。无需重写已匹配来源的组合证明，接口/入口变化时才复查相应范围。
+组合验证从[世界剧情例](../../examples/world-story.test.js)、[设施例](../../examples/facility.test.js)和对应领域合同测试选取；文件移动搜索 `registered NPC triggers`、`facilityActivities`。已删除的业务插件及其专属组合测试不再作为当前入口，历史日志仅证明当时版本。真实浏览器跨领域组合仍需在当前内容上验收，不能用这些最小例宣称整条组合链已通过。
 
 ## 可携带交接
 
@@ -43,13 +43,13 @@ description: 对绿宝石工程做针对性验证、框架阶段系统和浏览�
 
 文件：[examples/validation.test.js](../../examples/validation.test.js)。在项目根执行 `node --test examples/validation.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/validation.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("late invalid intent rolls back plugin memory and world money", async () => {
   let api;
   const plugin = manifest("check-demo", value => {

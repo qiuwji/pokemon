@@ -4,7 +4,7 @@ import {
   session,
   manifest,
   objectSchema,
-} from "../examples/helpers/session.js";
+} from "./helpers/session.js";
 import {
   CameraProfiles,
   cameraProjection,

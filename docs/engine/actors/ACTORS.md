@@ -51,7 +51,7 @@ spawn/位置变更验证真实碰撞、玩家及预约；外部位置/可见性�
 
 `core.query.actorRoutines[uid]` / `game.actors.routines()` 返回冻结的当前条目与 `arrived`。离屏补齐后发 `core:actor-relocated`，payload 为 `{before,after,routine:{schedule,id,day}}`；正常步行仍发 actor-moved。两者都是提交后事实，监听者通过自己的公开命令处理业务。
 
-完整代表例：[actor-day-cycle.js](../../../dist/plugins/actor-day-cycle.js)。浏览器用 `?actor-day-cycle=1` 启用定义和菜单查看页；通过公开 `core.actor.spawn` 命令生成 `actor-day-cycle:worker`，没有 setup 时偷偷写世界状态。此例 08:00 工作、18:00 返回，允许离屏地点交接；实验室门不属于自主 BFS，因此双方地图可见时会等待，不能把门前卡住解释为已实现门导航。
+日程行为证明见[actor-schedules.test.js](../../../tests/actor-schedules.test.js)，搜索 `Visible scheduled actors`。测试通过公开Actor合同验证日程、导航和保存；测试夹具不部署进游戏。实验室门不属于自主BFS，跨地图交接条件必须按导航合同验收，不能把离屏交接当成门导航。
 
 这套日程是项目新增可复用政策，不声称原作每位 NPC 具有此作息。专项 [actor-schedules.test.js](../../../tests/actor-schedules.test.js) 覆盖注册、七日选择、跨图步行、暂停/占位、插值/剧情控制、保存、时钟回退与外国插件依赖。当前未验证真实浏览器作息流程，完整 NPC 日常内容仍由后续作者填写。
 

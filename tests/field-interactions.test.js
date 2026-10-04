@@ -5,8 +5,8 @@ import {
   session,
   manifest,
   objectSchema,
-} from "../examples/helpers/session.js";
-import { createInteractionWorkshop } from "../dist/plugins/interaction-workshop.js";
+} from "./helpers/session.js";
+import { createFieldFixture } from "./fixtures/extensions/field.js";
 import {
   FieldEffectRegistry,
   FieldEffects,
@@ -24,10 +24,10 @@ import { validateSave } from "../dist/packs/emerald/save-contract.js";
 import { planObjectMotion } from "../dist/engine/object-motion.js";
 import { setQuantity, inventoryQuantity } from "./helpers/inventory-fixture.js";
 const base = loadContentSync();
-const room = "interaction-workshop:room";
+const room = "fixture-field:room";
 function workshop() {
   const s = session([
-    createInteractionWorkshop(base.maps.LittlerootTown_ProfessorBirchsLab),
+    createFieldFixture(base.maps.LittlerootTown_ProfessorBirchsLab),
   ]);
   assert(s.game.enter({ map: room, x: 3, y: 4, dir: "up" }));
   return s;
@@ -149,7 +149,7 @@ test("A custom crate triggers without story; its final occupancy drives an indep
   assert.equal(g.state.position.y, 3);
   assert.equal(g.field.npcs.objects(room).find((o) => o.id === "crate").y, 2);
   assert.deepEqual(
-    g.applications.devices.view().records["interaction-workshop:sensor"],
+    g.applications.devices.view().records["fixture-field:sensor"],
     { pressed: true },
   );
   assert.equal(facts.length, 1);
@@ -186,7 +186,7 @@ test("Object destinations reject walls, water, other objects, warps and incompat
     const before = structuredClone(g.state.worldState),
       position = { ...g.state.position };
     const result = await g.performFieldAction(
-      "interaction-workshop:shift-crate",
+      "fixture-field:shift-crate",
     );
     assert.equal(result.ok, false, JSON.stringify(obstacle));
     assert.deepEqual(g.state.worldState, before);
@@ -194,7 +194,7 @@ test("Object destinations reject walls, water, other objects, warps and incompat
     assert.equal(g.actionBusy, false);
   }
   const { game: g } = session([
-    createInteractionWorkshop(base.maps.LittlerootTown_ProfessorBirchsLab),
+    createFieldFixture(base.maps.LittlerootTown_ProfessorBirchsLab),
     manifest("warp-case", (api) =>
       api.content.register("mapExtensions", "warp", {
         map: room,
@@ -212,7 +212,7 @@ test("Object destinations reject walls, water, other objects, warps and incompat
   ]);
   assert(g.enter({ map: room, x: 3, y: 4, dir: "up" }));
   assert.equal(
-    (await g.performFieldAction("interaction-workshop:shift-crate")).ok,
+    (await g.performFieldAction("fixture-field:shift-crate")).ok,
     false,
   );
   assert.equal(g.state.position.y, 4);
@@ -220,7 +220,7 @@ test("Object destinations reject walls, water, other objects, warps and incompat
 test("Motion rechecks occupancy after presentation and a failed follower restores the object overlay", async () => {
   const { game: g } = workshop(),
     actions = g.applications.fieldActions;
-  const plan = actions.actions.prepare("interaction-workshop:shift-crate").plan;
+  const plan = actions.actions.prepare("fixture-field:shift-crate").plan;
   g.patchWorld([
     {
       kind: "object",
@@ -326,7 +326,7 @@ test("Object and follower interpolation share one duration and settle before fie
     await wait(ms);
   };
   assert.equal(
-    (await g.performFieldAction("interaction-workshop:shift-crate")).ok,
+    (await g.performFieldAction("fixture-field:shift-crate")).ok,
     true,
   );
   assert(observed);
@@ -373,13 +373,13 @@ test("A terrain interaction is routed into the same action API; item ownership g
   g.ui.showFieldAction = (id) => selected.push(id);
   assert(g.enter({ map: room, x: 1, y: 3, dir: "up" }));
   g.interact();
-  assert.deepEqual(selected, ["interaction-workshop:clear-tile"]);
+  assert.deepEqual(selected, ["fixture-field:clear-tile"]);
   assert.equal(
     (await bus.execute("core.field.action", { id: selected[0] })).ok,
     true,
   );
   assert.equal(g.world.map.behavior[17], 0);
-  const item = "interaction-workshop:lamp";
+  const item = "fixture-field:lamp";
   assert.equal(
     (await bus.execute("core.item.action", { item, action: "light" })).ok,
     false,

@@ -33,7 +33,7 @@ description: 在现有绿宝石工程中新增或演进HM、关键道具及野�
 
 ## 最小验收
 
-对象、道具和地形先尝试同一fieldActions入口：`triggers`选择交互、`items.actions`声明道具绑定、`displace`提交一格对象移动及可选玩家跟进、`fieldEffects`声明持续状态与保留政策。先读[FIELD_ACTIONS](../../docs/engine/field/FIELD_ACTIONS.md)的参数和所有权边界；独立组合是[interaction-workshop](../../dist/plugins/interaction-workshop.js)，对应[测试](../../tests/field-interactions.test.js)。文件移动搜索`Object and follower interpolation`、`fieldEffects`、`occupancy`。不要往World/FieldSession加石块种类、招式、道具或徽章分支，不通过世界覆盖写持久Actor坐标。
+对象、道具和地形先尝试同一fieldActions入口：`triggers`选择交互、`items.actions`声明道具绑定、`displace`提交一格对象移动及可选玩家跟进、`fieldEffects`声明持续状态与保留政策。先读[FIELD_ACTIONS](../../docs/engine/field/FIELD_ACTIONS.md)的参数和所有权边界；独立组合是[野外交互测试夹具](../../tests/fixtures/extensions/field.js)，对应[测试](../../tests/field-interactions.test.js)。文件移动搜索`Object and follower interpolation`、`fieldEffects`、`occupancy`。不要往World/FieldSession加石块种类、招式、道具或徽章分支，不通过世界覆盖写持久Actor坐标。
 
 局部照明不等于战争迷雾；接触遭遇、外观与相机的未来合同先核对[PLUGIN_ROADMAP](../../docs/project/PLUGIN_ROADMAP.md)，不能把计划API当作已经可用。
 
@@ -47,13 +47,13 @@ description: 在现有绿宝石工程中新增或演进HM、关键道具及野�
 
 文件：[examples/field-action.test.js](../../examples/field-action.test.js)。在项目根执行 `node --test examples/field-action.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/field-action.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("plugin field plan commits through the public command", async () => {
   const plugin = manifest("paint-demo", api => {
     api.content.register("fieldActions", "paint", {

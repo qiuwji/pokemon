@@ -5,14 +5,17 @@
   "private": true,
   "scripts": {
     "dev": "python3 tools/serve.py",
-    "test": "node --test tests/*.test.js examples/*.test.js",
+    "test": "npm run test:core",
     "check": "node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs && npm run check:lint && npm run check:engine-types",
     "check:contracts": "tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts",
-    "test:examples": "node --test examples/*.test.js",
+    "test:examples": "npm run test:plugins",
     "check:docs": "node tools/check-docs.mjs",
-    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"dist/**/*.js\" tests/*.test.js examples/*.test.js",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"dist/**/*.js\" tests/*.test.js",
     "check:lint": "eslint .",
-    "check:engine-types": "tsc -p tsconfig.engine.json"
+    "check:engine-types": "tsc -p tsconfig.engine.json",
+    "test:core": "node --test tests/*.test.js",
+    "test:plugins": "node --test examples/*.test.js",
+    "test:all": "npm run test:core && npm run test:plugins"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -18,7 +18,7 @@ description: 通过现有插件公开API扩展绿宝石的内容、规则、状�
 
 ## 最小真实锚点
 
-[companion-care](../../dist/plugins/companion-care.js)是详情页点击→action→受控intent→状态/记忆→反馈的实际组合；[plugins.test.js](../../tests/plugins.test.js)验证互动、保存及失败回滚。[field-journal](../../dist/plugins/field-journal.js)示例内容/世界。[ANIMATION_CONTRACT](../../docs/engine/presentation/ANIMATION_CONTRACT.md)描述注册演出和纯取样。
+[页面例](../../examples/plugin-page.test.js)串联详情入口、action和自有记忆；[plugins.test.js](../../tests/plugins.test.js)用测试专用夹具验证状态、互动、保存及失败回滚。[世界剧情例](../../examples/world-story.test.js)演示内容/世界。[ANIMATION_CONTRACT](../../docs/engine/presentation/ANIMATION_CONTRACT.md)描述注册演出和纯取样。
 
 ## 编写插件
 
@@ -28,7 +28,7 @@ manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。se
 
 事件是提交后事实，事务失败恢复领域和插件数据；只读规则回调不能发命令，异步表现不参与规则结果。注册视觉/招式/语义事件编排，复用纯时序、时钟和reducedMotion；音频注册真实资源，不能退回合成提示音。
 
-当前宿主区域/布局节点/主题能力以代码和规格为准；不能给未知slot/节点编造支持。大型现代机制同时核对资格、行动增强、资源/PP、限次、清理和事件；不能把形态变换当整个Mega/Z系统。一次招式增强可用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)和[battle-burst插件](../../dist/plugins/battle-burst.js)，搜索`core.battle.augments`定位查询；替换范围、消费点及不支持项按该规格。实际公开合同缺口归框架任务，不让插件导入核心绕过。
+当前宿主区域/布局节点/主题能力以代码和规格为准；不能给未知slot/节点编造支持。大型现代机制同时核对资格、行动增强、资源/PP、限次、清理和事件；不能把形态变换当整个Mega/Z系统。一次招式增强可用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)和[招式增强合同测试](../../tests/battle-augments.test.js)，搜索`core.battle.augments`定位查询；替换范围、消费点及不支持项按该规格。实际公开合同缺口归框架任务，不让插件导入核心绕过。
 
 ## 插件剧情与对话
 
@@ -40,7 +40,7 @@ selector绑定对象/原label，priority明确竞争关系；公共call使用sch
 
 ## 既有页面与复杂交互
 
-使用 `api.ui.region(id,{slot,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。真实锚点是[bag-notebook](../../dist/plugins/bag-notebook.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。
+使用 `api.ui.region(id,{slot,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。测试锚点是[表单测试夹具](../../tests/fixtures/extensions/form.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。
 
 只提供已有区域的追加；不要假定已能替换原生HUD、注册任意DOM控件、热卸载，或让普通插件事务在战斗/设施期间执行。真正缺口按领域合同补，不通过页面回调绕过规则。
 
@@ -62,13 +62,13 @@ selector绑定对象/原label，priority明确竞争关系；公共call使用sch
 
 文件：[examples/plugin-page.test.js](../../examples/plugin-page.test.js)。在项目根执行 `node --test examples/plugin-page.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/plugin-page.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 import { validateLayout } from "../dist/engine/extensions/ui-registry.js";
 test("detail entry renders a clickable action with persistent memory", async () => {
   let api;
@@ -106,7 +106,7 @@ test("detail entry renders a clickable action with persistent memory", async () 
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("a plugin controls step encounters and opens a contact-owned wild battle", async () => {
   let api;
   const plugin = manifest("visible-demo", value => {
@@ -146,7 +146,7 @@ test("a plugin controls step encounters and opens a contact-owned wild battle", 
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("a plugin composes appearance, camera range and independent fog", async () => {
   let api;
   const plugin = manifest("visual-demo", value => {
@@ -183,7 +183,7 @@ test("a plugin composes appearance, camera range and independent fog", async () 
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 import { SpriteCanvas } from "../dist/adapters/sprite-canvas.js";
 test("a registered detail clip is selected, sampled and cleaned up by the real player", () => {
   const plugin = manifest("sprite-demo", api => {
@@ -216,13 +216,13 @@ test("a registered detail clip is selected, sampled and cleaned up by the real p
 
 按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)注册presentation视觉，再在页面/区域/HUD返回canvas节点。树仅保存visual、尺寸和schema参数，不能塞draw函数；draw使用冻结frame和第三参数assets，循环由宿主帧驱动。点击由宿主产生pointer坐标并调用action，schema须声明context/input/pointer。不要在绘制里发命令、取游戏RNG或自行启动计时器。隐藏页签暂停，页面重建重新挂载，关闭释放；循环定义不能用于一次性play/feedback。
 
-[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。浏览器可用 `?canvas-gallery=1` 沿原菜单打开示例，或在详情内容区互动；生产插件放dist/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
+[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。当前游戏装配清单为空；需要浏览器验收时按作者指南注册自己的示例，生产插件放dist/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
 
 <!-- runnable-example: examples/plugin-canvas.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 import { canvasAdapter } from "../tests/helpers/canvas-extension-fixture.js";
 test("a plugin mounts a looping clickable visual with saved interaction and host cleanup", async () => {
   let api;
@@ -271,7 +271,7 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 | --- | --- |
 | [dist/engine/extensions/plugin-host.js](../../dist/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" dist tests docs package.json` |
 | [dist/engine/extensions/ui-registry.js](../../dist/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" dist tests docs package.json` |
-| [dist/plugins/companion-care.js](../../dist/plugins/companion-care.js) | `rg -n "monster.detail" dist tests docs package.json` |
+| [examples/plugin-page.test.js](../../examples/plugin-page.test.js) | `rg -n "monster.detail" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

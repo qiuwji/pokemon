@@ -30,7 +30,7 @@ description: 演进现有绿宝石战斗规则、招式效果、状态、训练�
 
 训练家/遭遇是内容，AI是冻结查询→合法行动的独立策略。人类/AI经过相同预检；完整敌方队伍和联盟仍有活人才能继续，不能按画面上的一个精灵结束。单/双打便利格式不等于三打距离/轮盘，新增格式需显式政策。
 
-领域先产生语义事件，动画注册消费其结果；表现不能计算命中或伤害。增强一次招式行动使用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)，真实插件见[battle-burst](../../dist/plugins/battle-burst.js)，测试搜索`Registered plugin augment`。原槽PP、资源和限次由战斗服务持有，不能写一套插件扣费账本；完整Mega/Z业务仍须核对自己的世代规则。
+领域先产生语义事件，动画注册消费其结果；表现不能计算命中或伤害。增强一次招式行动使用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)，真实插件见[招式增强合同测试](../../tests/battle-augments.test.js)，测试搜索`Registered plugin augment`。原槽PP、资源和限次由战斗服务持有，不能写一套插件扣费账本；完整Mega/Z业务仍须核对自己的世代规则。
 
 ## 验收与交接
 
@@ -76,13 +76,13 @@ node --input-type=module -e 'import {MoveEffectRegistry} from "./dist/engine/mov
 
 文件：[examples/battle-effect.test.js](../../examples/battle-effect.test.js)。在项目根执行 `node --test examples/battle-effect.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/battle-effect.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("registered move effect runs in a real trainer turn", async () => {
   const plugin = manifest("battle-demo", api => {
     const effect = api.content.register("moveEffects", "focus", {

@@ -15,7 +15,7 @@
 | dist/packs/emerald/application/facility-application.js | 受控随机采样、资源草稿与提交、临时队伍、战斗接线和事实通知 |
 | dist/packs/emerald/facilities.js | 连战规则和示例定义、第三世代临时等级投影 |
 | dist/packs/emerald/facility-interface.js | 通用选队/行动菜单；只查询并发命令 |
-| dist/plugins/facility-games.js | 完全通过公开注册实现的非战斗插件 |
+| examples/facility.test.js、tests/fixtures/extensions/facility.js | 通过公开注册验证非战斗活动；测试数据不部署 |
 
 表现不参与规则。状态提交与通知分开：表现失败不能退回已扣的成本、局部进度或已使用的随机数。真正的规则/成本/容量失败则保持会话、经济和随机状态不变。
 

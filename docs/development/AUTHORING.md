@@ -11,7 +11,7 @@
 | 新资源/导出流程 | dist/assets及tools | 以grid/metatile组织地图；保留来源；不能写回work/pokeemerald或sources |
 | 必要的新通用规则/生命周期 | dist/engine和明确的应用所有者 | 先写缺口合同及验收例，作为框架任务；核心不依赖内容包、DOM、Canvas |
 | 新演出/视觉 | 注册定义、dist/presentation及dist/adapters | 描述、纯取样和绘制分离；不重算规则、不使用游戏RNG；统一时钟及reducedMotion |
-| 验证 | tests/中的领域文件，入门例在examples/ | 验证公开行为及重要失败边界；夹具替代项明确标注 |
+| 验证 | 核心合同放tests/；产品插件专属用例和入门例放examples/ | tests不得导入已安装产品插件或examples；共享夹具放tests/helpers、tests/fixtures，替代项明确标注 |
 
 默认领域不支持的能力记录为缺口，不能假装插件API已经支持。复杂UI与现代行动增强按各自领域合同编写；完整NPC日程、部分持续HM及未提供的渲染/替换能力，以STATUS为准。
 

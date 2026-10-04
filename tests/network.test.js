@@ -21,7 +21,7 @@ import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
 import { createMonster } from "../dist/engine/model.js";
-import { companionCare } from "../dist/plugins/companion-care.js";
+import { interactionFixture } from "./fixtures/extensions/interaction.js";
 const wire = (sequence, command = "test.increment", input = {}, extras = {}) =>
   JSON.stringify({
     protocol: 1,
@@ -279,7 +279,7 @@ test("WebSocket adapter and loopback are interchangeable; binary input and disco
 });
 function adventure() {
   const base = loadContentSync(),
-    { host, db, catalog } = createEmeraldPlugins(base, [companionCare]);
+    { host, db, catalog } = createEmeraldPlugins(base, [interactionFixture]);
   const timeline = new Timeline({ now: () => 0, wait: async () => {} }),
     game = new EmeraldAdventure({
       db,
@@ -322,19 +322,19 @@ test("UI facade, plugin action and network use one registry; stable UIDs survive
   assert(
     (
       await gateway.receive(
-        wire(1, "companion-care:interact", { uid, activity: "pet" }),
+        wire(1, "fixture-interaction:interact", { uid, activity: "pet" }),
       )
     ).ok,
   );
   assert.equal(
-    game.state.extensions["companion-care"].data.partners[uid].interactions,
+    game.state.extensions["fixture-interaction"].data.partners[uid].interactions,
     1,
   );
   await gateway.receive(
-    wire(1, "companion-care:interact", { uid, activity: "pet" }),
+    wire(1, "fixture-interaction:interact", { uid, activity: "pet" }),
   );
   assert.equal(
-    game.state.extensions["companion-care"].data.partners[uid].interactions,
+    game.state.extensions["fixture-interaction"].data.partners[uid].interactions,
     1,
   );
   assert.equal(
@@ -348,7 +348,7 @@ test("UI facade, plugin action and network use one registry; stable UIDs survive
   );
   assert.deepEqual(completed.slice(0, 2), [
     "core.party.lead",
-    "companion-care:interact",
+    "fixture-interaction:interact",
   ]);
   game.storyBusy = true;
   assert.equal(ui.move("up"), false);

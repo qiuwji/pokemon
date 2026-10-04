@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { session, manifest } from "../examples/helpers/session.js";
+import { session, manifest } from "./helpers/session.js";
 import { StoryCatalog } from "../dist/engine/story-catalog.js";
 import {
   StorySession,

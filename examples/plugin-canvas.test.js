@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 import { canvasAdapter } from "../tests/helpers/canvas-extension-fixture.js";
 test("a plugin mounts a looping clickable visual with saved interaction and host cleanup", async () => {
   let api;

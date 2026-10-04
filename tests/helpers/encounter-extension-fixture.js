@@ -1,5 +1,5 @@
 import { loadContentSync } from "../../tools/content-io.mjs";
-import { manifest, session } from "../../examples/helpers/session.js";
+import { manifest, session } from "./session.js";
 const base = loadContentSync();
 export function encounterFixture({
   permissions = ["actors", "encounters", "movement"],

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("a registered field scene focuses the view and gates a subsequent reward", async () => {
   const plugin = manifest("scene-demo", api => {
     api.presentation.scene("focus", {

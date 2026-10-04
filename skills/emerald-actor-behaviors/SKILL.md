@@ -27,7 +27,7 @@ description: 为现有绿宝石Actor框架编写NPC自主行为、日程、感�
 
 寻路复用world规则/高度/对象预约；无路等待或改变目标，不能穿墙或把teleport当正常行走。主动互动先邻接再发请求事实，是否开对话、改变关系由业务决定。移动帧不持久化，记忆更新不能重启动画。
 
-作息通过 `actorSchedules` 注册，模板 `schedule` 引用返回ID；每个游戏日覆盖start=0，start为每日分钟，days使用游戏day%7而非设备星期。到达后才采用条目行为，未到达继续统一导航。具体字段见ACTORS日程合同，完整代表插件见[actor-day-cycle.js](../../dist/plugins/actor-day-cycle.js)，测试搜索 `Visible scheduled actors`。
+作息通过 `actorSchedules` 注册，模板 `schedule` 引用返回ID；每个游戏日覆盖start=0，start为每日分钟，days使用游戏day%7而非设备星期。到达后才采用条目行为，未到达继续统一导航。具体字段见ACTORS日程合同，日程合同测试见[Actor日程合同测试](../../tests/actor-schedules.test.js)，测试搜索 `Visible scheduled actors`。
 
 作息用保存的游戏本地时间。`offscreen:hold` 为默认，显式 `relocate` 才允许源/目的地图都不可见时补齐当前位置；忙、脚本控制、移动预约和占位时等待。冷加载在显示投影前补齐，跳过旧时段但不重播行为或奖励。日程从时钟派生，不保存第二份phase/RTC；门/HM/交通不是BFS自动能力，不能隐式创建全世界后台模拟。
 
@@ -43,13 +43,13 @@ description: 为现有绿宝石Actor框架编写NPC自主行为、日程、感�
 
 文件：[examples/actor.test.js](../../examples/actor.test.js)。在项目根执行 `node --test examples/actor.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/actor.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("plugin actor identity and memory survive save restore", async () => {
   const plugin = manifest("actor-demo", api => {
     api.content.register("npcBehaviors", "idle", { decide: () => ({ pose: "still" }) });

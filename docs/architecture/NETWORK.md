@@ -28,7 +28,7 @@
 控制端用该 session 从序号 1 开始发消息：
 
 ```json
-{"protocol":1,"type":"command","session":"game-随机连接标识","id":"pet-1","sequence":1,"command":"companion-care:interact","input":{"uid":"目标精灵UID","activity":"pet"},"policy":"reject"}
+{"protocol":1,"type":"command","session":"game-随机连接标识","id":"pet-1","sequence":1,"command":"my-plugin:action","input":{"uid":"目标精灵UID","activity":"pet"},"policy":"reject"}
 ```
 
 ```json

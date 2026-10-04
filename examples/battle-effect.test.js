@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("registered move effect runs in a real trainer turn", async () => {
   const plugin = manifest("battle-demo", api => {
     const effect = api.content.register("moveEffects", "focus", {

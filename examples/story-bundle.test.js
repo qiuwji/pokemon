@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("bundle registers an NPC, shared dialogue and choice with durable reward", async () => {
   const plugin = manifest("story-bundle", api => {
     api.content.register("mapExtensions", "guide", { map: "LittlerootTown",

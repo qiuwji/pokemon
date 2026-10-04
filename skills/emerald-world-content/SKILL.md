@@ -20,7 +20,7 @@ description: 给现有绿宝石工程添加网格地图、连接、动态对象�
 
 地图/对象读[WORLD_STATE](../../docs/engine/world/STATE_AND_LIFECYCLE.md)和[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)；剧情读[STORY_LANGUAGE](../../docs/engine/story/STORY_LANGUAGE.md)，涉及全作组织或新增核心机制另读[剧情内容架构方案](../../docs/architecture/STORY_CONTENT.md)，新增内容优先用registerBundle，同一目录校验；完整原作业务仍按STATUS确认；机关读[FIELD_DEVICES](../../docs/engine/field/FIELD_DEVICES.md)；时间/天气读[WORLD_TIME](../../docs/engine/world/WORLD_TIME.md)、[WEATHER](../../docs/engine/world/WEATHER.md)。高度或交通另读对应规格，不默认加载全部。
 
-实际参考：[field-journal插件](../../dist/plugins/field-journal.js)新增房间、warp、NPC、奖励、菜单/HUD。验证：[world-state](../../tests/world-state.test.js)、[story-language](../../tests/story-language.test.js)、[field-devices](../../tests/field-devices.test.js)。
+实际参考：[世界剧情例](../../examples/world-story.test.js)注册地图、NPC及一次奖励；菜单/HUD扩展合同见[宿主测试](../../tests/plugins.test.js)。验证：[world-state](../../tests/world-state.test.js)、[story-language](../../tests/story-language.test.js)、[field-devices](../../tests/field-devices.test.js)。
 
 ## 内容编写
 
@@ -48,13 +48,13 @@ description: 给现有绿宝石工程添加网格地图、连接、动态对象�
 
 文件：[examples/world-story.test.js](../../examples/world-story.test.js)。在项目根执行 `node --test examples/world-story.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/world-story.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("registered NPC triggers a once-only data story", async () => {
   const plugin = manifest("story-demo", api => {
     api.content.register("mapExtensions", "guide", {
@@ -94,7 +94,7 @@ test("registered NPC triggers a once-only data story", async () => {
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("registered text effect reaches an NPC dialogue through the story application", async () => {
   const plugin = manifest("speech-demo", api => {
     const effect = api.presentation.textEffect("float", {
@@ -133,7 +133,7 @@ test("registered text effect reaches an NPC dialogue through the story applicati
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("a registered field scene focuses the view and gates a subsequent reward", async () => {
   const plugin = manifest("scene-demo", api => {
     api.presentation.scene("focus", {

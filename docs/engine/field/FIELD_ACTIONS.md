@@ -51,7 +51,7 @@ await api.commands.dispatch("core.field.fishing-input", { cancel: true });
 
 `allowed/target/plan` 接收冻结视图，不直接写背包、坐标或地形。物品的 `items.actions` 仍绑定行动ID与输入，并额外检查物品持有；没有另一套物品脚本执行器。对象种类、地形行为值、徽章与招式是内容政策。移动内核不识别箱子、石块或怪力。公开纯辅助函数 `frontCell(position)` 位于 `dist/engine/extensions/field-utils.js`。
 
-独立作者例：[interaction-workshop](../../../dist/plugins/interaction-workshop.js) 注册箱子推动、草地整理、提灯、照明效果和重量感应器，不注册任何剧情。它是可选框架示例，没有默认装入原作地图，也没有完整石块素材。
+[野外交互测试夹具](../../../tests/fixtures/extensions/field.js)注册箱子推动、草地整理、提灯、照明效果和重量感应器，不注册任何剧情；[合同测试](../../../tests/field-interactions.test.js)验证实际行为。夹具不部署进游戏，原作地图业务及素材另行开发。
 
 ### 对象位移合同
 

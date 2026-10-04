@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("data story arrival chooses a branch and persists its variable", async () => {
   const plugin = manifest("branch-demo", api => {
     api.story.register("arrival", { trigger: "step", once: true,

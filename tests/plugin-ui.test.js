@@ -4,8 +4,8 @@ import {
   session,
   manifest,
   objectSchema,
-} from "../examples/helpers/session.js";
-import { bagNotebook } from "../dist/plugins/bag-notebook.js";
+} from "./helpers/session.js";
+import { formFixture } from "./fixtures/extensions/form.js";
 import {
   validateLayout,
   resolveLayout,
@@ -56,10 +56,10 @@ const contract = (s) => ({
 });
 
 test("Declarative layouts reject bad field types, duplicate names, nested forms and unbounded style before any command", () => {
-  const s = session([bagNotebook]);
+  const s = session([formFixture]);
   const form = (children) => ({
     kind: "form",
-    action: "bag-notebook:save",
+    action: "fixture-form:save",
     children,
   });
   for (const tree of [
@@ -69,12 +69,12 @@ test("Declarative layouts reject bad field types, duplicate names, nested forms 
       { kind: "input", name: "title", value: "b" },
     ]),
     form([form([])]),
-    { kind: "slider", action: "bag-notebook:save", value: -1, max: 10 },
+    { kind: "slider", action: "fixture-form:save", value: -1, max: 10 },
     { kind: "panel", style: { color: "red" }, children: [] },
     { kind: "table", columns: ["a"], rows: [[1, 2]] },
     {
       kind: "select",
-      action: "bag-notebook:save",
+      action: "fixture-form:save",
       options: [
         { label: "A", value: "a" },
         { label: "B", value: "a" },
@@ -82,7 +82,7 @@ test("Declarative layouts reject bad field types, duplicate names, nested forms 
     },
     {
       kind: "component",
-      component: "bag-notebook:inventory-summary",
+      component: "fixture-form:inventory-summary",
       props: { category: "invalid" },
     },
   ])
@@ -147,7 +147,7 @@ test("Bad region slots, component schemas and theme values fail during productio
     assert.throws(() => session([manifest("bad", setup)]));
 });
 test("Real bag page mounts a plugin form; typed submit saves plugin memory without changing inventory and reloads", async () => {
-  const s = session([bagNotebook]),
+  const s = session([formFixture]),
     a = adapter(s),
     before = structuredClone(s.game.state.bag),
     slots = [];
@@ -185,7 +185,7 @@ test("Real bag page mounts a plugin form; typed submit saves plugin memory witho
   for (const input of fields.filter((n) => n.type === "radio"))
     input.checked = input.value === "items";
   await form.onsubmit({ preventDefault() {} });
-  assert.deepEqual(s.game.state.extensions["bag-notebook"].data.note, {
+  assert.deepEqual(s.game.state.extensions["fixture-form"].data.note, {
     title: "出发准备",
     pinned: true,
     goal: 7,
@@ -193,11 +193,11 @@ test("Real bag page mounts a plugin form; typed submit saves plugin memory witho
   });
   assert.deepEqual(s.game.state.bag, before);
   s.game.loadDocument(s.game.exportDocument());
-  assert.equal(s.host.runtime.view("bag-notebook").store.get("note").goal, 7);
+  assert.equal(s.host.runtime.view("fixture-form").store.get("note").goal, 7);
   assert.equal(a.errors.length, 0);
 });
 test("Region refresh preserves unsaved text, focus and tab choice, while unmount removes its drafts", () => {
-  const s = session([bagNotebook]),
+  const s = session([formFixture]),
     a = adapter(s);
   a.ext.mountSlot("bag.content", a.root, { inBattle: false });
   let input = a.root.querySelectorAll("input").find((n) => n.type === "text");
@@ -227,7 +227,7 @@ test("Region refresh preserves unsaved text, focus and tab choice, while unmount
   assert.equal(a.ext.layout.drafts.size, 0);
 });
 test("Form duplicate submission is locked; closing before completion cannot remount a removed region", async () => {
-  const s = session([bagNotebook]),
+  const s = session([formFixture]),
     a = adapter(s);
   a.ext.mountSlot("bag.content", a.root, { inBattle: false });
   let resolve,
@@ -277,7 +277,7 @@ test("Native editable controls retain game keys, Escape returns, and widget-hand
 });
 test("A late old-page submission cannot refresh a different page, and component callbacks receive frozen props and queries", async () => {
   const s = session([
-      bagNotebook,
+      formFixture,
       manifest("freeze", (api) => {
         api.ui.component("mutation", {
           schema: objectSchema({ value: { type: "integer" } }, ["value"]),
@@ -291,7 +291,7 @@ test("A late old-page submission cannot refresh a different page, and component 
           render: () => ({
             kind: "button",
             text: "Save",
-            action: "bag-notebook:save",
+            action: "fixture-form:save",
           }),
         });
         api.ui.page("two", {

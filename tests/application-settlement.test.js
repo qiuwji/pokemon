@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { BattleSession } from "../dist/engine/battle-session.js";
 import { changeMoney, settleMoney } from "../dist/engine/currency.js";
-import { session } from "../examples/helpers/session.js";
+import { session } from "./helpers/session.js";
 import { InventoryApplication, INVENTORY_PORTS } from "../dist/packs/emerald/application/inventory-application.js";
 import { liveApplicationPorts } from "../dist/packs/emerald/application/ports.js";
 import { createMonster } from "../dist/engine/model.js";

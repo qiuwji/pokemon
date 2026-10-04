@@ -5,7 +5,7 @@ import {
   emptyAppearances,
 } from "../dist/engine/appearances.js";
 import { drawAppearance } from "../dist/presentation/appearance-canvas.js";
-import { session, manifest } from "../examples/helpers/session.js";
+import { session, manifest } from "./helpers/session.js";
 const definition = {
   name: "Layered",
   variants: {

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { session, manifest } from "../examples/helpers/session.js";
-import { battleBurst } from "../dist/plugins/battle-burst.js";
+import { session, manifest } from "./helpers/session.js";
+import { augmentFixture } from "./fixtures/extensions/augment.js";
 import { Battle } from "../dist/engine/battle.js";
 import { createMonster } from "../dist/engine/model.js";
 import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
@@ -50,12 +50,12 @@ async function setup(
   return { ...s, b, ally, foes };
 }
 test("Registered plugin augment uses public battle command, source PP, one controller use and registered presentation", async () => {
-  const s = session([battleBurst]);
+  const s = session([augmentFixture]);
   await s.bus.execute("core.battle.start", { trainerId: "youngster" });
   const b = s.game.battle,
     pp = s.mon.moves[0].pp;
   const choices = await s.bus.execute("core.battle.augments", { index: 0 });
-  assert.equal(choices[0].id, "battle-burst:burst");
+  assert.equal(choices[0].id, "fixture-augment:burst");
   await s.bus.execute("core.battle.action", {
     kind: "move",
     index: 0,
@@ -69,7 +69,7 @@ test("Registered plugin augment uses public battle command, source PP, one contr
   assert.equal(registry.eventAnimation(event).animation.duration, 320);
   assert.equal(
     b.events.find((e) => e.kind === "move").move.id,
-    "battle-burst:burst",
+    "fixture-augment:burst",
   );
 });
 test("Unknown references, charge replacements and malformed limits/costs fail registration", () => {
@@ -279,7 +279,7 @@ test("Battle menu adapter forwards the registered augment instead of silently us
   const { createBattleInterface } = await import(
     "../dist/packs/emerald/battle-interface.js"
   );
-  const s = session([battleBurst]);
+  const s = session([augmentFixture]);
   await s.bus.execute("core.battle.start", { trainerId: "youngster" });
   const sent = [];
   let nodes = [],
@@ -339,10 +339,10 @@ test("Battle menu adapter forwards the registered augment instead of silently us
     .click();
   const choice = root
     .querySelectorAll("[data-move]")
-    .find((n) => n.dataset.augment === "battle-burst:burst");
+    .find((n) => n.dataset.augment === "fixture-augment:burst");
   assert(choice);
   choice.click();
-  assert.equal(sent[0].augment, "battle-burst:burst");
+  assert.equal(sent[0].augment, "fixture-augment:burst");
   assert.equal(sent[0].index, 0);
 });
 test("Replacement self-target is validated without inheriting the source attack target", async () => {

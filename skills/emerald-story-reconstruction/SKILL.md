@@ -67,13 +67,13 @@ description: 结合现有网页绿宝石架构和只读pret/pokeemerald固定修
 
 接口锚点：插件API 1，示例使用现有registerBundle/StoryCatalog与执行合同。文件：[story-bundle.test.js](../../examples/story-bundle.test.js)，在项目根执行`node --test examples/story-bundle.test.js`。这是项目分支演示，**没有声称逐字还原上述员工事件**。
 
-[session夹具](../../examples/helpers/session.js)装配真实插件、应用服务和命令，固定时钟/存储、模拟UI取第一个选项。示例通过game.enter后game.interact触发实际对象绑定，浏览器UI由夹具立即确认；它不证明自动移动或动画观感。复制到examples/下的新测试才有正确相对导入。
+[session夹具](../../tests/helpers/session.js)装配真实插件、应用服务和命令，固定时钟/存储、模拟UI取第一个选项。示例通过game.enter后game.interact触发实际对象绑定，浏览器UI由夹具立即确认；它不证明自动移动或动画观感。复制到examples/下的新测试才有正确相对导入。
 
 <!-- runnable-example: examples/story-bundle.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("bundle registers an NPC, shared dialogue and choice with durable reward", async () => {
   const plugin = manifest("story-bundle", api => {
     api.content.register("mapExtensions", "guide", { map: "LittlerootTown",

@@ -19,7 +19,7 @@ import {
   manifest,
   session,
   objectSchema,
-} from "../examples/helpers/session.js";
+} from "./helpers/session.js";
 import { emeraldDatabase } from "../dist/packs/emerald/database.js";
 function escortFixture() {
   const clock = manualStoryClock(),

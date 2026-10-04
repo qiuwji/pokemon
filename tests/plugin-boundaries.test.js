@@ -7,7 +7,7 @@ import {
   manifest,
   session,
   objectSchema,
-} from "../examples/helpers/session.js";
+} from "./helpers/session.js";
 
 test("Plugin subscriptions reject internal/unknown core facts, foreign namespaces and namespace spoofing atomically", () => {
   for (const type of [

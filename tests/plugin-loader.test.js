@@ -1,100 +1,53 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import { loadPluginCatalog } from "../dist/adapters/plugin-loader.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 const url = new URL("../dist/plugins/catalog.json", import.meta.url);
-const readJSON = (location) => JSON.parse(fs.readFileSync(location));
 const content = loadContentSync();
-test("Default data catalog composes actual plugins without loading scenario rewards or fixture maps", async () => {
-  const plugins = await loadPluginCatalog({ url, readJSON, content });
-  assert.deepEqual(
-    plugins.map((plugin) => plugin.id),
-    ["companion-care", "facility-games", "field-journal"],
-  );
-  const { db, host } = createEmeraldPlugins(content, plugins);
-  assert(!Object.keys(db.maps).some((id) => id.includes("e2e")));
-  assert(!host.actions.has("e2e-support:unlock"));
+const fixtureCatalog = {
+  version: 1,
+  plugins: [
+    { id: "fixture-form", module: "../../tests/fixtures/extensions/form.js", export: "formFixture", enabled: true },
+    { id: "fixture-augment", module: "../../tests/fixtures/extensions/augment.js", export: "augmentFixture", enabled: false },
+    { id: "fixture-field", module: "../../tests/fixtures/extensions/field.js", export: "createFieldFixture", enabled: false,
+      environment: "test", flag: "scenario", arguments: ["content:maps.LittlerootTown_ProfessorBirchsLab"] },
+  ],
+};
+const loadFixtures = options => loadPluginCatalog({ url, content, readJSON: () => fixtureCatalog, ...options });
+test("Empty production catalog starts without importing any optional plugin code", async () => {
+  const plugins = await loadPluginCatalog({ url, readJSON: () => ({ version: 1, plugins: [] }), content,
+    importModule: () => { throw new Error("Empty catalog must not import code"); } });
+  assert.deepEqual(plugins, []);
+  const { host } = createEmeraldPlugins(content, plugins);
+  assert.equal(host.manifests.size, 0);
 });
-test("Explicit test environment loads isolated fixture maps through real registration", async () => {
-  const parameters = new URLSearchParams("e2e=1");
-  await assert.rejects(
-    loadPluginCatalog({ url, readJSON, content, parameters }),
-    /requires test environment/,
-  );
-  const plugins = await loadPluginCatalog({
-    url,
-    readJSON,
-    content,
-    parameters,
-    environment: "test",
-  });
+test("Test-only catalog entries require an explicit test environment and remain isolated", async () => {
+  const parameters = new URLSearchParams("scenario=1");
+  await assert.rejects(loadFixtures({ parameters }), /requires test environment/);
+  const plugins = await loadFixtures({ parameters, environment: "test" });
   const { db } = createEmeraldPlugins(content, plugins);
-  assert.equal(
-    Object.keys(db.maps).filter((id) => id.startsWith("e2e-support:")).length,
-    5,
-  );
-  assert(
-    db.maps.LittlerootTown.warps.every(
-      (warp) => !warp.dest_map.includes("e2e"),
-    ),
-  );
+  assert(db.maps["fixture-field:room"]);
+  assert(db.maps.LittlerootTown.warps.every(warp => !warp.dest_map.startsWith("fixture-")));
 });
-test("Additional enabled plugins and explicit disabling use the catalog without editing app.js", async () => {
-  const parameters = new URLSearchParams(
-    "plugins=integration-lab,canvas-gallery&disable-plugins=field-journal",
-  );
-  const plugins = await loadPluginCatalog({
-    url,
-    readJSON,
-    content,
-    parameters,
-  });
-  const { db } = createEmeraldPlugins(content, plugins);
-  assert(db.maps["integration-lab:room"]);
-  assert(!plugins.some((plugin) => plugin.id === "field-journal"));
-  await assert.rejects(
-    loadPluginCatalog({
-      url,
-      readJSON,
-      content,
-      parameters: new URLSearchParams("plugins=typo"),
-    }),
-    /Unknown catalog plugin/,
-  );
+test("Explicit enable/disable uses supplied catalog entries rather than fixed business plugins", async () => {
+  const plugins = await loadFixtures({ parameters: new URLSearchParams("plugins=fixture-augment&disable-plugins=fixture-form") });
+  assert.deepEqual(plugins.map(p => p.id), ["fixture-augment"]);
+  const { catalog } = createEmeraldPlugins(content, plugins);
+  assert(catalog.battleAugments["fixture-augment:burst"]);
+  await assert.rejects(loadFixtures({ parameters: new URLSearchParams("plugins=typo") }), /Unknown catalog plugin/);
 });
 test("Dependency errors fail before importing code; enabled dependencies load in order", async () => {
-  const descriptor = (id, requires = []) => ({
-    id,
-    module: "./" + id + ".js",
-    export: "plugin",
-    enabled: true,
-    requires,
-  });
+  const descriptor = (id, requires = []) => ({ id, module: "./" + id + ".js", export: "plugin", enabled: true, requires });
   const calls = [];
-  const importModule = async (location) => {
+  const importModule = async location => {
     const id = location.pathname.split("/").at(-1).replace(".js", "");
     calls.push(id);
     return { plugin: { id } };
   };
-  const run = (plugins) =>
-    loadPluginCatalog({
-      url,
-      content,
-      readJSON: () => ({ version: 1, plugins }),
-      importModule,
-    });
+  const run = plugins => loadPluginCatalog({ url, content, readJSON: () => ({ version: 1, plugins }), importModule });
   await assert.rejects(run([descriptor("a", ["b"])]), /needs enabled b/);
-  await assert.rejects(
-    run([descriptor("a", ["b"]), descriptor("b", ["a"])]),
-    /cycle/,
-  );
+  await assert.rejects(run([descriptor("a", ["b"]), descriptor("b", ["a"])]), /cycle/);
   assert.equal(calls.length, 0);
-  assert.deepEqual(
-    (await run([descriptor("a", ["b"]), descriptor("b")])).map(
-      (plugin) => plugin.id,
-    ),
-    ["b", "a"],
-  );
+  assert.deepEqual((await run([descriptor("a", ["b"]), descriptor("b")])).map(p => p.id), ["b", "a"]);
 });

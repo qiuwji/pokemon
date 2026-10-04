@@ -44,13 +44,13 @@ description: 在绿宝石工程中编写选美、游戏厅、狩猎区、对战�
 
 文件：[examples/facility.test.js](../../examples/facility.test.js)。在项目根执行 `node --test examples/facility.test.js`。示例为项目测试行为；不声称是原作完整内容。
 
-[装配夹具](../../examples/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
 <!-- runnable-example: examples/facility.test.js -->
 ```js
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("non-battle facility progresses and settles once", async () => {
   const plugin = manifest("stage-demo", api => {
     const activity = api.content.register("facilityActivities", "appeal", {
@@ -95,7 +95,7 @@ test("non-battle facility progresses and settles once", async () => {
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
 | [dist/engine/facilities.js](../../dist/engine/facilities.js) | `rg -n "class FacilitySession" dist tests docs package.json` |
-| [dist/plugins/facility-games.js](../../dist/plugins/facility-games.js) | `rg -n "facilityActivities" dist tests docs package.json` |
+| [examples/facility.test.js](../../examples/facility.test.js) | `rg -n "facilityActivities" dist tests docs package.json` |
 | [tests/facilities.test.js](../../tests/facilities.test.js) | `rg -n "Non-battle plugin activity" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

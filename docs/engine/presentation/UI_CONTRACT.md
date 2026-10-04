@@ -95,11 +95,11 @@ frame深冻结，含width/height、payload、view（该页面/区域的context�
 
 原有 `presentation.play` 与事务 `ctx.feedback` 仍是有限、按scope选择的叠层反馈。二者在播放/提交前验证同一payload schema，循环定义明确拒绝，要求通过有生命周期的Canvas挂载；不提供无人管理的无限叠层。绘制错误恢复Canvas状态、停止出错实例并报告，其他控件继续；异步draw拒绝。插件代码是受信任扩展，公开端口不是任意JavaScript沙箱。
 
-最小完整注册→挂载→互动→保存→关闭例见 [plugin-canvas.test.js](../../../examples/plugin-canvas.test.js)，宿主端口夹具仅替代DOM。可选 [canvas-gallery.js](../../../dist/plugins/canvas-gallery.js) 用 `?canvas-gallery=1` 启用，主菜单打开“像素画布示例”，或在宝可梦详情内容区域点击；它只记录插件自有互动，属于框架代表例。规格证明见 [plugin-canvas测试](../../../tests/plugin-canvas.test.js)，搜索 `Canvas mounts`、`Independent Canvas gallery`。
+最小完整注册→挂载→互动→保存→关闭例见[plugin-canvas.test.js](../../../examples/plugin-canvas.test.js)，宿主端口夹具仅替代DOM。[核心Canvas测试](../../../tests/plugin-canvas.test.js)验证宿主生命周期，搜索 `Canvas mounts`。当前不附带游戏内画廊插件；浏览器示例按作者指南自行装配。
 
 ## 可运行代表例与验证
 
-[bag-notebook.js](../../../dist/plugins/bag-notebook.js)是独立插件：在原背包挂入编辑/库存两个页签，输入标题、复选框、滑杆和单选范围；表单写插件笔记，组合组件查询真实库存表格。开发地址加 `?bag-notebook=1` 启用；打开主菜单→背包。这个例是项目扩展，不是绿宝石原作笔记系统。
+[表单测试夹具](../../../tests/fixtures/extensions/form.js)在原背包挂入表单、页签与库存表格，通过自有记忆保存字段；[plugin-ui测试](../../../tests/plugin-ui.test.js)验证真实背包页面挂载及交互。它不是运行时插件，也不是原作笔记系统。
 
 [plugin-ui.test.js](../../../tests/plugin-ui.test.js)通过真实插件装配、原生背包页面、声明式 DOM 端口、真实命令/保存，检查类型、写入、库存不变、重载、草稿/焦点、关闭与迟到。DOM 端口不模拟像素布局或真实浏览器事件传播；浏览器实玩在阶段最终验收记录中单独报告。当前状态与证据见[STATUS](../../project/STATUS.md)、[VALIDATION](../../project/VALIDATION.md)。
 
@@ -114,4 +114,4 @@ frame深冻结，含width/height、payload、view（该页面/区域的context�
 | Invalid plugin layout expansion budget | 组件递归或树超预算，拆分界面而不是取消限制 |
 | Invalid layout style / Invalid theme tokens | 核对允许的属性、单位和范围；不要传任意 CSS |
 
-文件改名时搜索 `resolveLayout`、`class LayoutDOM`、`ui.region`、`bag-notebook`。接口改动同步公开类型、Skill和对应例；只查改变的边界，不每次重跑未变化的游戏规则。
+文件改名时搜索 `resolveLayout`、`class LayoutDOM`、`ui.region`、`formFixture`。接口改动同步公开类型、Skill和对应例；只查改变的边界，不每次重跑未变化的游戏规则。

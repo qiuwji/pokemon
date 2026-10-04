@@ -16,8 +16,8 @@ import { validateLayout } from "../dist/engine/extensions/ui-registry.js";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
 import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { companionCare } from "../dist/plugins/companion-care.js";
-import { createFieldJournal } from "../dist/plugins/field-journal.js";
+import { interactionFixture } from "./fixtures/extensions/interaction.js";
+import { createWorldFixture } from "./fixtures/extensions/world.js";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
@@ -37,8 +37,8 @@ const manifest = (id, setup, rest = {}) => ({
 });
 function gameWith(
   plugins = [
-    companionCare,
-    createFieldJournal(base.maps.LittlerootTown_ProfessorBirchsLab),
+    interactionFixture,
+    createWorldFixture(base.maps.LittlerootTown_ProfessorBirchsLab),
   ],
 ) {
   const errors = [],
@@ -146,9 +146,9 @@ test("Two independent plugins register pages and slots without modifying the bui
   const { host, db, catalog } = gameWith();
   assert.equal(host.ui.pages.size, 2);
   assert.equal(host.ui.inSlot("monster.detail").length, 2);
-  assert(db.maps["field-journal:annex"]);
-  assert(catalog.items["field-journal:trail-biscuit"]);
-  assert(!base.maps["field-journal:annex"]);
+  assert(db.maps["fixture-world:annex"]);
+  assert(catalog.items["fixture-world:trail-biscuit"]);
+  assert(!base.maps["fixture-world:annex"]);
   assert.equal(
     db.maps.LittlerootTown_ProfessorBirchsLab.warps.length,
     base.maps.LittlerootTown_ProfessorBirchsLab.warps.length + 1,
@@ -164,7 +164,7 @@ test("Detail interaction composes action, core item/friendship, saved memory, li
     mon = game.state.party[0],
     friendship = mon.friendship;
   setQuantity(game.state.bag, "blue_pokeblock", 2);
-  await bus.execute("companion-care:interact", {
+  await bus.execute("fixture-interaction:interact", {
     uid: mon.uid,
     activity: "feed",
   });
@@ -172,22 +172,22 @@ test("Detail interaction composes action, core item/friendship, saved memory, li
   assert(mon.beauty > 0);
   assert(mon.friendship > friendship);
   assert.equal(presentation.length, 1);
-  const record = game.state.extensions["companion-care"];
+  const record = game.state.extensions["fixture-interaction"];
   assert.equal(record.data.partners[mon.uid].interactions, 1);
-  assert.equal(record.states[mon.uid]["companion-care:excited"].remaining, 128);
+  assert.equal(record.states[mon.uid]["fixture-interaction:excited"].remaining, 128);
   assert(validateSave(game.state, game.db, game.catalog, host));
   host.runtime.advance("step");
   assert.equal(
-    game.state.extensions["companion-care"].states[mon.uid][
-      "companion-care:excited"
+    game.state.extensions["fixture-interaction"].states[mon.uid][
+      "fixture-interaction:excited"
     ].remaining,
     127,
   );
   for (let i = 0; i < 127; i++) host.runtime.advance("step");
-  assert(!game.state.extensions["companion-care"].states[mon.uid]);
-  const view = host.runtime.view("companion-care", { uid: mon.uid }),
+  assert(!game.state.extensions["fixture-interaction"].states[mon.uid]);
+  const view = host.runtime.view("fixture-interaction", { uid: mon.uid }),
     tree = host.runtime.evaluate(
-      host.ui.pages.get("companion-care:interaction").render,
+      host.ui.pages.get("fixture-interaction:interaction").render,
       view,
     );
   validateLayout(tree, {
@@ -204,7 +204,7 @@ test("Failed feeding rolls back memory, states, inventory, friendship, events an
   mon.sheen = 250;
   const original = structuredClone(game.state),
     events = [];
-  host.events.on("companion-care:interacted", (e) => events.push(e));
+  host.events.on("fixture-interaction:interacted", (e) => events.push(e));
   const inventory = game.applications.inventory;
   const originalUse = inventory.useItem.bind(inventory);
   game.applications.inventory.useItem = (...args) => {
@@ -213,7 +213,7 @@ test("Failed feeding rolls back memory, states, inventory, friendship, events an
     return result;
   };
   await assert.rejects(
-    bus.execute("companion-care:interact", { uid: mon.uid, activity: "feed" }),
+    bus.execute("fixture-interaction:interact", { uid: mon.uid, activity: "feed" }),
     /fault/,
   );
   assert.deepEqual(game.state, original);
@@ -319,22 +319,22 @@ test("Plugin memory survives lead changes, box custody and omission; content ref
   const { game, host, bus } = gameWith(),
     m = game.state.party[0];
   game.state.party.push(createMonster("treecko", 5, game.db, game.rng));
-  await bus.execute("companion-care:interact", { uid: m.uid, activity: "pet" });
+  await bus.execute("fixture-interaction:interact", { uid: m.uid, activity: "pet" });
   game.setLead(1);
   game.depositBox(1);
   assert.equal(
-    game.state.extensions["companion-care"].data.partners[m.uid].interactions,
+    game.state.extensions["fixture-interaction"].data.partners[m.uid].interactions,
     1,
   );
   const naked = gameWith([]);
   assert(validateSave(game.state, naked.db, naked.catalog, naked.host));
   const copy = structuredClone(game.state);
-  copy.position = { map: "field-journal:annex", x: 3, y: 5, dir: "up" };
-  copy.contentDependencies = ["field-journal"];
+  copy.position = { map: "fixture-world:annex", x: 3, y: 5, dir: "up" };
+  copy.contentDependencies = ["fixture-world"];
   assert(!validateSave(copy, naked.db, naked.catalog, naked.host));
   const broken = structuredClone(game.state);
-  broken.extensions["companion-care"].states = {
-    x: { "companion-care:excited": { remaining: 0, data: { mood: 2 } } },
+  broken.extensions["fixture-interaction"].states = {
+    x: { "fixture-interaction:excited": { remaining: 0, data: { mood: 2 } } },
   };
   assert(!validateSave(broken, game.db, game.catalog, host));
 });
@@ -504,13 +504,13 @@ test("A state fault restores its clock and memory and missing plugin core conten
   const normal = gameWith(),
     document = normal.game.exportDocument();
   document.state.position = {
-    map: "field-journal:annex",
+    map: "fixture-world:annex",
     x: 3,
     y: 5,
     dir: "up",
   };
-  document.state.contentDependencies = ["field-journal"];
-  assert.throws(() => game.loadDocument(document), /field-journal/);
+  document.state.contentDependencies = ["fixture-world"];
+  assert.throws(() => game.loadDocument(document), /fixture-world/);
   assert.equal(game.state.position.map, "LittlerootTown");
 });
 
@@ -618,7 +618,7 @@ test("Themes and world feedback use bounded public definitions; invalid scopes a
     /synchronous/,
   );
   const { host } = gameWith();
-  assert(host.ui.themes.has("companion-care:warm"));
+  assert(host.ui.themes.has("fixture-interaction:warm"));
   assert.throws(
     () =>
       validateLayout(
@@ -658,11 +658,11 @@ test("Domain permissions are supplied by the content pack and queued observation
   const pending = bus.execute("test.async");
   host.events.emit("core:field-step", { x: 1 });
   host.events.emit("core:field-step", { x: 2 });
-  assert.equal(game.state.extensions["field-journal"].data.steps, undefined);
+  assert.equal(game.state.extensions["fixture-world"].data.steps, undefined);
   release(true);
   await pending;
   await new Promise((resolve) => setImmediate(resolve));
-  assert.equal(game.state.extensions["field-journal"].data.steps, 2);
+  assert.equal(game.state.extensions["fixture-world"].data.steps, 2);
 });
 
 test("Authorized plugins can use exposed domain commands and equipment removal remains a validated intent", async () => {

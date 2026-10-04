@@ -77,7 +77,7 @@ WorldStateService 分离永久覆盖与当前访问 visit 覆盖；地图重进�
 
 FieldActionService 拥有资格、目标和可校验行动计划；应用层协调移动/世界提交/钓鱼会话与演出。FieldTerrainRegistry 管通行和强制动作政策。FieldDeviceCatalog/FieldDevices 管多格 footprint、访问激活、逻辑状态与可保存的局部延迟任务；机关计时遵循游戏暂停，不使用 RTC 驱动帧动画。薄冰、裂地板和桥面升沉是内容包政策，核心没有房间 ID 分支。见 [FIELD_ACTIONS.md](docs/engine/field/FIELD_ACTIONS.md)、[FIELD_TERRAIN.md](docs/engine/field/FIELD_TERRAIN.md)、[FIELD_DEVICES.md](docs/engine/field/FIELD_DEVICES.md)、[BRIDGES.md](docs/engine/field/BRIDGES.md)。
 
-物品绑定、对象确认与地形/受阻行动共用注册入口。通用ObjectMotion预检一格位移、跟进和占位，WorldObjectOperations协调现有世界覆盖/玩家移动，纯导演输出偏移；怪力和箱子条件只在内容中。FieldEffects单独拥有持续野外数据，定义visit/world保留政策；地图darkness与light-radius投影经纯LightingDirector形成遮罩。照明不决定可见性规则或遇敌。见同一野外合同与独立interaction-workshop例；遇敌政策/接触见对应世界合同，外观、二维相机及独立环境层见[外观与视图](docs/engine/presentation/APPEARANCE_AND_VIEW.md)；探索可见性仍按[插件计划](docs/project/PLUGIN_ROADMAP.md)推进。
+物品绑定、对象确认与地形/受阻行动共用注册入口。通用ObjectMotion预检一格位移、跟进和占位，WorldObjectOperations协调现有世界覆盖/玩家移动，纯导演输出偏移；怪力和箱子条件只在内容中。FieldEffects单独拥有持续野外数据，定义visit/world保留政策；地图darkness与light-radius投影经纯LightingDirector形成遮罩。照明不决定可见性规则或遇敌。见同一野外合同与tests/field-interactions.test.js的测试夹具；遇敌政策/接触见对应世界合同，外观、二维相机及独立环境层见[外观与视图](docs/engine/presentation/APPEARANCE_AND_VIEW.md)；探索可见性仍按[插件计划](docs/project/PLUGIN_ROADMAP.md)推进。
 
 MovementRegistry / MovementInputRegistry 分别描述模式和输入策略。Mach/Acro 原作控制在 Gen3 政策中，浏览器只映射逻辑输入。GridMotion / Sprite 序列负责插值和姿态帧，不决定规则。见 [MOVEMENT_INPUT.md](docs/engine/field/MOVEMENT_INPUT.md)。
 

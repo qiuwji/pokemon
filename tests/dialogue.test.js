@@ -13,7 +13,7 @@ import {
 import { DialogueDOM } from "../dist/adapters/dialogue-dom.js";
 import { createUIShell } from "../dist/packs/emerald/ui-shell.js";
 import { layoutDocument } from "./helpers/layout-document.js";
-import { session, manifest } from "../examples/helpers/session.js";
+import { session, manifest } from "./helpers/session.js";
 function clockPort() {
   let time = 0,
     id = 0;

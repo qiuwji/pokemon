@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 import { validateLayout } from "../dist/engine/extensions/ui-registry.js";
 test("detail entry renders a clickable action with persistent memory", async () => {
   let api;

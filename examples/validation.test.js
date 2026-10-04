@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("late invalid intent rolls back plugin memory and world money", async () => {
   let api;
   const plugin = manifest("check-demo", value => {

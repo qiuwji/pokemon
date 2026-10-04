@@ -51,9 +51,9 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 ## 典型消费方
 
-`dist/plugins/companion-care.js` 是独立详情互动页。注册入口、图片/按钮行动、情绪数据、excited 状态、亲密度修饰、喂食核心意图、互动事件和像素爱心反馈。点击图片抚摸，按钮玩耍/喂食；无需给原详情页加入这些玩法分支。
+[页面入门例](../../examples/plugin-page.test.js)通过详情入口、按钮action和自有记忆验证最小UI扩展；[宿主合同测试](../../tests/plugins.test.js)使用独立夹具验证状态、规则修饰、核心意图、事件、反馈及失败回滚。夹具不打包到游戏。
 
-`dist/plugins/field-journal.js` 是第二个独立消费方。注册小饼干、新网格房间/观察员、研究所门、一次性剧情奖励、手记页面/详情入口、菜单入口、步数 HUD 和事件驱动计数。实验室东侧 (12,9) 入口从 (12,8) 向下进入，返回也落在通行网格。
+[世界剧情例](../../examples/world-story.test.js)串联地图、NPC、交互和一次奖励。当前 `dist/plugins/catalog.json` 为空；增加产品插件时登记清单即可，无需改app.js。产品插件可以独立增删，核心测试不得导入它们。具体测试分层见[测试指南](../development/TESTING.md)。
 
 ```js
 const plugin = {

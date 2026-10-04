@@ -158,3 +158,15 @@ test("Inventory quantities cannot be mutated as count dictionaries; UI cannot co
     }
   }
 });
+
+// Product plugins may be removed without changing engine contract test support.
+test("Core tests and fixtures do not import installed plugins or authoring examples", () => {
+  for (const file of modules(new URL("../tests/", import.meta.url).pathname)) {
+    const source = fs.readFileSync(file, "utf8");
+    for (const match of source.matchAll(/from\s+["']([^"']+)["']/g)) {
+      const target = path.resolve(path.dirname(file), match[1]);
+      assert(!target.startsWith(new URL("../dist/plugins/", import.meta.url).pathname), file);
+      assert(!target.startsWith(new URL("../examples/", import.meta.url).pathname), file);
+    }
+  }
+});

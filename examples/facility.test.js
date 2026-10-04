@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("non-battle facility progresses and settles once", async () => {
   const plugin = manifest("stage-demo", api => {
     const activity = api.content.register("facilityActivities", "appeal", {

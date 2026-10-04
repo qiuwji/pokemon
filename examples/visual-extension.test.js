@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("a plugin composes appearance, camera range and independent fog", async () => {
   let api;
   const plugin = manifest("visual-demo", value => {

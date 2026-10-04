@@ -4,7 +4,7 @@ import {
   manifest,
   session,
   objectSchema,
-} from "../examples/helpers/session.js";
+} from "./helpers/session.js";
 import { canvasAdapter } from "./helpers/canvas-extension-fixture.js";
 import { validateLayout } from "../dist/engine/extensions/layout-contracts.js";
 import {
@@ -12,7 +12,6 @@ import {
   VisualTimeline,
 } from "../dist/presentation/visual-timeline.js";
 import { ExtensionFeedback } from "../dist/presentation/extension-feedback.js";
-import { canvasGallery } from "../dist/plugins/canvas-gallery.js";
 
 const pointerSchema = objectSchema(
   {
@@ -420,40 +419,6 @@ test("Finite feedback consumes immutable sampled frames and separate assets, exp
   feedback.draw(ctx, {}, {}, 100);
   assert.equal(s.frames.length, 1);
   assert.equal(feedback.active.length, 0);
-});
-
-test("Independent Canvas gallery mounts through native menu and detail slots and rejects stale creature context", async () => {
-  const s = session([canvasGallery]),
-    a = canvasAdapter(s);
-  a.ext.mountSlot("menu", a.root);
-  a.root.querySelector("button").onclick();
-  a.frame(0);
-  a.frame(400);
-  assert.equal(a.paints.length, 6);
-  await a.root
-    .querySelector("button")
-    .onclick({ detail: 1, clientX: 210, clientY: 180 });
-  const memory = s.game.state.extensions["canvas-gallery"].data["last-touch"];
-  assert.deepEqual(memory, { pointer: { x: 100, y: 80, source: "pointer" } });
-  a.shell.closeModal();
-  a.ext.mountSlot("monster.content", a.root, { uid: s.mon.uid });
-  a.frame(500);
-  await a.root.querySelector("button").onclick({ detail: 0 });
-  assert.equal(
-    s.game.state.extensions["canvas-gallery"].data["last-touch"].uid,
-    s.mon.uid,
-  );
-  a.ext.unmountRegions();
-  a.root.replaceChildren();
-  a.ext.mountSlot("monster.content", a.root, { uid: "missing" });
-  await a.root.querySelector("button").onclick({ detail: 0 });
-  assert.equal(
-    s.game.state.extensions["canvas-gallery"].data["last-touch"].uid,
-    s.mon.uid,
-  );
-  assert.match(a.errors.at(-1).message, /离开队伍/);
-  a.ext.dispose();
-  assert.equal(a.ext.layout.canvases.size, 0);
 });
 
 test("Disabled form Canvas refuses clicks; one in-flight action cannot remount a closed page", async () => {

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "./helpers/session.js";
+import { manifest, session } from "../tests/helpers/session.js";
 test("plugin field plan commits through the public command", async () => {
   const plugin = manifest("paint-demo", api => {
     api.content.register("fieldActions", "paint", {

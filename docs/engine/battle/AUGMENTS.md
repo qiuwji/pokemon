@@ -4,7 +4,7 @@
 
 ## 内容如何注册
 
-使用 `api.content.register("battleAugments", localId, definition)`，保存返回的命名空间 ID；先注册替换招式，再引用它。真实独立插件见 [battle-burst.js](../../../dist/plugins/battle-burst.js)，公共装配及断言见 [battle-augments.test.js](../../../tests/battle-augments.test.js)。文件改名时搜索 `battleAugments`、`core.battle.augments`、`augmentId`。
+使用 `api.content.register("battleAugments", localId, definition)`，保存返回的命名空间ID；先注册替换招式再引用。最小注册见[增强测试夹具](../../../tests/fixtures/extensions/augment.js)，公共装配及断言见[battle-augments.test.js](../../../tests/battle-augments.test.js)。文件改名时搜索 `battleAugments`、`core.battle.augments`、`augmentId`。
 
 | 字段 | 合同 |
 | --- | --- |
@@ -46,7 +46,7 @@ BattleAugmentRegistry 拥有定义校验；BattleAugments 拥有预览、资格�
 
 ## 代表例与查错
 
-开发服务地址加 `?battle-burst=1` 启用爆发插件；例如 `http://127.0.0.1:5175/?battle-burst=1`，端口以实际启动为准。开始战斗后，攻击菜单会为符合条件的原招式展示增强按钮。该例是普通属性威力100、优先级1的项目示范，不是原作 Z 招式威力表或保护削弱算法。
+当前不装配爆发业务插件。[合同测试](../../../tests/battle-augments.test.js)通过普通属性威力100、优先级1的夹具验证原槽PP、费用、限次及事件；它不是原作Z招式威力表或保护削弱算法。浏览器业务需另按作者指南装配并验收。
 
 | 错误或返回 reason | 排查 |
 | --- | --- |

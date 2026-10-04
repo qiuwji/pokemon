@@ -1,7 +1,7 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session } from "../examples/helpers/session.js";
+import { manifest, session } from "./helpers/session.js";
 import { ActorScheduleRegistry } from "../dist/engine/actor-schedules.js";
 import { NPCBehaviorRegistry } from "../dist/engine/npc-behaviors.js";
 import {
@@ -9,7 +9,6 @@ import {
   emptyWorldClock,
   DAY_MS,
 } from "../dist/engine/world-clock.js";
-import { actorDayCycle } from "../dist/plugins/actor-day-cycle.js";
 const base = loadContentSync();
 const position = (map, x = 2, y = 1) => ({
   map: `routine:${map}`,
@@ -268,21 +267,4 @@ test("A schedule includes foreign destination plugins in the save dependency led
   const before = structuredClone(missing.game.state);
   assert.throws(() => missing.game.loadDocument(document));
   assert.deepEqual(missing.game.state, before);
-});
-test("The independent daily-worker plugin assembles and saves through public registration and commands", async () => {
-  const s = session([actorDayCycle]);
-  await start(s);
-  const { actor } = await s.bus.execute("core.actor.spawn", {
-    template: "actor-day-cycle:worker",
-    position: {
-      map: "LittlerootTown_ProfessorBirchsLab",
-      x: 8,
-      y: 3,
-      dir: "down",
-    },
-  });
-  assert(actor);
-  s.game.loadDocument(s.game.exportDocument());
-  assert.equal(s.game.actors.view(actor.uid).map, "LittlerootTown");
-  assert.equal(s.game.actors.routines()[actor.uid].id, "work");
 });

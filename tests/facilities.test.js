@@ -15,7 +15,7 @@ import { createMonster, Random } from "../dist/engine/model.js";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
-import { facilityGames } from "../dist/plugins/facility-games.js";
+import { facilityFixture } from "./fixtures/extensions/facility.js";
 import { validateSave } from "../dist/packs/emerald/pack.js";
 const base = loadContentSync();
 function fixture(plugins = [], storage = new Map()) {
@@ -291,10 +291,10 @@ test("Facility admission and active-session boundaries reject party changes, fie
   assert.equal(game.facilityView().results[0].outcome, "quit");
 });
 test("Failed facility action restores RNG/economy/session; slot plugin runs without any combat", async () => {
-  const { game, bus } = fixture([facilityGames]);
+  const { game, bus } = fixture([facilityFixture]);
   assert(
     bus.executeSync("core.facility.enter", {
-      id: "facility-games:game-room",
+      id: "fixture-facility:game-room",
       team: [],
     }).ok,
   );
@@ -428,9 +428,9 @@ test("UI facade routes facilities through the shared bus and save validation rej
 });
 
 test("Presentation failure after a non-battle commit preserves its economy, progress and consumed RNG", async () => {
-  const { game, bus } = fixture([facilityGames]);
+  const { game, bus } = fixture([facilityFixture]);
   bus.executeSync("core.facility.enter", {
-    id: "facility-games:game-room",
+    id: "fixture-facility:game-room",
     team: [],
   });
   const seed = game.rng.snapshot(),
@@ -492,15 +492,15 @@ test("Losing an isolated facility battle releases the session without blackout, 
   assert.equal(game.state.money, money);
 });
 test("Completed activity results reload with their plugin, while a missing activity plugin protects the original save", async () => {
-  const { game, bus, storage } = fixture([facilityGames]);
+  const { game, bus, storage } = fixture([facilityFixture]);
   bus.executeSync("core.facility.enter", {
-    id: "facility-games:game-room",
+    id: "fixture-facility:game-room",
     team: [],
   });
   await bus.execute("core.facility.action", { action: "spin" });
   bus.executeSync("core.facility.quit");
   const saved = [...storage.values()][0];
-  const restored = fixture([facilityGames], storage).game;
+  const restored = fixture([facilityFixture], storage).game;
   assert.equal(restored.facilityActive, false);
   assert.deepEqual(
     restored.state.facilities.results,
@@ -509,7 +509,7 @@ test("Completed activity results reload with their plugin, while a missing activ
   assert.equal(restored.state.money, game.state.money);
   const missing = fixture([], storage).game;
   assert.equal(missing.saveProtected, true);
-  assert.match(missing.saveWarning, /facility-games/);
+  assert.match(missing.saveWarning, /fixture-facility/);
   missing.save();
   assert.equal([...storage.values()][0], saved);
 });

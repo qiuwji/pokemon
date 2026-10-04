@@ -1,7 +1,7 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { session } from "../examples/helpers/session.js";
+import { session } from "./helpers/session.js";
 import { createMonster, Random } from "../dist/engine/model.js";
 import { interaction, battleOutcome } from "../dist/packs/emerald/story.js";
 import { objectsFor } from "../dist/packs/emerald/pack.js";

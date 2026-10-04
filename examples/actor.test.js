@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "./helpers/session.js";
+import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("plugin actor identity and memory survive save restore", async () => {
   const plugin = manifest("actor-demo", api => {
     api.content.register("npcBehaviors", "idle", { decide: () => ({ pose: "still" }) });
