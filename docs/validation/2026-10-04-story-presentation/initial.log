@@ -1,0 +1,254 @@
+✔ Pure tracks interpolate segment keyframes with shared named easing and stable boundaries (1.384333ms)
+✔ Reusable fragments keep local keyframe timing when placed in charge, release and impact intervals (0.496125ms)
+✔ Per-target hit and miss branches use committed facts and cannot mutate event or layout (0.262667ms)
+✔ Strict animation contracts reject unknown timing, channel shape, pose, async data and easing (0.219166ms)
+✔ Battle event registration picks specific selectors, rejects duplicates and seals against mutation (0.322958ms)
+✔ A form plugin controls injected-clock choreography while battle snapshots and reduced-motion facts remain intact (3.555167ms)
+✔ Append choreography preserves default movement while adding a reusable effect (0.164917ms)
+✔ A per-move pose track drives visual offsets without adding a new director branch (0.157792ms)
+✔ Field-wide event tracks have a viewport anchor even when the semantic event has no acting seat (0.078958ms)
+✔ Entire command tree is validated before rewards or movement; parallel pose conflicts fail early (1.3195ms)
+✔ Parallel choreography joins every track and drains in-flight movement before reporting failure (2.042583ms)
+✔ Camera pans independently of player state, holds focus, then returns smoothly to live follow (0.585417ms)
+✔ A different content pack reuses scripted walking, NPC tracks, camera and emotes without field triggers (2.808208ms)
+✖ Rescue choreography from bag side 6,14 approaches before travel and enters lab under blackout (6.839292ms)
+✖ Rescue choreography from bag side 7,13 approaches before travel and enters lab under blackout (3.852042ms)
+✖ Rescue choreography from bag side 8,14 approaches before travel and enters lab under blackout (2.304ms)
+✖ Rescue choreography from bag side 7,15 approaches before travel and enters lab under blackout (2.564708ms)
+✖ Intro plays independent NPC tracks, keeps progress incomplete until dialogue finishes, and releases camera (1.741333ms)
+✖ Bag investigation walks to its interaction position and waits before opening selection (1.95475ms)
+✖ Failed scene clears input ownership, camera, actor overrides and transient effects without saving partial choreography (1.642458ms)
+✖ Defeat return uses the shared entrance choreography and finishes on reachable center floor (1.7695ms)
+✔ Route planning honors connected-map destination NPCs and rejects unreachable targets (0.295875ms)
+✖ Malformed choreography is rejected before earlier rewards, positions or save state are changed (1.574792ms)
+✖ Movement automation returns at a story/dialogue boundary without waiting for acknowledgement (2.098459ms)
+✖ Dialogue confirmation gates later actor movement and flags, and input stays locked between commands (1.742792ms)
+✖ Scripted battle handoff releases field input ownership and redraws a ready combat menu (1.787625ms)
+✔ Scene commit occurs at full coverage exactly once; duplicate transition is refused (2.25875ms)
+✔ Transition failures release the input lock (0.143375ms)
+✔ HP interpolation is visual only; a zero-HP actor remains visible until faint finishes (0.813667ms)
+✔ Capture shakes follow domain result; failed capture restores opponent and successful capture seals ball (2.1895ms)
+✔ Combat session rejects repeated actions while presenting the previous turn (0.324833ms)
+✔ A different tiny content pack reuses the field session without Emerald names or DOM (1.283292ms)
+✔ Story commands await dialogue before applying later rewards; unknown commands fail explicitly (0.84975ms)
+✔ Reduced motion removes shaking while preserving HP timing and blackout commit (0.330584ms)
+✔ Content contract rejects missing grid tiles, invalid learnsets and dimensions (6.164417ms)
+✔ Battle events expose semantic animation metadata and immutable health snapshots (9.415125ms)
+✔ Party commands reject invalid use and evolution never revives a fainted member (1.554667ms)
+✖ Pack application rejects out-of-context inventory commands and preserves compatible saves (4.980583ms)
+✔ Versioned storage accepts only the current save format without rewriting rejected source (0.252166ms)
+✖ Completed combat returns at dialogue boundary without waiting for the next user confirmation (2.829292ms)
+✔ Missed moves identify the failed hit so presentation does not draw an impact (2.051583ms)
+✔ Public camera leases change range/focus without changing world state; ties and disconnected foci fail before writes (37.250875ms)
+✔ Projection and inverse use the same letterboxed space, reject margins and preserve tile coordinates (15.129458ms)
+✔ Story camera temporarily wins over plugin focus, then restores it; visit/session leases reset at proper boundaries (21.50975ms)
+✔ Independent fog layers compose in order without replacing logical weather; schema errors and unknown drawings fail (15.966959ms)
+✔ Field renderer shares projection for tiles/actors/weather/light and environment; frame drawing leaves rules untouched (13.062042ms)
+✔ Environment drawing is deterministic, honors reduced motion and releases context on failure (0.089208ms)
+✔ Public density composition selects distinct grass cells, prepares regional individuals and displays their species without StoryRunner (38.269334ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 34
+ℹ fail 14
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 254.798584
+
+✖ failing tests:
+
+test at tests/cutscene.test.js:251:3
+✖ Rescue choreography from bag side 6,14 approaches before travel and enters lab under blackout (6.839292ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:252:59)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:251:3
+✖ Rescue choreography from bag side 7,13 approaches before travel and enters lab under blackout (3.852042ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:252:59)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:251:3
+✖ Rescue choreography from bag side 8,14 approaches before travel and enters lab under blackout (2.304ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:252:59)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:251:3
+✖ Rescue choreography from bag side 7,15 approaches before travel and enters lab under blackout (2.564708ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:252:59)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:307:1
+✖ Intro plays independent NPC tracks, keeps progress incomplete until dialogue finishes, and releases camera (1.741333ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:308:37)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:324:1
+✖ Bag investigation walks to its interaction position and waits before opening selection (1.95475ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:325:27)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:342:1
+✖ Failed scene clears input ownership, camera, actor overrides and transient effects without saving partial choreography (1.642458ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:343:35)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:356:1
+✖ Defeat return uses the shared entrance choreography and finishes on reachable center floor (1.7695ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:357:37)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:388:1
+✖ Malformed choreography is rejected before earlier rewards, positions or save state are changed (1.574792ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:389:28)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:418:1
+✖ Movement automation returns at a story/dialogue boundary without waiting for acknowledgement (2.098459ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:419:27)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:430:1
+✖ Dialogue confirmation gates later actor movement and flags, and input stays locked between commands (1.742792ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:431:27)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/cutscene.test.js:453:1
+✖ Scripted battle handoff releases field input ownership and redraws a ready combat menu (1.787625ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at makeGame (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:79:16)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/cutscene.test.js:454:27)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+
+test at tests/presentation.test.js:292:1
+✖ Pack application rejects out-of-context inventory commands and preserves compatible saves (4.980583ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/presentation.test.js:301:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+
+test at tests/presentation.test.js:342:1
+✖ Completed combat returns at dialogue boundary without waiting for the next user confirmation (2.829292ms)
+  TypeError: Cannot convert undefined or null to object
+      at Object.hasOwn (<anonymous>)
+      at SpriteClips.register (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/presentation/sprite-clips.js:17:19)
+      at createEmeraldSpriteClips (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/sprite-clips.js:8:14)
+      at new PresentationApplication (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/presentation-application.js:19:24)
+      at composeApplications (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/application/composition.js:199:31)
+      at new EmeraldAdventure (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/packs/emerald/adventure.js:112:5)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/presentation.test.js:347:16)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)

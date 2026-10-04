@@ -119,6 +119,42 @@ test("registered text effect reaches an NPC dialogue through the story applicati
 });
 ```
 
+## 场景表现与队列
+
+镜头位移/縮放用注册场景field，叠层用draw；先读[表现合同](../../docs/architecture/PRESENTATION.md)，无需改渲染器。镜头坐标和反投影共用服务，采样不写规则。多个NPC临时排队用escort.followers；成员必须有序相邻，parent parallel占用所有成员。它不是常驻伙伴跟随或任意队形控制；前往不同落点可用既有move/parallel。
+
+完整例：[examples/scene-story.test.js](../../examples/scene-story.test.js)，项目根执行 `node --test examples/scene-story.test.js`。它使用真实剧情/服务与手动等待端口，证明注册镜头演出结束后才发奖励；浏览器还原须另验。真实切图仍用scene的遮盖提交，不能用纯色画面隐藏直接坐标写入。
+
+<!-- runnable-example: examples/scene-story.test.js -->
+```js
+import test from "node:test";
+import assert from "node:assert/strict";
+import { manifest, session, objectSchema } from "./helpers/session.js";
+test("a registered field scene focuses the view and gates a subsequent reward", async () => {
+  const plugin = manifest("scene-demo", api => {
+    api.presentation.scene("focus", {
+      duration: 800, schema: objectSchema(),
+      field: frame => ({ zoom: 1 + Math.sin(frame.progress * Math.PI) }),
+    });
+  });
+  const { game } = session([plugin]), money = game.state.money;
+  let finish;
+  game.timeline.wait = () => new Promise(resolve => { finish = resolve; });
+  const normal = game.cameraProjection();
+  const running = game.runStory([
+    { type: "presentation", id: "scene-demo:focus" },
+    { type: "reward", id: "scene-demo:after", money: 5 },
+  ]);
+  await new Promise(setImmediate);
+  assert.equal(game.state.money, money);
+  assert.equal(game.cameraProjection({}, 400).width, normal.width / 2);
+  assert(game.storyBusy); finish(); await running;
+  assert.equal(game.state.money, money + 5);
+  assert.equal(game.storyBusy, false);
+  assert.deepEqual(game.cameraProjection(), normal);
+});
+```
+
 ## 常见错误与排查
 
 报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。

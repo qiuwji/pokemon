@@ -32,7 +32,7 @@ environment-canvas 仅分发注册天气画师；WeatherDirector 按注入时钟
 
 ## 通用场景演出
 
-`SceneDirector` 管理单个场景的校验、时间、互斥和 finally 释放；`SceneDOM` 绘制注册定义。剧情使用 `{type:'presentation', id, payload}`，与其他模态指令不能并行。奖励仍由独立 reward 指令负责，场景展示不写进度。插件通过 `api.presentation.scene(id,{duration,schema,draw,sound?})` 注册。
+`SceneDirector` 管理单个场景的校验、时间、互斥和 finally 释放；`SceneDOM` 绘制注册定义。剧情使用 `{type:'presentation', id, payload}`，与其他模态指令不能并行。奖励仍由独立 reward 指令负责，场景展示不写进度。插件通过 `api.presentation.scene(id,{duration,schema,draw?,field?,sound?})` 注册，draw和field至少一个。
 
 徽章、联盟入场、选美舞台、战斗塔、标题、图鉴已有 6 个演出示例，可在主菜单“场景演出”检查。这些不是完整道馆、联盟、选美或战斗塔玩法。菜单页面采用短 steps 动画，减少动态效果时禁用。
 
@@ -55,3 +55,15 @@ environment-canvas 仅分发注册天气画师；WeatherDirector 按注入时钟
 逐字对话采用描述→字素时间轨道→纯采样→DOM宿主，文字效果独立注册；确认/取消的领域等待由UI shell拥有。详见[对话合同](../engine/presentation/DIALOGUE.md)。当前验证见[进度](../project/STATUS.md)，历史检查点不代表本轮全部浏览器验收。
 
 资源帧片段独立于野外方向动画：SpriteClips保存资源/裁切/时长与显式绑定，SpriteCanvas消费时间采样并负责Canvas播放，共享UI宿主清理页面资源。原生详情页与插件共用接口，资源统计与原作时序边界见[帧片段合同](../engine/presentation/SPRITE_CLIPS.md)。
+
+## 注册场景的纯镜头通道
+
+field(frame)消费冻结SceneFrame：id、payload、duration、start、progress（0–1）和reducedMotion，纯同步返回{x?,y?,zoom?}。x/y是相对镜头焦点的世界像素偏移（绝对值≤64），zoom为0.25–4倍率；缺省0/0/1。静态cameraProfile与该倍率组合，不改变世界坐标。reducedMotion时宿主跳过field回调并返回中性变换，场景结束/失败也回到中性；错误或异步回调只报告一次并禁用该场景剩余镜头采样，不中断主渲染循环或计算规则。
+
+SceneDirector统一拥有场景时钟和镜头采样，SceneDOM只消费可选draw，不为field-only场景遮住世界。ViewApplication将纯变换组合到投影；实际Renderer、可见地图计算和公开project/unproject共享投影，不能各写一套屏幕偏移。纯变换不发布业务事件、不提交规则，注册回调不能使用命令或事务。
+
+闪光/淡变无需新增引擎分支：通过draw注册叠层并尊重reducedMotion；缩放/震动通过field注册确定性采样。原作具体曲线、场景脚本和素材由业务内容提供。跨地图提交仍走TransitionController覆盖边界；这套接口不让颜色遮盖擅自成为逻辑传送。
+
+真实入门例见[scene-story.test.js](../../examples/scene-story.test.js)，Node端口验收见[story-presentation.test.js](../../tests/story-presentation.test.js)。如果源码更名，搜索`fieldTransform`、`api.presentation.scene`、`Escort members`。
+
+剧情中field-only场景声明独立field-presentation资源，可以与move、escort或cameraTo/cameraFollow并行；两段镜头片段不可重叠，完整parallel等待所有分支结束再继续。带draw的场景保留全屏/模态互斥，不能借字段同时绕过两种合同。

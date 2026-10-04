@@ -848,9 +848,14 @@ export interface PluginAPI {
         duration: number;
         schema: DataSchema;
         sound?: string;
-        draw: (
+        field?: (frame: Readonly<SceneFrame>) => {
+          x?: number;
+          y?: number;
+          zoom?: number;
+        };
+        draw?: (
           context: unknown,
-          frame: Readonly<Json>,
+          frame: Readonly<SceneFrame>,
           assets: unknown,
         ) => void;
       },
@@ -1553,4 +1558,13 @@ export interface SpriteClipDefinition {
     rect?: { x: number; y: number; width: number; height: number };
     durationMs: number;
   }[];
+}
+
+export interface SceneFrame {
+  id: string;
+  payload: Readonly<Record<string, Json>>;
+  duration: number;
+  start: number;
+  progress: number;
+  reducedMotion: boolean;
 }

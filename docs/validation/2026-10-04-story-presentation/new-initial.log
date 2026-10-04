@@ -1,0 +1,41 @@
+✖ Escort coordinates multiple NPC/player tracks through shared source occupancy and releases control (3.17725ms)
+✖ Escort may coordinate NPCs without moving the player, and malformed/nonadjacent chains fail before moving (1.663917ms)
+✔ Group escort resource claims prevent a parallel branch from controlling any member before rewards (0.988041ms)
+✔ Scene field transforms are pure bounded sampling with reduced motion and isolated faulty callbacks (0.549083ms)
+✔ Malformed/async field transforms report once and restore neutral projection instead of breaking the render loop (0.344791ms)
+✖ Public field-only scenes change actual world projection and inverse coordinates, never world state or RNG (26.423583ms)
+✔ Registered overlay and field definitions validate together; invalid scene payload preflights before reward (16.664083ms)
+✔ Pack bootstrap materializes native sprite resources for headless and plugin sessions using one policy (13.191875ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 5
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 175.770167
+
+✖ failing tests:
+
+test at tests/story-presentation.test.js:64:1
+✖ Escort coordinates multiple NPC/player tracks through shared source occupancy and releases control (3.17725ms)
+  ReferenceError: assert is not defined
+      at Object.drain (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/helpers/story-clock.js:37:9)
+      at async TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/story-presentation.test.js:71:3)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+
+test at tests/story-presentation.test.js:85:1
+✖ Escort may coordinate NPCs without moving the player, and malformed/nonadjacent chains fail before moving (1.663917ms)
+  ReferenceError: assert is not defined
+      at Object.drain (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/helpers/story-clock.js:37:9)
+      at async TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/story-presentation.test.js:88:3)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at tests/story-presentation.test.js:220:1
+✖ Public field-only scenes change actual world projection and inverse coordinates, never world state or RNG (26.423583ms)
+  TypeError: s.game.projectWorld is not a function
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/story-presentation.test.js:255:21)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

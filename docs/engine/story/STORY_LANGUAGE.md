@@ -53,13 +53,13 @@ api.story.register('gate', {
 | move | actor默认player，path方向数组或to:{x,y,map?}二选一，running可选，mode可选；通过真实通行，不直接改坐标 |
 | approach | actor必填，target默认player；移动到合法邻接格 |
 | face | actor默认player，dir方向或target角色；等该角色在途动作结束 |
-| escort | actor必填且不能player，to:{x,y,map?}；领路角色与玩家协调步行 |
+| escort | actor必填且不能player，to:{x,y,map?}，followers可选1–32个唯一ID（默认[player]）；同图有序相邻队列协调步行，非任意队形 |
 | emote | actor必填，kind默认exclamation且需在FIELD_EMOTES中，ms可选 |
 | hide | actor必填；当前场景隐藏，不自动表示永久删除 |
 | cameraTo / cameraFollow | cameraTo取actor或position:{map,x,y}，ms可选；cameraFollow回到玩家 |
 | teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位；真正需要传送时使用，不代替行走 |
 | wait | ms必填，有限且0–60000 |
-| presentation | id已注册场景，payload可选对象；纯表现，不能用来写规则 |
+| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头回调，等待场景结束；不写规则 |
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |
 | heal / starter / shop | 无必需额外参数；分别调用现有治疗、选择伙伴和商店界面端口 |
 

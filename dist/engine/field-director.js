@@ -76,6 +76,7 @@ export class FieldDirector {
   }
   async step(id, dir, { running = false, allowVacatedBy = null, mode } = {}) {
     if (!DIRECTIONS[dir]) throw new Error(`Invalid walking direction ${dir}`);
+    await this.ready(id);
     if (id === "player") {
       if (
         !this.field.move(dir, { running, scripted: true, allowVacatedBy, mode })
@@ -85,7 +86,6 @@ export class FieldDirector {
       this.field.tick(this.timeline.now());
       return;
     }
-    await this.ready(id);
     const map = this.field.position.map;
     const n = this.field.npcs.control(id, map);
     const position = {
@@ -98,7 +98,7 @@ export class FieldDirector {
         : {}),
     };
     const world = new World(this.field.world.maps, position, {
-      objects: (idMap) => this.objects(idMap, id),
+      objects: (idMap) => this.objects(idMap, id, allowVacatedBy),
       elevation: this.field.world.elevation,
     });
     const result = world.move(dir, { ignoreWarps: true });
@@ -178,19 +178,53 @@ export class FieldDirector {
     if (actor === "player") this.field.position.dir = dir;
     else this.field.npcs.face(actor, p.map, dir);
   }
-  async escort({ actor, to }) {
-    await this.ready(actor);
+  async escort({ actor, to, followers = ["player"] }) {
+    const members = [actor, ...followers];
+    await Promise.all(members.map((id) => this.ready(id)));
+    const initial = members.map((id) => this.actor(id));
+    for (let i = 1; i < initial.length; i++)
+      if (
+        initial[i].map !== initial[0].map ||
+        Math.abs(initial[i].x - initial[i - 1].x) +
+          Math.abs(initial[i].y - initial[i - 1].y) !==
+          1
+      )
+        throw new Error(
+          "Escort members must start in an adjacent ordered chain",
+        );
     const route = this.route(actor, to);
     for (const dir of route) {
-      const previous = this.actor(actor);
-      // Equal-duration tracks let the follower enter the leader's vacated source cell.
-      // The leader's destination remains occupied; unrelated reservations still apply.
-      const results = await Promise.allSettled([
-        this.step(actor, dir),
-        this.move({ actor: "player", to: previous, allowVacatedBy: actor }),
-      ]);
+      const previous = members.map((id) => this.actor(id));
+      // Every follower enters only its predecessor's vacated source. Destination and unrelated reservations remain occupied.
+      const directions = [
+        dir,
+        ...followers.map((id, i) => {
+          const dx = previous[i].x - previous[i + 1].x,
+            dy = previous[i].y - previous[i + 1].y;
+          if ((dx && dy) || (!dx && !dy))
+            throw new Error("Escort source is not aligned");
+          return dx ? (dx > 0 ? "right" : "left") : dy > 0 ? "down" : "up";
+        }),
+      ];
+      // All steps cross the same ready barrier, then commit in chain order before awaiting frame completion.
+      const results = await Promise.allSettled(
+        members.map((id, i) =>
+          this.step(id, directions[i], {
+            allowVacatedBy: i ? members[i - 1] : null,
+          }),
+        ),
+      );
       const failed = results.find((r) => r.status === "rejected");
       if (failed) throw failed.reason;
+      for (let i = 1; i < members.length; i++) {
+        const landed = this.actor(members[i]);
+        if (
+          landed.map !== previous[i - 1].map ||
+          landed.x !== previous[i - 1].x ||
+          landed.y !== previous[i - 1].y
+        )
+          throw new Error("Escort follower did not reach predecessor source");
+      }
     }
   }
   async emote({ actor, kind = "exclamation", ms = 600 }) {
@@ -231,7 +265,8 @@ export class FieldDirector {
 export function storyResources(c) {
   if (["move", "face", "approach", "hide"].includes(c.type))
     return [`actor:${c.actor || "player"}`];
-  if (c.type === "escort") return [`actor:${c.actor}`, "actor:player"];
+  if (c.type === "escort")
+    return [c.actor, ...(c.followers || ["player"])].map((id) => `actor:${id}`);
   if (c.type === "emote") return [`emote:${c.actor}`];
   if (["cameraTo", "cameraFollow"].includes(c.type)) return ["camera"];
   if (c.type === "dialog") return ["dialog"];
@@ -312,6 +347,16 @@ export function validateFieldCommand(c, maps) {
     fail();
   if (c.type === "approach" && c.actor === (c.target || "player")) fail();
   if (c.type === "escort" && (c.actor === "player" || !coordinate(c.to)))
+    fail();
+  if (
+    c.type === "escort" &&
+    c.followers !== undefined &&
+    (!Array.isArray(c.followers) ||
+      c.followers.length < 1 ||
+      c.followers.length > 32 ||
+      c.followers.some((n) => !id(n) || n === c.actor) ||
+      new Set(c.followers).size !== c.followers.length)
+  )
     fail();
   if (
     c.type === "emote" &&

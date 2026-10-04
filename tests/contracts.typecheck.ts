@@ -61,6 +61,15 @@ const plugin: PluginManifest = {
         allowDuplicates: true,
       };
     api.content.register("inventoryPockets", "materials", pocket);
+    api.presentation.scene("focus", {
+      duration: 800,
+      schema: { type: "object", properties: {}, additionalProperties: false },
+      field: (frame) => {
+        // @ts-expect-error Scene frames cannot be rewritten by plugins.
+        frame.progress = 0;
+        return { zoom: 1 + Math.sin(frame.progress * Math.PI) };
+      },
+    });
     api.presentation.sprite("detail", {
       width: 64,
       height: 64,

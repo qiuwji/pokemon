@@ -1,3 +1,5 @@
+import { SceneDirector } from "../../dist/presentation/scene-director.js";
+import { createEmeraldSceneDefinitions } from "../../dist/packs/emerald/presentation-scenes.js";
 import fs from "node:fs";
 import { createEmeraldPlugins } from "../../dist/packs/emerald/extensions.js";
 import { attachEmeraldExtensions } from "../../dist/packs/emerald/extension-ports.js";
@@ -21,6 +23,7 @@ export function session(plugins = []) {
   const timeline = new Timeline({ now: () => frame, wait: async (ms) => { frame += ms; } });
   const game = new EmeraldAdventure({
     db, catalog, plugins: host, timeline,
+    sceneDirector:new SceneDirector({timeline,definitions:createEmeraldSceneDefinitions(host)}),
     transitions: new TransitionController(timeline),
     director: new BattleDirector(timeline),
     motion: new GridMotion(new SceneGraph(db.maps)),

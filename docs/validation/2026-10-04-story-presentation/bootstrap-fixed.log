@@ -1,0 +1,40 @@
+✔ Entire command tree is validated before rewards or movement; parallel pose conflicts fail early (1.263625ms)
+✔ Parallel choreography joins every track and drains in-flight movement before reporting failure (1.928584ms)
+✔ Camera pans independently of player state, holds focus, then returns smoothly to live follow (0.385791ms)
+✔ A different content pack reuses scripted walking, NPC tracks, camera and emotes without field triggers (2.805458ms)
+✔ Rescue choreography from bag side 6,14 approaches before travel and enters lab under blackout (51.303834ms)
+✔ Rescue choreography from bag side 7,13 approaches before travel and enters lab under blackout (58.827667ms)
+✔ Rescue choreography from bag side 8,14 approaches before travel and enters lab under blackout (48.219709ms)
+✔ Rescue choreography from bag side 7,15 approaches before travel and enters lab under blackout (32.736458ms)
+✔ Intro plays independent NPC tracks, keeps progress incomplete until dialogue finishes, and releases camera (7.51ms)
+✔ Bag investigation walks to its interaction position and waits before opening selection (8.4305ms)
+✔ Failed scene clears input ownership, camera, actor overrides and transient effects without saving partial choreography (49.269542ms)
+✔ Defeat return uses the shared entrance choreography and finishes on reachable center floor (7.716ms)
+✔ Route planning honors connected-map destination NPCs and rejects unreachable targets (0.254ms)
+✔ Malformed choreography is rejected before earlier rewards, positions or save state are changed (4.001542ms)
+✔ Movement automation returns at a story/dialogue boundary without waiting for acknowledgement (4.065083ms)
+✔ Dialogue confirmation gates later actor movement and flags, and input stays locked between commands (6.800041ms)
+✔ Scripted battle handoff releases field input ownership and redraws a ready combat menu (7.051042ms)
+✔ Scene commit occurs at full coverage exactly once; duplicate transition is refused (2.091375ms)
+✔ Transition failures release the input lock (0.150833ms)
+✔ HP interpolation is visual only; a zero-HP actor remains visible until faint finishes (1.998042ms)
+✔ Capture shakes follow domain result; failed capture restores opponent and successful capture seals ball (0.684417ms)
+✔ Combat session rejects repeated actions while presenting the previous turn (0.287458ms)
+✔ A different tiny content pack reuses the field session without Emerald names or DOM (1.218959ms)
+✔ Story commands await dialogue before applying later rewards; unknown commands fail explicitly (0.771917ms)
+✔ Reduced motion removes shaking while preserving HP timing and blackout commit (0.2545ms)
+✔ Content contract rejects missing grid tiles, invalid learnsets and dimensions (5.634542ms)
+✔ Battle events expose semantic animation metadata and immutable health snapshots (8.50225ms)
+✔ Party commands reject invalid use and evolution never revives a fainted member (1.498792ms)
+✔ Pack application rejects out-of-context inventory commands and preserves compatible saves (20.864916ms)
+✔ Versioned storage accepts only the current save format without rewriting rejected source (0.260333ms)
+✔ Completed combat returns at dialogue boundary without waiting for the next user confirmation (12.010792ms)
+✔ Missed moves identify the failed hit so presentation does not draw an impact (1.768209ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 395.865042

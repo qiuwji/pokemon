@@ -146,8 +146,15 @@ export class StoryApplication {
         },
       },
       {
-        resources: (c) =>
-          c.type === "weather" ? ["weather"] : storyResources(c),
+        resources: (c) => {
+          if (c.type === "weather") return ["weather"];
+          const scene =
+            c.type === "presentation" &&
+            this.sceneDirector?.definitions.get(c.id);
+          return scene?.field && !scene.draw
+            ? ["field-presentation"]
+            : storyResources(c);
+        },
         testCondition: (c) =>
           matchesCondition(c, this.state, this.conditionQueries),
         choose: async (c) => {

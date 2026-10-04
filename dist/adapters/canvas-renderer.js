@@ -20,6 +20,7 @@ export class Renderer {
     db,
     assets,
     {
+      projection = () => null,
       appearanceView = () => null,
       cameraConfiguration = () => ({ columns: 20, rows: 14, zoom: 1 }),
       environmentLayers = () => [],
@@ -35,6 +36,7 @@ export class Renderer {
       canvas,
       db,
       assets,
+      projection,
       appearanceView,
       cameraConfiguration,
       environmentLayers,
@@ -193,6 +195,11 @@ export class Renderer {
         );
   }
   cameraAt(position, now) {
+    const supplied = this.projection(
+      { width: this.canvas.width, height: this.canvas.height },
+      now,
+    );
+    if (supplied) return supplied;
     const player = this.motion.sample(position, now);
     const focus = this.cameraRig?.sample(player, now) || player;
     return cameraProjection(this.cameraConfiguration(), focus, {

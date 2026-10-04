@@ -15,6 +15,7 @@ export const VIEW_PORTS = Object.freeze([
   "motion",
   "camera",
   "timeline",
+  "sceneDirector",
 ]);
 /** Coordinates presentation configuration; each registry and lease owns only its own data. */
 export class ViewApplication {
@@ -60,12 +61,18 @@ export class ViewApplication {
       ),
     };
   }
-  projection(size) {
-    const now = this.timeline.now(),
-      player = this.motion.sample(this.state.position, now);
+  projection(size, now = this.timeline.now()) {
+    const player = this.motion.sample(this.state.position, now),
+      focus = this.camera.sample(player, now),
+      configuration = this.config(),
+      visual = this.sceneDirector?.fieldTransform(now) || {
+        x: 0,
+        y: 0,
+        zoom: 1,
+      };
     return cameraProjection(
-      this.config(),
-      this.camera.sample(player, now),
+      { ...configuration, zoom: configuration.zoom * visual.zoom },
+      { ...focus, x: focus.x + visual.x, y: focus.y + visual.y },
       size,
     );
   }

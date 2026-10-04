@@ -20,9 +20,9 @@ export class SceneDOM {
     this.ctx.imageSmoothingEnabled = false;
   }
   render(frame) {
-    this.element.hidden = !frame;
-    if (!frame) return;
-    const definition = this.definitions.get(frame.id);
+    const definition = frame && this.definitions.get(frame.id);
+    this.element.hidden = !definition?.draw;
+    if (!definition?.draw) return;
     this.ctx.clearRect(0, 0, 320, 224);
     this.ctx.save();
     try {

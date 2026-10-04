@@ -469,7 +469,16 @@ export class PluginHost {
           },
           scene: (id, definition) => {
             if (
-              typeof definition.draw !== "function" ||
+              !definition ||
+              Object.keys(definition).some(
+                (k) =>
+                  !["duration", "schema", "sound", "draw", "field"].includes(k),
+              ) ||
+              (definition.draw !== undefined &&
+                typeof definition.draw !== "function") ||
+              (definition.field !== undefined &&
+                typeof definition.field !== "function") ||
+              (!definition.draw && !definition.field) ||
               !Number.isFinite(definition.duration) ||
               definition.duration < 1 ||
               definition.duration > 10000
@@ -478,8 +487,18 @@ export class PluginHost {
             return register(staged.presentationScenes, id, {
               ...definition,
               schema: validateSchema(definition.schema),
-              draw: (ctx, frame, assets) =>
-                evaluate(definition.draw, ctx, readOnly(frame), assets),
+              ...(definition.draw
+                ? {
+                    draw: (ctx, frame, assets) =>
+                      evaluate(definition.draw, ctx, readOnly(frame), assets),
+                  }
+                : {}),
+              ...(definition.field
+                ? {
+                    field: (frame) =>
+                      evaluate(definition.field, readOnly(frame)),
+                  }
+                : {}),
             });
           },
           textEffect: (id, definition) => {

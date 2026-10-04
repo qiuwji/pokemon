@@ -1,0 +1,60 @@
+✖ Escort coordinates multiple NPC/player tracks through shared source occupancy and releases control (3.151625ms)
+✖ Escort may coordinate NPCs without moving the player, and malformed/nonadjacent chains fail before moving (3.431833ms)
+✔ Public field-only scenes change actual world projection and inverse coordinates, never world state or RNG (30.537042ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 154.29125
+
+✖ failing tests:
+
+test at tests/story-presentation.test.js:64:1
+✖ Escort coordinates multiple NPC/player tracks through shared source occupancy and releases control (3.151625ms)
+  Error: No walkable route from meadow:2,2 to meadow:3,2
+      at findRoute (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/pathfinding.js:39:9)
+      at FieldDirector.route (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/field-director.js:61:12)
+      at FieldDirector.move (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/field-director.js:139:32)
+      at async Promise.allSettled (index 2)
+      at async FieldDirector.escort (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/dist/engine/field-director.js:199:23)
+
+test at tests/story-presentation.test.js:85:1
+✖ Escort may coordinate NPCs without moving the player, and malformed/nonadjacent chains fail before moving (3.431833ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    {
+      actor: 'Any',
+      dir: 'right',
+      duration: 0,
+      foot: 0,
+  ...
+      id: 'guide',
+  +   kind: undefined,
+      map: 'meadow',
+  +   name: undefined,
+      next: 1502.259216159399,
+      originX: 4,
+      originY: 2,
+      start: 0,
+  +   text: undefined,
+      toX: 4,
+      toY: 2,
+      x: 4,
+      y: 2
+    }
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/story-presentation.test.js:107:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'guide', actor: 'Any', x: 4, y: 2, dir: 'right', originX: 4, originY: 2, fromX: 4, fromY: 2, toX: 4, toY: 2, start: 0, duration: 0, foot: 0, next: 1502.259216159399, text: undefined, name: undefined, kind: undefined, map: 'meadow' },
+    expected: { id: 'guide', actor: 'Any', x: 4, y: 2, dir: 'right', originX: 4, originY: 2, fromX: 4, fromY: 2, toX: 4, toY: 2, start: 0, duration: 0, foot: 0, next: 1502.259216159399, map: 'meadow' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

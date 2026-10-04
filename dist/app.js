@@ -73,6 +73,7 @@ async function boot() {
         onError: console.error,
       }),
       renderer = new Renderer($("game"), db, assets, {
+        projection: (size, now) => game?.cameraProjection(size, now) || null,
         cameraConfiguration: () =>
           game?.cameraConfiguration() || { columns: 20, rows: 14, zoom: 1 },
         environmentLayers: () => game?.environmentFrames() || [],
@@ -114,6 +115,7 @@ async function boot() {
         timeline,
         definitions: sceneDefinitions,
         reducedMotion,
+        onError: console.error,
         onCue: (id) => {
           if (id) audio.play(id);
         },

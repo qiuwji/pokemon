@@ -1,6 +1,6 @@
 # 绿宝石 · 丰缘序章与可复用引擎
 
-当前工程版本 **0.23.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
+当前工程版本 **0.24.0**，插件 API / 网络协议版本 **1**，开发存档版本 **14**。这是可继续开发的单机格子探索、队伍回合制捕捉 RPG 项目；当前游戏内容是绿宝石序章切片。
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
@@ -18,14 +18,15 @@ npm run test:examples
 npm run check:docs
 ```
 
-`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。最近全量基线（0.22.0）：**748 项测试通过，0 失败、0 跳过**；本轮资源帧扩展进行专项验证，全量留阶段收口。十三个 Skill 入门例通过，当前 **303 个 JS 模块**检查通过；本轮证据见[帧片段检查点](docs/validation/2026-10-04-sprite-clips/manifest.json)。逐字对话检查点未改变保存格式；日志与源码范围见 [检查点证据](docs/validation/2026-10-04-dialogue/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
+`npm run check` 检查内容引用、公开合同类型和全部 JS 模块语法。当前阶段全量回归：**767项测试通过，0失败、0跳过**；十四个Skill入门例通过，当前**303个JS模块**检查通过。资源帧、剧情队列与注册镜头收口的日志和范围见[检查点证据](docs/validation/2026-10-04-story-presentation/manifest.json)；范围、基线和证据失效条件见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。可以直接部署 `dist/` 到静态 HTTP 服务；ES 模块与 fetch 需要 HTTP，不能双击 HTML 运行。开发服务禁用缓存。
 
-九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十三个入门例已验证，系统与浏览器的结果仍按实际范围记录。
+九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前十四个入门例已验证，系统与浏览器的结果仍按实际范围记录。
 
 ## 已经可玩的内容
 
 原序章：未白镇 → 调查博士背包、三选一伙伴 → 击败蛇纹熊 → 跟随博士回研究所 → 古辰镇、103 号道路与小遥对战 → 返回领取图鉴。包括 9 张原作地图和插件观察室，基础文件包含 58 种精灵、87 个招式、310 种道具；启动时合并第三世代参考招式，运行目录为 354 个招式。目录数量不代表全部原作语义、素材或道具主动用法均已完成。
 
+- 剧情有序多角色队列与纯注册镜头位移/缩放，实际渲染与坐标反算共用投影；不修改移动规则或存档坐标。
 - 详情页可复用帧片段播放、插件替换绑定、静态降级与共享关闭清理；现有3种多帧，默认时序为演示配置，见[帧片段合同](docs/engine/presentation/SPRITE_CLIPS.md)。
 - 结构化逐字对话、行内停顿/颜色、可注册文字效果、跳过/确认与关闭清理；见[对话合同](docs/engine/presentation/DIALOGUE.md)。
 - 网格图块渲染、连续道路、四向行走/跑步、NPC 自主动作、碰撞/台阶、室内转场与可编排剧情。
