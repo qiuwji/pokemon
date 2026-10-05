@@ -332,3 +332,9 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
 骑乘不要拿战斗精灵图充当野外素材。先追C模板的图片尺寸/调色板槽/主角偏移，再导入透明PNG和输入/输出hash；代表脚本为tools/plugins/export-flight-art.py，带--source和只读--check。新素材在插件自己assets目录，运行不依赖未跟踪work。
 
 游戏外插件面板保存下次启动配置，具体优先级、startup幂等动作和错误反馈按[内容管线](../../docs/development/CONTENT_PIPELINE.md)。不要在setup开始发奖或把本地设置当玩家存档；startup通过已注册的自身动作调用领域意图。现行原作样式约束与生成工具见[界面说明](../../docs/development/EMERALD_UI.md)。
+
+## 原生队伍野外招式入口
+
+给fieldActions增加`partyMove`（已注册招式ID），即可挂入选中宝可梦的操作菜单；参考high-flight的takeoff/land和原生dive/surface。多个行动共用招式时由当前预检和priority选择，不在party-interface里按插件ID分支。查询/执行用`core.movement.party-options {uid}` / `core.movement.party-action {uid,move,destination?}`；所选个体、学会招式与Gen3徽章在执行时重查，普通Fly仍选择目的地。背包HM入口用于学习，发动入口位于菜单→宝可梦→所选个体。合同和定位搜索`partyMove`、`partyFieldMoveOptions`见[野外行动](../../docs/engine/field/FIELD_ACTIONS.md)及[原生界面](../../docs/development/EMERALD_UI.md)。
+
+测试应覆盖未学/蛋/缺徽章/无目标/UID过期与同招式双向行动；核心夹具只注册最小模拟插件，产品插件专项留examples。不要直接改队伍或借队伍中另一只已学招式代替所选个体。页面容器用data-modal-page，按钮导航只绑定button[data-page]，不能让容器也收到导航onclick。

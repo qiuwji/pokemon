@@ -99,3 +99,9 @@ test("plugin field plan commits through the public command", async () => {
 | [tests/field-actions.test.js](../../tests/field-actions.test.js) | `rg -n "content-only" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
+
+## 原生队伍野外招式入口
+
+给fieldActions增加`partyMove`（已注册招式ID），即可挂入选中宝可梦的操作菜单；参考high-flight的takeoff/land和原生dive/surface。多个行动共用招式时由当前预检和priority选择，不在party-interface里按插件ID分支。查询/执行用`core.movement.party-options {uid}` / `core.movement.party-action {uid,move,destination?}`；所选个体、学会招式与Gen3徽章在执行时重查，普通Fly仍选择目的地。背包HM入口用于学习，发动入口位于菜单→宝可梦→所选个体。合同和定位搜索`partyMove`、`partyFieldMoveOptions`见[野外行动](../../docs/engine/field/FIELD_ACTIONS.md)及[原生界面](../../docs/development/EMERALD_UI.md)。
+
+测试应覆盖未学/蛋/缺徽章/无目标/UID过期与同招式双向行动；核心夹具只注册最小模拟插件，产品插件专项留examples。不要直接改队伍或借队伍中另一只已学招式代替所选个体。页面容器用data-modal-page，按钮导航只绑定button[data-page]，不能让容器也收到导航onclick。

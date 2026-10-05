@@ -3,7 +3,7 @@ import { ItemActionService } from "../../../engine/item-actions.js";
 import { createEmeraldInventory } from "../inventory.js";
 import { FieldActionRegistry } from "../../../engine/field-actions.js";
 import { EMERALD_FIELD_ACTIONS } from "../field-actions.js";
-import { setLead } from "../../../engine/party.js";
+import { setLead, swapParty } from "../../../engine/party.js";
 import { createItemService } from "../../../engine/items.js";
 import { matchesCondition } from "../../../engine/conditions.js";
 import { PartyStorageService } from "../../../engine/party-storage.js";
@@ -55,6 +55,9 @@ export class InventoryApplication {
       inBattle ? this.battle.bag : this.state.bag,
       id,
     );
+  }
+  swapParty(firstUid, secondUid) {
+    return this.canManageParty() && swapParty(this.state, firstUid, secondUid);
   }
   setLead(index) {
     return this.canManageParty() && setLead(this.state, index);

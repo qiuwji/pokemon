@@ -1,0 +1,47 @@
+✔ Optional flight plugin provisions a real Fly partner and badge once through domain commands (110.111042ms)
+✔ Takeoff uses native gendered rider art, a 1.5-axis view and light haze; landing restores ground visuals (54.448792ms)
+✔ Air traversal crosses solid terrain while invalid landing remains airborne; successful landing rebases elevation (61.035375ms)
+✔ Fly replacement does not teleport and airborne saves restore mode-derived presentation (47.855833ms)
+✔ Flight cannot start indoors or land on occupants, reserved cells, water or entrance warps (50.744959ms)
+✔ Committed Fly art matches recorded hashes, is native 32x32 and belongs to the plugin directory (0.896ms)
+✔ A full party receives no partial kit and retries on an idle field boundary after a slot is freed (49.945416ms)
+✔ Air mode crosses the real town/route connection without starting a grounded story or encounter (64.585333ms)
+✔ Selected Fly partner uses plugin takeoff and landing from the native party action without teleporting (54.432292ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (19.684625ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (2.778292ms)
+✔ Composition root does not own story, inventory or damage rules (0.247375ms)
+✔ Every local ES module import resolves after refactors (15.97675ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.111334ms)
+✔ Example plugins depend only on public extension utilities (0.385792ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (7.965917ms)
+✔ Core tests and fixtures do not import installed plugins or authoring examples (15.30675ms)
+✔ Mach input accelerates through original 16/8/4-frame steps and coasts through 4/8/16 on release (2.842458ms)
+✔ Mach standing turns first, moving turns retain acceleration and blocked feedback resets inertia (0.726875ms)
+✔ Motion busy does not advance Mach speed; pause and mode change clear transient input state (0.785833ms)
+✔ Rail-facing constraints prevent illegal idle turns and respect moving deceleration (0.406417ms)
+✔ Control policies must be synchronous and read-only; invalid actions cannot commit memory (1.008584ms)
+✔ Fractional frame motion finishes at its deadline without a floating-point extra frame (0.256375ms)
+✔ Browser maps held and released logical input, preserves field/menu paths and clears on blur (0.244458ms)
+✔ External panel callback is stored and gates held movement, keyboard, touch and item shortcuts (0.184042ms)
+✔ Party field menu follows the selected monster move order, exposes badge failures and rejects other identities (59.164375ms)
+✔ Plugin field-action association selects the currently applicable route without hardcoded action names (33.13525ms)
+✔ Party ordering swaps two stable identities and rejects stale references without changing the party (22.222209ms)
+✔ Party field move metadata rejects malformed and dangling learned-move references during registration (9.386083ms)
+✔ Native party view preserves six fixed slots, uses icon sheets, escapes names and navigates columns (21.040375ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (24.611625ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (4.973417ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (6.292083ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (5.582208ms)
+✔ Clock page submits setup through a command and renders live saved time (5.986417ms)
+✔ Loaded clock-before-TV state renders the real sidebar and continues through later opening tasks (4.156459ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (6.301416ms)
+✔ Settings navigation survives click bubbling and Travel opens its own modal instead of silently reopening settings (4.521083ms)
+✔ Selecting a party member opens native actions before Summary and preserves the party/list plugin region (4.767959ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 621.216416

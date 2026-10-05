@@ -337,3 +337,58 @@ test("Facility page renders frozen plugin data and submits entry/action through 
   assert(calls.includes("appeal"));
   assert.match(root.innerHTML, /score：12/);
 });
+
+/** Narrow HTML/event port: retain the detached backdrop in a click's bubbling path.
+ * It intentionally models the regression that a container and buttons shared data-page.
+ */
+function menuEventPort(doc) {
+  const root=doc.getElementById('modal-root'),descriptor=Object.getOwnPropertyDescriptor(root,'innerHTML');
+  let nodes=[];
+  const matches=(node,selector)=>{
+    const tag=selector.match(/^[a-z]+/)?.[0];
+    if(tag && node.tagName!==tag.toUpperCase())return false;
+    const attribute=selector.match(/\[([^=\]]+)(?:="([^"]*)")?\]/);
+    if(attribute && (!node.attrs.has(attribute[1]) || attribute[2]!==undefined && node.attrs.get(attribute[1])!==attribute[2]))return false;
+    if(selector.includes(':not(:disabled)') && node.disabled)return false;
+    return !!tag || !!attribute;
+  };
+  Object.defineProperty(root,'innerHTML',{
+    get:()=>descriptor.get.call(root),
+    set(html){
+      descriptor.set.call(root,html);nodes=[];
+      const backdrop={tagName:'DIV',attrs:new Map(),dataset:{}};
+      const first=html.match(/<div class="modal-backdrop"([^>]*)>/)?.[1] || '';
+      const populate=(node,attrs)=>{
+        for(const m of attrs.matchAll(/([\w-]+)(?:="([^"]*)")?/g)){
+          node.attrs.set(m[1],m[2] || '');
+          if(m[1].startsWith('data-'))node.dataset[m[1].slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]=m[2];
+        }
+        node.disabled=node.attrs.has('disabled');node.focus=()=>doc.activeElement=node;
+      };
+      populate(backdrop,first);nodes.push(backdrop);
+      for(const m of html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)){
+        const node={tagName:'BUTTON',attrs:new Map(),dataset:{},textContent:m[2]};populate(node,m[1]);
+        node.click=()=>{if(node.disabled)return;node.onclick?.();backdrop.onclick?.();};nodes.push(node);
+      }
+    },
+  });
+  root.querySelectorAll=selector=>nodes.filter(node=>matches(node,selector));
+  root.querySelector=selector=>root.querySelectorAll(selector)[0] || null;
+  return root;
+}
+test('Settings navigation survives click bubbling and Travel opens its own modal instead of silently reopening settings',()=>{
+  const {ui,doc}=fixture(),root=menuEventPort(doc);
+  ui.showMenu();root.querySelector('button[data-page="settings"]').click();
+  assert.equal(ui.modalType,'settings');
+  root.querySelector('button[data-page="movement"]').click();
+  assert.equal(ui.modalType,'movement');assert.match(root.innerHTML,/data-modal-page="movement"/);
+  assert(!root.querySelector('div[data-page]'));
+});
+test('Selecting a party member opens native actions before Summary and preserves the party/list plugin region',()=>{
+  const {ui,doc,game}=fixture(),root=menuEventPort(doc);
+  game.partyFieldMoveOptions=()=>[{move:'fly',name:'飞空术',route:'fly',ok:false,reason:'徽章不足'}];
+  ui.showParty();root.querySelector('button[data-mon="0"]').click();
+  assert.equal(ui.modalType,'party');assert.match(root.innerHTML,/data-party-action="summary"/);
+  assert.match(root.innerHTML,/data-party-action="field:0"/);assert.match(root.innerHTML,/data-extension-slot="party.list"/);
+  root.querySelector('button[data-party-action="summary"]').click();assert.equal(ui.modalType,'detail');
+});

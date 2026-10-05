@@ -30,6 +30,9 @@ export class FieldActionRegistry {
       !definition.cue.length
     )
       throw new Error(`Invalid field action ${id}`);
+    if (definition.partyMove !== undefined &&
+        (typeof definition.partyMove !== "string" || !/^[a-z][a-z0-9_.:-]{0,127}$/.test(definition.partyMove)))
+      throw new Error(`Invalid field action party move ${id}`);
     if (definition.menu !== undefined && typeof definition.menu !== "boolean")
       throw new Error("Invalid field action menu visibility");
     if (

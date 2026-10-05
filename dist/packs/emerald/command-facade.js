@@ -55,6 +55,8 @@ export function createEmeraldCommandFacade(
     interact: () => ["field.interact", {}],
     chooseStarter: (species) => ["starter.choose", { species }],
     turn: (action) => ["battle.action", action],
+    swapParty: (firstUid, secondUid) => ["party.swap", {firstUid,secondUid}],
+    usePartyFieldMove: (uid, move, destination) => ["movement.party-action", {uid,move,...(destination ? {destination} : {})}],
     setLead: (index) => ["party.lead", { uid: uidAt(game.state.party, index) }],
     useItem: (item, index, slot) => [
       "item.use",
@@ -137,6 +139,8 @@ export function createEmeraldCommandFacade(
     "collectEgg",
     "performTrade",
     "setMovementMode",
+    "usePartyFieldMove",
+    "performFieldAction",
     "boardSurf",
     "flyTo",
     "animateEvolution",

@@ -62,6 +62,37 @@ rgba=window.convert('RGBA')
 rgba.putdata([(*color[:3],0 if int(index)==0 else 255) for color,index in zip(rgba.getdata(),window.getdata())])
 add('window.png',rgba)
 add('party-background.png',screen('party_menu/bg.png','party_menu/bg.bin'))
+
+def party_slot(name, width, height, selected=False, empty=False):
+    """Party windows use byte tile indices and a private, remapped 16-color bank.
+
+    Palette substitutions are from sPartyBox*PalIds in src/data/party_menu.h.
+    """
+    atlas = png('party_menu/bg.png')
+    raw = atlas.getpalette()
+    palette = [tuple(raw[i:i+3]) for i in range(0, len(raw), 3)]
+    bank = palette[48:64]
+    remap = ({1:17, 11:27, 12:28} if empty else
+             dict(zip([4,5,6,1,7,8], [116,117,118,97,103,104] if selected else [52,53,54,49,55,56])))
+    for local, original in remap.items(): bank[local] = palette[original]
+    entries = read('graphics/party_menu/' + name + '.bin')
+    if len(entries) != width * height: raise ValueError('Invalid party slot tilemap size')
+    output = Image.new('RGBA', (width*8, height*8))
+    for i, index in enumerate(entries):
+        if index >= atlas.width * atlas.height // 64: raise ValueError('Invalid party slot tile')
+        x, y = index % (atlas.width//8)*8, index // (atlas.width//8)*8
+        tile = atlas.crop((x,y,x+8,y+8))
+        painted = Image.new('RGBA', (8,8))
+        painted.putdata([(*bank[int(v)%16], 0 if int(v)%16 == 0 else 255) for v in tile.getdata()])
+        output.paste(painted, (i%width*8, i//width*8))
+    return output
+
+for name, width, height in [('slot_main',10,7), ('slot_main_no_hp',10,7), ('slot_wide',18,3), ('slot_wide_no_hp',18,3)]:
+    for selected in [False, True]:
+        add('party-' + name.replace('_','-') + ('-selected' if selected else '') + '.png',
+            party_slot(name,width,height,selected))
+add('party-slot-wide-empty.png', party_slot('slot_wide_empty',18,3,empty=True))
+
 for gender in ['male','female']:
     add(f'bag-{gender}.png',screen('bag/menu.png','bag/menu.bin',colors(f'bag/menu_{gender}.pal')))
 add('summary-background.png',screen('summary_screen/tiles.png','summary_screen/page_info.bin'))

@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-05",
+  "version": "0.35.1",
+  "baseCommit": "2598f3a",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "scope": "Settings bubbling, native party selection and per-monster field move menu; plugin action association",
+  "checks": [
+    {
+      "command": "node --test tests/ui-composition.test.js tests/party-field-moves.test.js tests/movement.test.js tests/field-actions.test.js tests/field-interactions.test.js tests/native-ui-regions.test.js",
+      "log": "core.log",
+      "passed": 66
+    },
+    {
+      "command": "node --test examples/high-flight.test.js",
+      "log": "plugin.log",
+      "passed": 9
+    },
+    {
+      "command": "node --test tests/ui-composition.test.js tests/party-field-moves.test.js tests/movement-input.test.js tests/architecture.test.js examples/high-flight.test.js",
+      "log": "input-architecture.log",
+      "passed": 39,
+      "note": "Earlier focused group, reused unchanged input callback and architecture evidence; latest party UI is covered by core.log."
+    },
+    {
+      "command": "npm run check",
+      "log": "check.log",
+      "result": "passed before documentation/version-only updates and final menu navigation adjustment; final changed UI files linted separately"
+    },
+    {
+      "command": "npm run check:docs",
+      "log": "docs.log",
+      "result": "passed"
+    },
+    {
+      "command": "python3 tools/ui/export-theme.py --check",
+      "result": "no changes"
+    },
+    {
+      "command": "npx eslint dist/packs/emerald/party-menu-view.js dist/packs/emerald/party-interface.js tests/party-field-moves.test.js; git diff --check",
+      "result": "passed"
+    }
+  ],
+  "notRun": [
+    "Full core/plugin regression",
+    "Browser/computer use",
+    "Visual alignment, keyboard/touch end-to-end and listening"
+  ],
+  "notes": [
+    "Travel failure was shared data-page on backdrop and navigation buttons, not an exception from movement queries.",
+    "Current BrowserInput already saves externalBlocked; actual callback gating was verified without introducing compatibility fallback.",
+    "Slot assets are original byte tilemaps with original normal/selected palette substitutions. Fly destination page is not a full native region map.",
+    "User-owned deletion of docs/regions/littleroot-opening.md remains unstaged."
+  ]
+}

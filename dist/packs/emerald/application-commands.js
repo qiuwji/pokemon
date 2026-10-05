@@ -63,6 +63,7 @@ export function registerEmeraldCommands(game, bus) {
     growth: "evolution",
   };
   const commandPermissions = {
+    "party.swap": "setLead",
     "item.use": "useItem",
     "item.action": "useItem",
     "item.register": "useItem",
@@ -606,6 +607,12 @@ export function registerEmeraldCommands(game, bus) {
     mode: "async",
     ready: () => field() && !game.ui?.blocked,
   });
+  register("party.swap", objectSchema({firstUid:id, secondUid:id}, ["firstUid","secondUid"]),
+    ({firstUid,secondUid}) => game.swapParty(firstUid,secondUid));
+  register("movement.party-options", byUid, ({uid}) => game.partyFieldMoveOptions(uid),
+    {query:true,concurrent:true,ready:()=>true,permission:undefined});
+  register("movement.party-action", objectSchema({uid:id,move:id,destination:id}, ["uid","move"]),
+    ({uid,move,destination}) => game.usePartyFieldMove(uid,move,destination), {mode:"async"});
   register("movement.surf", empty, () => game.boardSurf(), { mode: "async" });
   register(
     "movement.fly",

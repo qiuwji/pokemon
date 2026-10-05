@@ -26,6 +26,7 @@ export function createUIShell(
   let dialog = null,
     modalBack = null,
     modalType = null,
+    modalNavigate = null,
     modalFocus = null,
     toastTimer;
   const modalResources = new Set();
@@ -292,15 +293,16 @@ export function createUIShell(
   function modal(
     title,
     body,
-    { back = null, type = "generic", close = true } = {},
+    { back = null, type = "generic", close = true, navigate = null } = {},
   ) {
     disposeModalResources();
     game.ui?.extensions?.unmountRegions();
     if (!root.children.length) modalFocus = doc.activeElement;
     modalBack = back;
     modalType = type;
+    modalNavigate = navigate;
     game.clearInput();
-    root.innerHTML = `<div class="modal-backdrop" data-page="${escapeHTML(type)}" data-gender="${escapeHTML(game.state.playerGender)}"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
+    root.innerHTML = `<div class="modal-backdrop" data-modal-page="${escapeHTML(type)}" data-gender="${escapeHTML(game.state.playerGender)}"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
     if ($("modal-close"))
       $("modal-close").onclick = () => (back ? back() : closeModal());
     requestFrame(() => {
@@ -316,6 +318,7 @@ export function createUIShell(
     game.ui?.extensions?.unmountRegions();
     root.innerHTML = "";
     modalType = null;
+    modalNavigate = null;
     modalBack = null;
     game.clearInput();
     modalFocus?.focus();
@@ -404,6 +407,7 @@ export function createUIShell(
       } else game.interact();
     },
     navigateMenu(dir) {
+      if (modalNavigate?.(dir)) return;
       const buttons = [
         ...root.querySelectorAll("button:not(:disabled):not(#modal-close)"),
       ];

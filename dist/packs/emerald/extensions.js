@@ -205,6 +205,8 @@ export function createEmeraldPlugins(db, plugins, onError) {
     new FieldEffectRegistry(c.fieldEffects);
     new FieldTerrainRegistry(c.terrainRules);
     for (const action of Object.values(c.fieldActions))
+      if (action.partyMove && !c.moves[action.partyMove]) throw new Error(`Unknown party field move ${action.partyMove}`);
+    for (const action of Object.values(c.fieldActions))
       if (
         !FIELD_ACTION_EFFECTS[action.cue] &&
         !PIXEL_EFFECTS[action.cue] &&

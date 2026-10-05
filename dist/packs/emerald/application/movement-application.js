@@ -9,11 +9,14 @@ import { TravelDirector } from "../../../presentation/travel-director.js";
 import { DIRECTIONS } from "../../../engine/world.js";
 import { emeraldFieldCapabilities } from "../field-capabilities.js";
 import { isWater, BEHAVIOR } from "../../../engine/terrain.js";
+import { partyFieldMoves } from "../party-field-moves.js";
 import { bindApplicationPorts } from "./ports.js";
 export const MOVEMENT_PORTS = Object.freeze([
   "visitAppearance",
   "visitView",
   "battle",
+  "fieldActionOptions",
+  "performFieldAction",
   "actionBusy",
   "growthBusy",
   "growthDirector",
@@ -104,6 +107,24 @@ export class MovementApplication {
   }
   fieldCapabilities() {
     return emeraldFieldCapabilities(this.state);
+  }
+  partyFieldMoveOptions(uid) {
+    return partyFieldMoves(this.state.party.find(m => m.uid === uid), {
+      definitions: this.catalog.fieldActions, moves: this.catalog.moves,
+      actions: this.fieldActionOptions(), flags: this.state.flags,
+      capabilities: this.fieldCapabilities(),
+    });
+  }
+  async usePartyFieldMove(uid, move, destination) {
+    if (!this.canManageParty()) return {ok:false,reason:"请先结束当前行动。"};
+    // Resolve the selected identity and its current move list again at command execution.
+    const choice = this.partyFieldMoveOptions(uid).find(a => a.move === move);
+    if (!choice) return {ok:false,reason:"这只宝可梦没有学会可使用的野外招式。"};
+    if (!choice.ok) return {ok:false,reason:choice.reason || "这里不能使用这个招式。"};
+    if (choice.route === 'action') return this.performFieldAction(choice.action);
+    if (choice.route === 'surf') return this.boardSurf();
+    if (!destination) return {ok:false,reason:"请选择飞行目的地。"};
+    return this.flyTo(destination);
   }
   movementOptions() {
     return Object.keys(this.catalog.movement)

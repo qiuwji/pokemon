@@ -33,6 +33,7 @@ dist/
 | 救博士追逐 | [route101.json](../../dist/content/stories/route101.json)；step入口在story/regions/littleroot.js | 原作Route101/scripts.inc与[移动转换工具](../../tools/story/movement.py)；不要再向公共scenes.js追加地区长剧情 |
 | 人物身份/初始出现 | [native-cast.js](../../dist/packs/emerald/native-cast.js)、[opening-objects.js](../../dist/packs/emerald/opening-objects.js) | native-object-bindings.js绑定来源local ID；阶段摆位写bundle.projections，动画写commands |
 | 进图后人物站错/重复触发卡住 | [WorldApplication.prepareEntry](../../dist/packs/emerald/application/world-application.js)、剧情入口与requires | 普通地图NPC按新访问重建；持久Actor从Actor领域恢复；visit patch决定本次访问，不能靠NPC缓存充当进度 |
+| 队伍选择与所选个体野外招式 | [party-menu-view.js](../../dist/packs/emerald/party-menu-view.js)、[party-field-moves.js](../../dist/packs/emerald/party-field-moves.js) | 原生布局/导航与规则描述分开；执行走movement.party-action，扩展关联搜partyMove |
 | 插件改已有UI | [UI合同](../engine/presentation/UI_CONTRACT.md)、对应*-interface.js | UIRegistry管注册，ExtensionDOM管区域仲裁，LayoutDOM管控件；native-ui-controls只把原控件转换为宿主句柄 |
 | 画面清晰度/尺寸 | [pixel-display.js](../../dist/adapters/pixel-display.js)、canvas-renderer.js | PixelDisplay持有尺寸监听生命周期；规则格子仍是16px，战斗仍用320×224布局；不要改地图分辨率 |
 | 战斗规则或新招式 | [battle-rules Skill](../../skills/emerald-battle-rules/SKILL.md) | move-effects/operations、规则阶段；动画走presentation注册，不放进规则函数 |

@@ -49,6 +49,7 @@ export function createEmeraldInterface(
     showParty: (...args) => shell.showParty(...args),
     showBag: (...args) => shell.showBag(...args),
     showMonster: (...args) => shell.showMonster(...args),
+    showPartyFieldMove: (...args) => shell.showPartyFieldMove(...args),
     showEvolutionOptions: (index) => shell.showEvolutionOptions(index),
     checkGrowth: () => shell.checkGrowth(),
   };
@@ -122,7 +123,7 @@ export function createEmeraldInterface(
       { type: "menu" },
     );
     const actions = pageActions();
-    root.querySelectorAll("[data-page]").forEach(b => b.onclick = actions[b.dataset.page]);
+    root.querySelectorAll("button[data-page]").forEach(b => b.onclick = actions[b.dataset.page]);
   }
   function pageActions() {
     return {
@@ -153,7 +154,7 @@ export function createEmeraldInterface(
     modal('设置与扩展',`<div class="menu-grid">${game.state.story.session?.status === 'ready' ? '<button class="menu-tile" data-page="resume">继续剧情</button>' : ''}${Object.entries(labels).map(([id,label])=>`<button class="menu-tile" data-page="${id}" ${id === 'daycare' && !game.canUseDaycare() ? 'disabled' : ''}>${label}</button>`).join('')}</div>`,{type:'settings',back:showMenu});
     game.ui?.extensions?.mountSlot('menu',root.querySelector('.menu-grid'),{},showExtras);
     const actions=pageActions();
-    root.querySelectorAll('[data-page]').forEach(b=>b.onclick=actions[b.dataset.page]);
+    root.querySelectorAll('button[data-page]').forEach(b=>b.onclick=actions[b.dataset.page]);
   }
   function showTrainer() {
     const badgeKeys=['badgeStone','badgeKnuckle','badgeDynamo','badgeHeat','badgeBalance','badgeFeather','badgeMind','badgeRain'];

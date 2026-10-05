@@ -120,3 +120,13 @@ test('Air mode crosses the real town/route connection without starting a grounde
   assert.equal(g.state.position.map,'Route101');assert.equal(g.state.movement.mode,'high-flight:air');
   assert.equal(g.storyBusy,false);assert.equal(g.lastEncounterSteps,count);assert.equal(g.battle,null);
 });
+
+test('Selected Fly partner uses plugin takeoff and landing from the native party action without teleporting',async()=>{
+  const s=await ready(),g=s.game,mon=g.state.party.find(m=>m.species==='swellow'),before={...g.state.position};
+  assert.equal(g.partyFieldMoveOptions(mon.uid).find(a=>a.move==='fly').action,'high-flight:takeoff');
+  assert((await s.bus.execute('core.movement.party-action',{uid:mon.uid,move:'fly'},'ui')).ok);
+  assert.deepEqual(g.state.position,before);assert.equal(g.state.movement.mode,'high-flight:air');
+  assert.equal(g.partyFieldMoveOptions(mon.uid).find(a=>a.move==='fly').action,'high-flight:land');
+  assert((await s.bus.execute('core.movement.party-action',{uid:mon.uid,move:'fly'},'ui')).ok);
+  assert.equal(g.state.movement.mode,'walk');
+});

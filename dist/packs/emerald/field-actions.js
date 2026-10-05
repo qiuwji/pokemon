@@ -54,6 +54,7 @@ const diveTarget = (action) => (c) =>
 /** Gen III qualifications belong to the rule pack; content supplies objects, dive links and encounter tables. */
 export const EMERALD_FIELD_ACTIONS = {
   strength: {
+    partyMove: "strength",
     name: "怪力",
     cue: "field-impact",
     duration: 640,
@@ -83,6 +84,7 @@ export const EMERALD_FIELD_ACTIONS = {
     }),
   },
   flash: {
+    partyMove: "flash",
     name: "闪光",
     cue: "field-flash",
     duration: 640,
@@ -144,6 +146,7 @@ export const EMERALD_FIELD_ACTIONS = {
     }),
   },
   cut: {
+    partyMove: "cut",
     name: "居合斩",
     cue: "field-cut",
     duration: 640,
@@ -153,6 +156,7 @@ export const EMERALD_FIELD_ACTIONS = {
     plan: hide,
   },
   "rock-smash": {
+    partyMove: "rock_smash",
     name: "碎岩",
     cue: "field-impact",
     duration: 640,
@@ -162,6 +166,7 @@ export const EMERALD_FIELD_ACTIONS = {
     plan: (c, t) => ({ ...hide(c, t), encounter: "rock" }),
   },
   dive: {
+    partyMove: "dive",
     name: "潜水",
     cue: "field-dive",
     duration: 600,
@@ -171,6 +176,7 @@ export const EMERALD_FIELD_ACTIONS = {
     plan: (c, t) => ({ kind: "travel", position: t.to, mode: "dive" }),
   },
   surface: {
+    partyMove: "dive",
     name: "浮出水面",
     cue: "field-dive",
     duration: 600,
@@ -180,6 +186,7 @@ export const EMERALD_FIELD_ACTIONS = {
     plan: (c, t) => ({ kind: "travel", position: t.to, mode: "surf" }),
   },
   waterfall: {
+    partyMove: "waterfall",
     name: "攀瀑",
     cue: "field-water",
     duration: 480,

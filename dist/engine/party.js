@@ -1,4 +1,11 @@
 /** Party ordering and pending move decisions; items and evolution have their own domain services. */
+export function swapParty(state, firstUid, secondUid) {
+  const first = state.party.findIndex(m => m.uid === firstUid);
+  const second = state.party.findIndex(m => m.uid === secondUid);
+  if (first < 0 || second < 0 || first === second) return false;
+  [state.party[first], state.party[second]] = [state.party[second], state.party[first]];
+  return true;
+}
 export function setLead(state, index) {
   if (!state.party[index]) return false;
   [state.party[0], state.party[index]] = [state.party[index], state.party[0]];

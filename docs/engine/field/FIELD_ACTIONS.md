@@ -137,3 +137,9 @@ api.content.register("fieldActions", "open-gate", {
 可选 `presentation` 引用注册的cameraProfile、environmentLayer、appearance，另含aboveTerrain / freezeAnimation。它们只控制相机、雾/外观、前景绘制顺序及步态，不改变规则；关闭模式即取消模式表现，保存模式后可推导恢复。显式相机租约优先于模式默认相机；显式外观覆盖优先于模式外观。`view.environmentFrames` 返回最终有效环境层，`view.environment` 仍是临时租约列表。
 
 代表组合：[自由飞行插件说明](../../../dist/plugins/high-flight/README.md)及[插件专项](../../../examples/high-flight.test.js)；核心导航合同独立于安装插件，见[导航测试](../../../tests/movement-navigation.test.js)。
+
+## 所选宝可梦的招式菜单
+
+fieldActions可声明`partyMove: "dive"`等已注册招式ID，宿主装配检查引用。多个行动可关联同一招式（下潜/浮出水面、起飞/降落）：先按priority降序排列，选当前预检成功项；全失败时保留首项及原因。它只扩展队伍操作菜单，不替代allowed/target/plan，不自动提供地图链接、徽章或招式。
+
+所选非蛋个体必须实际学会该招式；Gen3徽章规则在绿宝石pack，点击时重新校验。只读查询`core.movement.party-options {uid}`与异步执行`core.movement.party-action {uid,move,destination?}`使用稳定UID，不靠页面索引，命令要求movement权限。UI先关闭菜单再发起演出，失败返回菜单显示原因。普通Fly走旅行目的地，Surf走登水用例，其余交给原fieldAction管线；可选插件按声明替换。实际例见[独立飞行插件测试](../../../examples/high-flight.test.js)，宿主合同见[队伍野外招式测试](../../../tests/party-field-moves.test.js)。

@@ -1,8 +1,26 @@
 /** Navigation and controls only; permissions, movement and travel are application services. */
 export function createMovementInterface(
   game,
-  { modal, closeModal, showMenu, root, toast, escapeHTML },
+  { modal, closeModal, showMenu, showParty, root, toast, escapeHTML },
 ) {
+  async function showPartyFieldMove(uid, move) {
+    const choice = game.partyFieldMoveOptions(uid).find(a=>a.move===move);
+    if (!choice?.ok) {toast(choice?.reason || "这里不能使用这个招式。");return;}
+    if (choice.route === 'fly') {
+      const destinations=game.travel.list();
+      modal('飞往哪里？', `<div class="menu-list">${destinations.map(d=>`<button data-party-flight="${escapeHTML(d.id)}" ${d.ok ? '' : 'disabled'}>${escapeHTML(d.name)}</button>`).join('')}</div>`,
+        {type:'flight',back:()=>showParty(false,{actionUid:uid})});
+      root.querySelectorAll('[data-party-flight]').forEach(button=>button.onclick=()=>execute(button.dataset.partyFlight));
+      return;
+    }
+    await execute();
+    async function execute(destination) {
+      closeModal();
+      const result=await game.usePartyFieldMove(uid,move,destination);
+      if (!result.ok) {showParty(false,{actionUid:uid});toast(result.reason);}
+      else game.save();
+    }
+  }
   function showMovement() {
     const modes = game.movementOptions(),
       fieldActions = game.fieldActionOptions(),
@@ -122,6 +140,7 @@ export function createMovementInterface(
   }
   return {
     showMovement,
+    showPartyFieldMove,
     showSurf,
     showFieldAction,
     showFishing,

@@ -1195,6 +1195,8 @@ export interface FieldLinkDefinition {
 }
 export interface FieldActionDefinition<T extends Json = Record<string, Json>> {
   name: string;
+  /** Learned move that exposes this action in the selected monster menu. */
+  partyMove?: string;
   triggers?: ("interact" | "blocked")[];
   priority?: number;
   menu?: boolean;

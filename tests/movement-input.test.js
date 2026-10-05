@@ -202,3 +202,20 @@ test("Browser maps held and released logical input, preserves field/menu paths a
   assert.equal(browser.held, null);
   browser.destroy();
 });
+
+test('External panel callback is stored and gates held movement, keyboard, touch and item shortcuts', async () => {
+  const handlers={}, touch={}, calls=[];
+  let blocked=true;
+  const button={dataset:{dir:'right'},addEventListener:(name,fn)=>touch[name]=fn,setPointerCapture(){}};
+  const doc={addEventListener:(name,fn)=>handlers[name]=fn,querySelector:()=>null,querySelectorAll:()=>[button]};
+  const game={handleFieldInput:f=>calls.push(f),resetFieldInput(){},useRegisteredItem:async()=>{calls.push('item');return {ok:true};}};
+  const ui={confirm:()=>calls.push('confirm'),toast(){}};
+  const input=new BrowserInput({document:doc,window:{addEventListener(){}},game,ui,externalBlocked:()=>blocked});
+  const key={key:'Enter',target:{closest:()=>false},preventDefault(){}};
+  input.held='left';input.tick();handlers.keydown(key);touch.pointerdown({preventDefault(){},pointerId:1});
+  await input.useRegisteredItem();assert.deepEqual(calls,[]);
+  blocked=false;input.tick();handlers.keydown(key);touch.pointerdown({preventDefault(){},pointerId:1});
+  await input.useRegisteredItem();
+  assert.equal(calls[0].direction,'left');assert.equal(calls[1],'confirm');
+  assert.equal(calls[2].direction,'right');assert.equal(calls[3],'item');input.destroy();
+});

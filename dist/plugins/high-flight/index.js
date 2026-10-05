@@ -43,7 +43,7 @@ export const highFlight = {
       },
     });
     api.content.register('fieldActions', 'takeoff', {
-      name: '飞空术 · 起飞', duration: 480, cue: 'field-impact',
+      name: '飞空术 · 起飞', partyMove: 'fly', duration: 480, cue: 'field-impact',
       avatar: [{ anchor: 'actor', start: 0, end: 1, keyframes: [
         { at: 0, values: { y: 0 } }, { at: 1, easing: 'in-out-quad', values: { y: -16 } },
       ] }],
@@ -51,7 +51,7 @@ export const highFlight = {
       target: c => c.position, plan: () => ({ kind: 'movement', mode: air }),
     });
     api.content.register('fieldActions', 'land', {
-      name: '飞空术 · 降落', duration: 360, cue: 'field-impact',
+      name: '飞空术 · 降落', partyMove: 'fly', duration: 360, cue: 'field-impact',
       avatar: [{ anchor: 'actor', start: 0, end: 1, keyframes: [
         { at: 0, values: { y: 0 } }, { at: 1, easing: 'in-out-quad', values: { y: 16 } },
       ] }],
