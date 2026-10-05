@@ -1,3 +1,4 @@
+import { buttonPage } from "./helpers/button-page.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import {
   fixtureInventory,
@@ -434,49 +435,22 @@ test("Bag registration selects a plugin sub-action, does not use it, and toggles
   const s = fixture({ plugins: [plugin()] }),
     g = s.game;
   setQuantity(g.state.bag, "brush:kit", 1);
-  let buttons = [],
-    options;
-  const root = {
-    querySelectorAll(selector) {
-      const key = selector
-        .slice(6, -1)
-        .replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-      return buttons.filter((button) => key in button.dataset);
-    },
-  };
-  const ui = createBagInterface(createEmeraldCommandFacade(g, s.bus), {
-    root,
-    modal(_name, body, settings) {
-      options = settings;
-      buttons = [
-        ...body.matchAll(/<button[^>]*data-([\w-]+)="([^"]*)"[^>]*>/g),
-      ].map((m) => ({
-        dataset: {
-          [m[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase())]: m[2],
-        },
-        disabled: m[0].includes("disabled"),
-      }));
-    },
-    closeModal() {},
-    showMenu() {},
-    partyCard() {},
-    toast() {},
-    updateSide() {},
-    sound() {},
-    escapeHTML: String,
-  });
+  const p = buttonPage(), root = p.root;
+  const ui = createBagInterface(createEmeraldCommandFacade(g, s.bus), p.deps);
   ui.showBag();
+  p.selectItem("brush:kit");
   root
     .querySelectorAll("[data-register-item]")
     .find((button) => button.dataset.registerItem === "brush:kit")
     .onclick();
-  assert.equal(options.type, "item-registration");
+  assert.equal(p.options().type, "item-registration");
   root
     .querySelectorAll("[data-register-action]")
     .find((button) => button.dataset.registerAction === "blue")
     .onclick();
   assert.equal(g.state.registeredItem.action, "blue");
   assert.equal(g.world.map.behavior[6], 0);
+  p.selectItem("brush:kit");
   root
     .querySelectorAll("[data-register-item]")
     .find((button) => button.dataset.registerItem === "brush:kit")

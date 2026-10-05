@@ -1,3 +1,4 @@
+import { buttonPage } from "./helpers/button-page.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -283,42 +284,10 @@ test("Item plans use the selected stack, refuse moved or replaced containers, an
 });
 
 function page(g) {
-  let buttons = [],
-    body = "";
-  const root = {
-    querySelectorAll(selector) {
-      const field = selector
-        .slice(6, -1)
-        .replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-      return buttons.filter((button) => field in button.dataset);
-    },
-    querySelector(selector) {
-      return this.querySelectorAll(selector)[0] || null;
-    },
-  };
-  const ui = createBagInterface(g, {
-    root,
-    modal(_name, html) {
-      body = html;
-      buttons = [
-        ...html.matchAll(/<button[^>]*data-([\w-]+)="([^"]*)"[^>]*>/g),
-      ].map((match) => ({
-        dataset: {
-          [match[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase())]: match[2],
-        },
-        disabled: match[0].includes("disabled"),
-      }));
-    },
-    closeModal() {},
-    showMenu() {},
-    partyCard: (_mon, i) => `<button data-mon="${i}">伙伴</button>`,
-    toast() {},
-    updateSide() {},
-    sound() {},
-    escapeHTML: String,
-  });
-  return { ui, root, body: () => body };
+  const p = buttonPage();
+  return { ...p, ui: createBagInterface(g, p.deps) };
 }
+
 test("The real bag page renders distinct stacks and its command facade consumes the clicked second stack", () => {
   const s = session(),
     g = s.game,
@@ -327,10 +296,11 @@ test("The real bag page renders distinct stacks and its command facade consumes 
   assert(g.inventory.apply(g.state.bag, [add("potion", 150)]).ok);
   const p = page(createEmeraldCommandFacade(g, s.bus));
   p.ui.showBag();
-  assert.match(p.body(), /道具 · 2\/30/);
-  assert.match(p.body(), /伤药 × 99/);
-  assert.match(p.body(), /伤药 × 51/);
+  assert.equal(p.root.querySelectorAll("[data-item]").length, 2);
+  assert.match(p.body(), /伤药<\/span><span>×99/);
+  assert.match(p.body(), /伤药<\/span><span>×51/);
   p.root.querySelectorAll("[data-item]")[1].onclick();
+  p.root.querySelector("[data-use-item]").onclick();
   p.root.querySelectorAll("[data-mon]")[0].onclick();
   assert.equal(g.state.bag.pockets.items[0].count, 99);
   assert.equal(g.state.bag.pockets.items[1].count, 50);
@@ -523,8 +493,9 @@ test("Plugin pockets flow through reward, page, use and save; failed transaction
   assert.equal(g.itemQuantity("garden:tonic"), 3);
   const p = page(g);
   p.ui.showBag();
-  assert.match(p.body(), /园圃材料 · 1\/2/);
-  assert.match(p.body(), /园圃补剂 × 3/);
+  p.selectItem("garden:tonic");
+  assert.match(p.body(), /园圃材料/);
+  assert.match(p.body(), /园圃补剂<\/span><span>×3/);
   assert(g.inventory.apply(g.state.bag, [add("potion", 2970)]).ok);
   const before = structuredClone(g.state);
   await assert.rejects(

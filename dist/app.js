@@ -1,9 +1,13 @@
+import { emeraldBattleCues } from "./packs/emerald/battle-audio.js";
 import { PixelDisplay } from "./adapters/pixel-display.js";
 import { emeraldTransitionPatterns } from "./packs/emerald/battle-transition-canvas.js";
 import { loadContent } from "./adapters/content-loader.js";
 import { loadPluginCatalog } from "./adapters/plugin-loader.js";
 import { createPluginManager } from "./adapters/plugin-manager-dom.js";
-import { readPluginSettings, startPlugins } from "./adapters/plugin-settings.js";
+import {
+  readPluginSettings,
+  startPlugins,
+} from "./adapters/plugin-settings.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
 import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
@@ -30,35 +34,50 @@ import { BattleDirector } from "./presentation/battle-director.js";
 import { TransitionDOM } from "./presentation/transition-dom.js";
 import { EmeraldAdventure } from "./packs/emerald/adventure.js";
 import { createEmeraldInterface } from "./packs/emerald/interface.js";
-import { createEmeraldPresentation } from "./packs/emerald/animations.js";
+import {
+  createEmeraldPresentation,
+  emeraldBallResource,
+} from "./packs/emerald/animations.js";
 import { ANIMATION_PROFILES } from "./packs/emerald/animation-profiles.js";
 
 // Composition root: chooses a content pack, adapters and services; no gameplay rules.
 const $ = (id) => document.getElementById(id);
 async function boot() {
-  let input, pluginManager, game = null;
+  let input,
+    pluginManager,
+    game = null;
   try {
     const base = assertPackContent(
       await loadContent(new URL("./content/manifest.json", import.meta.url)),
     );
     const parameters = new URLSearchParams(location.search);
-    const environment = parameters.get('e2e') === '1' ? 'test' : 'production';
-    const catalogURL = new URL('./plugins/catalog.json', import.meta.url);
+    const environment = parameters.get("e2e") === "1" ? "test" : "production";
+    const catalogURL = new URL("./plugins/catalog.json", import.meta.url);
     const response = await fetch(catalogURL);
-    if (!response.ok) throw new Error('Plugin catalog unavailable');
+    if (!response.ok) throw new Error("Plugin catalog unavailable");
     const launchCatalog = await response.json();
-    pluginManager = createPluginManager({ document, storage: localStorage, catalog: launchCatalog,
-      parameters, environment, beforeOpen: () => input?.clear(), afterClose: () => input?.clear(),
-      restart: entries => {
+    pluginManager = createPluginManager({
+      document,
+      storage: localStorage,
+      catalog: launchCatalog,
+      parameters,
+      environment,
+      beforeOpen: () => input?.clear(),
+      afterClose: () => input?.clear(),
+      restart: (entries) => {
         game?.save();
         const url = new URL(location.href);
-        url.searchParams.delete('plugins');url.searchParams.delete('disable-plugins');
-        for (const entry of entries) url.searchParams.delete(entry.flag || entry.id);
+        url.searchParams.delete("plugins");
+        url.searchParams.delete("disable-plugins");
+        for (const entry of entries)
+          url.searchParams.delete(entry.flag || entry.id);
         location.assign(url.href);
       },
     });
     const plugins = await loadPluginCatalog({
-      url: catalogURL, manifest: launchCatalog, selection: readPluginSettings(localStorage),
+      url: catalogURL,
+      manifest: launchCatalog,
+      selection: readPluginSettings(localStorage),
       parameters,
       content: base,
       environment,
@@ -87,7 +106,8 @@ async function boot() {
         objectTransforms: (now) => sceneDirector.objectTransforms(now),
         appearanceView: (target, context) =>
           game?.appearanceFrame(target, context) || null,
-        movementPresentation: () => catalog.movement[game?.state.movement.mode]?.presentation || {},
+        movementPresentation: () =>
+          catalog.movement[game?.state.movement.mode]?.presentation || {},
         fieldPriority: emeraldFieldPriority,
         travelActor: PACK.travelActor,
         cameraRig: camera,
@@ -99,12 +119,23 @@ async function boot() {
         reducedMotion,
         presentation,
       });
-    const pixelDisplay = new PixelDisplay($("game"), (width, height) => renderer.resizeSurface(width, height));
+    const pixelDisplay = new PixelDisplay($("game"), (width, height) =>
+      renderer.resizeSurface(width, height),
+    );
     const transitions = new TransitionController(timeline, { reducedMotion });
     const audio = new AudioAdapter({
       cues: createEmeraldAudio(host),
       onError: console.error,
     });
+    // Decode short input/capture cues before the first gesture; never block boot on audio.
+    void audio
+      .preload([
+        "emerald:confirm",
+        "emerald:ball.throw",
+        "emerald:ball.shake",
+        "emerald:ball.open",
+      ])
+      .catch(console.error);
     const detachAudio = host.events.on("core:audio-request", ({ payload }) =>
       audio.play(payload.id),
     );
@@ -114,6 +145,8 @@ async function boot() {
     const director = new BattleDirector(timeline, {
       profiles: ANIMATION_PROFILES,
       registry: presentation,
+      cuePlan: emeraldBattleCues,
+      ballResource: emeraldBallResource,
       onCue: (kind) => {
         const id = emeraldBattleSound(kind, audio.cues);
         if (id) audio.play(id);
@@ -139,7 +172,8 @@ async function boot() {
       asset: (id) => db.resources?.[id + "-front"] || `assets/${id}-front.png`,
     });
     const patterns = new TransitionPatterns();
-    for (const [id, draw] of Object.entries(emeraldTransitionPatterns(assets))) patterns.register(id, draw);
+    for (const [id, draw] of Object.entries(emeraldTransitionPatterns(assets)))
+      patterns.register(id, draw);
     for (const [id, definition] of host.transitionPatterns)
       patterns.register(id, definition.draw);
     const overlay = new TransitionDOM($("transition"), {
@@ -189,13 +223,25 @@ async function boot() {
     const ui = createEmeraldInterface(game, {
       sound: (id) => audio.play(id),
       extensionAssets: assets,
+      audioSettings: {
+        enabled: () => audio.enabled,
+        setEnabled: (value) => {
+          audio.enabled = value;
+          $("sound").textContent = value ? "♫" : "♪";
+          $("sound").ariaLabel = value ? "关闭音乐与音效" : "开启音乐与音效";
+        },
+      },
     });
     game.attachUI(ui);
     game.attachSound((cue) => audio.play(cue));
-    const startupIssues = await startPlugins(plugins,bus);
-    if (startupIssues.length) ui.toast(startupIssues.join('；'));
+    const startupIssues = await startPlugins(plugins, bus);
+    if (startupIssues.length) ui.toast(startupIssues.join("；"));
     if (parameters.get("control") === "1") void ui.connectControl();
-    input = new BrowserInput({ game, ui, externalBlocked: () => pluginManager.active });
+    input = new BrowserInput({
+      game,
+      ui,
+      externalBlocked: () => pluginManager.active,
+    });
     $("loading").hidden = true;
     $("save").onclick = () => game.save(true);
     $("menu").onclick = () => ui.showMenu();

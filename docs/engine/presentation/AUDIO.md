@@ -42,15 +42,13 @@ source 必须是 assets 下的 wav/ogg/mp3/m4a 文件。volume 为 0..1；loop �
 
 ## 绿宝石内容与真实资源
 
-`packs/emerald/audio-library.js` 提供具名 confirm/purchase/attack/hurt/heal/reward 与三个初始精灵 cry。页面用 sound(id) 而非频率参数。地图的 music/battleMusic 直接引用已注册 music cue；缺少资源时为安静，不用示范旋律代替。插件地图同样可指定这些字段。
+`packs/emerald/audio-library.js`提供confirm/purchase/reward/door/ledge/ball.throw/ball.shake/ball.open/heal/save/storage.pc及初始精灵cry。核心短音效已指向原SE/fanfare离线渲染资源，不再使用合成提示音。逐招式attack/hurt没有通用替代映射；未导入者保持安静。
 
-`python3 tools/import.py audio work/pokeemerald --check`预演复制profile所选的真实WAV；审阅后去掉--check执行。当前默认profile选择sound/direct_sound_samples中的7个文件。原始bytes不重采样/合成，路径、SHA256、时长与修订记在dist/assets/audio/provenance.json。初始三精灵使用对应原采样；UI/战斗通用音效是临时采样映射，**不等于原作SE序列**。参数、写入归属见[导入索引](../../development/IMPORT_SCRIPTS.md)。
+采样复制使用tools/import.py audio；MIDI曲目和一次性SE/fanfare使用[音频工具](../../../tools/audio/README.md)，固定来源、音色表、音量/混响/声部设置和哈希记录在合并包manifest。运行时只播放成品资源；不是通用MIDI音色，也没有宣称硬件逐位相同。具体流程见[音乐导入指南](../../../skills/emerald-story-reconstruction/references/music-import.md)。
 
-完整BGM/SE按[音乐导入Skill指南](../../../skills/emerald-story-reconstruction/references/music-import.md)继续：从固定参考追踪歌曲常量、序列/构建参数、voicegroup/采样，记录引子/循环和来源。现有[成品BGM工具](../../../tools/audio/README.md)通过固定poryaaaa修订离线渲染MIDI循环曲目并安装音频插件，未白镇已接入；完整SE/汇编和全作选择政策尚待补齐。mid2agb和wav2agb不是整曲音频渲染器。运行时只播放成品音频，不用通用MIDI音色或占位旋律声称完成原作音乐。
+曲目保留原常量小写身份，例如MUS_LITTLEROOT→mus_littleroot.wav。按PCM帧确定loopStart/loopEnd，通过AudioBufferSourceNode循环曲身，不能用定时器重播引子。音乐选择在emeraldMusic：已准备的战斗优先，再取剧情覆盖或地图；求救阶段按旗标维持MUS_HELP。换曲/后台/静音恢复由适配器处理。完整冲浪/骑车及全作fanfare恢复政策仍需逐流程补充，查看STATUS而非历史数量。
 
-曲目文件保留原作身份：MUS_LITTLEROOT→mus_littleroot.wav，cue为owner命名空间内的mus_littleroot。按PCM帧计算loopStart/loopEnd，播放器用AudioBufferSourceNode.loop持续重复指定区域；引子不会每轮重播，不通过JS计时器或ended回调重启。未白镇部署包含引子和两遍曲身，重复第二遍以保留已有尾音。
-
-当前emeraldMusic只按map.music/map.battleMusic选择，冲浪/骑车、剧情特殊切曲、fanfare等待及BGM恢复等完整原作政策需追调用分别补齐。API能播放成品不等于这些业务已还原，曲目完成状态归[STATUS](../../project/STATUS.md)。
+确认入口在UI shell和battle-interface，trusted点击捕获阶段与程序confirm互斥，页面不重复播confirm。输入/捕捉短音效在启动时预解码，不阻塞加载或自动开声音。timed-cues.js按注入时钟等待音效点；battle-audio.js纯映射ball/capture/switch/entry与可用Growl叫声。捕捉消息在最终shake/release之后公布并保留阅读时间；reduced-motion收缩时序、省去重复摇晃声，不改变规则结果。插件演出缩短duration时按时间比例缩放音效点。
 
 ## 验证和变更边界
 

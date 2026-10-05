@@ -15,6 +15,18 @@ description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写�
 
 音乐任务的交付终点是**通过正常地图、战斗和剧情流程，在游戏中实际听到正确曲目，并完成循环、切曲及恢复验收**。接手者需补足转换工具和选曲/恢复业务；只生成文件、注册cue或通过自动测试不能报完成。具体完成判据与未验收记录见上述音乐指南。
 
+## 原作界面、文字与演出
+
+涉及菜单布局、sprite/文字坐标或音效时先读[界面实施与来源](../../docs/development/EMERALD_UI.md)。先追原C的window templates、CreateSprite、tilemap/palette及资源build规则，再使用tools/ui/export-theme.py导出；不得以整个场景截图代替网格地图。页面落在对应*-interface.js，纯格式化在ui/；规则依旧通过现有命令执行。
+
+NPC对白逐字、告示牌/家具查看即时显示：在内容中明确mode，不在UI按名字猜。捕捉结果由领域先决定，表现等待摇晃/挣脱结束再宣布；音效由一次性的时间点触发，不能放入每帧sample/draw。四次捕捉判定成功不等于播四次摇晃。统一确认入口已负责音效，页面回调不要重复播放。扩展原生区域、关闭资源生命周期和reduced-motion必须保留。
+
+针对性检查可用node --test tests/native-pages.test.js tests/ui-composition.test.js tests/presentation.test.js；文件改名搜索summaryPage、Capture announces、First field confirm。导出后先--check，应无差异；可执行检查只证明代码与资源合同，不证明像素/听感一致。浏览器或Computer Use仅按当次用户授权执行；用户承担端到端时明确留待验项。
+
+详情sprite用`python3 tools/import.py detail-sprites --check`预演，去掉`--check`导入真正的anim_front.png和normal.pal。front.png可能包含黑色VRAM预留槽，不能按高度生成动画帧。原生详情播放一次并返回首姿态，插件clip仍可循环；参数和资源归属见导入索引。
+
+队伍图标使用原作共享icon调色板，由pixel_assets.py解析pokemon_icon.c/graphics.c，不是物种normal.pal；detail-sprites同时修复已导入图标。别用CSS滤镜掩盖导入偏色。
+
 ## 本领域核心名词
 
 - **MapScripts / EventScript**：原作入图/刷新等地图回调与对象交互、区域触发脚本，不能全部转成一次性step事件。
@@ -43,7 +55,7 @@ description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写�
 
 ## 角色与动作转写的现有落点
 
-- 原作演员业务定义放native-cast.js / opening-objects.js，唯一身份绑定放native-object-bindings.js；使用来源local ID或严格唯一坐标，未知/歧义明确报错，不以静止朝下兜底。初始朝向核对native-movement.js的原作表，LEFT_AND_RIGHT与RIGHT_AND_LEFT不同，不能按子串猜。
+- 原作演员业务数据放native-cast-data.js / opening-objects.js，native-cast.js只作通用条件投影；唯一身份绑定放native-object-bindings.js。使用来源local ID或严格唯一坐标，未知/歧义明确报错，不以静止朝下兜底。条件入图站位用placement，在来源绑定后、目的地首帧前生效，不让延迟mapEnter补丁造成闪现。初始朝向核对native-movement.js的原作表，LEFT_AND_RIGHT与RIGHT_AND_LEFT不同，不能按子串猜。
 - local ID存在不等于绑定正确：逐角色核对原表的script、graphics_id、坐标、movement_type与范围，并覆盖男女镜像分支。隐式ID按完整原表序号计算，不能按筛选后演员列表编号；例如邻居孩子是6，3属于搬家过动猿。定向WANDER必须保留方向集合，不能当四方向漫步。至少验证一次移动及重入，不能只断言对象能创建。
 - 统一入口`python3 tools/story/extract.py movement --packet <packet> --label <label> --actor <稳定ID> --map <地图>`先回校验固定来源，再调用tools/story/movement.py输出source锚点和commands。完整调用与支持范围见[提取流程](../../docs/development/STORY_EXTRACTION.md)；未知指令先查C语义，再补局部映射/接口，不删除步骤。
 - applymovement并行关系仍由作者写parallel/sequence；跟随或推回可显式声明ignoreActors，只忽略指定演员的占位，保留地形/高度/边界。锁朝向用keepFacing，不用逐格插face冒充原作锁。别把例外带入正常玩家移动。

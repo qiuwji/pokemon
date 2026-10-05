@@ -1,44 +1,63 @@
-/** Owns this page and its navigation; gameplay changes are application commands. */
+import { itemIconURL, listNavigation } from "./ui/native-view.js";
+/** Buy list and selected description use original shop windows. Prices and purchases are domain calls. */
 export function createShopInterface(
   game,
-  { modal, root, updateSide, sound, toast },
+  {
+    modal,
+    root,
+    document: doc,
+    closeModal,
+    updateSide,
+    sound,
+    toast,
+    escapeHTML: esc,
+  },
 ) {
-  const ITEMS = game.itemDefinitions;
-  function showShop() {
+  const items = game.itemDefinitions;
+  function showShop(selectedId = null) {
+    const stock = Object.entries(items).filter(
+      ([, item]) => item.shopStock !== false && item.price > 0,
+    );
     modal(
       "友好商店",
-      `<p>欢迎光临！现有零花钱 ¥${game.state.money.toLocaleString("zh-CN")}</p>${Object.entries(
-        ITEMS,
-      )
-        .filter(([, item]) => item.shopStock !== false && item.price > 0)
-        .map(
-          ([id, item]) =>
-            `<div class="bag-item"><div class="bag-icon">${item.icon}</div><div><strong>${item.name} · ¥${item.price}</strong><p>${item.description}</p><p>持有 ${game.itemQuantity(id)} 个</p></div><button class="secondary-button" data-buy="${id}" ${!game.canBuyItem(id) ? "disabled" : ""}>购买 1 个</button></div>`,
-        )
-        .join(
-          "",
-        )}${!game.state.flags.pokedex ? '<p class="notice">领取图鉴后即可购买精灵球。</p>' : ""}<div data-extension-slot="shop.actions"></div><div data-extension-slot="shop.content"></div>`,
-      { type: "shop" },
+      `<div class="native-window shop-money">金钱 ¥${game.state.money}</div><div class="native-window shop-list">${stock.map(([id, item]) => `<button class="native-row" data-buy="${esc(id)}" ${game.canBuyItem(id) ? "" : "disabled"}><span>${esc(item.name)}</span><span>¥${item.price}</span></button>`).join("")}<button class="native-row" data-shop-exit>退出</button></div><div class="shop-description" data-shop-description></div><img class="shop-item-icon" data-shop-icon alt=""><div data-extension-slot="shop.actions"></div><div data-extension-slot="shop.content"></div>`,
+      {
+        type: "shop",
+        close: false,
+        back: closeModal,
+        navigate: (dir) => listNavigation(root, doc, ".shop-list button", dir),
+      },
     );
+    const describe = (id) => {
+      root.querySelector("[data-shop-description]").textContent = items[id]
+        ? `${items[id].description || ""} 持有 ${game.itemQuantity(id)} 个。`
+        : "欢迎再次光临！";
+      const icon = root.querySelector("[data-shop-icon]");
+      icon.hidden = !id;
+      if (id) icon.src = itemIconURL(id, game.db.resources);
+    };
+    describe(selectedId || stock[0]?.[0]);
+    root.querySelector("[data-shop-exit]").onclick = closeModal;
+    root.querySelectorAll("[data-buy]").forEach((button) => {
+      button.onfocus = () => describe(button.dataset.buy);
+      button.onclick = () => {
+        const id = button.dataset.buy;
+        if (!game.buyItem(id)) return;
+        updateSide();
+        game.save();
+        showShop(id);
+        sound("emerald:purchase");
+        toast(`买到了 1 个${items[id].name}。`);
+      };
+    });
     for (const slot of ["shop.actions", "shop.content"])
       game.ui?.extensions?.mountSlot(
         slot,
         root.querySelector(`[data-extension-slot="${slot}"]`),
         {},
-        showShop,
+        () => showShop(selectedId),
       );
-    root.querySelectorAll("[data-buy]").forEach(
-      (b) =>
-        (b.onclick = () => {
-          const id = b.dataset.buy;
-          if (!game.buyItem(id)) return;
-          updateSide();
-          game.save();
-          showShop();
-          sound("emerald:purchase");
-          toast(`买到了 1 个${ITEMS[id].name}。`);
-        }),
-    );
+    if (selectedId) root.querySelector(`[data-buy="${selectedId}"]`)?.focus();
   }
   return { showShop };
 }

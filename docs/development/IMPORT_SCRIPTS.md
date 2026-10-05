@@ -20,7 +20,7 @@
 | 图鉴 `import-species.py` | species_info/learnsets/PNG → 单个物种及PNG | 可选source与旧式条目，或--species/--profile；未导入招式保留unavailableLearnset并报告 | 是 |
 | 图鉴 `import-species-metadata.py` | species_info/egg_moves/tmhm_learnsets → 物种成长/遗传/机器字段 | 可选source、--species；先有物种/招式。遗传和机器招式遗漏逐条报告 | 是 |
 | 图鉴 `import-evolutions.py` | evolution.h → evolutions及露力丽后代政策 | 可选source、--species/--profile；缺目标/附加物种报告，局部导入保留其他家族 | 是 |
-| 图鉴 `import-detail-sprites.py` | 已导入精灵前PNG → pack/detail-sprite-frames.js | 无source，--species；读取target内精灵图，支持--target | 是 |
+| 图鉴 `import-detail-sprites.py` | anim_front.png/normal.pal、icon.png/原作共享图标调色板 → detail/icon PNG、来源哈希、帧元数据 | 可选source、--species/--target；缺动画时只取front首帧，局部导入保留其他元数据；拒绝纯色/无透明背景帧 | 是 |
 | 物品 `import-item-metadata.py` | items.h → rules/gen3/item-metadata.js | 可选source；至少解析到一个物品 | 是 |
 | 物品 `import-held-items.py` | items.h → rules/gen3/held-catalog.js | 可选source；至少解析到一个持有物品 | 是 |
 | 机器 `import-machine-learning.py` | tms_hms/tmhm_learnsets → rules/gen3/machine-learning.js | 可选source及`--config`；数量政策来自gen3.json，机器/学习表不能为空 | 是 |

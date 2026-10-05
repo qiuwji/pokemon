@@ -130,7 +130,10 @@
   "import-detail-sprites.py": {
     "content": [],
     "outputs": [
-      "packs/emerald/detail-sprite-frames.js"
+      "packs/emerald/detail-sprite-frames.js",
+      "assets/*-detail.png",
+      "assets/detail-sprite-source.json",
+      "assets/*-icon.png"
     ],
     "entry": "tools/imports/commands/dex/import-detail-sprites.py",
     "category": "dex"

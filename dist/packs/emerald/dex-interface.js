@@ -1,23 +1,49 @@
-/** Owns this page and its navigation; gameplay changes are application commands. */
+import { TYPE_NAMES } from "./pack.js";
+import { listNavigation } from "./ui/native-view.js";
+/** A list and entry page project the recorded Pokédex; unseen entries reveal no species artwork. */
 export function createDexInterface(
   game,
-  { modal, showMenu, spriteURL, escapeHTML },
+  { modal, showMenu, root, document: doc, spriteURL, escapeHTML: esc },
 ) {
-  const db = game.db;
-  function showDex() {
-    const list = Object.entries(db.species).sort((a, b) => a[1].dex - b[1].dex);
+  const list = Object.entries(game.db.species).sort(
+    (a, b) => a[1].dex - b[1].dex,
+  );
+  function showDex(selectedId = null) {
+    const selected = list.find(
+      ([id]) => id === selectedId && game.state.seen.includes(id),
+    );
     modal(
       "宝可梦图鉴",
-      `<p>已发现 ${game.state.seen.length} 种 · 已捕获 ${game.state.caught.length} 种</p><div class="dex-grid">${list
-        .map(([id, s]) => {
-          const found = game.state.seen.includes(id);
-          return `<div class="dex-entry ${found ? "" : "unseen"}"><span>No.${String(s.dex).padStart(3, "0")}</span><img src="${escapeHTML(spriteURL(id))}" alt="${found ? s.name : "未知宝可梦"}"><strong>${found ? s.name : "???"}</strong><span>${game.state.caught.includes(id) ? "● 已捕获" : found ? "已发现" : "尚未发现"}</span></div>`;
-        })
-        .join(
-          "",
-        )}</div><div class="modal-footer">当前图鉴收录序章及其部分进化形态，后续可继续补充。</div>`,
-      { back: showMenu, type: "dex" },
+      `<div class="dex-counts">看见 ${game.state.seen.length}<br>捕获 ${game.state.caught.length}</div><div class="dex-preview"><img data-dex-preview ${selected ? `src="${esc(spriteURL(selected[0]))}"` : "hidden"} alt=""></div><div class="dex-list">${list.map(([id, s]) => `<button class="native-row" data-dex="${esc(id)}" ${game.state.seen.includes(id) ? "" : "disabled"}><span>${game.state.caught.includes(id) ? "●" : " "} ${String(s.dex).padStart(3, "0")}</span><span>${esc(game.state.seen.includes(id) ? s.name : "————")}</span></button>`).join("")}</div><button class="native-return" data-dex-back>返回</button>`,
+      {
+        type: "dex",
+        back: showMenu,
+        close: false,
+        navigate: (dir) =>
+          listNavigation(root, doc, "[data-dex]:not(:disabled)", dir),
+      },
     );
+    root.querySelector("[data-dex-back]").onclick = showMenu;
+    root.querySelectorAll("[data-dex]").forEach((button) => {
+      button.onfocus = () => {
+        const img = root.querySelector("[data-dex-preview]");
+        img.hidden = false;
+        img.src = spriteURL(button.dataset.dex);
+      };
+      button.onclick = () => showEntry(button.dataset.dex);
+    });
+    if (selected) root.querySelector(`[data-dex="${selected[0]}"]`)?.focus();
+  }
+  function showEntry(id) {
+    if (!game.state.seen.includes(id)) return;
+    const species = game.db.species[id],
+      caught = game.state.caught.includes(id);
+    modal(
+      species.name,
+      `<img class="dex-entry-sprite" src="${esc(spriteURL(id))}" alt="${esc(species.name)}"><div class="dex-entry-name">No.${String(species.dex).padStart(3, "0")} ${esc(species.name)}</div><div class="dex-entry-types">${species.types.map((t) => esc(TYPE_NAMES[t])).join(" / ")}</div><div class="dex-entry-text">${caught ? esc(species.description || "已经记录在图鉴中。") : "尚未捕获，详细资料还未记录。"}</div><button class="native-return" data-dex-back>返回</button>`,
+      { type: "dex-info", back: () => showDex(id), close: false },
+    );
+    root.querySelector("[data-dex-back]").onclick = () => showDex(id);
   }
   return { showDex };
 }

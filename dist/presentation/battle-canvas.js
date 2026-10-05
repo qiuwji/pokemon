@@ -95,7 +95,7 @@ export function drawBattle(ctx, assets, frame) {
     reducedMotion: frame.reducedMotion,
     registry,
   });
-  if (ball) drawBall(ctx, ball);
+  if (ball) drawBall(ctx, ball, assets);
 }
 export function drawBattleBackground(ctx, assets, environment = {}) {
   const terrain = environment?.terrain || "grass",
@@ -127,10 +127,16 @@ export function drawBattleBackground(ctx, assets, environment = {}) {
     ctx.fillRect(x + 7, y - 4, w - 14, 18);
   }
 }
-function drawBall(ctx, b) {
+function drawBall(ctx, b, assets) {
   ctx.save();
   ctx.translate(Math.round(b.x), Math.round(b.y));
   ctx.rotate(b.angle);
+  const image = assets[b.resource];
+  if (image) {
+    ctx.drawImage(image, -10, -10, 20, 20);
+    ctx.restore();
+    return;
+  }
   // Deliberately composed of whole pixels, including its stepped silhouette.
   ctx.fillStyle = "#283038";
   ctx.fillRect(-5, -7, 10, 14);

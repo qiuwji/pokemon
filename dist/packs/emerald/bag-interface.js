@@ -1,3 +1,10 @@
+import {
+  itemIconURL,
+  listNavigation,
+  bagPockets,
+  bagPicture,
+} from "./ui/native-view.js";
+import { partyMenuCards, partyMenuNavigation } from "./party-menu-view.js";
 /** Owns this page and its navigation; gameplay changes are application commands. */
 export function createBagInterface(
   game,
@@ -6,75 +13,124 @@ export function createBagInterface(
     closeModal,
     showMenu,
     root,
-    partyCard,
+    document: doc,
+    hpTrack,
     toast,
     updateSide,
-    sound,
     escapeHTML,
   },
 ) {
   const ITEMS = game.itemDefinitions;
-  function showBag(inBattle = false) {
-    const shortcut = game.registeredItemView();
-    const view = game.bagView(inBattle);
-    const rows = Object.entries(view.pockets).flatMap(([pocket, definition]) =>
-      definition.slots.flatMap((slot, index) =>
-        slot
-          ? [{ ...slot, reference: { pocket, index, item: slot.item } }]
-          : [],
-      ),
+  let pocketIndex = 0;
+  function showBag(inBattle = false, selection = null, context = false) {
+    const shortcut = game.registeredItemView(),
+      view = game.bagView(inBattle);
+    const pockets = bagPockets(view.pockets);
+    pocketIndex = Math.min(pocketIndex, pockets.length - 1);
+    const [pocket, definition] = pockets[pocketIndex];
+    const rows = definition.slots.flatMap((slot, index) =>
+      slot ? [{ ...slot, reference: { pocket, index, item: slot.item } }] : [],
     );
-    const row = ({ item: id, count, reference }) => {
-      const item = ITEMS[id];
-      const usable =
+    const selected = rows.find(row => row.reference.pocket === selection?.pocket && row.reference.index === selection?.index && row.item === selection?.item) || rows[0];
+    const contextItem = context ? selected?.item : null;
+    const usable = (row) => {
+      const item = ITEMS[row.item];
+      return (
         item.contexts.includes(inBattle ? "battle" : "field") &&
         (item.target === "field"
-          ? !inBattle && game.itemActionOptions(id).some((action) => action.ok)
+          ? !inBattle && game.itemActionOptions(row.item).some((a) => a.ok)
           : item.target === "enemy"
-            ? game.itemPlan(id, undefined, inBattle, reference).ok
+            ? game.itemPlan(row.item, undefined, inBattle, row.reference).ok
             : (inBattle ? game.battle.party : game.state.party).some(
-                (m, index) => game.itemPlan(id, index, inBattle, reference).ok,
-              ));
-      return `<div class="bag-item"><div class="bag-icon">${escapeHTML(item.icon || "◆")}</div><div><strong>${escapeHTML(item.name)} × ${count}</strong><p>${escapeHTML(item.description || "")}</p></div><button class="secondary-button" data-item="${escapeHTML(id)}" ${!usable ? "disabled" : ""}>使用</button>${!inBattle && item.registerable ? `<button class="secondary-button" data-register-item="${escapeHTML(id)}">${shortcut.selection?.item === id ? "已登记" : "登记"}</button>` : ""}</div>`;
+                (m, index) =>
+                  game.itemPlan(row.item, index, inBattle, row.reference).ok,
+              ))
+      );
+    };
+    const turnPocket = (delta) => {
+      pocketIndex = (pocketIndex + delta + pockets.length) % pockets.length;
+      showBag(inBattle);
     };
     modal(
       "背包",
-      Object.entries(view.pockets)
-        .map(
-          ([pocket, definition]) =>
-            `<section><h3>${escapeHTML(definition.label)} · ${definition.used}/${definition.capacity}</h3>${
-              rows
-                .filter((entry) => entry.reference.pocket === pocket)
-                .map(row)
-                .join("") || "<p>这个口袋是空的。</p>"
-            }</section>`,
-        )
-        .join("") +
-        `<div data-extension-slot="bag.actions"></div><div data-extension-slot="bag.content"></div><div class="modal-footer">${inBattle ? "使用道具会占用这一回合。" : "精灵球可以在野生宝可梦战斗中使用。"}</div>`,
-      { back: inBattle ? closeModal : showMenu, type: "bag" },
+      `<div class="bag-pocket"><button data-pocket="-1" aria-label="前一个口袋">◀</button><span>${escapeHTML(definition.label)}</span><button data-pocket="1" aria-label="下一个口袋">▶</button></div>
+      <img class="bag-picture" src="${bagPicture(pocket, game.state.playerGender || "male")}" alt="背包">
+      <div class="native-window bag-list">${rows.map((row) => `<button class="native-row" data-item="${escapeHTML(row.item)}" data-slot-index="${row.reference.index}"><span>${escapeHTML(ITEMS[row.item].name)}</span><span>${shortcut.selection?.item === row.item ? "SELECT " : ""}×${row.count}</span></button>`).join("")}<button class="native-row" data-bag-close>关闭背包</button></div>
+      <div class="bag-description" data-item-description></div><img class="bag-selected-icon" data-item-icon alt="">
+      ${contextItem ? `<div class="native-window bag-context"><button data-use-item ${usable(selected) ? "" : "disabled"}>使用</button>${!inBattle && ITEMS[contextItem].registerable ? `<button data-register-item="${escapeHTML(contextItem)}">${shortcut.selection?.item === contextItem ? "取消登记" : "登记"}</button>` : ""}<button data-item-cancel>取消</button></div>` : ""}
+      <div data-extension-slot="bag.actions"></div><div data-extension-slot="bag.content"></div>`,
+      {
+        back: contextItem
+          ? () => showBag(inBattle, selected.reference)
+          : inBattle
+            ? closeModal
+            : showMenu,
+        type: "bag",
+        close: false,
+        navigate: (dir) =>
+          listNavigation(
+            root,
+            doc,
+            contextItem ? ".bag-context button" : ".bag-list button",
+            dir,
+            contextItem ? null : turnPocket,
+          ),
+      },
     );
+    const describe = (id) => {
+      const description = root.querySelector("[data-item-description]"),
+        icon = root.querySelector("[data-item-icon]");
+      if (description)
+        description.textContent = ITEMS[id]?.description || "返回冒险。";
+      if (icon) {
+        icon.hidden = !id;
+        if (id) icon.src = itemIconURL(id, game.db.resources);
+      }
+    };
+    describe(selected?.item);
+    root
+      .querySelectorAll("[data-pocket]")
+      .forEach(
+        (button) =>
+          (button.onclick = () => turnPocket(Number(button.dataset.pocket))),
+      );
+    root.querySelector("[data-bag-close]").onclick = inBattle
+      ? closeModal
+      : showMenu;
+    root.querySelectorAll("[data-item]").forEach((button) => {
+      button.onfocus = () => describe(button.dataset.item);
+      button.onclick = () =>
+        showBag(inBattle, rows.find(row => row.reference.index === Number(button.dataset.slotIndex)).reference, true);
+    });
+    const use = root.querySelector("[data-use-item]");
+    if (use) use.onclick = () => {
+      const row = selected,
+        id = row.item;
+      if (ITEMS[id].target === "field") chooseItemAction(id);
+      else if (ITEMS[id].target === "enemy") {
+        closeModal();
+        void game.turn({ kind: "item", item: id, slot: row.reference });
+      } else chooseItemTarget(id, inBattle, row.reference);
+    };
+    const cancel = root.querySelector("[data-item-cancel]");
+    if (cancel) cancel.onclick = () => showBag(inBattle, selected.reference);
+    root
+      .querySelectorAll("[data-register-item]")
+      .forEach(
+        (button) =>
+          (button.onclick = () =>
+            chooseItemRegistration(button.dataset.registerItem)),
+      );
     for (const slot of ["bag.actions", "bag.content"])
       game.ui?.extensions?.mountSlot(
         slot,
         root.querySelector(`[data-extension-slot="${slot}"]`),
         { inBattle },
-        () => showBag(inBattle),
+        () => showBag(inBattle, selected?.reference),
       );
-    root.querySelectorAll("[data-register-item]").forEach((button) => {
-      button.onclick = () =>
-        chooseItemRegistration(button.dataset.registerItem);
-    });
-    root.querySelectorAll("[data-item]").forEach(
-      (button, rowIndex) =>
-        (button.onclick = () => {
-          const id = button.dataset.item,
-            slot = rows[rowIndex].reference;
-          if (ITEMS[id].target === "field") chooseItemAction(id);
-          else if (ITEMS[id].target === "enemy")
-            void game.turn({ kind: "item", item: id, slot });
-          else chooseItemTarget(id, inBattle, slot);
-        }),
-    );
+    if (contextItem)
+      root.querySelector(".bag-context button:not(:disabled)")?.focus();
+    else root.querySelector(`[data-slot-index="${selected?.reference.index}"]`)?.focus();
   }
   function chooseItemRegistration(id) {
     const actions = game.itemActionOptions(id);
@@ -148,10 +204,12 @@ export function createBagInterface(
   function chooseItemTarget(id, inBattle, slot) {
     modal(
       `${ITEMS[id].name} · 选择伙伴`,
-      (inBattle ? game.battle.party : game.state.party)
-        .map((m, i) => partyCard(m, i))
-        .join(""),
-      { back: () => showBag(inBattle), type: "item-target" },
+      `<div data-native-party>${partyMenuCards(inBattle ? game.battle.party : game.state.party, { db: game.db, escapeHTML, hpTrack })}</div><div class="party-prompt">${escapeHTML(ITEMS[id].name)}：选择宝可梦。</div>`,
+      {
+        back: () => showBag(inBattle),
+        type: "item-target",
+        navigate: (dir) => partyMenuNavigation(root, doc, dir),
+      },
     );
     root.querySelectorAll("[data-mon]").forEach((button) => {
       const index = +button.dataset.mon;
@@ -182,7 +240,6 @@ export function createBagInterface(
         updateSide();
         game.save();
         showBag(false);
-        sound("emerald:confirm");
         toast(`使用了${ITEMS[id].name}。`);
       };
     });
@@ -204,7 +261,6 @@ export function createBagInterface(
       updateSide();
       game.save();
       showBag(false);
-      sound("emerald:confirm");
       toast(`学会了${move.name}。`);
     };
     modal(

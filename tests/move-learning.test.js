@@ -1,3 +1,4 @@
+import { buttonPage } from "./helpers/button-page.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
@@ -409,53 +410,20 @@ test("Backpack learning uses the selected UID, presents HM-disabled replacement 
     id,
     pp: 1,
   }));
-  let html = "",
-    options,
-    buttons = [],
-    lastToast;
-  const root = {
-    querySelectorAll: (selector) =>
-      buttons.filter((b) =>
-        Object.hasOwn(b.dataset, selector.match(/data-([\w-]+)/)[1]),
-      ),
-    querySelector: (selector) => root.querySelectorAll(selector)[0] ?? null,
-  };
-  const modal = (_title, text, opts) => {
-    html = text;
-    options = opts;
-    buttons = [
-      ...text.matchAll(/<button[^>]*data-([\w-]+)(?:="([^"]*)")?[^>]*>/g),
-    ].map((m) => ({
-      dataset: { [m[1]]: m[2] ?? "" },
-      disabled: m[0].includes("disabled"),
-    }));
-  };
+  let lastToast;
+  const p = buttonPage(), root = p.root;
   const ui = createBagInterface(createEmeraldCommandFacade(s.game, s.bus), {
-    modal,
-    root,
-    closeModal() {},
-    showMenu() {},
-    partyCard: (_mon, index) => `<button data-mon="${index}">Partner</button>`,
-    toast: (text) => (lastToast = text),
-    updateSide() {},
-    sound() {},
-    escapeHTML: (text) =>
-      String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll('"', "&quot;"),
+    ...p.deps, toast: text => { lastToast = text; },
   });
   ui.showBag();
-  root
-    .querySelectorAll("[data-item]")
-    .find((b) => b.dataset.item === "tm_toxic")
-    .onclick();
+  p.selectItem("tm_toxic");
+  root.querySelector("[data-use-item]").onclick();
   root.querySelector("[data-mon]").onclick();
-  assert.equal(options.type, "machine-learning");
-  assert(html.includes("秘传招式"));
+  assert.equal(p.options().type, "machine-learning");
+  assert(p.body().includes("秘传招式"));
   assert(root.querySelectorAll("[data-replace]")[0].disabled);
   const before = structuredClone(s.game.state);
-  options.back();
+  p.options().back();
   assert.deepEqual(s.game.state, before);
   ui.chooseLearningMove("tm_toxic", mon.uid);
   root.querySelectorAll("[data-replace]")[1].onclick();

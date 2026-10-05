@@ -1,38 +1,53 @@
+import { flightMap } from "./ui/flight-view.js";
 /** Navigation and controls only; permissions, movement and travel are application services. */
 export function createMovementInterface(
   game,
   { modal, closeModal, showMenu, showParty, root, toast, escapeHTML },
 ) {
   async function showPartyFieldMove(uid, move) {
-    const choice = game.partyFieldMoveOptions(uid).find(a=>a.move===move);
-    if (!choice?.ok) {toast(choice?.reason || "这里不能使用这个招式。");return;}
-    if (choice.route === 'fly') {
-      const destinations=game.travel.list();
-      modal('飞往哪里？', `<div class="menu-list">${destinations.map(d=>`<button data-party-flight="${escapeHTML(d.id)}" ${d.ok ? '' : 'disabled'}>${escapeHTML(d.name)}</button>`).join('')}</div>`,
-        {type:'flight',back:()=>showParty(false,{actionUid:uid})});
-      root.querySelectorAll('[data-party-flight]').forEach(button=>button.onclick=()=>execute(button.dataset.partyFlight));
+    const choice = game.partyFieldMoveOptions(uid).find((a) => a.move === move);
+    if (!choice?.ok) {
+      toast(choice?.reason || "这里不能使用这个招式。");
+      return;
+    }
+    if (choice.route === "fly") {
+      const destinations = game.travel.list();
+      modal("飞往哪里？", flightMap(destinations, escapeHTML), {
+        type: "flight",
+        back: () => showParty(false, { actionUid: uid }),
+      });
+      root
+        .querySelectorAll("[data-party-flight]")
+        .forEach(
+          (button) =>
+            (button.onclick = () => execute(button.dataset.partyFlight)),
+        );
       return;
     }
     await execute();
     async function execute(destination) {
       closeModal();
-      const result=await game.usePartyFieldMove(uid,move,destination);
-      if (!result.ok) {showParty(false,{actionUid:uid});toast(result.reason);}
-      else game.save();
+      const result = await game.usePartyFieldMove(uid, move, destination);
+      if (!result.ok) {
+        showParty(false, { actionUid: uid });
+        toast(result.reason);
+      } else game.save();
     }
   }
   function showMovement() {
     const modes = game.movementOptions(),
       fieldActions = game.fieldActionOptions(),
       techniques = game.movementTechniqueOptions(),
-      flights = modes.some(v=>v.replacesTravel === 'fly') ? [] : game.travel.list();
+      flights = modes.some((v) => v.replacesTravel === "fly")
+        ? []
+        : game.travel.list();
     modal(
       "旅行与移动",
       `<p>当前：${escapeHTML(modes.find((v) => v.id === game.state.movement.mode)?.name || "冲浪")}</p>
       <div class="menu-grid">${modes.map((v) => `<button class="menu-tile" data-mode="${v.id}" ${v.allowed ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.allowed ? "切换移动方式" : "尚未获得或此处不能骑车"}</small></button>`).join("")}</div>
       ${techniques.length > 1 ? `<h3>骑行技巧</h3><div class="menu-grid">${techniques.map((v) => `<button class="menu-tile" data-technique="${escapeHTML(v.id)}">${escapeHTML(v.name)}</button>`).join("")}</div>` : ""}
       <h3>野外行动</h3><div class="menu-grid">${fieldActions.map((v, index) => `<button class="menu-tile" data-field-action="${index}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "使用野外行动" : escapeHTML(v.reason)}</small></button>`).join("")}</div>
-      ${flights.length ? `<h3>飞往已到访的城镇</h3><div class="menu-grid">${flights.map((v) => `<button class="menu-tile" data-flight="${v.id}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "准备起飞" : escapeHTML(v.reason)}</small></button>`).join("")}</div>` : ''}
+      ${flights.length ? `<h3>飞往已到访的城镇</h3><div class="menu-grid">${flights.map((v) => `<button class="menu-tile" data-flight="${v.id}" ${v.ok ? "" : "disabled"}>${escapeHTML(v.name)}<small>${v.ok ? "准备起飞" : escapeHTML(v.reason)}</small></button>`).join("")}</div>` : ""}
       <p>自行车需要实际持有对应道具；冲浪和飞行需要相应徽章与招式。</p>`,
       { back: showMenu, type: "movement" },
     );

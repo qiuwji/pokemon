@@ -78,3 +78,9 @@ replace 取代默认事件的姿态/特效编排；append 在默认编排上增�
 ## 野外对象逐帧通道
 
 场景注册支持`objects(frame) => [{map,id,x,y}]`。x/y是视觉像素偏移，不是格子坐标；每帧最多64个、同map/id不可重复，每轴±64像素。回调同步读取冻结frame，无随机数或规则写入。绘制器与既有野外行动偏移相加；reducedMotion返回空列表，异常隔离并只报告一次。纸箱弹跳复用此通道，原生静态偏移放appearance定义。纯取样单测不能证明浏览器观感已验收。
+
+## 捕捉及具名声音时间点
+
+BattleDirector的cuePlan(event,{duration,reducedMotion})返回一次性{id,at}列表，onCue接收具名资源ID；未提供时沿用原事件回调。通用timed-cues验证时间点并使用注入Timeline串行等待，sample/draw不发声。原作资源和映射在pack的battle-audio.js，不从表现层导入pack。该构造端口供宿主装配，尚不是新的插件注册合同；插件既有audio/battle/visual接口仍保留。
+
+ball/capture事件附带所用item元数据，ballResource构造端口选择原图。位置按targetSeat布局计算，不固定投向单打敌方坐标。规则捕捉四次成功判定在原作显示三次摇晃；导演只截取可见次数，不改规则计数。成功/失败消息在全部动画之后，再等待阅读时间；不能从第一帧提前覆盖投球文案或进入结束转场。替换演出仍不决定捕获成败。

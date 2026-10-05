@@ -544,6 +544,34 @@
       "section": "stories",
       "key": "route101",
       "path": "stories/route101.json"
+    },
+    {
+      "section": "maps",
+      "key": "OldaleTown_House2",
+      "path": "maps/OldaleTown_House2/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "OldaleTown_House2",
+      "path": "maps/OldaleTown_House2/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "OldaleTown_House1",
+      "path": "maps/OldaleTown_House1/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "OldaleTown_House1",
+      "path": "maps/OldaleTown_House1/map.json"
+    },
+    {
+      "section": "tilesets",
+      "key": "building-generic_building",
+      "path": "tilesets/building-generic_building.json",
+      "generated": true
     }
   ]
 }

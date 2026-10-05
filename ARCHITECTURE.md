@@ -44,6 +44,8 @@ dist/
     extensions.js                通用插件合同的本作校验/默认注册
     interface.js / ui-shell.js   页面装配与共用交互基础设施
     *-interface.js               独立页面，只查询和提交命令
+    ui/*-view.js                 原作页面纯格式化/坐标政策；native-pages.css显示
+    battle-audio.js              语义快照到音效时间点，不参与规则
   content/manifest.json          分类数据装配清单；地图属性/网格分离
   fixtures/                      显式测试环境的独立地图，不进入正式清单
   plugins/catalog.json           受信任插件装配配置，不在app逐个接线
@@ -153,3 +155,5 @@ AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用�
 原作角色装配由native-cast/opening-objects选择业务角色，native-object-bindings核准唯一来源身份及坐标，native-movement使用原作初始朝向表；不以名称子串猜方向。家具行为由内容包投射为统一交互对象，世界引擎不识别家具台词。明确的剧情并行移动可声明ignoreActors及keepFacing；只有脚本移动应用该占位例外，地形/高度/边界仍照常校验。实现场次与保真边界见[开场说明](docs/regions/LITTLEROOT_OPENING.md)。
 
 开场战斗转场的来源参数/选择及纯时序采样在packs/emerald/battle-transitions.js，Canvas绘制在battle-transition-canvas.js。BattleSession只接受演出描述，TransitionController仅管理cover/hold/reveal和遮盖下提交；原作类型表不进通用内核。箭头出口由terrain命名语义统一驱动World，入图落点与跨图提交分别封装，不能为小遥家写特殊传送代码。
+
+界面按screen/field/tools分类，原生240×160素材由固定来源导出，控制器、纯视图与CSS各自拥有职责。BattleDirector延期捕捉结果消息并通过timed-cues共享注入时钟；pack选择资源与音效，Canvas只绘制，不播放声音。确认入口统一播音，具体落点与视觉待验见[界面说明](docs/development/EMERALD_UI.md)。

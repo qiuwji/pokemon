@@ -1,7 +1,8 @@
+import { playTime, BADGE_KEYS } from "./ui/native-view.js";
 /** Owns this page and its navigation; gameplay changes are application commands. */
 export function createSaveInterface(
   game,
-  { document: doc, modal, closeModal, showMenu, updateSide, toast },
+  { document: doc, modal, closeModal, showMenu, updateSide, toast, escapeHTML },
 ) {
   const saveStore = game.saveStore;
   const $ = (id) => doc.getElementById(id);
@@ -9,9 +10,12 @@ export function createSaveInterface(
     const saved = saveStore.load();
     modal(
       "记录冒险",
-      `<div class="save-box"><strong>${game.world.map.title} · ${game.state.party.length} 位伙伴</strong><p>已探索 ${game.state.seen.length} 种宝可梦 · 游玩 ${Math.floor(game.state.playSeconds / 60)} 分钟</p><p>${saved ? "上次保存：" + new Date(saved.savedAt).toLocaleString("zh-CN") : "尚未保存"}</p></div><div class="inline-actions"><button id="save-now" class="primary-button">保存进度</button><button id="continue-save" data-control="local" class="secondary-button" ${!saved ? "disabled" : ""}>读取存档</button><button id="export-save" class="secondary-button">导出存档</button><button id="import-save" data-control="local" class="secondary-button">导入存档</button><input id="save-file" type="file" accept="application/json,.json" hidden></div><p class="notice">进度保存在当前浏览器。切换设备前，请先导出存档。</p><div class="modal-footer"><button id="new-game" data-control="local" class="text-button" style="color:#cbb18e">重新开始冒险</button></div>`,
-      { back: showMenu, type: "save" },
+      `<div class="native-window save-status"><strong>${escapeHTML(game.world.map.title)}</strong><div>名字 ${escapeHTML(game.state.playerName || "训练家")}</div><div>徽章 ${BADGE_KEYS.filter((key) => game.state.flags[key]).length}</div>${game.state.flags.pokedex ? `<div>图鉴 ${game.state.caught.length}</div>` : ""}<div>游玩时间 ${playTime(game.state.playSeconds)}</div></div><div class="native-window save-prompt">要记录冒险吗？</div><div class="native-window save-choice"><button id="save-now">是</button><button data-save-cancel>否</button></div><details class="save-tools"><summary>存档管理</summary><div class="native-window"><p>${saved ? "上次保存：" + new Date(saved.savedAt).toLocaleString("zh-CN") : "尚未保存"}</p><button id="continue-save" data-control="local" ${!saved ? "disabled" : ""}>读取存档</button><button id="export-save">导出存档</button><button id="import-save" data-control="local">导入存档</button><input id="save-file" type="file" accept="application/json,.json" hidden><button id="new-game" data-control="local">重新开始</button></div></details>`,
+      { back: showMenu, type: "save", close: false },
     );
+    doc
+      .getElementById("modal-root")
+      .querySelector("[data-save-cancel]").onclick = showMenu;
     $("save-now").onclick = () => {
       game.save(true);
       showSave();

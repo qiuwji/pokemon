@@ -407,5 +407,6 @@
       "weight": 1
     }
   ],
-  "waterEncounterRate": 4
+  "waterEncounterRate": 4,
+  "allowRunning": true
 }

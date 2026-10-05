@@ -15,15 +15,18 @@ export function bindNativeObjects(map, definitions, sourceObjects) {
         : source.x === definition.x && source.y === definition.y);
     if (matches.length !== 1) throw new Error(`Native NPC binding failed: ${map}/${label}`);
     const { source, index } = matches[0];
+    // Source coordinates identify the object; entry placement is applied only
+    // after binding, before NPC simulation or the destination's first frame.
+    const { placement, ...role } = definition;
     const movement = nativeMovement(definition.movementType || source.movement_type);
     const { mode, dir } = movement;
     return {
-      ...definition,
+      ...role,
       id: definition.id || sourceObjectId(map, "npc", source, index),
       sourceLocalId: sourceLocalId(source, index),
       script: source.script,
-      x: source.x,
-      y: source.y,
+      x: placement?.x ?? source.x,
+      y: placement?.y ?? source.y,
       ...(source.elevation !== undefined ? { elevation: source.elevation } : {}),
       dir,
       movement: { mode, dir, rangeX: source.movement_range_x ?? 0, rangeY: source.movement_range_y ?? 0 },

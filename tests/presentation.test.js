@@ -7,6 +7,8 @@ import {
 import test from "node:test";
 import assert from "node:assert/strict";
 import { Timeline, TransitionController } from "../dist/engine/timeline.js";
+import { emeraldBattleCues } from "../dist/packs/emerald/battle-audio.js";
+import { emeraldBallResource } from "../dist/packs/emerald/animations.js";
 import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { BattleSession } from "../dist/engine/battle-session.js";
 import { FieldSession } from "../dist/engine/field-session.js";
@@ -129,25 +131,44 @@ test("Capture shakes follow domain result; failed capture restores opponent and 
   }
 });
 test("Entry music can observe the prepared battle before the scene swap; failed entry clears it", async () => {
-  const battle = { trainer: true, script: "rival", snapshot: () => view(), events: [] };
+  const battle = {
+    trainer: true,
+    script: "rival",
+    snapshot: () => view(),
+    events: [],
+  };
   let release;
-  const cover = new Promise(resolve => { release = resolve; });
+  const cover = new Promise((resolve) => {
+    release = resolve;
+  });
   const session = new BattleSession({
     createBattle: () => battle,
     director: { busy: false, reset() {}, stage() {}, async play() {} },
-    transitions: { busy: false, async run(_kind, swap) { await cover; swap(); } },
+    transitions: {
+      busy: false,
+      async run(_kind, swap) {
+        await cover;
+        swap();
+      },
+    },
   });
   const job = session.start({ trainer: true });
   assert.equal(session.enteringBattle, battle);
   assert.equal(session.battle, null);
   assert.equal(await session.start({}), false);
-  release(); await job;
+  release();
+  await job;
   assert.equal(session.enteringBattle, null);
   assert.equal(session.battle, battle);
   const failed = new BattleSession({
     createBattle: () => battle,
     director: { busy: false },
-    transitions: { busy: false, async run() { throw new Error("entry failed"); } },
+    transitions: {
+      busy: false,
+      async run() {
+        throw new Error("entry failed");
+      },
+    },
   });
   await assert.rejects(failed.start({}), /entry failed/);
   assert.equal(failed.enteringBattle, null);
@@ -437,4 +458,94 @@ test("Missed moves identify the failed hit so presentation does not draw an impa
   director.reset(view());
   director.stage(move);
   assert.equal(director.sample().effect.successful, false);
+});
+
+test("Capture announces success or escape only after the complete animation, and holds the result before settling", async () => {
+  for (const caught of [false, true])
+    for (const reducedMotion of [false, true]) {
+      const clock = manualClock(),
+        messages = [],
+        cues = [];
+      const director = new BattleDirector(clock.timeline, {
+        reducedMotion: () => reducedMotion,
+        onCue: (kind) => cues.push(kind),
+      });
+      director.reset(view());
+      const text = caught ? "捕获成功！" : "宝可梦逃出来了！";
+      const job = director.play(
+        { kind: "capture", caught, shakes: 3, text, ...view() },
+        { message: (message) => messages.push(message) },
+      );
+      const duration = reducedMotion ? 240 : 1960;
+      await clock.advance(duration - 1);
+      assert.deepEqual(messages, []);
+      assert.deepEqual(cues, []);
+      assert(director.busy);
+      await clock.advance(1);
+      assert.deepEqual(messages, [text]);
+      assert.deepEqual(cues, ["capture"]);
+      assert(director.busy);
+      await clock.advance(reducedMotion ? 240 : 550);
+      await job;
+      assert(!director.busy);
+    }
+});
+
+test("Capture cues follow visual phases exactly once and a four-check success displays three shakes", async () => {
+  const clock = manualClock(),
+    sounds = [];
+  const director = new BattleDirector(clock.timeline, {
+    cuePlan: emeraldBattleCues,
+    ballResource: emeraldBallResource,
+    onCue: (id) => sounds.push([id, clock.timeline.now()]),
+  });
+  director.reset(view());
+  const ball = director.play({
+    kind: "ball",
+    item: "greatball",
+    targetSeat: "away:0",
+    actorSeat: "home:0",
+    ...view(),
+  });
+  assert.deepEqual(
+    sounds.map(([id]) => id),
+    ["ball", "emerald:ball.throw"],
+  );
+  await clock.advance(553);
+  assert.equal(sounds.at(-1)[0], "emerald:ball.open");
+  await clock.advance(297);
+  await ball;
+  assert.equal(director.sample().ball.resource, "battle-ball-great");
+  sounds.length = 0;
+  const event = {
+      kind: "capture",
+      caught: true,
+      shakes: 4,
+      item: "greatball",
+      targetSeat: "away:0",
+      ...view(),
+    },
+    before = structuredClone(event);
+  const job = director.play(event);
+  assert.equal(director.duration(event), 1960);
+  await clock.advance(250);
+  await clock.advance(420);
+  await clock.advance(420);
+  assert.deepEqual(
+    sounds.map(([id]) => id),
+    Array(3).fill("emerald:ball.shake"),
+  );
+  await clock.advance(870);
+  await job;
+  assert.equal(director.sample().ball.sealed, true);
+  assert.deepEqual(event, before);
+  for (const reducedMotion of [false, true]) {
+    const d = reducedMotion ? 240 : 700;
+    const release = emeraldBattleCues(
+      { kind: "capture", caught: false, shakes: 0 },
+      { duration: d, reducedMotion },
+    );
+    assert.equal(release.length, 1);
+    assert.equal(release[0].id, "emerald:ball.open");
+  }
 });

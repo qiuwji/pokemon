@@ -50,7 +50,10 @@
     "BirchsBag",
     "Mom",
     "LittleBoy",
-    "MovingBox"
+    "MovingBox",
+    "Woman2",
+    "PokefanF",
+    "SchoolKidM"
   ],
   "battleBackground": "tall_grass",
   "locale": "../locales/zh-CN.json",

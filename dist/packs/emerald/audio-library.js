@@ -140,12 +140,16 @@ export function emeraldBattleSong(battle) {
   return battle.trainer ? "MUS_VS_TRAINER" : "MUS_VS_WILD";
 }
 /** Map content keeps the original song constant; a directly registered cue id is also accepted. */
-export function emeraldMusic({ battle, map, battleSong, storyMusic, flags = {} }, cues) {
+export function emeraldMusic(
+  { battle, map, battleSong, storyMusic, flags = {} },
+  cues,
+) {
   const id = battle
     ? battleSong || map.battleMusic || emeraldBattleSong(battle)
-    : storyMusic || (map.id === "Route101" && flags.heardBirch && !flags.rescued
-      ? "MUS_HELP"
-      : map.music);
+    : storyMusic ||
+      (map.id === "Route101" && flags.heardBirch && !flags.rescued
+        ? "MUS_HELP"
+        : map.music);
   if (!id) return null;
   const cueId = cues.has(id) ? id : ORIGINAL_SONG_CUES[id];
   return cueId && cues.get(cueId)?.kind === "music" ? cueId : null;
@@ -163,6 +167,6 @@ export const EMERALD_BATTLE_AUDIO = Object.freeze({
   level: "emerald:reward",
 });
 export function emeraldBattleSound(kind, cues) {
-  const id = EMERALD_BATTLE_AUDIO[kind];
+  const id = cues.has(kind) ? kind : EMERALD_BATTLE_AUDIO[kind];
   return id && cues.get(id)?.kind === "sound" ? id : null;
 }

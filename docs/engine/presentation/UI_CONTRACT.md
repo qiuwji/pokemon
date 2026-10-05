@@ -150,3 +150,9 @@ frame深冻结，含width/height、payload、view（该页面/区域的context�
 | Invalid layout style / Invalid theme tokens | 核对允许的属性、单位和范围；不要传任意 CSS |
 
 文件改名时搜索 `resolveLayout`、`class LayoutDOM`、`ui.region`、`formFixture`。接口改动同步公开类型、Skill和对应例；只查改变的边界，不每次重跑未变化的游戏规则。
+
+## 自定义子挂载位置
+
+`api.ui.slot(localId,{parent,priority?})` 返回命名空间位置ID；`parent` 必须是已有原生根位置或先注册的子位置。区域和入口可用返回ID，实际容器自动嵌入父位置并继承UID/页面上下文。注册最多128个子位置、12层；父容器刷新会重建子容器，卸载父位置清理所有子位置，关闭后旧原生句柄失效。根锚点仍由宿主页面定义，但插件位置数量不再限于UI_SLOTS的原生15项。
+
+父位置是否出现由原页面决定；把子位置注册在未打开的页面下不会常驻HUD。未知父位置立即报Invalid UI slot parent，不能默默接受未挂载字符串。自定义位置只支持append，不能借它替换原生控件。实际链路与清理测试见 `tests/mod-foundations.test.js`，文件移动搜索 `Plugin-defined nested slots`。

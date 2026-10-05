@@ -451,13 +451,15 @@
       "lines": [
         "未白镇",
         "“一座连色调都无法为其增色的城镇。”"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown.1": {
       "name": "路边的告示",
       "lines": [
         "小田卷博士的宝可梦研究所"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown.2": {
       "name": "路边的告示",
@@ -470,151 +472,175 @@
             "id": "playerName"
           }
         }
-      }
+      },
+      "mode": "instant"
     },
     "littleroottown.3": {
       "name": "路边的告示",
       "lines": [
         "小田卷博士的家"
-      ]
+      ],
+      "mode": "instant"
     },
     "route101.0": {
       "name": "",
       "lines": [
         "101号道路",
         "未白镇 ↔ 古辰镇"
-      ]
+      ],
+      "mode": "instant"
     },
     "oldaletown.0": {
       "name": "",
       "lines": [
         "古辰镇",
         "“过去的回忆与现代的生活交融的小镇。”"
-      ]
+      ],
+      "mode": "instant"
     },
     "oldaletown.1": {
       "name": "",
       "lines": [
         "宝可梦中心",
         "恢复你疲惫的宝可梦。"
-      ]
+      ],
+      "mode": "instant"
     },
     "oldaletown.2": {
       "name": "",
       "lines": [
         "友好商店",
         "欢迎购买宝可梦用品！"
-      ]
+      ],
+      "mode": "instant"
     },
     "oldaletown.3": {
       "name": "",
       "lines": [
         "宝可梦中心",
         "恢复你疲惫的宝可梦。"
-      ]
+      ],
+      "mode": "instant"
     },
     "oldaletown.4": {
       "name": "",
       "lines": [
         "友好商店",
         "欢迎购买宝可梦用品！"
-      ]
+      ],
+      "mode": "instant"
     },
     "route103.0": {
       "name": "",
       "lines": [
         "103号道路"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.0": {
       "name": "",
       "lines": [
         "这台机器看起来很专业。博士一定在用它做研究。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.1": {
       "name": "",
       "lines": [
         "这台机器看起来很专业。博士一定在用它做研究。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.2": {
       "name": "",
       "lines": [
         "这是一本很难读懂的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.3": {
       "name": "",
       "lines": [
         "这是一本很难读懂的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.4": {
       "name": "",
       "lines": [
         "里面塞满了有关宝可梦的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.5": {
       "name": "",
       "lines": [
         "里面塞满了有关宝可梦的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.6": {
       "name": "",
       "lines": [
         "里面塞满了有关宝可梦的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.7": {
       "name": "",
       "lines": [
         "里面塞满了有关宝可梦的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.8": {
       "name": "",
       "lines": [
         "里面塞满了有关宝可梦的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.9": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.10": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.11": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.12": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.13": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_professorbirchslab.14": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_brendanshouse_2f.1": {
       "name": "",
@@ -630,78 +656,90 @@
             "id": "playerName"
           }
         }
-      }
+      },
+      "mode": "instant"
     },
     "littleroottown_brendanshouse_2f.2": {
       "name": "路边的告示",
       "lines": [
         "丰缘地区 · 与宝可梦一起旅行。"
-      ]
+      ],
+      "mode": "instant"
     },
     "littleroottown_brendanshouse_2f.3": {
       "name": "",
       "lines": [
         "这是一台任天堂GameCube。",
         "连接着一台Game Boy Advance作为控制器。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.0": {
       "name": "",
       "lines": [
         "宝可梦中心",
         "恢复你疲惫的宝可梦。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.1": {
       "name": "",
       "lines": [
         "友好商店",
         "欢迎购买宝可梦用品！"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.2": {
       "name": "",
       "lines": [
         "101号道路",
         "未白镇 ↔ 古辰镇"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.3": {
       "name": "",
       "lines": [
         "103号道路"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.4": {
       "name": "",
       "lines": [
         "古辰镇",
         "“过去的回忆与现代的生活交融的小镇。”"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.5": {
       "name": "",
       "lines": [
         "这台机器看起来很专业。博士一定在用它做研究。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.6": {
       "name": "",
       "lines": [
         "这是研究用的电脑。还是别乱动吧。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.7": {
       "name": "",
       "lines": [
         "里面塞满了有关宝可梦的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.8": {
       "name": "",
       "lines": [
         "这是一本很难读懂的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.9": {
       "name": "",
@@ -717,21 +755,24 @@
             "id": "playerName"
           }
         }
-      }
+      },
+      "mode": "instant"
     },
     "furniture.10": {
       "name": "",
       "lines": [
         "这是一台任天堂GameCube。",
         "连接着一台Game Boy Advance作为控制器。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.11": {
       "name": "",
       "lines": [
         "纸箱上印着宝可梦的标志。",
         "这是宝可梦品牌的搬家与配送服务。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.12": {
       "name": "",
@@ -744,33 +785,38 @@
             "id": "playerName"
           }
         }
-      }
+      },
+      "mode": "instant"
     },
     "furniture.13": {
       "name": "",
       "lines": [
         "书架里放着各式各样的书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.14": {
       "name": "",
       "lines": [
         "这里有一套宝可梦图画书。"
-      ]
+      ],
+      "mode": "instant"
     },
     "furniture.15": {
       "name": "",
       "lines": [
         "宝可梦杂志！",
         "《宝可梦伙伴》……《宝可梦手册》……《可爱的宝可梦》……"
-      ]
+      ],
+      "mode": "instant"
     },
     "pc-email": {
       "name": "",
       "lines": [
         "宝可梦训练家学校的邮件。",
         "宝可梦最多可以学会四个招式。训练家要善用自己的知识！"
-      ]
+      ],
+      "mode": "instant"
     },
     "pc-boot": {
       "name": "",
@@ -783,19 +829,22 @@
             "id": "playerName"
           }
         }
-      }
+      },
+      "mode": "instant"
     },
     "pc-potion": {
       "name": "",
       "lines": [
         "取出了伤药！"
-      ]
+      ],
+      "mode": "instant"
     },
     "pc-empty": {
       "name": "",
       "lines": [
         "电脑里暂时没有存放其他道具。"
-      ]
+      ],
+      "mode": "instant"
     },
     "tv-movie": {
       "name": "电视",
@@ -803,7 +852,8 @@
         "电视上正在放一部电影。",
         "两个人正随着钢琴声跳舞。",
         "还是出发吧！"
-      ]
+      ],
+      "mode": "instant"
     }
   },
   "entries": {

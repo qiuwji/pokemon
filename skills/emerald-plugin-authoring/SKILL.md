@@ -10,7 +10,7 @@ description: 通过现有插件公开API扩展绿宝石的内容、规则、状�
 - **命名空间**：注册局部ID返回owner:localID；跨内容引用应保存返回值，而非拼错字符串。
 - **action / intent**：action接收输入并提交一组事务意图；intent请求既有领域写入，须有对应权限。
 - **store / states**：store保存插件自有记忆；states保存附着对象、可到期的状态；不复制核心队伍/库存。
-- **slot / page / layout**：slot是宿主提供的位置；page注册页面；layout是渲染端接受的声明式控件树。
+- **slot / page / layout**：slot是宿主根位置或注册的子位置；page注册页面；layout是渲染端接受的声明式控件树。
 - **事务 / 事实事件**：事务失败恢复领域及插件数据；事件和视觉反馈在成功提交后才发出。
 
 
@@ -338,3 +338,9 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
 给fieldActions增加`partyMove`（已注册招式ID），即可挂入选中宝可梦的操作菜单；参考high-flight的takeoff/land和原生dive/surface。多个行动共用招式时由当前预检和priority选择，不在party-interface里按插件ID分支。查询/执行用`core.movement.party-options {uid}` / `core.movement.party-action {uid,move,destination?}`；所选个体、学会招式与Gen3徽章在执行时重查，普通Fly仍选择目的地。背包HM入口用于学习，发动入口位于菜单→宝可梦→所选个体。合同和定位搜索`partyMove`、`partyFieldMoveOptions`见[野外行动](../../docs/engine/field/FIELD_ACTIONS.md)及[原生界面](../../docs/development/EMERALD_UI.md)。
 
 测试应覆盖未学/蛋/缺徽章/无目标/UID过期与同招式双向行动；核心夹具只注册最小模拟插件，产品插件专项留examples。不要直接改队伍或借队伍中另一只已学招式代替所选个体。页面容器用data-modal-page，按钮导航只绑定button[data-page]，不能让容器也收到导航onclick。
+
+## 位置扩展与关闭插件后的进度
+
+增加挂载位置用api.ui.slot(localId,{parent,priority?})，保存返回ID后交给ui.region/ui.entry。父位置先注册；子位置自动随父位置实际挂载、继承当前UID并一起释放。不要把UI_SLOTS的根锚点数量误当成插件位置上限，也不要把新位置当成任意DOM或原生替换授权。字段、预算和例见[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)，测试搜索`Plugin-defined nested slots`。
+
+缺插件后的存档能否继续必须按[当前审查计划](../../docs/project/MOD_REVIEW_PLAN.md)与STATUS核实；“原文保留”不等于“可继续玩”。不要靠清空依赖清单、删未知精灵/道具或强行装配缺定义的状态解决。插件自有记忆、核心内容硬引用和真正坏档分别处理；恢复/暂停能力尚未完成时如实记录，不能向作者承诺关闭任意插件均已可继续。

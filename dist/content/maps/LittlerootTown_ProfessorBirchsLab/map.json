@@ -230,5 +230,6 @@
   ],
   "music": "MUS_BIRCH_LAB",
   "tileset": "building-lab",
-  "indoor": true
+  "indoor": true,
+  "allowRunning": false
 }

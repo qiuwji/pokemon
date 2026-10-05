@@ -753,7 +753,8 @@ export type UISlot =
   | "battle.moves"
   | "battle.targets"
   | "facility.actions"
-  | "facility.content";
+  | "facility.content"
+  | `${string}:${string}`;
 export interface PluginUIView {
   context: Readonly<Record<string, Json>>;
   query(): Readonly<Json>;
@@ -889,6 +890,7 @@ export interface PluginAPI {
     ): StoryBundleExports;
   };
   ui: {
+    slot(id: string, definition: { parent: UISlot; priority?: number }): `${string}:${string}`;
     page(id: string, definition: unknown): string;
     entry(id: string, definition: unknown): string;
     hud(id: string, definition: unknown): string;

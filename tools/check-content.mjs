@@ -1,3 +1,4 @@
+import { createEmeraldStory } from "../dist/packs/emerald/story/runtime.js";
 import { assertContentAssets } from "./check-content-assets.mjs";
 import { loadContentSync } from "./content-io.mjs";
 import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
@@ -22,7 +23,8 @@ console.log(
   `Explicitly unavailable move mechanics (${unavailable.length}): ${unavailable.join(", ")}`,
 );
 
-const { catalog } = createEmeraldPlugins(db, []);
+const { catalog, host } = createEmeraldPlugins(db, []);
+createEmeraldStory({ db: { ...db, ...catalog }, plugins: host, queries: new ConditionQueries(catalog.conditionQueries) });
 const stories = new StoryCatalog(Object.values(db.stories || {}), {maps:db.maps,queries:new ConditionQueries(catalog.conditionQueries),eventIds:new Set(STORY_EVENTS.map(event=>event.id))});
 console.log(`Story content valid: ${stories.scripts.size} scripts, ${stories.dialogues.size} dialogues, ${stories.events.length} bindings.`);
 console.log(

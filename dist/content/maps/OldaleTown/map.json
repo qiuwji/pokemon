@@ -151,5 +151,6 @@
   ],
   "music": "MUS_OLDALE",
   "tileset": "general-petalburg",
-  "indoor": false
+  "indoor": false,
+  "allowRunning": true
 }

@@ -9,7 +9,7 @@ import { BattleMajorStatus } from "./battle/major-status.js";
 import { CreatureFormRegistry, CreatureForms } from "./creatures/forms.js";
 import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
 import { stageMultiplier } from "./model.js";
-import { BATTLE_RULES } from "./battle-rules.js";
+import { createBattleRules } from "./battle-rules.js";
 import { MoveEffectRegistry } from "./move-effects.js";
 import { createItemService } from "./items.js";
 import { BattleRoster, teamRoster } from "./battle/roster.js";
@@ -75,7 +75,7 @@ export class Battle {
       : null;
     this.environment = { terrain: environment.terrain || "grass" };
     this.turnOrder = [];
-    this.rules = { ...BATTLE_RULES, ...rules };
+    this.rules = createBattleRules(rules);
     this.moveEffects =
       effects instanceof MoveEffectRegistry
         ? effects

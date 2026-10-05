@@ -1,3 +1,4 @@
+import { buttonPage } from "./helpers/button-page.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
@@ -392,47 +393,19 @@ test("Plugin content composes a new key item with a registered field action and 
   const s = fixture({ plugins: [plugin] }),
     g = s.game;
   setQuantity(g.state.bag, "kit:brush", 1);
-  let buttons = [],
-    html = "",
-    updates = 0;
-  const root = {
-    querySelectorAll(selector) {
-      const key = selector
-        .slice(6, -1)
-        .replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-      return buttons.filter((b) => key in b.dataset);
-    },
-  };
+  let updates = 0;
+  const p = buttonPage(), root = p.root;
   const ui = createBagInterface(createEmeraldCommandFacade(g, s.bus), {
-    root,
-    modal(_title, body) {
-      html = body;
-      buttons = [
-        ...body.matchAll(/<button[^>]*data-([\w-]+)="([^"]*)"[^>]*>/g),
-      ].map((m) => ({
-        dataset: {
-          [m[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase())]: m[2],
-        },
-        disabled: m[0].includes("disabled"),
-      }));
-    },
-    closeModal() {},
-    showMenu() {},
-    partyCard() {},
-    toast() {},
-    updateSide() {
-      updates++;
-    },
-    sound() {},
-    escapeHTML: String,
+    ...p.deps, updateSide() { updates++; },
   });
   ui.showBag();
+  p.selectItem("kit:brush");
   const brush = root
     .querySelectorAll("[data-item]")
     .find((b) => b.dataset.item === "kit:brush");
   assert.equal(brush.disabled, false);
-  brush.onclick();
-  assert(html.includes('data-item-action="blue"'));
+  root.querySelector("[data-use-item]").onclick();
+  assert(p.body().includes('data-item-action="blue"'));
   root
     .querySelectorAll("[data-item-action]")
     .find((b) => b.dataset.itemAction === "blue")

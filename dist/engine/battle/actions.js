@@ -238,6 +238,7 @@ export class BattleActions {
       return;
     }
     b.emit(`投出了${plan.item.name}！`, "ball", {
+      item: action.item,
       actorSeat: action.seat,
       targetSeat: action.targetSeat,
     });
@@ -256,7 +257,7 @@ export class BattleActions {
         ? `太好了！捉到了 ${b.name(enemy)}！`
         : `${"晃动…".repeat(result.shakes)}宝可梦挣脱了！`,
       "capture",
-      { ...result, actorSeat: action.seat, targetSeat: action.targetSeat },
+      { ...result, item: action.item, actorSeat: action.seat, targetSeat: action.targetSeat },
     );
     if (result.caught) b.finish("caught");
   }

@@ -1,0 +1,32 @@
+{
+  "status": "code-validation-passed",
+  "date": "2026-10-06",
+  "referenceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "checks": {
+    "core": {
+      "passed": 1016,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 36,
+      "failed": 0
+    },
+    "imageImportTools": {
+      "passed": 3,
+      "failed": 0
+    },
+    "quality": "content, public contracts, 369 JS modules, lint, configured engine types passed; final documentation delta passed",
+    "detailAssets": "58 species; deterministic preview has no changes"
+  },
+  "browser": "not run; user performs visual, audio, touch and end-to-end acceptance",
+  "history": "Initial UI fixture regressions retained. Final run passed after corrections. Missing-plugin save continuation remains a separate design, not implemented.",
+  "logs": {
+    "all-tests-final.log": "c84ec133b3a23ce25a7903b144a09cdd820d82e3c89402d26192f341d5a6feb0",
+    "screens-initial-regressions.log": "e13cad3d4e0aac0e716814a966825df8dc85af4fb844517c36c5a7d3d344a21f",
+    "screens-targeted.log": "343bdd560301c347abdba827c9ed87cac92849cc138b9254da7e33c93792b767",
+    "check-final.log": "55a6a8952cc0698d57408a75bc8a0b2f7a40899eaf780150c47462b826ac8ae0",
+    "docs-final.log": "3e19f2ce7e62148703019ce204f4e5a85040976b650b66dc2afd34b947d32a7d",
+    "pixel-import-tests.log": "7a9f90ca44f4a8a1d0c12953ef51e9b039972c2f4fcf0cafcc0213e600d2ec83",
+    "detail-assets-check.log": "42ae067f3e486486edceaaa700653f618bc9ea7a924ad7dedd1db21e8252d29a"
+  }
+}

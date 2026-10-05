@@ -21,6 +21,7 @@ export function layoutDocument() {
   };
   doc.createElement = (tag) => {
     const attrs = new Map(),
+      listeners = new Map(),
       node = {
         tagName: tag.toUpperCase(),
         children: [],
@@ -39,6 +40,13 @@ export function layoutDocument() {
             node.className += " " + k;
           },
           remove() {},
+        },
+        addEventListener(type, fn) {
+          if (!listeners.has(type)) listeners.set(type, []);
+          listeners.get(type).push(fn);
+        },
+        dispatchEvent(event) {
+          for (const fn of listeners.get(event.type) || []) fn(event);
         },
         append(...nodes) {
           this.children.push(...nodes);

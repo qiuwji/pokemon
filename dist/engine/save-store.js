@@ -82,6 +82,7 @@ export class SaveStore {
       }
       return raw ? this.decode(raw) : null;
     } catch {
+      this.lastIssue = { code: "storage_unavailable" };
       return null;
     }
   }

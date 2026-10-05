@@ -9,7 +9,7 @@ import { session } from './helpers/session.js';
 
 test('Space and Enter confirm battle choices directly; modal confirmation retains precedence',()=>{
   const input=Object.create(BrowserInput.prototype),calls=[];
-  input.game={battle:{}};input.ui={blocked:false,modalType:null,confirmBattle:()=>calls.push('battle'),confirm:()=>calls.push('modal')};
+  input.externalBlocked=()=>false;input.game={battle:{}};input.ui={blocked:false,modalType:null,confirmBattle:()=>calls.push('battle'),confirm:()=>calls.push('modal')};
   const event=key=>({key,target:{closest:()=>false},preventDefault(){}});
   input.keydown(event(' '));input.keydown(event('Enter'));input.ui.blocked=true;input.ui.modalType='party';input.keydown(event(' '));
   assert.deepEqual(calls,['battle','battle','modal']);

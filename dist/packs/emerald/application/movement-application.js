@@ -44,6 +44,7 @@ export class MovementApplication {
   }
   resetFieldInput() {
     this.input?.reset();
+    if (this.storyBusy) return;
     this.movement?.setTechnique("normal", this.world.map);
     this.field?.motion.idle(
       "normal",

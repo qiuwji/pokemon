@@ -33,6 +33,9 @@ function documentPort() {
         },
         getContext: () => ({ clearRect() {}, drawImage() {}, fillRect() {} }),
         setAttribute() {},
+        addEventListener(type, fn) {
+          this[`on${type}`] = fn;
+        },
         classList: { add() {}, remove() {} },
         focus() {
           doc.activeElement = this;
@@ -144,7 +147,8 @@ function fixture() {
   };
   const ui = createEmeraldInterface(game, {
     document: doc,
-    extensionAssets: { "mudkip-front": { width: 64, height: 64 } },
+    sound: (id) => calls.push(id),
+    extensionAssets: { "mudkip-detail": { width: 64, height: 128 } },
   });
   game.ui = ui;
   return { game, doc, ui, calls };
@@ -270,10 +274,11 @@ test("Clock page submits setup through a command and renders live saved time", (
   };
   ui.showTime();
   assert.equal(ui.modalType, "clock");
-  assert.match(doc.getElementById("modal-root").innerHTML, /确认时间/);
-  const dial=doc.getElementById("[data-clock-dial]");
-  const key = (key) => dial.onkeydown({ key, preventDefault() {}, stopPropagation() {} });
-  for(let i=0;i<14;i++) key("ArrowUp");
+  assert.match(doc.getElementById("modal-root").innerHTML, /data-start-clock/);
+  const dial = doc.getElementById("[data-clock-dial]");
+  const key = (key) =>
+    dial.onkeydown({ key, preventDefault() {}, stopPropagation() {} });
+  for (let i = 0; i < 14; i++) key("ArrowUp");
   key("ArrowLeft");
   doc.getElementById("[data-start-clock]").onclick();
   assert.deepEqual(calls[0], [23, 59]);
@@ -291,23 +296,44 @@ test("Clock page submits setup through a command and renders live saved time", (
     doc.getElementById("[data-clock-time]").textContent,
     "第 4 天 · 09:04",
   );
-  assert.doesNotMatch(doc.getElementById("modal-root").innerHTML, /data-play-time|data-tide/);
+  assert.doesNotMatch(
+    doc.getElementById("modal-root").innerHTML,
+    /data-play-time|data-tide/,
+  );
   assert.match(doc.getElementById("weather").textContent, /09:04/);
 });
 
 test("Loaded clock-before-TV state renders the real sidebar and continues through later opening tasks", () => {
   const { game, doc, ui } = fixture();
-  game.state = readOnly({ ...game.state, flags: {}, clock: { initialized: true } });
+  game.state = readOnly({
+    ...game.state,
+    flags: {},
+    clock: { initialized: true },
+  });
   ui.updateSide();
   assert.equal(doc.getElementById("quest-title").textContent, "回到妈妈身边");
   // Content packs may legitimately have no eligible task; it cannot prevent boot.
-  game.state = readOnly({ ...game.state, flags: { rescued: true }, clock: { initialized: false } });
+  game.state = readOnly({
+    ...game.state,
+    flags: { rescued: true },
+    clock: { initialized: false },
+  });
   ui.updateSide();
   assert.equal(doc.getElementById("quest-title").textContent, "与小遥初次交手");
-  game.state = readOnly({ ...game.state, flags: { rescued: true, rivalWon: true, pokedex: false } });
+  game.state = readOnly({
+    ...game.state,
+    flags: { rescued: true, rivalWon: true, pokedex: false },
+  });
   ui.updateSide();
-  assert.equal(doc.getElementById("quest-title").textContent, "属于你的宝可梦图鉴");
-  game.state = readOnly({ ...game.state, flags: { tvWatched: true, neighborMet: true }, clock: { initialized: true } });
+  assert.equal(
+    doc.getElementById("quest-title").textContent,
+    "属于你的宝可梦图鉴",
+  );
+  game.state = readOnly({
+    ...game.state,
+    flags: { tvWatched: true, neighborMet: true },
+    clock: { initialized: true },
+  });
   ui.updateSide();
   assert.equal(doc.getElementById("quest-title").textContent, "草丛里的求救声");
 });
@@ -342,53 +368,132 @@ test("Facility page renders frozen plugin data and submits entry/action through 
  * It intentionally models the regression that a container and buttons shared data-page.
  */
 function menuEventPort(doc) {
-  const root=doc.getElementById('modal-root'),descriptor=Object.getOwnPropertyDescriptor(root,'innerHTML');
-  let nodes=[];
-  const matches=(node,selector)=>{
-    const tag=selector.match(/^[a-z]+/)?.[0];
-    if(tag && node.tagName!==tag.toUpperCase())return false;
-    const attribute=selector.match(/\[([^=\]]+)(?:="([^"]*)")?\]/);
-    if(attribute && (!node.attrs.has(attribute[1]) || attribute[2]!==undefined && node.attrs.get(attribute[1])!==attribute[2]))return false;
-    if(selector.includes(':not(:disabled)') && node.disabled)return false;
+  const root = doc.getElementById("modal-root"),
+    descriptor = Object.getOwnPropertyDescriptor(root, "innerHTML");
+  let nodes = [];
+  const matches = (node, selector) => {
+    const tag = selector.match(/^[a-z]+/)?.[0];
+    if (tag && node.tagName !== tag.toUpperCase()) return false;
+    const attribute = selector.match(/\[([^=\]]+)(?:="([^"]*)")?\]/);
+    if (
+      attribute &&
+      (!node.attrs.has(attribute[1]) ||
+        (attribute[2] !== undefined &&
+          node.attrs.get(attribute[1]) !== attribute[2]))
+    )
+      return false;
+    if (selector.includes(":not(:disabled)") && node.disabled) return false;
     return !!tag || !!attribute;
   };
-  Object.defineProperty(root,'innerHTML',{
-    get:()=>descriptor.get.call(root),
-    set(html){
-      descriptor.set.call(root,html);nodes=[];
-      const backdrop={tagName:'DIV',attrs:new Map(),dataset:{}};
-      const first=html.match(/<div class="modal-backdrop"([^>]*)>/)?.[1] || '';
-      const populate=(node,attrs)=>{
-        for(const m of attrs.matchAll(/([\w-]+)(?:="([^"]*)")?/g)){
-          node.attrs.set(m[1],m[2] || '');
-          if(m[1].startsWith('data-'))node.dataset[m[1].slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]=m[2];
+  Object.defineProperty(root, "innerHTML", {
+    get: () => descriptor.get.call(root),
+    set(html) {
+      descriptor.set.call(root, html);
+      nodes = [];
+      const backdrop = { tagName: "DIV", attrs: new Map(), dataset: {} };
+      const first =
+        html.match(/<div class="modal-backdrop"([^>]*)>/)?.[1] || "";
+      const populate = (node, attrs) => {
+        for (const m of attrs.matchAll(/([\w-]+)(?:="([^"]*)")?/g)) {
+          node.attrs.set(m[1], m[2] || "");
+          if (m[1].startsWith("data-"))
+            node.dataset[
+              m[1].slice(5).replace(/-([a-z])/g, (_, c) => c.toUpperCase())
+            ] = m[2];
         }
-        node.disabled=node.attrs.has('disabled');node.focus=()=>doc.activeElement=node;
+        node.disabled = node.attrs.has("disabled");
+        node.focus = () => (doc.activeElement = node);
       };
-      populate(backdrop,first);nodes.push(backdrop);
-      for(const m of html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)){
-        const node={tagName:'BUTTON',attrs:new Map(),dataset:{},textContent:m[2]};populate(node,m[1]);
-        node.click=()=>{if(node.disabled)return;node.onclick?.();backdrop.onclick?.();};nodes.push(node);
+      populate(backdrop, first);
+      nodes.push(backdrop);
+      for (const m of html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)) {
+        const node = {
+          tagName: "BUTTON",
+          attrs: new Map(),
+          dataset: {},
+          textContent: m[2],
+        };
+        populate(node, m[1]);
+        node.click = () => {
+          if (node.disabled) return;
+          node.onclick?.();
+          backdrop.onclick?.();
+        };
+        nodes.push(node);
       }
     },
   });
-  root.querySelectorAll=selector=>nodes.filter(node=>matches(node,selector));
-  root.querySelector=selector=>root.querySelectorAll(selector)[0] || null;
+  root.querySelectorAll = (selector) =>
+    nodes.filter((node) => matches(node, selector));
+  root.querySelector = (selector) => root.querySelectorAll(selector)[0] || null;
   return root;
 }
-test('Settings navigation survives click bubbling and Travel opens its own modal instead of silently reopening settings',()=>{
-  const {ui,doc}=fixture(),root=menuEventPort(doc);
-  ui.showMenu();root.querySelector('button[data-page="settings"]').click();
-  assert.equal(ui.modalType,'settings');
+test("Settings navigation survives click bubbling and Travel opens its own modal instead of silently reopening settings", () => {
+  const { ui, doc } = fixture(),
+    root = menuEventPort(doc);
+  ui.showMenu();
+  root.querySelector('button[data-page="settings"]').click();
+  assert.equal(ui.modalType, "options");
+  root.querySelector("button[data-open-extras]").click();
+  assert.equal(ui.modalType, "extensions");
   root.querySelector('button[data-page="movement"]').click();
-  assert.equal(ui.modalType,'movement');assert.match(root.innerHTML,/data-modal-page="movement"/);
-  assert(!root.querySelector('div[data-page]'));
+  assert.equal(ui.modalType, "movement");
+  assert.match(root.innerHTML, /data-modal-page="movement"/);
+  assert(!root.querySelector("div[data-page]"));
 });
-test('Selecting a party member opens native actions before Summary and preserves the party/list plugin region',()=>{
-  const {ui,doc,game}=fixture(),root=menuEventPort(doc);
-  game.partyFieldMoveOptions=()=>[{move:'fly',name:'飞空术',route:'fly',ok:false,reason:'徽章不足'}];
-  ui.showParty();root.querySelector('button[data-mon="0"]').click();
-  assert.equal(ui.modalType,'party');assert.match(root.innerHTML,/data-party-action="summary"/);
-  assert.match(root.innerHTML,/data-party-action="field:0"/);assert.match(root.innerHTML,/data-extension-slot="party.list"/);
-  root.querySelector('button[data-party-action="summary"]').click();assert.equal(ui.modalType,'detail');
+test("Selecting a party member opens native actions before Summary and preserves the party/list plugin region", () => {
+  const { ui, doc, game } = fixture(),
+    root = menuEventPort(doc);
+  game.partyFieldMoveOptions = () => [
+    {
+      move: "fly",
+      name: "飞空术",
+      route: "fly",
+      ok: false,
+      reason: "徽章不足",
+    },
+  ];
+  ui.showParty();
+  root.querySelector('button[data-mon="0"]').click();
+  assert.equal(ui.modalType, "party");
+  assert.match(root.innerHTML, /data-party-action="summary"/);
+  assert.match(root.innerHTML, /data-party-action="field:0"/);
+  assert.match(root.innerHTML, /data-extension-slot="party.list"/);
+  root.querySelector('button[data-party-action="summary"]').click();
+  assert.equal(ui.modalType, "detail");
+});
+
+test("First field confirm and every menu confirm sound once; dialogue confirmation never doubles its cue", async () => {
+  const { game, doc, ui, calls } = fixture();
+  ui.confirm();
+  assert.deepEqual(calls.slice(-2), ["emerald:confirm", "interact"]);
+  const pending = ui.say("博士", ["你好。"], null, { mode: "instant" });
+  const before = calls.filter((id) => id === "emerald:confirm").length;
+  ui.confirm();
+  await pending;
+  assert.equal(
+    calls.filter((id) => id === "emerald:confirm").length,
+    before + 1,
+  );
+  const root = doc.getElementById("modal-root"),
+    button = {
+      disabled: false,
+      click() {
+        calls.push("activated");
+      },
+    };
+  root.children = [{}];
+  root.querySelector = () => button;
+  ui.confirm();
+  assert.deepEqual(calls.slice(-2), ["emerald:confirm", "activated"]);
+  const target = { closest: () => button };
+  root.onclick({ isTrusted: false, target });
+  assert.equal(calls.at(-1), "activated");
+  root.onclick({ isTrusted: true, target });
+  assert.equal(calls.at(-1), "emerald:confirm");
+  root.children = [];
+  game.busy = true;
+  const count = calls.length;
+  ui.confirm();
+  assert.equal(calls.length, count);
 });

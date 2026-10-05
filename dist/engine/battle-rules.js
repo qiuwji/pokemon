@@ -4,8 +4,9 @@ import {
   grantExperience,
   accuracyMultiplier,
 } from "./model.js";
+import { freeze } from "./extensions/values.js";
 import { BATTLE_POLICY } from "./rule-policy.js";
-export const BATTLE_RULES = {
+export const BATTLE_RULES = freeze({
   replacementPolicies: {
     baton_pass: {
       handoff: "baton_pass",
@@ -60,4 +61,12 @@ export const BATTLE_RULES = {
     (waterSport && type === "fire") || (mudSport && type === "electric")
       ? Math.max(1, Math.floor(power / 2))
       : power,
-};
+ });
+
+/** Function-valued rules stay callable; every battle owns its nested policy data. */
+export function createBattleRules(overrides = {}) {
+  const copy = value => Array.isArray(value) ? value.map(copy)
+    : value && typeof value === "object" ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, copy(entry)]))
+    : value;
+  return copy({ ...BATTLE_RULES, ...overrides });
+}

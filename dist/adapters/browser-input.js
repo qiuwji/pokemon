@@ -51,6 +51,10 @@ export class BrowserInput {
         (e) => {
           if (this.externalBlocked()) return;
           e.preventDefault();
+          if (!ui.modalType && !game.battle && this.fieldBlocked()) {
+            this.clear();
+            return;
+          }
           button.setPointerCapture(e.pointerId);
           const dir = button.dataset.dir;
           if (ui.modalType) ui.navigateMenu(dir);
@@ -70,10 +74,18 @@ export class BrowserInput {
     this.keys.clear();
     this.held = null;
     this.running = false;
-    this.game.resetFieldInput();
+    // Input cancellation must not cancel the director-owned scripted pose/motion.
+    if (!this.game.storyBusy) this.game.resetFieldInput();
+  }
+  fieldBlocked() {
+    return this.game.storyBusy || this.ui.blocked;
   }
   tick() {
     if (this.externalBlocked()) return;
+    if (this.fieldBlocked()) {
+      this.clear();
+      return;
+    }
     this.game.handleFieldInput({
       direction: this.held,
       secondary: this.running,
@@ -119,6 +131,7 @@ export class BrowserInput {
       return;
     }
     if (key === "shift") {
+      if (this.fieldBlocked()) { this.clear(); return; }
       this.running = true;
       this.tick();
       return;
@@ -127,6 +140,7 @@ export class BrowserInput {
       if (this.ui.modalType) this.ui.navigateMenu(dir);
       else if (this.game.battle) this.ui.navigateBattle(dir);
       else {
+        if (this.fieldBlocked()) { this.clear(); return; }
         this.keys.add(key);
         this.held = dir;
         this.tick();

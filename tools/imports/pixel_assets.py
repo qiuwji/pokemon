@@ -1,5 +1,32 @@
 """Decode native gbagfx 4bpp PNG inputs; indexed and grayscale have different semantics."""
 from PIL import Image
+from functools import lru_cache
+import re
+
+
+@lru_cache(maxsize=8)
+def icon_palette_sources(source):
+    """Resolve the native shared icon banks; normal.pal is battle art only."""
+    table = (source / 'src/pokemon_icon.c').read_text()
+    block = re.search(r'gMonIconPaletteIndices\[\]\s*=\s*\{(.*?)\};', table, re.S)
+    graphics = (source / 'src/graphics.c').read_text()
+    palettes = re.search(r'gMonIconPalettes\[\]\[16\]\s*=\s*\{(.*?)\};', graphics, re.S)
+    if not block or not palettes:
+        raise ValueError('Missing native icon palette tables')
+    return (dict(re.findall(r'\[SPECIES_(\w+)\]\s*=\s*(\d+)', block[1])),
+            re.findall(r'INCGFX_U16\("([^"]+)"', palettes[1]))
+
+
+def icon_palette_path(source, species):
+    indices, paths = icon_palette_sources(source)
+    index = indices.get(species.upper())
+    if index is None or int(index) >= len(paths):
+        raise ValueError(f'Unknown native icon palette: {species}')
+    return source / paths[int(index)]
+
+
+def read_palette(path):
+    return [tuple(map(int, line.split())) for line in path.read_text().splitlines()[3:19]]
 
 
 def paint_4bpp(image, palette, transparent=False):

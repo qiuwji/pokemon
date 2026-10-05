@@ -185,5 +185,6 @@
     }
   ],
   "encounterRate": 20,
-  "indoor": false
+  "indoor": false,
+  "allowRunning": true
 }

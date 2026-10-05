@@ -285,6 +285,7 @@ test("Battle menu adapter forwards the registered augment instead of silently us
   let nodes = [],
     html = "";
   const root = {
+    addEventListener() {},
     hidden: true,
     set innerHTML(value) {
       html = value;
@@ -340,10 +341,9 @@ test("Battle menu adapter forwards the registered augment instead of silently us
   ui.navigate("right");
   assert.equal(sounds.length, 4);
   game.busy = false;
-  root
-    .querySelectorAll("[data-action]")
-    .find((n) => n.dataset.action === "fight")
-    .click();
+  ui.confirm();
+  assert.equal(sounds.length, 5);
+  game.busy = true; ui.confirm(); assert.equal(sounds.length, 5); game.busy = false;
   const choice = root
     .querySelectorAll("[data-move]")
     .find((n) => n.dataset.augment === "fixture-augment:burst");

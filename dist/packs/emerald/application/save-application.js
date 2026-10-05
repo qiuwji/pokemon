@@ -75,11 +75,13 @@ export class SaveApplication {
     const loaded = this.saveStore.load();
     this.saveProtected =
       this.saveStore.lastIssue !== null &&
-      ["missing_dependency", "invalid_state", "unsupported_version"].includes(
+      ["missing_dependency", "invalid_state", "unsupported_version", "storage_unavailable"].includes(
         this.saveStore.lastIssue?.code,
       );
     this.saveWarning = this.saveProtected
-      ? this.saveStore.lastIssue.code === "unsupported_version"
+      ? this.saveStore.lastIssue.code === "storage_unavailable"
+        ? "浏览器暂时无法读取存档，已暂停覆盖。请恢复存储权限后刷新。"
+        : this.saveStore.lastIssue.code === "unsupported_version"
         ? "开发存档版本已更新。原存档已保留，可导出备份或从菜单开始新冒险。"
         : this.saveStore.lastIssue.code === "missing_dependency"
           ? "存档需要插件：" +
@@ -146,7 +148,7 @@ export class SaveApplication {
     this.forms?.reconcile();
     if (this.saveProtected) {
       if (show) this.ui?.toast(this.saveWarning);
-      return;
+      return false;
     }
     if (
       this.battle ||
@@ -156,7 +158,7 @@ export class SaveApplication {
       this.storyBusy
     ) {
       if (show) this.ui.toast("请在移动、对话或战斗结束后保存。");
-      return;
+      return false;
     }
     try {
       this.syncTime();
@@ -169,8 +171,11 @@ export class SaveApplication {
           ]),
         ];
       this.lastSave = this.saveStore.save(this.state);
+      this.saveWarning = null;
+      this.ui?.updateSide();
       this.onSave(this.lastSave);
       if (show) this.ui.toast("进度已保存在当前浏览器。");
+      return true;
     } catch (error) {
       if (error.code === "save_conflict") {
         this.saveProtected = true;
@@ -179,7 +184,15 @@ export class SaveApplication {
         this.saveConflict = true;
         this.ui?.toast(this.saveWarning);
         this.ui?.updateSide();
-      } else if (show) this.ui.toast("浏览器无法保存，请从存档菜单导出进度。");
+      } else {
+        const warning = error.code === "invalid_state"
+          ? "当前进度未通过存档检查，未覆盖上一次存档。请导出进度并报告问题。"
+          : "浏览器无法保存，未覆盖上一次存档。请从存档菜单导出进度。";
+        if (show || warning !== this.saveWarning) this.ui?.toast(warning);
+        this.saveWarning = warning;
+        this.ui?.updateSide();
+      }
+      return false;
     }
   }
   loadDocument(d) {

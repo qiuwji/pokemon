@@ -488,6 +488,7 @@ export class PluginHost {
           },
         }),
         ui: Object.freeze({
+          slot: (id, def) => staged.ui.register(owner, "slots", id, def),
           page: (id, def) => staged.ui.register(owner, "pages", id, def),
           entry: (id, def) => staged.ui.register(owner, "entries", id, def),
           hud: (id, def) => staged.ui.register(owner, "hud", id, def),

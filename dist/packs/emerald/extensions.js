@@ -1,3 +1,4 @@
+import { validateNativeCast } from "./native-cast.js";
 import { EMERALD_PUBLIC_EVENTS } from "./public-events.js";
 import { createEmeraldSpriteClips } from "./sprite-clips.js";
 import { createEmeraldPresentation } from "./animations.js";
@@ -78,6 +79,7 @@ import { ITEMS } from "./items.js";
 /** Content-pack adapter validates extension content using the same domain contracts as built-ins. */
 export function createEmeraldPlugins(db, plugins, onError) {
   db = emeraldDatabase(db);
+  validateNativeCast(db);
   const resources = db.resources;
   const host = new PluginHost({
     permissions: EMERALD_PLUGIN_PERMISSIONS,

@@ -1,7 +1,5 @@
 {
   "maps": {
-    "MAP_OLDALE_TOWN_HOUSE1": "原作区域尚未导入；禁止静默忽略或替换为测试地图。",
-    "MAP_OLDALE_TOWN_HOUSE2": "原作区域尚未导入；禁止静默忽略或替换为测试地图。",
     "MAP_ALTERING_CAVE": "原作区域尚未导入；禁止静默忽略或替换为测试地图。",
     "MAP_OLDALE_TOWN_POKEMON_CENTER_2F": "原作区域尚未导入；禁止静默忽略或替换为测试地图。",
     "ROUTE102": "相邻原作道路尚未导入；当前世界边界不可通行。",
@@ -81,7 +79,10 @@
     "EventScript_TV": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
     "EventScript_BookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
     "EventScript_PictureBookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
-    "EventScript_PokemonCenterBookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。"
+    "EventScript_PokemonCenterBookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
+    "OldaleTown_House1_EventScript_Woman": "已转写为 oldale.json 的 house1-woman 入口与对话。",
+    "OldaleTown_House2_EventScript_Woman": "已转写为 oldale.json 的 house2-woman 入口与对话。",
+    "OldaleTown_House2_EventScript_Man": "已转写为 oldale.json 的 house2-man 入口与对话。"
   },
   "ignoredScripts": {
     "0x0": "原作空脚本指针：明确无脚本，并非待转写剧情。"

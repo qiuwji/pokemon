@@ -83,11 +83,11 @@ export class ExtensionDOM {
     container,
     context = {},
     back = () => this.shell.closeModal(),
-    { nativeRoot = null, controls = new Map() } = {},
+    { nativeRoot = null, controls = new Map(), parent = null } = {},
   ) {
     if (!container) return;
     const mount = {
-      slot, container, back, nativeRoot, nativeHidden: nativeRoot?.hidden,
+      slot, container, back, nativeRoot, parent, nativeHidden: nativeRoot?.hidden,
     };
     mount.context = readOnly({
       ...context,
@@ -106,6 +106,7 @@ export class ExtensionDOM {
     mount.root = root;
     this.mounts.add(mount);
     this.refreshMount(mount);
+    return mount;
   }
   resolve(tree, context, nativeControls = new Map()) {
     return resolveLayout(
@@ -127,6 +128,8 @@ export class ExtensionDOM {
     );
   }
   refreshMount(mount) {
+    for (const child of [...this.mounts])
+      if (child.parent === mount) this.releaseMount(child);
     for (const region of this.host.ui.inSlot(mount.slot, "regions"))
       this.layout.disposeScope("region:" + region.id);
     mount.root.replaceChildren();
@@ -183,8 +186,14 @@ export class ExtensionDOM {
     mount.root.setAttribute("data-native-owner", winner?.id || "");
     for (const region of regions.filter(r => !r.mode || r.mode === "append"))
       try { render(region); } catch (error) { this.onError(error); }
+    for (const slot of this.host.ui.childSlots(mount.slot))
+      this.mountSlot(slot.id, mount.root, mount.context, mount.back, {
+        parent: mount, controls: mount.nativeControls,
+      });
   }
   releaseMount(mount) {
+    for (const child of [...this.mounts])
+      if (child.parent === mount) this.releaseMount(child);
     for (const region of this.host.ui.inSlot(mount.slot, "regions"))
       this.layout.clearScope("region:" + region.id);
     if (mount.nativeRoot) mount.nativeRoot.hidden = mount.nativeHidden;
@@ -288,7 +297,7 @@ export class ExtensionDOM {
     if (this.shell.modalType === "extension")
       this.withFocus(() => this.refreshPage());
     else
-      for (const mount of this.mounts)
+      for (const mount of [...this.mounts].filter(m => !m.parent))
         this.withFocus(() => this.refreshMount(mount));
   }
   refreshHUD() {

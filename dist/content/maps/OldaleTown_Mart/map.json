@@ -65,5 +65,6 @@
   ],
   "music": "MUS_POKE_MART",
   "tileset": "building-shop",
-  "indoor": true
+  "indoor": true,
+  "allowRunning": false
 }

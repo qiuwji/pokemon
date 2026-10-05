@@ -1,0 +1,8 @@
+Detail frames: 58 species, 58 animation sheets.
+{
+  "script": "import-detail-sprites.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": []
+}

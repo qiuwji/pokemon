@@ -10,10 +10,12 @@ export function createEmeraldSpriteClips(db, host = null) {
       {
         width: 64,
         height: 64,
-        loop: count > 1,
+        loop: false,
         match: { species, view: "detail" },
-        frames: Array.from({ length: count }, (_, index) => ({
-          resource: species + "-front",
+        // Play the entrance once, then rest on the first pose. Plugin clips can
+        // still explicitly loop through the generic SpriteClips contract.
+        frames: [...Array.from({ length: count }, (_, index) => index), ...(count > 1 ? [0] : [])].map(index => ({
+          resource: species + (Object.hasOwn(DETAIL_SPRITE_FRAMES, species) ? "-detail" : "-front"),
           rect: { x: 0, y: index * 64, width: 64, height: 64 },
           durationMs: 125,
         })),

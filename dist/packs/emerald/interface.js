@@ -1,3 +1,5 @@
+import { createTrainerInterface } from "./trainer-interface.js";
+import { createOptionsInterface } from "./options-interface.js";
 import { SpriteCanvas } from "../../adapters/sprite-canvas.js";
 import { createDialogueHistoryInterface } from "./dialogue-history-interface.js";
 import { createFacilityInterface } from "./facility-interface.js";
@@ -26,6 +28,7 @@ export function createEmeraldInterface(
     sound = () => {},
     extensionAssets = {},
     dialogueClock = null,
+    audioSettings = null,
   } = {},
 ) {
   const shell = createUIShell(game, { document: doc, sound, dialogueClock });
@@ -53,7 +56,13 @@ export function createEmeraldInterface(
     showEvolutionOptions: (index) => shell.showEvolutionOptions(index),
     checkGrowth: () => shell.checkGrowth(),
   };
-  const historyUI = createDialogueHistoryInterface(game, deps),
+  const optionsUI = createOptionsInterface({
+      ...deps,
+      showExtras: () => showExtras(),
+      audioSettings,
+    }),
+    trainerUI = createTrainerInterface(game, deps),
+    historyUI = createDialogueHistoryInterface(game, deps),
     partyUI = createPartyInterface(game, deps),
     bagUI = createBagInterface(game, deps),
     dexUI = createDexInterface(game, deps),
@@ -72,6 +81,8 @@ export function createEmeraldInterface(
     battleUI = createBattleInterface(game, deps);
   Object.assign(
     shell,
+    optionsUI,
+    trainerUI,
     historyUI,
     partyUI,
     bagUI,
@@ -101,6 +112,7 @@ export function createEmeraldInterface(
     showMonster: shell.showMonster,
     checkGrowth: shell.checkGrowth,
     backBattle: () => battleUI.back(),
+    confirmBattle: () => battleUI.confirm(),
   });
   if (game.plugins)
     shell.extensions = new ExtensionDOM({
@@ -119,17 +131,20 @@ export function createEmeraldInterface(
     }
     modal(
       "冒险菜单",
-      `<div class="menu-grid start-menu"><button class="menu-tile" data-page="dex" ${!game.state.flags.pokedex ? 'disabled' : ''}>图鉴</button><button class="menu-tile" data-page="party">宝可梦</button><button class="menu-tile" data-page="bag">背包</button><button class="menu-tile" data-page="trainer">${shell.escapeHTML(game.state.playerName)}</button><button class="menu-tile" data-page="save">记录</button><button class="menu-tile" data-page="settings">设置 / 扩展</button><button class="menu-tile" data-page="close">退出</button></div>`,
+      `<div class="menu-grid start-menu">${game.state.flags.pokedex ? '<button class="menu-tile" data-page="dex">图鉴</button>' : ""}${game.state.party.length ? '<button class="menu-tile" data-page="party">宝可梦</button>' : ""}<button class="menu-tile" data-page="bag">背包</button><button class="menu-tile" data-page="trainer">${shell.escapeHTML(game.state.playerName)}</button><button class="menu-tile" data-page="save">记录</button><button class="menu-tile" data-page="settings">设置</button><button class="menu-tile" data-page="close">退出</button></div>`,
       { type: "menu" },
     );
     const actions = pageActions();
-    root.querySelectorAll("button[data-page]").forEach(b => b.onclick = actions[b.dataset.page]);
+    root
+      .querySelectorAll("button[data-page]")
+      .forEach((b) => (b.onclick = actions[b.dataset.page]));
   }
   function pageActions() {
     return {
       close: shell.closeModal,
-      settings: showExtras,
-      trainer: showTrainer,
+      settings: optionsUI.showOptions,
+      extensions: showExtras,
+      trainer: trainerUI.showTrainer,
       party: () => shell.showParty(),
       bag: () => shell.showBag(),
       dex: shell.showDex,
@@ -150,15 +165,39 @@ export function createEmeraldInterface(
     };
   }
   function showExtras() {
-    const labels = {movement:'旅行与移动',clock:'时钟',box:'电脑盒子',history:'对话记录',daycare:'育成研究',facility:'设施与活动',presentation:'场景演出',network:'扩展连接',help:'操作说明'};
-    modal('设置与扩展',`<div class="menu-grid">${game.state.story.session?.status === 'ready' ? '<button class="menu-tile" data-page="resume">继续剧情</button>' : ''}${Object.entries(labels).map(([id,label])=>`<button class="menu-tile" data-page="${id}" ${id === 'daycare' && !game.canUseDaycare() ? 'disabled' : ''}>${label}</button>`).join('')}</div>`,{type:'settings',back:showMenu});
-    game.ui?.extensions?.mountSlot('menu',root.querySelector('.menu-grid'),{},showExtras);
-    const actions=pageActions();
-    root.querySelectorAll('button[data-page]').forEach(b=>b.onclick=actions[b.dataset.page]);
-  }
-  function showTrainer() {
-    const badgeKeys=['badgeStone','badgeKnuckle','badgeDynamo','badgeHeat','badgeBalance','badgeFeather','badgeMind','badgeRain'];
-    modal('训练家卡片',`<div class="trainer-card"><p>名字: ${shell.escapeHTML(game.state.playerName)}</p><p>钱: ¥${game.state.money}</p><p>图鉴: ${game.state.caught.length}</p><p>徽章: ${badgeKeys.filter(key=>game.state.flags[key]).length} / 8</p></div>`,{type:'trainer',back:showMenu});
+    const labels = {
+      movement: "旅行与移动",
+      clock: "时钟",
+      box: "电脑盒子",
+      history: "对话记录",
+      daycare: "育成研究",
+      facility: "设施与活动",
+      presentation: "场景演出",
+      network: "扩展连接",
+      help: "操作说明",
+    };
+    modal(
+      "设置与扩展",
+      `<div class="menu-grid">${game.state.story.session?.status === "ready" ? '<button class="menu-tile" data-page="resume">继续剧情</button>' : ""}${Object.entries(
+        labels,
+      )
+        .map(
+          ([id, label]) =>
+            `<button class="menu-tile" data-page="${id}" ${id === "daycare" && !game.canUseDaycare() ? "disabled" : ""}>${label}</button>`,
+        )
+        .join("")}</div>`,
+      { type: "extensions", back: optionsUI.showOptions },
+    );
+    game.ui?.extensions?.mountSlot(
+      "menu",
+      root.querySelector(".menu-grid"),
+      {},
+      showExtras,
+    );
+    const actions = pageActions();
+    root
+      .querySelectorAll("button[data-page]")
+      .forEach((b) => (b.onclick = actions[b.dataset.page]));
   }
   return shell;
 }

@@ -1,3 +1,4 @@
+import { CAPTURE_TIMING, captureShakes, playTimedCues } from "./timed-cues.js";
 import { battleView, battleLayout } from "./battle-view.js";
 const clamp = (t) => Math.max(0, Math.min(1, t));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -26,10 +27,20 @@ export class BattleDirector {
       profiles = {},
       registry = null,
       onCue = () => {},
+      cuePlan = () => [],
+      ballResource = () => null,
       reducedMotion = () => false,
     } = {},
   ) {
-    Object.assign(this, { timeline, profiles, registry, reducedMotion, onCue });
+    Object.assign(this, {
+      timeline,
+      profiles,
+      registry,
+      reducedMotion,
+      onCue,
+      cuePlan,
+      ballResource,
+    });
     this.reset();
   }
   reset(view = null) {
@@ -38,6 +49,8 @@ export class BattleDirector {
     this.hidden = new Set();
     this.ball = false;
     this.caught = false;
+    this.ballTarget = null;
+    this.ballArt = null;
   }
   get busy() {
     return this.event !== null;
@@ -54,7 +67,9 @@ export class BattleDirector {
     const registered = this.registry?.eventAnimation(event);
     if (registered) return registered.animation.duration;
     return event.kind === "capture"
-      ? 700 + event.shakes * 420
+      ? CAPTURE_TIMING.settle +
+          CAPTURE_TIMING.release +
+          captureShakes(event) * CAPTURE_TIMING.shake
       : event.kind === "move" && this.registry?.moves.has(event.move?.id)
         ? this.registry.moves.get(event.move.id).duration
         : (DURATIONS[event.kind] ?? DURATIONS.text);
@@ -65,20 +80,26 @@ export class BattleDirector {
         ? Math.min(240, this.duration(event))
         : this.duration(event),
       previous = this.view || event;
+    const deferredMessage = event.kind === "capture";
     this.view = event;
-    await this.timeline.play(
+    await playTimedCues(
+      this.timeline,
       duration,
       (start) => {
         this.event = { data: event, previous, start, duration };
         if (event.kind === "switch") this.hidden.delete(event.targetSeat);
-        message(event.text || "");
-        this.onCue(event.kind, event);
+        if (!deferredMessage) {
+          message(event.text || "");
+          this.onCue(event.kind, event);
+        }
       },
       () => {
         if (event.kind === "faint" || event.kind === "vacancy")
           this.hidden.add(event.targetSeat);
         if (event.kind === "ball") {
           this.ball = true;
+          this.ballTarget = event.targetSeat || event.combatants[1]?.seatId;
+          this.ballArt = this.ballResource(event);
           this.hidden.add(event.targetSeat || event.combatants[1]?.seatId);
         }
         if (event.kind === "capture") {
@@ -90,7 +111,31 @@ export class BattleDirector {
         }
         this.event = null;
       },
+      this.cuePlan(event, { duration, reducedMotion: this.reducedMotion() }),
+      (id) => this.onCue(id, event),
     );
+    if (deferredMessage) {
+      // Rules decide once; the result announcement follows the final shake/release.
+      message(event.text || "");
+      this.onCue(event.kind, event);
+      if (event.text) {
+        const hold = this.reducedMotion() ? 240 : DURATIONS.text;
+        await this.timeline.play(
+          hold,
+          (start) => {
+            this.event = {
+              data: { ...event, kind: "text" },
+              previous: event,
+              start,
+              duration: hold,
+            };
+          },
+          () => {
+            this.event = null;
+          },
+        );
+      }
+    }
   }
   sample(now = this.timeline.now()) {
     if (!this.view) return null;
@@ -120,7 +165,15 @@ export class BattleDirector {
       layout,
       effect: null,
       effects: [],
-      ball: this.ball ? { x: 252, y: 78, angle: 0, sealed: this.caught } : null,
+      ball: this.ball
+        ? {
+            x: layout.get(this.ballTarget)?.x ?? 252,
+            y: (layout.get(this.ballTarget)?.baseline ?? 97) - 19,
+            angle: 0,
+            sealed: this.caught,
+            resource: this.ballArt,
+          }
+        : null,
     };
     if (!this.event) return result;
     const { data: e, previous, start, duration } = this.event,
@@ -255,10 +308,15 @@ export class BattleDirector {
           },
         ];
       else if (e.kind === "ball") {
-        const flight = clamp(t / 0.7);
+        const flight = clamp(t / 0.7),
+          targetPose = layout.get(e.targetSeat) || { x: 252, baseline: 97 },
+          sourcePose = layout.get(e.actorSeat) || { x: 72, y: 124 };
         result.ball = {
-          x: lerp(72, 252, flight),
-          y: lerp(124, 62, flight) - Math.sin(flight * Math.PI) * 72,
+          resource: this.ballResource(e),
+          x: lerp(sourcePose.x, targetPose.x, flight),
+          y:
+            lerp(sourcePose.y, targetPose.baseline - 35, flight) -
+            Math.sin(flight * Math.PI) * 72,
           angle: flight * Math.PI * 4,
         };
         const target =
@@ -268,13 +326,23 @@ export class BattleDirector {
           target.opacity = target.scale;
         }
       } else if (e.kind === "capture") {
-        const shakeTime = Math.max(0, now - start - 250),
-          shaking = shakeTime < e.shakes * 420,
-          end = clamp((now - start - 250 - e.shakes * 420) / 450);
+        const shakeTime = Math.max(0, now - start - CAPTURE_TIMING.settle),
+          shaking = shakeTime < captureShakes(e) * CAPTURE_TIMING.shake,
+          end = clamp(
+            (now -
+              start -
+              CAPTURE_TIMING.settle -
+              captureShakes(e) * CAPTURE_TIMING.shake) /
+              CAPTURE_TIMING.release,
+          );
+        const targetPose = layout.get(e.targetSeat) || { x: 252, baseline: 97 };
         result.ball = {
-          x: 252,
-          y: 78,
-          angle: shaking ? Math.sin((shakeTime / 420) * Math.PI * 2) * 0.28 : 0,
+          resource: this.ballResource(e),
+          x: targetPose.x,
+          y: targetPose.baseline - 19,
+          angle: shaking
+            ? Math.sin((shakeTime / CAPTURE_TIMING.shake) * Math.PI * 2) * 0.28
+            : 0,
           sealed: !!e.caught && !shaking,
         };
         const target =

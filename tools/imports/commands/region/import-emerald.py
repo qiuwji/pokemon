@@ -1,4 +1,5 @@
 from imports.context import PROJECT, ImportSession, arguments, source_argument
+from imports.pixel_assets import icon_palette_path, read_palette
 import json,re,struct
 from pathlib import Path
 from PIL import Image
@@ -51,7 +52,8 @@ for key,cn,no in entries:
  species[key.lower()]={'name':cn,'dex':no,'types':list(dict.fromkeys(t.lower() for t in types)),'stats':dict(zip(['hp','atk','def','spe','spa','spd'],[get('base'+k) for k in ['HP','Attack','Defense','Speed','SpAttack','SpDefense']])),'catchRate':get('catchRate'),'expYield':get('expYield'),'growth':growth,'femaleRatio':float(re.search(r'genderRatio = PERCENT_FEMALE\(([\d.]+)\)',block)[1])/100 if re.search(r'genderRatio = PERCENT_FEMALE\(([\d.]+)\)',block) else .5,'abilities':[a.lower() for a in abilities if a!='NONE'],'evYield':dict(zip(['hp','atk','def','spe','spa','spd'],[get('evYield_'+k) for k in ['HP','Attack','Defense','Speed','SpAttack','SpDefense']])),'learnset':learn}
  folder=R/f'graphics/pokemon/{key.lower()}';palette=pal(folder/'normal.pal')
  for img in ['front','back','icon']:
-  session.image(recolor(folder/f'{img}.png',palette),A/f'{key.lower()}-{img}.png')
+  selected_palette=read_palette(icon_palette_path(R,key.lower())) if img=='icon' else palette
+  session.image(recolor(folder/f'{img}.png',selected_palette),A/f'{key.lower()}-{img}.png')
  for entry in learn:
   mk=entry['move'].upper()
   if mk.lower() in moves:continue

@@ -85,5 +85,6 @@
   ],
   "music": "MUS_POKE_CENTER",
   "tileset": "building-pokemon_center",
-  "indoor": true
+  "indoor": true,
+  "allowRunning": false
 }

@@ -31,6 +31,7 @@ export const THEME_TOKENS = Object.freeze({
 /** Definitions are registered at startup; adapters own navigation, focus and rendering. */
 export class PluginUIRegistry {
   constructor() {
+    this.slots = new Map();
     this.pages = new Map();
     this.entries = new Map();
     this.hud = new Map();
@@ -43,6 +44,21 @@ export class PluginUIRegistry {
       registry = this[kind];
     if (!registry || registry.has(key))
       throw new Error("Duplicate or unknown UI registration");
+    if (kind === "slots") {
+      if (!definition || Object.keys(definition).some(k => !["parent", "priority"].includes(k)) || !this.hasSlot(definition.parent))
+        throw new Error("Invalid UI slot parent");
+      if (definition.priority !== undefined && (!Number.isSafeInteger(definition.priority) || Math.abs(definition.priority) > 1000))
+        throw new Error("Invalid UI priority");
+      if (this.slots.size >= 128) throw new Error("UI slot budget exceeded");
+      let depth = 1, parent = definition.parent;
+      while (this.slots.has(parent)) {
+        if (++depth > 12) throw new Error("UI slot depth exceeded");
+        parent = this.slots.get(parent).parent;
+      }
+      // Parents must already exist: registration cannot create cycles or detached slots.
+      registry.set(key, Object.freeze({ ...definition, id: key, owner }));
+      return key;
+    }
     if (kind === "themes") {
       if (
         !definition ||
@@ -66,7 +82,7 @@ export class PluginUIRegistry {
       );
       return key;
     }
-    if (kind === "regions" && !UI_SLOTS.includes(definition.slot))
+    if (kind === "regions" && !this.hasSlot(definition.slot))
       throw new Error("Invalid UI definition: unknown region slot");
     if (kind === "regions" && (
       (definition.mode !== undefined && !["append", "replace", "hide"].includes(definition.mode)) ||
@@ -82,7 +98,7 @@ export class PluginUIRegistry {
       kind === "pages"
         ? typeof definition.render !== "function" || !definition.title
         : kind === "entries"
-          ? !UI_SLOTS.includes(definition.slot) ||
+          ? !this.hasSlot(definition.slot) ||
             !definition.label ||
             !definition.page
           : !(kind === "regions" && definition.mode === "hide") && typeof definition.render !== "function"
@@ -98,8 +114,13 @@ export class PluginUIRegistry {
       if (!this.pages.has(entry.page))
         throw new Error(`Missing plugin page ${entry.page}`);
   }
+  hasSlot(slot) { return UI_SLOTS.includes(slot) || this.slots.has(slot); }
+  childSlots(parent) {
+    return [...this.slots.values()].filter(s => s.parent === parent)
+      .sort((a, b) => (a.priority || 0) - (b.priority || 0) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  }
   inSlot(slot, kind = "entries") {
-    if (!UI_SLOTS.includes(slot)) throw new Error("Unknown UI slot");
+    if (!this.hasSlot(slot)) throw new Error("Unknown UI slot");
     return [...this[kind].values()]
       .filter((entry) => entry.slot === slot)
       .sort(

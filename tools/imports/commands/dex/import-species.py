@@ -1,5 +1,6 @@
 """Merge selected original species into the slice. Unimported moves remain explicit metadata."""
 from imports.context import PROJECT, ImportSession, arguments, source_argument
+from imports.pixel_assets import icon_palette_path, read_palette
 import argparse, json, re
 from pathlib import Path
 from PIL import Image
@@ -32,7 +33,8 @@ for entry in entries:
         if item!='none':species.setdefault('heldItems',{})[prop]='pokeball'if item=='poke_ball'else item
     palette=[tuple(map(int,v.split()))for v in (r/f'graphics/pokemon/{ident}/normal.pal').read_text().splitlines()[3:19]]
     for side in ['front','back','icon']:
-        image=Image.open(r/f'graphics/pokemon/{ident}/{side}.png');out=Image.new('RGBA',image.size);out.putdata([(*palette[int(v)%16],255 if int(v)%16 else 0)for v in image.getdata()]);session.image(out,d/f'assets/{ident}-{side}.png')
+        selected_palette=read_palette(icon_palette_path(r,ident)) if side=='icon' else palette
+        image=Image.open(r/f'graphics/pokemon/{ident}/{side}.png');out=Image.new('RGBA',image.size);out.putdata([(*selected_palette[int(v)%16],255 if int(v)%16 else 0)for v in image.getdata()]);session.image(out,d/f'assets/{ident}-{side}.png')
     for pending in species['unavailableLearnset']:session.omit('learnset', ident, pending['move'], 'move not imported')
     data['species'][ident]={**data['species'].get(ident,{}),**species};print(ident,len(species['learnset']),'available learn entries;',len(species['unavailableLearnset']),'pending')
 session.content(data)

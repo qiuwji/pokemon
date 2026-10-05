@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import io
 import json
+import re
 import struct
 from pathlib import Path
 from PIL import Image
@@ -31,27 +32,42 @@ def png(relative):
 def colors(relative):
     return [tuple(map(int, line.split())) for line in read('graphics/' + relative).decode().splitlines()[3:] if line.strip()]
 
-def screen(tiles, tilemap, palette=None):
+def screen(tiles, tilemap, palette=None, *, map_width=32, size=(240,160), bpp=4, transparent=False, tile_base=0, entry_bits=16, palette_base=0):
     image = png(tiles)
-    entries = struct.unpack('<' + 'H' * 1024, read('graphics/' + tilemap))
+    data = read('graphics/' + tilemap)
+    if entry_bits == 16 and len(data) % 2: raise ValueError('Invalid 16-bit tilemap length')
+    entries = data if entry_bits == 8 else struct.unpack('<' + 'H' * (len(data)//2), data)
     if palette is None:
         raw = image.getpalette()
         palette = [tuple(raw[i:i+3]) for i in range(0,len(raw),3)]
-    output = Image.new('RGBA',(240,160))
-    for y in range(20):
-        for x in range(30):
-            entry = entries[y * 32 + x]
-            index, bank = entry & 1023, entry >> 12
-            if index >= image.width * image.height // 64 or bank * 16 + 15 >= len(palette):
-                raise ValueError(f'Invalid native tile/palette reference: {tilemap}/{x},{y}')
+    output = Image.new('RGBA',size)
+    for y in range(size[1]//8):
+        for x in range(size[0]//8):
+            address = y * map_width + x
+            if address >= len(entries): raise ValueError('Truncated native tilemap ' + tilemap)
+            entry = entries[address]
+            index, bank = (entry & 1023) - tile_base, ((entry >> 12) - palette_base) if bpp == 4 else 0
+            if index < 0 or index >= image.width * image.height // 64:
+                raise ValueError(f'Invalid native tile reference: {tilemap}/{x},{y}/{index}')
             tx,ty = index % (image.width // 8) * 8, index // (image.width // 8) * 8
             tile = image.crop((tx,ty,tx+8,ty+8))
             painted = Image.new('RGBA',(8,8))
-            painted.putdata([(*palette[bank*16+int(v)%16],255) for v in tile.getdata()])
+            indices = [bank*16+int(v)%16 if bpp == 4 else int(v) for v in tile.getdata()]
+            if min(indices) < 0 or max(indices) >= len(palette): raise ValueError('Invalid native palette ' + tilemap)
+            painted.putdata([(*palette[v],0 if transparent and v % (16 if bpp == 4 else 256) == 0 else 255) for v in indices])
             if entry & 1024: painted = painted.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
             if entry & 2048: painted = painted.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
             output.paste(painted,(x*8,y*8))
     return output
+
+def sprite(relative, palette=None):
+    image = png(relative)
+    if palette is None:
+        raw = image.getpalette()
+        palette = [tuple(raw[i:i+3]) for i in range(0,len(raw),3)]
+    result = Image.new('RGBA', image.size)
+    result.putdata([(*palette[int(v)],0 if int(v)==0 else 255) for v in image.getdata()])
+    return result
 
 def add(name,image):
     buffer=io.BytesIO();image.save(buffer,format='PNG');outputs[name]=buffer.getvalue()
@@ -61,6 +77,11 @@ window=png('text_window/1.png')
 rgba=window.convert('RGBA')
 rgba.putdata([(*color[:3],0 if int(index)==0 else 255) for color,index in zip(rgba.getdata(),window.getdata())])
 add('window.png',rgba)
+for number in range(1,21):
+    indexed=png('text_window/'+str(number)+'.png')
+    image=indexed.convert('RGBA')
+    image.putdata([(*color[:3],0 if int(index)==0 else 255) for color,index in zip(image.getdata(),indexed.getdata())])
+    add('window-'+str(number)+'.png',image)
 add('party-background.png',screen('party_menu/bg.png','party_menu/bg.bin'))
 
 def party_slot(name, width, height, selected=False, empty=False):
@@ -96,7 +117,77 @@ add('party-slot-wide-empty.png', party_slot('slot_wide_empty',18,3,empty=True))
 for gender in ['male','female']:
     add(f'bag-{gender}.png',screen('bag/menu.png','bag/menu.bin',colors(f'bag/menu_{gender}.pal')))
 add('summary-background.png',screen('summary_screen/tiles.png','summary_screen/page_info.bin'))
-outputs['source.json']=(json.dumps({'source':'pret/pokeemerald','inputs':inputs,'outputs':{
+# Full pages and sprites remain native resources. Layout/text overlays are authored in the pack.
+for page in ['skills','battle_moves','contest_moves','info_egg']:
+    image = screen('summary_screen/tiles.png','summary_screen/page_'+page+'.bin')
+    if page != 'info_egg':
+        image.paste(screen('summary_screen/tiles.png','summary_screen/page_info.bin').crop((0,0,80,160)),(0,0))
+    add('summary-'+page.replace('_','-')+'.png',image)
+for gender in ['male','female']:
+    sheet = sprite('bag/bag_'+gender+'.png', colors('bag/bag.pal'))
+    for pocket, frame in [('items',1),('balls',3),('machines',4),('berries',5),('key',2)]:
+        add(f'bag-sprite-{gender}-{pocket}.png',sheet.crop((0,frame*64,64,(frame+1)*64)))
+for kind, tilemap in [('list','list'),('info','info_screen')]:
+    add('dex-'+kind+'.png',screen('pokedex/menu.png','pokedex/'+tilemap+'.bin',colors('pokedex/bg_hoenn.pal')))
+for gender in ['male','female']:
+    palette = colors('trainer_card/green.pal')
+    if gender == 'female':
+        replacement = colors('trainer_card/female_bg.pal')
+        palette[:len(replacement)] = replacement
+    bg = screen('trainer_card/tiles.png','trainer_card/bg.bin',palette,map_width=30)
+    for face in ['front','back']:
+        layer = screen('trainer_card/tiles.png','trainer_card/'+face+'.bin',palette,map_width=30,transparent=True)
+        add(f'trainer-{gender}-{face}.png',Image.alpha_composite(bg,layer))
+add('badges.png',sprite('trainer_card/badges.png'))
+for gender, name in [('male','brendan'),('female','may')]:
+    add('trainer-portrait-'+gender+'.png',sprite('trainers/front_pics/'+name+'.png',colors('trainers/palettes/'+name+'.pal')))
+# Forest build rule concatenates exactly 55 frame tiles and eight background tiles.
+# Tilemap banks 1/2 refer to frame/background; bank zero is the clear tile.
+frame = png('pokemon_storage/wallpapers/forest/frame.png')
+bg = png('pokemon_storage/wallpapers/forest/bg.png')
+entries = struct.unpack('<360H',read('graphics/pokemon_storage/wallpapers/forest/tilemap.bin'))
+forest = Image.new('RGBA',(160,144))
+for address, entry in enumerate(entries):
+    index, bank = entry & 1023, entry >> 12
+    atlas = frame if index < 55 else bg
+    index = index if index < 55 else index - 55
+    if index >= atlas.width * atlas.height // 64: raise ValueError('Invalid forest wallpaper tile')
+    tile = atlas.crop((index % (atlas.width//8)*8,index // (atlas.width//8)*8,index % (atlas.width//8)*8+8,index // (atlas.width//8)*8+8))
+    palette = (frame if bank == 1 else bg).getpalette()
+    painted = Image.new('RGBA',(8,8));painted.putdata([(*palette[int(v)*3:int(v)*3+3],255) for v in tile.getdata()])
+    if entry & 1024: painted = painted.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+    if entry & 2048: painted = painted.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+    forest.paste(painted,(address%20*8,address//20*8))
+add('storage-forest.png',forest)
+add('storage.png',screen('pokemon_storage/menu.png','pokemon_storage/display_menu.bin',colors('pokemon_storage/interface.pal'),tile_base=256))
+add('shop.png',screen('shop/menu.png','shop/menu.bin',transparent=True))
+grass = screen('starter_choose/tiles.png','starter_choose/birch_grass.bin')
+bag = screen('starter_choose/tiles.png','starter_choose/birch_bag.bin',transparent=True)
+add('starter.png',Image.alpha_composite(grass,bag))
+add('starter-balls.png',sprite('starter_choose/pokeball_selection.png').crop((0,0,32,96)))
+add('starter-hand.png',sprite('starter_choose/pokeball_selection.png').crop((0,96,32,128)))
+add('starter-circle.png',sprite('starter_choose/starter_circle.png'))
+add('region-map.png',screen('pokenav/region_map/map.png','pokenav/region_map/map.bin',[(0,0,0)]*112+colors('pokenav/region_map/map.pal'),bpp=8,entry_bits=8,map_width=64))
+add('region-frame.png',screen('pokenav/region_map/frame.png','pokenav/region_map/frame.bin',transparent=True,palette_base=1))
+for ball in ['poke','great','safari','ultra','master','net','dive','nest','repeat','timer','luxury','premier']:
+    add('ball-'+ball+'.png',sprite('balls/'+ball+'.png').crop((0,0,16,16)))
+for kind in ['singles_player','singles_opponent','doubles_player','doubles_opponent']:
+    add('healthbox-'+kind.replace('_','-')+'.png',sprite('battle_interface/healthbox_'+kind+'.png').crop((0,0,104,40 if kind=='singles_player' else 32)))
+# Item icon ID and palette pairing are taken from the source tables (shared icons keep their own palette).
+constants = read('src/data/graphics/items.h').decode()
+paths = dict(re.findall(r'(gItemIcon(?:Palette)?_\w+)\[\]\s*=\s*INCGFX_U32\("graphics/([^" ]+)', constants))
+table = read('src/data/item_icon_table.h').decode()
+icon_map = {}
+for item, graphic, palette in re.findall(r'\[ITEM_(\w+)\]\s*=\s*\{(gItemIcon_\w+),\s*(gItemIconPalette_\w+)\}',table):
+    if graphic not in paths or palette not in paths: raise ValueError('Unknown item icon symbol '+item)
+    filename = 'items/'+item.lower()+'.png'
+    add(filename,sprite(paths[graphic],colors(paths[palette])))
+    icon_map[item.lower()] = 'assets/ui/'+filename
+outputs['item-icons.json']=(json.dumps(icon_map,sort_keys=True,indent=2)+'\n').encode()
+# Browser-ready lookup avoids an asynchronous asset fetch during a menu click.
+lookup = {key.replace('_',''):value for key,value in icon_map.items()}
+outputs['item-icons.js']=('// @generated by tools/ui/export-theme.py; do not edit.\nexport const ITEM_ICONS = Object.freeze('+json.dumps(lookup,sort_keys=True,indent=2)+');\n').encode()
+outputs['source.json']=(json.dumps({'source':'pret/pokeemerald','revision':'731ad5bfd6e6f265508d0efcca0ba42f9dcf5881','inputs':inputs,'outputs':{
     key:hashlib.sha256(data).hexdigest() for key,data in outputs.items()}},indent=2)+'\n').encode()
 changed=[]
 for name,data in outputs.items():

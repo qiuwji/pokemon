@@ -1,0 +1,41 @@
+✔ Script ownership blocks touch and held keyboard movement without cancelling the scripted animation; choices remain operable (2.869ms)
+✔ Resetting logical movement during a story cannot force director-owned sprites to idle (212.958792ms)
+✔ Native cast entries bind real source identities, preserve gender/visibility, and support a new map through data alone (134.541708ms)
+✔ Plugin-defined nested slots render within the native detail host with selected UID, refresh and clean up as a tree (221.065458ms)
+✔ Nested battle policy edits cannot leak to another battle, to defaults, or to caller-owned overrides (0.726792ms)
+✔ Oldale footprints man blocks the west exit until the laboratory gifts, repeats and resets on re-entry (287.681541ms)
+✔ An invalid automatic save is observable, preserves the last good record, and clears the warning after repair (106.914666ms)
+✔ An unreadable storage port records a read failure instead of presenting it as an empty save (0.439167ms)
+✔ All exported native assets match the tracked provenance manifest and item selections resolve real files (73.455958ms)
+✔ Pocket order and sprite selection remain native without dropping plugin pockets (0.948584ms)
+✔ Summary pages expose full stats, current move PP and accurate ownership without modifying the frozen monster (38.105959ms)
+✔ Native list navigation skips disabled items, wraps, reveals the focused row and routes horizontal pocket changes (0.266916ms)
+✔ Sign content is immediate while ordinary character dialogue remains typewritten through the real catalog (205.2915ms)
+✔ Clip validation rejects invalid timing, dimensions, shape and binding; definitions are deeply immutable (20.470958ms)
+✔ Pure frame sampling uses exact boundaries, loop modulo, finite clocks and reduced-motion first frame (1.455833ms)
+✔ Registry rejects unknown resources/species and conflicting explicit bindings while allowing replacement of native defaults (0.747041ms)
+✔ Canvas player crops actual frames, draws only changes, letterboxes and cancels stale callbacks on replacement (1.187875ms)
+✔ Missing/oversized resource frames fail before the first draw, and asynchronous drawing failures release the loop (0.804041ms)
+✔ Reduced motion and single frames draw once; non-loop clips finish without a lingering timer (0.343291ms)
+✔ Public plugin clip registration replaces only presentation; duplicates and bad references fail at startup (233.970708ms)
+✔ Every generated native clip has real asset rectangles; current single and multiple sheets select correct metadata (221.606041ms)
+✔ Shared modal lifecycle disposes page resources exactly once on replacement, close and explicit host disposal (100.8425ms)
+✔ Real detail page mounts the registered clip and shared shell releases its playback on page navigation (118.233917ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (45.361916ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (20.89ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (19.903541ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (37.532958ms)
+✔ Clock page submits setup through a command and renders live saved time (18.520625ms)
+✔ Loaded clock-before-TV state renders the real sidebar and continues through later opening tasks (9.276584ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (64.330416ms)
+✔ Settings navigation survives click bubbling and Travel opens its own modal instead of silently reopening settings (21.967917ms)
+✔ Selecting a party member opens native actions before Summary and preserves the party/list plugin region (14.430041ms)
+✔ First field confirm and every menu confirm sound once; dialogue confirmation never doubles its cue (10.674667ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3539.189958

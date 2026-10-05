@@ -49,11 +49,32 @@
         "不过，原来那些只是我自己的脚印……"
       ]
     },
-    "blocked": {
+    "house1-woman": {
+      "name": "女子",
+      "lines": [
+        "宝可梦对战开始时，队伍里排在最左边的那只会先出场。",
+        "所以队伍变长之后，试着调换一下宝可梦的顺序。",
+        "说不定能占到便宜。"
+      ]
+    },
+    "house2-woman": {
+      "name": "女子",
+      "lines": [
+        "宝可梦在对战之中会慢慢升级，变得更强。"
+      ]
+    },
+    "house2-man": {
       "name": "男子",
       "lines": [
-        "啊！等等！请不要走进这里！",
-        "我刚发现了一只稀有宝可梦的脚印。请等我画完，好吗？"
+        "如果你带的宝可梦变强了，就能去更远的地方了。"
+      ]
+    },
+    "footprints-blocked": {
+      "name": "男子",
+      "lines": [
+        "啊！等等！请不要进来。",
+        "我刚发现了一只稀有宝可梦的脚印！",
+        "等我把它们画下来，好吗？"
       ]
     }
   },
@@ -408,7 +429,40 @@
         }
       ]
     },
-    "blocked": {
+    "enter": {
+      "commands": [
+        {
+          "type": "setVariable",
+          "name": "emerald.oldaleTour",
+          "value": false
+        }
+      ]
+    },
+    "house1-woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "house1-woman"
+        }
+      ]
+    },
+    "house2-woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "house2-woman"
+        }
+      ]
+    },
+    "house2-man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "house2-man"
+        }
+      ]
+    },
+    "blocked-path": {
       "commands": [
         {
           "type": "parallel",
@@ -425,6 +479,9 @@
                   "actor": "player",
                   "path": [
                     "right"
+                  ],
+                  "ignoreActors": [
+                    "oldale.footprints"
                   ]
                 }
               ]
@@ -438,7 +495,10 @@
                   "path": [
                     "up"
                   ],
-                  "running": true
+                  "running": true,
+                  "ignoreActors": [
+                    "player"
+                  ]
                 },
                 {
                   "type": "face",
@@ -451,7 +511,10 @@
                   "path": [
                     "right"
                   ],
-                  "keepFacing": true
+                  "keepFacing": true,
+                  "ignoreActors": [
+                    "player"
+                  ]
                 }
               ]
             }
@@ -459,7 +522,7 @@
         },
         {
           "type": "dialog",
-          "dialogue": "blocked"
+          "dialogue": "footprints-blocked"
         },
         {
           "type": "move",
@@ -467,67 +530,6 @@
           "path": [
             "down",
             "left"
-          ]
-        }
-      ]
-    },
-    "enter": {
-      "commands": [
-        {
-          "type": "setVariable",
-          "name": "emerald.oldaleTour",
-          "value": false
-        },
-        {
-          "type": "if",
-          "condition": {
-            "not": {
-              "flag": "potionGift"
-            }
-          },
-          "then": [
-            {
-              "type": "worldPatch",
-              "operations": [
-                {
-                  "kind": "object",
-                  "map": "OldaleTown",
-                  "id": "oldale.employee",
-                  "scope": "visit",
-                  "changes": {
-                    "x": 13,
-                    "y": 14,
-                    "dir": "down"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "if",
-          "condition": {
-            "not": {
-              "flag": "pokedex"
-            }
-          },
-          "then": [
-            {
-              "type": "worldPatch",
-              "operations": [
-                {
-                  "kind": "object",
-                  "map": "OldaleTown",
-                  "id": "oldale.footprints",
-                  "scope": "visit",
-                  "changes": {
-                    "x": 1,
-                    "y": 11,
-                    "dir": "left"
-                  }
-                }
-              ]
-            }
           ]
         }
       ]
@@ -567,9 +569,44 @@
       },
       "script": "footprints"
     },
-    "blocked": {
-      "trigger": "step",
+    "enter": {
+      "trigger": "mapEnter",
       "priority": 30,
+      "selector": {
+        "map": "OldaleTown"
+      },
+      "script": "enter"
+    },
+    "house1-woman": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "objectId": "oldale.house1.woman"
+      },
+      "script": "house1-woman"
+    },
+    "house2-woman": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "objectId": "oldale.house2.woman"
+      },
+      "script": "house2-woman"
+    },
+    "house2-man": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "objectId": "oldale.house2.man"
+      },
+      "script": "house2-man"
+    },
+    "blocked-path": {
+      "trigger": "step",
+      "priority": 40,
+      "selector": {
+        "map": "OldaleTown"
+      },
       "where": {
         "map": "OldaleTown",
         "x": 0,
@@ -582,22 +619,39 @@
           "flag": "pokedex"
         }
       },
-      "script": "blocked"
-    },
-    "enter": {
-      "trigger": "mapEnter",
-      "priority": 30,
-      "selector": {
-        "map": "OldaleTown"
-      },
-      "script": "enter"
+      "script": "blocked-path"
     }
   },
   "sources": [
     {
       "label": "OldaleTown_EventScript_MartEmployee",
       "status": "original-verified",
-      "note": "原作三个玩家朝向的并行带路、入图摆位、同访问介绍一次、满包可下次访问重试、音乐恢复；变量在入图重置，不用实时projection反复摆位。"
+      "note": "原作三个玩家朝向的并行带路、入图装配摆位、同访问介绍一次、满包可下次访问重试、音乐恢复；变量在入图重置，不用实时projection反复摆位。"
+    },
+    {
+      "label": "OldaleTown_House1_EventScript_Woman",
+      "status": "original-verified",
+      "note": "House1：说明对战先出队伍最左，后建议调换顺序；无分支。"
+    },
+    {
+      "label": "OldaleTown_House2_EventScript_Woman",
+      "status": "original-verified",
+      "note": "House2：说明宝可梦对战会升级变强；无分支。"
+    },
+    {
+      "label": "OldaleTown_House2_EventScript_Man",
+      "status": "original-verified",
+      "note": "House2：说明变强才能走更远；无分支。"
+    },
+    {
+      "label": "OldaleTown_EventScript_BlockWestEntrance",
+      "status": "original-verified",
+      "note": "获得图鉴前（本项目pokedex对应原作实验室FLAG_ADVENTURE_STARTED的可出图进度），眼镜男在(1,11)朝左；解除后恢复源对象(8,9)朝右。不能以队伍数或starter判断。原作OnTransition摆位在native cast装配时完成，首帧不显示默认位置。"
+    },
+    {
+      "label": "OldaleTown_EventScript_BlockedPath",
+      "status": "original-verified",
+      "note": "西出口(0,10)：玩家delay_8→右移一格；男子快步上→朝左保持朝向右移→警告→下、左返回。入图装配摆位，无延迟worldPatch或持续projection抢走剧情移动。"
     }
   ]
 }

@@ -260,15 +260,19 @@ test("Public plugin clip registration replaces only presentation; duplicates and
 test("Every generated native clip has real asset rectangles; current single and multiple sheets select correct metadata", () => {
   const s = session(),
     r = s.game.spriteClips;
-  assert.equal(r.find("mudkip").frames.length, 1);
+  assert.equal(r.find("mudkip").loop, false);
   assert(r.find("poochyena").frames.length > 1);
   for (const [species, count] of Object.entries(DETAIL_SPRITE_FRAMES)) {
     const raw = fs.readFileSync(
-      new URL(`../dist/assets/${species}-front.png`, import.meta.url),
+      new URL(`../dist/assets/${species}-detail.png`, import.meta.url),
     );
     assert.equal(raw.readUInt32BE(16), 64);
     assert.equal(raw.readUInt32BE(20), count * 64);
-    assert.equal(r.find(species).frames.length, count);
+    const clip = r.find(species);
+    assert.equal(clip.frames.length, count + (count > 1 ? 1 : 0));
+    assert.equal(clip.frames[0].resource, species + "-detail");
+    assert.equal(sampleSpriteClip(clip, 60000).frame.rect.y, 0);
+    assert.equal(sampleSpriteClip(clip, 60000).complete, true);
   }
 });
 test("Shared modal lifecycle disposes page resources exactly once on replacement, close and explicit host disposal", () => {
@@ -298,6 +302,8 @@ test("Real detail page mounts the registered clip and shared shell releases its 
     shell = createUIShell(s.game, { document: doc, dialogueClock: clock }),
     canvas = canvasPort();
   doc.getElementById("detail-sprite").getContext = canvas.getContext;
+  const back = doc.createElement("button"); back.setAttribute("data-summary-back", "");
+  doc.getElementById("modal-root").append(back);
   s.mon.species = "poochyena"; // Arrange an existing species; presentation must not write the individual.
   const before = structuredClone(s.game.state),
     players = [];
@@ -311,7 +317,7 @@ test("Real detail page mounts the registered clip and shared shell releases its 
     mountSprite: (n, d) => {
       const player = new SpriteCanvas({
         canvas: n,
-        assets: { "poochyena-front": { width: 64, height: 256 } },
+        assets: { "poochyena-detail": { width: 64, height: 128 } },
         clock,
       });
       players.push(player);

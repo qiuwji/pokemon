@@ -159,6 +159,9 @@ test("Real bag page mounts a plugin form; typed submit saves plugin memory witho
     root: a.root,
     modal(title, body) {
       a.root.replaceChildren();
+      const close = a.doc.createElement("button");
+      close.setAttribute("data-bag-close", "");
+      a.root.append(close);
       for (const match of body.matchAll(/data-extension-slot="([^"]+)"/g)) {
         const node = a.doc.createElement("div");
         node.setAttribute("data-extension-slot", match[1]);
@@ -251,6 +254,7 @@ test("Native editable controls retain game keys, Escape returns, and widget-hand
   let back = 0,
     move = 0;
   const input = Object.create(BrowserInput.prototype);
+  input.externalBlocked = () => false;
   input.ui = {
     modalType: "extension",
     back: () => back++,

@@ -4,18 +4,28 @@ import { TYPE_NAMES, STATUS_NAMES } from "./pack.js";
 /** Two-column battle menu cursor. Horizontal moves preserve rows, vertical moves preserve columns. */
 export function battleOptionIndex(selected, dir, count) {
   if (!count) return 0;
-  const column = selected % 2, row = Math.floor(selected / 2);
+  const column = selected % 2,
+    row = Math.floor(selected / 2);
   if (dir === "left" || dir === "right") {
     const target = row * 2 + (1 - column);
     return target < count ? target : selected;
   }
-  const rows = Math.ceil(count / 2), delta = dir === "up" ? -1 : 1;
+  const rows = Math.ceil(count / 2),
+    delta = dir === "up" ? -1 : 1;
   return Math.min(((row + delta + rows) % rows) * 2 + column, count - 1);
 }
 /** Emerald battle menu adapter: owns focus and layout, sends actions, never mutates domain state. */
 export function createBattleInterface(
   game,
-  { document: doc, hpTrack, hpColor, escapeHTML, showParty, showBag, sound = () => {} },
+  {
+    document: doc,
+    hpTrack,
+    hpColor,
+    escapeHTML,
+    showParty,
+    showBag,
+    sound = () => {},
+  },
 ) {
   const root = doc.getElementById("battle-hud"),
     db = game.db;
@@ -23,9 +33,19 @@ export function createBattleInterface(
     page = "main",
     selectedMove = null,
     selectedAugment = null;
-  const buttons = () => [
-    ...root.querySelectorAll(".battle-options button:not(:disabled)"),
-  ].filter(button => !button.closest?.("[hidden]"));
+  const buttons = () =>
+    [...root.querySelectorAll(".battle-options button:not(:disabled)")].filter(
+      (button) => !button.closest?.("[hidden]"),
+    );
+  root.addEventListener(
+    "click",
+    (event) => {
+      const button = event.target.closest?.("button");
+      if (event.isTrusted && button && !button.disabled && !game.busy)
+        sound("emerald:confirm");
+    },
+    true,
+  );
   const friendly = (frame, c) =>
     frame.view.sides.find((s) => s.id === c.sideId)?.allianceId ===
     frame.view.homeAlliance;
@@ -40,7 +60,7 @@ export function createBattleInterface(
     const s = db.species[m.species],
       base = experienceAt(m.level, s.growth),
       next = experienceAt(m.level + 1, s.growth);
-    return `<div class="battle-status ${side} ${multi ? "multi" : ""}" data-seat="${c.seatId}" data-identity="${m.uid}:${m.level}" ${position}><div class="mon-heading">${escapeHTML(s.name)} <span>${m.gender} Lv.${m.level}</span></div>${hpTrack(m)}${home ? `<div class="hp-value"><span class="condition">${STATUS_NAMES[m.status] || ""}</span><span class="hp-number">${m.hp} / ${m.stats.hp}</span></div><div class="exp-track"><i style="width:${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%"></i></div>` : ""}</div>`;
+    return `<div class="battle-status ${side} ${multi ? "multi" : ""}" data-seat="${c.seatId}" data-identity="${m.uid}:${m.level}" ${position}><div class="mon-heading">${escapeHTML(s.name)} <span>${m.gender === "male" ? "♂" : m.gender === "female" ? "♀" : ""} Lv.${m.level}</span></div>${hpTrack(m)}${home ? `<div class="hp-value"><span class="condition">${STATUS_NAMES[m.status] || ""}</span><span class="hp-number">${m.hp} / ${m.stats.hp}</span></div><div class="exp-track"><i style="width:${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%"></i></div>` : ""}</div>`;
   }
   function seatLabel(b, id) {
     const seat = b.roster.seat(id),
@@ -184,7 +204,7 @@ export function createBattleInterface(
       away.map((c, i) => status(c, false, multi, i)).join("") +
       home.map((c, i) => status(c, true, multi, i)).join("") +
       plan +
-      `<div class="battle-menu">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
+      `<div class="battle-menu" data-battle-page="${page}">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
     root.querySelectorAll("[data-action]").forEach(
       (button) =>
         (button.onclick = () => {
@@ -221,21 +241,43 @@ export function createBattleInterface(
       ?.addEventListener("click", () => void game.turn({ kind: "cancel" }));
     if (!game.busy)
       game.ui?.extensions?.mountSlot(
-        page === "moves" ? "battle.moves" : page === "targets" ? "battle.targets" : "battle.actions",
+        page === "moves"
+          ? "battle.moves"
+          : page === "targets"
+            ? "battle.targets"
+            : "battle.actions",
         root.querySelector(".battle-options"),
         { seat: b.commandSeat, page },
         () => draw(),
         {
           nativeRoot: root.querySelector(".native-options"),
-          controls: nativeUIControls(root.querySelectorAll(".native-options button"), button =>
-            button.dataset.move !== undefined
-              ? `move:${button.dataset.move}${button.dataset.augment ? ":" + button.dataset.augment : ""}`
-              : button.dataset.target !== undefined
-                ? `target:${button.dataset.target}` : button.dataset.action),
+          controls: nativeUIControls(
+            root.querySelectorAll(".native-options button"),
+            (button) =>
+              button.dataset.move !== undefined
+                ? `move:${button.dataset.move}${button.dataset.augment ? ":" + button.dataset.augment : ""}`
+                : button.dataset.target !== undefined
+                  ? `target:${button.dataset.target}`
+                  : button.dataset.action,
+          ),
         },
       );
     if (selected >= buttons().length) selected = 0;
     buttons()[selected]?.classList.add("selected");
+    if (page === "moves" && !game.busy) {
+      const button = buttons()[selected],
+        slot = b.movesFor(b.commandSeat)[Number(button?.dataset.move)];
+      const move = button?.dataset.augment
+        ? db.moves[
+            b.augments
+              .options(b.commandSeat, Number(button.dataset.move))
+              .find((o) => o.id === button.dataset.augment)?.moveId
+          ]
+        : slot && db.moves[slot.id];
+      const panel = root.querySelector(".battle-message");
+      if (panel && move)
+        panel.innerHTML = `PP ${slot.pp}/${move.pp}<br>属性 ${escapeHTML(TYPE_NAMES[move.type])}`;
+    }
   }
   function refresh(frame) {
     if (!frame) return;
@@ -250,7 +292,7 @@ export function createBattleInterface(
         el.dataset.identity = identity;
         const heading = el.querySelector(".mon-heading");
         if (heading)
-          heading.innerHTML = `${escapeHTML(db.species[m.species].name)} <span>${m.gender} Lv.${m.level}</span>`;
+          heading.innerHTML = `${escapeHTML(db.species[m.species].name)} <span>${m.gender === "male" ? "♂" : m.gender === "female" ? "♀" : ""} Lv.${m.level}</span>`;
       }
       const bar = el.querySelector(".hp-track i");
       if (bar) {
@@ -280,7 +322,11 @@ export function createBattleInterface(
       selectedAugment = null;
     },
     confirm() {
-      if (!game.busy) buttons()[selected]?.click();
+      const button = buttons()[selected];
+      if (!game.busy && button) {
+        sound("emerald:confirm");
+        button.click();
+      }
     },
     navigate(dir) {
       if (game.busy) return;

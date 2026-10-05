@@ -1,4 +1,7 @@
-import { WallClockDial, drawWallClock } from "../../presentation/wall-clock-dial.js";
+import {
+  WallClockDial,
+  drawWallClock,
+} from "../../presentation/wall-clock-dial.js";
 import { WALL_CLOCK_HAND_OFFSETS } from "./generated/wall-clock.js";
 /** A pixel menu observes the saved world clock; initial setup is an application command. */
 export function createTimeInterface(
@@ -11,72 +14,141 @@ export function createTimeInterface(
     view.initialized
       ? `第 ${view.day + 1} 天 · ${pad(view.hour)}:${pad(view.minute)}`
       : "时钟还没有设定";
-  function showTime({ story = false, close = (commit) => commit(), confirm = (h, m) => game.startClock(h, m) } = {}) {
-    const view = game.timeView(), dial = new WallClockDial(view.initialized ? view.hour : 10, view.initialized ? view.minute : 0);
-    let settled = false, resolve;
-    const result = new Promise((done) => { resolve = done; });
+  function showTime({
+    story = false,
+    close = (commit) => commit(),
+    confirm = (h, m) => game.startClock(h, m),
+  } = {}) {
+    const view = game.timeView(),
+      dial = new WallClockDial(
+        view.initialized ? view.hour : 10,
+        view.initialized ? view.minute : 0,
+      );
+    let settled = false,
+      resolve;
+    const result = new Promise((done) => {
+      resolve = done;
+    });
     const finish = (status) => {
       if (settled) return;
       settled = true;
-      return close(() => { closeModal(); resolve({ status }); });
+      return close(() => {
+        closeModal();
+        resolve({ status });
+      });
     };
-    modal(view.initialized ? "时钟" : "调整时钟",
-      `<div class="clock-panel"><canvas data-clock-dial width="240" height="160" tabindex="0" role="img" aria-label="时钟表盘" style="image-rendering:pixelated;width:100%;max-width:720px;touch-action:none"></canvas><strong data-clock-time>${clockText(view)}</strong></div>${!view.initialized ? `<div class="inline-actions clock-controls"><button data-clock-adjust="-60" aria-label="减少一小时">时 −</button><button data-clock-adjust="60" aria-label="增加一小时">时 ＋</button><button data-clock-adjust="-1" aria-label="减少一分钟">分 −</button><button data-clock-adjust="1" aria-label="增加一分钟">分 ＋</button><button data-start-clock>确认时间</button></div>` : '<button data-clock-return>返回</button>'}`,
-      { type: "clock", back: async () => { await finish("cancelled"); if (!story) showMenu(); } });
-    const canvas = root.querySelector("[data-clock-dial]"), ctx = canvas.getContext("2d");
+    modal(
+      view.initialized ? "时钟" : "调整时钟",
+      `<div class="clock-panel"><canvas data-clock-dial width="240" height="160" tabindex="0" role="img" aria-label="时钟表盘"></canvas><strong class="sr-only" data-clock-time>${clockText(view)}</strong></div>${!view.initialized ? '<button class="clock-confirm" data-start-clock>确认</button>' : '<button class="clock-confirm" data-clock-return>返回</button>'}`,
+      {
+        type: "clock",
+        close: false,
+        back: async () => {
+          await finish("cancelled");
+          if (!story) showMenu();
+        },
+      },
+    );
+    const canvas = root.querySelector("[data-clock-dial]"),
+      ctx = canvas.getContext("2d");
     const ImageClass = doc.defaultView?.Image;
     const art = { handOffsets: WALL_CLOCK_HAND_OFFSETS };
-    const gender = game.state.playerGender || 'male';
-    const mode = view.initialized ? 'view' : 'start';
-    if (ImageClass) for (const [key, suffix] of [['background', mode], ['hands', 'hands']]) {
-      const image = new ImageClass();
-      art[key] = image;
-      image.onload = () => { if (!settled) render(); };
-      image.onerror = () => { if (!settled) toast('时钟资源加载失败，请刷新重试。'); };
-      image.src = `assets/wallclock-${gender}-${suffix}.png`;
-    }
+    const gender = game.state.playerGender || "male";
+    const mode = view.initialized ? "view" : "start";
+    if (ImageClass)
+      for (const [key, suffix] of [
+        ["background", mode],
+        ["hands", "hands"],
+      ]) {
+        const image = new ImageClass();
+        art[key] = image;
+        image.onload = () => {
+          if (!settled) render();
+        };
+        image.onerror = () => {
+          if (!settled) toast("时钟资源加载失败，请刷新重试。");
+        };
+        image.src = `assets/wallclock-${gender}-${suffix}.png`;
+      }
     const render = () => {
       const value = dial.value();
       drawWallClock(ctx, value, art);
-      const label = root.querySelector('[data-clock-time]');
-      if (label && !view.initialized) label.textContent = `${pad(value.hour)}:${pad(value.minute)}`;
-      canvas.setAttribute("aria-label", `时钟 ${pad(value.hour)}:${pad(value.minute)}`);
+      const label = root.querySelector("[data-clock-time]");
+      if (label && !view.initialized)
+        label.textContent = `${pad(value.hour)}:${pad(value.minute)}`;
+      canvas.setAttribute(
+        "aria-label",
+        `时钟 ${pad(value.hour)}:${pad(value.minute)}`,
+      );
     };
     render();
     renderClock = (time) => drawWallClock(ctx, time, art);
     canvas.focus?.();
     if (!view.initialized) {
-      root.querySelectorAll('[data-clock-adjust]').forEach((button) => {
-        button.onclick = () => { dial.adjust(Number(button.dataset.clockAdjust)); render(); };
+      root.querySelectorAll("[data-clock-adjust]").forEach((button) => {
+        button.onclick = () => {
+          dial.adjust(Number(button.dataset.clockAdjust));
+          render();
+        };
       });
       canvas.onkeydown = (e) => {
-        const delta = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: 60, ArrowDown: -60 }[e.key];
-        if (delta !== undefined) { e.preventDefault(); e.stopPropagation(); dial.adjust(delta); render(); }
+        const delta = {
+          ArrowLeft: -1,
+          ArrowRight: 1,
+          ArrowUp: 60,
+          ArrowDown: -60,
+        }[e.key];
+        if (delta !== undefined) {
+          e.preventDefault();
+          e.stopPropagation();
+          dial.adjust(delta);
+          render();
+        }
       };
       const point = (e) => {
         const bounds = canvas.getBoundingClientRect();
-        dial.point((e.clientX - bounds.left) * 240 / bounds.width - 120,
-          (e.clientY - bounds.top) * 160 / bounds.height - 80);
+        dial.point(
+          ((e.clientX - bounds.left) * 240) / bounds.width - 120,
+          ((e.clientY - bounds.top) * 160) / bounds.height - 80,
+        );
         render();
       };
-      canvas.onpointerdown = (e) => { canvas.setPointerCapture(e.pointerId); point(e); };
-      canvas.onpointermove = (e) => { if (canvas.hasPointerCapture(e.pointerId)) point(e); };
+      canvas.onpointerdown = (e) => {
+        canvas.setPointerCapture(e.pointerId);
+        point(e);
+      };
+      canvas.onpointermove = (e) => {
+        if (canvas.hasPointerCapture(e.pointerId)) point(e);
+      };
       canvas.onpointerup = (e) => canvas.releasePointerCapture(e.pointerId);
       root.querySelector("[data-start-clock]").onclick = () => {
-        const value = dial.value(), response = confirm(value.hour, value.minute);
-        if (!response.ok) { toast(response.reason); return; }
+        const value = dial.value(),
+          response = confirm(value.hour, value.minute);
+        if (!response.ok) {
+          toast(response.reason);
+          return;
+        }
         finish("confirmed");
         if (!story) game.save();
       };
-    } else root.querySelector("[data-clock-return]").onclick = () => finish("viewed");
+    } else
+      root.querySelector("[data-clock-return]").onclick = () =>
+        finish("viewed");
     ownModalResource(() => {
       renderClock = null;
-      for (const key of ['background', 'hands']) {
+      for (const key of ["background", "hands"]) {
         const image = art[key];
         if (image) image.onload = image.onerror = null;
       }
-      canvas.onkeydown = canvas.onpointerdown = canvas.onpointermove = canvas.onpointerup = null;
-      if (!settled) { settled = true; resolve({ status: "cancelled" }); }
+      canvas.onkeydown =
+        canvas.onpointerdown =
+        canvas.onpointermove =
+        canvas.onpointerup =
+          null;
+      if (!settled) {
+        settled = true;
+        resolve({ status: "cancelled" });
+      }
     });
     return result;
   }

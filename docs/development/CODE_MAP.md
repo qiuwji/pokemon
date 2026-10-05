@@ -34,6 +34,8 @@ dist/
 | 人物身份/初始出现 | [native-cast.js](../../dist/packs/emerald/native-cast.js)、[opening-objects.js](../../dist/packs/emerald/opening-objects.js) | native-object-bindings.js绑定来源local ID；阶段摆位写bundle.projections，动画写commands |
 | 进图后人物站错/重复触发卡住 | [WorldApplication.prepareEntry](../../dist/packs/emerald/application/world-application.js)、剧情入口与requires | 普通地图NPC按新访问重建；持久Actor从Actor领域恢复；visit patch决定本次访问，不能靠NPC缓存充当进度 |
 | 队伍选择与所选个体野外招式 | [party-menu-view.js](../../dist/packs/emerald/party-menu-view.js)、[party-field-moves.js](../../dist/packs/emerald/party-field-moves.js) | 原生布局/导航与规则描述分开；执行走movement.party-action，扩展关联搜partyMove |
+| 原作菜单/文字/图标位置 | [界面说明](EMERALD_UI.md)、对应*-interface.js及ui/*-view.js | 原C窗口/精灵坐标；tools/ui/export-theme.py导出原图块/palette，不把规则写进CSS或app |
+| 战斗动画/捕捉/音效时机 | BattleDirector、timed-cues.js、pack的battle-audio.js | 快照和时钟只管演出；捕捉结果延后公布；声音不在每帧绘制里发射 |
 | 插件改已有UI | [UI合同](../engine/presentation/UI_CONTRACT.md)、对应*-interface.js | UIRegistry管注册，ExtensionDOM管区域仲裁，LayoutDOM管控件；native-ui-controls只把原控件转换为宿主句柄 |
 | 画面清晰度/尺寸 | [pixel-display.js](../../dist/adapters/pixel-display.js)、canvas-renderer.js | PixelDisplay持有尺寸监听生命周期；规则格子仍是16px，战斗仍用320×224布局；不要改地图分辨率 |
 | 战斗规则或新招式 | [battle-rules Skill](../../skills/emerald-battle-rules/SKILL.md) | move-effects/operations、规则阶段；动画走presentation注册，不放进规则函数 |
@@ -47,3 +49,5 @@ dist/
 对白数据、事件条件、演员动作分别有自己的位置。脚本移动的终点是本次演出事实，不等于下一次进图的出生点；重新访问应由内容投影/访问覆盖/持久Actor决定。修复重复触发时至少走两次入口，必要时在中间保存恢复，检查输入锁也已释放。
 
 本次整理将公共短演出归入story/common/scenes.js，将Route101入场追逐归入地区JSON；没有更换启动器或增加一套平行剧情引擎。文件改名时搜索上表中的类名、bundle ID或原作label，不靠旧绝对路径猜。
+
+原生地区角色选择：`native-cast-data.js` 编写按地图索引的出现条件/性别差异，`native-cast.js` 统一投影，`native-object-bindings.js` 绑定C对象身份及源位置。不要再在nativeCast按地图逐个增加分支。当前Mod审查与尚未实施的存档解绑见[计划](../project/MOD_REVIEW_PLAN.md)。

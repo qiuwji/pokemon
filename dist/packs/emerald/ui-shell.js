@@ -1,3 +1,4 @@
+import { pageLayout } from "./ui/native-view.js";
 import { ControlDOM } from "../../adapters/control-dom.js";
 import { dialogueDescription } from "../../engine/dialogue.js";
 import { DialogueDOM } from "../../adapters/dialogue-dom.js";
@@ -16,6 +17,7 @@ export function createUIShell(
   } = {},
 ) {
   const navigation = {};
+  let textPace = 1;
   const requestFrame =
     doc.defaultView?.requestAnimationFrame?.bind(doc.defaultView) ||
     ((callback) => setTimeout(callback, 0));
@@ -46,7 +48,12 @@ export function createUIShell(
     reducedMotion,
     onError: (error) => disposeDialogue(error),
   });
-  const controls = new ControlDOM({ root, document: doc, dialogue: () => dialog, modalType: () => modalType });
+  const controls = new ControlDOM({
+    root,
+    document: doc,
+    dialogue: () => dialog,
+    modalType: () => modalType,
+  });
   const escapeHTML = (s) =>
     String(s).replace(
       /[&<>"']/g,
@@ -84,7 +91,9 @@ export function createUIShell(
     updateWeather(game.weatherView());
     game.ui?.extensions?.refreshHUD();
     const q = questFor(game.state) || {
-      title: "自由探索", description: "当前没有待办任务，可以继续探索丰缘。", number: "—",
+      title: "自由探索",
+      description: "当前没有待办任务，可以继续探索丰缘。",
+      number: "—",
     };
     $("quest-title").textContent = q.title;
     $("quest-description").textContent = q.description;
@@ -160,7 +169,12 @@ export function createUIShell(
     let description;
     try {
       description = dialogueDescription(
-        { name, lines, ...options },
+        {
+          name,
+          lines,
+          ...options,
+          speed: Math.min(1000, (options.speed ?? 30) * textPace),
+        },
         (id, data) => textEffects.parameters(id, data),
       );
     } catch (error) {
@@ -177,7 +191,10 @@ export function createUIShell(
       };
       try {
         renderDialogue();
-        game.control?.record("dialogue.started", { name: description.name, lines: description.lines.length });
+        game.control?.record("dialogue.started", {
+          name: description.name,
+          lines: description.lines.length,
+        });
         announce(description.lines[0].text);
         game.clearInput();
       } catch (error) {
@@ -189,7 +206,8 @@ export function createUIShell(
     const previous = dialog;
     dialog = null;
     dialogueView.hide();
-    if (previous) game.control?.record("dialogue.closed", { reason: reason.message });
+    if (previous)
+      game.control?.record("dialogue.closed", { reason: reason.message });
     previous?.reject(reason);
   }
 
@@ -282,13 +300,27 @@ export function createUIShell(
         }
       } else {
         renderDialogue();
-        game.control?.record("dialogue.line", { name: dialog.lines[dialog.index].name ?? dialog.name, index: dialog.index });
+        game.control?.record("dialogue.line", {
+          name: dialog.lines[dialog.index].name ?? dialog.name,
+          index: dialog.index,
+        });
         announce(dialog.lines[dialog.index].text);
       }
     } catch (error) {
       disposeDialogue(error);
     }
   }
+
+  // Physical clicks and A/Space confirmations share one cue, before page handlers run.
+  root.addEventListener(
+    "click",
+    (event) => {
+      const button = event.target.closest?.("button");
+      if (event.isTrusted && button && !button.disabled)
+        sound("emerald:confirm");
+    },
+    true,
+  );
 
   function modal(
     title,
@@ -302,12 +334,15 @@ export function createUIShell(
     modalType = type;
     modalNavigate = navigate;
     game.clearInput();
-    root.innerHTML = `<div class="modal-backdrop" data-modal-page="${escapeHTML(type)}" data-gender="${escapeHTML(game.state.playerGender)}"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
+    root.innerHTML = `<div class="modal-backdrop" data-modal-page="${escapeHTML(type)}" data-native-layout="${pageLayout(type)}" data-gender="${escapeHTML(game.state.playerGender || "male")}"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
     if ($("modal-close"))
       $("modal-close").onclick = () => (back ? back() : closeModal());
     requestFrame(() => {
       const buttons = [...root.querySelectorAll("button")].filter(
-        (button) => !button.disabled,
+        (button) =>
+          !button.disabled &&
+          button.id !== "modal-close" &&
+          (!button.getClientRects || button.getClientRects().length > 0),
       );
       if (!buttons.includes(doc.activeElement)) buttons[0]?.focus();
     });
@@ -360,8 +395,13 @@ export function createUIShell(
   return {
     controlView: () => controls.inspect(),
     controlActivate: (id) => controls.activate(id),
-    controlConfirm: () => root.children.length ? controls.confirm() : game.interact(),
+    controlConfirm: () =>
+      root.children.length ? controls.confirm() : game.interact(),
     ownModalResource,
+    setTextPace: (value) => {
+      if (![0.5, 1, 2].includes(value)) throw new Error("Invalid text pace");
+      textPace = value;
+    },
     disposeModalResources,
     frameClock: clock,
     reducedMotion,
@@ -400,13 +440,27 @@ export function createUIShell(
       return !!dialog || !!root.children.length;
     },
     confirm() {
+      if (dialog) {
+        nextDialogue();
+        return;
+      }
       if (root.children.length) {
-        const button = root.querySelector("button:focus:not(:disabled)") ||
+        const button =
+          root.querySelector("button:focus:not(:disabled)") ||
           root.querySelector("button:not(:disabled):not(#modal-close)");
-        button?.click();
-      } else game.interact();
+        if (button) {
+          sound("emerald:confirm");
+          button.click();
+        }
+      } else if (game.battle) {
+        navigation.confirmBattle?.();
+      } else if (!game.busy) {
+        sound("emerald:confirm");
+        game.interact();
+      }
     },
     navigateMenu(dir) {
+      if (root.children.length) sound("emerald:confirm");
       if (modalNavigate?.(dir)) return;
       const buttons = [
         ...root.querySelectorAll("button:not(:disabled):not(#modal-close)"),
