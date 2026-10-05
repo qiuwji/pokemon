@@ -3,8 +3,24 @@
   "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
   "inputs": [
     {
+      "path": "data/tilesets/secondary/petalburg/palettes/00.pal",
+      "sha256": "24590e1e383394ef157db0b3435728c3b838839ffc33d9eb984f7c98a7c2ba64"
+    },
+    {
+      "path": "data/tilesets/secondary/petalburg/palettes/01.pal",
+      "sha256": "c17687ece4bb432d345b43b4e806ebba741553b1ed83b0f46207ce537db5d25c"
+    },
+    {
       "path": "data/tilesets/secondary/petalburg/palettes/06.pal",
       "sha256": "d19ac2cc38bf373a77ca9067bb62fa3860d7efc3b2e3662287e077016becb685"
+    },
+    {
+      "path": "data/tilesets/secondary/petalburg/palettes/08.pal",
+      "sha256": "a2721e74b6f3dab4516825ff3fba64768d971b50319f40e2495450ef29b0c525"
+    },
+    {
+      "path": "data/tilesets/secondary/petalburg/palettes/09.pal",
+      "sha256": "81f3aa2cce80945b1229a60058ea88d3f6335829220725935bced555d7d42ed5"
     },
     {
       "path": "data/tilesets/secondary/petalburg/palettes/10.pal",
@@ -15,8 +31,24 @@
       "sha256": "edfa2c2187e0e94b8ad41755b07bd4ea97ec25ce223004666ac90aa05727d852"
     },
     {
+      "path": "graphics/door_anims/birchs_lab.png",
+      "sha256": "98dd6b1ebeae340109881e404a2ea08e893155890b7f203de052a646291485a7"
+    },
+    {
       "path": "graphics/door_anims/littleroot.png",
       "sha256": "5c9bedca4b334698723581bee88dceeb938722dd664b9901b75c1bfed6f04757"
+    },
+    {
+      "path": "graphics/door_anims/oldale.png",
+      "sha256": "a1aaed4bce0db3af83ee9f918a45468f45eb6fad98d2c171d0c16d9572087061"
+    },
+    {
+      "path": "graphics/door_anims/poke_center.png",
+      "sha256": "acc7b0a5d42d37597a34e247eba76a4391b772986a1436946faf4c11b64e129d"
+    },
+    {
+      "path": "graphics/door_anims/poke_mart.png",
+      "sha256": "5228893b4dcdc8363e44a3036708e31123021cec76e38ca0e25543bf0031dd88"
     },
     {
       "path": "graphics/field_effects/palettes/pokeball.pal",
@@ -47,22 +79,88 @@
       "sha256": "bec80cd474b57f736cb7fffc82efa8dd84fc1898a14a9246a269155fdcfcf77c"
     },
     {
+      "path": "include/constants/metatile_labels.h",
+      "sha256": "6f53ac68b105d8d72c7daa3d57c4c669a828f68d3f8d84d1902e9f6309b818f2"
+    },
+    {
+      "path": "src/field_door.c",
+      "sha256": "e2c3104fb441f8440455bc5951362b4eb20704c01f165101f00481aee97b1d27"
+    },
+    {
       "path": "src/wallclock.c",
       "sha256": "7a1227697bce57b72a7e5a4a3cdb1af55eaa127484d5b94f01afadfb7cf5548e"
     }
   ],
-  "doorMetatiles": [
-    [
-      900,
-      901
+  "doorMetatiles": {
+    "65": [
+      [
+        906,
+        907
+      ],
+      [
+        908,
+        909
+      ],
+      [
+        910,
+        911
+      ]
     ],
-    [
-      902,
-      903
+    "97": [
+      [
+        912,
+        913
+      ],
+      [
+        914,
+        915
+      ],
+      [
+        916,
+        917
+      ]
     ],
-    [
-      904,
-      905
+    "584": [
+      [
+        900,
+        901
+      ],
+      [
+        902,
+        903
+      ],
+      [
+        904,
+        905
+      ]
+    ],
+    "585": [
+      [
+        918,
+        919
+      ],
+      [
+        920,
+        921
+      ],
+      [
+        922,
+        923
+      ]
+    ],
+    "647": [
+      [
+        924,
+        925
+      ],
+      [
+        926,
+        927
+      ],
+      [
+        928,
+        929
+      ]
     ]
-  ]
+  }
 }

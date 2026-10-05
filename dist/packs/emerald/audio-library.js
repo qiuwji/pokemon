@@ -170,3 +170,16 @@ export function emeraldBattleSound(kind, cues) {
   const id = cues.has(kind) ? kind : EMERALD_BATTLE_AUDIO[kind];
   return id && cues.get(id)?.kind === "sound" ? id : null;
 }
+
+/**
+ * field_door.c GetDoorSoundEffect plays a sliding sound for some doors instead of the
+ * swinging one. The sliding render is not installed yet, so an absent cue falls back to
+ * the swinging door instead of going silent. Every other cue id passes through unchanged.
+ */
+export const EMERALD_SLIDING_DOOR_CUE = "emerald-audio:se_sliding_door";
+export function emeraldDoorSound(id, cues) {
+  if (id !== "emerald:slidingDoor") return id;
+  return cues?.get?.(EMERALD_SLIDING_DOOR_CUE)?.kind === "sound"
+    ? EMERALD_SLIDING_DOOR_CUE
+    : "emerald:door";
+}

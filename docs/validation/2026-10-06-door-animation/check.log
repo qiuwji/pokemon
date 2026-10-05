@@ -1,0 +1,27 @@
+
+> emerald-web-engine@0.37.0 check
+> node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs && npm run check:lint && npm run check:engine-types
+
+Explicit pending source references: 4 maps, 77 scripts (see dist/content/references.json)
+Content valid: 14 maps, 58 species, 87 moves, 310 items, 27 events.
+Explicitly unavailable move mechanics (0): 
+Story content valid: 128 scripts, 169 dialogues, 119 bindings.
+Runtime content valid: 354 moves, 58 learning methods, 310 items.
+
+> emerald-web-engine@0.37.0 check:contracts
+> tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+
+Module syntax valid: 378 files.
+
+> emerald-web-engine@0.37.0 check:docs
+> node tools/check-docs.mjs
+
+Documentation: 83 Markdown files, 891 local links, 17 synchronized examples valid
+
+> emerald-web-engine@0.37.0 check:lint
+> eslint .
+
+
+> emerald-web-engine@0.37.0 check:engine-types
+> tsc -p tsconfig.engine.json
+

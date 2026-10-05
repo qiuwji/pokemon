@@ -12,7 +12,7 @@
 | --- | --- | --- | --- |
 | 区域 `import-emerald.py` | maps/layouts、物种/招式/属性表、对象和精灵图 → 选定地图/物种/招式/actor字段及PNG | 可选source、--maps/--species/--profile；现有包。区域/中文名来自slice及locale | 是 |
 | 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | 可选source、--maps/--profile；先地图导入，动画区间从配置读取 | 是 |
-| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、src/wallclock.c偏移表、门帧 → 男女时钟资源、生成的wall-clock.js、门metatile 900–905及来源哈希 | source/--target/--strict；先grid；重新生成图集后重跑，重复运行不累加派生帧 | 是 |
+| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、src/wallclock.c偏移表、`field_door.c`门帧图组与`metatile_labels.h` → 男女时钟资源、生成的wall-clock.js、生成的door-anims.js、门metatile 900起及来源哈希 | source/--target/--strict；先grid；重新生成图集后重跑，重复运行不累加派生帧 | 是 |
 | 区域 `import-encounters.py` | wild_encounters.json陆地表 → 地图陆地遭遇字段 | 可选source、--maps；所需物种先导入，校验槽位数，不再写进化 | 是 |
 | 区域 `import-water-encounters.py` | 同上水上表 → 地图水上遭遇字段 | 可选source、--maps；所需水上物种先导入，校验槽位数 | 是 |
 | 区域 `import-weather.py` | 所有地图header/坐标事件 → rules/gen3/map-weather.js | 可选source；原作地图header不能为空，不依赖可玩地图数量 | 是 |
@@ -106,4 +106,4 @@ python3 tools/fixtures/generate.py --scenes E2ETestField
 
 只写dist/fixtures/world.json。terrain表记录水/冰/岩壁的视觉来源；泥坡、凸坡、横/竖轨道另以原图集行为属性和渲染截图确认。水动画区间与grid导入共读tile-animations.json，花动画不算水。自动检查只能证明索引/动画/行为合同；外观另做图片观察，不把生成成功当视觉还原。安装图像工具依赖用`python3 -m pip install -r tools/requirements.txt`。干净副本无work/的生成与第二次无差异预演由Python可携带性测试覆盖。
 
-剧情工具入口为`tools/story/extract.py extract/verify/movement`；movement子命令连接`tools/story/movement.py`，先回校验固定来源再输出命令。参数及支持范围见[提取流程](STORY_EXTRACTION.md)，不写游戏数据。opening-art同时导出原作转场精灵球，固定透明色与调色板，纳入opening-art-source.json来源清单。
+剧情工具入口为`tools/story/extract.py extract/verify/movement`；movement子命令连接`tools/story/movement.py`，先回校验固定来源再输出命令。参数及支持范围见[提取流程](STORY_EXTRACTION.md)，不写游戏数据。opening-art同时导出原作转场精灵球，固定透明色与调色板，纳入opening-art-source.json来源清单。门帧不再写死是哪几扇：脚本按`field_door.c`的图组和`metatile_labels.h`，只为本内容实际走到的门格追加派生metatile，`door-anims.js`是运行时唯一门表，未列入的门不播放；重新运行按图集尾部的自有门图块整体替换，不累加。

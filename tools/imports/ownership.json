@@ -216,6 +216,7 @@
     "outputs": [
       "assets/wallclock-*.png",
       "packs/emerald/generated/wall-clock.js",
+      "packs/emerald/generated/door-anims.js",
       "assets/tiles-general-petalburg.png",
       "assets/opening-art-source.json"
     ],

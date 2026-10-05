@@ -1,6 +1,7 @@
-"""Import pinned wall-clock tilemaps, Littleroot doors and battle transition sprite; no source writes.
+"""Import pinned wall-clock tilemaps, door animation frames and battle transition sprite; no source writes.
 
-The door remains a visual metatile overlay: collision and warps are untouched.
+Door frames stay a visual metatile overlay: collision, behavior and warps keep the original
+metatile. Which doors are shipped is derived from the tiles this content actually walks on.
 Re-run after grid import. --check uses the same ownership and validation pipeline.
 """
 import argparse
@@ -69,45 +70,155 @@ session.text(session.dist / 'packs/emerald/generated/wall-clock.js',
              'export const WALL_CLOCK_HAND_OFFSETS = Object.freeze(' +
              json.dumps(coordinates, separators=(',', ':')) + '.map(Object.freeze));\n')
 
-# These IDs are reserved for this derived animation in the pack, never in the source.
+# Derived door metatiles: IDs 900+ are reserved inside the pack and never exist in the
+# reference. Each door occupies three open frames of one top and one bottom metatile; the
+# fully open appearance is the last frame, matching GetLastDoorFrame in src/field_door.c.
+DOOR_BASE = 900
+DOOR_BLOCK = 6
+DOOR_TILES = 24
+DOOR_FRAMES = 3
+# Tiles are addressed as palette<<12 | tile, and the merged tileset leaves this palette free.
+DOOR_TILE_PALETTE = 15
+# MetatileBehavior_IsDoor accepts exactly these two codes.
+DOOR_BEHAVIORS = (0x69, 0x8D)
+# Published before this importer covered every door; story content already references them,
+# so 584 keeps the 900-905 block and everything else is appended after it.
+PINNED_DOORS = (584,)
+DOOR_PALETTE_SOURCES = {
+    'general-petalburg': 'data/tilesets/secondary/petalburg/palettes',
+}
+
+
+def snake_case(name):
+    return re.sub(r'(?<=[a-z0-9])(?=[A-Z])', '_', name).lower()
+
+
+def native_door_table():
+    native = read('src/field_door.c').read_text()
+    labels = {name: int(value, 16) for name, value in re.findall(
+        r'#define\s+(METATILE_\w+)\s+0x([0-9A-Fa-f]+)',
+        read('include/constants/metatile_labels.h').read_text())}
+    palettes = {name: [int(v) for v in body.split(',')] for name, body in re.findall(
+        r'static const u8 sDoorAnimPalettes_(\w+)\[\]\s*=\s*\{([^}]*)\}', native)}
+    table = {}
+    for metatile, sound, size, tiles, pal in re.findall(
+            r'\{\s*(METATILE_\w+)\s*,\s*(DOOR_SOUND_\w+)\s*,\s*(\d+)\s*,'
+            r'\s*(sDoorAnimTiles_\w+)\s*,\s*(sDoorAnimPalettes_\w+)\s*\}',
+            native.split('sDoorAnimGraphicsTable[] =')[1].split('{},')[0]):
+        if metatile not in labels:
+            continue
+        table[labels[metatile]] = {
+            'label': metatile,
+            'sound': sound[len('DOOR_SOUND_'):].lower(),
+            'size': int(size),
+            'graphic': snake_case(tiles[len('sDoorAnimTiles_'):]),
+            'palettes': palettes[pal[len('sDoorAnimPalettes_'):]],
+        }
+    return table
+
+
+def content_doors(table):
+    """Metatiles this content both walks through and the reference can animate."""
+    found = {}
+    for ident, record in data['maps'].items():
+        tileset = record.get('tileset')
+        blocks, behavior = record.get('blocks'), record.get('behavior')
+        if not blocks or not behavior:
+            continue
+        for index, value in enumerate(blocks):
+            metatile = value & 1023
+            if behavior[index] not in DOOR_BEHAVIORS or metatile not in table:
+                continue
+            if tileset not in DOOR_PALETTE_SOURCES:
+                session.omit('door', ident, table[metatile]['label'],
+                             'No palette source for tileset ' + str(tileset))
+                continue
+            found.setdefault(metatile, {'tileset': tileset, 'maps': set()})['maps'].add(ident)
+    return found
+
+
+def door_plan(table, found):
+    order = [m for m in PINNED_DOORS if m in found] + sorted(
+        m for m in found if m not in PINNED_DOORS)
+    for position, metatile in enumerate(order):
+        if metatile in PINNED_DOORS and DOOR_BASE + DOOR_BLOCK * position != DOOR_BASE:
+            raise ValueError('Pinned door moved from its published metatiles: ' + str(metatile))
+        found[metatile].update(**table[metatile],
+                               base=DOOR_BASE + DOOR_BLOCK * position,
+                               offset=DOOR_TILES * position)
+    return order
+
+
+table = native_door_table()
+doors = content_doors(table)
+order = door_plan(table, doors)
+if not order:
+    raise ValueError('Content uses no door the reference can animate')
 pack = data['tilesets']['general-petalburg']
 image = Image.open(session.dist / 'assets/tiles-general-petalburg.png').convert('RGBA')
-start = pack['atlas']['tileCount']
-# On repeat import, replace our appended tiles instead of growing the atlas.
-keys = [str((15 << 12) | (960 + i)) for i in range(24)]
-if keys[0] in pack['lookup']:
-    start = pack['lookup'][keys[0]]
-    if pack['atlas']['tileCount'] != start + 24:
+count = DOOR_TILES * len(order)
+# A raw tile number is 10 bits; the palette nibble above it is free here, so the whole door
+# block lives under one unused palette slot instead of overflowing into the flip bits.
+previous = sorted(int(key) for key in pack['lookup'] if int(key) >> 12 == DOOR_TILE_PALETTE)
+if previous:
+    # On repeat import, replace our appended tiles instead of growing the atlas.
+    start = pack['lookup'][str(previous[0])]
+    if pack['atlas']['tileCount'] != start + len(previous):
         raise ValueError('Door atlas has additional downstream tiles; re-import grid before opening-art')
-count = start + 24
-atlas = Image.new('RGBA', (image.width, math.ceil(count / pack['columns']) * 8))
+    for key in previous:
+        del pack['lookup'][str(key)]
+else:
+    start = pack['atlas']['tileCount']
+total = start + count
+atlas = Image.new('RGBA', (image.width, math.ceil(total / pack['columns']) * 8))
 atlas.paste(image.crop((0, 0, atlas.width, min(image.height, atlas.height))))
-door = Image.open(read('graphics/door_anims/littleroot.png'))
-palettes = {i: palette(f'data/tilesets/secondary/petalburg/palettes/{i:02d}.pal') for i in (6, 10)}
-for frame in range(3):
-    tiles = []
-    for i in range(8):
-        key = keys[frame * 8 + i]
-        tile = door.crop((i % 2 * 8, frame * 32 + i // 2 * 8,
-                          i % 2 * 8 + 8, frame * 32 + i // 2 * 8 + 8))
-        output = paint(tile, palettes[10 if i < 2 else 6], True)
-        index = start + frame * 8 + i
-        atlas.paste(output, (index % pack['columns'] * 8, index // pack['columns'] * 8))
-        pack['lookup'][key] = index
-        tiles.append(int(key))
-    for half in range(2):
-        ident = str(900 + frame * 2 + half)
-        pack['metatiles'][ident] = tiles[half * 4:half * 4 + 4] + [0, 0, 0, 0]
-        pack['attributes'][ident] = 0
-pack['atlas'] = {'width': atlas.width, 'height': atlas.height, 'tileCount': count}
+animations = {}
+for metatile in order:
+    plan = doors[metatile]
+    directory = DOOR_PALETTE_SOURCES[plan['tileset']]
+    palettes = {slot: palette(f'{directory}/{slot:02d}.pal') for slot in sorted(set(plan['palettes']))}
+    art = Image.open(read(f"graphics/door_anims/{plan['graphic']}.png"))
+    frames = []
+    for frame in range(DOOR_FRAMES):
+        tiles = []
+        for i in range(8):
+            key = (DOOR_TILE_PALETTE << 12) | (plan['offset'] + frame * 8 + i)
+            index = start + plan['offset'] + frame * 8 + i
+            tile = art.crop((i % 2 * 8, frame * 32 + i // 2 * 8,
+                             i % 2 * 8 + 8, frame * 32 + i // 2 * 8 + 8))
+            atlas.paste(paint(tile, palettes[plan['palettes'][i]], True),
+                        (index % pack['columns'] * 8, index // pack['columns'] * 8))
+            pack['lookup'][str(key)] = index
+            tiles.append(key)
+        frames.append([])
+        for half in range(2):
+            ident = str(plan['base'] + frame * 2 + half)
+            pack['metatiles'][ident] = tiles[half * 4:half * 4 + 4] + [0, 0, 0, 0]
+            pack['attributes'][ident] = 0
+            frames[-1].append(plan['base'] + frame * 2 + half)
+    animations[metatile] = {'sound': plan['sound'], 'open': frames}
+pack['atlas'] = {'width': atlas.width, 'height': atlas.height, 'tileCount': total}
 session.image(atlas, session.dist / 'assets/tiles-general-petalburg.png')
 ball = Image.open(read('graphics/battle_transitions/pokeball.png'))
 session.image(paint(ball, palette('graphics/field_effects/palettes/pokeball.pal'), True),
               session.dist / 'assets/battle-transition-pokeball.png')
+session.text(session.dist / 'packs/emerald/generated/door-anims.js',
+             generated_header('import-opening-art.py', source) +
+             'export const DOOR_ANIMATIONS = Object.freeze({' +
+             ','.join(
+                 f'{metatile}:Object.freeze({{sound:{json.dumps(animations[metatile]["sound"])},'
+                 f'open:Object.freeze([' +
+                 ','.join('Object.freeze([' + ','.join(str(v) for v in pair) + '])'
+                          for pair in animations[metatile]['open']) +
+                 '])})'
+                 for metatile in sorted(animations)) +
+             '});\n')
 session.text(session.dist / 'assets/opening-art-source.json', json.dumps({
     'generator': 'tools/import.py opening-art', 'revision': source_revision(source),
     'inputs': sorted({x['path']: x for x in inputs}.values(), key=lambda x: x['path']),
-    'doorMetatiles': [[900, 901], [902, 903], [904, 905]],
+    'doorMetatiles': {str(metatile): [pair for pair in animations[metatile]['open']]
+                      for metatile in sorted(animations)},
 }, indent=2) + '\n')
+
 session.content(data)
 session.finish()

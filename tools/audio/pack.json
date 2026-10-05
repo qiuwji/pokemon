@@ -103,6 +103,11 @@
       "selection": "field-door"
     },
     {
+      "song": "SE_SLIDING_DOOR",
+      "config": "tracks/se-sliding-door.json",
+      "selection": "field-door-sliding"
+    },
+    {
       "song": "SE_LEDGE",
       "config": "tracks/se-ledge.json",
       "selection": "field-ledge"

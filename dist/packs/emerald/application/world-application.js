@@ -19,6 +19,7 @@ import {
   FieldTerrainService,
 } from "../../../engine/field-terrain.js";
 import { EMERALD_TERRAIN_RULES } from "../terrain-rules.js";
+import { DoorDirector, createDoorWarp } from "../door-animation.js";
 import { bindApplicationPorts } from "./ports.js";
 export const WORLD_PORTS = Object.freeze([
   "control",
@@ -431,6 +432,11 @@ export class WorldApplication {
     if (visit) this.worldState.commit(visit);
     this.resetTriggers();
     this.bindMovement();
+    this.doorDirector = new DoorDirector({
+      timeline: this.timeline,
+      maps: this.db.maps,
+      reducedMotion: this.reducedMotion,
+    });
     this.field = new FieldSession({
       maps: this.worldState.maps,
       prepareEntry: (map, options) => this.prepareEntry(map, options),
@@ -439,6 +445,11 @@ export class WorldApplication {
       motion: this.motion,
       transitions: this.transitions,
       movement: this.movement,
+      doorWarp: createDoorWarp({
+        director: this.doorDirector,
+        sound: (id) => this.ui?.sound?.(id),
+        reducedMotion: this.reducedMotion,
+      }),
       terrain: new FieldTerrainService(
         new FieldTerrainRegistry(
           this.catalog.terrainRules || EMERALD_TERRAIN_RULES,

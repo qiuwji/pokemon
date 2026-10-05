@@ -44,6 +44,10 @@ source 必须是 assets 下的 wav/ogg/mp3/m4a 文件。volume 为 0..1；loop �
 
 `packs/emerald/audio-library.js`提供confirm/purchase/reward/door/ledge/ball.throw/ball.shake/ball.open/heal/save/storage.pc及初始精灵cry。核心短音效已指向原SE/fanfare离线渲染资源，不再使用合成提示音。逐招式attack/hurt没有通用替代映射；未导入者保持安静。
 
+门音效按原作`GetDoorSoundEffect`分普通/滑动两类：pack传逻辑ID（`emerald:door`/`emerald:slidingDoor`），由适配器边界的`emeraldDoorSound`解析成已安装的cue；该cue缺失或不是sound时回退到普通开门音而不是静音，非门ID原样透传。
+
+滑动门SE已按原曲身份渲染并装入统一音频包：配置为`tools/audio/tracks/se-sliding-door.json`（音色组/音量/声部取自`midi.cfg`的`se_sliding_door.mid: -E -R50 -G_rs_sfx_2 -V095 -P4`，一次性音效），曲目登记在`tools/audio/pack.json`的`sounds`，cue为`emerald-audio:se_sliding_door`。登记与渲染有顺序要求：合并安装器对已声明未渲染的曲目直接报`Missing rendered track pack`，所以必须先渲染再写`pack.json`，否则文档里的安装命令会失败。回退分支保留给未装该包的构建（例如只装地图内容的最小包）。
+
 采样复制使用tools/import.py audio；MIDI曲目和一次性SE/fanfare使用[音频工具](../../../tools/audio/README.md)，固定来源、音色表、音量/混响/声部设置和哈希记录在合并包manifest。运行时只播放成品资源；不是通用MIDI音色，也没有宣称硬件逐位相同。具体流程见[音乐导入指南](../../../skills/emerald-story-reconstruction/references/music-import.md)。
 
 曲目保留原常量小写身份，例如MUS_LITTLEROOT→mus_littleroot.wav。按PCM帧确定loopStart/loopEnd，通过AudioBufferSourceNode循环曲身，不能用定时器重播引子。音乐选择在emeraldMusic：已准备的战斗优先，再取剧情覆盖或地图；求救阶段按旗标维持MUS_HELP。换曲/后台/静音恢复由适配器处理。完整冲浪/骑车及全作fanfare恢复政策仍需逐流程补充，查看STATUS而非历史数量。

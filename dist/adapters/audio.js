@@ -137,9 +137,15 @@ export class AudioAdapter {
         if (voice && token === this.musicGeneration) {
           const previous = this.musicVoice;
           this.musicVoice = voice;
-          if (previous && previous !== voice)
-            this.stopVoice(previous, previous.cue.fadeOutMs ?? 250);
-        }
+          if (previous && previous !== voice) {
+            // Crossfade: the outgoing fade must last at least as long as the incoming
+            // one, otherwise the summed level dips in the middle of the transition.
+            const incomingFade = this.cues.get(id)?.fadeInMs ?? 0;
+            this.stopVoice(
+              previous,
+              Math.max(previous.cue.fadeOutMs ?? 250, incomingFade),
+            );
+          }        }
         return voice;
       })
       .finally(() => {

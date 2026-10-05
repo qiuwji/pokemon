@@ -18,6 +18,7 @@ export class FieldSession {
     onWarp = () => {},
     onWarpStart = () => {},
     beforeWarp = () => false,
+    doorWarp = null,
     prepareEntry,
     elevation = null,
     onBlocked = () => {},
@@ -45,6 +46,7 @@ export class FieldSession {
       onWarp,
       onWarpStart,
       beforeWarp,
+      doorWarp,
       movement,
       terrain,
       canContinue,
@@ -106,12 +108,15 @@ export class FieldSession {
     this.npcs.clear();
     this.pending = this.pendingCell = this.movementPlan = null;
     this.cancelForced("disposed");
+    this.doorPlan = null;
+    this.warping = false;
     this.disposed = true;
   }
   get busy() {
     return (
       !!this.pending ||
       !!this.force ||
+      this.warping ||
       this.transitions.busy ||
       this.motion.moving(this.now())
     );
@@ -287,6 +292,18 @@ export class FieldSession {
       allowVacatedBy,
       ignoreActors: scripted ? ignoreActors : [],
     });
+    // A door opens while the player is still standing in front of it, so the step in is held
+    // back by the animation instead of running underneath it (src/field_screen_effect.c
+    // Task_DoDoorWarp opens the door before MOVEMENT_ACTION_WALK_NORMAL_UP).
+    this.doorPlan =
+      !scripted && result?.warp && this.doorWarp
+        ? this.doorWarp.enter({
+            map: from.map,
+            direction,
+            door: { ...this.position },
+            to: { ...result.warp },
+          })
+        : null;
     const visual = {
       freezeAnimation: this.movement?.registry.get(this.stepMode).presentation.freezeAnimation,
       ...this.movement?.techniqueVisual(),
@@ -306,7 +323,7 @@ export class FieldSession {
     const ledge = result.jump
       ? this.movement?.registry.get(this.stepMode).ledge
       : null;
-    this.motion.begin(from, this.position, this.now(), {
+    this.motion.begin(from, this.position, this.now() + (this.doorPlan?.holdMs || 0), {
       running,
       ...(this.movementPlan
         ? { mode: this.movementPlan.mode, duration: this.movementPlan.duration }
@@ -363,26 +380,57 @@ export class FieldSession {
       this.scriptedStep = false;
       return;
     }
-    // Coordinate scripts may take control before a warp on the same landed cell.
-    if (result.warp && this.beforeWarp(cell)) return;
+    // Coordinate scripts may take control before a warp on the same landed cell. The step
+    // still opened the door on the way in, so it has to be put back before they take over.
+    if (result.warp && this.beforeWarp(cell)) {
+      this.doorPlan?.cancel?.();
+      this.doorPlan = null;
+      return;
+    }
     if (result.warp) {
-      this.onWarpStart({ from: { ...this.position }, to: { ...result.warp } });
-      void this.transitions
-        .run("door", () => {
-          const { map, x, y, dir } = result.warp;
-          this.cancelForced("warp");
-          const from = { ...this.position };
-          if (this.world.enter(map, x, y, dir)) this.onWarp({ from, to: { ...this.position } });
-          this.motion.snap(this.position);
-        })
-        .then(() => {
-          this.onStep(this.world.cell(this.position.x, this.position.y));
-          this.scheduleForced(this.lastDirection);
-        });
+      const plan = this.doorPlan;
+      this.doorPlan = null;
+      void this.runWarp(result.warp, plan);
     } else {
       this.onStep(cell);
       this.scheduleForced(this.lastDirection);
       this.continueForced();
+    }
+  }
+  /**
+   * Door swaps run outside the transition: the door closes, and only then does the screen
+   * cover the map change (src/field_screen_effect.c Task_DoDoorWarp states 0-4).
+   */
+  async runWarp(warp, plan) {
+    this.warping = true;
+    try {
+      if (plan) await plan.close();
+      else this.onWarpStart({ from: { ...this.position }, to: { ...warp } });
+      let exit = null;
+      const covered = await this.transitions.run("door", () => {
+        const { map, x, y, dir } = warp;
+        this.cancelForced("warp");
+        const from = { ...this.position };
+        if (this.world.enter(map, x, y, dir)) this.onWarp({ from, to: { ...this.position } });
+        this.motion.snap(this.position);
+        // The arrival is up while the screen is still covered, so a player hidden behind
+        // the old door is restored and the new door, if any, is already drawn open.
+        this.doorWarp?.arrive?.();
+        exit =
+          this.doorWarp?.exit?.({ map, position: { ...this.position } }) || null;
+        exit?.open?.();
+      });
+      if (!covered) {
+        // A refused transition still has to give the player back.
+        this.doorWarp?.arrive?.();
+        return;
+      }
+      this.onStep(this.world.cell(this.position.x, this.position.y));
+      this.scheduleForced(this.lastDirection);
+      if (exit) await exit.close();
+    } finally {
+      this.doorPlan = null;
+      this.warping = false;
     }
   }
 }

@@ -1,0 +1,66 @@
+{
+  "status": "code-validation-passed",
+  "version": "0.37.0",
+  "baseCommit": "671165c",
+  "coreTests": {
+    "passed": 1034,
+    "failed": 0
+  },
+  "pluginTests": {
+    "passed": 36,
+    "failed": 0
+  },
+  "contentImport": {
+    "script": "tools/import.py opening-art --check",
+    "changes": 0,
+    "note": "re-running the door frame import proposes no further changes"
+  },
+  "browser": "not-run; user handles gameplay, touch and listening acceptance",
+  "limits": [
+    "The sliding-door SE is rendered and installed (emerald-audio:se_sliding_door) but its listening acceptance is the user's, per project convention. Automatic checks only prove the cue resolves, the file is not silent, and reinstalling the pack is a no-op.",
+    "Only the five door metatiles this content walks on are imported, all from the general-petalburg tileset.",
+    "The player still arrives on the passable mat and not on the solid door tile, so the one-tile walk out of the doorway is the reference arrival cell rather than a replayed step.",
+    "Door frames are a transient render-layer overlay; they are never written to world patch state."
+  ],
+  "logs": {
+    "audio-tools.log": "99c0da505c93ece9d768e9c59ac20dffb1dd211308116203a59c4e68b4e729eb",
+    "check.log": "88438b6be16e218157ece1a01d807edc5cd004f4d17f7f50a73c7a8453bd37e9",
+    "core-tests.log": "2eea1f86de5818fb2d72e91c306d61241006f7f8d0a710c1e3ec60fa85a5036c",
+    "import-check.log": "bb8a78fd19763b7ec1748098741ec0fcea1de5b5ba50894f2a726231d5353d7f",
+    "plugin-tests.log": "4fa5aaac61f9aeb8cd3a15f2383040a1878a2170ca1e3c7de6e423152f18b2a0",
+    "se-sliding-door-preflight.log": "5a505d479fb148476382358c962f86f1ca41c960a6381ee675a3e01066d026b4"
+  },
+  "inputs": {
+    "dist/adapters/canvas-renderer.js": "39df675fe4ebe3ca734ce25045ddbe9940f1503ca87640889fe29bbe48a86188",
+    "dist/app.js": "0b8d80082bad134182667451c2aac3895ff443b73f6c3af17d317d583ccad863",
+    "dist/assets/opening-art-source.json": "19d5fc997a571abc05e817d972b43f2a74c743acbbf215baedee4544da98c1e0",
+    "dist/assets/tiles-general-petalburg.png": "28674ee5595db3810b7cf34516bdd007ddf978300cd2f06e03f31bdd00246739",
+    "dist/content/tilesets/general-petalburg.json": "467f783ea4484156013acedc83ab234dff10d8e780cc5c54439857fdd62b0427",
+    "dist/engine/field-session.js": "2b674627ed0d638814a9bdd0c1dbf3e81763c22ed8da8ac738255a029dcba4ba",
+    "dist/engine/motion.js": "e502de4a33e5bcf567101e183600718c2ff37803da305e62c81bf62845c5c7a8",
+    "dist/engine/world.js": "3d99a8e1189b9cc457244f3af93df8106be8a2c777fe58fbde90a67b6b45092b",
+    "dist/packs/emerald/application/public-ports.js": "4bfcefc2028c6661b28a30ed270b723cd6e8dced0c46b4d77460d6630b6de386",
+    "dist/packs/emerald/application/world-application.js": "e4012aa5a72a1cb1ec6139d4352898de1e906960211ecbdd93ae2cf0b9660628",
+    "dist/packs/emerald/audio-library.js": "0d6808bc7cc1c736c81f85331a091329a3290cefe87d386b920a90a71d42c465",
+    "dist/packs/emerald/door-animation.js": "945572976a26496a718d6fe1fcc267f5dd3412632942da02af2be69087cfb0c6",
+    "dist/packs/emerald/generated/door-anims.js": "c2b2484abc59480c543ff5cc0d5d97e9128f37fa9b05f3c4791927fc01a68192",
+    "tests/door-animation.test.js": "16990a4ad9aa761ce722f35fb3aca4ef163d6785643dddf36285ca629c1e8591",
+    "tests/opening-choreography.test.js": "4c037b50c09e134619cf7aafb88eb1616218172b052221594ccaeccac0eb5e95",
+    "tools/audio/tracks/se-sliding-door.json": "9ee200f281c3f504dc43221c8830b17357321075aed07032fe76afdbe368b42a",
+    "tools/imports/commands/region/import-opening-art.py": "4dfe5bbe4cbdd851aacfedfaaa3532836554c9284cfa0f1139be0383392529b0"
+  },
+  "audioPack": {
+    "renderer": "poryaaaa 4000591de6c397b6c80adc07af17144e26b30dfd",
+    "tracksRerendered": 32,
+    "installChanges": [
+      "assets/audio/emerald-audio/sounds/se_sliding_door.wav",
+      "assets/audio/emerald-audio/manifest.json",
+      "plugins/emerald-audio.js"
+    ],
+    "existingAudioRewritten": 0
+  },
+  "audioToolTests": {
+    "passed": 6,
+    "failed": 0
+  }
+}

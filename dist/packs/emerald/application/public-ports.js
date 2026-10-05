@@ -32,6 +32,7 @@ export const APPLICATION_FIELDS = Object.freeze({
   fishing: "fieldActions",
   field: "world",
   fieldDirector: "world",
+  doorDirector: "world",
   worldState: "world",
   lastEncounterSteps: "encounters",
   saveStore: "save",

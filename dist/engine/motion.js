@@ -120,6 +120,12 @@ export class GridMotion {
   moving(now) {
     return this.to !== null && now < this.start + this.duration;
   }
+  /** Time left before the step lands; a step scheduled ahead is not part of it. */
+  remaining(now) {
+    return this.duration && this.to !== null
+      ? Math.max(0, this.start + this.duration - now)
+      : 0;
+  }
   begin(
     from,
     to,
@@ -166,6 +172,8 @@ export class GridMotion {
     )
       this.snap(position);
     const end = this.graph.point(this.to),
+      // A step may be scheduled ahead of the clock; until then the player just stands there.
+      waiting = this.duration > 0 && now < this.start,
       t = this.duration
         ? now >= this.start + this.duration
           ? 1
@@ -182,20 +190,25 @@ export class GridMotion {
       y: this.from.y + (end.y - this.from.y) * t,
       zone: end.zone,
       progress: t,
-      moving: t < 1,
+      moving: !waiting && t < 1,
       dir:
         t < this.turnAt
           ? this.sourcePosition.dir
           : t < 1
             ? this.dir
             : position.dir,
-      running: t < 1 && this.running,
+      running: !waiting && t < 1 && this.running,
       mode: this.mode || "walk",
       foot: this.foot,
-      freezeAnimation: t < 1 && !!this.freezeAnimation,
-      pose: t < 1 ? this.pose : this.idlePose || "normal",
-      animationTimeMs:
-        t < 1
+      freezeAnimation: !waiting && t < 1 && !!this.freezeAnimation,
+      pose: waiting
+        ? this.idlePose || "normal"
+        : t < 1
+          ? this.pose
+          : this.idlePose || "normal",
+      animationTimeMs: waiting
+        ? Math.max(0, now - (this.idleStart || 0))
+        : t < 1
           ? Math.max(0, now - this.start)
           : Math.max(0, now - (this.idleStart || 0)),
       lift:

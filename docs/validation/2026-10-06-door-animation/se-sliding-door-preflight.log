@@ -1,0 +1,12 @@
+{
+  "song": "SE_SLIDING_DOOR",
+  "voicegroup": "rs_sfx_2",
+  "output": "/private/tmp/se-slide-check",
+  "kind": "sound",
+  "oneShot": true,
+  "introFrames": 0,
+  "loopStartFrame": null,
+  "loopEndFrame": null,
+  "sampleRate": 44100,
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881"
+}

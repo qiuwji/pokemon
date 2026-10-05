@@ -1,6 +1,21 @@
 # 当前开发与验证记录
 
 
+## 2026-10-06 · 0.37.0 · 开关门动画
+
+入场与离场不再是「踩到门格立刻淡出换图」。按`src/field_door.c`与`src/field_screen_effect.c`的`Task_DoDoorWarp`/`Task_ExitDoor`补齐时序：**原位开门→玩家走进门→门在身后关→淡出换图**；离场方向相反，淡入时门已经是开的，玩家走出后门在其身后关上。
+
+门帧来自原作`graphics/door_anims/*.png`，由`import-opening-art.py`按`field_door.c`的`sDoorAnimGraphicsTable`和`metatile_labels.h`自动匹配本内容实际走到的门格（584未白镇住宅/585小田卷研究所/647古辰镇住宅/65商店/97宝可梦中心），追加为metatile 900–929并生成`packs/emerald/generated/door-anims.js`。列在表的门**不**通过行为码二次判断，判定只读基础地图图块，因此剧情已有的visit覆盖不会改变是否播放动画。
+
+新门帧是**只读的瞬时渲染层**，与既有的visit视觉覆盖无关：碰撞、行为、warp和存档一律保持原图块，等价于原作把门图块拷进VRAM。渲染端口新增一帧门图块（上/下两个metatile），App每帧采样`DoorDirector`。
+
+玩家进门时**可见地走进门洞**（门保持打开），门在其身后关闭的同时隐藏贴图，并隐藏状态一直保持到新地图装配完成——否则人物会在淡出前重新出现在关着的门里。出门方向不隐藏人物（原作`Task_ExitDoor`不隐藏）。
+
+门音效按metatile取原作`GetDoorSoundEffect`的普通/滑动两类。滑动门缺的那条`SE_SLIDING_DOOR`本轮补上：按[tools/audio/README.md](../../tools/audio/README.md)获取固定修订`4000591d`的poryaaaa渲染器，用`tools/audio/tracks/se-sliding-door.json`（取自`midi.cfg`的`-G_rs_sfx_2 -V095 -P4`）渲染出`se_sliding_door.wav`，登记进`pack.json`并重跑合并安装。安装前用`--check`确认过**只有新音效、manifest与插件三处变化，既有音频零重写**，说明离线渲染对已验收资源逐字节可复现。pack只说门的类别，适配器边界解析cue，未装该包时回退普通开门音而不是静音。
+
+存档、图块与碰撞字段零改动；门动画不写世界补丁状态。核心1034/1034、独立插件36/36、音频工具6/6、`npm run check`通过；`tools/import.py opening-art --check`重跑无新增改动。**未做浏览器验收**，实际观感与听音由用户确认；证据见[本轮记录](../validation/2026-10-06-door-animation/manifest.json)。
+
+
 ## 2026-10-06 · 0.36.1 · 音乐渐变、地图名称与停用插件存档
 
 先提交既有页面/角色/素材交付（5d28b1b），再按用户顺序完成3、4、1。音频包统一BGM渐入500ms/渐出250ms，播放器等新曲解码成功才交叉切换，回到仍播放的曲目不重启，加载失败可重试；SE即时，WAV/循环边界不变。室内不弹地图名，进入室内立即清除旧提示，室外按元数据配置。

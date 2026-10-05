@@ -191,10 +191,14 @@ for(const gender of ['male','female']) test(`${gender}: returning to the lab aut
 });
 
 const finishStep = async (s, dir) => {
-  assert(s.game.move(dir));
-  await s.game.timeline.wait(s.game.motion.duration);
-  s.game.field.tick(s.game.timeline.now());
-  await s.settle(); await s.game.flushStoryQueue(); await s.settle();
+  const g=s.game;
+  assert(g.move(dir));
+  // Stepping into a door schedules the walk behind the door opening, so drain the arranged
+  // clock until the step has actually landed; plain steps settle after one duration.
+  for(let i=0;i<8&&g.motion.moving(g.timeline.now());i++)
+    await g.timeline.wait(g.motion.remaining(g.timeline.now())||g.motion.duration);
+  g.field.tick(g.timeline.now());
+  await s.settle(); await g.flushStoryQueue(); await s.settle();
 };
 for (const gender of ['male','female']) {
   test(`${gender}: receiving shoes preserves both upstairs warps and own-home projections`,async()=>{

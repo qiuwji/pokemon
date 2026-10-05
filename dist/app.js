@@ -15,6 +15,7 @@ import {
   createEmeraldAudio,
   emeraldMusic,
   emeraldBattleSound,
+  emeraldDoorSound,
 } from "./packs/emerald/audio-library.js";
 import { SceneDirector } from "./presentation/scene-director.js";
 import { SceneDOM } from "./adapters/scene-dom.js";
@@ -181,7 +182,11 @@ async function boot() {
       patterns,
       onError: console.error,
     });
-    const mapName = new MapNameDOM({ element: $("scene-name") });
+    const mapName = new MapNameDOM({
+      element: $("scene-name"),
+      schedule: setTimeout.bind(window),
+      cancel: clearTimeout.bind(window),
+    });
     const adventure = new EmeraldAdventure({
       playActive: () => !document.hidden,
       db,
@@ -216,7 +221,7 @@ async function boot() {
     const { bus } = attachEmeraldExtensions(adventure, host);
     game = createEmeraldCommandFacade(adventure, bus);
     const ui = createEmeraldInterface(game, {
-      sound: (id) => audio.play(id),
+      sound: (id) => audio.play(emeraldDoorSound(id, audio.cues)),
       extensionAssets: assets,
       audioSettings: {
         enabled: () => audio.enabled,
@@ -307,6 +312,7 @@ async function boot() {
             movementMode: game.state.movement.mode,
             travel: game.travelDirector.sample(now),
             action: game.actionDirector.sample(now),
+            door: game.doorDirector?.sample(now) || null,
           });
         sceneOverlay.render(sceneDirector.sample(now));
         overlay.render(transitions.sample(now));

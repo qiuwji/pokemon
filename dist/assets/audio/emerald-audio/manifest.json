@@ -66,11 +66,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_littleroot.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 54.16662131519274,
-        "loopEnd": 107.49990929705216,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 107.49990929705216
       },
       "assetSha256": "8e8bdb813ff42554f5693517cce489e124b357ac28a8d9380bab0ea770c15044",
       "frames": 4740746,
@@ -90,7 +90,8 @@
         "reverb": 50,
         "polyphony": 5,
         "pcmMixRate": 13379,
-        "cueVolume": 0.6
+        "cueVolume": 0.6,
+        "defaultEnabled": true
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -111,11 +112,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_route101.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 33.947324263038546,
-        "loopEnd": 67.63149659863946,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 67.63149659863946
       },
       "assetSha256": "1ef8a68aa11c0f85d54a2e9323f63fecbf76e0ef730899e2b67a63827a8c1d07",
       "frames": 2982549,
@@ -135,7 +136,8 @@
         "reverb": 50,
         "polyphony": 5,
         "pcmMixRate": 13379,
-        "cueVolume": 0.6
+        "cueVolume": 0.6,
+        "defaultEnabled": true
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -156,11 +158,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_oldale.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 38.4,
-        "loopEnd": 76.8,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 76.8
       },
       "assetSha256": "3c7975b34ddba2467dafce8416da970afdc8b7dde1f35d7cdcda8926bb1a2ff5",
       "frames": 3386880,
@@ -180,7 +182,8 @@
         "reverb": 50,
         "polyphony": 5,
         "pcmMixRate": 13379,
-        "cueVolume": 0.6
+        "cueVolume": 0.6,
+        "defaultEnabled": true
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -201,11 +204,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_birch_lab.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 28.8,
-        "loopEnd": 57.6,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 57.6
       },
       "assetSha256": "a6e34cb8f5f686e3ca1c66aadaacc9d2499400f971806d6571e6b62892fbc4ca",
       "frames": 2540160,
@@ -225,7 +228,8 @@
         "reverb": 50,
         "polyphony": 5,
         "pcmMixRate": 13379,
-        "cueVolume": 0.6
+        "cueVolume": 0.6,
+        "defaultEnabled": true
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -246,11 +250,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_poke_center.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 39.23077097505669,
-        "loopEnd": 76.15385487528344,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 76.15385487528344
       },
       "assetSha256": "292cbe84aec4255ea14719fae120eff9e1275b42ca2076df8036071243bbb810",
       "frames": 3358385,
@@ -270,7 +274,8 @@
         "reverb": 50,
         "polyphony": 5,
         "pcmMixRate": 13379,
-        "cueVolume": 0.6
+        "cueVolume": 0.6,
+        "defaultEnabled": true
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -291,11 +296,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_poke_mart.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 44.65113378684807,
-        "loopEnd": 83.7208843537415,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 83.7208843537415
       },
       "assetSha256": "c6289664a033cce34a68b3b6714208b19cfdf37ee569e964aa7d301e77107c51",
       "frames": 3692091,
@@ -315,7 +320,8 @@
         "reverb": 50,
         "polyphony": 5,
         "pcmMixRate": 13379,
-        "cueVolume": 0.6
+        "cueVolume": 0.6,
+        "defaultEnabled": true
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -336,11 +342,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_vs_wild.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 52.65299319727891,
-        "loopEnd": 91.83662131519274,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 91.83662131519274
       },
       "assetSha256": "0421d5320f71eb121ded754143b27741d492550bbea1794f425fb07a7d49fd47",
       "frames": 4049995,
@@ -361,7 +367,8 @@
         "polyphony": 5,
         "pcmMixRate": 13379,
         "cueVolume": 0.6,
-        "defaultEnabled": true
+        "defaultEnabled": true,
+        "selection": "battle-wild"
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -382,11 +389,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_vs_trainer.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 89.69687074829932,
-        "loopEnd": 167.27253968253967,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 167.27253968253967
       },
       "assetSha256": "eb19b523fe30ae52af3e60a077a24f1899b06d84058bda8b0ee68fcc294fca93",
       "frames": 7376719,
@@ -407,7 +414,8 @@
         "polyphony": 5,
         "pcmMixRate": 13379,
         "cueVolume": 0.6,
-        "defaultEnabled": true
+        "defaultEnabled": true,
+        "selection": "battle-trainer"
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -428,11 +436,11 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_vs_rival.wav",
         "volume": 0.6,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 64.89786848072562,
-        "loopEnd": 117.55086167800454,
-        "fadeInMs": 500,
-        "fadeOutMs": 250
+        "loopEnd": 117.55086167800454
       },
       "assetSha256": "1786f5a95853d72ef83d88d461a430587a718e2f1b2f5d2d38416b095c0cc58a",
       "frames": 5183993,
@@ -453,7 +461,8 @@
         "polyphony": 5,
         "pcmMixRate": 13379,
         "cueVolume": 0.6,
-        "defaultEnabled": true
+        "defaultEnabled": true,
+        "selection": "battle-rival"
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -876,6 +885,52 @@
         "oneShot": true,
         "kind": "sound",
         "selection": "ui"
+      },
+      "renderer": {
+        "repository": "https://github.com/huderlem/poryaaaa",
+        "revision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
+      },
+      "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
+    },
+    {
+      "song": "SE_SLIDING_DOOR",
+      "kind": "sound",
+      "selection": "field-door-sliding",
+      "title": "滑动门",
+      "config": "tracks/se-sliding-door.json",
+      "cueId": "emerald-audio:se_sliding_door",
+      "source": "assets/audio/emerald-audio/sounds/se_sliding_door.wav",
+      "cue": {
+        "kind": "sound",
+        "source": "assets/audio/emerald-audio/sounds/se_sliding_door.wav",
+        "volume": 0.6,
+        "fadeInMs": 0,
+        "fadeOutMs": 0,
+        "loop": false
+      },
+      "assetSha256": "9692e535c91410ea4281c7f1c322d21b190b84ef3ce7a5a39f5a530235db6d2a",
+      "frames": 11025,
+      "durationSeconds": 0.25,
+      "midiLoopStartFrame": 0,
+      "midiLoopEndFrame": 0,
+      "renderConfig": {
+        "id": "se-sliding-door",
+        "title": "滑动门",
+        "song": "SE_SLIDING_DOOR",
+        "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+        "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "midi": "sound/songs/midi/se_sliding_door.mid",
+        "voicegroup": "rs_sfx_2",
+        "sampleRate": 44100,
+        "songVolume": 95,
+        "reverb": 50,
+        "polyphony": 4,
+        "pcmMixRate": 13379,
+        "cueVolume": 0.6,
+        "oneShot": true,
+        "kind": "sound",
+        "selection": "field-door-sliding"
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -2819,6 +2874,7 @@
     "se-save",
     "se-select",
     "se-shop",
+    "se-sliding-door",
     "se-truck-door",
     "se-truck-move",
     "se-truck-stop",

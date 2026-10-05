@@ -1,0 +1,48 @@
+
+> emerald-web-engine@0.37.0 test:plugins
+> node --test examples/*.test.js
+
+✔ plugin actor identity and memory survive save restore (285.036375ms)
+✔ Default AI observer exposes compact live state and commands; observation does not mutate the game (289.383167ms)
+✔ Actual catalog defaults to AI control and the original BGM packs; the test fixture requires an explicit test environment (22.152458ms)
+✔ Test harness prepares through atomic intents, retries once and exposes dialogue reward evidence (373.74675ms)
+✔ Test harness preparation rolls back its reward and memory when party creation has no capacity (181.252333ms)
+✔ AI detail projections include cultivation, catalog move/item details, collection and task destinations without RNG or save writes (132.358791ms)
+✔ NPC confirmed-talk metadata survives save reload; observations describe interactions and current opponents (253.129625ms)
+✔ registered move effect runs in a real trainer turn (265.51775ms)
+✔ Installed original-song pack selects its named asset and loops without restarting the intro (249.725084ms)
+✔ Every manifest track has a matching registered cue, and the pack owns no stale module (146.526375ms)
+✔ Installed plugin catalog references existing modules and default startup composes its actual contents (288.00425ms)
+✔ registered text effect reaches an NPC dialogue through the story application (256.845584ms)
+✔ a plugin controls step encounters and opens a contact-owned wild battle (288.447125ms)
+✔ JSON-only facility plugin loads through the catalog and runs all three authored templates (587.377417ms)
+✔ non-battle facility progresses and settles once (289.64975ms)
+✔ plugin field plan commits through the public command (316.46325ms)
+✔ first plugin uses registered content and public reward transaction (360.488792ms)
+✔ Optional flight plugin provisions a real Fly partner and badge once through domain commands (522.470375ms)
+✔ Takeoff uses native gendered rider art, a 1.5-axis view and light haze; landing restores ground visuals (228.743583ms)
+✔ Air traversal crosses solid terrain while invalid landing remains airborne; successful landing rebases elevation (191.851709ms)
+✔ Fly replacement does not teleport and airborne saves restore mode-derived presentation (126.975917ms)
+✔ Flight cannot start indoors or land on occupants, reserved cells, water or entrance warps (107.541708ms)
+✔ Committed Fly art matches recorded hashes, is native 32x32 and belongs to the plugin directory (1.328709ms)
+✔ A full party receives no partial kit and retries on an idle field boundary after a slot is freed (100.095375ms)
+✔ Air mode crosses the real town/route connection without starting a grounded story or encounter (107.325042ms)
+✔ Selected Fly partner uses plugin takeoff and landing from the native party action without teleporting (106.431459ms)
+✔ a plugin mounts a looping clickable visual with saved interaction and host cleanup (308.2085ms)
+✔ detail entry renders a clickable action with persistent memory (292.772375ms)
+✔ a registered field scene focuses the view and gates a subsequent reward (278.093084ms)
+✔ a registered detail clip is selected, sampled and cleaned up by the real player (192.898708ms)
+✔ bundle registers an NPC, shared dialogue and choice with durable reward (263.584459ms)
+✔ data story arrival chooses a branch and persists its variable (225.613292ms)
+✔ late invalid intent rolls back plugin memory and world money (209.615667ms)
+✔ a plugin composes appearance, camera range and independent fog (232.23225ms)
+✔ a mod discovers, replaces and reads back an existing sign dialogue (226.519958ms)
+✔ registered NPC triggers a once-only data story (186.785792ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2524.17525

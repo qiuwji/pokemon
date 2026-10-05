@@ -1,0 +1,18 @@
+{
+ "id": "se-sliding-door",
+ "title": "滑动门",
+ "song": "SE_SLIDING_DOOR",
+ "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+ "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+ "midi": "sound/songs/midi/se_sliding_door.mid",
+ "voicegroup": "rs_sfx_2",
+ "sampleRate": 44100,
+ "songVolume": 95,
+ "reverb": 50,
+ "polyphony": 4,
+ "pcmMixRate": 13379,
+ "cueVolume": 0.6,
+ "oneShot": true,
+ "kind": "sound",
+ "selection": "field-door-sliding"
+}

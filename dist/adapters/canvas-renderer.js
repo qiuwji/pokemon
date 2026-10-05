@@ -225,6 +225,20 @@ export class Renderer {
           now,
         );
   }
+  /** Transient door frames from the field session; never part of the saved map. */
+  doorTiles(frame, now) {
+    // A hidden player between two doors carries no tile to draw.
+    if (frame.top == null && frame.bottom == null) return;
+    const m = this.mapProvider?.(frame.map),
+      origin = this.graph.placements[frame.map];
+    if (!m || !origin) return;
+    const pack = this.db.tilesets[m.tileset],
+      x = (origin.x + frame.x) * 16 - this.camera.x,
+      y = (origin.y + frame.y) * 16 - this.camera.y;
+    // A door is two metatiles tall: the upper half paints the wall tile above the doorway.
+    if (frame.top !== null) this.grid(pack, frame.top, x, y - 16, false, now);
+    if (frame.bottom !== null) this.grid(pack, frame.bottom, x, y, false, now);
+  }
   cameraAt(position, now) {
     const size = { width: this.canvas.width, height: this.canvas.height, raster: true };
     const supplied = this.projection(size, now);
@@ -244,7 +258,7 @@ export class Renderer {
     world,
     npcs,
     now = performance.now(),
-    { emotes = [], movementMode = "walk", travel = null, action = null } = {},
+    { emotes = [], movementMode = "walk", travel = null, action = null, door = null } = {},
   ) {
     this.mapProvider = (id) => world.maps[id];
     const p = world.position,
@@ -296,6 +310,8 @@ export class Renderer {
           );
         }
       for (const id of ids) this.drawMap(id, false, now);
+      // The door swap draws into the background layer, so it sits under every object.
+      if (door) this.doorTiles(door, now);
       const offsets = this.objectTransforms(now);
       const all = ids.flatMap((id) => {
         const o = this.graph.placements[id];
@@ -327,6 +343,8 @@ export class Renderer {
       all.sort((a, b) => priority(b) - priority(a) || a.py - b.py);
       const drawActors = (actors) => {
         for (const n of actors) {
+          // The reference hides the player while the door closes over him.
+          if (n.player && door?.hidePlayer) continue;
           const avatar = n.player ? action?.player || {} : {};
           const x = n.px - this.camera.x + (avatar.x || 0),
             y = n.py - this.camera.y + (avatar.y || 0);
