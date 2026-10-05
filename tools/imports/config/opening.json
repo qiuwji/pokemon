@@ -253,6 +253,15 @@
         }
       },
       {
+        "id": "NinjaBoy",
+        "path": "graphics/object_events/pics/people/ninja_boy.png",
+        "palette": "graphics/object_events/palettes/npc_1.pal",
+        "definition": {
+          "w": 16,
+          "h": 16
+        }
+      },
+      {
         "id": "Girl3",
         "path": "graphics/object_events/pics/people/girl_3.png",
         "palette": "graphics/object_events/palettes/npc_2.pal",

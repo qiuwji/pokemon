@@ -99,9 +99,9 @@ export function nativeMovement(type) {
   const dir = initialFacings.get(type);
   if (!dir) throw new Error(`Unknown Emerald movement type: ${type}`);
   let mode = "still";
-  if (type.startsWith("MOVEMENT_TYPE_WANDER")) mode = "wander";
-  else if (/^MOVEMENT_TYPE_WALK_(LEFT_AND_RIGHT|RIGHT_AND_LEFT)$/.test(type)) mode = "horizontal";
-  else if (/^MOVEMENT_TYPE_WALK_(UP_AND_DOWN|DOWN_AND_UP)$/.test(type)) mode = "vertical";
+  if (/^MOVEMENT_TYPE_(WANDER|WALK)_(LEFT_AND_RIGHT|RIGHT_AND_LEFT)$/.test(type)) mode = "horizontal";
+  else if (/^MOVEMENT_TYPE_(WANDER|WALK)_(UP_AND_DOWN|DOWN_AND_UP)$/.test(type)) mode = "vertical";
+  else if (type.startsWith("MOVEMENT_TYPE_WANDER")) mode = "wander";
   else if (type === "MOVEMENT_TYPE_LOOK_AROUND") mode = "look";
   else if (/^MOVEMENT_TYPE_(WALK|JOG|RUN|WALK_SLOWLY)_IN_PLACE_/.test(type)) mode = "jog";
   return { dir, mode };

@@ -17,7 +17,7 @@ export function openingObjects(state) {
   if (home[2] === '1F') {
     if (!isOwn) return [
       native('neighbor.mom', 'Woman4', 'LOCALID_RIVALS_HOUSE_1F_MOM'),
-      native('neighbor.sibling', 'LittleGirl', '3', { name: '小女孩' }),
+      native('neighbor.sibling', 'NinjaBoy', '6', { name: '小男孩' }),
       ...(f.meetingRivalDownstairs ? [native('neighbor.rival.downstairs', mirrored ? 'MayNormal' : 'BrendanNormal', 'LOCALID_RIVALS_HOUSE_1F_RIVAL')] : []),
     ];
     const stage = f.introState ?? 7;

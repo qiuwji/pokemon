@@ -36,11 +36,46 @@ test('Native facing uses the exact movement table, including asymmetric directio
   assert.equal(nativeMovement('MOVEMENT_TYPE_WANDER_RIGHT_AND_LEFT').dir,'right');
   assert.equal(nativeMovement('MOVEMENT_TYPE_WANDER_DOWN_AND_UP').dir,'down');
   assert.equal(nativeMovement('MOVEMENT_TYPE_JOG_IN_PLACE_UP').mode,'jog');
+  for (const suffix of ['LEFT_AND_RIGHT','RIGHT_AND_LEFT'])
+    assert.equal(nativeMovement(`MOVEMENT_TYPE_WANDER_${suffix}`).mode,'horizontal');
+  for (const suffix of ['UP_AND_DOWN','DOWN_AND_UP'])
+    assert.equal(nativeMovement(`MOVEMENT_TYPE_WANDER_${suffix}`).mode,'vertical');
+  assert.equal(nativeMovement('MOVEMENT_TYPE_WANDER_AROUND').mode,'wander');
   assert.throws(()=>nativeMovement('MOVEMENT_TYPE_TYPO'),/Unknown/);
 });
 
 for(const gender of ['male','female']) {
   const female=gender==='female', other=`LittlerootTown_${female?'Brendans':'Mays'}House_`;
+  test(`${gender}: neighbor sibling binds to the child and wanders horizontally, away from the TV`,async()=>{
+    const s=setup(gender),g=s.game,map=other+'1F';
+    await enter(s,map,female?8:2,8);
+    const child=()=>g.field.npcs.objects(map).find(o=>o.id==='neighbor.sibling');
+    const origin=[female?1:9,5,'left'];
+    assert.deepEqual(pose(child()),origin);
+    assert.equal(child().sourceLocalId,'6');
+    assert.equal(child().script,'RivalsHouse_1F_EventScript_RivalSibling');
+    assert.equal(child().actor,'NinjaBoy');
+    assert.deepEqual(s.db.actors.NinjaBoy,{w:16,h:16});
+    assert.equal(child().movement.mode,'horizontal');
+    assert(!g.field.npcs.objects(map).some(o=>o.id.startsWith('house.mover.')));
+    const npcs=g.field.npcs;
+    npcs.random=()=>female?0.8:0.4;
+    child().next=0;
+    npcs.tick(npcs.now+3000,g.state.position);
+    assert.deepEqual([child().x,child().y],[female?2:8,5]);
+    // Repeated attempts at the range edge must not switch to vertical wandering.
+    for(let i=0;i<8;i++) npcs.tick(npcs.now+3000,g.state.position);
+    assert.equal(child().y,5);
+    npcs.random=()=>female?0.4:0.8;
+    npcs.tick(npcs.now+3000,g.state.position);
+    assert.deepEqual([child().x,child().y],origin.slice(0,2));
+    await enter(s,'LittlerootTown',10,10);
+    await enter(s,map,female?8:2,8);
+    assert.deepEqual(pose(child()),origin);
+    g.loadDocument(g.exportDocument());
+    assert.equal(child().sourceLocalId,'6');
+    assert.equal(child().y,5);valid(s);
+  });
   const bx=female?3:5;
   for(const [dir,dx,dy] of [['up',0,1],['down',0,-1],['left',1,0],['right',-1,0]])
     test(`${gender}: rival first meeting from ${dir} returns to the source PC position`,async()=>{

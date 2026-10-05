@@ -44,6 +44,7 @@ description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写�
 ## 角色与动作转写的现有落点
 
 - 原作演员业务定义放native-cast.js / opening-objects.js，唯一身份绑定放native-object-bindings.js；使用来源local ID或严格唯一坐标，未知/歧义明确报错，不以静止朝下兜底。初始朝向核对native-movement.js的原作表，LEFT_AND_RIGHT与RIGHT_AND_LEFT不同，不能按子串猜。
+- local ID存在不等于绑定正确：逐角色核对原表的script、graphics_id、坐标、movement_type与范围，并覆盖男女镜像分支。隐式ID按完整原表序号计算，不能按筛选后演员列表编号；例如邻居孩子是6，3属于搬家过动猿。定向WANDER必须保留方向集合，不能当四方向漫步。至少验证一次移动及重入，不能只断言对象能创建。
 - 统一入口`python3 tools/story/extract.py movement --packet <packet> --label <label> --actor <稳定ID> --map <地图>`先回校验固定来源，再调用tools/story/movement.py输出source锚点和commands。完整调用与支持范围见[提取流程](../../docs/development/STORY_EXTRACTION.md)；未知指令先查C语义，再补局部映射/接口，不删除步骤。
 - applymovement并行关系仍由作者写parallel/sequence；跟随或推回可显式声明ignoreActors，只忽略指定演员的占位，保留地形/高度/边界。锁朝向用keepFacing，不用逐格插face冒充原作锁。别把例外带入正常玩家移动。
 - 会在本场戏改变资格flag的演员须在变化前获得场景pin，否则实时projection可能在行走前重置它。OnTransition摆位宜用入图visit patch；临时对白分支变量在入图重置。原作一次性图鉴与赠球分开记账，不能因赠球满包扣住主线。
