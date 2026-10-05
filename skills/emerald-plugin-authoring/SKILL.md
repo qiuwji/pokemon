@@ -322,3 +322,13 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
   assert.equal((await api.commands.dispatch("core.world.objects", { map, id: sign.id })).objects[0].dialogue, dialogue);
 });
 ```
+
+## 可选移动玩法与骑乘素材
+
+自定义移动仍用movement + fieldActions注册。需要越障/非地面交互时先核对[导航政策](../../docs/engine/field/FIELD_ACTIONS.md)，通过navigation显式声明，不在World写某个插件或徽章分支。表现引用独立appearances/cameraProfiles/environmentLayers；规则不读取绘制结果。requiresLanding的退出需走统一移动提交，不能先把模式改成walk再校验地形。
+
+端到端锚点：[high-flight插件](../../dist/plugins/high-flight/index.js)、[作者说明](../../dist/plugins/high-flight/README.md)、[专项](../../examples/high-flight.test.js)。入口改名搜索`replacesTravel`、`requiresLanding`、`commitMode`。测试应验证真实命令、非法落地保持原模式、地面高度恢复、空中存读档和关闭后原移动可用；不能只断言注册表里有ID。动画/reducedMotion通过既有纯表现合同处理。
+
+骑乘不要拿战斗精灵图充当野外素材。先追C模板的图片尺寸/调色板槽/主角偏移，再导入透明PNG和输入/输出hash；代表脚本为tools/plugins/export-flight-art.py，带--source和只读--check。新素材在插件自己assets目录，运行不依赖未跟踪work。
+
+游戏外插件面板保存下次启动配置，具体优先级、startup幂等动作和错误反馈按[内容管线](../../docs/development/CONTENT_PIPELINE.md)。不要在setup开始发奖或把本地设置当玩家存档；startup通过已注册的自身动作调用领域意图。现行原作样式约束与生成工具见[界面说明](../../docs/development/EMERALD_UI.md)。

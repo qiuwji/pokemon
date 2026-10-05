@@ -111,6 +111,7 @@ export class MovementApplication {
       .map((id) => ({
         id,
         name: this.catalog.movement[id].name,
+        replacesTravel: this.catalog.movement[id].replacesTravel || null,
         allowed: this.inspectMovementMode(id).ok,
       }));
   }
@@ -121,7 +122,15 @@ export class MovementApplication {
     )
       return { ok: false, reason: "现在不能更换移动方式。" };
     const cell = this.world.cell(this.state.position.x, this.state.position.y);
-    if (isWater(cell?.behavior)) return { ok: false, reason: "请先上岸。" };
+    const current = this.movement.registry.get(this.state.movement.mode);
+    if (mode !== this.state.movement.mode && current.navigation.requiresLanding) {
+      const p=this.state.position;
+      if (!cell || cell.collision !== 0 || this.world.map.warps.some(w=>w.x===p.x && w.y===p.y) ||
+          !this.movement.traversal(mode,{cell,map:this.world.map,from:p,dir:p.dir,warp:null}) ||
+          this.field.npcs.occupants(p.map).some(o=>(o.x===p.x && o.y===p.y) || o.reserved?.some(v=>v.x===p.x && v.y===p.y)))
+        return {ok:false,reason:'下方没有可以安全降落的空地。请移动到空地后再降落。'};
+    }
+    if (isWater(cell?.behavior) && !current.navigation.requiresLanding) return { ok: false, reason: "请先上岸。" };
     if (
       ["mach-bike", "acro-bike"].includes(this.state.movement.mode) &&
       mode !== this.state.movement.mode &&
@@ -141,10 +150,24 @@ export class MovementApplication {
   setMovementMode(mode) {
     if (!this.canManageParty())
       return { ok: false, reason: "请先结束当前行动。" };
+    return this.commitMode(mode);
+  }
+  // Shared commit port for direct mode commands and already-owned field action plans.
+  commitMode(mode) {
     const result = this.inspectMovementMode(mode);
     if (!result.ok) return result;
+    const landing = mode !== this.state.movement.mode &&
+      this.movement.registry.get(this.state.movement.mode).navigation.requiresLanding;
     const changed = this.movement.set(mode, this.world.map);
-    if (changed.ok) this.resetFieldInput();
+    if (changed.ok) {
+      if (landing && this.world.elevation) {
+        // Air movement retained the previous plane; resume on the actual ground plane.
+        delete this.state.position.elevation;
+        delete this.state.position.previousElevation;
+        this.world.elevation.initialize(this.state.position, this.world.map);
+      }
+      this.resetFieldInput();
+    }
     return changed;
   }
   movementTechniqueOptions() {
@@ -186,6 +209,8 @@ export class MovementApplication {
   async flyTo(id) {
     if (!this.canManageParty())
       return { ok: false, reason: "请先结束当前行动。" };
+    const replacement=Object.entries(this.catalog.movement).find(([,d])=>d.replacesTravel === 'fly');
+    if (replacement) return this.setMovementMode(replacement[0]);
     const result = this.travel.prepare(id);
     if (!result.ok) return result;
     this.clearInput();

@@ -190,7 +190,8 @@ export class WorldApplication {
         a,
         ...(a.reserved || []).map((p) => ({ ...p, id: a.id })),
       ]);
-      if (player?.map === id) protectedCells.push({ ...player, player: true });
+      if (player?.map === id && !this.movement.registry.get(this.state.movement.mode).navigation.ignoreTerrain)
+        protectedCells.push({ ...player, player: true });
       for (const cell of protectedCells) {
         const block = map.blocks[cell.y * map.width + cell.x];
         if (
@@ -250,9 +251,11 @@ export class WorldApplication {
       map: this.worldState.map(map, draft),
       entered: () => {
         this.control.record("map.entered", { map, reason: options.reason || "travel", position: { ...this.state.position } });
-        this.storyMapEntered(map, options.reason || "travel");
+        if (!this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions)
+          this.storyMapEntered(map, options.reason || "travel");
         this.enterWeather(map);
-        this.deviceEvent("activate", this.state.position);
+        if (!this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions)
+          this.deviceEvent("activate", this.state.position);
         this.plugins?.events.emit("core:world-visit", {
           map,
           revision: this.worldState.state.revision,
@@ -267,7 +270,7 @@ export class WorldApplication {
             throw new Error("Invalid map entry direction");
           this.assertOccupants(draft, new Set([map]), position);
           if (
-            objects.some((o) =>
+            !this.movement.registry.get(this.state.movement.mode).navigation.ignoreActors && objects.some((o) =>
               GEN3_ELEVATION.occupies(
                 this.worldState.map(map, draft),
                 o,
@@ -345,6 +348,9 @@ export class WorldApplication {
       return;
     }
     if (this.ui.blocked || this.facilityActive) return;
+    if (this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions) {
+      this.ui.showMovement(); return;
+    }
     if (this.state.story.session) {
       this.ui.toast("当前有暂停的剧情，请从菜单继续剧情。");
       return;
@@ -497,12 +503,13 @@ export class WorldApplication {
       },
       onStep: (cell) => {
         this.stepWeather(this.state.position);
-        this.step(cell);
+        if (!this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions) this.step(cell);
       },
       onStart: ({ from, position, jump }) => {
         if (jump) this.ui?.sound?.("emerald:ledge");
         this.control.record("movement.started", { from, to: position });
         if (from.map !== position.map) this.control.record("map.changed", { from: from.map, to: position.map });
+        if (this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions) return;
         this.deviceEvent("leave", from, { position });
         const map = this.worldState.maps[from.map],
           index = from.y * map.width + from.x;
@@ -513,7 +520,8 @@ export class WorldApplication {
       },
       onProgress: () => {
         this.control.record("movement.settled", { position: { ...this.state.position } });
-        this.deviceEvent("settle", this.state.position);
+        if (!this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions)
+          this.deviceEvent("settle", this.state.position);
         this.advanceTravelClocks();
       },
       onMap: () => {

@@ -24,6 +24,7 @@ export class World {
       prepareEntry = null,
       elevation = null,
       deferWarps = false,
+      navigation = () => ({}),
       passage = ({ cell, warp }) =>
         !isWater(cell.behavior) && (cell.collision === 0 || !!warp),
     } = {},
@@ -39,6 +40,7 @@ export class World {
       prepareEntry,
       elevation,
       deferWarps,
+      navigation,
       passage,
     });
     this.steps = 0;
@@ -121,6 +123,8 @@ export class World {
     this.lastBlocked = null;
     const [dx, dy] = DIRECTIONS[dir];
     const p = this.position;
+    const policy = this.navigation();
+    ignoreWarps ||= !!policy.ignoreWarps;
     p.dir = dir;
     let x = p.x + dx,
       y = p.y + dy,
@@ -159,9 +163,9 @@ export class World {
           return this.block("boundary");
         const targetCell = { block: dest.blocks[i], behavior: dest.behavior[i],
           collision: (dest.blocks[i] >> 10) & 3, elevation: dest.blocks[i] >> 12 };
-        if (this.elevation && !this.elevation.canEnter(p.elevation, targetCell.elevation))
+        if (!policy.ignoreElevation && this.elevation && !this.elevation.canEnter(p.elevation, targetCell.elevation))
           return this.block("elevation");
-        const object = preview.objects.find(n => this.occupied(dest, n, x, y));
+        const object = !policy.ignoreActors && preview.objects.find(n => this.occupied(dest, n, x, y));
         if (object) return this.block("object", object);
         if (!this.passage({ cell: targetCell, map: dest, mapId: id, dir, from: { ...p }, warp: null }))
           return this.block("wall");
@@ -176,7 +180,7 @@ export class World {
           dir,
         });
         const target = { ...p, map: id, x, y, dir };
-        this.elevation?.advance(target, sourceElevation, dest.blocks[i] >> 12);
+        if (!policy.ignoreElevation) this.elevation?.advance(target, sourceElevation, dest.blocks[i] >> 12);
         if (!this.commitEntry(target, preview)) return this.block("entry-rejected");
         this.steps++;
         this.onStep(this.cell(x, y));
@@ -186,7 +190,7 @@ export class World {
     }
     const jumpDir = ledgeDirection(cell.behavior);
     let jump = false;
-    if (jumpDir === dir) {
+    if (!policy.ignoreEdges && jumpDir === dir) {
       x += dx;
       y += dy;
       cell = this.cell(x, y);
@@ -201,14 +205,14 @@ export class World {
     ) {
       return this.block("unavailable");
     }
-    const obj = this.objects(p.map).find((n) =>
+    const obj = !policy.ignoreActors && this.objects(p.map).find((n) =>
       !ignoreActors.includes(n.id) && this.occupied(m, n, x, y, { reservations: n.id !== allowVacatedBy }),
     );
-    const oneWay = blockedDirection(cell?.behavior);
+    const oneWay = !policy.ignoreEdges && blockedDirection(cell?.behavior);
     if (
       !cell ||
       obj ||
-      (this.elevation &&
+      (!policy.ignoreElevation && this.elevation &&
         !this.elevation.canEnter(p.elevation, cell.elevation)) ||
       !this.passage({
         cell,
@@ -221,13 +225,13 @@ export class World {
       oneWay === dir
     ) {
       return this.block(obj ? "object" : !cell ? "boundary" :
-        this.elevation && !this.elevation.canEnter(p.elevation, cell.elevation) ? "elevation" :
+        !policy.ignoreElevation && this.elevation && !this.elevation.canEnter(p.elevation, cell.elevation) ? "elevation" :
         oneWay === dir ? "one-way" : "wall", obj);
     }
     this.beforeMove({ map: m, cell, dir });
     p.x = x;
     p.y = y;
-    this.elevation?.advance(p, sourceElevation, cell.elevation);
+    if (!policy.ignoreElevation) this.elevation?.advance(p, sourceElevation, cell.elevation);
     this.steps++;
     if (warp && !ignoreWarps && !arrowWarpDirection(cell.behavior)) {
       const result = this.traverseWarp(warp, jump);

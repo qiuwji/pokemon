@@ -1,5 +1,17 @@
 # 当前框架交付与接手进度
 
+## 2026-10-05 · 0.35.0 · 原作窗口素材、外部插件管理与自由飞行
+
+UI采用原240×160比例、原作window/party/bag/summary素材与原生调色板；Start七项纵向入口，工程工具和插件入口放设置/扩展。页面仍保留既有控件/领域命令和原生replace/hide接口，不宣称全作UI逐像素一致；视觉与实际输入由用户验收。素材由tools/ui/export-theme.py确定性导出并保存SHA-256，参考只读。
+
+游戏外插件管理器读catalog名称/说明，保存下次启动选择，明确重启生效；不热切换，不改玩家存档。catalog可指定自身命名空间的幂等startup动作，装配后走命令总线执行并报告失败。
+
+可选[high-flight插件](../../dist/plugins/high-flight/README.md)已由城镇传送改为室外逐格自由飞行：越过地形/角色、忽略门warp和跳崖、保留实际地图connection边界，视野宽高各1.5倍、薄雾0.18、仅可降落到无占用可站立空地。原生Fly鸟32×32与男/女主角分别用原作palette，不再借用大王燕战斗图；导入脚本/产物/来源记录位于跟踪目录。自动大王燕/HM02/白羽徽章按存档一次，满队不部分领取，真实野外边界通知可合并重试。
+
+通用导航与模式表现政策位于MovementRegistry/World/FieldSession，资格、徽章、骑乘和测试发奖留在插件。MovementApplication.commitMode统一处理直接命令与fieldAction计划的退出检查/地面高度恢复；模式相机/外观/雾由状态推导，重载可恢复。具体合同见[野外行动](../engine/field/FIELD_ACTIONS.md)，接手Skill同步。
+
+109项相关核心合同、8项独立插件专项通过；内容/资源、公开合同、模块语法、ESLint、配置的引擎类型与文档检查通过。初次检查发现四处全角空白lint错误、插件满队重试时序，已修复并重查对应增量。证据见[本轮记录](../validation/2026-10-05-flight-ui/manifest.json)。没有执行全量回归或浏览器/Computer Use，未改的子域沿用上一轮记录；游戏实际骑乘位置、朦胧程度、菜单和升降节奏由用户端到端验收。
+
 ## 2026-10-05 · 邻居家孩子身份与移动范围修复
 
 邻居家的孩子误绑定原生local ID 3（搬家过动猿），因此出现在电视机旁并原地朝上踏步；男女邻居家均修正为local ID 6，恢复原作NinjaBoy外观、出生位置和RivalSibling脚本。新增图集通过既有movement导入器和opening配置生成。原作限定左右/上下的WANDER类型分别映射到现有horizontal/vertical行为，不再误用四方向wander；通用Actor引擎未新增地区特例。

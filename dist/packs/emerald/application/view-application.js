@@ -87,9 +87,11 @@ export class ViewApplication {
   }
   config() {
     const lease = this.cameraLeases.list().at(-1);
+    const modeProfile=this.catalog.movement?.[this.state.movement?.mode]?.presentation?.cameraProfile;
+    const profile=lease?.value.profile || modeProfile || 'emerald-default';
     return readOnly({
-      profile: lease?.value.profile || "emerald-default",
-      ...this.cameras.get(lease?.value.profile || "emerald-default"),
+      profile,
+      ...this.cameras.get(profile),
       focus: lease?.value.focus || null,
     });
   }
@@ -113,13 +115,15 @@ export class ViewApplication {
     return this.layerLeases.release(token);
   }
   frames() {
-    return readOnly(this.layerLeases.list().map((r) => r.value));
+    const layer=this.catalog.movement?.[this.state.movement?.mode]?.presentation?.environmentLayer;
+    return readOnly([...(layer?[this.layers.selection(layer)]:[]),...this.layerLeases.list().map((r) => r.value)]);
   }
   view() {
     return readOnly({
       camera: this.config(),
       cameraLeases: this.cameraLeases.list(),
       environment: this.layerLeases.list(),
+      environmentFrames: this.frames(),
     });
   }
   visit(map) {

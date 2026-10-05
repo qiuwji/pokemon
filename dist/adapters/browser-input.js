@@ -10,8 +10,8 @@ const DIRECTIONS = {
 };
 /** Input mapping is replaceable; field and battle services don't inspect keys. */
 export class BrowserInput {
-  constructor({ document: doc = document, window: win = window, game, ui }) {
-    Object.assign(this, { doc, win, game, ui });
+  constructor({ document: doc = document, window: win = window, game, ui, externalBlocked = () => false }) {
+    Object.assign(this, { doc, win, game, ui, externalBlocked });
     this.keys = new Set();
     this.held = null;
     this.running = false;
@@ -49,6 +49,7 @@ export class BrowserInput {
       button.addEventListener(
         "pointerdown",
         (e) => {
+          if (this.externalBlocked()) return;
           e.preventDefault();
           button.setPointerCapture(e.pointerId);
           const dir = button.dataset.dir;
@@ -72,6 +73,7 @@ export class BrowserInput {
     this.game.resetFieldInput();
   }
   tick() {
+    if (this.externalBlocked()) return;
     this.game.handleFieldInput({
       direction: this.held,
       secondary: this.running,
@@ -79,12 +81,13 @@ export class BrowserInput {
     });
   }
   async useRegisteredItem() {
-    if (this.ui.blocked || this.game.busy || this.game.battle) return;
+    if (this.externalBlocked() || this.ui.blocked || this.game.busy || this.game.battle) return;
     this.clear();
     const result = await this.game.useRegisteredItem();
     if (!result.ok) this.ui.toast(result.reason);
   }
   keydown(e) {
+    if (this.externalBlocked()) return;
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key.toLowerCase() === "tab") {
       this.ui.focusTrap(e);

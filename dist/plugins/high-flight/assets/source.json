@@ -1,0 +1,18 @@
+{
+  "source": "pret/pokeemerald",
+  "reference": "src/field_effect.c:CreateFlyBirdSprite / SpriteCB_FlyBirdSwoopDown",
+  "dimensions": [
+    32,
+    32
+  ],
+  "transparentIndex": 0,
+  "inputs": {
+    "graphics/field_effects/pics/bird.png": "5f3a01bb6df49d7d873bbf1af69e3f0b77a70d761df84796c82b007263f1c8eb",
+    "graphics/object_events/palettes/brendan.pal": "407449b83a93ca4b05077c9f8fd017b975cbc9fa9ecb9b059bc9ddc92f5ab7e2",
+    "graphics/object_events/palettes/may.pal": "47f5a4093f6ec2f6b7c220b2c8627b418582f2874ce46c73d7c0ea8b2c7a5d99"
+  },
+  "outputs": {
+    "fly-bird-male.png": "a3b0021acfe6eb07e1a62a92a3d9fb40ae1a2c8d563c361896e383d4d846187c",
+    "fly-bird-female.png": "85bb8c84b20fe26769681e17468b8e6c5afc710a54d4e67cbb5699234a62c25d"
+  }
+}

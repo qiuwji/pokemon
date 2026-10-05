@@ -22,6 +22,7 @@ export class Renderer {
     {
       projection = () => null,
       appearanceView = () => null,
+      movementPresentation = () => ({}),
       cameraConfiguration = () => ({ columns: 20, rows: 14, zoom: 1 }),
       environmentLayers = () => [],
       objectTransforms = () => [],
@@ -39,6 +40,7 @@ export class Renderer {
       assets,
       projection,
       appearanceView,
+      movementPresentation,
       cameraConfiguration,
       environmentLayers,
       objectTransforms,
@@ -406,9 +408,11 @@ export class Renderer {
           c.restore();
         }
       };
-      drawActors(all.filter((n) => priority(n) >= 2));
+      const aboveTerrain = this.movementPresentation().aboveTerrain;
+      drawActors(all.filter((n) => !(n.player && aboveTerrain) && priority(n) >= 2));
       for (const id of ids) this.drawMap(id, true, now);
-      drawActors(all.filter((n) => priority(n) < 2));
+      drawActors(all.filter((n) => !(n.player && aboveTerrain) && priority(n) < 2));
+      if (aboveTerrain) drawActors(all.filter(n=>n.player));
       if (action?.target.map) {
         const p = this.graph.point(action.target);
         drawFieldAction(

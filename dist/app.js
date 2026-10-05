@@ -2,6 +2,8 @@ import { PixelDisplay } from "./adapters/pixel-display.js";
 import { emeraldTransitionPatterns } from "./packs/emerald/battle-transition-canvas.js";
 import { loadContent } from "./adapters/content-loader.js";
 import { loadPluginCatalog } from "./adapters/plugin-loader.js";
+import { createPluginManager } from "./adapters/plugin-manager-dom.js";
+import { readPluginSettings, startPlugins } from "./adapters/plugin-settings.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
 import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
@@ -34,16 +36,32 @@ import { ANIMATION_PROFILES } from "./packs/emerald/animation-profiles.js";
 // Composition root: chooses a content pack, adapters and services; no gameplay rules.
 const $ = (id) => document.getElementById(id);
 async function boot() {
+  let input, pluginManager, game = null;
   try {
     const base = assertPackContent(
       await loadContent(new URL("./content/manifest.json", import.meta.url)),
     );
     const parameters = new URLSearchParams(location.search);
+    const environment = parameters.get('e2e') === '1' ? 'test' : 'production';
+    const catalogURL = new URL('./plugins/catalog.json', import.meta.url);
+    const response = await fetch(catalogURL);
+    if (!response.ok) throw new Error('Plugin catalog unavailable');
+    const launchCatalog = await response.json();
+    pluginManager = createPluginManager({ document, storage: localStorage, catalog: launchCatalog,
+      parameters, environment, beforeOpen: () => input?.clear(), afterClose: () => input?.clear(),
+      restart: entries => {
+        game?.save();
+        const url = new URL(location.href);
+        url.searchParams.delete('plugins');url.searchParams.delete('disable-plugins');
+        for (const entry of entries) url.searchParams.delete(entry.flag || entry.id);
+        location.assign(url.href);
+      },
+    });
     const plugins = await loadPluginCatalog({
-      url: new URL("./plugins/catalog.json", import.meta.url),
+      url: catalogURL, manifest: launchCatalog, selection: readPluginSettings(localStorage),
       parameters,
       content: base,
-      environment: parameters.get("e2e") === "1" ? "test" : "production",
+      environment,
     });
     const { host, catalog, db } = createEmeraldPlugins(
       base,
@@ -53,7 +71,6 @@ async function boot() {
     const assets = await loadAssets(db);
     const reducedMotion = () =>
       matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let game = null;
     const timeline = new Timeline(),
       camera = new CameraRig(timeline, {
         baseFocus: (player) => game?.cameraFocus(player) || player,
@@ -70,6 +87,7 @@ async function boot() {
         objectTransforms: (now) => sceneDirector.objectTransforms(now),
         appearanceView: (target, context) =>
           game?.appearanceFrame(target, context) || null,
+        movementPresentation: () => catalog.movement[game?.state.movement.mode]?.presentation || {},
         fieldPriority: emeraldFieldPriority,
         travelActor: PACK.travelActor,
         cameraRig: camera,
@@ -128,7 +146,7 @@ async function boot() {
       patterns,
       onError: console.error,
     });
-    let input, sceneTimer;
+    let sceneTimer;
     const adventure = new EmeraldAdventure({
       playActive: () => !document.hidden,
       db,
@@ -174,8 +192,10 @@ async function boot() {
     });
     game.attachUI(ui);
     game.attachSound((cue) => audio.play(cue));
+    const startupIssues = await startPlugins(plugins,bus);
+    if (startupIssues.length) ui.toast(startupIssues.join('；'));
     if (parameters.get("control") === "1") void ui.connectControl();
-    input = new BrowserInput({ game, ui });
+    input = new BrowserInput({ game, ui, externalBlocked: () => pluginManager.active });
     $("loading").hidden = true;
     $("save").onclick = () => game.save(true);
     $("menu").onclick = () => ui.showMenu();

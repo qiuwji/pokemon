@@ -115,3 +115,25 @@ api.content.register("fieldActions", "open-gate", {
 针对性证据与失败修正见 `docs/project/CHANGELOG.md`。新增测试覆盖计划权限/一次性/变化、公开命令、插件与视觉注册、障碍保存恢复、资格、潜水模式往返、全路线攀瀑预检、钓鱼窗口/轮数/特性/取消、遭遇一次生成、剧情租约与预检、只读 UI。浏览器端地图素材/动作保真留在最终系统验收，不以 DOM 替身检查代替。
 
 只有操作结构、资格/指纹、移动/世界提交、场景锁、钓鱼计时或共享视觉注册合同变化时，上述对应证据需要重查；仅新增合规地图/行动内容，应验证该内容引用与业务流程，不重复全工程回归。
+
+## 插件移动导航与表现政策
+
+`MovementDefinition.navigation` 是可选布尔字段表，默认全部false，普通走路/跑步/冲浪不改变：
+
+| 字段 | 含义 |
+| --- | --- |
+| ignoreActors | 玩家移动忽略对象当前占位/预约，包括相邻地图入口；不删除对象 |
+| ignoreElevation | 跳过目标高度门槛，移动中保留旧逻辑地面高度 |
+| ignoreEdges | 不执行跳崖和单向边缘限制 |
+| ignoreWarps | 经过门/传送格不触发warp；已有地图connection仍正常连接 |
+| ignoreTerrain | 跳过地形前置规则及强制滑行/流水/机关格触发；模式traverse仍决定通行 |
+| suppressInteractions | 不触发玩家地面接触、普通interact、step剧情/暗雷及入图剧情；确认键改开移动菜单 |
+| requiresLanding | 离开该模式必须检查脚下为目标模式可走、collision=0、非warp且无对象/预约的格子 |
+
+边界永远受地图和已有connection约束；单有这些开关不会让traverse自动通过，也不会生成缺失地图。离开requiresLanding模式时统一在MovementApplication.commitMode恢复实际地面高度，字段计划和直接模式命令共用该入口；失败不改模式。此政策不是NPC寻路改写或全局无碰撞。
+
+可选 `replacesTravel` 是非空旅行入口标识；同一入口不能同时有两个模式替代。绿宝石业务层识别`fly`，把原城镇飞行调用转换为该模式，插件未启用时使用原TravelService；引擎不识别high-flight或徽章。
+
+可选 `presentation` 引用注册的cameraProfile、environmentLayer、appearance，另含aboveTerrain / freezeAnimation。它们只控制相机、雾/外观、前景绘制顺序及步态，不改变规则；关闭模式即取消模式表现，保存模式后可推导恢复。显式相机租约优先于模式默认相机；显式外观覆盖优先于模式外观。`view.environmentFrames` 返回最终有效环境层，`view.environment` 仍是临时租约列表。
+
+代表组合：[自由飞行插件说明](../../../dist/plugins/high-flight/README.md)及[插件专项](../../../examples/high-flight.test.js)；核心导航合同独立于安装插件，见[导航测试](../../../tests/movement-navigation.test.js)。

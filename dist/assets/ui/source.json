@@ -1,0 +1,21 @@
+{
+  "source": "pret/pokeemerald",
+  "inputs": {
+    "graphics/text_window/1.png": "54dd874e861667c55797ea31bc1e173d0804ccc23c7c26d6373f4f6d2139fac4",
+    "graphics/party_menu/bg.png": "73c0cdbcaa8f3d9cb31fceafef44eba31eef7771d1e728ed9d65a9827c7d88d3",
+    "graphics/party_menu/bg.bin": "a14ed626ff3008b23714aff36ecccddf37c6fe994dad0b83b66be99f2c85c462",
+    "graphics/bag/menu_male.pal": "64b21f5ecbdca3e8af29be2e50fee22e78ece7788c5eb97654c354f844ea4675",
+    "graphics/bag/menu.png": "03ec62a14910e5202c3939bfff3be896db57650258097d3894c343ee08ec7bc8",
+    "graphics/bag/menu.bin": "13c94db483c8b287298b8a1747e8501b219002a8abe19de9b2b31e3ee1c05f29",
+    "graphics/bag/menu_female.pal": "f46f10db249db8ed15411c4dac9fb282c5d82b1d052aa95bdebf61eaa12056fb",
+    "graphics/summary_screen/tiles.png": "bc610103272790e201924025f4c704e116447905f9f6d3101d74099ab1670870",
+    "graphics/summary_screen/page_info.bin": "56a726f2709bcf095001c49e82ed2d350941fc6b0b1ba96d12476ac2b2fac0f9"
+  },
+  "outputs": {
+    "window.png": "25e4baffe8bd9795a44a82c9ce4b3c7e97b6119a39bd03e11fe9e2235e7063b8",
+    "party-background.png": "ca481a7890ac0687a59daa32fcbd4768ba613b75ea35b0313f9c17d03ce76b17",
+    "bag-male.png": "1403d75847e51d2e351b093af92947b0a3e28927dacb72831ab4b8d1cf9151b9",
+    "bag-female.png": "1dbf0168e9cb2493d5adc49d99338b9aee50a81cc320cbc4b3e8529b5f3ea14f",
+    "summary-background.png": "f3596539c126e6787d1637de79ed4af82453a32c71bfc64ac1e3d3aa16b5197b"
+  }
+}

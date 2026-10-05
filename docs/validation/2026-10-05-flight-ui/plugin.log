@@ -1,0 +1,16 @@
+✔ Optional flight plugin provisions a real Fly partner and badge once through domain commands (111.713709ms)
+✔ Takeoff uses native gendered rider art, a 1.5-axis view and light haze; landing restores ground visuals (51.439791ms)
+✔ Air traversal crosses solid terrain while invalid landing remains airborne; successful landing rebases elevation (60.557541ms)
+✔ Fly replacement does not teleport and airborne saves restore mode-derived presentation (49.774583ms)
+✔ Flight cannot start indoors or land on occupants, reserved cells, water or entrance warps (51.065292ms)
+✔ Committed Fly art matches recorded hashes, is native 32x32 and belongs to the plugin directory (1.197209ms)
+✔ A full party receives no partial kit and retries on an idle field boundary after a slot is freed (50.253166ms)
+✔ Air mode crosses the real town/route connection without starting a grounded story or encounter (61.456459ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 573.925042

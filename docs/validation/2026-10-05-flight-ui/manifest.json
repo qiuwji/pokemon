@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-05",
+  "version": "0.35.0",
+  "baseCommit": "7e569f1",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "scope": "Native UI assets, external launch preferences, generic navigation and optional free flight/rider art",
+  "checks": [
+    {
+      "command": "node --test tests/movement-navigation.test.js tests/plugin-settings.test.js tests/plugin-loader.test.js tests/movement.test.js tests/movement-input.test.js tests/field-elevation.test.js tests/field-actions.test.js tests/field-interactions.test.js tests/view-extensions.test.js tests/appearances.test.js tests/native-ui-regions.test.js tests/architecture.test.js tests/control-movement.test.js",
+      "log": "core.log",
+      "passed": 109
+    },
+    {
+      "command": "node --test examples/high-flight.test.js",
+      "log": "plugin.log",
+      "passed": 8
+    },
+    {
+      "command": "node tools/check-content.mjs",
+      "result": "passed; explicit pending source references retained"
+    },
+    {
+      "command": "npm run check:contracts",
+      "result": "passed; MovementDefinition policies"
+    },
+    {
+      "command": "node tools/check-modules.mjs",
+      "result": "passed; 358 modules at initial check, later modified plugin parsed by its live test and lint"
+    },
+    {
+      "command": "npm run check:lint",
+      "log": "lint.log",
+      "result": "passed; final plugin/test increment also linted"
+    },
+    {
+      "command": "npm run check:engine-types",
+      "log": "engine-types.log",
+      "result": "passed"
+    },
+    {
+      "command": "python3 tools/plugins/export-flight-art.py --check",
+      "result": "no changed files"
+    },
+    {
+      "command": "python3 tools/ui/export-theme.py --check",
+      "result": "no changed files"
+    },
+    {
+      "command": "node tools/check-docs.mjs",
+      "log": "docs.log",
+      "result": "81 Markdown files, 853 local links, 17 synchronized examples valid"
+    }
+  ],
+  "initialFailures": [
+    "Four full-width whitespace lint errors in trainer page fixed",
+    "Full-party retry could lose a field notification during provisioning; coalesced field boundaries and verified"
+  ],
+  "notRun": [
+    "Full regression",
+    "Browser/Computer Use",
+    "Actual pixel/audio/input E2E"
+  ],
+  "fingerprints": {
+    "README.md": "01c4005128474c0432e35d285706b11e13d18eb9eb1b4281d1eb131cdbd6f90d",
+    "dist/adapters/browser-input.js": "0fce1f67813b95d61316d4b9f58b82bfa33843fd9339eb544b1226a4cb9ed234",
+    "dist/adapters/canvas-renderer.js": "cf8f5e4cfee9f866f21662018e2aaef3acbdce0a57c93166cce052984baa41eb",
+    "dist/adapters/plugin-loader.js": "e9b7653e092fc8ee4bad8f3db8e273f44fa750713a45e0d7b3f11bc169cb7a1f",
+    "dist/app.js": "23a59b7ba2c61d518e234f306bc5d59405a334ea965aa829f57b0ed83761eb9a",
+    "dist/engine/contracts.d.ts": "bbe9a842d13dadfe92b3be82ca1cb48cd990ce2def163e18811f15963091c25b",
+    "dist/engine/field-session.js": "e3a079f7cc4bd5731269d9bda06edcd23e293a3a895da30b40dee9e4347cda42",
+    "dist/engine/movement.js": "4abcb142a3b03405e9e5af804a1226a54b0579ad09f3f0c2bc4c11125960ba2c",
+    "dist/engine/world.js": "3d99a8e1189b9cc457244f3af93df8106be8a2c777fe58fbde90a67b6b45092b",
+    "dist/index.html": "2b5d09f5a5f2c90e7266251250285db0dc018125aa44813a7ab3208d1fb11b22",
+    "dist/packs/emerald/application/appearance-application.js": "ef9381771b50107334f1d6673ea60f5330805a4dcda2ab4e0b1e3feb1445d944",
+    "dist/packs/emerald/application/composition.js": "ce0530f6db7d80f634146dfe8d8a9c7611d72d3b1999e1d69cf2c5158428e958",
+    "dist/packs/emerald/application/contact-application.js": "f2a8d7e0953095e5d3880584de46d0e53aea0bc2ecbbf24a84f7da8e67871044",
+    "dist/packs/emerald/application/field-action-application.js": "4d0d48d35321e57013b4dcf15cc2d2c96be83de21841c5d3a4b1f07454cffe7b",
+    "dist/packs/emerald/application/movement-application.js": "a030f64953ea894579d42c91bd9fe4c7456dbc478b51a9aa0fdfa67c980ca02f",
+    "dist/packs/emerald/application/view-application.js": "888e35460406c7280bc48c62651779cf6765fccfc52846b60ec492f6375e549c",
+    "dist/packs/emerald/application/world-application.js": "1e881da7f33676b12b9e198788e9caf01c5759eab0b36fca04f8329f0841634c",
+    "dist/packs/emerald/extensions.js": "7f18d3966227ade55f6a5e95d17ede8a452f2f354ef74ce13ef74bd1ad6b93d1",
+    "dist/packs/emerald/interface.js": "659371a89f6af9a7168436559100276b5d854dc56b4aceb1e5445363c9e039a5",
+    "dist/packs/emerald/movement-interface.js": "815effde92d7379d5041ce9f4fdf09d3bcc759cb1b6d32405252c39fd5a79f03",
+    "dist/packs/emerald/ui-shell.js": "a450f6627529b80e0dd2be4e357a8b3134ca6e55d006ffe43bea74f0c28cf020",
+    "dist/plugins/catalog.json": "ca7df2c7157741c74e22ae3b57f78d86aa7d5e6033491ba2f66296bb1428bb4c",
+    "docs/README.md": "bbf8682b982ca481501672bc9ff5896e4f067d39a15e6ff50915e46d430a1e03",
+    "docs/development/CONTENT_PIPELINE.md": "9fa8ff688a75153f8c44cedd440d64a6095ef20d587ca5ebb6de7d6548e063af",
+    "docs/engine/field/FIELD_ACTIONS.md": "559843842e60bed3747dadd02df0cb946488a0e1ed64b1f148c41b5061c3869d",
+    "docs/engine/presentation/APPEARANCE_AND_VIEW.md": "d55fe0ced547e6fa2fc5ecc1ef9597de74656b940a405ac4a6b0ba91e5b78fe3",
+    "docs/project/CHANGELOG.md": "67a7299545cde7083c9f29494b2c98b46532a10c2cd1a55f03aa85fee29a6674",
+    "docs/project/STATUS.md": "d9450ba64ce18e15f9216f11971c297761de5f58922e59411efff16ad3d6d9e5",
+    "docs/project/VALIDATION.md": "b00f475871f5a7d6d28ac8cd911bb700d01b1e1d4458fd492cc1ffd08df0ad47",
+    "package-lock.json": "fdfc97b6102ccb6ce29ee6dad58c6bf21855fe44121fcff5d873f60455a99c96",
+    "package.json": "90c68fc33283900f2b564942323dde480d8ac9350d6d3eec58ee66708f25f1ee",
+    "skills/emerald-plugin-authoring/SKILL.md": "739f5d520c0c321ae9d85a60cef8181e05fa2373c3a2d51b83147993cf4537ee",
+    "dist/plugins/high-flight/index.js": "abfc2c66f2c70808d166327a1f3100e3c857d38a962d99f12396b0759f461ab0",
+    "dist/plugins/high-flight/README.md": "ea98bdcd8a574e0bdec4dbceff6d7d4d94c34a5daacac5f3ad30b834d79886c1",
+    "dist/plugins/high-flight/assets/fly-bird-male.png": "a3b0021acfe6eb07e1a62a92a3d9fb40ae1a2c8d563c361896e383d4d846187c",
+    "dist/plugins/high-flight/assets/source.json": "63be35ab9f7e15cd9e1467cacd9dd0555bea26cead52650431a9fc203440c569",
+    "dist/plugins/high-flight/assets/fly-bird-female.png": "85bb8c84b20fe26769681e17468b8e6c5afc710a54d4e67cbb5699234a62c25d",
+    "dist/assets/ui/bag-male.png": "1403d75847e51d2e351b093af92947b0a3e28927dacb72831ab4b8d1cf9151b9",
+    "dist/assets/ui/source.json": "cb834f9264569ad4936c24a906f9b28211674a2a466bf6baa6e72ed95e446959",
+    "dist/assets/ui/bag-female.png": "1dbf0168e9cb2493d5adc49d99338b9aee50a81cc320cbc4b3e8529b5f3ea14f",
+    "dist/assets/ui/summary-background.png": "f3596539c126e6787d1637de79ed4af82453a32c71bfc64ac1e3d3aa16b5197b",
+    "dist/assets/ui/party-background.png": "ca481a7890ac0687a59daa32fcbd4768ba613b75ea35b0313f9c17d03ce76b17",
+    "dist/assets/ui/window.png": "25e4baffe8bd9795a44a82c9ce4b3c7e97b6119a39bd03e11fe9e2235e7063b8",
+    "dist/packs/emerald/ui/emerald-theme.css": "3ada210ccd39b8e6b7deca99d79e84084496bdd839ae8e9255ef636c188f67e0",
+    "tools/plugins/export-flight-art.py": "d7c364d95d3b320e4fd2325251d2503ba2ab0d2316b6fa537d273bbc0f0cde97",
+    "tools/ui/export-theme.py": "b22dddaf084f63d050c4de609ccfc024afeeb05825350f1dd75e2b1d6f6b4de7",
+    "tests/movement-navigation.test.js": "d65999d807163909eb547cabca0f9be6311e8e73e8cd69b205e37c10d18ec379",
+    "tests/plugin-settings.test.js": "8301270efce66a27cc8b182d89b74be6a3ec95f9f29a6ca10fe48c7d45c9fe73",
+    "examples/high-flight.test.js": "8b0cb902c27300b908a2b04b071b22bba2913c4e73645fbf4ca93faec408407a",
+    "dist/adapters/plugin-manager-dom.js": "f876e20383ee277957ea71021ee9d0071273d8d08a6d5d458487f0f7db74d7d9",
+    "dist/adapters/plugin-settings.js": "18d18a03515e6961452593bf238f629a55c604ee4cd904c27d673dcae4442eab",
+    "docs/development/EMERALD_UI.md": "092c6e0e163f7e21939268e4f5393bfa9b457d5c2f1e80fd1787aaa0d70f5441"
+  }
+}

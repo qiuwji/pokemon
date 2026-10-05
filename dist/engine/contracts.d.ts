@@ -1032,6 +1032,11 @@ export interface MovementDefinition {
   actor: string;
   surface?: "land" | "water" | "both";
   mapRequires?: Record<string, string | number | boolean>;
+  replacesTravel?: string;
+  navigation?: Partial<Record<"ignoreActors" | "ignoreElevation" | "ignoreEdges" | "ignoreWarps" |
+    "ignoreTerrain" | "suppressInteractions" | "requiresLanding", boolean>>;
+  presentation?: { cameraProfile?: string; environmentLayer?: string; appearance?: string;
+    aboveTerrain?: boolean; freezeAnimation?: boolean };
   techniques?: Record<string, MovementTechnique>;
   inputRule?: string;
   ledge?: { durationMs: number; liftFrames: number[] };

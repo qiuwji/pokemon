@@ -22,6 +22,18 @@ export class MovementRegistry {
       definition.durations.some((v) => !Number.isFinite(v) || v <= 0)
     )
       throw new Error(`Invalid movement mode ${id}`);
+    const navigation = readOnly(definition.navigation || {});
+    if (Array.isArray(navigation) || typeof navigation !== 'object' || Object.entries(navigation).some(([k,v]) =>
+      !['ignoreActors','ignoreElevation','ignoreEdges','ignoreWarps','ignoreTerrain','suppressInteractions','requiresLanding'].includes(k) || typeof v !== 'boolean'))
+      throw new Error('Invalid movement navigation policy');
+    const presentation = readOnly(definition.presentation || {});
+    if (Array.isArray(presentation) || typeof presentation !== 'object' || Object.entries(presentation).some(([k,v]) =>
+      ['aboveTerrain','freezeAnimation'].includes(k) ? typeof v !== 'boolean' :
+        !['cameraProfile','environmentLayer','appearance'].includes(k) || typeof v !== 'string' || !v))
+      throw new Error('Invalid movement presentation');
+    if (definition.replacesTravel !== undefined && (typeof definition.replacesTravel !== 'string' || !/^[a-zA-Z0-9_.:-]{1,128}$/.test(definition.replacesTravel) ||
+        [...this.definitions.values()].some(d=>d.replacesTravel === definition.replacesTravel)))
+      throw new Error('Invalid or competing travel replacement');
     if (
       definition.afterStep !== undefined &&
       typeof definition.afterStep !== "function"
@@ -121,6 +133,8 @@ export class MovementRegistry {
       id,
       Object.freeze({
         ...definition,
+        navigation,
+        presentation,
         ledge,
         durations: Object.freeze([...definition.durations]),
         mapRequires,

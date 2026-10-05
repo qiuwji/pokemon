@@ -72,6 +72,7 @@ export class FieldSession {
     });
     this.world = new World(maps, position, {
       deferWarps: true,
+      navigation: () => movement?.registry.get(this.stepMode || movement.state.mode).navigation || {},
       prepareEntry,
       elevation,
       objects: (map = position.map) => this.npcs.occupants(map),
@@ -153,7 +154,8 @@ export class FieldSession {
     const base = this.movement
       ? this.movement.traversal(mode, c)
       : !isWater(c.cell.behavior) && (c.cell.collision === 0 || !!c.warp);
-    const plan = this.terrain?.before(this.terrainContext(c, mode)) || {};
+    const plan = this.movement?.registry.get(mode).navigation.ignoreTerrain ? {} :
+      this.terrain?.before(this.terrainContext(c, mode)) || {};
     return { ...plan, allowed: plan.allowed ?? base };
   }
   traversal(mode, c) {
@@ -167,6 +169,7 @@ export class FieldSession {
     this.forceVisited.clear();
   }
   scheduleForced(direction) {
+    if (this.movement?.registry.get(this.movement.state.mode).navigation.ignoreTerrain) return;
     if (!this.terrain || this.disposed) return;
     try {
       this.force = this.terrain.after(
@@ -285,6 +288,7 @@ export class FieldSession {
       ignoreActors: scripted ? ignoreActors : [],
     });
     const visual = {
+      freezeAnimation: this.movement?.registry.get(this.stepMode).presentation.freezeAnimation,
       ...this.movement?.techniqueVisual(),
       ...this.terrainPlan,
       ...(forced || {}),

@@ -31,7 +31,7 @@ export const FIELD_ACTION_PORTS = Object.freeze([
   "fieldDirector",
   "movement",
   "inspectMovementMode",
-  "resetFieldInput",
+  "commitMovementMode",
   "patchWorld",
   "plugins",
   "prepareWorldPatch",
@@ -268,11 +268,8 @@ export class FieldActionApplication {
         mode: operation.mode,
       });
     if (operation.kind === "movement") {
-      const checked = this.inspectMovementMode(operation.mode);
-      if (!checked.ok) throw new Error(checked.reason);
-      const result = this.movement.set(operation.mode, this.world.map);
+      const result = this.commitMovementMode(operation.mode);
       if (!result.ok) throw new Error(result.reason);
-      this.resetFieldInput();
     }
     if (operation.kind === "fishing") return this.runFishing(operation.rod);
     return { ok: true };

@@ -300,7 +300,7 @@ export function createUIShell(
     modalBack = back;
     modalType = type;
     game.clearInput();
-    root.innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
+    root.innerHTML = `<div class="modal-backdrop" data-page="${escapeHTML(type)}" data-gender="${escapeHTML(game.state.playerGender)}"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}"><div class="modal-header"><h2>${escapeHTML(title)}</h2>${close ? '<button id="modal-close" aria-label="关闭">×</button>' : ""}</div>${body}</section></div>`;
     if ($("modal-close"))
       $("modal-close").onclick = () => (back ? back() : closeModal());
     requestFrame(() => {

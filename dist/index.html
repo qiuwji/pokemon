@@ -14,6 +14,7 @@
     <meta name="theme-color" content="#101d1b" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="packs/emerald/ui/emerald-theme.css" />
   </head>
   <body>
     <div class="app-shell">
@@ -26,6 +27,7 @@
           </div>
         </div>
         <div class="top-actions">
+          <button id="plugins-open" class="menu-button" aria-haspopup="dialog">插件管理</button>
           <span class="edition">丰缘序章 <span>01</span></span
           ><button
             id="sound"
@@ -58,8 +60,8 @@
             <div class="screen" id="screen">
               <canvas
                 id="game"
-                width="320"
-                height="224"
+                width="240"
+                height="160"
                 tabindex="0"
                 aria-label="宝可梦游戏。方向键或 WASD 移动，Z 或回车确认，X 返回。"
               ></canvas>
@@ -72,6 +74,7 @@
                 hidden
               ></div>
               <div id="modal-root"></div>
+              <div id="extension-hud" aria-live="polite"></div>
               <div class="scene-name" id="scene-name"></div>
               <div id="battle-hud" hidden></div>
               <div id="dialogue" class="dialogue" hidden></div>
@@ -153,7 +156,6 @@
               <div><span>徽章</span><strong>0 / 8</strong></div>
             </div>
           </section>
-          <div id="extension-hud" aria-live="polite"></div>
         </aside>
       </main>
       <footer>
@@ -161,6 +163,13 @@
         ><span>非官方同人演示 · 存档仅保存在当前浏览器</span>
       </footer>
     </div>
+    <dialog id="plugin-manager" class="launch-panel" aria-labelledby="plugin-manager-title">
+      <header><h2 id="plugin-manager-title">插件管理</h2><button id="plugins-close" aria-label="关闭插件管理">返回</button></header>
+      <p>此面板位于游戏外。切换插件需要重启游戏，不会即时替换正在运行的插件。</p>
+      <div id="plugin-manager-list"></div>
+      <p id="plugin-manager-status" role="status">关闭存档所需插件前，请先导出备份；缺失依赖时原存档会保留。</p>
+      <div class="launch-actions"><button id="plugins-save">保存开关</button><button id="plugins-restart">保存并重启游戏</button></div>
+    </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <div class="sr-only" id="announcer" aria-live="polite"></div>
     <script type="module" src="app.js"></script>

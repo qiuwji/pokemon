@@ -106,7 +106,7 @@ export class AppearanceApplication {
   frame(target, context) {
     let fallback;
     if (target.kind === "player")
-      fallback = { appearance: "emerald-player", data: {} };
+      fallback = { appearance: this.catalog.movement?.[this.state.movement?.mode]?.presentation?.appearance || "emerald-player", data: {} };
     else if (target.kind === "actor") {
       const r = this.state.actors.records[target.uid],
         definition = r && this.catalog.actorTemplates[r.template];

@@ -2,7 +2,18 @@
   "version": 1,
   "plugins": [
     {
+      "id": "high-flight",
+      "name": "飞空术 · 高空测试版",
+      "description": "自由飞行、越过障碍、1.5倍视野与薄雾；仅能降落在空地。自动提供测试大王燕与白羽徽章。",
+      "module": "./high-flight/index.js",
+      "export": "highFlight",
+      "enabled": false,
+      "startup": ["high-flight:prepare", "high-flight:teach"]
+    },
+    {
       "id": "facility-content",
+      "name": "设施内容示例",
+      "description": "加载华丽大赛、游戏厅及开拓区的示例内容。",
       "module": "./facility-content/index.js",
       "export": "createFacilityContent",
       "enabled": false,
@@ -10,12 +21,15 @@
     },
     {
       "id": "ai-control",
+      "name": "AI 操作接口",
+      "description": "供AI读取游戏状态并通过公开命令操作游戏。",
       "module": "./ai-control/index.js",
       "export": "aiControl",
       "enabled": true
     },
     {
       "id": "test-harness",
+      "name": "工程测试插件",
       "module": "./test-harness.js",
       "export": "createTestHarness",
       "enabled": false,
@@ -27,6 +41,8 @@
     },
     {
       "id": "emerald-audio",
+      "name": "绿宝石原作音乐",
+      "description": "原作BGM、场景选曲与真实音效资源。",
       "module": "./emerald-audio.js",
       "export": "audioPlugin",
       "enabled": true

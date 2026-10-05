@@ -76,6 +76,10 @@ python3 tools/import.py encounters /绝对路径/pokeemerald
 
 插件装配来自[catalog.json](../../dist/plugins/catalog.json)，新增受信任本地插件无需修改app.js。配置项指定模块、导出名、默认启用、开关与工厂输入；`?plugins=id1,id2`追加启用，`?disable-plugins=id`关闭。`requires`用于装配依赖检查和排序；实际插件manifest依赖仍由PluginHost校验。加载失败明确报错，没有热卸载、远程沙箱或旧档迁移。
 
+游戏外顶部「插件」面板保存下次启动的开关，点击「保存并重启」才重建宿主；当前游戏不热切换。优先级：URL disable > URL enable/单独flag=1 > 本地开关 > catalog默认。重启按钮去掉一次性插件URL开关，保留control/e2e等环境参数。设置键为 `emerald.plugin-selection.v1`，与玩家存档分开；禁用带存档依赖的插件仍走缺依赖保护，不把它当坏档覆盖。
+
+catalog可配置 `name/description` 用于面板，以及 `startup:["owner:action"]`。启动动作必须属于该插件命名空间，通过既有命令总线在游戏装配后执行；setup仍只注册。动作应幂等、走领域意图；失败显示原因而不停止其他插件的初始化。开关/优先级/启动/面板合同见 [plugin-settings.test.js](../../tests/plugin-settings.test.js)。
+
 ## 验证与维护
 
 [content-manifest.test.js](../../tests/content-manifest.test.js)验证浏览器/Node一致、部署前缀、缺文件/坏JSON、重复字段、引用与PNG尺寸；[Python写入测试](../../tools/tests/test_content_store.py)验证不写预演、所属范围、无关文件保留和提交故障回滚。[独立输出与共享解析测试](../../tools/tests/test_import_outputs.py)验证二进制预演、输出归属、空表拒绝、配置失败不落盘及原作解析。[插件加载测试](../../tests/plugin-loader.test.js)使用真实模块及目录验证默认隔离、显式测试环境和依赖排序。

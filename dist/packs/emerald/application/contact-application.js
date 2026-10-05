@@ -6,6 +6,7 @@ export const CONTACT_PORTS = Object.freeze([
   "timeline",
   "plugins",
   "contactReady",
+  "movement",
 ]);
 /** Resolves authoritative entities; publishes only after an input or frame boundary. */
 export class ContactApplication {
@@ -18,6 +19,8 @@ export class ContactApplication {
     this.contacts.sequence = sequence;
   }
   lookup({ id, map }) {
+    if (id === 'player' && this.movement.registry.get(this.state.movement.mode).navigation.suppressInteractions)
+      return null;
     const p = this.state.position,
       m = this.field.world.maps[map];
     if (!m) return null;

@@ -106,3 +106,9 @@ CameraRig的剧情hold/pan优先于插件焦点，follow回到当前有效插件
 PixelDisplay按Canvas实际CSS尺寸及devicePixelRatio设置绘制缓冲，避免先240×160→320×224再由CSS二次放大。Renderer正常无缩放地图使用整数物理像素倍数与居中留边，地块共享边界继续按同一栅格对齐；战斗保持320×224参考坐标并直接绘制到屏幕缓冲。小于原始视口的屏幕仍按比例缩小；显式相机/剧情zoom保持连续，不强制整数化。
 
 公开camera投影默认是所指定surface的数学投影；size.raster:true采用与浏览器Renderer相同的整数放大和像素对齐策略，project/unproject共享它。显式zoom保持连续，Renderer.screenToWorld使用同一投影。对齐不改变通行、遇敌或Actor逻辑范围。resize/pagehide由适配器持有和释放，不建立引擎里的DOM监听。
+
+## 移动模式派生表现
+
+模式可以引用外观、相机和环境层作为默认表现，无需把短期租约永久写入存档。绑定、清理、优先级与查询字段见[野外行动合同](../field/FIELD_ACTIONS.md)的移动政策段。Fly骑乘素材示例见[插件说明](../../../dist/plugins/high-flight/README.md)：原生32px鸟图加男女角色共享浮动时钟；不是战斗正面图。
+
+默认游戏画布为原作240×160（15×10格），原作菜单素材导入与页面职责见[界面说明](../../../docs/development/EMERALD_UI.md)。完整页面布局逐像素还原仍需逐页验收。

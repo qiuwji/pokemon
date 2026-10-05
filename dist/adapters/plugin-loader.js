@@ -4,6 +4,8 @@ export async function loadPluginCatalog({
   content,
   parameters = new URLSearchParams(),
   environment = "production",
+  selection = {},
+  manifest: suppliedManifest,
   readJSON = async (location) => {
     const response = await fetch(location);
     if (!response.ok)
@@ -12,7 +14,7 @@ export async function loadPluginCatalog({
   },
   importModule = (location) => import(location.href),
 }) {
-  const manifest = await readJSON(url);
+  const manifest = suppliedManifest || await readJSON(url);
   if (manifest?.version !== 1 || !Array.isArray(manifest.plugins))
     throw new Error("Invalid plugin catalog");
   const records = new Map();
@@ -35,6 +37,8 @@ export async function loadPluginCatalog({
       (entry.environment !== undefined &&
         !["test", "production"].includes(entry.environment)) ||
       (entry.flag !== undefined && typeof entry.flag !== "string") ||
+      (entry.startup !== undefined && (!Array.isArray(entry.startup) || entry.startup.some(id =>
+        typeof id !== 'string' || !id.startsWith(entry.id + ':') || !/^[a-zA-Z0-9_.:-]+$/.test(id)))) ||
       (entry.requires !== undefined &&
         (!Array.isArray(entry.requires) ||
           entry.requires.some((id) => typeof id !== "string"))) ||
@@ -56,7 +60,7 @@ export async function loadPluginCatalog({
   for (const [id, entry] of records) {
     if (disabled.has(id)) continue;
     if (
-      entry.enabled ||
+      (selection[id] ?? entry.enabled) ||
       enabled.has(id) ||
       parameters.get(entry.flag || id) === "1"
     ) {
@@ -115,7 +119,7 @@ export async function loadPluginCatalog({
     }
     if (plugin?.id !== entry.id)
       throw new Error(`Plugin catalog identity mismatch: ${entry.id}`);
-    plugins.push(plugin);
+    plugins.push({ ...plugin, startup: entry.startup || [] });
   }
   return plugins;
 }

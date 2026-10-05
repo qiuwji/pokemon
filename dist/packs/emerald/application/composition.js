@@ -121,6 +121,7 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.fieldActions = new FieldActionApplication(
     liveApplicationPorts(read, FIELD_ACTION_PORTS, {
+      commitMovementMode: mode => applications.movement.commitMode(mode),
       deviceView: () => applications.devices.view(),
       deviceEvent: (...args) => applications.devices.event(...args),
     }),
