@@ -398,7 +398,9 @@ export function createUIShell(
     },
     confirm() {
       if (root.children.length) {
-        root.querySelector("button:focus")?.click();
+        const button = root.querySelector("button:focus:not(:disabled)") ||
+          root.querySelector("button:not(:disabled):not(#modal-close)");
+        button?.click();
       } else game.interact();
     },
     navigateMenu(dir) {

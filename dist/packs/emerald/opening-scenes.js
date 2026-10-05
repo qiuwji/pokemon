@@ -13,6 +13,12 @@ const stopSample = (f) => {
   return { n, x: stopping[step], y: step < 9 ? (n % 120 === 0 ? -1 : n % 10 <= 4 ? 1 : 0) : 0, step };
 };
 export const OPENING_SCENES = new Map([
+  ['emerald:actor-hop', {
+    duration: 400,
+    schema: objectSchema({ map: { type: 'string' }, actor: { type: 'string' } }, ['map', 'actor']),
+    objects: (frame) => [{ map: frame.payload.map, id: frame.payload.actor, x: 0,
+      y: -Math.round(8 * Math.sin(frame.progress * Math.PI)) }],
+  }],
   ['emerald:truck-ride', {
     duration: 9000, schema,
     field: (f) => {

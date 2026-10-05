@@ -271,8 +271,10 @@ test("Clock page submits setup through a command and renders live saved time", (
   ui.showTime();
   assert.equal(ui.modalType, "clock");
   assert.match(doc.getElementById("modal-root").innerHTML, /确认时间/);
-  doc.getElementById("[data-clock-hour]").value = "23";
-  doc.getElementById("[data-clock-minute]").value = "59";
+  const dial=doc.getElementById("[data-clock-dial]");
+  const key = (key) => dial.onkeydown({ key, preventDefault() {}, stopPropagation() {} });
+  for(let i=0;i<14;i++) key("ArrowUp");
+  key("ArrowLeft");
   doc.getElementById("[data-start-clock]").onclick();
   assert.deepEqual(calls[0], [23, 59]);
   assert(calls.includes("save"));
@@ -289,7 +291,7 @@ test("Clock page submits setup through a command and renders live saved time", (
     doc.getElementById("[data-clock-time]").textContent,
     "第 4 天 · 09:04",
   );
-  assert.equal(doc.getElementById("[data-play-time]").textContent, "1:01:01");
+  assert.doesNotMatch(doc.getElementById("modal-root").innerHTML, /data-play-time|data-tide/);
   assert.match(doc.getElementById("weather").textContent, /09:04/);
 });
 

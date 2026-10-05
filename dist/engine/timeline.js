@@ -33,20 +33,25 @@ export class TransitionController {
     const t = Math.min(1, Math.max(0, (now - a.start) / a.duration));
     return {
       kind: a.kind,
+      phase: a.phase,
       opacity: a.phase === "cover" ? t : a.phase === "reveal" ? 1 - t : 1,
       covered: a.phase === "hold",
     };
   }
-  async run(kind, commit) {
+  async run(kind, commit, { coverMs, revealMs } = {}) {
     if (this.busy) return false;
     const reduced = this.reducedMotion();
-    const duration = reduced ? 100 : kind === "encounter" ? 480 : 220;
+    for (const ms of [coverMs, revealMs])
+      if (ms !== undefined && (!Number.isFinite(ms) || ms <= 0 || ms > 60000))
+        throw new Error("Invalid transition duration");
+    const duration = reduced ? 100 : coverMs ?? (kind === "encounter" ? 480 : 220);
+    const revealDuration = reduced ? 100 : revealMs ?? duration;
     const phase = (name) => {
       this.active = {
         kind: reduced ? "fade" : kind,
         phase: name,
         start: this.timeline.now(),
-        duration,
+        duration: name === "reveal" ? revealDuration : duration,
       };
     };
     try {
@@ -58,7 +63,7 @@ export class TransitionController {
       await commit();
       await this.timeline.wait(96);
       phase("reveal");
-      await this.timeline.wait(duration);
+      await this.timeline.wait(revealDuration);
       return true;
     } finally {
       this.active = null;

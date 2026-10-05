@@ -1,5 +1,10 @@
 /** Decoded Generation III metatile behavior codes; named in one place. */
 export const BEHAVIOR = Object.freeze({
+  EAST_ARROW_WARP: 0x62,
+  WEST_ARROW_WARP: 0x63,
+  NORTH_ARROW_WARP: 0x64,
+  SOUTH_ARROW_WARP: 0x65,
+  WATER_SOUTH_ARROW_WARP: 0x6d,
   GRASS: 2,
   LONG_GRASS: 3,
   COUNTER: 128,
@@ -63,3 +68,10 @@ const ENCOUNTER_TERRAIN = new Set([
   2, 3, 5, 6, 8, 0x0b, 0x10, 0x11, 0x12, 0x15, 0x22, 0x24, 0x25, 0x2a,
 ]);
 export const hasEncounterTerrain = (code) => ENCOUNTER_TERRAIN.has(code);
+
+/** Arrow exits trigger from the occupied cell, on the next outward input. */
+export const arrowWarpDirection = (code) => ({
+  [BEHAVIOR.EAST_ARROW_WARP]: "right", [BEHAVIOR.WEST_ARROW_WARP]: "left",
+  [BEHAVIOR.NORTH_ARROW_WARP]: "up", [BEHAVIOR.SOUTH_ARROW_WARP]: "down",
+  [BEHAVIOR.WATER_SOUTH_ARROW_WARP]: "down",
+})[code];

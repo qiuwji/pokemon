@@ -66,7 +66,7 @@ for (const gender of ['male', 'female']) test(`Opening ${gender}: truck, exact d
   assert.equal(g.state.flags.tvWatched, true);
   assert.equal(g.storyMusic, null);
   const other = `LittlerootTown_${gender === 'male' ? 'Mays' : 'Brendans'}House_`;
-  await enter(s, other+'1F', gender === 'male' ? 2 : 8, 7);
+  await enter(s, other+'1F', gender === 'male' ? 2 : 8, 8);
   assert.equal(g.state.flags.neighborMomMet, true);
   await enter(s, other+'2F', gender === 'male' ? 5 : 3, 5);
   g.interact(); await s.settle();
@@ -74,8 +74,8 @@ for (const gender of ['male', 'female']) test(`Opening ${gender}: truck, exact d
   assert(!g.field.npcs.objects(other+'2F').some((o)=>o.id==='neighbor.ball'));
   // Existing rescue/rival battle rules are verified in cutscene/battle suites; arrange the dex receipt here.
   g.state.flags.pokedex = true;
-  await enter(s, 'LittlerootTown', 11, 1);
-  await run(s, 'emerald:running-shoes.give.'+gender);
+  await enter(s, 'LittlerootTown', 11, 2);
+  await g.runStory(g.story.resolve('step', g.state, { map:'LittlerootTown', position:{...g.state.position} }));
   assert.equal(g.fieldCapabilities().run, true);
   assert.equal(g.storyBusy, false);
   assert(validateSave(g.state, s.db, s.catalog, s.host));

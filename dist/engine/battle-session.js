@@ -33,7 +33,8 @@ export class BattleSession {
     try {
       const preparedBattle = this.createBattle(options);
       let entry;
-      await this.transitions.run("encounter", () => {
+      const transition = options.presentation?.transition;
+      await this.transitions.run(transition?.kind || "encounter", () => {
         this.battle = preparedBattle;
         const view = this.battle.entryView || this.battle.snapshot();
         this.director.reset(view);
@@ -45,7 +46,7 @@ export class BattleSession {
         };
         this.director.stage(entry);
         this.onChange();
-      });
+      }, transition);
       await this.director.play(entry, { message: this.onMessage });
       for (const event of this.battle.events)
         await this.director.play(event, { message: this.onMessage });

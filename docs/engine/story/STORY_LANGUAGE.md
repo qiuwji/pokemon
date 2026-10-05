@@ -42,7 +42,7 @@ api.story.register('gate', {
 
 `story.completed`表示整段事件执行到末尾；`story.rewards`表示一次原子奖励已经提交，两者不能互换。`after`仅用于必须完整执行前置事件的顺序约束。若业务旗标/奖励先于对话提交，不要再要求该对话的completeEvent来解锁唯一的后续入口，否则表现失败会令业务前进、入口却关闭。此类后续条件应依赖`{reward:'稳定奖励ID'}`或相应领域事实；失败的演出不能补记为完成。
 
-序章图鉴资格依赖`rival.prize`已领取，胜利对话失败或重载不阻塞博士；教授礼物容量失败时旗标/奖励账本/完成账本均不改变，腾出空间可以重试。`Reward inventory plan expired`发生在reward提交之前，不能据此认定同一奖励的旗标已写入；更早已提交的命令仍保留。
+序章图鉴资格依赖`rival.prize`已领取，胜利对话失败或重载不阻塞博士；原作图鉴与随后赠球分成professor.pokedex/professor.pokeballs两笔：球袋满只拒绝赠球，不撤销图鉴也不阻塞跑步鞋。`Reward inventory plan expired`发生在reward提交之前，不能据此认定同一奖励的旗标已写入；更早已提交的命令仍保留。
 
 训练家奖励统一用[trainerRewardId](../../../dist/packs/emerald/trainers.js)：`trainer.<trainerId>.prize`，包括练习、双打、混战和通用结算。视线资格读取同一ID，交互重战仍可开放但不重复付奖。事件ID如`trainer.practice.prize`另属completed，不是奖励账本的别名。
 
@@ -63,7 +63,7 @@ api.story.register('gate', {
 | battle | trainerId引用已登记训练家；或species、level（1–100）及可选options；同一会话规则，非任意C trainerbattle模式 |
 | worldPatch | operations数组；每项按WorldState合同定义kind/map/坐标/变更及scope，不直接改地图数据 |
 | fieldAction | id已注册行动，input可选对象，variable可选保存ok结果；未指定variable时失败抛错 |
-| move | actor默认player，path方向数组或to:{x,y,map?}二选一，running可选，mode/jump可选；jump为表现跳步，不绕过通行；通过真实通行，不直接改坐标 |
+| move | actor默认player，path方向数组或to:{x,y,map?}二选一，running可选，mode/jump可选；jump为表现跳步，不绕过通行；keepFacing保持移动前朝向；ignoreActors为最多32个明确角色ID的脚本占位例外，正常移动不应用；地形/高度/边界仍校验，不直接改坐标 |
 | approach | actor必填，target默认player；移动到合法邻接格 |
 | face | actor默认player，dir方向或target角色；等该角色在途动作结束 |
 | escort | actor必填且不能player，to:{x,y,map?}，followers可选1–32个唯一ID（默认[player]）；同图有序相邻队列协调步行，非任意队形 |

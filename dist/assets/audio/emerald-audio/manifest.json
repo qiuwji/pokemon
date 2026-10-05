@@ -559,6 +559,54 @@
       "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
     },
     {
+      "song": "MUS_FOLLOW_ME",
+      "kind": "music",
+      "selection": "story",
+      "title": "商店员工带路",
+      "config": "tracks/mus-follow-me.json",
+      "cueId": "emerald-audio:mus_follow_me",
+      "source": "assets/audio/emerald-audio/music/mus_follow_me.wav",
+      "cue": {
+        "kind": "music",
+        "source": "assets/audio/emerald-audio/music/mus_follow_me.wav",
+        "volume": 0.6,
+        "fadeInMs": 0,
+        "fadeOutMs": 0,
+        "loop": true,
+        "loopStart": 26.25,
+        "loopEnd": 48.75
+      },
+      "assetSha256": "ea725f43eb3eeef1de9d89f4be510d40ff84ad7088fb7d723671a788a11fe8b0",
+      "frames": 2149875,
+      "durationSeconds": 48.75,
+      "midiLoopStartFrame": 165375,
+      "midiLoopEndFrame": 1157625,
+      "renderConfig": {
+        "id": "mus-follow-me",
+        "title": "商店员工带路",
+        "song": "MUS_FOLLOW_ME",
+        "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+        "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "midi": "sound/songs/midi/mus_follow_me.mid",
+        "voicegroup": "follow_me",
+        "sampleRate": 44100,
+        "songVolume": 74,
+        "reverb": 50,
+        "polyphony": 5,
+        "pcmMixRate": 13379,
+        "cueVolume": 0.6,
+        "oneShot": false,
+        "kind": "music",
+        "selection": "story"
+      },
+      "renderer": {
+        "repository": "https://github.com/huderlem/poryaaaa",
+        "revision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
+      },
+      "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
+    },
+    {
       "song": "SE_SELECT",
       "kind": "sound",
       "selection": "ui-menu",
@@ -1332,6 +1380,52 @@
         "oneShot": true,
         "kind": "sound",
         "selection": "ui"
+      },
+      "renderer": {
+        "repository": "https://github.com/huderlem/poryaaaa",
+        "revision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
+      },
+      "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
+    },
+    {
+      "song": "SE_PIN",
+      "kind": "sound",
+      "selection": "story",
+      "title": "发现与感叹",
+      "config": "tracks/se-pin.json",
+      "cueId": "emerald-audio:se_pin",
+      "source": "assets/audio/emerald-audio/sounds/se_pin.wav",
+      "cue": {
+        "kind": "sound",
+        "source": "assets/audio/emerald-audio/sounds/se_pin.wav",
+        "volume": 0.6,
+        "fadeInMs": 0,
+        "fadeOutMs": 0,
+        "loop": false
+      },
+      "assetSha256": "68022efc42bd1be1b6f49fe5b490a01138eb824063b10903358e36ccb2b45eea",
+      "frames": 16538,
+      "durationSeconds": 0.37501133786848073,
+      "midiLoopStartFrame": 0,
+      "midiLoopEndFrame": 0,
+      "renderConfig": {
+        "id": "se-pin",
+        "title": "发现与感叹",
+        "song": "SE_PIN",
+        "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+        "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "midi": "sound/songs/midi/se_pin.mid",
+        "voicegroup": "rs_sfx_1",
+        "sampleRate": 44100,
+        "songVolume": 60,
+        "reverb": 50,
+        "polyphony": 5,
+        "pcmMixRate": 13379,
+        "cueVolume": 0.6,
+        "oneShot": true,
+        "kind": "sound",
+        "selection": "story"
       },
       "renderer": {
         "repository": "https://github.com/huderlem/poryaaaa",
@@ -2662,6 +2756,7 @@
     "mus-encounter-brendan",
     "mus-encounter-interviewer",
     "mus-encounter-may",
+    "mus-follow-me",
     "mus-obtain-item",
     "se-ball",
     "se-ball-open",
@@ -2671,6 +2766,7 @@
     "se-exp",
     "se-ledge",
     "se-pc-login",
+    "se-pin",
     "se-save",
     "se-select",
     "se-shop",

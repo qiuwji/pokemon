@@ -210,14 +210,6 @@
         }
       ]
     },
-    "littleroottown_brendanshouse_2f.0": {
-      "commands": [
-        {
-          "type": "dialog",
-          "dialogue": "littleroottown_brendanshouse_2f.0"
-        }
-      ]
-    },
     "littleroottown_brendanshouse_2f.1": {
       "commands": [
         {
@@ -239,6 +231,216 @@
         {
           "type": "dialog",
           "dialogue": "littleroottown_brendanshouse_2f.3"
+        }
+      ]
+    },
+    "furniture.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.0"
+        }
+      ]
+    },
+    "furniture.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.1"
+        }
+      ]
+    },
+    "furniture.2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.2"
+        }
+      ]
+    },
+    "furniture.3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.3"
+        }
+      ]
+    },
+    "furniture.4": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.4"
+        }
+      ]
+    },
+    "furniture.5": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.5"
+        }
+      ]
+    },
+    "furniture.6": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.6"
+        }
+      ]
+    },
+    "furniture.7": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.7"
+        }
+      ]
+    },
+    "furniture.8": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.8"
+        }
+      ]
+    },
+    "furniture.9": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.9"
+        }
+      ]
+    },
+    "furniture.10": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.10"
+        }
+      ]
+    },
+    "furniture.11": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.11"
+        }
+      ]
+    },
+    "furniture.12": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.12"
+        }
+      ]
+    },
+    "furniture.13": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.13"
+        }
+      ]
+    },
+    "furniture.14": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.14"
+        }
+      ]
+    },
+    "furniture.15": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "furniture.15"
+        }
+      ]
+    },
+    "pc-own": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "pc-boot"
+        },
+        {
+          "type": "choice",
+          "name": "电脑",
+          "prompt": "要做什么？",
+          "options": [
+            {
+              "id": "withdraw",
+              "label": "取出伤药",
+              "commands": [
+                {
+                  "type": "reward",
+                  "id": "emerald:bedroom-pc.potion",
+                  "items": {
+                    "potion": 1
+                  }
+                },
+                {
+                  "type": "dialog",
+                  "dialogue": "pc-potion"
+                }
+              ],
+              "visibleWhen": {
+                "not": {
+                  "reward": "emerald:bedroom-pc.potion"
+                }
+              },
+              "enabledWhen": {
+                "compare": {
+                  "query": {
+                    "id": "itemSpace",
+                    "input": {
+                      "item": "potion",
+                      "count": 1
+                    }
+                  },
+                  "op": "eq",
+                  "value": true
+                }
+              },
+              "disabledReason": "背包里放不下伤药。"
+            },
+            {
+              "id": "items",
+              "label": "查看道具",
+              "commands": [
+                {
+                  "type": "dialog",
+                  "dialogue": "pc-empty"
+                }
+              ]
+            },
+            {
+              "id": "exit",
+              "label": "退出",
+              "commands": []
+            }
+          ]
+        }
+      ]
+    },
+    "pc-email": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "pc-email"
+        }
+      ]
+    },
+    "tv-movie": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "tv-movie"
         }
       ]
     }
@@ -277,148 +479,158 @@
       ]
     },
     "route101.0": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "101 号道路 · 请小心草丛里的野生宝可梦。"
+        "101号道路",
+        "未白镇 ↔ 古辰镇"
       ]
     },
     "oldaletown.0": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "古辰镇 · 每一段旅程都从小镇开始。"
+        "古辰镇",
+        "“过去的回忆与现代的生活交融的小镇。”"
       ]
     },
     "oldaletown.1": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "宝可梦中心",
+        "恢复你疲惫的宝可梦。"
       ]
     },
     "oldaletown.2": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "友好商店",
+        "欢迎购买宝可梦用品！"
       ]
     },
     "oldaletown.3": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "宝可梦中心",
+        "恢复你疲惫的宝可梦。"
       ]
     },
     "oldaletown.4": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "友好商店",
+        "欢迎购买宝可梦用品！"
       ]
     },
     "route103.0": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "103 号道路 · 请小心草丛里的野生宝可梦。"
+        "103号道路"
       ]
     },
     "littleroottown_professorbirchslab.0": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这台机器看起来很专业。博士一定在用它做研究。"
       ]
     },
     "littleroottown_professorbirchslab.1": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这台机器看起来很专业。博士一定在用它做研究。"
       ]
     },
     "littleroottown_professorbirchslab.2": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是一本很难读懂的书。"
       ]
     },
     "littleroottown_professorbirchslab.3": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是一本很难读懂的书。"
       ]
     },
     "littleroottown_professorbirchslab.4": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "里面塞满了有关宝可梦的书。"
       ]
     },
     "littleroottown_professorbirchslab.5": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "里面塞满了有关宝可梦的书。"
       ]
     },
     "littleroottown_professorbirchslab.6": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "里面塞满了有关宝可梦的书。"
       ]
     },
     "littleroottown_professorbirchslab.7": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "里面塞满了有关宝可梦的书。"
       ]
     },
     "littleroottown_professorbirchslab.8": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "里面塞满了有关宝可梦的书。"
       ]
     },
     "littleroottown_professorbirchslab.9": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是研究用的电脑。还是别乱动吧。"
       ]
     },
     "littleroottown_professorbirchslab.10": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是研究用的电脑。还是别乱动吧。"
       ]
     },
     "littleroottown_professorbirchslab.11": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是研究用的电脑。还是别乱动吧。"
       ]
     },
     "littleroottown_professorbirchslab.12": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是研究用的电脑。还是别乱动吧。"
       ]
     },
     "littleroottown_professorbirchslab.13": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是研究用的电脑。还是别乱动吧。"
       ]
     },
     "littleroottown_professorbirchslab.14": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
-      ]
-    },
-    "littleroottown_brendanshouse_2f.0": {
-      "name": "路边的告示",
-      "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是研究用的电脑。还是别乱动吧。"
       ]
     },
     "littleroottown_brendanshouse_2f.1": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
-      ]
+        "{{who}}翻开了笔记本。",
+        "冒险规则第一条：按START打开菜单。",
+        "冒险规则第二条：用保存记录冒险进度。",
+        "剩下的页面还是空白……"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
     },
     "littleroottown_brendanshouse_2f.2": {
       "name": "路边的告示",
@@ -427,9 +639,170 @@
       ]
     },
     "littleroottown_brendanshouse_2f.3": {
-      "name": "路边的告示",
+      "name": "",
       "lines": [
-        "丰缘地区 · 与宝可梦一起旅行。"
+        "这是一台任天堂GameCube。",
+        "连接着一台Game Boy Advance作为控制器。"
+      ]
+    },
+    "furniture.0": {
+      "name": "",
+      "lines": [
+        "宝可梦中心",
+        "恢复你疲惫的宝可梦。"
+      ]
+    },
+    "furniture.1": {
+      "name": "",
+      "lines": [
+        "友好商店",
+        "欢迎购买宝可梦用品！"
+      ]
+    },
+    "furniture.2": {
+      "name": "",
+      "lines": [
+        "101号道路",
+        "未白镇 ↔ 古辰镇"
+      ]
+    },
+    "furniture.3": {
+      "name": "",
+      "lines": [
+        "103号道路"
+      ]
+    },
+    "furniture.4": {
+      "name": "",
+      "lines": [
+        "古辰镇",
+        "“过去的回忆与现代的生活交融的小镇。”"
+      ]
+    },
+    "furniture.5": {
+      "name": "",
+      "lines": [
+        "这台机器看起来很专业。博士一定在用它做研究。"
+      ]
+    },
+    "furniture.6": {
+      "name": "",
+      "lines": [
+        "这是研究用的电脑。还是别乱动吧。"
+      ]
+    },
+    "furniture.7": {
+      "name": "",
+      "lines": [
+        "里面塞满了有关宝可梦的书。"
+      ]
+    },
+    "furniture.8": {
+      "name": "",
+      "lines": [
+        "这是一本很难读懂的书。"
+      ]
+    },
+    "furniture.9": {
+      "name": "",
+      "lines": [
+        "{{who}}翻开了笔记本。",
+        "冒险规则第一条：按START打开菜单。",
+        "冒险规则第二条：用保存记录冒险进度。",
+        "剩下的页面还是空白……"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "furniture.10": {
+      "name": "",
+      "lines": [
+        "这是一台任天堂GameCube。",
+        "连接着一台Game Boy Advance作为控制器。"
+      ]
+    },
+    "furniture.11": {
+      "name": "",
+      "lines": [
+        "纸箱上印着宝可梦的标志。",
+        "这是宝可梦品牌的搬家与配送服务。"
+      ]
+    },
+    "furniture.12": {
+      "name": "",
+      "lines": [
+        "{{who}}仔细看了看丰缘地区的地图。"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "furniture.13": {
+      "name": "",
+      "lines": [
+        "书架里放着各式各样的书。"
+      ]
+    },
+    "furniture.14": {
+      "name": "",
+      "lines": [
+        "这里有一套宝可梦图画书。"
+      ]
+    },
+    "furniture.15": {
+      "name": "",
+      "lines": [
+        "宝可梦杂志！",
+        "《宝可梦伙伴》……《宝可梦手册》……《可爱的宝可梦》……"
+      ]
+    },
+    "pc-email": {
+      "name": "",
+      "lines": [
+        "宝可梦训练家学校的邮件。",
+        "宝可梦最多可以学会四个招式。训练家要善用自己的知识！"
+      ]
+    },
+    "pc-boot": {
+      "name": "",
+      "lines": [
+        "{{who}}打开了电脑。"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "pc-potion": {
+      "name": "",
+      "lines": [
+        "取出了伤药！"
+      ]
+    },
+    "pc-empty": {
+      "name": "",
+      "lines": [
+        "电脑里暂时没有存放其他道具。"
+      ]
+    },
+    "tv-movie": {
+      "name": "电视",
+      "lines": [
+        "电视上正在放一部电影。",
+        "两个人正随着钢琴声跳舞。",
+        "还是出发吧！"
       ]
     }
   },
@@ -668,15 +1041,6 @@
       },
       "script": "littleroottown_professorbirchslab.14"
     },
-    "littleroottown_brendanshouse_2f.0": {
-      "trigger": "interact",
-      "selector": {
-        "map": "LittlerootTown_BrendansHouse_2F",
-        "script": "LittlerootTown_BrendansHouse_2F_EventScript_PC",
-        "kind": "sign"
-      },
-      "script": "littleroottown_brendanshouse_2f.0"
-    },
     "littleroottown_brendanshouse_2f.1": {
       "trigger": "interact",
       "selector": {
@@ -694,6 +1058,235 @@
         "kind": "sign"
       },
       "script": "littleroottown_brendanshouse_2f.3"
+    },
+    "furniture.0": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "Common_EventScript_ShowPokemonCenterSign",
+        "kind": "sign"
+      },
+      "script": "furniture.0"
+    },
+    "furniture.1": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "Common_EventScript_ShowPokemartSign",
+        "kind": "sign"
+      },
+      "script": "furniture.1"
+    },
+    "furniture.2": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "Route101_EventScript_RouteSign",
+        "kind": "sign"
+      },
+      "script": "furniture.2"
+    },
+    "furniture.3": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "Route103_EventScript_RouteSign",
+        "kind": "sign"
+      },
+      "script": "furniture.3"
+    },
+    "furniture.4": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "OldaleTown_EventScript_TownSign",
+        "kind": "sign"
+      },
+      "script": "furniture.4"
+    },
+    "furniture.5": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine",
+        "kind": "sign"
+      },
+      "script": "furniture.5"
+    },
+    "furniture.6": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+        "kind": "sign"
+      },
+      "script": "furniture.6"
+    },
+    "furniture.7": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+        "kind": "sign"
+      },
+      "script": "furniture.7"
+    },
+    "furniture.8": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Book",
+        "kind": "sign"
+      },
+      "script": "furniture.8"
+    },
+    "furniture.9": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "PlayersHouse_2F_EventScript_Notebook",
+        "kind": "sign"
+      },
+      "script": "furniture.9"
+    },
+    "furniture.10": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "PlayersHouse_2F_EventScript_GameCube",
+        "kind": "sign"
+      },
+      "script": "furniture.10"
+    },
+    "furniture.11": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "InsideOfTruck_EventScript_MovingBox",
+        "kind": "sign"
+      },
+      "script": "furniture.11"
+    },
+    "furniture.12": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "EventScript_RegionMap",
+        "kind": "sign"
+      },
+      "script": "furniture.12"
+    },
+    "furniture.13": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "EventScript_BookShelf",
+        "kind": "sign"
+      },
+      "script": "furniture.13"
+    },
+    "furniture.14": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "EventScript_PictureBookShelf",
+        "kind": "sign"
+      },
+      "script": "furniture.14"
+    },
+    "furniture.15": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "EventScript_PokemonCenterBookShelf",
+        "kind": "sign"
+      },
+      "script": "furniture.15"
+    },
+    "pc.male.brendans": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "LittlerootTown_BrendansHouse_2F_EventScript_PC",
+        "kind": "sign"
+      },
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "male"
+        }
+      },
+      "script": "pc-own"
+    },
+    "pc.male.mays": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_2F",
+        "script": "LittlerootTown_MaysHouse_2F_EventScript_PC",
+        "kind": "sign"
+      },
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "male"
+        }
+      },
+      "script": "pc-email"
+    },
+    "pc.female.mays": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_2F",
+        "script": "LittlerootTown_MaysHouse_2F_EventScript_PC",
+        "kind": "sign"
+      },
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "female"
+        }
+      },
+      "script": "pc-own"
+    },
+    "pc.female.brendans": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F",
+        "script": "LittlerootTown_BrendansHouse_2F_EventScript_PC",
+        "kind": "sign"
+      },
+      "requires": {
+        "compare": {
+          "query": {
+            "id": "playerGender"
+          },
+          "op": "eq",
+          "value": "female"
+        }
+      },
+      "script": "pc-email"
+    },
+    "tv-movie": {
+      "trigger": "interact",
+      "priority": 20,
+      "selector": {
+        "script": "EventScript_TV",
+        "kind": "sign"
+      },
+      "script": "tv-movie"
     }
   },
   "sources": [

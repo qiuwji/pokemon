@@ -1,4 +1,4 @@
-"""Import pinned wall-clock tilemaps and Littleroot door frames; no source writes.
+"""Import pinned wall-clock tilemaps, Littleroot doors and battle transition sprite; no source writes.
 
 The door remains a visual metatile overlay: collision and warps are untouched.
 Re-run after grid import. --check uses the same ownership and validation pipeline.
@@ -101,6 +101,9 @@ for frame in range(3):
         pack['attributes'][ident] = 0
 pack['atlas'] = {'width': atlas.width, 'height': atlas.height, 'tileCount': count}
 session.image(atlas, session.dist / 'assets/tiles-general-petalburg.png')
+ball = Image.open(read('graphics/battle_transitions/pokeball.png'))
+session.image(paint(ball, palette('graphics/field_effects/palettes/pokeball.pal'), True),
+              session.dist / 'assets/battle-transition-pokeball.png')
 session.text(session.dist / 'assets/opening-art-source.json', json.dumps({
     'generator': 'tools/import.py opening-art', 'revision': source_revision(source),
     'inputs': sorted({x['path']: x for x in inputs}.values(), key=lambda x: x['path']),

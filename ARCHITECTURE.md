@@ -114,7 +114,7 @@ SaveStore 只接受PACK.version指定的当前开发存档格式（当前14）�
 
 制作同类游戏可复用 engine、导演和宿主适配器，以新内容包注入规则、地形政策、素材、剧情与 UI。当前目标为 2D 网格、单机探索、多队伍/席位回合 RPG；不能声称支持任意游戏类型。领域规则中的有来源数值可保留在规则包，不应为了消除“硬编码”把每条原作规则变成无约束回调。
 
-`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run check` 检查内容、严格公开类型和模块语法。当前阶段全量回归为 **736 项通过，0 失败、0 跳过**，十一个 Skill 入门例通过，内容/严格类型/**294 个 JS 模块语法通过**；检查点记录见 [manifest](docs/validation/2026-10-04-appearance-view/manifest.json)，证据见 [docs/project/VALIDATION.md](docs/project/VALIDATION.md)。受影响代码/合同变化才使对应记录失效，已通过且未变化的模块不重复验证。完整原作内容、设施业务与 E 最终浏览器验收仍未完成。
+`npm test` 验证领域、组合、失败原子性、时序和架构；`npm run test:plugins`单独验证可选插件；`npm run check`检查内容、公开类型、模块语法、文档和静态代码质量。最新计数及证据统一维护在[STATUS](docs/project/STATUS.md)及其验证记录；未修改的领域复用匹配指纹的证据，阶段收口再回归。
 
 接手材料按职责组织：docs/project持有动态范围/状态/证据索引，docs/architecture解释职责，docs/engine按领域保存合同，docs/development说明业务写法与测试，history保存旧计划。九份Skill链接真实examples；check:docs校验本地链接和片段同步，不替代领域行为检查。
 
@@ -149,3 +149,7 @@ SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与Sprite
 AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用架构](docs/architecture/APPLICATION.md)和[网络架构](docs/architecture/NETWORK.md)，操作字段与实例见[插件指南](dist/plugins/ai-control/README.md)。
 
 设施的纯JSON作者路径：registerFacilityContent编译独立的battle-sequence/score-contest/reel-machine策略，策略返回计划，FacilityApplication继续唯一持有RNG、临时队伍与经济提交。原生连战复用同一策略；可选插件只加载JSON并通过公开API注册，app.js不增加设施分支。动作when由查询和执行共用，插件回调受规则守卫和深冻结约束。配置范围及原作欠账见[JSON作者说明](dist/plugins/facility-content/README.md)。
+
+原作角色装配由native-cast/opening-objects选择业务角色，native-object-bindings核准唯一来源身份及坐标，native-movement使用原作初始朝向表；不以名称子串猜方向。家具行为由内容包投射为统一交互对象，世界引擎不识别家具台词。明确的剧情并行移动可声明ignoreActors及keepFacing；只有脚本移动应用该占位例外，地形/高度/边界仍照常校验。实现场次与保真边界见[开场说明](docs/regions/LITTLEROOT_OPENING.md)。
+
+开场战斗转场的来源参数/选择及纯时序采样在packs/emerald/battle-transitions.js，Canvas绘制在battle-transition-canvas.js。BattleSession只接受演出描述，TransitionController仅管理cover/hold/reveal和遮盖下提交；原作类型表不进通用内核。箭头出口由terrain命名语义统一驱动World，入图落点与跨图提交分别封装，不能为小遥家写特殊传送代码。

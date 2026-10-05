@@ -290,7 +290,8 @@ test("Oldale native data handles full inventory, retry and repeat interaction wi
     },
   ]);
   assert(s.game.inventory.commit(add, s.game.state.bag));
-  assert(s.game.enter({ map: "OldaleTown", x: 6, y: 10, dir: "up" }));
+  assert(s.game.enter({ map: "OldaleTown", x: 13, y: 15, dir: "up" }));
+  await s.game.flushStoryQueue(); await s.settle();
   const context = { object: { kind: "giftPotion" } };
   await s.game.runStory(
     s.game.story.resolve("interact", s.game.state, context),
@@ -301,6 +302,8 @@ test("Oldale native data handles full inventory, retry and repeat interaction wi
     { kind: "remove", item: "potion", count: 1 },
   ]);
   assert(s.game.inventory.commit(remove, s.game.state.bag));
+  assert(s.game.enter({ map: "OldaleTown", x:13, y:15, dir:"up" }));
+  await s.game.flushStoryQueue(); await s.settle();
   await s.game.runStory(
     s.game.story.resolve("interact", s.game.state, context),
   );

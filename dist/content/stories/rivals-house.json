@@ -75,11 +75,80 @@
       "lines": [
         "先去隔壁向小田卷博士的家人打个招呼吧。"
       ]
+    },
+    "first-floor.may": {
+      "name": "小遥",
+      "lines": [
+        "诶？你是谁？",
+        "原来你是刚搬来的{{who}}！我是小遥，请多关照！",
+        "我刚才还在想，爸爸朋友的孩子会是什么样的人呢。",
+        "我在帮爸爸研究野生宝可梦，一会儿还得出去做准备。下次再聊吧！"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "first-floor.brendan": {
+      "name": "小悠",
+      "lines": [
+        "诶？你是谁？",
+        "原来你是刚搬来的{{who}}！我是小悠，请多关照！",
+        "我刚才还在想，爸爸朋友的孩子会是什么样的人呢。",
+        "我在帮爸爸研究野生宝可梦，一会儿还得出去做准备。下次再聊吧！"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "sibling": {
+      "name": "小女孩",
+      "lines": [
+        "你有没有自己的宝可梦呀？"
+      ]
+    },
+    "mom-before": {
+      "name": "小田卷博士的妻子",
+      "lines": [
+        "有其父必有其子呢。",
+        "我丈夫和我们的孩子都很喜欢宝可梦。博士不在研究所时，多半是在草丛里做研究。"
+      ]
+    },
+    "mom-busy": {
+      "name": "小田卷博士的妻子",
+      "lines": [
+        "那孩子忙着准备宝可梦的事情，大概没注意到你来拜访呢。"
+      ]
+    },
+    "mom-route": {
+      "name": "小田卷博士的妻子",
+      "lines": [
+        "那孩子刚才出门去了103号道路。",
+        "和爸爸一样，没法安安静静待在家里呢。"
+      ]
+    },
+    "mom-after": {
+      "name": "小田卷博士的妻子",
+      "lines": [
+        "和宝可梦一起旅行真是美好。",
+        "不过要时常回家，让妈妈知道你平安哦。她也许不说，可一定在担心你。"
+      ]
     }
   },
   "scripts": {
     "mom.male": {
       "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
         {
           "type": "emote",
           "actor": "neighbor.mom",
@@ -87,14 +156,36 @@
           "ms": 800
         },
         {
-          "type": "approach",
-          "actor": "neighbor.mom",
-          "target": "player"
-        },
-        {
-          "type": "face",
-          "actor": "player",
-          "dir": "right"
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "right"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "neighbor.mom",
+                  "path": [
+                    "down",
+                    "left",
+                    "left",
+                    "left",
+                    "left",
+                    "left"
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "dialog",
@@ -110,8 +201,58 @@
     "mom-talk.male": {
       "commands": [
         {
-          "type": "dialog",
-          "dialogue": "neighbor-mom"
+          "type": "face",
+          "actor": "neighbor.mom",
+          "target": "player"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "flag": "rivalWon",
+            "equals": true
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "mom-after"
+            }
+          ],
+          "else": [
+            {
+              "type": "if",
+              "condition": {
+                "flag": "rescued",
+                "equals": true
+              },
+              "then": [
+                {
+                  "type": "dialog",
+                  "dialogue": "mom-route"
+                }
+              ],
+              "else": [
+                {
+                  "type": "if",
+                  "condition": {
+                    "flag": "neighborMet",
+                    "equals": true
+                  },
+                  "then": [
+                    {
+                      "type": "dialog",
+                      "dialogue": "mom-busy"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "type": "dialog",
+                      "dialogue": "mom-before"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -136,10 +277,18 @@
           "dir": "right"
         },
         {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
           "type": "emote",
           "actor": "neighbor.rival",
           "kind": "exclamation",
           "ms": 800
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
         },
         {
           "type": "music",
@@ -178,33 +327,78 @@
               "dialogue": "may"
             },
             {
-              "type": "move",
-              "actor": "neighbor.rival",
-              "path": [
-                "up",
-                "up",
-                "up"
+              "type": "parallel",
+              "commands": [
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "up"
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "right"
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "up",
+                        "up",
+                        "up"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "right"
+                    },
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "right",
+                        "right",
+                        "right",
+                        "right"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "up"
+                    }
+                  ]
+                }
               ]
-            },
-            {
-              "type": "face",
-              "actor": "neighbor.rival",
-              "dir": "right"
-            },
-            {
-              "type": "move",
-              "actor": "neighbor.rival",
-              "path": [
-                "right",
-                "right",
-                "right",
-                "right"
-              ]
-            },
-            {
-              "type": "face",
-              "actor": "neighbor.rival",
-              "dir": "up"
             }
           ],
           "else": [
@@ -239,31 +433,68 @@
                   "dialogue": "may"
                 },
                 {
-                  "type": "move",
-                  "actor": "neighbor.rival",
-                  "path": [
-                    "up"
+                  "type": "parallel",
+                  "commands": [
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "face",
+                          "actor": "player",
+                          "dir": "up"
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "face",
+                          "actor": "player",
+                          "dir": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "up"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "right"
+                        },
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "right",
+                            "right",
+                            "right",
+                            "right"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "up"
+                        }
+                      ]
+                    }
                   ]
-                },
-                {
-                  "type": "face",
-                  "actor": "neighbor.rival",
-                  "dir": "right"
-                },
-                {
-                  "type": "move",
-                  "actor": "neighbor.rival",
-                  "path": [
-                    "right",
-                    "right",
-                    "right",
-                    "right"
-                  ]
-                },
-                {
-                  "type": "face",
-                  "actor": "neighbor.rival",
-                  "dir": "up"
                 }
               ],
               "else": [
@@ -356,22 +587,59 @@
                           "dialogue": "may"
                         },
                         {
-                          "type": "move",
-                          "actor": "neighbor.rival",
-                          "path": [
-                            "up",
-                            "up",
-                            "right",
-                            "right",
-                            "right",
-                            "right",
-                            "right"
+                          "type": "parallel",
+                          "commands": [
+                            {
+                              "type": "sequence",
+                              "commands": [
+                                {
+                                  "type": "wait",
+                                  "ms": 266.6666666666667
+                                },
+                                {
+                                  "type": "face",
+                                  "actor": "player",
+                                  "dir": "up"
+                                },
+                                {
+                                  "type": "wait",
+                                  "ms": 266.6666666666667
+                                },
+                                {
+                                  "type": "wait",
+                                  "ms": 266.6666666666667
+                                },
+                                {
+                                  "type": "face",
+                                  "actor": "player",
+                                  "dir": "right"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "sequence",
+                              "commands": [
+                                {
+                                  "type": "move",
+                                  "actor": "neighbor.rival",
+                                  "path": [
+                                    "up",
+                                    "up",
+                                    "right",
+                                    "right",
+                                    "right",
+                                    "right",
+                                    "right"
+                                  ]
+                                },
+                                {
+                                  "type": "face",
+                                  "actor": "neighbor.rival",
+                                  "dir": "up"
+                                }
+                              ]
+                            }
                           ]
-                        },
-                        {
-                          "type": "face",
-                          "actor": "neighbor.rival",
-                          "dir": "up"
                         }
                       ],
                       "else": []
@@ -391,11 +659,19 @@
           "type": "flag",
           "key": "meetingRival",
           "value": false
+        },
+        {
+          "type": "music"
         }
       ]
     },
     "rival-talk.male": {
       "commands": [
+        {
+          "type": "face",
+          "actor": "neighbor.rival",
+          "target": "player"
+        },
         {
           "type": "dialog",
           "dialogue": "rival-later"
@@ -405,20 +681,46 @@
     "mom.female": {
       "commands": [
         {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
           "type": "emote",
           "actor": "neighbor.mom",
           "kind": "exclamation",
           "ms": 800
         },
         {
-          "type": "approach",
-          "actor": "neighbor.mom",
-          "target": "player"
-        },
-        {
-          "type": "face",
-          "actor": "player",
-          "dir": "left"
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "left"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "neighbor.mom",
+                  "path": [
+                    "down",
+                    "right",
+                    "right",
+                    "right",
+                    "right",
+                    "right"
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "dialog",
@@ -434,8 +736,58 @@
     "mom-talk.female": {
       "commands": [
         {
-          "type": "dialog",
-          "dialogue": "neighbor-mom"
+          "type": "face",
+          "actor": "neighbor.mom",
+          "target": "player"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "flag": "rivalWon",
+            "equals": true
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "mom-after"
+            }
+          ],
+          "else": [
+            {
+              "type": "if",
+              "condition": {
+                "flag": "rescued",
+                "equals": true
+              },
+              "then": [
+                {
+                  "type": "dialog",
+                  "dialogue": "mom-route"
+                }
+              ],
+              "else": [
+                {
+                  "type": "if",
+                  "condition": {
+                    "flag": "neighborMet",
+                    "equals": true
+                  },
+                  "then": [
+                    {
+                      "type": "dialog",
+                      "dialogue": "mom-busy"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "type": "dialog",
+                      "dialogue": "mom-before"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -460,10 +812,18 @@
           "dir": "left"
         },
         {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
           "type": "emote",
           "actor": "neighbor.rival",
           "kind": "exclamation",
           "ms": 800
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
         },
         {
           "type": "music",
@@ -502,22 +862,67 @@
               "dialogue": "brendan"
             },
             {
-              "type": "move",
-              "actor": "neighbor.rival",
-              "path": [
-                "up",
-                "up",
-                "up",
-                "left",
-                "left",
-                "left",
-                "left"
+              "type": "parallel",
+              "commands": [
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "up"
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "wait",
+                      "ms": 266.6666666666667
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "left"
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "move",
+                      "actor": "neighbor.rival",
+                      "path": [
+                        "up",
+                        "up",
+                        "up",
+                        "left",
+                        "left",
+                        "left",
+                        "left"
+                      ]
+                    },
+                    {
+                      "type": "face",
+                      "actor": "neighbor.rival",
+                      "dir": "up"
+                    }
+                  ]
+                }
               ]
-            },
-            {
-              "type": "face",
-              "actor": "neighbor.rival",
-              "dir": "up"
             }
           ],
           "else": [
@@ -552,20 +957,57 @@
                   "dialogue": "brendan"
                 },
                 {
-                  "type": "move",
-                  "actor": "neighbor.rival",
-                  "path": [
-                    "up",
-                    "left",
-                    "left",
-                    "left",
-                    "left"
+                  "type": "parallel",
+                  "commands": [
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "face",
+                          "actor": "player",
+                          "dir": "up"
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "face",
+                          "actor": "player",
+                          "dir": "left"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "neighbor.rival",
+                          "path": [
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "neighbor.rival",
+                          "dir": "up"
+                        }
+                      ]
+                    }
                   ]
-                },
-                {
-                  "type": "face",
-                  "actor": "neighbor.rival",
-                  "dir": "up"
                 }
               ],
               "else": [
@@ -605,22 +1047,63 @@
                       "dialogue": "brendan"
                     },
                     {
-                      "type": "move",
-                      "actor": "neighbor.rival",
-                      "path": [
-                        "up",
-                        "up",
-                        "left",
-                        "left",
-                        "left",
-                        "left",
-                        "left"
+                      "type": "parallel",
+                      "commands": [
+                        {
+                          "type": "sequence",
+                          "commands": [
+                            {
+                              "type": "wait",
+                              "ms": 133.33333333333334
+                            },
+                            {
+                              "type": "wait",
+                              "ms": 266.6666666666667
+                            },
+                            {
+                              "type": "face",
+                              "actor": "player",
+                              "dir": "up"
+                            },
+                            {
+                              "type": "wait",
+                              "ms": 266.6666666666667
+                            },
+                            {
+                              "type": "wait",
+                              "ms": 266.6666666666667
+                            },
+                            {
+                              "type": "face",
+                              "actor": "player",
+                              "dir": "left"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "sequence",
+                          "commands": [
+                            {
+                              "type": "move",
+                              "actor": "neighbor.rival",
+                              "path": [
+                                "up",
+                                "up",
+                                "left",
+                                "left",
+                                "left",
+                                "left",
+                                "left"
+                              ]
+                            },
+                            {
+                              "type": "face",
+                              "actor": "neighbor.rival",
+                              "dir": "up"
+                            }
+                          ]
+                        }
                       ]
-                    },
-                    {
-                      "type": "face",
-                      "actor": "neighbor.rival",
-                      "dir": "up"
                     }
                   ],
                   "else": [
@@ -693,29 +1176,970 @@
           "type": "flag",
           "key": "meetingRival",
           "value": false
+        },
+        {
+          "type": "music"
         }
       ]
     },
     "rival-talk.female": {
       "commands": [
         {
+          "type": "face",
+          "actor": "neighbor.rival",
+          "target": "player"
+        },
+        {
           "type": "dialog",
           "dialogue": "rival-later"
         }
       ]
     },
-    "first-neighbor": {
+    "upstairs.male": {
       "commands": [
         {
-          "type": "dialog",
-          "dialogue": "go-neighbor"
+          "type": "flag",
+          "key": "neighborUpstairs",
+          "value": true
+        }
+      ]
+    },
+    "meet-downstairs.male.0": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": true
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival.downstairs",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "down"
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_may"
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "left"
         },
         {
           "type": "move",
-          "actor": "player",
+          "actor": "neighbor.rival.downstairs",
           "path": [
-            "down"
+            "left"
           ]
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "up"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "up",
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "first-floor.may"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "right"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "right"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "right"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up",
+                    "up"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "hide",
+          "actor": "neighbor.rival.downstairs"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": false
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "music"
+        }
+      ]
+    },
+    "meet-downstairs.male.1": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": true
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival.downstairs",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_may"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "first-floor.may"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "right"
+                },
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "up"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "right"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "right"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up",
+                    "up"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "left"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "left"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "hide",
+          "actor": "neighbor.rival.downstairs"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": false
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "music"
+        }
+      ]
+    },
+    "meet-downstairs.male.2": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": true
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival.downstairs",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "down"
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_may"
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "right"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "up"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "up",
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "first-floor.may"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "left"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "left"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "left"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up",
+                    "up"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "hide",
+          "actor": "neighbor.rival.downstairs"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": false
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "music"
+        }
+      ]
+    },
+    "upstairs.female": {
+      "commands": [
+        {
+          "type": "flag",
+          "key": "neighborUpstairs",
+          "value": true
+        }
+      ]
+    },
+    "meet-downstairs.female.0": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": true
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival.downstairs",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "down"
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_brendan"
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "left"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "left"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "up"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "up",
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "first-floor.brendan"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "right"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "right"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "right"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up",
+                    "up"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "hide",
+          "actor": "neighbor.rival.downstairs"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": false
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "music"
+        }
+      ]
+    },
+    "meet-downstairs.female.1": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": true
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival.downstairs",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_brendan"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "first-floor.brendan"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "right"
+                },
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "up"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "right"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "right"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up",
+                    "up"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "left"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "left"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "hide",
+          "actor": "neighbor.rival.downstairs"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": false
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "music"
+        }
+      ]
+    },
+    "meet-downstairs.female.2": {
+      "commands": [
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "wait",
+          "ms": 166.66666666666666
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": true
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_pin"
+        },
+        {
+          "type": "emote",
+          "actor": "neighbor.rival.downstairs",
+          "kind": "exclamation",
+          "ms": 800
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "down"
+        },
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_encounter_brendan"
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "right"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "right"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "neighbor.rival.downstairs",
+          "dir": "up"
+        },
+        {
+          "type": "move",
+          "actor": "neighbor.rival.downstairs",
+          "path": [
+            "up",
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "first-floor.brendan"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "left"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "left"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "left"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "neighbor.rival.downstairs",
+                  "dir": "up"
+                },
+                {
+                  "type": "move",
+                  "actor": "neighbor.rival.downstairs",
+                  "path": [
+                    "up",
+                    "up"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_exit"
+        },
+        {
+          "type": "hide",
+          "actor": "neighbor.rival.downstairs"
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "meetingRivalDownstairs",
+          "value": false
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "music"
+        }
+      ]
+    },
+    "sibling": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "sibling"
         }
       ]
     }
@@ -911,26 +2335,21 @@
         }
       }
     },
-    "first-neighbor": {
-      "trigger": "step",
-      "priority": 50,
+    "upstairs.male": {
+      "trigger": "mapEnter",
+      "priority": 30,
       "selector": {
-        "map": "LittlerootTown"
-      },
-      "script": "first-neighbor",
-      "where": {
-        "map": "LittlerootTown",
-        "x": 10,
-        "y": 0,
-        "width": 3,
-        "height": 2
+        "map": "LittlerootTown_MaysHouse_2F"
       },
       "requires": {
         "all": [
           {
-            "not": {
-              "flag": "rescued",
-              "equals": true
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
             }
           },
           {
@@ -940,7 +2359,271 @@
             }
           }
         ]
-      }
+      },
+      "script": "upstairs.male"
+    },
+    "meet-downstairs.male.0": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "where": {
+        "map": "LittlerootTown_MaysHouse_1F",
+        "x": 1,
+        "y": 3,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "neighborUpstairs",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "meet-downstairs.male.0"
+    },
+    "meet-downstairs.male.1": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "where": {
+        "map": "LittlerootTown_MaysHouse_1F",
+        "x": 2,
+        "y": 4,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "neighborUpstairs",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "meet-downstairs.male.1"
+    },
+    "meet-downstairs.male.2": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_MaysHouse_1F"
+      },
+      "where": {
+        "map": "LittlerootTown_MaysHouse_1F",
+        "x": 3,
+        "y": 3,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "neighborUpstairs",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "meet-downstairs.male.2"
+    },
+    "upstairs.female": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_2F"
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "upstairs.female"
+    },
+    "meet-downstairs.female.0": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "where": {
+        "map": "LittlerootTown_BrendansHouse_1F",
+        "x": 7,
+        "y": 3,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "neighborUpstairs",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "meet-downstairs.female.0"
+    },
+    "meet-downstairs.female.1": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "where": {
+        "map": "LittlerootTown_BrendansHouse_1F",
+        "x": 8,
+        "y": 4,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "neighborUpstairs",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "meet-downstairs.female.1"
+    },
+    "meet-downstairs.female.2": {
+      "trigger": "step",
+      "priority": 30,
+      "selector": {
+        "map": "LittlerootTown_BrendansHouse_1F"
+      },
+      "where": {
+        "map": "LittlerootTown_BrendansHouse_1F",
+        "x": 9,
+        "y": 3,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "neighborUpstairs",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "script": "meet-downstairs.female.2"
+    },
+    "sibling": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "objectId": "neighbor.sibling"
+      },
+      "script": "sibling"
     }
   },
   "sources": [
@@ -948,13 +2631,13 @@
       "label": "LittlerootTown_MaysHouse_2F_EventScript_MeetMay",
       "map": "LittlerootTown_MaysHouse_2F",
       "status": "original-verified",
-      "note": "精灵球触发初见；四个方向的接近/去电脑路径机械转写为 move/face/wait 数据。原作玩家观看对方走向电脑的逐帧转身未逐条移植；不会影响进度。"
+      "note": "四方向接近、并行观看及去电脑移动逐数组转写；另有下楼初见的三个坐标入口。画面与节奏待用户验收。"
     },
     {
       "label": "LittlerootTown_BrendansHouse_2F_EventScript_MeetBrendan",
       "map": "LittlerootTown_BrendansHouse_2F",
       "status": "original-verified",
-      "note": "精灵球触发初见；四个方向的接近/去电脑路径机械转写为 move/face/wait 数据。原作玩家观看对方走向电脑的逐帧转身未逐条移植；不会影响进度。"
+      "note": "四方向接近、并行观看及去电脑移动逐数组转写；另有下楼初见的三个坐标入口。画面与节奏待用户验收。"
     }
   ],
   "projections": [
@@ -1006,6 +2689,72 @@
         "x": 0,
         "y": 2,
         "dir": "up"
+      }
+    },
+    {
+      "map": "LittlerootTown_BrendansHouse_2F",
+      "objectId": "neighbor.rival",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "rescued"
+          },
+          {
+            "any": [
+              {
+                "flag": "neighborMet"
+              },
+              {
+                "flag": "meetingRival"
+              }
+            ]
+          }
+        ]
+      },
+      "changes": {
+        "hidden": true
+      }
+    },
+    {
+      "map": "LittlerootTown_MaysHouse_2F",
+      "objectId": "neighbor.rival",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "rescued"
+          },
+          {
+            "any": [
+              {
+                "flag": "neighborMet"
+              },
+              {
+                "flag": "meetingRival"
+              }
+            ]
+          }
+        ]
+      },
+      "changes": {
+        "hidden": true
       }
     }
   ]

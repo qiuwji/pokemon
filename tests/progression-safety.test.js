@@ -125,6 +125,7 @@ test("Native capture commits custody before dialogue; a failed capture announcem
 test("Interrupted rival victory cannot lock the Pokédex gift; the durable reward survives save/reload", async () => {
   const s = session(),
     before = s.game.state.money;
+  s.game.enter({map:"Route103",x:10,y:4,dir:"up"});
   s.game.ui.say = async () => {
     throw new Error("rival dialogue failed");
   };
@@ -141,6 +142,8 @@ test("Interrupted rival victory cannot lock the Pokédex gift; the durable rewar
   assert(valid(s));
   s.game.loadDocument(s.game.exportDocument());
   s.game.ui.say = async () => {};
+  s.game.enter({ map: "LittlerootTown_ProfessorBirchsLab", x:6, y:12, dir:"up" });
+  await s.game.flushStoryQueue(); await s.settle();
   const gift = interaction(s.game.state, { kind: "professor" }, "研究所");
   assert(gift.length > 0);
   await s.game.runStory(gift);
@@ -157,43 +160,21 @@ test("Interrupted rival victory cannot lock the Pokédex gift; the durable rewar
   assert(valid(s));
 });
 
-test("Full ball pocket rejects the Pokédex reward atomically and freeing space allows the same interaction to retry", async () => {
+test("Full ball pocket does not prevent the source dex scene from finishing or corrupt the save", async () => {
   const s = session();
-  await s.game.runStory(
-    battleOutcome(s.game.state, { script: "rival", result: "win" }, s.db),
-  );
+  s.game.enter({map:"Route103",x:10,y:4,dir:"up"});
+  await s.game.runStory(battleOutcome(s.game.state, { script: "rival", result: "win" }, s.db));
   addItem(s, "pokeball", 16 * 99);
-  const before = structuredClone(s.game.state);
-  await assert.rejects(
-    s.game.runStory(interaction(s.game.state, { kind: "professor" }, "研究所")),
-  );
-  assert(s.game.state.story.history.length > before.story.history.length);
-  assert.deepEqual(
-    {
-      ...s.game.state,
-      story: { ...s.game.state.story, history: before.story.history },
-    },
-    before,
-  );
-  assert(!s.game.state.flags.pokedex);
-  assert(!s.game.state.story.completed.includes("professor.pokedex"));
-  assert(
-    s.game.inventory.commit(
-      s.game.inventory.prepare(s.game.state.bag, [
-        { kind: "remove", item: "pokeball", count: 5 },
-      ]),
-      s.game.state.bag,
-    ),
-  );
-  await s.game.runStory(
-    interaction(s.game.state, { kind: "professor" }, "研究所"),
-  );
+  s.game.enter({ map: "LittlerootTown_ProfessorBirchsLab", x:6, y:12, dir:"up" });
+  await s.game.flushStoryQueue(); await s.settle();
   assert.equal(s.game.state.flags.pokedex, true);
-  assert.equal(
-    s.game.inventory.quantity(s.game.state.bag, "pokeball"),
-    16 * 99,
-  );
+  assert(s.game.state.story.rewards.includes("professor.pokedex"));
+  assert(!s.game.state.story.rewards.includes("professor.pokeballs"));
+  assert.equal(s.game.inventory.quantity(s.game.state.bag, "pokeball"), 16 * 99);
+  assert.equal(s.game.storyBusy, false);
   assert(valid(s));
+  s.game.loadDocument(s.game.exportDocument());
+  assert.equal(s.game.state.flags.pokedex, true);
 });
 
 test("Loss settlement handles an empty party and rejects a non-finite calculation before touching money", async () => {
@@ -218,7 +199,7 @@ test("Loss settlement handles an empty party and rejects a non-finite calculatio
   assert(valid(s));
 });
 
-test("Mother binds by original local identity and uses original coordinates/facing; custom practice NPCs explicitly declare behavior", () => {
+test("Mother binds by original local identity; native Route101 cast contains no demonstration trainers", () => {
   const s = session(),
     map = "LittlerootTown_BrendansHouse_1F";
   const mother = objectsFor({ ...s.game.state, position: { map } }, s.db).find(
@@ -237,19 +218,10 @@ test("Mother binds by original local identity and uses original coordinates/faci
     ).x,
     3,
   );
-  const arenas = objectsFor(
-    { ...s.game.state, position: { map: "Route101" } },
-    s.db,
-  ).filter((o) => o.kind === "arena");
-  assert.equal(arenas.length, 2);
-  assert(
-    arenas.every(
-      (o) =>
-        o.movement.mode === "still" &&
-        o.movement.rangeX === 0 &&
-        o.movement.rangeY === 0,
-    ),
-  );
+  const route = objectsFor({ ...s.game.state, position: { map: "Route101" } }, s.db);
+  assert(!route.some(o => ["arena", "trainer"].includes(o.kind)));
+  assert(route.some(o => o.id === "route101.boy"));
+
 });
 
 test("Missing or ambiguous native NPC bindings fail in content validation rather than silently standing still", () => {
@@ -301,7 +273,9 @@ test("Practice trainer sight triggers before victory and stops after the actual 
   s.game.enter({ map: "Route101", x: 16, y: 9, dir: "up" });
   const npc = s.game.field.npcs
     .objects("Route101")
-    .find((o) => o.trainerId === "youngster");
+    .find((o) => o.id === "route101.youngster");
+  // Arrange a trainer for the sight contract; the original Route 101 youngster only talks.
+  Object.assign(npc, { kind: "trainer", trainerId: "youngster" });
   npc.dir = "down";
   npc.sightRange = 2;
   const scenes = [],

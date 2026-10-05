@@ -1,0 +1,370 @@
+{
+  "id": "emerald:professor-lab",
+  "version": 1,
+  "dialogues": {
+    "aide-first": {
+      "name": "研究助手",
+      "lines": [
+        "诶？小田卷博士？博士出去做野外研究了，不在这里。",
+        "野外研究，就是在田野、山间等自然环境里研究，而不是待在研究所。",
+        "博士不喜欢伏案工作。他更喜欢走出去亲身体验，而不是只在书里阅读。"
+      ]
+    },
+    "aide-repeat": {
+      "name": "研究助手",
+      "lines": [
+        "博士不喜欢伏案工作。",
+        "比起读书，他更喜欢出去亲身体验。"
+      ]
+    },
+    "aide-starter": {
+      "name": "研究助手",
+      "lines": [
+        "小田卷博士正在研究宝可梦的栖息地和分布。",
+        "他的孩子也很乐意帮忙，真是和睦的一家人。"
+      ]
+    },
+    "rival-after": {
+      "name": "",
+      "lines": [
+        "接下来去哪里好呢？",
+        "先留在这里，帮爸爸研究宝可梦吧。"
+      ]
+    },
+    "dex-offer": {
+      "name": "小田卷博士",
+      "lines": [
+        "听说你第一次对战就击败了我的孩子，真了不起！",
+        "我的孩子总是在外面帮我做研究，也很有经验。",
+        "为了帮助你研究宝可梦，我准备了这份礼物。"
+      ]
+    },
+    "dex-received": {
+      "name": "",
+      "lines": [
+        "获得了宝可梦图鉴！"
+      ]
+    },
+    "dex-explain": {
+      "name": "小田卷博士",
+      "lines": [
+        "图鉴是一件高科技工具，会自动记录你遇到和捕捉的宝可梦。",
+        "我的孩子也带着它四处旅行。希望你能见到各种各样的宝可梦！"
+      ]
+    },
+    "balls.male": {
+      "name": "小遥",
+      "lines": [
+        "你也有图鉴了呀！",
+        "这是我送给你的精灵球。用它们去捕捉可爱的宝可梦吧！"
+      ]
+    },
+    "balls.female": {
+      "name": "小悠",
+      "lines": [
+        "你也拿到图鉴了啊！",
+        "这些精灵球给你。去捕捉厉害的宝可梦吧！"
+      ]
+    },
+    "balls-full": {
+      "name": "",
+      "lines": [
+        "背包已经满了，放不下精灵球。"
+      ]
+    },
+    "balls-received": {
+      "name": "",
+      "lines": [
+        "获得了5个精灵球！",
+        "把精灵球放进了背包的精灵球口袋。"
+      ]
+    }
+  },
+  "scripts": {
+    "aide": {
+      "commands": [
+        {
+          "type": "if",
+          "condition": {
+            "flag": "rescued",
+            "equals": true
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "aide-starter"
+            }
+          ],
+          "else": [
+            {
+              "type": "if",
+              "condition": {
+                "flag": "birchAideMet",
+                "equals": true
+              },
+              "then": [
+                {
+                  "type": "dialog",
+                  "dialogue": "aide-repeat"
+                }
+              ],
+              "else": [
+                {
+                  "type": "dialog",
+                  "dialogue": "aide-first"
+                },
+                {
+                  "type": "flag",
+                  "key": "birchAideMet",
+                  "value": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "rival-after": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rival-after"
+        }
+      ]
+    },
+    "give-dex": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "lab.rival",
+          "dir": "down"
+        },
+        {
+          "type": "face",
+          "actor": "birch",
+          "target": "player"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "up"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "dex-offer"
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:mus_obtain_item",
+          "channel": "fanfare"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "dex-received"
+        },
+        {
+          "type": "waitSound",
+          "channel": "fanfare"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokedex",
+          "flags": {
+            "pokedex": true
+          }
+        },
+        {
+          "type": "dialog",
+          "dialogue": "dex-explain"
+        },
+        {
+          "type": "move",
+          "actor": "lab.rival",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "lab.rival",
+          "dir": "left"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "balls.male"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "balls.female"
+            }
+          ]
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokeballs",
+          "items": {
+            "pokeball": 5
+          },
+          "onResult": {
+            "ok": [
+              {
+                "type": "sound",
+                "cue": "emerald-audio:mus_obtain_item",
+                "channel": "fanfare"
+              },
+              {
+                "type": "dialog",
+                "dialogue": "balls-received"
+              },
+              {
+                "type": "waitSound",
+                "channel": "fanfare"
+              }
+            ],
+            "alreadyGranted": [],
+            "inventoryFull": [
+              {
+                "type": "dialog",
+                "dialogue": "balls-full"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "enter-dex": {
+      "commands": [
+        {
+          "type": "move",
+          "actor": "player",
+          "path": [
+            "up",
+            "up",
+            "up",
+            "up",
+            "up",
+            "up",
+            "up"
+          ]
+        },
+        {
+          "type": "call",
+          "script": "give-dex"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "aide": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "objectId": "lab.aide"
+      },
+      "script": "aide"
+    },
+    "rival-after": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "objectId": "lab.rival"
+      },
+      "script": "rival-after"
+    },
+    "enter-dex": {
+      "trigger": "mapEnter",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab"
+      },
+      "requires": {
+        "all": [
+          {
+            "flag": "rescued"
+          },
+          {
+            "reward": "rival.prize"
+          },
+          {
+            "not": {
+              "flag": "pokedex"
+            }
+          }
+        ]
+      },
+      "script": "enter-dex"
+    },
+    "give-dex": {
+      "trigger": "interact",
+      "priority": 40,
+      "selector": {
+        "map": "LittlerootTown_ProfessorBirchsLab",
+        "objectId": "birch"
+      },
+      "requires": {
+        "all": [
+          {
+            "flag": "rescued"
+          },
+          {
+            "reward": "rival.prize"
+          },
+          {
+            "not": {
+              "flag": "pokedex"
+            }
+          }
+        ]
+      },
+      "script": "give-dex"
+    }
+  },
+  "sources": [
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Aide",
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "status": "original-verified",
+      "note": "助手首次/再次/领取初始宝可梦三个分支；博士救援前不在研究所，助手不提供培育业务。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedexEvent",
+      "status": "original-verified",
+      "note": "入图玩家上移七步；图鉴与精灵球分开发放，满包只影响球；对手向下走一格面左。"
+    }
+  ],
+  "projections": [
+    {
+      "map": "LittlerootTown_ProfessorBirchsLab",
+      "objectId": "lab.rival",
+      "requires": {
+        "flag": "pokedex"
+      },
+      "changes": {
+        "x": 7,
+        "y": 5,
+        "dir": "left"
+      }
+    }
+  ]
+}

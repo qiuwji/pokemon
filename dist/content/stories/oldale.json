@@ -4,63 +4,367 @@
   "dialogues": {
     "welcome": {
       "name": "商店员工",
-      "lines": ["友好商店欢迎你！"]
+      "lines": [
+        "你好！我在友好商店工作。",
+        "可以请你跟我来一下吗？"
+      ]
     },
     "full": {
       "name": "商店员工",
-      "lines": ["背包里已经放不下了。腾出空间后再来领取伤药吧。"]
+      "lines": [
+        "背包里已经放不下了。腾出空间后再来领取伤药吧。"
+      ]
     },
     "received": {
       "name": "商店员工",
-      "lines": ["获得了 1 瓶伤药！"]
+      "lines": [
+        "获得了 1 瓶伤药！"
+      ]
     },
     "greeting": {
       "name": "商店员工",
-      "lines": ["需要道具的话，欢迎到蓝色屋顶的友好商店来。"]
+      "lines": [
+        "伤药随时都能使用。有些时候，它比宝可梦中心还方便呢。"
+      ]
+    },
+    "mart": {
+      "name": "商店员工",
+      "lines": [
+        "这里就是友好商店，认准蓝色的屋顶就行。",
+        "我们出售各种道具，包括用来捕捉宝可梦的精灵球。",
+        "这份宣传赠品就送给你吧。"
+      ]
+    },
+    "footprints-before": {
+      "name": "男子",
+      "lines": [
+        "我刚发现了一只稀有宝可梦的脚印！",
+        "请等我把它画下来，好吗？"
+      ]
+    },
+    "footprints-after": {
+      "name": "男子",
+      "lines": [
+        "我终于画下了那只稀有宝可梦的脚印。",
+        "不过，原来那些只是我自己的脚印……"
+      ]
+    },
+    "blocked": {
+      "name": "男子",
+      "lines": [
+        "啊！等等！请不要走进这里！",
+        "我刚发现了一只稀有宝可梦的脚印。请等我画完，好吗？"
+      ]
     }
   },
   "scripts": {
     "gift": {
       "commands": [
         {
-          "type": "dialog",
-          "dialogue": "welcome"
-        },
-        {
-          "type": "reward",
-          "id": "shop.gift",
-          "flags": {
-            "potionGift": true
-          },
-          "items": {
-            "potion": 1
-          },
-          "onResult": {
-            "ok": [
-              {
-                "type": "emote",
-                "actor": "player",
-                "kind": "exclamation",
-                "ms": 450
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "variable",
+                "input": {
+                  "name": "emerald.oldaleTour"
+                }
               },
-              {
-                "type": "dialog",
-                "dialogue": "received"
+              "op": "eq",
+              "value": true
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "greeting"
+            }
+          ],
+          "else": [
+            {
+              "type": "setVariable",
+              "name": "emerald.oldaleTour",
+              "value": true
+            },
+            {
+              "type": "face",
+              "actor": "oldale.employee",
+              "target": "player"
+            },
+            {
+              "type": "music",
+              "cue": "emerald-audio:mus_follow_me"
+            },
+            {
+              "type": "dialog",
+              "dialogue": "welcome"
+            },
+            {
+              "type": "if",
+              "condition": {
+                "compare": {
+                  "query": {
+                    "id": "playerFacing"
+                  },
+                  "op": "eq",
+                  "value": "up"
+                }
+              },
+              "then": [
+                {
+                  "type": "parallel",
+                  "commands": [
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "oldale.employee",
+                          "path": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up"
+                          ],
+                          "ignoreActors": [
+                            "player"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "oldale.employee",
+                          "dir": "down"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "player",
+                          "path": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up"
+                          ],
+                          "ignoreActors": [
+                            "oldale.employee"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "if",
+              "condition": {
+                "compare": {
+                  "query": {
+                    "id": "playerFacing"
+                  },
+                  "op": "eq",
+                  "value": "down"
+                }
+              },
+              "then": [
+                {
+                  "type": "parallel",
+                  "commands": [
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "oldale.employee",
+                          "path": [
+                            "left",
+                            "up",
+                            "up",
+                            "right",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up"
+                          ],
+                          "ignoreActors": [
+                            "player"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "oldale.employee",
+                          "dir": "down"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "wait",
+                          "ms": 266.6666666666667
+                        },
+                        {
+                          "type": "move",
+                          "actor": "player",
+                          "path": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up"
+                          ],
+                          "ignoreActors": [
+                            "oldale.employee"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "if",
+              "condition": {
+                "compare": {
+                  "query": {
+                    "id": "playerFacing"
+                  },
+                  "op": "eq",
+                  "value": "right"
+                }
+              },
+              "then": [
+                {
+                  "type": "parallel",
+                  "commands": [
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "oldale.employee",
+                          "path": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up"
+                          ],
+                          "ignoreActors": [
+                            "player"
+                          ]
+                        },
+                        {
+                          "type": "face",
+                          "actor": "oldale.employee",
+                          "dir": "down"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sequence",
+                      "commands": [
+                        {
+                          "type": "move",
+                          "actor": "player",
+                          "path": [
+                            "right",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up"
+                          ],
+                          "ignoreActors": [
+                            "oldale.employee"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "dialog",
+              "dialogue": "mart"
+            },
+            {
+              "type": "reward",
+              "id": "shop.gift",
+              "flags": {
+                "potionGift": true
+              },
+              "items": {
+                "potion": 1
+              },
+              "onResult": {
+                "ok": [
+                  {
+                    "type": "sound",
+                    "cue": "emerald-audio:mus_obtain_item",
+                    "channel": "fanfare"
+                  },
+                  {
+                    "type": "dialog",
+                    "dialogue": "received"
+                  },
+                  {
+                    "type": "waitSound",
+                    "channel": "fanfare"
+                  },
+                  {
+                    "type": "dialog",
+                    "dialogue": "greeting"
+                  }
+                ],
+                "alreadyGranted": [
+                  {
+                    "type": "dialog",
+                    "dialogue": "greeting"
+                  }
+                ],
+                "inventoryFull": [
+                  {
+                    "type": "dialog",
+                    "dialogue": "full"
+                  }
+                ]
               }
-            ],
-            "alreadyGranted": [
-              {
-                "type": "dialog",
-                "dialogue": "greeting"
-              }
-            ],
-            "inventoryFull": [
-              {
-                "type": "dialog",
-                "dialogue": "full"
-              }
-            ]
-          }
+            },
+            {
+              "type": "music",
+              "restore": true
+            }
+          ]
         }
       ]
     },
@@ -69,6 +373,162 @@
         {
           "type": "dialog",
           "dialogue": "greeting"
+        }
+      ]
+    },
+    "footprints": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "oldale.footprints",
+          "target": "player"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "flag": "pokedex"
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "footprints-after"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "footprints-before"
+            },
+            {
+              "type": "face",
+              "actor": "oldale.footprints",
+              "dir": "left"
+            }
+          ]
+        }
+      ]
+    },
+    "blocked": {
+      "commands": [
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "move",
+                  "actor": "player",
+                  "path": [
+                    "right"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "oldale.footprints",
+                  "path": [
+                    "up"
+                  ],
+                  "running": true
+                },
+                {
+                  "type": "face",
+                  "actor": "oldale.footprints",
+                  "dir": "left"
+                },
+                {
+                  "type": "move",
+                  "actor": "oldale.footprints",
+                  "path": [
+                    "right"
+                  ],
+                  "keepFacing": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "blocked"
+        },
+        {
+          "type": "move",
+          "actor": "oldale.footprints",
+          "path": [
+            "down",
+            "left"
+          ]
+        }
+      ]
+    },
+    "enter": {
+      "commands": [
+        {
+          "type": "setVariable",
+          "name": "emerald.oldaleTour",
+          "value": false
+        },
+        {
+          "type": "if",
+          "condition": {
+            "not": {
+              "flag": "potionGift"
+            }
+          },
+          "then": [
+            {
+              "type": "worldPatch",
+              "operations": [
+                {
+                  "kind": "object",
+                  "map": "OldaleTown",
+                  "id": "oldale.employee",
+                  "scope": "visit",
+                  "changes": {
+                    "x": 13,
+                    "y": 14,
+                    "dir": "down"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "if",
+          "condition": {
+            "not": {
+              "flag": "pokedex"
+            }
+          },
+          "then": [
+            {
+              "type": "worldPatch",
+              "operations": [
+                {
+                  "kind": "object",
+                  "map": "OldaleTown",
+                  "id": "oldale.footprints",
+                  "scope": "visit",
+                  "changes": {
+                    "x": 1,
+                    "y": 11,
+                    "dir": "left"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -97,13 +557,47 @@
         "flag": "potionGift"
       },
       "script": "greeting"
+    },
+    "footprints": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "map": "OldaleTown",
+        "objectId": "oldale.footprints"
+      },
+      "script": "footprints"
+    },
+    "blocked": {
+      "trigger": "step",
+      "priority": 30,
+      "where": {
+        "map": "OldaleTown",
+        "x": 0,
+        "y": 10,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "not": {
+          "flag": "pokedex"
+        }
+      },
+      "script": "blocked"
+    },
+    "enter": {
+      "trigger": "mapEnter",
+      "priority": 30,
+      "selector": {
+        "map": "OldaleTown"
+      },
+      "script": "enter"
     }
   },
   "sources": [
     {
       "label": "OldaleTown_EventScript_MartEmployee",
-      "status": "project-adaptation",
-      "note": "保留现有切片并补容量分支；原作方向移动和入图配置尚待业务转写。"
+      "status": "original-verified",
+      "note": "原作三个玩家朝向的并行带路、入图摆位、同访问介绍一次、满包可下次访问重试、音乐恢复；变量在入图重置，不用实时projection反复摆位。"
     }
   ]
 }

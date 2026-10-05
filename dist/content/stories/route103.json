@@ -1,0 +1,235 @@
+{
+  "id": "emerald:route103",
+  "version": 1,
+  "dialogues": {
+    "after.male": {
+      "name": "小遥",
+      "lines": [
+        "唔，你和搭档的配合真不错！",
+        "你才刚得到宝可梦，就已经能这样对战了，太好了！",
+        "爸爸应该还在研究所。我们回去吧！"
+      ]
+    },
+    "after.female": {
+      "name": "小悠",
+      "lines": [
+        "你和宝可梦配合得不错嘛！",
+        "你会成为很棒的训练家。爸爸应该还在研究所，走，回去吧！"
+      ]
+    }
+  },
+  "scripts": {
+    "exit.north": {
+      "commands": [
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "rival.route103",
+                  "path": [
+                    "left",
+                    "down"
+                  ],
+                  "ignoreActors": [
+                    "player"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "wait",
+                  "ms": 66.66666666666667
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "left"
+                },
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "down"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_ledge"
+        },
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 266.6666666666667
+        },
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down",
+            "down",
+            "down",
+            "down"
+          ]
+        },
+        {
+          "type": "hide",
+          "actor": "rival.route103"
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        }
+      ]
+    },
+    "exit.south": {
+      "commands": [
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down"
+          ],
+          "ignoreActors": [
+            "player"
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_ledge"
+        },
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 266.6666666666667
+        },
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down",
+            "down",
+            "down"
+          ]
+        },
+        {
+          "type": "hide",
+          "actor": "rival.route103"
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        }
+      ]
+    },
+    "exit.side": {
+      "commands": [
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "rival.route103",
+                  "path": [
+                    "down"
+                  ],
+                  "ignoreActors": [
+                    "player"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "wait",
+                  "ms": 266.6666666666667
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "down"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "sound",
+          "cue": "emerald-audio:se_ledge"
+        },
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down"
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 266.6666666666667
+        },
+        {
+          "type": "move",
+          "actor": "rival.route103",
+          "path": [
+            "down",
+            "down",
+            "down"
+          ]
+        },
+        {
+          "type": "hide",
+          "actor": "rival.route103"
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "label": "Route103_EventScript_RivalExit",
+      "map": "Route103",
+      "status": "original-verified",
+      "note": "三种朝向出口；第一步后跨越南向跳崖，延迟16帧再离场；领奖不提前移除角色。"
+    }
+  ]
+}

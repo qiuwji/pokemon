@@ -233,6 +233,60 @@
             }
           }
         }
+      },
+      {
+        "id": "Woman4",
+        "path": "graphics/object_events/pics/people/woman_4.png",
+        "palette": "graphics/object_events/palettes/npc_1.pal",
+        "definition": {
+          "w": 16,
+          "h": 32
+        }
+      },
+      {
+        "id": "LittleGirl",
+        "path": "graphics/object_events/pics/people/little_girl.png",
+        "palette": "graphics/object_events/palettes/npc_2.pal",
+        "definition": {
+          "w": 16,
+          "h": 16
+        }
+      },
+      {
+        "id": "Girl3",
+        "path": "graphics/object_events/pics/people/girl_3.png",
+        "palette": "graphics/object_events/palettes/npc_2.pal",
+        "definition": {
+          "w": 16,
+          "h": 32
+        }
+      },
+      {
+        "id": "Maniac",
+        "path": "graphics/object_events/pics/people/maniac.png",
+        "palette": "graphics/object_events/palettes/npc_4.pal",
+        "definition": {
+          "w": 16,
+          "h": 32
+        }
+      },
+      {
+        "id": "MartEmployee",
+        "path": "graphics/object_events/pics/people/mart_employee.png",
+        "palette": "graphics/object_events/palettes/npc_1.pal",
+        "definition": {
+          "w": 16,
+          "h": 32
+        }
+      },
+      {
+        "id": "Woman5",
+        "path": "graphics/object_events/pics/people/woman_5.png",
+        "palette": "graphics/object_events/palettes/npc_2.pal",
+        "definition": {
+          "w": 16,
+          "h": 32
+        }
       }
     ]
   },

@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-05",
+  "version": "0.33.0",
+  "saveVersion": 15,
+  "baseCommit": "fd9e0078f3d9b2bfbd4d1d751f480fbd55b98593",
+  "scope": "Opening main chain through running shoes, choreography, input and reusable source conversion",
+  "tests": {
+    "core": {
+      "passed": 956,
+      "failed": 0
+    },
+    "plugins": {
+      "passed": 27,
+      "failed": 0
+    },
+    "log": "tests.log",
+    "sourceTools": {
+      "passed": 12,
+      "failed": 0,
+      "log": "source-tools.log"
+    }
+  },
+  "quality": {
+    "status": "passed",
+    "syntaxModules": 352,
+    "documents": 79,
+    "localLinks": 799,
+    "executableExamples": 17,
+    "log": "check.log",
+    "checks": [
+      "content references/assets",
+      "strict public contracts",
+      "all module syntax",
+      "documentation and Skill metadata/examples",
+      "ESLint",
+      "configured strict engine types"
+    ]
+  },
+  "source": {
+    "roots": 36,
+    "blocks": 427,
+    "unresolved": 0,
+    "packetSha256": "da3db44cc00d58dfa8fd013171dd03ffc8dc5a93685297d0203bd47bbaf5a842",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "status": "matches-pinned-reference",
+    "log": "source.log",
+    "movement": "movement-cli.log"
+  },
+  "browser": {
+    "status": "pending-user",
+    "reason": "No Computer Use; user owns end-to-end acceptance"
+  },
+  "limitations": [
+    "No browser visual or audio acceptance",
+    "Hardware BG displacement, palette blending and ball affine rotation are not fully emulated",
+    "Optional nickname, refusal loop, Oldale hurry-home and full PC/decorations remain"
+  ],
+  "inputFingerprint": "8160a5dd3410c15d7d5424bc9841ca381731aab501d71161210b9da9475dbfe3",
+  "fingerprintScope": "dist, tests, tools excluding user story-doc-check.py and caches; package/quality configuration",
+  "audio": {
+    "tracks": [
+      "MUS_FOLLOW_ME",
+      "SE_PIN"
+    ],
+    "installation": "audio-install.log",
+    "plan": "audio-plan.log",
+    "loop": {
+      "song": "MUS_FOLLOW_ME",
+      "sampleRate": 44100,
+      "startFrame": 1157625,
+      "endFrame": 2149875
+    },
+    "listening": "pending-user"
+  },
+  "skill": "Project metadata, links and synchronized executable examples pass; standalone skill-creator validator unavailable in system Python because PyYAML is absent."
+}

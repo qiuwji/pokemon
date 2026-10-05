@@ -529,6 +529,16 @@
       "section": "stories",
       "key": "rivals-house",
       "path": "stories/rivals-house.json"
+    },
+    {
+      "section": "stories",
+      "key": "professor-lab",
+      "path": "stories/professor-lab.json"
+    },
+    {
+      "section": "stories",
+      "key": "route103",
+      "path": "stories/route103.json"
     }
   ]
 }

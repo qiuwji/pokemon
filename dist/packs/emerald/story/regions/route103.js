@@ -25,15 +25,10 @@ export const REGIONS_ROUTE103_EVENTS = [
     once: true,
     match: ({ battle: b }) => b.script === "rival" && b.result === "win",
     build: (s, { battle: b }) => [
-      {
-        type: "reward",
-        id: "rival.prize",
-        flags: { rivalWon: true },
-        money: 300 * (b.prizeMultiplier || 1),
-      },
-      dialog("emerald:dialogues.regions.route103.3", {
-        "line0.0": 300 * (b.prizeMultiplier || 1),
-      }),
+      { type: "face", actor: "rival.route103", target: "player" },
+      { type: "reward", id: "rival.prize", flags: { rivalWon: true }, money: 300 * (b.prizeMultiplier || 1) },
+      dialog(`emerald:route103.after.${s.playerGender === "female" ? "female" : "male"}`, {}),
+      { type: "script", id: `emerald:route103.exit.${s.position.dir === "up" ? "north" : s.position.dir === "down" ? "south" : "side"}` },
     ],
   },
 ];

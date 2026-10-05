@@ -105,3 +105,5 @@ python3 tools/fixtures/generate.py --scenes E2ETestField
 ```
 
 只写dist/fixtures/world.json。terrain表记录水/冰/岩壁的视觉来源；泥坡、凸坡、横/竖轨道另以原图集行为属性和渲染截图确认。水动画区间与grid导入共读tile-animations.json，花动画不算水。自动检查只能证明索引/动画/行为合同；外观另做图片观察，不把生成成功当视觉还原。安装图像工具依赖用`python3 -m pip install -r tools/requirements.txt`。干净副本无work/的生成与第二次无差异预演由Python可携带性测试覆盖。
+
+剧情工具入口为`tools/story/extract.py extract/verify/movement`；movement子命令连接`tools/story/movement.py`，先回校验固定来源再输出命令。参数及支持范围见[提取流程](STORY_EXTRACTION.md)，不写游戏数据。opening-art同时导出原作转场精灵球，固定透明色与调色板，纳入opening-art-source.json来源清单。

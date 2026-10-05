@@ -87,7 +87,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       resources,
       appearances: emeraldAppearances(db),
       cameraProfiles: {
-        "emerald-default": { name: "默认视口", columns: 20, rows: 14, zoom: 1 },
+        "emerald-default": { name: "原作视口", columns: 15, rows: 10, zoom: 1 },
       },
       environmentLayers: {},
       weather: GEN3_WORLD_WEATHER,

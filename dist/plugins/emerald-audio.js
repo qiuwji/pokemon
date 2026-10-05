@@ -14,6 +14,7 @@ export const audioPlugin = {
     api.presentation.audio("mus_encounter_interviewer", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_encounter_interviewer.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": true, "loopStart": 10.246462585034013, "loopEnd": 17.00700680272109});
     api.presentation.audio("mus_encounter_may", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_encounter_may.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": true, "loopStart": 33.75, "loopEnd": 63.75});
     api.presentation.audio("mus_encounter_brendan", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_encounter_brendan.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": true, "loopStart": 33.75, "loopEnd": 63.75});
+    api.presentation.audio("mus_follow_me", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_follow_me.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": true, "loopStart": 26.25, "loopEnd": 48.75});
     api.presentation.audio("se_select", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_select.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("se_shop", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_shop.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("se_exp", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_exp.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
@@ -31,5 +32,6 @@ export const audioPlugin = {
     api.presentation.audio("se_truck_door", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_truck_door.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("mus_obtain_item", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/mus_obtain_item.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("se_exit", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_exit.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("se_pin", {"kind": "sound", "source": "assets/audio/emerald-audio/sounds/se_pin.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
   },
 };

@@ -65,26 +65,26 @@ export class FieldDirector {
     const remaining = n.duration - (this.timeline.now() - n.start);
     if (remaining > 0) await this.timeline.wait(remaining);
   }
-  objects(map, actor, allowVacatedBy = null) {
+  objects(map, actor, allowVacatedBy = null, ignoreActors = []) {
     const objects = this.field.npcs
       .occupants(map)
-      .filter((n) => n.id !== actor)
+      .filter((n) => n.id !== actor && !ignoreActors.includes(n.id))
       .map((n) => ({
         ...n,
         reserved: n.id === allowVacatedBy ? [] : n.reserved,
       }));
-    if (actor !== "player" && this.field.position.map === map)
+    if (actor !== "player" && allowVacatedBy !== "player" && !ignoreActors.includes("player") && this.field.position.map === map)
       objects.push({ ...this.field.position, id: "player" });
     return objects;
   }
-  route(id, to, allowVacatedBy = null, mode) {
+  route(id, to, allowVacatedBy = null, mode, ignoreActors = []) {
     const from = this.actor(id);
     return findRoute(
       this.field.world.maps,
       from,
       { map: from.map, ...to },
       {
-        objects: (map) => this.objects(map, id, allowVacatedBy),
+        objects: (map) => this.objects(map, id, allowVacatedBy, ignoreActors),
         elevation: this.field.world.elevation,
         ...(id === "player" && this.field.movement
           ? {
@@ -95,12 +95,12 @@ export class FieldDirector {
       },
     );
   }
-  async step(id, dir, { running = false, allowVacatedBy = null, mode, jump = false } = {}) {
+  async step(id, dir, { running = false, allowVacatedBy = null, mode, jump = false, keepFacing = false, ignoreActors = [] } = {}) {
     if (!DIRECTIONS[dir]) throw new Error(`Invalid walking direction ${dir}`);
     await this.ready(id);
     if (id === "player") {
       if (
-        !this.field.move(dir, { running, scripted: true, allowVacatedBy, mode, jump })
+        !this.field.move(dir, { running, scripted: true, allowVacatedBy, mode, jump, keepFacing, ignoreActors })
       )
         throw new Error(`Scripted player movement blocked: ${dir}`);
       await this.waitUntil(this.field.motion.start + this.field.motion.duration);
@@ -119,10 +119,10 @@ export class FieldDirector {
         : {}),
     };
     const world = new World(this.field.world.maps, position, {
-      objects: (idMap) => this.objects(idMap, id, allowVacatedBy),
+      objects: (idMap) => this.objects(idMap, id, allowVacatedBy, ignoreActors),
       elevation: this.field.world.elevation,
     });
-    const result = world.move(dir, { ignoreWarps: true });
+    const result = world.move(dir, { ignoreWarps: true, allowVacatedBy });
     if (!result || position.map !== map)
       throw new Error(`Scripted actor movement blocked: ${id}/${dir}`);
     n.fromElevation = n.elevation;
@@ -135,7 +135,7 @@ export class FieldDirector {
     n.fromY = n.y;
     n.x = n.toX = position.x;
     n.y = n.toY = position.y;
-    n.dir = dir;
+    if (!keepFacing) n.dir = dir;
     n.start = this.timeline.now();
     n.jump = !!result.jump;
     n.duration = n.jump ? 256 : running ? 96 : 160;
@@ -156,13 +156,15 @@ export class FieldDirector {
     allowVacatedBy = null,
     mode,
     jump = false,
+    keepFacing = false,
+    ignoreActors = [],
   }) {
     await this.ready(actor);
-    const route = path || this.route(actor, to, allowVacatedBy, mode);
+    const route = path || this.route(actor, to, allowVacatedBy, mode, ignoreActors);
     if (!Array.isArray(route))
       throw new Error("Movement needs a path or a destination");
     for (const dir of route)
-      await this.step(actor, dir, { running, allowVacatedBy, mode, jump });
+      await this.step(actor, dir, { running, allowVacatedBy, mode, jump, keepFacing, ignoreActors });
   }
   async approach({ actor, target = "player" }) {
     await this.ready(actor);
@@ -367,6 +369,11 @@ export function validateFieldCommand(c, maps) {
   )
     fail();
   if (c.type === "move" && c.jump !== undefined && typeof c.jump !== "boolean") fail();
+  if (c.type === "move" && c.keepFacing !== undefined && typeof c.keepFacing !== "boolean") fail();
+  if (c.type === "move" && c.ignoreActors !== undefined &&
+    (!Array.isArray(c.ignoreActors) || c.ignoreActors.length > 32 ||
+      c.ignoreActors.some(n => !id(n) || n === (c.actor || "player")) ||
+      new Set(c.ignoreActors).size !== c.ignoreActors.length)) fail();
   if (c.type === "move" && c.mode !== undefined && !id(c.mode)) fail();
   if (c.type === "face" && !(c.target ? id(c.target) : DIRECTIONS[c.dir]))
     fail();

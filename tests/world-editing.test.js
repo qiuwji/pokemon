@@ -10,14 +10,12 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { assertPackContent } from "../dist/packs/emerald/content.js";
 import { objectsFor } from "../dist/packs/emerald/pack.js";
 
-test("Browser startup validates the complete pack, including authored arena identities", () => {
-  const db = loadContentSync();
-  assert.equal(assertPackContent(db), db);
-  const arena = objectsFor({ position: { map: "Route101" }, flags: { rescued: true } }, db)
-    .filter(o => o.kind === "arena");
-  assert.equal(arena.length, 2);
-  assert.equal(new Set(arena.map(o => o.id)).size, 2);
-  assert(arena.every(o => typeof o.id === "string" && o.id.length > 0));
+test("Browser startup validates the native pack and each source NPC has a stable identity", () => {
+  const db=loadContentSync(); assert.equal(assertPackContent(db),db);
+  const cast=objectsFor({position:{map:"Route101"},flags:{rescued:true}},db);
+  assert(cast.every(o=>typeof o.id==="string" && o.id.length>0));
+  assert.equal(new Set(cast.map(o=>o.id)).size,cast.length);
+  assert(!cast.some(o=>o.kind==="arena"));
 });
 
 function fixture() {

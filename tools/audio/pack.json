@@ -64,6 +64,11 @@
       "song": "MUS_ENCOUNTER_BRENDAN",
       "config": "tracks/mus-encounter-brendan.json",
       "selection": "story"
+    },
+    {
+      "song": "MUS_FOLLOW_ME",
+      "config": "tracks/mus-follow-me.json",
+      "selection": "story"
     }
   ],
   "sounds": [
@@ -151,6 +156,11 @@
       "song": "SE_EXIT",
       "config": "tracks/se-exit.json",
       "selection": "ui"
+    },
+    {
+      "song": "SE_PIN",
+      "config": "tracks/se-pin.json",
+      "selection": "story"
     }
   ]
 }

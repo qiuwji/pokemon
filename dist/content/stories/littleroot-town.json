@@ -15,6 +15,27 @@
         "你要去捕捉宝可梦吗？",
         "祝你好运！"
       ]
+    },
+    "no-pokemon": {
+      "name": "小女孩",
+      "lines": [
+        "这个、这个、这个！",
+        "要是跑到外面草丛里，野生宝可梦就会跳出来！"
+      ]
+    },
+    "dangerous": {
+      "name": "小女孩",
+      "lines": [
+        "没有自己的宝可梦的话，会很危险的。"
+      ]
+    },
+    "go-save-birch": {
+      "name": "小女孩",
+      "lines": [
+        "你好！外面有好吓人的宝可梦！我都听见它们的叫声了！",
+        "我想去看看发生了什么，可是我没有宝可梦……",
+        "能拜托你去看看吗？"
+      ]
     }
   },
   "scripts": {
@@ -31,6 +52,262 @@
         {
           "type": "dialog",
           "dialogue": "good-luck"
+        }
+      ]
+    },
+    "guard.left": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "right"
+        },
+        {
+          "type": "wait",
+          "ms": 133.33333333333334
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "right"
+        },
+        {
+          "type": "presentation",
+          "id": "emerald:actor-hop",
+          "payload": {
+            "map": "LittlerootTown",
+            "actor": "littleroot.twin"
+          }
+        },
+        {
+          "type": "wait",
+          "ms": 133.33333333333334
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.twin",
+          "path": [
+            "right",
+            "right",
+            "right",
+            "right",
+            "up",
+            "up",
+            "left"
+          ],
+          "running": true
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "down"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "no-pokemon"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "littleroot.twin",
+                  "path": [
+                    "down"
+                  ],
+                  "allowVacatedBy": "player"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "player",
+                  "path": [
+                    "down"
+                  ],
+                  "keepFacing": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "dangerous"
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.twin",
+          "path": [
+            "right",
+            "down",
+            "down",
+            "left",
+            "left",
+            "left",
+            "left",
+            "up"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "down"
+        }
+      ]
+    },
+    "guard.right": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "right"
+        },
+        {
+          "type": "wait",
+          "ms": 133.33333333333334
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "right"
+        },
+        {
+          "type": "presentation",
+          "id": "emerald:actor-hop",
+          "payload": {
+            "map": "LittlerootTown",
+            "actor": "littleroot.twin"
+          }
+        },
+        {
+          "type": "wait",
+          "ms": 133.33333333333334
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.twin",
+          "path": [
+            "right",
+            "right",
+            "right",
+            "up",
+            "up",
+            "right"
+          ],
+          "running": true
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "down"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "no-pokemon"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "littleroot.twin",
+                  "path": [
+                    "down"
+                  ],
+                  "allowVacatedBy": "player"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "player",
+                  "path": [
+                    "down"
+                  ],
+                  "keepFacing": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "dangerous"
+        },
+        {
+          "type": "move",
+          "actor": "littleroot.twin",
+          "path": [
+            "left",
+            "down",
+            "left",
+            "left",
+            "left"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "down"
+        }
+      ]
+    },
+    "go-save-birch": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "right"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "left"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "go-save-birch"
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "up"
+        },
+        {
+          "type": "flag",
+          "key": "heardOutsideCries",
+          "value": true
+        }
+      ]
+    },
+    "ask-save-birch": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "go-save-birch"
+        },
+        {
+          "type": "face",
+          "actor": "littleroot.twin",
+          "dir": "up"
+        },
+        {
+          "type": "flag",
+          "key": "heardOutsideCries",
+          "value": true
         }
       ]
     }
@@ -63,6 +340,126 @@
         "equals": true
       },
       "script": "good-luck"
+    },
+    "guard.left": {
+      "trigger": "step",
+      "priority": 50,
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "script": "guard.left",
+      "where": {
+        "map": "LittlerootTown",
+        "x": 10,
+        "y": 1,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "guard.right": {
+      "trigger": "step",
+      "priority": 50,
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "script": "guard.right",
+      "where": {
+        "map": "LittlerootTown",
+        "x": 11,
+        "y": 1,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "go-save-birch": {
+      "trigger": "step",
+      "priority": 50,
+      "selector": {
+        "map": "LittlerootTown"
+      },
+      "script": "go-save-birch",
+      "where": {
+        "map": "LittlerootTown",
+        "x": 11,
+        "y": 1,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "flag": "neighborMet",
+            "equals": true
+          },
+          {
+            "not": {
+              "flag": "heardOutsideCries",
+              "equals": true
+            }
+          }
+        ]
+      }
+    },
+    "ask-save-birch": {
+      "trigger": "interact",
+      "priority": 15,
+      "selector": {
+        "map": "LittlerootTown",
+        "objectId": "littleroot.twin"
+      },
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "flag": "neighborMet",
+            "equals": true
+          }
+        ]
+      },
+      "script": "ask-save-birch"
     }
   },
   "sources": [
@@ -70,7 +467,57 @@
       "label": "LittlerootTown_EventScript_Twin",
       "map": "LittlerootTown",
       "status": "original-verified",
-      "note": "原作四分支按 FLAG_ADVENTURE_STARTED / FLAG_RESCUED_BIRCH / VAR_LITTLEROOT_TOWN_STATE 排列；本项目以 pokedex 对应冒险开始、rescued 对应 FLAG_RESCUED_BIRCH。VAR_LITTLEROOT_TOWN_STATE 依赖原作出门前同伴托付场景，当前序章无该入口，故 CanYouGoSeeWhatsHappening 分支待转写。文本逐句取自 LittlerootTown_Text_YouSavedBirch 与 LittlerootTown_Text_GoodLuckCatchingPokemon。"
+      "note": "原作同一个Twin按冒险开始、救援、初见状态切换对白；初见前两条拦路路径及初见后求助入口已转写。男女电影/实际帧节奏待用户验收。"
+    }
+  ],
+  "projections": [
+    {
+      "map": "LittlerootTown",
+      "objectId": "littleroot.twin",
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "not": {
+              "flag": "neighborMet",
+              "equals": true
+            }
+          }
+        ]
+      },
+      "changes": {
+        "x": 7,
+        "y": 2,
+        "dir": "down"
+      }
+    },
+    {
+      "map": "LittlerootTown",
+      "objectId": "littleroot.twin",
+      "requires": {
+        "all": [
+          {
+            "not": {
+              "flag": "rescued",
+              "equals": true
+            }
+          },
+          {
+            "flag": "neighborMet",
+            "equals": true
+          }
+        ]
+      },
+      "changes": {
+        "x": 10,
+        "y": 1,
+        "dir": "up"
+      }
     }
   ]
 }

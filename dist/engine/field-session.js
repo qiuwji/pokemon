@@ -252,6 +252,8 @@ export class FieldSession {
       mode,
       forced = null,
       jump = false,
+      keepFacing = false,
+      ignoreActors = [],
       duration,
     } = {},
   ) {
@@ -278,11 +280,13 @@ export class FieldSession {
     const result = this.world.move(direction, {
       ignoreWarps: scripted,
       allowVacatedBy,
+      ignoreActors: scripted ? ignoreActors : [],
     });
     const visual = {
       ...this.movement?.techniqueVisual(),
       ...this.terrainPlan,
       ...(forced || {}),
+      ...(keepFacing ? { keepFacing: true } : {}),
     };
     if (visual.keepFacing) this.position.dir = from.dir;
     if (!result) {

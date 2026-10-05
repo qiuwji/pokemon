@@ -1,3 +1,4 @@
+import { stageMessage } from "./battle/messages.js";
 import { BattleAugmentRegistry, BattleAugments } from "./battle/augments.js";
 import { BattleWeatherRegistry } from "./battle/weather.js";
 import { GEN3_BATTLE_WEATHER } from "./rules/gen3/weather.js";
@@ -335,7 +336,7 @@ export class Battle {
       permission.allowed &&
       this.conditions.changeStage(targetSeat, key, amount);
     if (changed) {
-      this.emit("能力发生了变化！", "stage", {
+      this.emit(stageMessage(this.name(this.roster.occupant(targetSeat)), key, this.conditions.get(targetSeat).stages[key] - before), "stage", {
         targetSeat,
         actorSeat: this.seatId(sourceSeat),
         stat: key,

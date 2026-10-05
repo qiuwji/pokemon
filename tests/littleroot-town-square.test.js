@@ -14,7 +14,10 @@ const said = (s) =>
 async function talkToTwin(flags) {
   const s = session();
   Object.assign(s.game.state.flags, flags);
-  s.game.enter({ map: "LittlerootTown", x: 16, y: 11, dir: "up" });
+  if (!flags.rescued) s.game.state.flags.neighborMet = false;
+  const guarded = !flags.rescued;
+  s.game.enter({ map: "LittlerootTown", x: guarded ? 7 : 16, y: guarded ? 3 : 11,
+    dir: "up" });
   s.game.interact();
   await s.settle();
   return s;

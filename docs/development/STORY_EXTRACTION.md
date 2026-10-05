@@ -110,3 +110,22 @@ python3 tools/story/extract.py verify \
 常见错误：Unknown reference label 是拼错/选错修订；Ambiguous reference label 要查条件定义及来源；Packet differs 表示产物被编辑或来源变化；Original text changed / placeholders changed 要恢复原文/占位符；Review belongs to a different packet 表示审阅稿需重新核对。旧地区文档检查脚本若可用可另运行 `python3 tools/story-doc-check.py`，但不能替代本工具的精确来源回校验，也不能证明自然语言动作描述正确。
 
 工具契约测试：`node --test tests/story-reference-tools.test.js`，内含 Python 的小型来源夹具、遗漏/歧义及原文污染检查。工具无需执行整个游戏回归；游戏功能变更仍按 [TESTING](TESTING.md) 验证。
+
+
+## 将已回校验的移动数组转为命令
+
+提取/verify成功后可使用只读转换器；它不改源码、产物或游戏状态：
+
+```sh
+python3 tools/story/extract.py movement --packet /tmp/emerald-opening-shoes-evidence/packet.json \
+  --label LittlerootTown_MaysHouse_2F_Movement_MayApproachPlayerNorth \
+  --actor neighbor.rival --map LittlerootTown_MaysHouse_2F
+```
+
+stdout包含source锚点和commands，取commands放到目标bundle的脚本/sequence。支持walk/walk_fast、face/walk_in_place_faster、delay_N、平衡朝向锁和原地跳；原地跳依赖内容包注册的emerald:actor-hop，只有表现偏移。未知动作、未闭合锁、非movement或缺step_end均拒绝，不能删除原步骤凑通过。跨格跳、不可见移动、任意C special尚不自动转换。
+
+转换仅保留受支持动作的方向和显式等待，不自动编排applymovement的并行关系、设置剧情前置或决定碰撞例外；快慢与姿态取现有引擎步长，并非原机逐帧等价。按原作每个VAR_FACING分支分别取数组，校验起点/中途转向/终点/可见性，再决定可合并的连续path与共享call；不拿最终坐标正确冒充整段演出正确。
+
+`extract.py movement`已接入统一CLI：先按packet.selection从固定参考重新提取并比对，再调用movement.py共享转换器；来源过期、悬空引用、未知动作均拒绝。独立movement.py用于已有校验packet的批量调用，不能替代verify。命令只输出JSON，不自动覆盖剧情。
+
+资源由导入脚本生成（角色/grid/clock/door/转场球、音频各自明确所有权）；源脚本提取和单角色动作转换可自动化。剧情触发、条件、call复用、applymovement并行关系、奖励/战斗续接仍需人工转写并核对，不能把commands输出当作端到端剧情。

@@ -101,7 +101,7 @@ test("Public camera leases change range/focus without changing world state; ties
   await api.commands.dispatch("core.camera.release", { token: a.token });
   assert.equal(
     (await api.commands.dispatch("core.camera.view", {})).width,
-    320,
+    240,
   );
 });
 test("Projection and inverse use the same letterboxed space, reject margins and preserve tile coordinates", async () => {

@@ -1,3 +1,4 @@
+import { openingBattleTransition } from "../battle-transitions.js";
 import { BATTLE_RULES } from "../../../engine/battle-rules.js";
 import { GEN3_GLOBAL_HOOKS } from "../../../engine/rules/gen3/global-rules.js";
 import { healMonster } from "../../../engine/model.js";
@@ -210,18 +211,19 @@ export class BattleApplication {
             : this.world.map.presentation?.terrain || "grass",
         ...context?.environment,
       },
-      presentation: options.trainer
-        ? {
+      presentation: {
+        transition: openingBattleTransition({trainer: !!options.trainer, party, opponents}),
+        ...(options.trainer ? {
             trainers: [
-              { actor: "BrendanNormal", back: true },
+              { actor: this.state.playerGender === "female" ? "MayNormal" : "BrendanNormal", back: true },
               {
                 actor:
                   this.trainerDefinitions[options.trainerId]?.actor ||
-                  (options.script === "rival" ? "MayNormal" : "Youngster"),
+                  (options.script === "rival" ? (this.state.playerGender === "female" ? "BrendanNormal" : "MayNormal") : "Youngster"),
               },
             ],
-          }
-        : {},
+          } : {}),
+      },
       traits: {
         abilities: this.catalog.abilities,
         heldItems: this.catalog.heldItems,

@@ -41,6 +41,14 @@ description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写�
 
 逐场记录触发条件、状态轴、每个演员的起点/逐格动作/原地朝向/并行组/等待/终点/可见性；单独列男/女、玩家方向、取消/失败与重入。不得用“走过来”“动画完成”概括有决定性次序的步骤，不把 setobjectxyperm 的状态摆位当作可见行走，也不把 applymovement 的结束位置当作实际演出已实现。
 
+## 角色与动作转写的现有落点
+
+- 原作演员业务定义放native-cast.js / opening-objects.js，唯一身份绑定放native-object-bindings.js；使用来源local ID或严格唯一坐标，未知/歧义明确报错，不以静止朝下兜底。初始朝向核对native-movement.js的原作表，LEFT_AND_RIGHT与RIGHT_AND_LEFT不同，不能按子串猜。
+- 统一入口`python3 tools/story/extract.py movement --packet <packet> --label <label> --actor <稳定ID> --map <地图>`先回校验固定来源，再调用tools/story/movement.py输出source锚点和commands。完整调用与支持范围见[提取流程](../../docs/development/STORY_EXTRACTION.md)；未知指令先查C语义，再补局部映射/接口，不删除步骤。
+- applymovement并行关系仍由作者写parallel/sequence；跟随或推回可显式声明ignoreActors，只忽略指定演员的占位，保留地形/高度/边界。锁朝向用keepFacing，不用逐格插face冒充原作锁。别把例外带入正常玩家移动。
+- 会在本场戏改变资格flag的演员须在变化前获得场景pin，否则实时projection可能在行走前重置它。OnTransition摆位宜用入图visit patch；临时对白分支变量在入图重置。原作一次性图鉴与赠球分开记账，不能因赠球满包扣住主线。
+- 连续同选项移动可合并为path，共用对白/门动作以call复用；各方向不同的路线留在内容中。不要为了压缩JSON把剧情转回巨型JS条件函数。
+
 ## 从原作资料找到业务
 
 | 要查什么 | 起始路径 / 继续追踪 |
@@ -77,7 +85,7 @@ description: 将只读pret/pokeemerald的C实现、事件脚本与数据转写�
 - 商店介绍后`giveitem ITEM_POTION`，检查`VAR_RESULT`；背包满走BagIsFull，**不设置已领取flag**；成功才设置`FLAG_RECEIVED_POTION_OLDALE`并结束。
 - 入图MapScripts还会调整对象位置/阻路状态；不能只补这一段对话就声称此区域完整。
 
-转写应先做来源分支表，再映射角色、方向、移动路径、奖励与容量结果。本引擎可用`reward.onResult`明确写ok/alreadyGranted/inventoryFull三种分支，提交仍由库存领域原子执行。不要先preview再提前写领取flag；其他错误继续抛出。当前Oldale数据代表例只覆盖赠药结果，并未转写原作方向移动、入图位置及音乐；应继续补这些业务而不是重写库存或导演。
+转写应先做来源分支表，再映射角色、方向、移动路径、奖励与容量结果。本引擎可用`reward.onResult`明确写ok/alreadyGranted/inventoryFull三种分支，提交仍由库存领域原子执行。不要先preview再提前写领取flag；其他错误继续抛出。当前Oldale数据使用三方向带路数组、入图visit摆位、同访问介绍一次和领取结果；重新进入地图清理临时变量。具体画面/听音与原机细节仍看地区记录，不因数据转写就判全镇完成。
 
 当前core剧情切片是否包含这个完整过程只看代码与STATUS；此段是下一位作者的原作转写方法和差异说明，不是已实现声明。保存来源记录可用[切片模板](references/story-slice.md)。
 
@@ -174,3 +182,7 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 本地化写对白目录；多角色用每句name/portrait/expression，插值声明bindings，条件台词用入口requires/if而非播放器读状态。记录只收最终确认dialog及已选项，历史回看不触发奖励。内容来源保持原作确认/项目演绎/pending三类，不能把换了数据格式当作原作完整还原。
 
 接手调钟或其他special后续剧情时，检查“旧任务已完成、新任务尚未解锁”的空隙；侧栏必须支持无当前任务，不能让进度查询导致启动失败。原作4bpp灰度PNG不等同于索引PNG：复用tools/imports/pixel_assets.py的gbagfx截断/反色语义，验证透明背景及帧裁切；只检查图像尺寸不证明素材正确。
+
+入口地毯/箭头warp依据所在格及下一次向外输入，不是落格立即传送；进入房子必须核对真实落点，不能以相邻可行走格替换而令演员路线偏一格。跨男女/家中的projection必须同时限定地图和性别；同名角色不存在时，不得删除严格校验来隐藏内容错误。战后演员先pin，再写已胜奖励，保留对白/逐步离场，最后hide。新增可获物品用成功分支的明确对白、fanfare及waitSound，满包不得宣称获得。
+
+原作战斗转场选择在battle_setup.c，逐帧机制在battle_transition.c。现有packs/emerald/battle-transitions.js接开场正常地形四种选择，描述与纯采样/绘制分开；generic TransitionController只管理遮盖时序与提交，不放原作表。扫描线硬件/调色板混合与Canvas非等价，不得以单测声称逐像素一比一。相机正常默认15×10格，插件仍可配置视口。

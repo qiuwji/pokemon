@@ -28,6 +28,30 @@ def fixture(root):
     return Reference(root)
 
 
+class MovementConversionTests(unittest.TestCase):
+    def commands(self, text):
+        from story.movement import movement_commands
+        return movement_commands(parse_blocks('Move:\n'+text,'moves.inc')[0],'actor',map_id='Room')
+
+    def test_moves_waits_and_facing_lock_are_preserved(self):
+        commands=self.commands('\twalk_up\n\tlock_facing_direction\n\twalk_right\n\tunlock_facing_direction\n\tdelay_8\n\tface_left\n\tstep_end\n')
+        self.assertEqual(commands[0],{'type':'move','actor':'actor','path':['up']})
+        self.assertEqual(commands[1]['keepFacing'],True)
+        self.assertAlmostEqual(commands[2]['ms'],8*1000/60)
+        self.assertEqual(commands[3]['dir'],'left')
+
+    def test_unknown_missing_terminator_and_unbalanced_locks_fail(self):
+        for text,error in [('\tunknown_step\n\tstep_end\n','Unsupported'),
+          ('\twalk_up\n','Expected movement'),('\tlock_facing_direction\n\tstep_end\n','Unbalanced'),
+          ('\tunlock_facing_direction\n\tstep_end\n','Unbalanced')]:
+            with self.assertRaisesRegex(ValueError,error):self.commands(text)
+
+    def test_hop_is_only_presentation_and_keeps_source_direction(self):
+        commands=self.commands('\tdisable_jump_landing_ground_effect\n\tjump_in_place_down\n\tstep_end\n')
+        self.assertEqual(commands,[{'type':'face','actor':'actor','dir':'down'},
+          {'type':'presentation','id':'emerald:actor-hop','payload':{'map':'Room','actor':'actor'}}])
+
+
 class StoryReferenceTests(unittest.TestCase):
     def test_legacy_text_entry_reuses_label_parser(self):
         tools = Path(__file__).resolve().parents[1]

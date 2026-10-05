@@ -204,7 +204,10 @@ test("Original map doors are collision 1 but traversable; indoor exits return to
   });
   assert(w.move("up"));
   assert.equal(s.position.map, "LittlerootTown_ProfessorBirchsLab");
-  assert.equal(s.position.y, 11);
+  assert.equal(s.position.y, 12);
+  assert(w.move("up"));
+  assert(w.move("down"));
+  assert.equal(s.position.map, "LittlerootTown_ProfessorBirchsLab");
   assert(w.move("down"));
   assert.equal(s.position.map, "LittlerootTown");
   assert.deepEqual([s.position.x, s.position.y], [7, 17]);

@@ -1,4 +1,5 @@
 import {
+  arrowWarpDirection,
   ledgeDirection,
   blockedDirection,
   isWater,
@@ -89,7 +90,34 @@ export class World {
     this.onBlocked(reason, object);
     return false;
   }
-  move(dir, { ignoreWarps = false, allowVacatedBy = null } = {}) {
+  warpArrival(preview, destination) {
+    const m = preview.map, index = destination.y * m.width + destination.x;
+    // Exit mats are safe arrival cells; stepping outward is a separate input.
+    if (arrowWarpDirection(m.behavior[index]))
+      return { x: destination.x, y: destination.y };
+    const offsets = m.indoor ? [[0,-1],[0,1],[-1,0],[1,0]] : [[0,1],[0,-1],[-1,0],[1,0]];
+    for (const [dx, dy] of offsets) {
+      const x = destination.x + dx, y = destination.y + dy;
+      if (x < 0 || y < 0 || x >= m.width || y >= m.height) continue;
+      if ((m.blocks[y * m.width + x] >> 10) & 3) continue;
+      if (m.warps.some(w => w.x === x && w.y === y)) continue;
+      if (preview.objects.some(n => (n.x === x && n.y === y) || n.reserved?.some(p => p.x === x && p.y === y))) continue;
+      return { x, y };
+    }
+    return { x: destination.x, y: destination.y };
+  }
+  traverseWarp(warp, jump = false) {
+    const id = this.resolve(warp.dest_map);
+    if (!id) return false;
+    const preview = this.entryPreview(id), destination = preview.map.warps[Number(warp.dest_warp_id)];
+    if (!destination) return false;
+    const target = { map: id, ...this.warpArrival(preview, destination), dir: preview.map.indoor ? "up" : "down" };
+    if (this.deferWarps) return { jump, warp: target };
+    if (!this.enter(id, target.x, target.y, target.dir, preview)) return false;
+    this.onStep(this.cell(target.x, target.y));
+    return { jump };
+  }
+  move(dir, { ignoreWarps = false, allowVacatedBy = null, ignoreActors = [] } = {}) {
     this.lastBlocked = null;
     const [dx, dy] = DIRECTIONS[dir];
     const p = this.position;
@@ -97,7 +125,12 @@ export class World {
     let x = p.x + dx,
       y = p.y + dy,
       m = this.map;
-    const sourceElevation = this.cell(p.x, p.y)?.elevation;
+    const sourceCell = this.cell(p.x, p.y);
+    const sourceWarp = m.warps.find((w) => w.x === p.x && w.y === p.y);
+    if (!ignoreWarps && sourceWarp && arrowWarpDirection(sourceCell?.behavior) === dir) {
+      return this.traverseWarp(sourceWarp) || this.block("unavailable");
+    }
+    const sourceElevation = sourceCell?.elevation;
     let cell = this.cell(x, y);
     if (!cell) {
       const c = m.connections.find((c) => c.direction === dir);
@@ -169,7 +202,7 @@ export class World {
       return this.block("unavailable");
     }
     const obj = this.objects(p.map).find((n) =>
-      this.occupied(m, n, x, y, { reservations: n.id !== allowVacatedBy }),
+      !ignoreActors.includes(n.id) && this.occupied(m, n, x, y, { reservations: n.id !== allowVacatedBy }),
     );
     const oneWay = blockedDirection(cell?.behavior);
     if (
@@ -196,60 +229,9 @@ export class World {
     p.y = y;
     this.elevation?.advance(p, sourceElevation, cell.elevation);
     this.steps++;
-    if (warp && !ignoreWarps) {
-      const id = this.resolve(warp.dest_map);
-      if (id) {
-        const preview = this.entryPreview(id),
-          destination = preview.map.warps[Number(warp.dest_warp_id)];
-        if (destination) {
-          const interior = !!preview.map.indoor;
-          const candidates = interior
-            ? [
-                [0, -1],
-                [0, 1],
-                [-1, 0],
-                [1, 0],
-              ]
-            : [
-                [0, 1],
-                [0, -1],
-                [-1, 0],
-                [1, 0],
-              ];
-          let tx = destination.x,
-            ty = destination.y;
-          for (const [ox, oy] of candidates) {
-            const nx = destination.x + ox,
-              ny = destination.y + oy;
-            const dm = preview.map;
-            if (
-              nx >= 0 &&
-              ny >= 0 &&
-              nx < dm.width &&
-              ny < dm.height &&
-              ((dm.blocks[ny * dm.width + nx] >> 10) & 3) === 0 &&
-              !dm.warps.some((w) => w.x === nx && w.y === ny) &&
-              !preview.objects.some(
-                (n) =>
-                  (n.x === nx && n.y === ny) ||
-                  n.reserved?.some((p) => p.x === nx && p.y === ny),
-              )
-            ) {
-              tx = nx;
-              ty = ny;
-              break;
-            }
-          }
-          const target = {
-            map: id,
-            x: tx,
-            y: ty,
-            dir: interior ? "up" : "down",
-          };
-          if (this.deferWarps) return { jump, warp: target };
-          this.enter(id, tx, ty, target.dir, preview);
-        }
-      }
+    if (warp && !ignoreWarps && !arrowWarpDirection(cell.behavior)) {
+      const result = this.traverseWarp(warp, jump);
+      if (result) return result;
     }
     this.onStep(this.cell(p.x, p.y));
     return { jump };
@@ -282,7 +264,8 @@ export class World {
       obj = this.objects().find((n) =>
         this.occupied(this.map, n, x + dx, y + dy, { reservations: false }),
       );
-    const sign = this.map.signs.find((n) => n.x === x && n.y === y);
+    const sign = this.map.signs.find((n) => n.x === x && n.y === y &&
+      (!n.interactFacing || n.interactFacing === this.position.dir));
     return obj || (sign && { ...sign, kind: "sign" }) || null;
   }
 }

@@ -14,16 +14,7 @@ export const REGIONS_LITTLEROOT_EVENTS = [
     ...talkEvent(
       "professor.pokedex",
       "professor",
-      () => [
-        dialog("emerald:dialogues.regions.littleroot.1", {}),
-        { type: "emote", actor: "player", kind: "exclamation", ms: 500 },
-        {
-          type: "reward",
-          id: "professor.pokedex",
-          flags: { pokedex: true },
-          items: { pokeball: 5 },
-        },
-      ],
+      () => [{ type: "script", id: "emerald:professor-lab.give-dex" }],
       all(flag("rescued"), { reward: "rival.prize" }, not("pokedex")),
     ),
     once: true,

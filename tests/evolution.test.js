@@ -130,13 +130,15 @@ test("Emerald story selection is pure; committed rival reward unlocks the Pokéd
   const before = structuredClone(s);
   assert.deepEqual(interaction(s, { kind: "professor" }, "lab"), []);
   const result = battleOutcome(s, { result: "win", script: "rival" }, db);
-  assert.equal(result[0].type, "reward");
+  const reward = result.find(c => c.type === "reward");
+  assert(reward);
+  assert.equal(result[0].type, "face", "pin the rival before the victory flag hides native content");
   assert.deepEqual(s, before);
   completeEvent(s, "rival.victory");
   assert.deepEqual(interaction(s, { kind: "professor" }, "lab"), []);
-  grantReward(s, result[0], { inventory: fixtureInventory(), items: ITEMS });
+  grantReward(s, reward, { inventory: fixtureInventory(), items: ITEMS });
   const gift = interaction(s, { kind: "professor" }, "lab");
-  assert.equal(gift.find((c) => c.type === "reward").items.pokeball, 5);
+  assert.equal(gift[0].id, "emerald:professor-lab.give-dex");
   assert.equal(EMERALD_STORY.quest(s).id, "pokedex");
 });
 

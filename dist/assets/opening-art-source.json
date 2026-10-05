@@ -11,8 +11,16 @@
       "sha256": "05dff2802ae119041dfd03c7685b735c7c751ee5f93f60f8828e04a2bce53548"
     },
     {
+      "path": "graphics/battle_transitions/pokeball.png",
+      "sha256": "edfa2c2187e0e94b8ad41755b07bd4ea97ec25ce223004666ac90aa05727d852"
+    },
+    {
       "path": "graphics/door_anims/littleroot.png",
       "sha256": "5c9bedca4b334698723581bee88dceeb938722dd664b9901b75c1bfed6f04757"
+    },
+    {
+      "path": "graphics/field_effects/palettes/pokeball.pal",
+      "sha256": "68880b4c620c385222e104b2a2e0535a7f6f64f8d0600caf9fd1e7cdd738ce30"
     },
     {
       "path": "graphics/wallclock/clock.png",

@@ -31,7 +31,7 @@ export function assertPackContent(db) {
   for (const map of Object.keys(db.maps))
     for (const rescued of [false, true])
       for (const pokedex of [false, true])
-        objectsFor({ position: { map }, flags: { rescued, pokedex } }, db);
+        objectsFor({ position: { map }, flags: { rescued, pokedex }, story: { rewards: [] } }, db);
   validateTrainers(TRAINERS, db);
   new MoveEffectRegistry().validateMoves(db.moves);
   createItemService(ITEMS);

@@ -1,5 +1,16 @@
 import { experienceAt } from "../../engine/model.js";
 import { TYPE_NAMES, STATUS_NAMES } from "./pack.js";
+/** Two-column battle menu cursor. Horizontal moves preserve rows, vertical moves preserve columns. */
+export function battleOptionIndex(selected, dir, count) {
+  if (!count) return 0;
+  const column = selected % 2, row = Math.floor(selected / 2);
+  if (dir === "left" || dir === "right") {
+    const target = row * 2 + (1 - column);
+    return target < count ? target : selected;
+  }
+  const rows = Math.ceil(count / 2), delta = dir === "up" ? -1 : 1;
+  return Math.min(((row + delta + rows) % rows) * 2 + column, count - 1);
+}
 /** Emerald battle menu adapter: owns focus and layout, sends actions, never mutates domain state. */
 export function createBattleInterface(
   game,
@@ -265,8 +276,7 @@ export function createBattleInterface(
       if (game.busy) return;
       const count = buttons().length;
       if (count) {
-        selected =
-          (selected + (["up", "left"].includes(dir) ? -1 : 1) + count) % count;
+        selected = battleOptionIndex(selected, dir, count);
         draw();
       }
     },

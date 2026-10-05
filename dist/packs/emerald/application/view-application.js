@@ -23,7 +23,7 @@ export class ViewApplication {
     bindApplicationPorts(this, ports, VIEW_PORTS);
     this.cameras = new CameraProfiles(
       this.catalog.cameraProfiles || {
-        "emerald-default": { name: "默认视口", columns: 20, rows: 14, zoom: 1 },
+        "emerald-default": { name: "原作视口", columns: 15, rows: 10, zoom: 1 },
       },
     );
     this.layers = new EnvironmentLayers(this.catalog.environmentLayers || {});

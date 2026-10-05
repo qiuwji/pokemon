@@ -130,7 +130,10 @@ export class BrowserInput {
       }
       return;
     }
-    if (["z", "enter", " "].includes(key)) this.ui.confirm();
+    if (["z", "enter", " "].includes(key)) {
+      if (this.game.battle && !this.ui.blocked) this.ui.confirmBattle();
+      else this.ui.confirm();
+    }
     if (["x", "escape"].includes(key)) {
       e.preventDefault();
       this.ui.back();

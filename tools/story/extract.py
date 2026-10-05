@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export/verify a pinned, read-only story evidence packet; never translate or edit game content."""
+"""Export/verify pinned evidence or convert supported movement; never edit source or game content."""
 import argparse
 import json
 from pathlib import Path
@@ -50,7 +50,7 @@ def safe_destination(path, source):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=('extract','verify'))
+    parser.add_argument('action', choices=('extract','verify','movement'))
     parser.add_argument('--source', type=Path, default=PROJECT/'work/pokeemerald')
     parser.add_argument('--profile', type=Path)
     parser.add_argument('--maps', nargs='+')
@@ -60,6 +60,9 @@ def main():
     parser.add_argument('--packet', type=Path)
     parser.add_argument('--review', type=Path)
     parser.add_argument('--check', action='store_true', help='Preview extraction counts without writing files')
+    parser.add_argument('--label', help='Movement array label for the movement action')
+    parser.add_argument('--actor', help='Stable web actor ID for the movement action')
+    parser.add_argument('--map', dest='map_id', help='Visual hop map for the movement action')
     parser.add_argument('--ready', action='store_true', help='Require reviewed entries/translations and source-anchored scenarios; not a gameplay certification')
     args = parser.parse_args()
     source = args.source.expanduser().resolve()
@@ -106,6 +109,14 @@ def main():
         problems.append('Generated source.md was edited or does not match packet.json')
     if packet.get('unresolved'):
         problems.append('Unresolved script references in packet')
+    if args.action == 'movement':
+        if problems:
+            raise ValueError('; '.join(problems))
+        if not args.label or not args.actor:
+            parser.error('movement requires --label and --actor')
+        from story.movement import movement_document
+        print(json.dumps(movement_document(packet,args.label,args.actor,map_id=args.map_id),ensure_ascii=False,indent=2))
+        return 0
     if args.review:
         problems += validate_review(packet,json.loads(args.review.read_text(encoding='utf-8')),args.ready)
     elif args.ready:

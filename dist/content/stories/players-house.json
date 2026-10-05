@@ -162,6 +162,18 @@
       "lines": [
         "你和宝可梦都精神起来了！路上小心哦。"
       ]
+    },
+    "vigoroth.0": {
+      "name": "过动猿",
+      "lines": [
+        "咕哦！"
+      ]
+    },
+    "vigoroth.1": {
+      "name": "过动猿",
+      "lines": [
+        "呜呜！"
+      ]
     }
   },
   "scripts": {
@@ -382,6 +394,19 @@
     "tv.male": {
       "commands": [
         {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown_BrendansHouse_1F",
+              "x": 4,
+              "y": 4,
+              "scope": "visit",
+              "appearance": 3
+            }
+          ]
+        },
+        {
           "type": "face",
           "actor": "house.mom",
           "dir": "right"
@@ -423,6 +448,11 @@
           ]
         },
         {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "right"
+        },
+        {
           "type": "move",
           "actor": "player",
           "path": [
@@ -437,6 +467,23 @@
         {
           "type": "dialog",
           "dialogue": "tv-report"
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown_BrendansHouse_1F",
+              "x": 4,
+              "y": 4,
+              "scope": "visit",
+              "appearance": null
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 583.3333333333334
         },
         {
           "type": "music"
@@ -459,6 +506,11 @@
           ]
         },
         {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "right"
+        },
+        {
           "type": "flag",
           "key": "introState",
           "value": 7
@@ -472,6 +524,11 @@
     },
     "mom-talk.male": {
       "commands": [
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "target": "player"
+        },
         {
           "type": "if",
           "condition": {
@@ -717,6 +774,19 @@
     "tv.female": {
       "commands": [
         {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown_MaysHouse_1F",
+              "x": 6,
+              "y": 4,
+              "scope": "visit",
+              "appearance": 3
+            }
+          ]
+        },
+        {
           "type": "face",
           "actor": "house.mom",
           "dir": "left"
@@ -758,6 +828,11 @@
           ]
         },
         {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "left"
+        },
+        {
           "type": "move",
           "actor": "player",
           "path": [
@@ -772,6 +847,23 @@
         {
           "type": "dialog",
           "dialogue": "tv-report"
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "tile",
+              "map": "LittlerootTown_MaysHouse_1F",
+              "x": 6,
+              "y": 4,
+              "scope": "visit",
+              "appearance": null
+            }
+          ]
+        },
+        {
+          "type": "wait",
+          "ms": 583.3333333333334
         },
         {
           "type": "music"
@@ -794,6 +886,11 @@
           ]
         },
         {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "left"
+        },
+        {
           "type": "flag",
           "key": "introState",
           "value": 7
@@ -807,6 +904,11 @@
     },
     "mom-talk.female": {
       "commands": [
+        {
+          "type": "face",
+          "actor": "house.mom",
+          "target": "player"
+        },
         {
           "type": "if",
           "condition": {
@@ -838,6 +940,11 @@
     "leave-early.male": {
       "commands": [
         {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "left"
+        },
+        {
           "type": "dialog",
           "dialogue": "go-up"
         },
@@ -858,6 +965,11 @@
     "leave-early.female": {
       "commands": [
         {
+          "type": "face",
+          "actor": "house.mom",
+          "dir": "right"
+        },
+        {
           "type": "dialog",
           "dialogue": "go-up"
         },
@@ -872,6 +984,22 @@
           "path": [
             "up"
           ]
+        }
+      ]
+    },
+    "vigoroth.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "vigoroth.0"
+        }
+      ]
+    },
+    "vigoroth.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "vigoroth.1"
         }
       ]
     }
@@ -1236,6 +1364,22 @@
           }
         ]
       }
+    },
+    "vigoroth.0": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "objectId": "house.mover.0"
+      },
+      "script": "vigoroth.0"
+    },
+    "vigoroth.1": {
+      "trigger": "interact",
+      "priority": 30,
+      "selector": {
+        "objectId": "house.mover.1"
+      },
+      "script": "vigoroth.1"
     }
   },
   "sources": [

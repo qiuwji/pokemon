@@ -18,6 +18,7 @@ export function emeraldAppearanceResources(db) {
         `assets/${id}-front.png`,
       ]),
     ),
+    "battle-transition-pokeball": "assets/battle-transition-pokeball.png",
     ...(db.resources || {}),
   };
 }

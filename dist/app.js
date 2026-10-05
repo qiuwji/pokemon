@@ -1,3 +1,4 @@
+import { emeraldTransitionPatterns } from "./packs/emerald/battle-transition-canvas.js";
 import { loadContent } from "./adapters/content-loader.js";
 import { loadPluginCatalog } from "./adapters/plugin-loader.js";
 import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
@@ -118,6 +119,7 @@ async function boot() {
       asset: (id) => db.resources?.[id + "-front"] || `assets/${id}-front.png`,
     });
     const patterns = new TransitionPatterns();
+    for (const [id, draw] of Object.entries(emeraldTransitionPatterns(assets))) patterns.register(id, draw);
     for (const [id, definition] of host.transitionPatterns)
       patterns.register(id, definition.draw);
     const overlay = new TransitionDOM($("transition"), {

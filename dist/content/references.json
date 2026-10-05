@@ -23,7 +23,7 @@
     "LittlerootTown_EventScript_Mom": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "LittlerootTown_EventScript_TownSign": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "LittlerootTown_EventScript_Twin": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
-    "LittlerootTown_ProfessorBirchsLab_EventScript_Aide": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
+    "LittlerootTown_ProfessorBirchsLab_EventScript_Aide": "已由对应区域剧情bundle按稳定对象/script绑定转写开场分支；后期章节不在本切片。",
     "LittlerootTown_ProfessorBirchsLab_EventScript_Birch": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "LittlerootTown_ProfessorBirchsLab_EventScript_Book": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
@@ -48,11 +48,11 @@
     "PlayersHouse_1F_EventScript_Mom": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "PlayersHouse_1F_EventScript_Vigoroth1": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "PlayersHouse_1F_EventScript_Vigoroth2": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
-    "PlayersHouse_2F_EventScript_GameCube": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
-    "PlayersHouse_2F_EventScript_Notebook": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
+    "PlayersHouse_2F_EventScript_GameCube": "已由对应区域剧情bundle按稳定对象/script绑定转写开场分支；后期章节不在本切片。",
+    "PlayersHouse_2F_EventScript_Notebook": "已由对应区域剧情bundle按稳定对象/script绑定转写开场分支；后期章节不在本切片。",
     "ProfBirch_EventScript_RatePokedexOrRegister": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
-    "RivalsHouse_1F_EventScript_RivalMom": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
-    "RivalsHouse_1F_EventScript_RivalSibling": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
+    "RivalsHouse_1F_EventScript_RivalMom": "已由对应区域剧情bundle按稳定对象/script绑定转写开场分支；后期章节不在本切片。",
+    "RivalsHouse_1F_EventScript_RivalSibling": "已由对应区域剧情bundle按稳定对象/script绑定转写开场分支；后期章节不在本切片。",
     "RivalsHouse_2F_EventScript_Rival": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "Route101_EventScript_BirchsBag": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
     "Route101_EventScript_Boy": "只读原作脚本引用，尚未转写为可执行剧情；当前序章使用独立内容包事件。",
@@ -76,7 +76,12 @@
     "InsideOfTruck_EventScript_MovingBox": "原作纸箱提示脚本，已在 emerald:inside-of-truck 逐字转写；地图元素仍保留原脚本名作为来源身份。",
     "LittlerootTown_MaysHouse_2F_EventScript_RivalsPokeBall": "开场区域脚本待装配。",
     "LittlerootTown_MaysHouse_2F_EventScript_WallClock": "开场区域脚本待装配。",
-    "LittlerootTown_MaysHouse_2F_EventScript_PC": "开场区域脚本待装配。"
+    "LittlerootTown_MaysHouse_2F_EventScript_PC": "开场区域脚本待装配。",
+    "EventScript_RegionMap": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
+    "EventScript_TV": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
+    "EventScript_BookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
+    "EventScript_PictureBookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。",
+    "EventScript_PokemonCenterBookShelf": "由native-backgrounds按原作metatile behavior补全背景交互；当前章节文本见emerald:signs。电视后续新闻与全功能地图页面尚未转写。"
   },
   "ignoredScripts": {
     "0x0": "原作空脚本指针：明确无脚本，并非待转写剧情。"

@@ -1,0 +1,45 @@
+{
+  "source": {
+    "label": "LittlerootTown_MaysHouse_2F_Movement_MayApproachPlayerNorth",
+    "path": "data/maps/LittlerootTown_MaysHouse_2F/scripts.inc",
+    "line": 121,
+    "sha256": "4c24902d8f196cc37580af281656b3d896db02bedc89d67ffefe134d7f071d2d"
+  },
+  "commands": [
+    {
+      "type": "move",
+      "actor": "neighbor.rival",
+      "path": [
+        "right"
+      ]
+    },
+    {
+      "type": "move",
+      "actor": "neighbor.rival",
+      "path": [
+        "right"
+      ]
+    },
+    {
+      "type": "move",
+      "actor": "neighbor.rival",
+      "path": [
+        "down"
+      ]
+    },
+    {
+      "type": "move",
+      "actor": "neighbor.rival",
+      "path": [
+        "down"
+      ]
+    },
+    {
+      "type": "move",
+      "actor": "neighbor.rival",
+      "path": [
+        "right"
+      ]
+    }
+  ]
+}
