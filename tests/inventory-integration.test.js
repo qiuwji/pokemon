@@ -527,9 +527,11 @@ test("Plugin pockets flow through reward, page, use and save; failed transaction
   assert.equal(restored.itemQuantity("garden:tonic"), 2);
   const bytes = [...s.records];
   const missing = session([], s.records).game;
-  assert(missing.saveProtected);
-  missing.save();
-  assert.deepEqual([...s.records], bytes);
+  assert.equal(missing.saveProtected, false);
+  assert.equal(missing.state.bag.pockets["garden:materials"], undefined);
+  assert(missing.state.suspendedContent.records.some(r => r.payload.path?.includes("garden:materials")));
+  assert.equal(s.records.get("emerald-hoenn-01"), new Map(bytes).get("emerald-hoenn-01"));
+  assert(missing.save());
 });
 
 test("Capacity preview and story itemSpace queries use registered policies without mutating state or permitting a commit", async () => {

@@ -426,7 +426,8 @@ test("Saved appearance dependencies include the resource owner even when another
   assert(doc.state.contentDependencies.includes("tailor"));
   assert(doc.state.contentDependencies.includes("cloth"));
   const other = session();
-  const before = JSON.stringify(other.game.state);
-  assert.throws(() => other.game.loadDocument(doc), /插件/);
-  assert.equal(JSON.stringify(other.game.state), before);
+  other.game.loadDocument(doc);
+  assert.equal(Object.keys(other.game.state.appearances.records).length, 0);
+  assert(other.game.state.suspendedContent.records.some(r => r.payload.path?.[0] === "appearances"));
+  assert.equal(other.game.state.money, doc.state.money);
 });

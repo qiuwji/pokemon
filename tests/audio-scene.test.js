@@ -468,3 +468,29 @@ test('Voice completion resolves on natural end and mute so waiting stories canno
   assert.equal(audio.voices.size, 0);
   audio.dispose();
 });
+
+test('Music crossfade keeps the previous voice until decoding completes and rejects stale replacements', async () => {
+  const pending = new Map(), f = fakeAudio({fetchAsset: source => new Promise(r => pending.set(source, r))});
+  const audio = player(f); audio.enabled = true;
+  const response = {ok:true, arrayBuffer:async()=>new ArrayBuffer(8)};
+  const a = audio.setMusic('town'); pending.get('assets/town.ogg')(response); const town = await a;
+  const b = audio.setMusic('battle'); assert.equal(town.stopped, false);
+  pending.get('assets/battle.ogg')(response); const battle = await b;
+  assert.equal(town.stopped, true); assert.equal(audio.musicVoice, battle);
+  assert.equal(await audio.setMusic('battle'), battle);
+  audio.dispose();
+});
+
+test('Returning to the playing cue cancels a pending replacement without restarting; failed replacement can retry', async () => {
+  let fail = false, resolve;
+  const f = fakeAudio({fetchAsset: source => source.includes('battle') ? new Promise(r => { resolve = () => r({ok:!fail,status:404,arrayBuffer:async()=>new ArrayBuffer(8)}); }) : Promise.resolve({ok:true,arrayBuffer:async()=>new ArrayBuffer(8)})});
+  const errors=[], audio=player(f,{onError:e=>errors.push(e)});audio.enabled=true;
+  const town=await audio.setMusic('town'), pending=audio.setMusic('battle');
+  assert.equal(await audio.setMusic('town'),town);resolve();assert.equal(await pending,null);
+  assert.equal(town.stopped,false);
+  // Drop the cached success to exercise a genuine resource failure and retry.
+  audio.buffers.delete('assets/battle.ogg'); fail=true;
+  const failed=audio.setMusic('battle');resolve();assert.equal(await failed,null);assert.equal(audio.musicVoice,town);
+  fail=false;const retry=audio.setMusic('battle');resolve();assert.equal((await retry).id,'battle');
+  assert.equal(errors.length,1);audio.dispose();
+});

@@ -8,7 +8,10 @@
       "module": "./high-flight/index.js",
       "export": "highFlight",
       "enabled": false,
-      "startup": ["high-flight:prepare", "high-flight:teach"]
+      "startup": [
+        "high-flight:prepare",
+        "high-flight:teach"
+      ]
     },
     {
       "id": "facility-content",
@@ -17,7 +20,9 @@
       "module": "./facility-content/index.js",
       "export": "createFacilityContent",
       "enabled": false,
-      "arguments": ["json:./facility-content/content.json"]
+      "arguments": [
+        "json:./facility-content/content.json"
+      ]
     },
     {
       "id": "ai-control",

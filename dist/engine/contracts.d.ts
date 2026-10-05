@@ -409,6 +409,7 @@ export interface AdventureState {
   tradePartner: Creature[];
   extensions: Record<string, PluginRecord>;
   contentDependencies: string[];
+  suspendedContent?: { version: 1; nextId: number; records: { id: number; domain: string; owners: string[]; payload: Json }[] };
 }
 export interface SaveEnvelope<S = AdventureState> {
   version: number;

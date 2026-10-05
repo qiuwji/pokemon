@@ -513,8 +513,9 @@ test("A state fault restores its clock and memory and missing plugin core conten
     dir: "up",
   };
   document.state.contentDependencies = ["fixture-world"];
-  assert.throws(() => game.loadDocument(document), /fixture-world/);
+  game.loadDocument(document);
   assert.equal(game.state.position.map, "LittlerootTown");
+  assert(game.state.suspendedContent.records.some(r => r.payload.kind === "location"));
 });
 
 test("Two live sessions cannot silently overwrite each other and read-only save inspection does not adopt a changed baseline", async () => {

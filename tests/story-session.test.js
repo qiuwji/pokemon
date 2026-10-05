@@ -183,7 +183,9 @@ test("Unknown saved cursor, removed plugin and missing stable IDs are rejected b
   const broken = structuredClone(document);
   broken.state.story.session.cursor = "unknown";
   assert.throws(() => s.game.loadDocument(broken), /Invalid save/);
-  assert.throws(() => session().game.loadDocument(document), /存档需要插件/);
+  const omitted = session().game; omitted.loadDocument(document);
+  assert.equal(omitted.state.story.session, undefined);
+  assert(omitted.state.suspendedContent.records.some(r => r.payload.path?.join("/") === "story/session"));
   const invalid = program(
     [{ type: "reward", id: "story-invalid:bad", money: 100 }],
     "invalid",

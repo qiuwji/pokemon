@@ -1,3 +1,4 @@
+import { MapNameDOM } from "./adapters/map-name-dom.js";
 import { emeraldBattleCues } from "./packs/emerald/battle-audio.js";
 import { PixelDisplay } from "./adapters/pixel-display.js";
 import { emeraldTransitionPatterns } from "./packs/emerald/battle-transition-canvas.js";
@@ -180,7 +181,7 @@ async function boot() {
       patterns,
       onError: console.error,
     });
-    let sceneTimer;
+    const mapName = new MapNameDOM({ element: $("scene-name") });
     const adventure = new EmeraldAdventure({
       playActive: () => !document.hidden,
       db,
@@ -209,13 +210,7 @@ async function boot() {
         $("location").textContent = title;
         game?.ui?.updateWeather(game.weatherView(id));
         game?.ui?.updateTime(game.timeView());
-        $("scene-name").textContent = title;
-        $("scene-name").classList.add("show");
-        clearTimeout(sceneTimer);
-        sceneTimer = setTimeout(
-          () => $("scene-name").classList.remove("show"),
-          2200,
-        );
+        mapName.show(title, db.maps[id]);
       },
     });
     const { bus } = attachEmeraldExtensions(adventure, host);

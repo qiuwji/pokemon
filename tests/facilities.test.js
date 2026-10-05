@@ -490,7 +490,7 @@ test("Losing an isolated facility battle releases the session without blackout, 
   assert.deepEqual(game.state.position, position);
   assert.equal(game.state.money, money);
 });
-test("Completed activity results reload with their plugin, while a missing activity plugin protects the original save", async () => {
+test("Completed activity results reload with their plugin and pause without losing earnings when disabled", async () => {
   const { game, bus, storage } = fixture([facilityFixture]);
   bus.executeSync("core.facility.enter", {
     id: "fixture-facility:game-room",
@@ -507,10 +507,12 @@ test("Completed activity results reload with their plugin, while a missing activ
   );
   assert.equal(restored.state.money, game.state.money);
   const missing = fixture([], storage).game;
-  assert.equal(missing.saveProtected, true);
-  assert.match(missing.saveWarning, /fixture-facility/);
-  missing.save();
+  assert.equal(missing.saveProtected, false);
+  assert.equal(missing.state.money, game.state.money);
+  assert.equal(missing.state.facilities.results.length, 0);
+  assert(missing.state.suspendedContent.records.some(r => r.payload.path?.[0] === "facilities"));
   assert.equal([...storage.values()][0], saved);
+  assert(missing.save());
 });
 
 test("Failed facility battle settlement releases its wait and permits quitting without writing a result", async () => {

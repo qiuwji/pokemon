@@ -81,3 +81,7 @@ BattleDirector消费已经提交的快照，捕捉结果消息留到完整摇晃
 演出音效通过纯pack函数battle-audio.js输出{id,at}，通用timed-cues.js使用注入Timeline推进，不在sample/draw里播放，不会每帧重复响。投球、摇晃、挣脱和入场/换人释放已接原SE资源；未导入逐招式音效仍安静，不以通用撞击替代。原作入场四种图案及选取仍复用battle-transitions与对应绘制器，未改规则。
 
 插件原生region与native句柄保留，动画关闭/换页由ownModalResource释放。新页面按data-modal-page/data-native-layout归属，不能给导航按钮和容器复用data-page。页面布局的新变动应以本文源码关键词定位；最新测试证据看STATUS，不能从本节推断视觉已验收。
+
+## 地图名提示策略
+
+MapNameDOM只管理提示生命周期，app按有效地图元数据调用。`indoor:true`不弹名称，室外默认显示，可通过`showMapName:false`关闭；进入室内立即取消上一个室外提示的定时器并隐藏。位置标题和AI观察仍保留地图名称。

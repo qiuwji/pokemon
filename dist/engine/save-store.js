@@ -11,7 +11,7 @@ export class SaveStore {
     key,
     validate,
     version = 1,
-    { diagnose = () => null } = {},
+    { diagnose = () => null, prepare = state => state } = {},
   ) {
     Object.assign(this, {
       storage,
@@ -19,6 +19,7 @@ export class SaveStore {
       validate,
       version,
       diagnose,
+      prepare,
     });
   }
   acceptCurrent() {
@@ -63,6 +64,9 @@ export class SaveStore {
         };
         return null;
       }
+      const original = JSON.stringify(envelope.state);
+      envelope.state = this.prepare(envelope.state);
+      this.preparedChanged = original !== JSON.stringify(envelope.state);
       if (this.validate(envelope.state)) return envelope;
       this.lastIssue = this.diagnose(envelope.state) || {
         code: "invalid_state",
@@ -73,6 +77,11 @@ export class SaveStore {
       return null;
     }
   }
+  backup(raw) {
+    // Keep the first pre-projection document; a later ordinary save must not erase recovery data.
+    const key = this.key + ":before-content-suspension";
+    if (this.storage.getItem(key) === null) this.storage.setItem(key, raw);
+  }
   load() {
     try {
       const raw = this.storage.getItem(this.key);
@@ -80,7 +89,9 @@ export class SaveStore {
         this.expectedRaw = raw ?? null;
         this.baselineKnown = true;
       }
-      return raw ? this.decode(raw) : null;
+      const loaded = raw ? this.decode(raw) : null;
+      if (loaded && this.preparedChanged) this.backup(raw);
+      return loaded;
     } catch {
       this.lastIssue = { code: "storage_unavailable" };
       return null;

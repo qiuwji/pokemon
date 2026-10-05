@@ -167,5 +167,9 @@
       "config": "tracks/se-pin.json",
       "selection": "story"
     }
-  ]
+  ],
+  "musicFades": {
+    "fadeInMs": 500,
+    "fadeOutMs": 250
+  }
 }

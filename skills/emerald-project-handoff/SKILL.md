@@ -107,3 +107,7 @@ test("first plugin uses registered content and public reward transaction", async
 新增原作剧情先读story-reconstruction，新增地图/事件组合读world-content；接口统一在剧情语言/剧情架构，对话字段在对话合同。原生数据放content/stories并登记manifest，插件用registerBundle；既有动态短事件分地区装配。不要沿旧聊天重新把全部事件写回story.js，或假定普通battle会等待结果。当前验证/待办仅查STATUS，不在本Skill维护易变测试数。
 
 若当前任务明确要求暂缓验证，只记录未执行范围和已有阶段证据；不能为了补齐模板自动重跑，也不能把未执行写成通过。恢复开发时依据变更范围决定受影响检查，阶段回归和浏览器验收分别记录。
+
+## 存档与场景反馈接手
+
+当前停用插件的硬引用解析按[存档合同](../../docs/engine/SAVES.md)继续；新增领域需补暂停/恢复适配器，不能把缺插件当坏JSON或替换为新冒险。验证同一保存键的启用→停用→正常保存→再次读取→恢复，保留原文备份、UID和新进度。BGM渐变属于音频包配置与播放时序，室内名称属于地图元数据与提示生命周期，不向核心添加地区ID判断。

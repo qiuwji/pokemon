@@ -64,3 +64,9 @@ UI/插件/保存/表现/架构相关 46 项通过；内容引用、公开类型�
 AudioAdapter的播放句柄提供`finished` Promise，声部自然结束、停止、静音、悬挂或dispose均完成。剧情`sound {cue,channel}`保存当前具名声部，`waitSound {channel}`等待它；失败解码不遗留等待。`music {cue}`临时覆盖宿主选曲，空cue恢复地图音乐，剧情finally释放覆盖与声部引用。跑步鞋fanfare在提示之后等待真实结束；时长不写在剧情数据里。
 
 合并包manifest把原始输入哈希去重到`sourceInputSets`，每首曲目通过`inputSet`引用，曲目仍分别保留资源哈希/循环帧/渲染设置。新增获得物品、离开楼梯、采访员和男女对手音乐已安装；实际听音和原机逐帧对照仍待用户验收。
+
+## 场景切曲的渐变
+
+合并音频包的 `tools/audio/pack.json.musicFades` 控制BGM：当前渐入500ms、渐出250ms；bundle-audio负责写进实际注册cue和资源manifest，不能只手改生成插件。音效保留即时播放。循环采样边界和WAV内容不变。
+
+AudioAdapter等新曲解码成功后才让旧曲渐出；失败保留旧声并允许重试，快速切场景只接受最新请求。回到仍在播放的原曲会取消待加载替换，不重新从头播放。禁音、后台暂停和释放继续清理全部声音。听感由用户在游戏内验收。

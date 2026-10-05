@@ -80,7 +80,9 @@ test("Sign patches affect interaction and readback without creating an NPC block
   s.game.loadDocument(document);
   assert.equal((await s.bus.execute("core.world.objects", { map, id: sign.id })).objects[0].dialogue, s.dialogue);
   const plain = session();
-  assert.throws(() => plain.game.loadDocument(document), /存档需要插件/);
+  plain.game.loadDocument(document);
+  assert(plain.game.state.suspendedContent.records.some(r => r.payload.path?.includes(sign.id)));
+  assert.equal((await plain.bus.execute("core.world.objects", { map, id: sign.id })).objects[0].dialogue, null);
   await s.bus.execute("core.world.patch", { feedback: true, operations: JSON.stringify([
     { kind: "object", map, id: sign.id, hidden: true },
   ]) });

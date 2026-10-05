@@ -18,6 +18,8 @@ export function validateContent(db) {
   if (errors.length) return errors;
   for (const [id, map] of Object.entries(db.maps)) {
     const path = `maps.${id}`;
+    for (const key of ["indoor", "showMapName"])
+      if (map[key] !== undefined) check(typeof map[key] === "boolean", path + "." + key);
     if (map.darkness !== undefined)
       check(validDarkness(map.darkness), path + ".darkness");
     // A map added by the map importer is explicitly staged until the grid importer builds

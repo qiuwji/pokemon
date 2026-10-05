@@ -350,9 +350,9 @@ test("Public time setup, scheduled plugin facts and save/load use the same domai
     validateSave(invalid, restored.db, restored.catalog, restored.host),
     false,
   );
-  assert.throws(() =>
-    adventure([], s.saved()).game.loadDocument(JSON.parse(s.saved())),
-  );
+  const omitted = adventure([], s.saved()).game; omitted.loadDocument(JSON.parse(s.saved()));
+  assert.equal(Object.keys(omitted.state.schedule.tasks).length, 0);
+  assert(omitted.state.suspendedContent.records.some(r => r.payload.path?.[0] === "schedule"));
 });
 test("World clocks advance during dialogue but daily/task effects wait until the field is available", async () => {
   const s = adventure(),

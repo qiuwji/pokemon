@@ -106,12 +106,20 @@ export class AudioAdapter {
       this.onError(new Error(`Unknown music cue ${id}`));
       return Promise.resolve(null);
     }
-    if (id === this.music)
+    if (id === this.music && (this.musicRequest || this.musicVoice?.id === id || !this.playable))
       return this.musicRequest || Promise.resolve(this.musicVoice);
+    // Cancel an in-flight replacement when returning to the still-playing scene.
+    if (id !== null && id === this.musicVoice?.id && !this.musicVoice.stopped) {
+      this.musicGeneration++;
+      this.music = id;
+      this.musicRequest = null;
+      return Promise.resolve(this.musicVoice);
+    }
     this.musicGeneration++;
-    if (this.musicVoice)
-      this.stopVoice(this.musicVoice, this.musicVoice.cue.fadeOutMs ?? 200);
-    this.musicVoice = null;
+    if (id === null && this.musicVoice) {
+      this.stopVoice(this.musicVoice, this.musicVoice.cue.fadeOutMs ?? 250);
+      this.musicVoice = null;
+    }
     this.music = id;
     this.musicOffset = 0;
     this.musicRequest = null;
@@ -126,7 +134,12 @@ export class AudioAdapter {
       offset: this.musicOffset,
     })
       .then((voice) => {
-        if (token === this.musicGeneration) this.musicVoice = voice;
+        if (voice && token === this.musicGeneration) {
+          const previous = this.musicVoice;
+          this.musicVoice = voice;
+          if (previous && previous !== voice)
+            this.stopVoice(previous, previous.cue.fadeOutMs ?? 250);
+        }
         return voice;
       })
       .finally(() => {
@@ -239,7 +252,7 @@ export class AudioAdapter {
     this.generation++;
     this.musicGeneration++;
     this.musicRequest = null;
-    if (this.musicVoice)
+    if (this.musicVoice?.id === this.music)
       this.musicOffset =
         this.musicVoice.offset +
         Math.max(0, this.context.currentTime - this.musicVoice.startedAt);

@@ -404,10 +404,11 @@ test("A content plugin registers a chosen action, controls it through authorized
   assert(g.state.contentDependencies.includes("brush"));
   const raw = [...s.records.values()].at(-1);
   const unloaded = fixture({ records: s.records });
-  assert.equal(unloaded.game.saveProtected, true);
-  assert.equal(unloaded.game.saveStore.lastIssue.code, "missing_dependency");
-  unloaded.game.save();
-  assert.equal([...s.records.values()].at(-1), raw);
+  assert.equal(unloaded.game.saveProtected, false);
+  assert.equal(unloaded.game.state.registeredItem, null);
+  assert(unloaded.game.state.suspendedContent.records.some(r => r.payload.path?.[0] === "registeredItem"));
+  assert.equal(s.records.get("emerald-hoenn-01"), raw);
+  assert(unloaded.game.save());
 });
 test("A plugin without useItem may read the shortcut but cannot register, clear or activate it", async () => {
   let api;

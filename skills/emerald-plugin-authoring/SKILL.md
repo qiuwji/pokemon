@@ -343,4 +343,4 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
 
 增加挂载位置用api.ui.slot(localId,{parent,priority?})，保存返回ID后交给ui.region/ui.entry。父位置先注册；子位置自动随父位置实际挂载、继承当前UID并一起释放。不要把UI_SLOTS的根锚点数量误当成插件位置上限，也不要把新位置当成任意DOM或原生替换授权。字段、预算和例见[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)，测试搜索`Plugin-defined nested slots`。
 
-缺插件后的存档能否继续必须按[当前审查计划](../../docs/project/MOD_REVIEW_PLAN.md)与STATUS核实；“原文保留”不等于“可继续玩”。不要靠清空依赖清单、删未知精灵/道具或强行装配缺定义的状态解决。插件自有记忆、核心内容硬引用和真正坏档分别处理；恢复/暂停能力尚未完成时如实记录，不能向作者承诺关闭任意插件均已可继续。
+停用插件后的存档行为按[存档合同](../../docs/engine/SAVES.md)及STATUS核实。当前硬引用进入有校验的暂停区，原生冒险可继续保存；重新启用仅恢复不覆盖新进度的条目。插件自有extensions保留，当前版本仍严格校验。新增持久领域必须注册暂停/恢复适配器并验证同一存储的启停链路，不能清空依赖或直接删未知精灵/道具。插件地图或空中模式回到有效陆地，位置记录不自动传回。当前没有热卸载或历史schema迁移，模块/配置错误仍是启动问题。

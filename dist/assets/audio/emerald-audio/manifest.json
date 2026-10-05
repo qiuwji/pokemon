@@ -18,8 +18,8 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_help.wav",
         "volume": 0.6,
-        "fadeInMs": 0,
-        "fadeOutMs": 0,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 8.06671201814059,
         "loopEnd": 14.220544217687074
@@ -69,8 +69,8 @@
         "loop": true,
         "loopStart": 54.16662131519274,
         "loopEnd": 107.49990929705216,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "8e8bdb813ff42554f5693517cce489e124b357ac28a8d9380bab0ea770c15044",
       "frames": 4740746,
@@ -114,8 +114,8 @@
         "loop": true,
         "loopStart": 33.947324263038546,
         "loopEnd": 67.63149659863946,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "1ef8a68aa11c0f85d54a2e9323f63fecbf76e0ef730899e2b67a63827a8c1d07",
       "frames": 2982549,
@@ -159,8 +159,8 @@
         "loop": true,
         "loopStart": 38.4,
         "loopEnd": 76.8,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "3c7975b34ddba2467dafce8416da970afdc8b7dde1f35d7cdcda8926bb1a2ff5",
       "frames": 3386880,
@@ -204,8 +204,8 @@
         "loop": true,
         "loopStart": 28.8,
         "loopEnd": 57.6,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "a6e34cb8f5f686e3ca1c66aadaacc9d2499400f971806d6571e6b62892fbc4ca",
       "frames": 2540160,
@@ -249,8 +249,8 @@
         "loop": true,
         "loopStart": 39.23077097505669,
         "loopEnd": 76.15385487528344,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "292cbe84aec4255ea14719fae120eff9e1275b42ca2076df8036071243bbb810",
       "frames": 3358385,
@@ -294,8 +294,8 @@
         "loop": true,
         "loopStart": 44.65113378684807,
         "loopEnd": 83.7208843537415,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "c6289664a033cce34a68b3b6714208b19cfdf37ee569e964aa7d301e77107c51",
       "frames": 3692091,
@@ -339,8 +339,8 @@
         "loop": true,
         "loopStart": 52.65299319727891,
         "loopEnd": 91.83662131519274,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "0421d5320f71eb121ded754143b27741d492550bbea1794f425fb07a7d49fd47",
       "frames": 4049995,
@@ -385,8 +385,8 @@
         "loop": true,
         "loopStart": 89.69687074829932,
         "loopEnd": 167.27253968253967,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "eb19b523fe30ae52af3e60a077a24f1899b06d84058bda8b0ee68fcc294fca93",
       "frames": 7376719,
@@ -431,8 +431,8 @@
         "loop": true,
         "loopStart": 64.89786848072562,
         "loopEnd": 117.55086167800454,
-        "fadeInMs": 0,
-        "fadeOutMs": 0
+        "fadeInMs": 500,
+        "fadeOutMs": 250
       },
       "assetSha256": "1786f5a95853d72ef83d88d461a430587a718e2f1b2f5d2d38416b095c0cc58a",
       "frames": 5183993,
@@ -474,8 +474,8 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_encounter_interviewer.wav",
         "volume": 0.6,
-        "fadeInMs": 0,
-        "fadeOutMs": 0,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 10.246462585034013,
         "loopEnd": 17.00700680272109
@@ -522,8 +522,8 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_encounter_may.wav",
         "volume": 0.6,
-        "fadeInMs": 0,
-        "fadeOutMs": 0,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 33.75,
         "loopEnd": 63.75
@@ -570,8 +570,8 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_encounter_brendan.wav",
         "volume": 0.6,
-        "fadeInMs": 0,
-        "fadeOutMs": 0,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 33.75,
         "loopEnd": 63.75
@@ -618,8 +618,8 @@
         "kind": "music",
         "source": "assets/audio/emerald-audio/music/mus_follow_me.wav",
         "volume": 0.6,
-        "fadeInMs": 0,
-        "fadeOutMs": 0,
+        "fadeInMs": 500,
+        "fadeOutMs": 250,
         "loop": true,
         "loopStart": 26.25,
         "loopEnd": 48.75

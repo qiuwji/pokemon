@@ -43,3 +43,5 @@ Skill保存稳定接手流程、术语、真实示例和查错入口；当前进
 history是旧设计和旧范围，不控制当前任务。CHANGELOG和VALIDATION中带日期/版本的段落也是历史事实，不能按旧测试数认定当前通过。原C参考在只读work/pokeemerald，生成审计是索引，不等于已经完成全部语义。
 
 相关短规格已按所有权合并：世界状态与访问生命周期、战斗状态/行动/AI、野外物品与快捷。旧路径到新路径见[document-paths.json](project/document-paths.json)。根DEVELOPMENT_LOG和FINAL_VALIDATION仅保留入口，避免维护两份进度。文件移动时同步真实链接与关键词；`npm run check:docs`会检查链接和Skill片段。
+
+存档、停用插件、恢复冲突与原始备份统一见[存档合同](engine/SAVES.md)。

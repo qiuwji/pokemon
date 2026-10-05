@@ -1,0 +1,85 @@
+{
+  "status": "code-validation-passed",
+  "version": "0.36.1",
+  "baseCommit": "5d28b1b",
+  "coreTests": {
+    "passed": 1025,
+    "failed": 0
+  },
+  "pluginTests": {
+    "passed": 36,
+    "failed": 0
+  },
+  "audioToolTests": {
+    "passed": 6,
+    "failed": 0
+  },
+  "quality": {
+    "passed": true,
+    "javascriptModules": 376
+  },
+  "browser": "not-run; user handles gameplay, touch and listening acceptance",
+  "limits": [
+    "Current save envelope only; no historical schema migration or hot unload.",
+    "Conflicted/full-capacity restoration stays suspended; saved location does not auto-teleport.",
+    "Malformed plugin modules/dependencies remain startup configuration errors."
+  ],
+  "logs": {
+    "all-tests.log": "8d6bfea0fab7d1175f16ab9736975753195b152c267f7adafcdffd80986ad6b1",
+    "check.log": "d825167f44df34c45c569eb5e7b6a6a29e02310e16bb1e442791388a7b349bb4",
+    "audio-tools.log": "b52fd2030bf92de4dd39dd804082b2d46694302b3e58cf9795e8231d2f98f7c2",
+    "initial-contract-regressions.log": "7b75d72ecde7aee04e759cbdb3d4cfdb3db135264b0b1d3e81327fb088b8a9e2",
+    "docs-final.log": "db6df0b9be1782bc31401d830b27934cd38e67b7f2cad9efd3be6d9fb6c3b7a3"
+  },
+  "inputs": {
+    "ARCHITECTURE.md": "f7a604dee3fb1cded5f89b8bf9d7f3b89216d2e7c921977555bf5f83bbd31f30",
+    "README.md": "f1231f3f4a2a9547147182a598c3ec6e8b8ad3b1ad7d28254f2b4b7f951d4403",
+    "dist/adapters/audio.js": "9b8b8b43a8323553e92b650e5be2f4c1271387896da8edee9888e3d2452d9383",
+    "dist/adapters/map-name-dom.js": "c2c4dc82905237f0578005da346b19ebb614fd85b0a65d2bc076a4f7f22e6962",
+    "dist/app.js": "46c6731ec776af72c6fd93b7bbd74495ae541ee8700caff7208eeb4eb04e95ff",
+    "dist/assets/audio/emerald-audio/manifest.json": "834aa6561718372f406f68bb5184fd78acfc6a01ccb3d136bf9e16770478d503",
+    "dist/engine/content-suspension.js": "b27ff695df40fca3a47fe67a26d64b96970fb0ba6e371807fc9044d6f01bfc28",
+    "dist/engine/content.js": "1a3e4e0cab1e0609015e0329b8a1108deaecc69cc8aac1ec5b99f0b7bcf1d792",
+    "dist/engine/contracts.d.ts": "4bb486419cc12b66297f7c01b490e59461e666f1e2cec049e6a1add8811c1f2d",
+    "dist/engine/save-store.js": "153893607376ca77c8b83ff080bb772c02dcfedd70c86a77b329b3b5a05c447c",
+    "dist/packs/emerald/application/save-application.js": "ed3a0222a8e259205db34f120fb172cdb6672d71af48295f2490a4753eb3fb31",
+    "dist/packs/emerald/pack.js": "de71472785e4215c7560cd8447f2a0e47ae50b3ed7a1901be3edeb3da434f850",
+    "dist/packs/emerald/save-contract.js": "1d9dcbd1b4febac03c4c6754729554aae6bc467821924eb97777c719dfa17c18",
+    "dist/packs/emerald/save/content-resolver.js": "870ab5831c6ce1e3c0c7eb057cfc3e75fccbb221c86c1f52f7b028c5aabdb578",
+    "dist/packs/emerald/save/creature-suspension.js": "1d01b3c6fd6ede4b314d6d31d79713f2cdf02df92c7dd531d9a161f7fceba5e5",
+    "dist/packs/emerald/save/runtime-suspension.js": "678d554e11b40a6e097cc4167844902c1d2964c679a6ec2acb365a0f4c2847d2",
+    "dist/packs/emerald/save/suspension-values.js": "5c276bb11c453795cb378858010d1cfda4f2e79dfcfba86829e5c9f888ba0fe1",
+    "dist/packs/emerald/save/world-suspension.js": "a54a0f4b02d69a261f443f564b82bc9ca2a4ef63e6842f03f3d9643daf8dd7dd",
+    "dist/plugins/catalog.json": "b8026c05daa613c47047d97525bd35b675ce1221fcecba9f5d876168df8da17a",
+    "dist/plugins/emerald-audio.js": "7f8d9252d6d44691a9eaa65ff5299544efbd843345a4a88d096833f0a6df3a89",
+    "docs/README.md": "d767d4ff20f0ce8b770e052f070e8f9aaf000e3e375b64c0d4f2cfa7cd108aee",
+    "docs/development/CODE_MAP.md": "5283c6d0d76dbd989d0937887807d03398bdac108649244f504f96d3b89e276b",
+    "docs/development/EMERALD_UI.md": "50ca1349484e7fca954323d6dff483069d756cc58d544dfa825e4d4923a74468",
+    "docs/engine/SAVES.md": "0d188f5182c3464c9eb492984d93959b981bc39bf759ab9ca033c2cee295db5c",
+    "docs/engine/presentation/AUDIO.md": "81321176477ab0633e916c4ea3ec5f243733b1793f719552a3e9b8e1aea39710",
+    "docs/project/CHANGELOG.md": "008c5fa5c66d4f81756a4456d900df4159e438cca32e565230bb98cae8b7cf6d",
+    "docs/project/MOD_REVIEW_PLAN.md": "8ea0bb00f4cd78e60fa4364349e05ae1d755ebc7ba850a8bd22708daa7d524dc",
+    "docs/project/STATUS.md": "13979c35eb8e0faf4ca79190b6eaeb643c58494383bc049db62694d89ebb1922",
+    "docs/project/VALIDATION.md": "bb95fd7d2bbc61929b0a8d492ddb2c879fb5f6b6dd9ac94a6bbc74ec303d072d",
+    "package-lock.json": "96be170c79915c95817ad74b17b2db07e269b9f327c4fdb097272f2b516d40dc",
+    "package.json": "5a56c10fbca55306b65f6f4995dd91b6f4a78eede57d28096b5c9d41a36c6e42",
+    "skills/emerald-plugin-authoring/SKILL.md": "1409b4cdb4088f14105b622905088ffcbc04aafc862d83f24479bee627db11de",
+    "skills/emerald-project-handoff/SKILL.md": "d3fef92eb21e761cbcf44fd33722147ee700c06d8afa7ebf874467dd6fce9524",
+    "tests/actor-schedules.test.js": "ea6b4d3c9761827cc79bd9b7a456ba12660c4b083ff3b0e511faa4b30be764e9",
+    "tests/appearances.test.js": "88b2aa9c4c5adaa89df833b8777fd726a6bde7a98c1ad2f942d80b2d2cca2e52",
+    "tests/audio-scene.test.js": "25e4f9c5d707877bb17d1de98abdeec70064b55478a7111fb0aa164fa8b507c4",
+    "tests/content-suspension.test.js": "0dfcf273ed57c7c807d23ab605dde8cfd364be01d4854164c2345ed5dd0596f8",
+    "tests/facilities.test.js": "d94ddc3f220111ad8b40eca8e668ea11bc1a0a22a89d855cc0f694dda43991ca",
+    "tests/inventory-integration.test.js": "242e1b9601f0cdbec1574631b7907a38ceb850e54a8958d039ae927ec366694d",
+    "tests/item-shortcut.test.js": "120465e63d8b930e380ca5a226ecc6badc4542a2b85ea1d66f832624db1a9f6b",
+    "tests/map-name.test.js": "88e0ffaaef80d13058aee7b792dd05dfb124fd6f964752bac2ac7657217d3987",
+    "tests/plugins.test.js": "8f0a5235a3391918745d9a7954957f01915b2825f64cfeeff4a6284a746a0c8e",
+    "tests/story-session.test.js": "9e0b7a9b85faac9fed54459f583761111501b31c4d368eb9c9451c9b564cc76b",
+    "tests/world-editing.test.js": "cc9db55a0187fccd483cf1dd943977b87864d2e7623e8f239b96a058fa0dc1b0",
+    "tests/world-time.test.js": "e470440691e02ea2b353356d38a9d2172becb36837133a42543b489a9541d2fc",
+    "tools/audio/README.md": "4e60e05648694afb4816ffec4be3d2fda30108536a8305edc774959bedbd417c",
+    "tools/audio/bundle-audio.py": "c17afdeb201cf3a96f0db3d98a52cc71c9f2a21b869021e1e863e185b1cb8d74",
+    "tools/audio/pack.json": "2f40bea528b2cc64c1a61fdf224480885adde16fa1ea0ffd79e3cbd16d224e86",
+    "tools/audio/test_tools.py": "a3d30e00566facdb2022bb6e502fcfaf899916a965f8757d29004e29f0b6b40c"
+  }
+}

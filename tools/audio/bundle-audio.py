@@ -30,13 +30,18 @@ def load_track_packs(build):
     return result
 
 
-def resolve_cue(track_id, song, kind, section, folder, data):
+def resolve_cue(track_id, song, kind, section, folder, data, fades=None):
     """The installed cue keeps the original identity: owner:mus_song or owner:se_song."""
     local = song.lower()
     asset = f'assets/audio/{track_id}/{section}/{local}.wav'
     cue = dict(data['cue'])
     cue['source'] = asset
     cue['kind'] = kind
+    if kind == 'music' and fades:
+        for key, value in fades.items():
+            if key not in ('fadeInMs', 'fadeOutMs') or not isinstance(value, int) or not 0 <= value <= 10000:
+                raise ValueError('Invalid music fade policy')
+            cue[key] = value
     if kind == 'music':
         cue.update({'loop': True,
                     'loopStart': data['cue']['loopStart'],
@@ -67,7 +72,7 @@ def install(pack_file, build, project, check=False):
                 raise ValueError(f'Reference revision differs for {song}')
             if data.get('renderer', {}).get('revision') != spec['rendererRevision']:
                 raise ValueError(f'Renderer revision differs for {song}')
-            local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data)
+            local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data, spec.get('musicFades'))
             audio = folder / data['assetName']
             if digest(audio) != data['assetSha256']:
                 raise ValueError(f'Track checksum differs from its manifest: {song}')

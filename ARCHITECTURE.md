@@ -157,3 +157,7 @@ AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用�
 开场战斗转场的来源参数/选择及纯时序采样在packs/emerald/battle-transitions.js，Canvas绘制在battle-transition-canvas.js。BattleSession只接受演出描述，TransitionController仅管理cover/hold/reveal和遮盖下提交；原作类型表不进通用内核。箭头出口由terrain命名语义统一驱动World，入图落点与跨图提交分别封装，不能为小遥家写特殊传送代码。
 
 界面按screen/field/tools分类，原生240×160素材由固定来源导出，控制器、纯视图与CSS各自拥有职责。BattleDirector延期捕捉结果消息并通过timed-cues共享注入时钟；pack选择资源与音效，Canvas只绘制，不播放声音。确认入口统一播音，具体落点与视觉待验见[界面说明](docs/development/EMERALD_UI.md)。
+
+## 当前存档内容解析
+
+存储端口负责原文备份与冲突检测；通用ContentSuspension只装配领域计划与验证草稿。内容包按育成、运行记录、世界引用拆分适配器，关闭插件时暂停硬引用，恢复时拒绝覆盖新进度。启动读取和手工导入共用解析管线，业务门面不承担逐插件分支。详见[存档合同](docs/engine/SAVES.md)。

@@ -1,3 +1,4 @@
+import { createSaveContentResolver } from "./save/content-resolver.js";
 import { storyDialogueIds } from "../../engine/story-catalog.js";
 import {
   AppearanceRegistry,
@@ -87,6 +88,7 @@ export function validateSave(
 ) {
   try {
     jsonValue(s, 2 * 1024 * 1024);
+    createSaveContentResolver({db,catalog,plugins}).validateArchive(s.suspendedContent);
     if (!["male", "female"].includes(s.playerGender) ||
         typeof s.playerName !== "string" || !s.playerName.trim() || s.playerName.length > 16) return false;
     if (!s.appearances) return false;
@@ -449,7 +451,7 @@ export function validateSave(
   )
     return false;
   if (s.daycare?.egg && !s.daycare.egg.egg) return false;
-  if (s.flags.rescued && !s.party.some((m) => !m.egg)) return false;
+  // Story history does not imply a nonempty party: plugin creatures may be suspended.
   if (!validStoryProgress(s.story)) return false;
   return true;
 }

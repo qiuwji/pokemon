@@ -15,6 +15,7 @@ export const PACK = {
   title: "绿宝石 · 丰缘序章",
   // WarpToTruck() starts at the centre of the truck interior.
   start: { map: "InsideOfTruck", x: 2, y: 2, dir: "down" },
+  safeReturn: { map: "LittlerootTown", x: 10, y: 10, dir: "down" },
   starters: ["treecko", "torchic", "mudkip"],
   rival: { treecko: "torchic", torchic: "mudkip", mudkip: "treecko" },
 };

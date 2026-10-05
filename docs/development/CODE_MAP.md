@@ -51,3 +51,5 @@ dist/
 本次整理将公共短演出归入story/common/scenes.js，将Route101入场追逐归入地区JSON；没有更换启动器或增加一套平行剧情引擎。文件改名时搜索上表中的类名、bundle ID或原作label，不靠旧绝对路径猜。
 
 原生地区角色选择：`native-cast-data.js` 编写按地图索引的出现条件/性别差异，`native-cast.js` 统一投影，`native-object-bindings.js` 绑定C对象身份及源位置。不要再在nativeCast按地图逐个增加分支。当前Mod审查与尚未实施的存档解绑见[计划](../project/MOD_REVIEW_PLAN.md)。
+
+存档暂停/恢复落点为 `dist/packs/emerald/save/`，通用装配器为 `dist/engine/content-suspension.js`；流程见[存档合同](../engine/SAVES.md)。地图名定时提示由 `dist/adapters/map-name-dom.js`拥有。

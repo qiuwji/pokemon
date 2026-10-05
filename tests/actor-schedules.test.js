@@ -264,7 +264,7 @@ test("A schedule includes foreign destination plugins in the save dependency led
   const document = s.game.exportDocument();
   assert(document.state.contentDependencies.includes("destination"));
   const missing = session([plugin()]);
-  const before = structuredClone(missing.game.state);
-  assert.throws(() => missing.game.loadDocument(document));
-  assert.deepEqual(missing.game.state, before);
+  missing.game.loadDocument(document);
+  assert(!missing.game.state.contentDependencies.includes("destination"));
+  assert.equal(missing.game.state.money, document.state.money);
 });
