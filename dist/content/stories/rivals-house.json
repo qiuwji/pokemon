@@ -195,6 +195,22 @@
           "type": "flag",
           "key": "neighborMomMet",
           "value": true
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "object",
+              "map": "LittlerootTown_MaysHouse_1F",
+              "id": "neighbor.mom",
+              "scope": "visit",
+              "changes": {
+                "x": 3,
+                "y": 8,
+                "dir": "left"
+              }
+            }
+          ]
         }
       ]
     },
@@ -730,6 +746,22 @@
           "type": "flag",
           "key": "neighborMomMet",
           "value": true
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "object",
+              "map": "LittlerootTown_BrendansHouse_1F",
+              "id": "neighbor.mom",
+              "scope": "visit",
+              "changes": {
+                "x": 7,
+                "y": 8,
+                "dir": "right"
+              }
+            }
+          ]
         }
       ]
     },

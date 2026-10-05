@@ -221,9 +221,11 @@ async function boot() {
     function frame(now) {
       if (!document.hidden) {
         audio.setMusic(
-          game.storyMusic || emeraldMusic(
+          emeraldMusic(
             {
-              battle: game.battle,
+              battle: game.battleMusicContext(),
+              storyMusic: game.storyMusic,
+              flags: game.state.flags,
               map: { ...game.world.map, id: game.state.position.map },
             },
             audio.cues,

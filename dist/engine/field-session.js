@@ -16,6 +16,7 @@ export class FieldSession {
     onStart = () => {},
     onMap = () => {},
     onWarp = () => {},
+    onWarpStart = () => {},
     beforeWarp = () => false,
     prepareEntry,
     elevation = null,
@@ -42,6 +43,7 @@ export class FieldSession {
       onProgress,
       onStart,
       onWarp,
+      onWarpStart,
       beforeWarp,
       movement,
       terrain,
@@ -331,7 +333,7 @@ export class FieldSession {
     };
     this.pending = result;
     this.scriptedStep = scripted;
-    this.onStart({ from, position: { ...this.position }, direction });
+    this.onStart({ from, position: { ...this.position }, direction, jump: !!result.jump });
     return true;
   }
   tick(now) {
@@ -360,6 +362,7 @@ export class FieldSession {
     // Coordinate scripts may take control before a warp on the same landed cell.
     if (result.warp && this.beforeWarp(cell)) return;
     if (result.warp) {
+      this.onWarpStart({ from: { ...this.position }, to: { ...result.warp } });
       void this.transitions
         .run("door", () => {
           const { map, x, y, dir } = result.warp;

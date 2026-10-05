@@ -39,6 +39,9 @@ export const BATTLE_PORTS = Object.freeze([
 ]);
 /** battle use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
 export class BattleApplication {
+  musicContext() {
+    return this.combat.battle || this.combat.enteringBattle;
+  }
   constructor(ports) {
     bindApplicationPorts(this, ports, BATTLE_PORTS);
     this.combat = new BattleSession({

@@ -6,6 +6,11 @@
   "defaultEnabled": true,
   "music": [
     {
+      "song": "MUS_HELP",
+      "config": "tracks/mus-help.json",
+      "selection": "story"
+    },
+    {
       "song": "MUS_LITTLEROOT",
       "config": "tracks/littleroot.json",
       "selection": "map-music"

@@ -7,6 +7,54 @@
   "cuePrefix": "emerald-audio",
   "tracks": [
     {
+      "song": "MUS_HELP",
+      "kind": "music",
+      "selection": "story",
+      "title": "小田卷博士求救",
+      "config": "tracks/mus-help.json",
+      "cueId": "emerald-audio:mus_help",
+      "source": "assets/audio/emerald-audio/music/mus_help.wav",
+      "cue": {
+        "kind": "music",
+        "source": "assets/audio/emerald-audio/music/mus_help.wav",
+        "volume": 0.6,
+        "fadeInMs": 0,
+        "fadeOutMs": 0,
+        "loop": true,
+        "loopStart": 8.06671201814059,
+        "loopEnd": 14.220544217687074
+      },
+      "assetSha256": "1f521791e546df42adfb816d0b64fba91c7e9ea9953d0e940a9948a0ee20c0dc",
+      "frames": 627126,
+      "durationSeconds": 14.220544217687074,
+      "midiLoopStartFrame": 84358,
+      "midiLoopEndFrame": 355742,
+      "renderConfig": {
+        "id": "mus-help",
+        "title": "小田卷博士求救",
+        "song": "MUS_HELP",
+        "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+        "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "midi": "sound/songs/midi/mus_help.mid",
+        "voicegroup": "help",
+        "sampleRate": 44100,
+        "songVolume": 78,
+        "reverb": 50,
+        "polyphony": 5,
+        "pcmMixRate": 13379,
+        "cueVolume": 0.6,
+        "oneShot": false,
+        "kind": "music",
+        "selection": "story"
+      },
+      "renderer": {
+        "repository": "https://github.com/huderlem/poryaaaa",
+        "revision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
+      },
+      "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
+    },
+    {
       "song": "MUS_LITTLEROOT",
       "kind": "music",
       "selection": "map-music",
@@ -2757,6 +2805,7 @@
     "mus-encounter-interviewer",
     "mus-encounter-may",
     "mus-follow-me",
+    "mus-help",
     "mus-obtain-item",
     "se-ball",
     "se-ball-open",

@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-05",
+  "scope": "Opening feedback: shared raster edges, rescue BGM/boundaries, input/warp audio, mom visit poses, seamless map initialization",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "checks": [
+    {
+      "command": "node --test tests/opening-choreography.test.js tests/presentation.test.js tests/battle-augments.test.js tests/chapter-one-music.test.js tests/view-extensions.test.js tests/field-elevation.test.js tests/story-presentation.test.js tests/application-services.test.js",
+      "result": "113 passed",
+      "log": "affected.log"
+    },
+    {
+      "command": "node --test tests/rescue-boundaries.test.js tests/tile-seams.test.js",
+      "result": "12 passed",
+      "log": "seams-rescue.log"
+    },
+    {
+      "command": "node --test --test-name-pattern=\"Oldale map setup\" tests/opening-choreography.test.js",
+      "result": "1 passed; held input preserved and real dialogue still clears control"
+    },
+    {
+      "command": "node tools/check-modules.mjs",
+      "result": "353 module syntax checks passed"
+    },
+    {
+      "command": "node tools/check-docs.mjs",
+      "result": "79 Markdown files, 802 local links, 17 synchronized examples valid"
+    },
+    {
+      "command": "npx eslint <changed JS and tests>",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "files": {
+    "dist/adapters/canvas-renderer.js": "99166d3d3f3708c94cc384d0152b600ee5283b33c176359f8aa884fc6f41bb97",
+    "dist/engine/field-session.js": "332dcc21573865b12077b359f7e85bc9bfa6f0732a4454a19b28dc66cc05631a",
+    "dist/engine/battle-session.js": "eb7e62810eb940af565dd3c6fdce14f5537d2e6f6165eb87e4d3fbe76f6090ac",
+    "dist/packs/emerald/application/story-application.js": "0d3e9ffefd235e3cbe3e33f924a13145ba6c94f6c72c22b808871b56066d6bb3",
+    "dist/packs/emerald/story/map-setup.js": "d8b9bb1fc973b78d49e3fba43b9159a501c5f670bb0774274c1442fef39a060b",
+    "dist/packs/emerald/application/world-application.js": "d0a855af7080377416d124475d187177e8f1084cdb0b618513dc588c80785fa1",
+    "dist/packs/emerald/audio-library.js": "2e0e33078667205719a8ad85bcbea1f1ddc391b1d47aeb73110e83a1f59eb599",
+    "dist/packs/emerald/battle-interface.js": "18eceec83b2eff65586d9cbb8743395a9ab7a69f21de22105bc104c10ee341f3",
+    "dist/packs/emerald/story/regions/littleroot.js": "f86541c1c60f4e57f84bba352fc24f21d00f9ac1b6133eec4d7d6f0aa9d50e5c",
+    "dist/content/stories/players-house.json": "b11576c7964ec4caab72ee15a56aac0b16b407229a6a619bbffffd625763c83b",
+    "dist/content/stories/rivals-house.json": "759e6f282114d529ad3da32017ef60c01cac764e1a56d5f023333eecf5e33b6a",
+    "tools/audio/tracks/mus-help.json": "791751b9b7cfa9ea78d96c22c197dff78c8be972a03e7303c1445d3d75d904c9"
+  },
+  "fullRegression": "not rerun; prior stage evidence remains separate",
+  "browser": "not operated; visual/audio E2E assigned to user",
+  "saveData": "not cleared or modified"
+}

@@ -2,6 +2,7 @@
 export const audioPlugin = {
   ...{"id": "emerald-audio", "apiVersion": 1, "version": "1.0.0", "dataVersion": 1, "permissions": []},
   setup(api) {
+    api.presentation.audio("mus_help", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_help.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": true, "loopStart": 8.06671201814059, "loopEnd": 14.220544217687074});
     api.presentation.audio("mus_littleroot", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_littleroot.wav", "volume": 0.6, "loop": true, "loopStart": 54.16662131519274, "loopEnd": 107.49990929705216, "fadeInMs": 0, "fadeOutMs": 0});
     api.presentation.audio("mus_route101", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_route101.wav", "volume": 0.6, "loop": true, "loopStart": 33.947324263038546, "loopEnd": 67.63149659863946, "fadeInMs": 0, "fadeOutMs": 0});
     api.presentation.audio("mus_oldale", {"kind": "music", "source": "assets/audio/emerald-audio/music/mus_oldale.wav", "volume": 0.6, "loop": true, "loopStart": 38.4, "loopEnd": 76.8, "fadeInMs": 0, "fadeOutMs": 0});

@@ -21,6 +21,16 @@ const setup = (gender) => {
   return s;
 };
 
+test('Oldale map setup preserves held movement input, while real dialogue still takes control',async()=>{
+  const s=setup('male'),g=s.game;g.state.flags.rescued=true;
+  let clears=0;g.clearInput=()=>{clears++;};
+  await enter(s,'OldaleTown',10,19);
+  assert.equal(clears,0);
+  assert.deepEqual(pose(g.field.npcs.objects('OldaleTown').find(o=>o.id==='oldale.employee')),[13,14,'down']);
+  await g.runStory([{type:'dialog',name:'测试',lines:['真正对白仍接管控制。']}]);
+  assert.equal(clears,2);
+});
+
 test('Native facing uses the exact movement table, including asymmetric direction names', () => {
   assert.equal(nativeMovement('MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT').dir,'left');
   assert.equal(nativeMovement('MOVEMENT_TYPE_WANDER_RIGHT_AND_LEFT').dir,'right');
@@ -72,6 +82,10 @@ for(const gender of ['male','female']) {
     assert.equal(snapshots[2].player[2],'up');assert.equal(snapshots[2].tile,3);
     assert.equal(snapshots[3].tile,undefined);
     assert.equal(g.state.flags.tvWatched,true);valid(s);
+    const seat=[female?8:2,6,female?'left':'right'];
+    assert.deepEqual(pose(g.field.npcs.objects(map).find(o=>o.id==='house.mom')),seat);
+    g.loadDocument(g.exportDocument());
+    assert.deepEqual(pose(g.field.npcs.objects(map).find(o=>o.id==='house.mom')),seat);
   });
 }
 
@@ -161,6 +175,7 @@ for (const gender of ['male','female']) {
   });
   test(`${gender}: entering the neighbor home lands on the mat and mom approaches adjacent to the player`,async()=>{
     const s=setup(gender),g=s.game,female=gender==='female';
+    const sounds=[];g.ui.sound=id=>sounds.push(id);
     g.state.flags.neighborMomMet=false;g.state.flags.neighborMet=false;g.state.flags.rescued=false;
     const x=female?5:14,other=`LittlerootTown_${female?'Brendans':'Mays'}House_1F`;
     await enter(s,'LittlerootTown',x,9,'up');await finishStep(s,'up');
@@ -168,9 +183,17 @@ for (const gender of ['male','female']) {
     assert.deepEqual(pose(g.state.position),[female?8:2,8,female?'left':'right']);
     const mom=g.field.npcs.objects(other).find(o=>o.id==='neighbor.mom');
     assert.deepEqual(pose(mom),[female?7:3,8,female?'right':'left']);
+    g.loadDocument(g.exportDocument());
+    assert.deepEqual(pose(g.field.npcs.objects(other).find(o=>o.id==='neighbor.mom')),pose(mom));
+    assert.deepEqual(sounds,['emerald:door']);
     await finishStep(s,'up');await finishStep(s,'down');
     assert.equal(g.state.position.map,other,'standing on the mat does not leave');
     await finishStep(s,'down');assert.equal(g.state.position.map,'LittlerootTown');valid(s);
+    assert.deepEqual(sounds,['emerald:door','emerald-audio:se_exit']);
+    await finishStep(s,'up');
+    assert.equal(g.state.position.map,other);
+    assert.deepEqual(pose(g.field.npcs.objects(other).find(o=>o.id==='neighbor.mom')),[female?2:8,7,female?'right':'left']);
+    assert.deepEqual(sounds,['emerald:door','emerald-audio:se_exit','emerald:door']);
   });
   for (const [dir,x,y] of [['up',10,4],['down',10,2],['left',11,3],['right',9,3]])
     test(`${gender}: Route103 victory from ${dir} speaks before walking and hiding the rival`,async()=>{

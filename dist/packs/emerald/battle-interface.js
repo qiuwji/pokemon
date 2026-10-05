@@ -14,7 +14,7 @@ export function battleOptionIndex(selected, dir, count) {
 /** Emerald battle menu adapter: owns focus and layout, sends actions, never mutates domain state. */
 export function createBattleInterface(
   game,
-  { document: doc, hpTrack, hpColor, escapeHTML, showParty, showBag },
+  { document: doc, hpTrack, hpColor, escapeHTML, showParty, showBag, sound = () => {} },
 ) {
   const root = doc.getElementById("battle-hud"),
     db = game.db;
@@ -277,6 +277,7 @@ export function createBattleInterface(
       const count = buttons().length;
       if (count) {
         selected = battleOptionIndex(selected, dir, count);
+        sound("emerald:confirm");
         draw();
       }
     },

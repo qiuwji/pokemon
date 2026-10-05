@@ -4,6 +4,8 @@
 
 领域与存档不持有音频节点。内容包/插件注册资源；页面、战斗/场景导演提出语义提示；宿主 AudioAdapter 管理解码、缓存、通道、播放位置与释放。播放失败仅报告宿主错误，不改变战斗/道具/剧情结果。当前没有音符程序、振荡器或合成回退。
 
+原生选曲集中在pack的emeraldMusic：准备中的战斗（BattleSession.enteringBattle）及已发布战斗优先，其次临时storyMusic、剧情阶段曲、地图曲。准备状态只用于表现选曲，finally清理；不可据此提前操作战斗。剧情阶段曲从现有旗标重建，不保存音频节点。FieldSession.onStart的jump仅指成功地形跳跃；onWarpStart在坐标剧情未接管且确实开始传送时发出，正常warp音效由pack选择。脚本指定jump/门动画继续用显式sound，防止和地形音效重复。
+
 公开 AudioCue：
 
 ```js

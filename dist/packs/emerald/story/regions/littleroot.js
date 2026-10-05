@@ -10,6 +10,23 @@ export const REGIONS_LITTLEROOT_EVENTS = [
     build: () => RESCUE_INTRO,
   },
   talkEvent("rescue.bag", "starter", () => OPEN_BAG, not("rescued")),
+  // Route101/map.json: VAR_ROUTE101_STATE=2 coordinate events; the C
+  // applymovement ignores object occupancy, including the bag south of (7,13).
+  ...[
+    { edge: "south", dir: "up", cells: [[10, 18], [11, 18]] },
+    { edge: "west", dir: "right", cells: [[6, 15], [6, 16], [6, 17], [6, 18]] },
+    { edge: "north", dir: "down", cells: [[7, 13]] },
+  ].map(({ edge, dir, cells }) => ({
+    id: `rescue.prevent-exit.${edge}`,
+    trigger: "step",
+    requires: all(flag("heardBirch"), not("rescued")),
+    match: ({ map, position }) => map === "Route101" &&
+      cells.some(([x, y]) => position.x === x && position.y === y),
+    build: () => [
+      dialog("emerald:dialogues.rescue.dont-leave", {}),
+      { type: "move", actor: "player", path: [dir], ignoreActors: ["birchBag"] },
+    ],
+  })),
   {
     ...talkEvent(
       "professor.pokedex",

@@ -139,6 +139,7 @@ export const APPLICATION_METHODS = Object.freeze({
   performTrade: Object.freeze(["growth", "performTrade"]),
   startTrainerBattle: Object.freeze(["battle", "startTrainerBattle"]),
   startBattle: Object.freeze(["battle", "startBattle"]),
+  battleMusicContext: Object.freeze(["battle", "musicContext"]),
   turn: Object.freeze(["battle", "turn"]),
   encounterService: Object.freeze(["battle", "encounterService"]),
   resultPlan: Object.freeze(["battle", "resultPlan"]),

@@ -6,6 +6,7 @@ const dialog = (dialogue, parameters = {}) => ({
 });
 
 export const RESCUE_INTRO = [
+  { type: "music", cue: "emerald-audio:mus_help" },
   dialog("emerald:dialogues.scenes.1", {}),
   { type: "cameraTo", actor: "birch", ms: 420 },
   {

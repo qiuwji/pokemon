@@ -1,0 +1,20 @@
+✔ A real ledge hop emits the original sound once; animation-busy and blocked climbs stay silent (60.305042ms)
+✔ Before rescuing Birch, (10,18) pushes back towards up; rescue releases it (38.254083ms)
+✔ Before rescuing Birch, (11,18) pushes back towards up; rescue releases it (30.583292ms)
+✔ Before rescuing Birch, (6,15) pushes back towards right; rescue releases it (29.980292ms)
+✔ Before rescuing Birch, (6,16) pushes back towards right; rescue releases it (30.599208ms)
+✔ Before rescuing Birch, (6,17) pushes back towards right; rescue releases it (33.36725ms)
+✔ Before rescuing Birch, (6,18) pushes back towards right; rescue releases it (41.581792ms)
+✔ Before rescuing Birch, (7,13) pushes back towards down; rescue releases it (28.359792ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 1 (1.967083ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 1.3333333333333333 (0.191166ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 0.6666666666666666 (0.162708ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 1.7 (0.190875ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 431.143791

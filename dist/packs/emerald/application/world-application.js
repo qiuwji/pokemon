@@ -482,6 +482,10 @@ export class WorldApplication {
         void this.playStory(commands);
         return true;
       },
+      onWarpStart: ({ from }) => {
+        this.ui?.sound?.(this.world.maps[from.map].indoor
+          ? "emerald-audio:se_exit" : "emerald:door");
+      },
       onWarp: ({ from, to }) => {
         this.control.record("teleport", { from, to });
         if (from.map !== to.map) this.control.record("map.changed", { from: from.map, to: to.map });
@@ -490,7 +494,8 @@ export class WorldApplication {
         this.stepWeather(this.state.position);
         this.step(cell);
       },
-      onStart: ({ from, position }) => {
+      onStart: ({ from, position, jump }) => {
+        if (jump) this.ui?.sound?.("emerald:ledge");
         this.control.record("movement.started", { from, to: position });
         if (from.map !== position.map) this.control.record("map.changed", { from: from.map, to: position.map });
         this.deviceEvent("leave", from, { position });

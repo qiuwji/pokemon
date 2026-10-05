@@ -21,6 +21,7 @@ export class BattleSession {
       onFailure,
     });
     this.battle = null;
+    this.enteringBattle = null;
     this.locked = false;
     this.pendingResult = null;
   }
@@ -32,6 +33,9 @@ export class BattleSession {
     this.locked = true;
     try {
       const preparedBattle = this.createBattle(options);
+      // Presentation can select entry audio before the covered scene swap.
+      // The interactive battle is still published only at the transition midpoint.
+      this.enteringBattle = preparedBattle;
       let entry;
       const transition = options.presentation?.transition;
       await this.transitions.run(transition?.kind || "encounter", () => {
@@ -52,6 +56,7 @@ export class BattleSession {
         await this.director.play(event, { message: this.onMessage });
       return true;
     } finally {
+      this.enteringBattle = null;
       this.locked = false;
       this.onChange();
     }

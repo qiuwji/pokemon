@@ -281,7 +281,7 @@ test("Battle menu adapter forwards the registered augment instead of silently us
   );
   const s = session([augmentFixture]);
   await s.bus.execute("core.battle.start", { trainerId: "youngster" });
-  const sent = [];
+  const sent = [], sounds = [];
   let nodes = [],
     html = "";
   const root = {
@@ -331,8 +331,15 @@ test("Battle menu adapter forwards the registered augment instead of silently us
     escapeHTML: String,
     showParty() {},
     showBag() {},
+    sound: (id) => sounds.push(id),
   });
   ui.draw();
+  for (const dir of ["right", "down", "left", "up"]) ui.navigate(dir);
+  assert.deepEqual(sounds, Array(4).fill("emerald:confirm"));
+  game.busy = true;
+  ui.navigate("right");
+  assert.equal(sounds.length, 4);
+  game.busy = false;
   root
     .querySelectorAll("[data-action]")
     .find((n) => n.dataset.action === "fight")

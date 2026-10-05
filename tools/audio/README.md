@@ -64,6 +64,8 @@ dist/plugins/emerald-audio.js                               # 一个插件注册
 
 选曲政策在`dist/packs/emerald/audio-library.js`：`ORIGINAL_SONG_CUES`是常量到cue的唯一映射，`emeraldMusic`先读地图`music`，战斗时按`emeraldBattleSong`取`MUS_VS_WILD`/`MUS_VS_TRAINER`/`MUS_VS_RIVAL`，与原作`GetBattleBGM`一致。声音仍由玩家点击♪开启。
 
+剧情曲也登记pack.json的story用途：MUS_HELP配置在tracks/mus-help.json，按midi.cfg的help音色组/-V078/-R50渲染，仍循环第二遍曲身。求救音乐跨对白持续及存读档恢复由pack剧情阶段旗标选曲；战斗准备时切入战斗曲，不等入场转场的中点。曲目生成、选择和播放是不同验收环节，听感仍由实际游戏试听确认。
+
 ## 验证边界
 
 检查真实PCM、loop在资源范围、试听插件注册和内容选曲、安装预演不写及重复安装；受影响测试用audio-scene和插件装配例。正常游戏开启声音后的听感与固定原作对照仍必须人工听音记录，不能用音频时长或DOM代替。Skill入口见[音乐指南](../../skills/emerald-story-reconstruction/references/music-import.md)。

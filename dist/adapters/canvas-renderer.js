@@ -131,6 +131,21 @@ export class Renderer {
       );
     c.restore();
   }
+  pixelBounds(x, y, width, height) {
+    // Snap shared edges, not individual widths: fractional viewport scales must
+    // not expose the background between adjacent tiles or their overlay layers.
+    const { scale = 1, offsetX = 0, offsetY = 0 } = this.camera;
+    const left = Math.round(offsetX + x * scale),
+      top = Math.round(offsetY + y * scale),
+      right = Math.round(offsetX + (x + width) * scale),
+      bottom = Math.round(offsetY + (y + height) * scale);
+    return {
+      x: (left - offsetX) / scale,
+      y: (top - offsetY) / scale,
+      width: (right - left) / scale,
+      height: (bottom - top) / scale,
+    };
+  }
   tile(pack, value, x, y, now) {
     const base = value & ~3072;
     const animation = pack.animations[base];
@@ -143,14 +158,19 @@ export class Renderer {
     const image = this.assets["tiles-" + pack.id];
     const sx = (index % pack.columns) * 8,
       sy = Math.floor(index / pack.columns) * 8;
-    const c = this.ctx;
+    const c = this.ctx,
+      bounds = this.pixelBounds(x, y, 8, 8);
     if (value & 3072) {
       c.save();
-      c.translate(x + (value & 1024 ? 8 : 0), y + (value & 2048 ? 8 : 0));
+      c.translate(
+        bounds.x + (value & 1024 ? bounds.width : 0),
+        bounds.y + (value & 2048 ? bounds.height : 0),
+      );
       c.scale(value & 1024 ? -1 : 1, value & 2048 ? -1 : 1);
-      c.drawImage(image, sx, sy, 8, 8, 0, 0, 8, 8);
+      c.drawImage(image, sx, sy, 8, 8, 0, 0, bounds.width, bounds.height);
       c.restore();
-    } else c.drawImage(image, sx, sy, 8, 8, x, y, 8, 8);
+    } else
+      c.drawImage(image, sx, sy, 8, 8, bounds.x, bounds.y, bounds.width, bounds.height);
   }
   grid(pack, id, x, y, overlay, now) {
     id &= 1023;
@@ -159,8 +179,9 @@ export class Renderer {
     const layer = pack.attributes[id] >> 12;
     if (overlay && layer === 1) return;
     if (!overlay) {
+      const bounds = this.pixelBounds(x, y, 16, 16);
       this.ctx.fillStyle = `rgb(${pack.background.join(",")})`;
-      this.ctx.fillRect(x, y, 16, 16);
+      this.ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
     for (let i = overlay ? 4 : 0; i < 8; i++)
       this.tile(
@@ -190,8 +211,8 @@ export class Renderer {
         this.grid(
           pack,
           m.appearances?.[y * m.width + x] ?? m.blocks[y * m.width + x],
-          Math.round((origin.x + x) * 16 - this.camera.x),
-          Math.round((origin.y + y) * 16 - this.camera.y),
+          (origin.x + x) * 16 - this.camera.x,
+          (origin.y + y) * 16 - this.camera.y,
           overlay,
           now,
         );

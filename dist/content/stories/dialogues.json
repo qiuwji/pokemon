@@ -2,6 +2,10 @@
   "id": "emerald:dialogues",
   "version": 1,
   "dialogues": {
+    "rescue.dont-leave": {
+      "name": "小田卷博士",
+      "lines": ["你、你要去哪儿？！别丢下我不管啊！"]
+    },
     "scenes.1": {
       "name": "远处传来的声音",
       "lines": [

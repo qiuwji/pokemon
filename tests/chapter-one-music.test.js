@@ -93,6 +93,17 @@ test("Every imported map keeps its original song constant and resolves to an ins
   for (const song of seen) assert.ok(ORIGINAL_SONG_CUES[song], song);
 });
 
+test("Rescue music persists between dialogues and on restore; battle entry overrides scripted music", async () => {
+  const cues = await installedMusicCues(), map = { id: "Route101", music: "MUS_ROUTE101" };
+  const flags = { heardBirch: true, rescued: false };
+  assert.equal(emeraldMusic({ map, flags: structuredClone(flags) }, cues), "emerald-audio:mus_help");
+  const cue = cues.get("emerald-audio:mus_help");
+  assert(cue.loop && cue.loopEnd > cue.loopStart);
+  assert.equal(emeraldMusic({ map, flags, storyMusic: "emerald-audio:mus_help",
+    battle: { trainer: false } }, cues), "emerald-audio:mus_vs_wild");
+  assert.equal(emeraldMusic({ map, flags: { ...flags, rescued: true } }, cues), "emerald-audio:mus_route101");
+  assert.equal(emeraldMusic({ map, flags: {} }, cues), "emerald-audio:mus_route101");
+});
 test("An unregistered original song constant stays silent instead of guessing a track", async () => {
   const cues = await installedMusicCues();
   assert.equal(emeraldMusic({ map: { music: "MUS_NOT_IMPORTED" } }, cues), null);

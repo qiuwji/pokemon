@@ -20,6 +20,7 @@ import {
   validateCondition,
 } from "../../../engine/conditions.js";
 import { bindApplicationPorts } from "./ports.js";
+import { isMapSetup } from "../story/map-setup.js";
 import { dialogueHistory } from "../../../engine/dialogue-history.js";
 import { validateChoicePolicy } from "../../../engine/story-choice.js";
 import {
@@ -330,7 +331,9 @@ export class StoryApplication {
         return;
       }
       const commands = this.story.resolve("mapEnter", this.state, entry);
-      if (commands.length) await this.playStory(commands);
+      if (commands.length) await this.playStory(commands, {
+        preserveInput: isMapSetup(commands, this.storyCatalog),
+      });
     } catch (error) {
       this.ui.toast("地图剧情未能启动，请检查剧情绑定。");
       console.error(error);
@@ -406,12 +409,12 @@ export class StoryApplication {
       return;
     return this.runStory([{ type: "resumeScript" }]);
   }
-  async runStory(commands) {
+  async runStory(commands, { preserveInput = false } = {}) {
     if (this.storyBusy) return;
     if (this.state.story.session && commands[0]?.type !== "resumeScript")
       throw new Error("Resume the pending story before starting another");
     this.storyBusy = true;
-    this.clearInput();
+    if (!preserveInput) this.clearInput();
     let failed = true;
     try {
       if (commands[0]?.type === "resumeScript") {
@@ -442,15 +445,15 @@ export class StoryApplication {
         this.storyMusic = null;
         this.sounds.clear();
         this.storyBusy = false;
-        this.clearInput();
+        if (!preserveInput) this.clearInput();
         this.ui?.updateSide();
         if (this.battle) this.ui?.drawBattleHUD();
         if (!failed) this.save();
       }
     }
   }
-  playStory(commands) {
-    return this.runStory(commands).catch((error) => {
+  playStory(commands, options) {
+    return this.runStory(commands, options).catch((error) => {
       this.ui?.toast("剧情未能继续，请读取最近的存档。");
       console.error(error);
     });

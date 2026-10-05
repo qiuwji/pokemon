@@ -1568,6 +1568,58 @@
         "y": 5,
         "dir": "up"
       }
+    },
+    {
+      "map": "LittlerootTown_BrendansHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 7
+          }
+        ]
+      },
+      "changes": {
+        "x": 2,
+        "y": 6,
+        "dir": "right"
+      }
+    },
+    {
+      "map": "LittlerootTown_MaysHouse_1F",
+      "objectId": "house.mom",
+      "requires": {
+        "all": [
+          {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          {
+            "flag": "introState",
+            "equals": 7
+          }
+        ]
+      },
+      "changes": {
+        "x": 8,
+        "y": 6,
+        "dir": "left"
+      }
     }
   ]
 }

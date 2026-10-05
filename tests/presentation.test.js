@@ -128,6 +128,32 @@ test("Capture shakes follow domain result; failed capture restores opponent and 
     assert.equal(director.sample().actors[1].opacity, caught ? 0 : 1);
   }
 });
+test("Entry music can observe the prepared battle before the scene swap; failed entry clears it", async () => {
+  const battle = { trainer: true, script: "rival", snapshot: () => view(), events: [] };
+  let release;
+  const cover = new Promise(resolve => { release = resolve; });
+  const session = new BattleSession({
+    createBattle: () => battle,
+    director: { busy: false, reset() {}, stage() {}, async play() {} },
+    transitions: { busy: false, async run(_kind, swap) { await cover; swap(); } },
+  });
+  const job = session.start({ trainer: true });
+  assert.equal(session.enteringBattle, battle);
+  assert.equal(session.battle, null);
+  assert.equal(await session.start({}), false);
+  release(); await job;
+  assert.equal(session.enteringBattle, null);
+  assert.equal(session.battle, battle);
+  const failed = new BattleSession({
+    createBattle: () => battle,
+    director: { busy: false },
+    transitions: { busy: false, async run() { throw new Error("entry failed"); } },
+  });
+  await assert.rejects(failed.start({}), /entry failed/);
+  assert.equal(failed.enteringBattle, null);
+  assert.equal(failed.battle, null);
+  assert.equal(failed.busy, false);
+});
 test("Combat session rejects repeated actions while presenting the previous turn", async () => {
   const clock = manualClock(),
     director = new BattleDirector(clock.timeline),

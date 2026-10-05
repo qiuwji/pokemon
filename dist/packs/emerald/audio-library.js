@@ -121,6 +121,7 @@ export function createEmeraldAudio(host) {
 export const ORIGINAL_SONG_CUES = Object.freeze({
   MUS_LITTLEROOT: "emerald-audio:mus_littleroot",
   MUS_ROUTE101: "emerald-audio:mus_route101",
+  MUS_HELP: "emerald-audio:mus_help",
   MUS_OLDALE: "emerald-audio:mus_oldale",
   MUS_BIRCH_LAB: "emerald-audio:mus_birch_lab",
   MUS_POKE_CENTER: "emerald-audio:mus_poke_center",
@@ -139,10 +140,12 @@ export function emeraldBattleSong(battle) {
   return battle.trainer ? "MUS_VS_TRAINER" : "MUS_VS_WILD";
 }
 /** Map content keeps the original song constant; a directly registered cue id is also accepted. */
-export function emeraldMusic({ battle, map, battleSong }, cues) {
+export function emeraldMusic({ battle, map, battleSong, storyMusic, flags = {} }, cues) {
   const id = battle
     ? battleSong || map.battleMusic || emeraldBattleSong(battle)
-    : map.music;
+    : storyMusic || (map.id === "Route101" && flags.heardBirch && !flags.rescued
+      ? "MUS_HELP"
+      : map.music);
   if (!id) return null;
   const cueId = cues.has(id) ? id : ORIGINAL_SONG_CUES[id];
   return cueId && cues.get(cueId)?.kind === "music" ? cueId : null;
