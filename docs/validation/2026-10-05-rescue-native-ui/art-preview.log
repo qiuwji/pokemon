@@ -1,0 +1,14 @@
+{
+  "script": "import-movement.py",
+  "check": true,
+  "files": [
+    "assets/actor-EnemyZigzagoon.png",
+    "content/actors.json"
+  ],
+  "contentChanges": [
+    "actors.EnemyZigzagoon.h",
+    "actors.EnemyZigzagoon.offsetX",
+    "actors.EnemyZigzagoon.w"
+  ],
+  "omissions": []
+}

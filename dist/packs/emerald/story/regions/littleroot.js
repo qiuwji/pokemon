@@ -1,13 +1,14 @@
 import { dialog, flag, not, all, talkEvent } from "../helpers.js";
-import { RESCUE_INTRO, OPEN_BAG, RETURN_WITH_BIRCH } from "../../scenes.js";
+import { OPEN_BAG, RETURN_WITH_BIRCH } from "../common/scenes.js";
 export const REGIONS_LITTLEROOT_EVENTS = [
   {
     id: "rescue.intro",
     trigger: "step",
     once: true,
     requires: all(not("rescued"), not("heardBirch")),
-    match: ({ map }) => map === "Route101",
-    build: () => RESCUE_INTRO,
+    match: ({ map, position }) => map === "Route101" &&
+      position.y === 19 && [10, 11].includes(position.x),
+    build: () => [{ type: "script", id: "emerald:route101.rescue-intro" }],
   },
   talkEvent("rescue.bag", "starter", () => OPEN_BAG, not("rescued")),
   // Route101/map.json: VAR_ROUTE101_STATE=2 coordinate events; the C

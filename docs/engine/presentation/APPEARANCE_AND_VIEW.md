@@ -60,13 +60,13 @@ Actor模板可声明`appearance:{id,data?}`，此时允许省略actor图集字�
 
 ## 相机注册、焦点和投影
 
-注册`cameraProfiles`：`{name,columns,rows,zoom?}`。columns/rows为4–100整数，zoom为0.25–4，默认1。绿宝石默认20×14格；实际可见逻辑宽高是columns×16/zoom与rows×16/zoom。该参数不会改变角色每步距离。
+注册`cameraProfiles`：`{name,columns,rows,zoom?}`。columns/rows为4–100整数，zoom为0.25–4，默认1。绿宝石默认15×10格；实际可见逻辑宽高是columns×16/zoom与rows×16/zoom。该参数不会改变角色每步距离。
 
 | 命令 | 输入/结果 |
 | --- | --- |
 | core.camera.acquire | `{profile,focus?:{map,x,y},priority?,scope?}` → `{token}`，需camera权限 |
 | core.camera.release | `{token}` → boolean，需camera权限，可随时释放 |
-| core.camera.view | `{size?:{width,height}}` → 投影矩形，默认输出画布320×224 |
+| core.camera.view | `{size?:{width,height,raster?}}` → 投影矩形，默认输出画布320×224 |
 | core.camera.project | `{point:{x,y},size?}`，世界逻辑像素→画布像素 |
 | core.camera.unproject | 同上，画布像素→世界像素；黑边外返回null |
 
@@ -99,3 +99,10 @@ CameraRig的剧情hold/pan优先于插件焦点，follow回到当前有效插件
 | Invalid save | 当前外观字段、参数、身份或依赖错误；检查原始数据，不恢复历史格式兼容 |
 
 源码位置变动时搜索`AppearanceSelections`、`CameraProfiles`、`VisualLeases`、`core.camera.acquire`。修改相关生命周期/资源/投影后，复查受影响测试和真实画面；仅修改文档不重跑领域规则。完整验收记录查[VALIDATION](../../project/VALIDATION.md)。
+
+
+## 浏览器像素输出
+
+PixelDisplay按Canvas实际CSS尺寸及devicePixelRatio设置绘制缓冲，避免先240×160→320×224再由CSS二次放大。Renderer正常无缩放地图使用整数物理像素倍数与居中留边，地块共享边界继续按同一栅格对齐；战斗保持320×224参考坐标并直接绘制到屏幕缓冲。小于原始视口的屏幕仍按比例缩小；显式相机/剧情zoom保持连续，不强制整数化。
+
+公开camera投影默认是所指定surface的数学投影；size.raster:true采用与浏览器Renderer相同的整数放大和像素对齐策略，project/unproject共享它。显式zoom保持连续，Renderer.screenToWorld使用同一投影。对齐不改变通行、遇敌或Actor逻辑范围。resize/pagehide由适配器持有和释放，不建立引擎里的DOM监听。

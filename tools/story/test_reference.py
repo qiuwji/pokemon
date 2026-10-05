@@ -40,6 +40,11 @@ class MovementConversionTests(unittest.TestCase):
         self.assertAlmostEqual(commands[2]['ms'],8*1000/60)
         self.assertEqual(commands[3]['dir'],'left')
 
+    def test_fast_in_place_keeps_direction_and_eight_frame_wait(self):
+        commands=self.commands('\twalk_in_place_fast_left\n\tstep_end\n')
+        self.assertEqual(commands[0],{'type':'face','actor':'actor','dir':'left'})
+        self.assertAlmostEqual(commands[1]['ms'],8*1000/60)
+
     def test_unknown_missing_terminator_and_unbalanced_locks_fail(self):
         for text,error in [('\tunknown_step\n\tstep_end\n','Unsupported'),
           ('\twalk_up\n','Expected movement'),('\tlock_facing_direction\n\tstep_end\n','Unbalanced'),

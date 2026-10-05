@@ -1,0 +1,384 @@
+{
+  "id": "emerald:route101",
+  "version": 1,
+  "scripts": {
+    "rescue-intro": {
+      "commands": [
+        {
+          "type": "music",
+          "cue": "emerald-audio:mus_help"
+        },
+        {
+          "type": "dialog",
+          "dialogue": "emerald:dialogues.scenes.1"
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "object",
+              "map": "Route101",
+              "id": "birch",
+              "scope": "visit",
+              "changes": {
+                "x": 0,
+                "y": 15
+              }
+            },
+            {
+              "kind": "object",
+              "map": "Route101",
+              "id": "pursuer",
+              "scope": "visit",
+              "changes": {
+                "x": 0,
+                "y": 16
+              }
+            }
+          ]
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "player",
+                  "path": [
+                    "up",
+                    "up",
+                    "up",
+                    "up"
+                  ],
+                  "running": true,
+                  "ignoreActors": [
+                    "birch",
+                    "pursuer"
+                  ]
+                },
+                {
+                  "type": "face",
+                  "actor": "player",
+                  "dir": "left"
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "birch",
+                  "path": [
+                    "right",
+                    "right",
+                    "right",
+                    "right",
+                    "up",
+                    "up"
+                  ],
+                  "running": true,
+                  "ignoreActors": [
+                    "player",
+                    "pursuer"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "pursuer",
+                  "path": [
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "right",
+                    "up"
+                  ],
+                  "running": true,
+                  "ignoreActors": [
+                    "player",
+                    "birch"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "birch",
+                  "path": [
+                    "up",
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "down",
+                    "down",
+                    "left",
+                    "left",
+                    "left",
+                    "up",
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "down",
+                    "down",
+                    "left",
+                    "left",
+                    "left",
+                    "up",
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "down",
+                    "down",
+                    "left",
+                    "left",
+                    "left"
+                  ],
+                  "running": true,
+                  "ignoreActors": [
+                    "player",
+                    "pursuer"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "move",
+                  "actor": "pursuer",
+                  "path": [
+                    "up",
+                    "up",
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "down",
+                    "down",
+                    "left",
+                    "left",
+                    "left",
+                    "up",
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "down",
+                    "down",
+                    "left",
+                    "left",
+                    "left",
+                    "up",
+                    "up",
+                    "right",
+                    "right",
+                    "right",
+                    "down",
+                    "down",
+                    "left",
+                    "left"
+                  ],
+                  "running": true,
+                  "ignoreActors": [
+                    "player",
+                    "birch"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "birch",
+          "dir": "right"
+        },
+        {
+          "type": "parallel",
+          "commands": [
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "birch",
+                  "dir": "right"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "birch",
+                  "dir": "right"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "birch",
+                  "dir": "right"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "birch",
+                  "dir": "right"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                }
+              ]
+            },
+            {
+              "type": "sequence",
+              "commands": [
+                {
+                  "type": "face",
+                  "actor": "pursuer",
+                  "dir": "left"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "pursuer",
+                  "dir": "left"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "pursuer",
+                  "dir": "left"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                },
+                {
+                  "type": "face",
+                  "actor": "pursuer",
+                  "dir": "left"
+                },
+                {
+                  "type": "wait",
+                  "ms": 133.33333333333334
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "dialog",
+          "dialogue": "emerald:dialogues.scenes.2"
+        },
+        {
+          "type": "worldPatch",
+          "operations": [
+            {
+              "kind": "object",
+              "map": "Route101",
+              "id": "birch",
+              "scope": "visit",
+              "changes": {
+                "x": 4,
+                "y": 13
+              }
+            },
+            {
+              "kind": "object",
+              "map": "Route101",
+              "id": "pursuer",
+              "scope": "visit",
+              "changes": {
+                "x": 5,
+                "y": 13
+              }
+            }
+          ]
+        },
+        {
+          "type": "flag",
+          "key": "heardBirch",
+          "value": true
+        }
+      ]
+    }
+  },
+  "projections": [
+    {
+      "map": "Route101",
+      "objectId": "birch",
+      "requires": {
+        "all": [
+          {
+            "flag": "heardBirch"
+          },
+          {
+            "not": {
+              "flag": "rescued"
+            }
+          }
+        ]
+      },
+      "changes": {
+        "x": 4,
+        "y": 13,
+        "dir": "right"
+      }
+    },
+    {
+      "map": "Route101",
+      "objectId": "pursuer",
+      "requires": {
+        "all": [
+          {
+            "flag": "heardBirch"
+          },
+          {
+            "not": {
+              "flag": "rescued"
+            }
+          }
+        ]
+      },
+      "changes": {
+        "x": 5,
+        "y": 13,
+        "dir": "left"
+      }
+    }
+  ]
+}

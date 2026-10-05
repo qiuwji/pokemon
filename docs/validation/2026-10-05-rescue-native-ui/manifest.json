@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-05",
+  "version": "0.34.0",
+  "baseCommit": "b6619c7",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "scope": "Rescue entry and chase, NPC visit state, native UI region controls and pixel raster projection",
+  "checks": [
+    {
+      "log": "opening-ui.log",
+      "result": "77 passed"
+    },
+    {
+      "log": "affected.log",
+      "result": "88 passed"
+    },
+    {
+      "log": "delta.log",
+      "result": "16 passed; native handles and original actor resource delta"
+    },
+    {
+      "log": "raster.log",
+      "result": "14 passed; shared public and renderer raster projection delta"
+    },
+    {
+      "log": "quality.log",
+      "result": "content/assets, contracts, 355 module syntax, docs, ESLint and configured engine types passed before final raster delta"
+    },
+    {
+      "log": "raster-contracts.log",
+      "result": "Public contracts passed after raster query option"
+    },
+    {
+      "log": "extractor.log",
+      "result": "13 passed"
+    },
+    {
+      "log": "art-preview.log",
+      "result": "Read-only selected actor import preview"
+    },
+    {
+      "log": "art.log",
+      "result": "Selected original EnemyZigzagoon sheet/palette installed without rewriting other content"
+    },
+    {
+      "log": "final-docs.log",
+      "result": "Final documentation links/examples passed"
+    },
+    {
+      "command": "Targeted node --check, ESLint and git diff --check after raster integration and formatting",
+      "result": "passed"
+    }
+  ],
+  "uniqueTargetedNodeCases": 175,
+  "policy": "Reuse unchanged earlier cases. Delta logs validate later substantive changes; final syntax/lint/doc checks recorded separately. No full regression repeated.",
+  "notRun": [
+    "Browser or Computer Use",
+    "Full game end-to-end",
+    "Visual/audio/real keyboard-touch acceptance",
+    "Whole-engine and optional-plugin suite repeat"
+  ],
+  "userAcceptance": [
+    "Rescue entrance at both columns: player stops four steps north and faces left; complete chase loops and final opposing facings",
+    "Returning downstairs repeatedly before clock setup and after reload restores mom, returns upstairs and releases control",
+    "Default field is crisp when resized; battle and intentional plugin zoom retain layout",
+    "Native UI replacements use original party/move/target controls; default UI remains intact"
+  ],
+  "finalSourceSnapshot": {
+    "README.md": "fb5f0fd19a3ee417ace6878760788376f8511cde8fe21f304287eae9242acbf4",
+    "dist/adapters/canvas-renderer.js": "c0b6c3032b29c9a76fe10703917f535cc3e457063b065f56372419b703f43c0b",
+    "dist/adapters/extension-dom.js": "48b4f03ff3cbb75d5d3eb63e9b19fb254b12d61f8a3d1ff177fcfd5cb9751f3e",
+    "dist/adapters/layout-dom.js": "233987e6642959e8b367d8e764503e09d27c4f6b88225dde023205c71af4dada",
+    "dist/app.js": "79879ab7a31a49080259eb8899d9c9e2ac76028cfe90c62b59b5afaa0c7d42b9",
+    "dist/content/actors.json": "9b586b1be0c6da542fddc5d5c846efc19b355c248108e3edaf6d163c1ed5ea4e",
+    "dist/content/manifest.json": "072c259c64ca590ede85efd0208763f1ed67cd599bc98cebcc68b740ee45314d",
+    "dist/content/stories/players-house.json": "aeaa00eef9c440b69ad6ef6238594a6091fe29b77360c08758b4013513e4558e",
+    "dist/engine/camera-view.js": "dc9de1d5a6b499cd0223072c4c152bf090de62df8e6bf5c7096e191d3ea62583",
+    "dist/engine/contracts.d.ts": "f0a2000e338199fd666afe5dba32d9c41c062106e870790e1d98daa9780f1dda",
+    "dist/engine/extensions/layout-contracts.js": "a07b5fb5291cf270c9b5aa5ffecba50e84ddf471848a248e1e0d5676258fab52",
+    "dist/engine/extensions/ui-registry.js": "c703356e267540d00afdcfb23e10e0cf489fe825f4388377be5687f84d528be1",
+    "dist/packs/emerald/appearance-definitions.js": "84ff2f149da20e6fed5a696b59d95f3b5c3a534c8d37f9650d00d1e1ee78b268",
+    "dist/packs/emerald/application-commands.js": "10f1dacdc1a4a003a7b443bc3402dd32814e0ac6579d3a7cf2417183a753d62a",
+    "dist/packs/emerald/application/world-application.js": "fdb92d6e0fc10efb92a8008b3d78ff3f727a2bd96c42d535213916d30b2e0d29",
+    "dist/packs/emerald/battle-interface.js": "e70076f43a255b327fe3b91d71c9d3c5f4509f4dd3ab1e529fa39d8e5d4a7bfd",
+    "dist/packs/emerald/native-cast.js": "22ed7b6d072dac953432fd22c1a751d458611e2701dd1cf28ca123b72a011e94",
+    "dist/packs/emerald/party-interface.js": "1729b5ae2f001add0cdf08a6ff2b7cec25ff6ffc64ffd4fada77dbea48f7c162",
+    "dist/packs/emerald/story/common/battle-results.js": "0ec393f6127336d80a224cdf7073d9460dfad2614a1392f9cee36f95a462c034",
+    "dist/packs/emerald/story/common/interactions.js": "90ccb328cfecf9fa2a27bb555ff7b8b2b33d9c1bb7f48861bb6fd13862594f10",
+    "dist/packs/emerald/story/regions/littleroot.js": "5d02dd8a8d938642a0f2ac16e614c30a7eb882759fe471d9ba12c8aa59e62a17",
+    "dist/style.css": "a1ef66d872edcf9fe7a2bd1691d67368527d6629770ab5037916961ed5c33a57",
+    "docs/README.md": "a05b5509350065abf90a92cfd63323bd2a6bf9d47474560e6319576b31195e68",
+    "docs/architecture/CUTSCENES.md": "a77a118bbb7ce4064b1caee693a3c573a472a8f67eb7ade0bfa1ae0b4b1e1d89",
+    "docs/development/AUTHORING.md": "9aa47f5284057bd0b42da24803326f11f4be39dc6c5e9f842bca0915b968589b",
+    "docs/engine/presentation/APPEARANCE_AND_VIEW.md": "fb64080afcac9ff2153ec58d10e6ca47337cdf2c692c61feffe7b700d88b9052",
+    "docs/engine/presentation/UI_CONTRACT.md": "c95a61b4791f625b247cbae01dc148b20af9f943c172a6210aaa9f22618799d5",
+    "docs/project/CHANGELOG.md": "36970342c43ae5f08a80f4b6ec3555bc1bf4095a3ce8e5af2524299cdab259c6",
+    "docs/project/PLUGIN_ROADMAP.md": "910805689bbc3c9676ed8c56cfe2b0297d1851d9f391d1960eb55d85b697b4b6",
+    "docs/project/STATUS.md": "e0e07c2c696f10ad33bd954e96b109819437f78c9976a64bcdf79dc9fc7585c7",
+    "docs/regions/LITTLEROOT_OPENING.md": "236d07c66e714eb8c9e31082c66f1c78ebc9d8f07c5f6b3f34bf9a4e75097236",
+    "package-lock.json": "2ab9d13c804450a6a27f8874bef34294cf5f62e0dc1cc3493781735ab368bf24",
+    "package.json": "a73e7327d93d3f0574424d5b06d34d31ae645e5f65f737d232ab61927e9c8c3c",
+    "skills/emerald-plugin-authoring/SKILL.md": "2babf57aa3511b2ce5c49e016fd22dcc536ab5c3f6531763011682c62afe4833",
+    "skills/emerald-project-handoff/SKILL.md": "889f7b45c3744e9be89405fe062fbd0a933bf2e56d2fadf6854af54c5d26fe5e",
+    "skills/emerald-story-reconstruction/SKILL.md": "ff99a9b3e6a3e14a955cada2f4b4e7903bbe0942e20987beaee0b1549da6ae07",
+    "tests/cutscene.test.js": "827776e15b27587fb3ddcb2ac758c5806360d4d7a8ca3a493d1d08bf1430d76d",
+    "tests/opening-choreography.test.js": "e7c28e627415339d8bfc1fcd3040fe9915ae94b11d6de9ae19f2477ce186c9db",
+    "tools/imports/config/opening.json": "adce925940d79a103a7e0687b22560bc74b60408cbcbd83628ded74ee9a60ce2",
+    "tools/story/movement.py": "0fbac5a8fa609998a1f261887df6f27bd0d0994c5b3f8596c02f76296b1bb85b",
+    "tools/story/test_reference.py": "4c63bc6b25336b02fcdfd3d4ab390a92ee504329143a638bfc5f3050de6ab222",
+    "dist/adapters/native-ui-controls.js": "e14adb7305abb89e47c0fa372673d3503e2c57d428b9a3fac3040e1d5623f87c",
+    "dist/adapters/pixel-display.js": "d05c9f776d2d3082686a05f3b43e38b451ae2169441a3e159c93f10a49203179",
+    "dist/assets/actor-EnemyZigzagoon.png": "5c4f50604d58d3ce6ff577d23320d197365bf4702aa920292e33b787af34f969",
+    "dist/content/stories/route101.json": "c54b180348eba5cbf261c718cdea473b4ce52daee69f8caf3d51ae24fc3a95e5",
+    "dist/packs/emerald/story/common/scenes.js": "d569a32710b51fc4a5de3919390c37892e80a0b9b6a22234a738bb5cc5e2be2d",
+    "docs/development/CODE_MAP.md": "5a5a89580bae4ec8eae362255f0b6780fba8c4f8a6a9e6fc466b84f9cded92c6",
+    "tests/fixtures/rescue-movements.json": "081391392107049547ccde71db774ab7b239a18c5c2a8265bc787f826df63bcf",
+    "tests/native-ui-regions.test.js": "eb643ff8339bfb25b25fbe786fc1d5f1b87038ea0793d2cf4900ce45efc571c0",
+    "tests/pixel-display.test.js": "90fb9cceaed72d64e736d30e9dd60dca8acaaf0eeb81a64f2a2c3f26f24b9134",
+    "tests/rescue-choreography.test.js": "46d65a75247fb479d033a08b43573223daf16fbbe22073320c746b56a6ded60f",
+    "tools/story/slices/route101-rescue.json": "de89db30a7a4718354faa863513b65f58fb066c1df93f7245971bcc954fa7ec8"
+  }
+}

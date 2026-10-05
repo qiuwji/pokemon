@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | ui.page(id, definition) | title、render(view)、when? | 独立页面，仍沿原导航合同 |
 | ui.entry(id, definition) | slot、label、page、when?、priority? | 在宿主区域加入打开页面的按钮 |
-| ui.region(id, definition) | slot、render(view)、when?、priority? | 在现有页面直接加入一棵交互树 |
+| ui.region(id, definition) | slot、mode?、render(view)、when?、priority? | 在现有页面直接加入一棵交互树 |
 | ui.component(id, definition) | schema、render(props, view) | 可复用、有参数校验的声明式组合组件 |
 | ui.theme(id, tokens) | 下文颜色及数值 token | 像素界面主题 |
 | ui.hud(id, definition) | render(view)、when? | 常驻扩展内容 |
@@ -25,12 +25,47 @@
 | bag.actions、bag.content | 原生口袋之后的操作/内容区域；inBattle |
 | party.actions、party.content | 原生队伍之后；inBattle |
 | shop.actions、shop.content | 原生商品之后；空 context |
-| battle.actions | 非忙碌时的战斗选项区；seat |
+| battle.actions、battle.moves、battle.targets | 非忙碌时的主战斗选项、招式选择、目标选择；seat、page、controls |
+| party.list | 原生队伍选择区域；inBattle、controls |
 | facility.actions、facility.content | 设施页面中原生内容之后；facility 为选中/活动 ID 或 null |
 
-每个区域先展示 entry，再展示 region；各类按 priority 升序及完整 ID 的字典顺序排列，priority 默认为0，范围整数 -1000～1000。当前是追加合同，不隐藏或替换原生内容。背包新口袋仍由 inventoryPockets 的领域注册产生，不能由 UI 再造一份库存。
+每个区域先展示 entry，再展示 region；各类按 priority 升序及完整 ID 的字典顺序排列，priority 默认为0，范围整数 -1000～1000。默认mode为append，仍然追加；下节列出可替换的原生区域。背包新口袋仍由 inventoryPockets 的领域注册产生，不能由 UI 再造一份库存。
 
 区域不是领域授权：普通插件事务仍受世界/战斗/设施就绪检查，战斗和活动进行中不能用普通 action 绕过它。需要控制这些领域时使用已授权的公共领域命令；页面与只读区域可以查询展示。这个版本没有声明式“任意核心命令按钮”或活动中插件事务新权限。
+
+## 修改原生选择控件
+
+`region.mode`为`append | replace | hide`，只有party.list、battle.actions、battle.moves、battle.targets支持replace/hide。其他slot仍只追加。hide可以不传render；replace必须返回有效布局。页签、HUD和任意DOM不在此合同内。
+
+宿主将原按钮放在独立nativeRoot，把ID、文本及是否禁用作为只读`view.context.controls`提供。插件返回`{kind:"button",native:control.id,text?:...,disabled?:...}`，可调整顺序、标签、主题和布局，但不接收原DOM或回调。native与action/input/submit互斥，只能引用该次挂载提供的句柄；原本禁用的按钮不能被插件启用。点击仍调用原选择/换人/招式/目标逻辑，普通插件事务权限不改变。
+
+稳定入口ID为fight/bag/party/run；队伍为party:<下标>，招式为move:<下标>（增强招式附完整增强ID），目标为target:<席位ID>。优先读取context.controls，不自行推断可用选项；目标不是精灵UID。队伍/招式下标只在当前页面挂载有效。
+
+```js
+export const battleLayout = {
+  id: "battle-layout", apiVersion: 1, version: "1.0.0", dataVersion: 1,
+  permissions: [],
+  setup(api) {
+    for (const slot of ["party.list", "battle.moves", "battle.targets"])
+      api.ui.region(slot, {
+        slot, mode: "replace", priority: 10,
+        render(view) {
+          return {
+            kind: "grid", style: { columns: 2, gap: 4 },
+            children: view.context.controls.map(control => ({
+              kind: "button", native: control.id,
+              text: control.label, disabled: control.disabled,
+            })),
+          };
+        },
+      });
+  },
+};
+```
+
+将插件模块登记catalog后装配；不需修改app.js。未装插件时原生界面不变。多个replace/hide同时满足when时，选priority最高者；同优先级按完整ID字典序最大者确定。追加region/entry照常显示。当前胜者记录在挂载根的data-native-owner；替换布局或回调报错时报告错误并尝试其他候选，没有成功候选则显示原控件。when变false、页面关闭/重建或区域卸载都会恢复原控件并使旧句柄失效，不把选择句柄保存到插件数据。
+
+真实原战斗命令和生命周期验证见[native-ui-regions.test.js](../../../tests/native-ui-regions.test.js)。这些是宿主DOM端口测试，实际焦点、键盘、触屏和布局需单独实玩验收。当前原战斗方向导航仍按两列选项工作，自定义视觉布局宜保留两列。
 
 ## 控件与参数速查
 
@@ -41,7 +76,7 @@
 | text、heading | text；显示纯文本 |
 | image | src 为已注册资源 ID、alt；可选 action/input/disabled，使图片可点击 |
 | canvas | width/height（整数1～512）、visual（presentation.register返回ID）、alt（非空名称）、payload（视觉schema参数）；可选action/input/disabled；每棵树最多16个 |
-| button | text，action/input/disabled；表单提交按钮改用 submit:true，无 action |
+| button | text，action/input/disabled；原生区域可用native替代action；表单提交按钮改用 submit:true，无 action |
 | row、grid、panel、list | children 数组；list 的子项会包成原生 li |
 | divider | 分隔线 |
 | meter | value/max 有限数，0≤value≤max、max>0；label 为可访问名称 |

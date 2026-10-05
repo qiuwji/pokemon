@@ -1,3 +1,4 @@
+import { PixelDisplay } from "./adapters/pixel-display.js";
 import { emeraldTransitionPatterns } from "./packs/emerald/battle-transition-canvas.js";
 import { loadContent } from "./adapters/content-loader.js";
 import { loadPluginCatalog } from "./adapters/plugin-loader.js";
@@ -80,6 +81,7 @@ async function boot() {
         reducedMotion,
         presentation,
       });
+    const pixelDisplay = new PixelDisplay($("game"), (width, height) => renderer.resizeSurface(width, height));
     const transitions = new TransitionController(timeline, { reducedMotion });
     const audio = new AudioAdapter({
       cues: createEmeraldAudio(host),
@@ -259,6 +261,7 @@ async function boot() {
     window.addEventListener(
       "pagehide",
       () => {
+        pixelDisplay.dispose();
         detachAudio();
         document.removeEventListener("visibilitychange", audioVisibility);
         audio.dispose();

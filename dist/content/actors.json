@@ -726,5 +726,10 @@
   "Woman5": {
     "w": 16,
     "h": 32
+  },
+  "EnemyZigzagoon": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
   }
 }

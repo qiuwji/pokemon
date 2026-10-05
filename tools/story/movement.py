@@ -28,6 +28,12 @@ def movement_commands(block, actor, *, map_id=None):
         if face:
             commands.append({'type': 'face', 'actor': actor, 'dir': face[1]})
             continue
+        in_place = re.fullmatch(r'walk_in_place_fast_(up|down|left|right)', op)
+        if in_place:
+            # InitMoveInPlace(..., 8), src/event_object_movement.c.
+            commands.extend([{'type': 'face', 'actor': actor, 'dir': in_place[1]},
+                             {'type': 'wait', 'ms': 8 * FRAME_MS}])
+            continue
         walk = re.fullmatch(r'walk(_fast)?_(up|down|left|right)', op)
         if walk:
             command = {'type': 'move', 'actor': actor, 'path': [walk[2]]}

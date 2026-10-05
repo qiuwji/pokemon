@@ -57,6 +57,12 @@ export class Renderer {
     this.weatherDirector = new WeatherDirector();
     this.lightingDirector = new LightingDirector();
   }
+  resizeSurface(width, height) {
+    if (this.canvas.width === width && this.canvas.height === height) return;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.ctx.imageSmoothingEnabled = false;
+  }
   moving(now = performance.now()) {
     return this.motion.moving(now);
   }
@@ -218,17 +224,12 @@ export class Renderer {
         );
   }
   cameraAt(position, now) {
-    const supplied = this.projection(
-      { width: this.canvas.width, height: this.canvas.height },
-      now,
-    );
+    const size = { width: this.canvas.width, height: this.canvas.height, raster: true };
+    const supplied = this.projection(size, now);
     if (supplied) return supplied;
     const player = this.motion.sample(position, now);
     const focus = this.cameraRig?.sample(player, now) || player;
-    return cameraProjection(this.cameraConfiguration(), focus, {
-      width: this.canvas.width,
-      height: this.canvas.height,
-    });
+    return cameraProjection(this.cameraConfiguration(), focus, size);
   }
   visibleMaps(position, now) {
     const view = this.cameraAt(position, now);
@@ -482,7 +483,12 @@ export class Renderer {
     }
   }
   battle(frame) {
-    drawBattle(this.ctx, this.assets, frame);
+    this.ctx.save();
+    try {
+      // Battle layout, HUD and plugin anchors retain their 320x224 reference.
+      this.ctx.scale(this.canvas.width / 320, this.canvas.height / 224);
+      drawBattle(this.ctx, this.assets, frame);
+    } finally { this.ctx.restore(); }
   }
 }
 export async function loadAssets(db) {

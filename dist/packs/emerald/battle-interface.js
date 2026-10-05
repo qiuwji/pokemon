@@ -1,3 +1,4 @@
+import { nativeUIControls } from "../../adapters/native-ui-controls.js";
 import { experienceAt } from "../../engine/model.js";
 import { TYPE_NAMES, STATUS_NAMES } from "./pack.js";
 /** Two-column battle menu cursor. Horizontal moves preserve rows, vertical moves preserve columns. */
@@ -24,7 +25,7 @@ export function createBattleInterface(
     selectedAugment = null;
   const buttons = () => [
     ...root.querySelectorAll(".battle-options button:not(:disabled)"),
-  ];
+  ].filter(button => !button.closest?.("[hidden]"));
   const friendly = (frame, c) =>
     frame.view.sides.find((s) => s.id === c.sideId)?.allianceId ===
     frame.view.homeAlliance;
@@ -85,7 +86,8 @@ export function createBattleInterface(
     } else void act({ kind: "move", index, ...(augment ? { augment } : {}) });
   }
   function draw(message = null) {
-    game.ui?.extensions?.unmountSlot("battle.actions");
+    for (const slot of ["battle.actions", "battle.moves", "battle.targets"])
+      game.ui?.extensions?.unmountSlot(slot);
     const b = game.battle;
     if (!b) {
       root.hidden = true;
@@ -182,7 +184,7 @@ export function createBattleInterface(
       away.map((c, i) => status(c, false, multi, i)).join("") +
       home.map((c, i) => status(c, true, multi, i)).join("") +
       plan +
-      `<div class="battle-menu">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}">${options}</div>`}</div>`;
+      `<div class="battle-menu">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
     root.querySelectorAll("[data-action]").forEach(
       (button) =>
         (button.onclick = () => {
@@ -219,10 +221,18 @@ export function createBattleInterface(
       ?.addEventListener("click", () => void game.turn({ kind: "cancel" }));
     if (!game.busy)
       game.ui?.extensions?.mountSlot(
-        "battle.actions",
+        page === "moves" ? "battle.moves" : page === "targets" ? "battle.targets" : "battle.actions",
         root.querySelector(".battle-options"),
-        { seat: b.commandSeat },
+        { seat: b.commandSeat, page },
         () => draw(),
+        {
+          nativeRoot: root.querySelector(".native-options"),
+          controls: nativeUIControls(root.querySelectorAll(".native-options button"), button =>
+            button.dataset.move !== undefined
+              ? `move:${button.dataset.move}${button.dataset.augment ? ":" + button.dataset.augment : ""}`
+              : button.dataset.target !== undefined
+                ? `target:${button.dataset.target}` : button.dataset.action),
+        },
       );
     if (selected >= buttons().length) selected = 0;
     buttons()[selected]?.classList.add("selected");

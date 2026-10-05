@@ -61,11 +61,12 @@ export class LayoutDOM {
       tabs: (t, s) => this.tabs(t, s),
     };
   }
-  create(tree, { context = {}, scope = "layout", refresh = () => {} } = {}) {
+  create(tree, { context = {}, scope = "layout", refresh = () => {}, nativeControls = new Map() } = {}) {
     this.disposeScope(scope);
     try {
       return this.node(tree, {
         context,
+        nativeControls,
         scope,
         refresh,
         path: "root",
@@ -81,6 +82,18 @@ export class LayoutDOM {
       element = this.factories[t.kind](t, { ...s, key });
     element.classList.add(`extension-${t.kind}`);
     if (t.text && t.kind !== "canvas") element.textContent = t.text;
+    if (t.native) {
+      const control = s.nativeControls.get(t.native);
+      element.textContent = t.text ?? control.label;
+      element.disabled = control.disabled;
+      element.onclick = async () => {
+        if (element.disabled) return;
+        element.disabled = true;
+        try { await control.activate(); }
+        catch (error) { this.onError(error); }
+        finally { element.disabled = !!t.disabled || control.disabled; }
+      };
+    }
     if (t.disabled || s.form?.disabled) element.disabled = true;
     this.style(element, t);
     if (

@@ -287,6 +287,16 @@
           "w": 16,
           "h": 32
         }
+      },
+      {
+        "id": "EnemyZigzagoon",
+        "path": "graphics/object_events/pics/pokemon/enemy_zigzagoon.png",
+        "palette": "graphics/object_events/palettes/enemy_zigzagoon.pal",
+        "definition": {
+          "w": 32,
+          "h": 32,
+          "offsetX": -8
+        }
       }
     ]
   },

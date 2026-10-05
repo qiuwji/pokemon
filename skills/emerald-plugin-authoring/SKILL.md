@@ -40,9 +40,9 @@ selector绑定对象/原label，priority明确竞争关系；公共call使用sch
 
 ## 既有页面与复杂交互
 
-使用 `api.ui.region(id,{slot,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。测试锚点是[表单测试夹具](../../tests/fixtures/extensions/form.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。
+使用 `api.ui.region(id,{slot,mode?,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。测试锚点是[表单测试夹具](../../tests/fixtures/extensions/form.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。
 
-只提供已有区域的追加；不要假定已能替换原生HUD、注册任意DOM控件、热卸载，或让普通插件事务在战斗/设施期间执行。真正缺口按领域合同补，不通过页面回调绕过规则。
+默认区域追加；party.list、battle.actions/moves/targets支持mode:replace/hide，button.native复用context.controls提供的原控件。按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)调整布局/顺序/文本，不接收DOM，不向render里放命令；原禁用状态与原战斗授权继续由宿主管理。查[native-ui-regions测试](../../tests/native-ui-regions.test.js)确认失败回退、竞争优先级和关闭后句柄失效。不要假定能替换原生HUD、注册任意DOM控件、热卸载，或让普通插件事务在战斗/设施期间执行。真正缺口按领域合同补，不通过页面回调绕过规则。
 
 ## 验收
 

@@ -1,5 +1,5 @@
 import { dialog } from "../helpers.js";
-import { RETURN_TO_CENTER } from "../../scenes.js";
+import { RETURN_TO_CENTER } from "./scenes.js";
 export const COMMON_BATTLE_RESULTS_EVENTS = [
   {
     id: "battle.capture",

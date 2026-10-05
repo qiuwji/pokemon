@@ -34,18 +34,19 @@ export class CameraProfiles {
 export function cameraProjection(
   profile,
   focus,
-  { width = 320, height = 224 } = {},
+  { width = 320, height = 224, raster = false } = {},
 ) {
   const logicalWidth = (profile.columns * 16) / profile.zoom,
     logicalHeight = (profile.rows * 16) / profile.zoom;
   if (
     ![focus.x, focus.y, width, height].every(Number.isFinite) ||
+    typeof raster !== "boolean" ||
     width <= 0 ||
     height <= 0
   )
     throw new Error("Invalid camera projection");
   const scale = Math.min(width / logicalWidth, height / logicalHeight);
-  return readOnly({
+  return readOnly(pixelProjection({
     x: focus.x + 8 - logicalWidth / 2,
     y: focus.y + 8 - logicalHeight / 2,
     width: logicalWidth,
@@ -53,7 +54,7 @@ export function cameraProjection(
     scale,
     offsetX: (width - logicalWidth * scale) / 2,
     offsetY: (height - logicalHeight * scale) / 2,
-  });
+  }, { width, height }, raster && profile.zoom === 1));
 }
 export function projectWorld(point, view) {
   return {
@@ -67,4 +68,18 @@ export function unprojectScreen(point, view) {
   return x < 0 || y < 0 || x >= view.width || y >= view.height
     ? null
     : { x: x + view.x, y: y + view.y };
+}
+
+/** Normal pixel-art view uses whole device pixels; custom zoom and tiny screens still fit. */
+export function pixelProjection(view, surface, enabled = true) {
+  if (!enabled || view.scale < 1) return view;
+  const scale = Math.floor(view.scale);
+  return {
+    ...view,
+    scale,
+    offsetX: Math.round((surface.width - view.width * scale) / 2),
+    offsetY: Math.round((surface.height - view.height * scale) / 2),
+    x: Math.round(view.x * scale) / scale,
+    y: Math.round(view.y * scale) / scale,
+  };
 }

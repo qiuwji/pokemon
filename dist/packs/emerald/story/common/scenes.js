@@ -5,24 +5,6 @@ const dialog = (dialogue, parameters = {}) => ({
   parameters,
 });
 
-export const RESCUE_INTRO = [
-  { type: "music", cue: "emerald-audio:mus_help" },
-  dialog("emerald:dialogues.scenes.1", {}),
-  { type: "cameraTo", actor: "birch", ms: 420 },
-  {
-    type: "parallel",
-    commands: [
-      { type: "move", actor: "birch", path: ["down", "down", "up"] },
-      { type: "move", actor: "pursuer", path: ["down", "down", "up"] },
-      { type: "emote", actor: "birch", kind: "exclamation", ms: 550 },
-    ],
-  },
-  { type: "face", actor: "birch", dir: "right" },
-  dialog("emerald:dialogues.scenes.2", {}),
-  { type: "cameraFollow", ms: 420 },
-  { type: "flag", key: "heardBirch", value: true },
-];
-
 export const OPEN_BAG = [
   { type: "move", actor: "player", to: { map: "Route101", x: 6, y: 14 } },
   { type: "face", actor: "player", dir: "right" },

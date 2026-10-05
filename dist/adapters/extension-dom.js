@@ -83,9 +83,23 @@ export class ExtensionDOM {
     container,
     context = {},
     back = () => this.shell.closeModal(),
+    { nativeRoot = null, controls = new Map() } = {},
   ) {
     if (!container) return;
-    const mount = { slot, container, context: readOnly(context), back };
+    const mount = {
+      slot, container, back, nativeRoot, nativeHidden: nativeRoot?.hidden,
+    };
+    mount.context = readOnly({
+      ...context,
+      ...(nativeRoot ? {
+        controls: [...controls].map(([id, c]) => ({ id, label: c.label, disabled: c.disabled })),
+      } : {}),
+    });
+    mount.nativeControls = new Map([...controls].map(([id, c]) => [id, {
+      label: c.label,
+      get disabled() { return c.disabled; },
+      activate: () => this.mounts.has(mount) ? c.activate() : undefined,
+    }]));
     const root = this.doc.createElement("div");
     root.className = "extension-slot";
     container.append(root);
@@ -93,7 +107,7 @@ export class ExtensionDOM {
     this.mounts.add(mount);
     this.refreshMount(mount);
   }
-  resolve(tree, context) {
+  resolve(tree, context, nativeControls = new Map()) {
     return resolveLayout(
       tree,
       {
@@ -102,6 +116,7 @@ export class ExtensionDOM {
         themes: this.host.ui.themes,
         components: this.host.ui.components,
         visuals: this.host.presentation,
+        nativeControls,
       },
       (definition, props) =>
         this.host.runtime.evaluate(
@@ -131,41 +146,58 @@ export class ExtensionDOM {
       } catch (error) {
         this.onError(error);
       }
-    for (const region of this.host.ui.inSlot(mount.slot, "regions"))
-      try {
-        const view = this.view(region.owner, mount.context);
-        if (region.when && !this.invoke(region.when, view)) continue;
+    // Resolve competitors from highest priority down. A broken replacement never
+    // hides the original controls; only a successfully mounted winner does.
+    const regions = this.host.ui.inSlot(mount.slot, "regions");
+    let winner = null;
+    const render = (region) => {
+      const view = this.view(region.owner, mount.context);
+      if (region.when && !this.invoke(region.when, view)) return false;
+      if (region.mode !== "hide") {
         const tree = this.resolve(
-          this.invoke(region.render, view),
-          mount.context,
+          this.invoke(region.render, view), mount.context, mount.nativeControls,
         );
-        mount.root.append(
-          this.node(tree, mount.context, {
-            scope: "region:" + region.id,
-            refresh: () => {
-              if (this.mounts.has(mount))
-                this.withFocus(() => this.refreshMount(mount));
-            },
-          }),
-        );
-      } catch (error) {
-        this.onError(error);
+        mount.root.append(this.node(tree, mount.context, {
+          scope: "region:" + region.id,
+          nativeControls: mount.nativeControls,
+          refresh: () => {
+            if (this.mounts.has(mount))
+              this.withFocus(() => this.refreshMount(mount));
+          },
+        }));
       }
+      return true;
+    };
+    const replacements = [...regions].reverse()
+      .filter(r => ["replace", "hide"].includes(r.mode));
+    for (const region of replacements) {
+      try {
+        if (!mount.nativeRoot) throw new Error("Native UI region is not mounted");
+        if (render(region)) {
+          winner = region;
+          break;
+        }
+      } catch (error) { this.onError(error); }
+    }
+    if (mount.nativeRoot) mount.nativeRoot.hidden = !!winner || mount.nativeHidden;
+    mount.root.setAttribute("data-native-owner", winner?.id || "");
+    for (const region of regions.filter(r => !r.mode || r.mode === "append"))
+      try { render(region); } catch (error) { this.onError(error); }
+  }
+  releaseMount(mount) {
+    for (const region of this.host.ui.inSlot(mount.slot, "regions"))
+      this.layout.clearScope("region:" + region.id);
+    if (mount.nativeRoot) mount.nativeRoot.hidden = mount.nativeHidden;
+    mount.root.remove?.();
+    this.mounts.delete(mount);
   }
   unmountSlot(slot) {
     for (const mount of [...this.mounts])
-      if (mount.slot === slot) {
-        for (const region of this.host.ui.inSlot(slot, "regions"))
-          this.layout.clearScope("region:" + region.id);
-        this.mounts.delete(mount);
-      }
+      if (mount.slot === slot) this.releaseMount(mount);
   }
   unmountRegions() {
     if (this.active) this.layout.disposeScope("page:" + this.active.id);
-    for (const mount of this.mounts)
-      for (const region of this.host.ui.inSlot(mount.slot, "regions"))
-        this.layout.clearScope("region:" + region.id);
-    this.mounts.clear();
+    for (const mount of [...this.mounts]) this.releaseMount(mount);
   }
   withFocus(render) {
     const active = this.doc.activeElement,
@@ -319,7 +351,7 @@ export class ExtensionDOM {
   dispose() {
     this.doc.removeEventListener?.("visibilitychange", this.visibilityChanged);
     this.layout.clear();
-    this.mounts.clear();
+    this.unmountRegions();
     this.active = null;
     for (const feedback of [
       this.feedback,

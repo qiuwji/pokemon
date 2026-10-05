@@ -210,3 +210,17 @@ for (const gender of ['male','female']) {
       assert(g.state.story.rewards.includes('rival.prize'));valid(s);
     });
 }
+
+for (const gender of ['male','female']) test(`${gender}: returning downstairs three times before setting the clock always restores mom and releases input`, async () => {
+  const s=setup(gender),g=s.game, female=gender==='female';
+  Object.assign(g.state.flags,{introState:5,roomChecked:false,tvWatched:false});
+  const home=`LittlerootTown_${female?'Mays':'Brendans'}House_`, x=female?2:8;
+  for(let attempt=0;attempt<3;attempt++) {
+    await enter(s,home+'1F',x,3,'down');
+    assert.equal(g.state.position.map,home+'2F');
+    assert.equal(g.storyBusy,false);
+    assert.deepEqual(pose(g.field.npcs.objects(home+'1F').find(n=>n.id==='house.mom')),[x,4,'up']);
+    valid(s);
+    if(attempt===1) g.loadDocument(g.exportDocument());
+  }
+});

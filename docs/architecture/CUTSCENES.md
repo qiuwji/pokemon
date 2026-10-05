@@ -6,7 +6,7 @@
 
 | 文件 | 职责 |
 | --- | --- |
-| `dist/packs/emerald/scenes.js` | 本作的演出内容：角色 ID、格子位置、对白、指令顺序 |
+| `dist/packs/emerald/story/common/scenes.js` | 本作的演出内容：角色 ID、格子位置、对白、指令顺序 |
 | `dist/engine/commands.js` | 整树预校验、顺序执行、并行汇合、资源冲突检测 |
 | `dist/engine/field-director.js` | 临时控制角色、自动走路、靠近、跟随、朝向、表情和镜头端口 |
 | `dist/engine/pathfinding.js` | 有上限的寻路，复用 World 的碰撞、台阶与道路连接规则 |

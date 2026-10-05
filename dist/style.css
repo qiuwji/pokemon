@@ -1312,3 +1312,9 @@ button.extension-canvas:focus-visible {outline:3px solid var(--extension-accent,
 .extension-form[aria-busy=true] {opacity:.6;}
 
 .dialogue-portrait { float: left; width: 48px; height: 48px; margin-right: 8px; object-fit: contain; image-rendering: pixelated; }
+
+/* Keep original menu geometry when no native-region replacement is installed. */
+.native-options { display: contents; }
+.native-options[hidden] { display: none; }
+.battle-options > .extension-slot { grid-column: 1 / -1; }
+.battle-options > .extension-slot:empty { display: none; }

@@ -1,0 +1,48 @@
+# 新接手者的代码地图
+
+先读[范围](../project/SCOPE.md)和[当前状态](../project/STATUS.md)，再按下面的任务入口打开文件。目录位置说明职责，STATUS说明完成度；不需要先读遍引擎。运行与检查见[作者指南](AUTHORING.md)，固定参考只读。
+
+## 五层各放什么
+
+```text
+dist/
+├── app.js                 浏览器启动装配，不写某个地图或招式的业务
+├── content/               可编辑内容；manifest.json是唯一加载清单
+│   ├── maps/<地图>/       map.json属性、grid.json生成的网格
+│   └── stories/           按地区/流程拆分的对白、脚本、入口和投影
+├── packs/emerald/          绿宝石业务政策、原生角色绑定、页面和应用服务
+│   ├── application/       用例协调与状态提交所有者
+│   └── story/             剧情装配、地区动态触发、公共演出
+│       ├── regions/       按地区选择事件，不存整章对白
+│       └── common/        共用交互、战后处理、scenes.js短演出
+├── engine/                通用领域规则、合同、状态及插件注册
+├── presentation/          无规则写入的动画取样、布局和绘制
+├── adapters/              浏览器DOM、Canvas、输入、音频及资源适配
+└── plugins/<插件>/        可独立装配业务；catalog.json登记入口
+```
+
+`tools/`是导入/提取/校验入口；`tests/`验证内核及公开合同，`examples/`验证可选插件及作者示例；`skills/`是稳定接手流程。`work/`是参考或临时产物，不是可部署代码，也不能成为核心测试必需的依赖。
+
+引擎已有battle、growth、creatures、extensions等子域；其余单模块按状态所有者命名。不要为整理目录一次性挪动所有文件。新规则先放已有子域；只有职责发生变化才移动模块，并同时改import、文档和测试。旧验证日志保留当时的路径，不改历史证据。
+
+## 按任务找最小修改集合
+
+| 我要改什么 | 第一落点 | 继续查什么 |
+| --- | --- | --- |
+| 某个地区台词、条件、走位 | [content/stories](../../dist/content/stories/players-house.json)中对应bundle；新增文件登记manifest | [剧情语言](../engine/story/STORY_LANGUAGE.md)、[原作转写Skill](../../skills/emerald-story-reconstruction/SKILL.md) |
+| 救博士追逐 | [route101.json](../../dist/content/stories/route101.json)；step入口在story/regions/littleroot.js | 原作Route101/scripts.inc与[移动转换工具](../../tools/story/movement.py)；不要再向公共scenes.js追加地区长剧情 |
+| 人物身份/初始出现 | [native-cast.js](../../dist/packs/emerald/native-cast.js)、[opening-objects.js](../../dist/packs/emerald/opening-objects.js) | native-object-bindings.js绑定来源local ID；阶段摆位写bundle.projections，动画写commands |
+| 进图后人物站错/重复触发卡住 | [WorldApplication.prepareEntry](../../dist/packs/emerald/application/world-application.js)、剧情入口与requires | 普通地图NPC按新访问重建；持久Actor从Actor领域恢复；visit patch决定本次访问，不能靠NPC缓存充当进度 |
+| 插件改已有UI | [UI合同](../engine/presentation/UI_CONTRACT.md)、对应*-interface.js | UIRegistry管注册，ExtensionDOM管区域仲裁，LayoutDOM管控件；native-ui-controls只把原控件转换为宿主句柄 |
+| 画面清晰度/尺寸 | [pixel-display.js](../../dist/adapters/pixel-display.js)、canvas-renderer.js | PixelDisplay持有尺寸监听生命周期；规则格子仍是16px，战斗仍用320×224布局；不要改地图分辨率 |
+| 战斗规则或新招式 | [battle-rules Skill](../../skills/emerald-battle-rules/SKILL.md) | move-effects/operations、规则阶段；动画走presentation注册，不放进规则函数 |
+| JSON设施/比赛/游戏厅 | [设施作者指南](../../dist/plugins/facility-content/README.md) | 配置已有模板；模板外规则读facility Skill，不能把设施业务塞进app.js |
+| 导入原作资源/音乐 | [导入索引](IMPORT_SCRIPTS.md)、[音乐指南](../../skills/emerald-story-reconstruction/references/music-import.md) | 统一入口tools/import.py；先--check；运行时用真实资源与音频cue |
+
+## 一段剧情怎样到达屏幕
+
+`manifest → StoryCatalog → 地区入口匹配 → StoryApplication → FieldDirector / 领域命令 → UI/表现`。
+
+对白数据、事件条件、演员动作分别有自己的位置。脚本移动的终点是本次演出事实，不等于下一次进图的出生点；重新访问应由内容投影/访问覆盖/持久Actor决定。修复重复触发时至少走两次入口，必要时在中间保存恢复，检查输入锁也已释放。
+
+本次整理将公共短演出归入story/common/scenes.js，将Route101入场追逐归入地区JSON；没有更换启动器或增加一套平行剧情引擎。文件改名时搜索上表中的类名、bundle ID或原作label，不靠旧绝对路径猜。

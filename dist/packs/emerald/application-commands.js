@@ -97,6 +97,7 @@ export function registerEmeraldCommands(game, bus) {
     {
       width: { type: "number", minimum: 1, maximum: 8192 },
       height: { type: "number", minimum: 1, maximum: 8192 },
+      raster: { type: "boolean" },
     },
     ["width", "height"],
   );

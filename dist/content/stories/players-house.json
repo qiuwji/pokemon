@@ -242,11 +242,9 @@
               ]
             },
             {
-              "type": "move",
+              "type": "face",
               "actor": "house.mom",
-              "path": [
-                "up"
-              ]
+              "dir": "up"
             }
           ]
         },
@@ -622,11 +620,9 @@
               ]
             },
             {
-              "type": "move",
+              "type": "face",
               "actor": "house.mom",
-              "path": [
-                "up"
-              ]
+              "dir": "up"
             }
           ]
         },

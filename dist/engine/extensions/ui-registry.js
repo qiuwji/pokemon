@@ -6,14 +6,18 @@ export const UI_SLOTS = Object.freeze([
   "monster.content",
   "bag.actions",
   "bag.content",
+  "party.list",
   "party.actions",
   "party.content",
   "shop.actions",
   "shop.content",
   "battle.actions",
+  "battle.moves",
+  "battle.targets",
   "facility.actions",
   "facility.content",
 ]);
+export const NATIVE_UI_SLOTS = Object.freeze(["party.list", "battle.actions", "battle.moves", "battle.targets"]);
 export const THEME_TOKENS = Object.freeze({
   background: (v) => typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v),
   foreground: (v) => typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v),
@@ -64,6 +68,10 @@ export class PluginUIRegistry {
     }
     if (kind === "regions" && !UI_SLOTS.includes(definition.slot))
       throw new Error("Invalid UI definition: unknown region slot");
+    if (kind === "regions" && (
+      (definition.mode !== undefined && !["append", "replace", "hide"].includes(definition.mode)) ||
+      ((definition.mode === "replace" || definition.mode === "hide") && !NATIVE_UI_SLOTS.includes(definition.slot))
+    )) throw new Error("Invalid native UI region mode or slot");
     if (
       definition.priority !== undefined &&
       (!Number.isSafeInteger(definition.priority) ||
@@ -77,7 +85,7 @@ export class PluginUIRegistry {
           ? !UI_SLOTS.includes(definition.slot) ||
             !definition.label ||
             !definition.page
-          : typeof definition.render !== "function"
+          : !(kind === "regions" && definition.mode === "hide") && typeof definition.render !== "function"
     )
       throw new Error("Invalid UI definition");
     if (definition.when !== undefined && typeof definition.when !== "function")

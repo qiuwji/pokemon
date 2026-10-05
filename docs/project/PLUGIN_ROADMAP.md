@@ -103,3 +103,6 @@
 ### 2026-10-04 已落实的 UI 合同
 
 新增12个已接线宿主区域，entry与region有明确排序；原生input/checkbox/radio/slider/form/tabs/list/table/divider及schema组合组件、受限布局与8个主题token已实现。背包笔记独立插件证明输入→事务记忆→库存只读表格→保存重载，10项新增证明及71项受影响验证通过。见[UI_CONTRACT](../engine/presentation/UI_CONTRACT.md)。这使上文对应待办成为首轮已验证，任意渲染组件、原生HUD隐藏/替换、对话类型注册、多宿主及完整现代业务仍不是本次实现；浏览器操作仍待最终验收。
+
+
+2026-10-05：party.list、battle.actions/moves/targets已提供原生区域replace/hide与button.native句柄。竞争按priority/完整ID决定，失败保留原控件，关闭使旧句柄失效；继续调用原选择/战斗逻辑。对应[UI合同](../engine/presentation/UI_CONTRACT.md)和native-ui-regions测试，浏览器输入/布局待用户验收。此能力不代表任意既有页面/HUD均可替换，未挂载位置仍属后续接口。

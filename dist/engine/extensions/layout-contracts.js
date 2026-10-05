@@ -66,7 +66,7 @@ export const LAYOUT_NODES = freeze({
     error: "Invalid layout Canvas dimensions or accessible name",
   },
   button: {
-    keys: ["action", "input", "disabled", "submit"],
+    keys: ["action", "input", "disabled", "submit", "native"],
     valid: (t) => t.submit === undefined || typeof t.submit === "boolean",
   },
   row: { keys: ["children"] },
@@ -235,6 +235,10 @@ export function validateLayout(
   }
   if (tree.action !== undefined && !contract.actions.has(tree.action))
     throw new Error("Unknown layout action");
+  if (tree.native !== undefined && (
+    typeof tree.native !== "string" || !contract.nativeControls?.has(tree.native) ||
+    tree.action !== undefined || tree.input !== undefined || tree.submit || form
+  )) throw new Error("Unknown or invalid native UI control");
   if (descriptor.valid && !descriptor.valid(tree, contract))
     throw new Error(descriptor.error || `Invalid layout ${tree.kind}`);
   if (tree.kind === "canvas") {
@@ -255,7 +259,7 @@ export function validateLayout(
   }
   if (
     tree.kind === "button" &&
-    (tree.submit ? !form || !!tree.action : !tree.action)
+    (tree.submit ? !form || !!tree.action : !tree.action && !tree.native)
   )
     throw new Error("Invalid layout button action");
   if (tree.kind === "component")

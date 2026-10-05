@@ -1,3 +1,4 @@
+import { nativeUIControls } from "../../adapters/native-ui-controls.js";
 import { experienceAt } from "../../engine/model.js";
 import { TYPE_NAMES, STATUS_NAMES, ABILITIES, NATURES } from "./pack.js";
 /** Owns this page and its navigation; gameplay changes are application commands. */
@@ -23,21 +24,14 @@ export function createPartyInterface(
   function showParty(inBattle = false) {
     modal(
       inBattle ? "替换宝可梦" : "我的队伍",
-      (game.state.party.length
+      '<div data-native-party>' + (game.state.party.length
         ? (inBattle ? game.battle.party : game.state.party)
             .map((m, i) => partyCard(m, i))
             .join("")
         : `<p>还没有宝可梦。到 101 号道路调查博士的背包，选择你的搭档。</p>`) +
-        '<div data-extension-slot="party.actions"></div><div data-extension-slot="party.content"></div>',
+        '</div><div data-extension-slot="party.list"></div><div data-extension-slot="party.actions"></div><div data-extension-slot="party.content"></div>',
       { back: inBattle ? closeModal : showMenu, type: "party" },
     );
-    for (const slot of ["party.actions", "party.content"])
-      game.ui?.extensions?.mountSlot(
-        slot,
-        root.querySelector(`[data-extension-slot="${slot}"]`),
-        { inBattle },
-        () => showParty(inBattle),
-      );
     root
       .querySelectorAll("[data-mon]")
       .forEach(
@@ -46,6 +40,18 @@ export function createPartyInterface(
             inBattle
               ? game.turn({ kind: "switch", index: +b.dataset.mon })
               : showMonster(+b.dataset.mon)),
+      );
+    game.ui?.extensions?.mountSlot("party.list", root.querySelector('[data-extension-slot="party.list"]'),
+      { inBattle }, () => showParty(inBattle), {
+        nativeRoot: root.querySelector("[data-native-party]"),
+        controls: nativeUIControls(root.querySelectorAll("[data-mon]"), button => `party:${button.dataset.mon}`),
+      });
+    for (const slot of ["party.actions", "party.content"])
+      game.ui?.extensions?.mountSlot(
+        slot,
+        root.querySelector(`[data-extension-slot="${slot}"]`),
+        { inBattle },
+        () => showParty(inBattle),
       );
   }
 

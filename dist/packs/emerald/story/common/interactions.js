@@ -1,5 +1,5 @@
 import { dialog, talkEvent } from "../helpers.js";
-import { healingScene } from "../../scenes.js";
+import { healingScene } from "./scenes.js";
 export const COMMON_INTERACTIONS_EVENTS = [
   talkEvent("shop.open", "shop", () => [{ type: "shop" }]),
   ...["heal", "healMom"].map((kind) =>

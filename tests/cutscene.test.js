@@ -18,10 +18,9 @@ import { BattleDirector } from "../dist/presentation/battle-director.js";
 import { createMonster } from "../dist/engine/model.js";
 import { battleOutcome } from "../dist/packs/emerald/story.js";
 import {
-  RESCUE_INTRO,
   OPEN_BAG,
   RETURN_TO_CENTER,
-} from "../dist/packs/emerald/scenes.js";
+} from "../dist/packs/emerald/story/common/scenes.js";
 const db = loadContentSync();
 function makeGame(position = { map: "Route101", x: 6, y: 14, dir: "right" }) {
   const clock = manualClock(),
@@ -264,13 +263,13 @@ test("Intro plays independent NPC tracks, keeps progress incomplete until dialog
     y: 19,
     dir: "up",
   });
-  await clock.drain(game.runStory(RESCUE_INTRO), (now) =>
+  await clock.drain(game.runStory([{type:"script",id:"emerald:route101.rescue-intro"}]), (now) =>
     game.tick(now, ["Route101"]),
   );
   assert.equal(messages.length, 2);
   assert(game.state.flags.heardBirch);
   assert.equal(game.camera.mode, "follow");
-  assert.equal(game.state.position.y, 19);
+  assert.equal(game.state.position.y, 15);
   assert(!game.busy);
 });
 

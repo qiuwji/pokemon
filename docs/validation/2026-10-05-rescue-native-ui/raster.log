@@ -1,0 +1,22 @@
+✔ Raster resizing matches real device pixels, keeps smoothing off and disconnects listeners (1.252083ms)
+✔ Default field projection fits whole pixels without changing visible grid bounds or pointer inversion (0.271708ms)
+✔ Public camera queries and browser drawing share the same raster projection (121.714417ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 1 (1.506041ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 1.3333333333333333 (0.201125ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 0.6666666666666666 (0.153333ms)
+✔ Tile background, overlays and mirrored quadrants share device-pixel edges at scale 1.7 (0.134208ms)
+✔ Public camera leases change range/focus without changing world state; ties and disconnected foci fail before writes (64.50025ms)
+✔ Projection and inverse use the same letterboxed space, reject margins and preserve tile coordinates (26.62175ms)
+✔ Story camera temporarily wins over plugin focus, then restores it; visit/session leases reset at proper boundaries (33.758458ms)
+✔ Independent fog layers compose in order without replacing logical weather; schema errors and unknown drawings fail (28.136458ms)
+✔ Field renderer shares projection for tiles/actors/weather/light and environment; frame drawing leaves rules untouched (22.0785ms)
+✔ Environment drawing is deterministic, honors reduced motion and releases context on failure (0.132125ms)
+✔ Public density composition selects distinct grass cells, prepares regional individuals and displays their species without StoryRunner (66.999ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 425.174042

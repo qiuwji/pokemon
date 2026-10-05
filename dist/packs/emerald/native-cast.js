@@ -55,7 +55,7 @@ export function nativeCast(state, db) {
               id: "birchBag",
             },
             {
-              ...obj(10, 13, null, "wildObject", "npc.wildobject.9"),
+              ...obj(10, 13, "EnemyZigzagoon", "wildObject", "npc.wildobject.9"),
               species: "zigzagoon",
               id: "pursuer",
             },

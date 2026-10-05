@@ -19,7 +19,7 @@ description: 接手现有绿宝石网页复刻工程，定位项目、确认范�
 
 先读[项目导航](references/project-map.md)，找到包含`emerald-web-engine` package和dist/engine的项目根。不要根据上一个机器的绝对路径另建项目。若从符号链接读Skill，先解析到仓库真实目录再解析相对文档链接。
 
-从项目根读取[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)、[架构](../../ARCHITECTURE.md)。范围由最近用户决定和SCOPE控制；当前进度只能在STATUS/代码/证据确认，不能把Skill、旧路线或聊天里的已完成当成事实。
+先按[代码地图](../../docs/development/CODE_MAP.md)找到本次代码落点，再从项目根读取[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)、[架构](../../ARCHITECTURE.md)。范围由最近用户决定和SCOPE控制；当前进度只能在STATUS/代码/证据确认，不能把Skill、旧路线或聊天里的已完成当成事实。
 
 ## 接手流程
 

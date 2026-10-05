@@ -5,9 +5,10 @@ const truckBoxes = { 'truck.box.top': [3, 3], 'truck.box.left': [0, -3], 'truck.
 export function emeraldDefaultAppearance(target, context) {
   if (target.kind === 'object' && target.map === 'InsideOfTruck' && Object.hasOwn(truckBoxes, target.id))
     return { appearance: 'emerald-truck-box', data: { box: target.id } };
-  return context.species
-    ? { appearance: 'emerald-species', data: { species: context.species } }
-    : context.actor ? { appearance: 'emerald-actor', data: { actor: context.actor } } : undefined;
+  // An explicitly authored actor sheet takes precedence over the inferred species image.
+  return context.actor
+    ? { appearance: 'emerald-actor', data: { actor: context.actor } }
+    : context.species ? { appearance: 'emerald-species', data: { species: context.species } } : undefined;
 }
 /** Asset naming, default avatar modes and the original scene art are pack content, not renderer rules. */
 export function emeraldAppearanceResources(db) {

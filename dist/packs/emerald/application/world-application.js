@@ -236,7 +236,9 @@ export class WorldApplication {
       )
       .map((o) => {
         const live = runtime.get(o.id);
-        return live && live._worldVersion === o._worldVersion ? live : o;
+        // Persistent actors own their position. Native objects respawn from the
+        // composed visit definition, not the previous cutscene cache.
+        return live?._actorUid && live._worldVersion === o._worldVersion ? live : o;
       });
     for (const [id, live] of runtime)
       if (/^core:actor\.\d+$/.test(id) && !objects.some((o) => o.id === id))
@@ -281,7 +283,10 @@ export class WorldApplication {
           this.worldState.commit(draft);
           deviceVisit.commit();
           effectVisit.commit();
-          for (const id of changed) this.field.npcs.invalidate(map, id);
+          const refresh = new Set([
+            ...objects.filter(o => !o._actorUid).map(o => o.id), ...changed,
+          ]);
+          for (const id of refresh) this.field.npcs.invalidate(map, id);
           return true;
         } catch (error) {
           this.ui?.toast(error.message);

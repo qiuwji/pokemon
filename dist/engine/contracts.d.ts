@@ -702,6 +702,8 @@ export interface LayoutNode {
   key?: string;
   name?: string;
   submit?: boolean;
+  /** Reuses a host control in a mounted native region; mutually exclusive with action. */
+  native?: string;
   placeholder?: string;
   maxLength?: number;
   min?: number;
@@ -742,11 +744,14 @@ export type UISlot =
   | "monster.content"
   | "bag.actions"
   | "bag.content"
+  | "party.list"
   | "party.actions"
   | "party.content"
   | "shop.actions"
   | "shop.content"
   | "battle.actions"
+  | "battle.moves"
+  | "battle.targets"
   | "facility.actions"
   | "facility.content";
 export interface PluginUIView {
@@ -755,12 +760,14 @@ export interface PluginUIView {
   store: { get(key: string): Readonly<Json> };
   states: { list(uid: string): Readonly<Json> };
 }
-export interface UIRegionDefinition {
+export type UIRegionDefinition = {
   slot: UISlot;
   priority?: number;
   when?: (view: PluginUIView) => boolean;
-  render(view: PluginUIView): LayoutNode;
-}
+} & (
+  | { mode?: "append" | "replace"; render(view: PluginUIView): LayoutNode }
+  | { mode: "hide"; render?: never }
+);
 export interface UIComponentDefinition {
   schema: Json;
   render(props: Readonly<Record<string, Json>>, view: PluginUIView): LayoutNode;

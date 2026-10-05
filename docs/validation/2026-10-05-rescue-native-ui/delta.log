@@ -1,0 +1,24 @@
+✔ Appearance public commands persist a layered choice without changing creature, movement or random state (83.027667ms)
+✔ Appearance-only Actor template shares persistent identity and removals clear its selection (43.104416ms)
+✔ Appearance leases prioritize, reject ties, release to saved choice and expire on map entry/load (42.174667ms)
+✔ Appearance recipes reject invalid references, parameters, identities and asynchronous selectors before selection writes (50.818416ms)
+✔ Appearance selectors are pure and permissions reject unauthorized writes (44.569125ms)
+✔ Layer drawing shares direction/pose clock, deterministic offsets, reduced motion and balanced cleanup (0.224375ms)
+✔ Saved choices validate current schemas, missing Actor identities and referenced resource dependencies (24.558375ms)
+✔ Scene object selectors accept stable native IDs and restore dormant choices without modifying object state (28.996917ms)
+✔ Saved appearance dependencies include the resource owner even when another plugin declares the recipe (43.179709ms)
+✔ A native replacement activates the original battle command; unmount restores controls and expires handles (71.832375ms)
+✔ Native hide is conditional; deterministic priority selects one replacement and returns originals on refresh (38.519333ms)
+✔ Invalid or throwing replacements leave the native controls usable; disabled native controls cannot be enabled by layout (51.968834ms)
+✔ Replacement mode is restricted to native slots and registered native handles cannot invoke arbitrary commands (9.151167ms)
+✔ Birch rescue at source entrance 10 walks four tiles and plays both complete chase arrays (91.943792ms)
+✔ Birch rescue at source entrance 11 walks four tiles and plays both complete chase arrays (49.201334ms)
+✔ Rescue intro does not start at arbitrary Route101 coordinates (26.087541ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 548.644875
