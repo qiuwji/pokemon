@@ -1,12 +1,24 @@
 import { drawWeather } from "./environment-canvas.js";
 import { createDefaultPresentation } from "./default-presentation.js";
 const DEFAULT_REGISTRY = createDefaultPresentation();
-/** Canvas adapter for presentation poses; no access to domain state. */
-export function drawBattle(ctx, assets, frame) {
+/** Canvas adapter for presentation poses; no access to domain state or content names. */
+export function drawBattle(ctx, assets, frame, backgrounds = {}) {
   const { view, actors, effect, ball } = frame;
   ctx.fillStyle = "#e8f9db";
   ctx.fillRect(0, 0, 320, 224);
-  drawBattleBackground(ctx, assets, view.environment);
+  // BattleIntroSlide scrolls the board in; wrap the fixed-width backdrop to close the gap.
+  const shift = Math.round(frame.background?.x || 0);
+  const paint = (offsetX) =>
+    drawBattleBackground(ctx, assets, view.environment, offsetX, backgrounds);
+  if (shift > 0) {
+    paint(shift - 320);
+    paint(shift);
+  } else if (shift < 0) {
+    paint(shift);
+    paint(shift + 320);
+  } else {
+    paint(0);
+  }
   const registry = frame.registry || DEFAULT_REGISTRY;
   const combatants = frame.combatants || [
     { seatId: "home:0", monster: view.player },
@@ -95,37 +107,36 @@ export function drawBattle(ctx, assets, frame) {
     reducedMotion: frame.reducedMotion,
     registry,
   });
-  if (ball) drawBall(ctx, ball, assets);
+  for (const item of frame.balls || (ball ? [ball] : []))
+    drawBall(ctx, item, assets);
 }
-export function drawBattleBackground(ctx, assets, environment = {}) {
-  const terrain = environment?.terrain || "grass",
-    custom = assets[`battle-bg-${terrain}`];
-  if (custom || terrain === "grass") {
-    const image = custom || assets["battle-bg"];
-    if (image) ctx.drawImage(image, 0, 0, 320, 170);
-    return;
+/**
+ * Paints the terrain backdrop from a pack-provided table keyed by the environment key.
+ * The canvas names no terrain or asset: a descriptor is `{ resource?, sky?, ground?, platforms? }`,
+ * whose `resource` is preferred and whose palette is the fallback. Terrains without a descriptor
+ * leave the neutral fill in place.
+ */
+export function drawBattleBackground(ctx, assets, environment = {}, offsetX = 0, backgrounds = {}) {
+  const terrain = environment?.terrain,
+    descriptor = backgrounds[terrain] || backgrounds.default;
+  if (!descriptor) return;
+  const image = descriptor.resource ? assets[descriptor.resource] : null;
+  ctx.save();
+  ctx.translate(Math.round(offsetX), 0);
+  if (image) {
+    ctx.drawImage(image, 0, 0, 320, 170);
+  } else if (descriptor.sky || descriptor.ground) {
+    ctx.fillStyle = descriptor.sky || "#e8f9db";
+    ctx.fillRect(0, 0, 320, 110);
+    ctx.fillStyle = descriptor.ground || "#b8d898";
+    ctx.fillRect(0, 110, 320, 60);
+    for (const [x, y, w] of descriptor.platforms || []) {
+      ctx.fillStyle = descriptor.sky || "#e8f9db";
+      ctx.fillRect(x, y, w, 10);
+      ctx.fillRect(x + 7, y - 4, w - 14, 18);
+    }
   }
-  const palettes = {
-    water: ["#b8e0f8", "#58a8c8"],
-    sand: ["#f8e0b0", "#c8b078"],
-    cave: ["#706878", "#484050"],
-    indoor: ["#d8d8e0", "#8898a8"],
-    forest: ["#b8d898", "#588860"],
-    snow: ["#e8f8ff", "#b8d8e8"],
-  };
-  const [sky, ground] = palettes[terrain] || palettes.indoor;
-  ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, 320, 110);
-  ctx.fillStyle = ground;
-  ctx.fillRect(0, 110, 320, 60);
-  for (const [x, y, w] of [
-    [30, 151, 102],
-    [208, 69, 82],
-  ]) {
-    ctx.fillStyle = sky;
-    ctx.fillRect(x, y, w, 10);
-    ctx.fillRect(x + 7, y - 4, w - 14, 18);
-  }
+  ctx.restore();
 }
 function drawBall(ctx, b, assets) {
   ctx.save();

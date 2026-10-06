@@ -27,7 +27,7 @@ import {
   StorySession,
   validStoryActors,
 } from "../../../engine/story-session.js";
-import { changeMoney, settleMoney } from "../../../engine/currency.js";
+import { settleMoney } from "../../../engine/currency.js";
 import { trainerRewardId } from "../trainers.js";
 import { configurePlayer, validatePlayerProfile } from "../player-profile.js";
 import { createStoryScreenPorts } from "./story-screen-ports.js";
@@ -125,12 +125,16 @@ export class StoryApplication {
               throw new Error("Story destination cannot be entered");
           }),
         scene: (c) =>
-          this.transitions.run(c.kind || "door", () => {
-            if (!this.enter(c.position))
-              throw new Error("Story destination cannot be entered");
-            this.camera.reset();
-            this.fieldDirector.stage(c.actors);
-          }),
+          this.transitions.run(
+            c.kind || "door",
+            () => {
+              if (!this.enter(c.position))
+                throw new Error("Story destination cannot be entered");
+              this.camera.reset();
+              this.fieldDirector.stage(c.actors);
+            },
+            { coverMs: c.coverMs, holdMs: c.holdMs, revealMs: c.revealMs },
+          ),
         wait: (c) => this.timeline.wait(c.ms),
         // The original scripts play sound effects inline; only registered cues are reachable.
         identity: (c) => configurePlayer(this.state, c),
@@ -170,15 +174,34 @@ export class StoryApplication {
           this.state.flags[c.key] = c.value;
           this.ui?.updateSide();
         },
-        heal: () => {
+        heal: async (c) => {
+          // Place heals use the shared machine beat; the Pokémon Centre uses the full
+          // palette-blink machine sequence. The nurse only turns in place (story `face`).
+          const beat =
+            c.variant === "center"
+              ? this.ui?.showHealCenter?.(this.state.party)
+              : this.ui?.showHeal?.(this.state.party);
+          await beat;
           this.state.party.forEach((m) => healMonster(m, this.db));
           this.ui?.updateSide();
         },
-        reward: (c) =>
-          (c.onResult ? grantRewardResult : grantReward)(this.state, c, {
-            items: this.itemDefinitions,
-            inventory: this.inventory,
-          }),
+        reward: (c) => {
+          const granted = (c.onResult ? grantRewardResult : grantReward)(
+            this.state,
+            c,
+            { items: this.itemDefinitions, inventory: this.inventory },
+          );
+          const ok = c.onResult ? granted?.status === "ok" : granted === true;
+          const shown =
+            ok && Object.keys(c.items || {}).length
+              ? this.ui?.showItemAcquired?.(
+                  Object.entries(c.items).map(([id, count]) => ({ id, count })),
+                )
+              : null;
+          // Announce the close-up (if any) but always return the domain result so
+          // an onResult reward still resolves to its { status } object.
+          return shown?.then ? shown.then(() => granted) : granted;
+        },
         completeEvent: (c) => completeEvent(this.state, c.id),
         captureMonster: (c) => {
           if (
@@ -192,12 +215,13 @@ export class StoryApplication {
             throw new Error("Capture storage unavailable");
           this.seen(mon.species, true);
         },
-        lossPenalty: () => {
-          const delta = -Math.max(0, ...this.state.party.map((m) => m.level)) * 8;
-          settleMoney(this.state, changeMoney(this.state.money, delta, {
-            clamp: true, message: "Invalid loss currency settlement",
-          }));
-        },
+        // The original DoWhiteOut halves the player's money (integer division) on defeat.
+        lossPenalty: () =>
+          settleMoney(
+            this.state,
+            Math.floor(this.state.money / 2),
+            "Invalid loss currency settlement",
+          ),
       },
       {
         resources: (c) => {

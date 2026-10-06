@@ -13,6 +13,7 @@ import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { FieldDirector } from "../src/engine/field-director.js";
 import {
   BEHAVIOR as B,
+  arrivalDirection,
   isWater,
   hasEncounterTerrain,
 } from "../src/engine/terrain.js";
@@ -440,6 +441,22 @@ test("Application commands select techniques; a paused cutscene stops current dr
   game.field.tick(time);
   assert.equal(game.state.position.x, 3);
   assert.equal(game.busy, false);
+});
+
+test("Warp arrival facing follows overworld.c GetAdjustedInitialDirection, including inverted arrow warps", () => {
+  // House door mats are south arrow warps: you arrive facing north, into the room.
+  assert.equal(arrivalDirection(B.SOUTH_ARROW_WARP), "up");
+  assert.equal(arrivalDirection(B.WATER_SOUTH_ARROW_WARP), "up");
+  assert.equal(arrivalDirection(B.DEEP_SOUTH_WARP), "up");
+  // The other arrow warps face opposite their arrow as well.
+  assert.equal(arrivalDirection(B.NORTH_ARROW_WARP), "down");
+  assert.equal(arrivalDirection(B.EAST_ARROW_WARP), "left");
+  assert.equal(arrivalDirection(B.WEST_ARROW_WARP), "right");
+  // Doors and indoor stairs face south; ladders keep the travelled direction.
+  assert.equal(arrivalDirection(B.NON_ANIMATED_DOOR), "down");
+  assert.equal(arrivalDirection(B.ANIMATED_DOOR), "down");
+  assert.equal(arrivalDirection(B.LADDER, "left"), "left");
+  assert.equal(arrivalDirection(0), "down");
 });
 
 test("Blocked slide continuation preserves facing instead of turning toward the blocked flow", () => {

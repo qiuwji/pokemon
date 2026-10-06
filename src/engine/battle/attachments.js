@@ -328,6 +328,7 @@ export class BattleAttachments {
         targetSeat: action.seat,
         actorSeat: action.seat,
         formId: d.transition.form,
+        message: { id: "form-changed", params: {} },
       });
     }
     b.emit(`${b.name(b.roster.occupant(action.seat))} 发动了 ${d.name}！`, "attachment", {

@@ -177,25 +177,23 @@ test("Full ball pocket does not prevent the source dex scene from finishing or c
   assert.equal(s.game.state.flags.pokedex, true);
 });
 
-test("Loss settlement handles an empty party and rejects a non-finite calculation before touching money", async () => {
+test("Loss settlement halves the player's money and rejects a non-finite total before writing", async () => {
   const s = session(),
     money = s.game.state.money;
-  const party = s.game.state.party;
-  s.game.state.party = [];
   await s.game.runStory([{ type: "lossPenalty" }]);
-  assert.equal(s.game.state.money, money);
-  s.game.state.party = party;
-  await s.game.runStory([{ type: "lossPenalty" }]);
-  assert.equal(s.game.state.money, money - party[0].level * 8);
-  const previous = s.game.state.money,
-    level = party[0].level;
-  party[0].level = NaN;
+  assert.equal(
+    s.game.state.money,
+    Math.floor(money / 2),
+    "the original DoWhiteOut halves the money",
+  );
+  const previous = s.game.state.money;
+  s.game.state.money = NaN;
   await assert.rejects(
     s.game.runStory([{ type: "lossPenalty" }]),
     /Invalid loss currency/,
   );
-  assert.equal(s.game.state.money, previous);
-  party[0].level = level;
+  assert(Number.isNaN(s.game.state.money), "invalid arithmetic never writes money");
+  s.game.state.money = previous;
   assert(valid(s));
 });
 

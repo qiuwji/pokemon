@@ -1,5 +1,73 @@
 # 当前开发与验证记录
 
+## 2026-10-06 · 治疗机精灵球右移、跑步鞋物品图标
+
+- **宝可梦中心治疗球位置**：治疗球基准由原作锚点 `(93,36)` 右移 4 像素到 `(97,36)`，使其落在本作治疗机贴图的格槽中心。
+- **跑步鞋物品图标**：原作里跑步鞋是剧情 flag（`FLAG_RECEIVED_RUNNING_SHOES`）、并非背包物品，因此没有物品图标（原作的 `item_icon_table.h` 里没有对应条目）。新增自绘 24×24 图标 `generated/assets/ui/items/running_shoes.png`，并在 `emeraldAppearanceResources` 注册 `running_shoes-icon`，使 `itemIconURL`（获得道具特写 / 背包 / 商店）不再回退到问号占位。像素按用户验收。
+
+核心 1107/1107、独立插件 52/52、`check` 全绿。
+
+## 2026-10-06 · 进屋朝向修正（箭头 warp 反向）+ 得救后切换 BGM
+
+- **进屋/楼梯朝向**：对照只读原作 `src/overworld.c` `GetAdjustedInitialDirection`——arrow warp 的落地朝向是**箭头反向**（南箭头→up、北箭头→down、西箭头→right、东箭头→left），deep-south→up，门（`MB_*_DOOR`，含室内楼梯）→down。先前 `arrivalDirection` 把 arrow warp 弄反了，导致从门口上楼进屋时背对房间、面朝门（down）。已修正：房门室内格是 `MB_SOUTH_ARROW_WARP`(0x65)→up，门外侧是 `MB_ANIMATED_DOOR`(0x69)→down，室内楼梯是 `MB_NON_ANIMATED_DOOR`(0x60)→down（逐一核对生成的 grid 与原作枚举）。
+- **剧情落点同步**：`littleroot-intro` 两段进屋剧情 `dir` 由 `down` 改 `up`；`players-house` 两段"回楼上"剧情由 `up` 改 `down`（与楼梯一致）。
+- **帮助小田卷博士后切换 BGM**：此前打赢蛇纹熊仍放危机曲（`MUS_HELP`，由 `emeraldMusic` 的 `Route101 && heardBirch && !rescued` 特例维持）。`RETURN_WITH_BIRCH` 开头显式播放 `emerald-audio:mus_route101` 覆盖该特例，进入研究所后清空 `music`，恢复该地图自身的 BGM。`rescued` 仍留在结尾置位（`pursuer`/`birch` 投影依赖 `!rescued`，不能提前）。
+- 新增 `arrivalDirection` 单测；`cutscene.test.js` 为返回场景补充 BGM 断言（走回路段播放路线曲、进入研究所后清空）。
+
+核心 1107/1107、独立插件 52/52、`check` 全绿。像素/听感由用户浏览器验收。
+
+## 2026-10-06 · 中心治疗改为原作 field effect + 跑步鞋物品与朝向
+
+- **中心治疗**：先前错误的"左上角面板"删除。按只读原作 `FLDEFF_POKECENTER_HEAL`（`src/field_effect.c`）复刻：在**世界治疗机位置**绘制队伍的宝可梦球（原作 2×3 网格偏移 `(0,0)(6,0)(0,4)(6,4)(0,8)(6,8)`、基准 `(93,36)`，视口同为 240×160），**逐颗放入**（每 25 帧 + 音效），随后 4 相 `{16,12,8,0}` 调色板式白光**以 8 帧为步长、闪 3 轮**再补一次整机白光，最后消退；乔伊**原地转身**（剧情 `face` 左转/复位）不移动。其它治疗（如妈妈）沿用旧表现。
+- **跑步鞋物品**：新增 `running_shoes`（`pocket:"key"`），妈妈发鞋的 `receive` 脚本 `reward` 发放，进入背包"重要道具"。
+- **到家朝向**：`arrivalDirection` 按 arrow-warp 语义修正（南→down 等），进屋落地朝前。
+- 核对了跑步帧（原作 `[12,9,13,9]`、每格 8 帧、foot 交替）与外观 mode，数据/时序一致；"奇怪"待用户补充现象后定位。
+
+核心 1106/1106、独立插件 52/52、`check` 全绿。像素/听感由用户浏览器验收。
+
+## 2026-10-06 · 到家朝向、中心治疗整段演出、换人抛球顺序
+
+- **到家朝向**：arrow warp 的朝向应为**箭头方向**（原作 `TryArrowWarp`）。此前 `arrivalDirection` 把南/西/东箭头反了，导致进屋落在门口朝上（背对镜头）。修正为南→down、北→up、西→left、东→right，进屋/进研究所落地即朝前（down）。
+- **宝可梦中心治疗（按规格）**：新增 `showHealCenter` 整段演出——阶段 A 精灵球依次滑入 6 槽（按队伍数量）→ 阶段 B 6 帧调色板式**白光闪烁循环×3**（`brightness` 模拟，非新绘）→ 阶段 C 末次峰值后瞬灭 → 阶段 D 球滑出。配套对话：乔伊「我来帮你保管宝可梦一小会儿。」→ 演出 →「久等了，你的宝可梦已经完全恢复健康！」。`heal` 命令新增 `variant:"center"`（护士交互与战败返程使用），乔伊视觉左移至治疗机；其它治疗（如妈妈）保持现有动画。
+- **换人顺序**：修正为**先抛球落定、宝可梦再出现**（此前宝可梦出现过早）；入场同样在球开后再出现。
+
+核心 1107/1107、独立插件 52/52、`npm run check` 全绿。像素/听感由用户浏览器验收。
+
+## 2026-10-06 · 中心治疗站位与按球数的治疗机动画
+
+- 战败返程落点改为柜台**正前方一格**（中心柜台墙在 y=3，玩家站 `OldaleTown_PokemonCenter_1F (7,4)` 朝上）。
+- 治疗动画改为**按队伍球数逐个放入治疗机**：最多 6 格，逐球延时 + 每球 `emerald:heal` 音效，总时长随球数增长（`heal` 命令通用）。治疗机面板置于左上（对应左侧机能区）。
+- 新增场次演出 `emerald:healnurse`：乔伊在治疗期间**视觉左移**到治疗机再返回（纯 `objects` 像素偏移，不改碰撞/占位）。`heal` 同时播放该演出与治疗机动画。
+- 顺带修掉一个**偶发测试**：`battle-messages` 用随机种子生成低等级敌人，可能被一击结束战斗；改为既不秒杀也不被秒的等级，连跑 4 次全绿。
+
+核心 1107/1107、独立插件 52/52、`check` 全绿。像素/听感由用户浏览器验收。
+
+## 2026-10-06 · 战斗演出：入场/换人抛球、返程治疗、获得道具特写
+
+- **入场**：训练家滑入就位 → 抛出宝可梦球（抛物线 + 旋转）→ 球开时在宝可梦位置爆发（`release`），宝可梦缩放出现；训练家随后退场。野生遭遇仍滑入。
+- **换人**：收回阶段画红色收回光束（`beam`）把旧宝可梦收进飞回训练家的球；再抛出下一只，开球时爆发。
+- **返程**：战败黑场保持后落在宝可梦中心柜台前（`OldaleTown_PokemonCenter_1F 7,5`）；剧情 `heal` 现在播放可见的治疗节拍（“宝可梦们恢复了健康！”+ `emerald:heal`，所有治疗共用），金钱仍按原作 `floor(money/2)` 减半。
+- **获得道具**：剧情 `reward` 发放新道具时弹出道具特写（大图标 + 名称 + 数量，`emerald:reward` 音效）。
+- **测试插件**新增入口：训练家入场（抛球）、治疗画面（宝可梦中心）、获得道具（特写），以及菜单页“开发者”里的“加入一只 Lv20 测试宝可梦”（`createMonster` intent，便于测换人）。
+
+核心 1106/1106、独立插件 52/52、`npm run check` 全绿。像素/听感由用户浏览器验收。
+
+## 2026-10-06 · 存档诊断可见性
+
+开发期"改完代码刷新后从头开始"的排查：载入链路本身正常（`core.save.write` 可写盘、跨插件可续档、缺插件走内容暂停），重开只发生在**存档被判无效**或**该时点尚无存档**时。新增两处可见性——`control-ports` 的控制快照暴露 `save: { lastSave, warning, protected, conflict }`，`ai-control:observe` 输出它；`app.js` 在 `saveWarning` 存在时把原因常驻写入 `#save-status`，而不是一闪而过的 toast。核心 1106/1106、插件 50/50、`check` 全绿。
+
+## 2026-10-06 · 开发测试员插件（快捷场景 + 战斗演出测试）
+
+新增默认关闭的开发插件 `dev-scenarios`：在未白镇/古辰镇/101/103/研究所/宝可梦中心放置"测试员"，交互弹出菜单——传送、恢复队伍、练习战、**野生遭遇演示**，以及**逐招式演示**：按"普通·火·水·草·电·岩地·变化"分类，每招注册一个只带该招式（Lv20 低攻 dummy）的**单招演示训练家**，使单个招式动画可确定性触发，直接服务战斗演出专项。只用公开接口——`api.content.register("mapExtensions"/"trainers")`、`api.story.registerBundle`（`choice`+`scene`/`battle`/`heal`）、`entries` 以 `interact`+`objectId` 接真实入口；无私有导入、无逐插件分支、默认关闭零影响。子菜单取消即关闭（静态检查禁止 `call` 环）。启用：`?plugins=dev-scenarios` 或游戏内插件管理勾选。
+
+核心 1106/1106、独立插件 50/50、`npm run check` 全绿（内容/剧情校验、模块、契约、文档、lint、引擎类型）。浏览器实操未验收，按惯例由用户确认。
+
+## 2026-10-06 · 战败白屏返程对齐原作
+
+战败不再走「进宝可梦中心 → 走到接待区 → 爱心表情 → 护士对白」。按只读原作 `src/overworld.c` 的 `CB2_WhiteOut`/`DoWhiteOut` 与 `data/heal_locations.json` 重写 `RETURN_TO_CENTER`：黑场保持约 120 帧 → 传到上次治疗点的**镇内格子**（`HEAL_LOCATION_OLDALE_TOWN` `(6,17)`，宝可梦中心门外）→ 黑场淡入 → 队伍静默恢复；无走路/表情/护士对白。金钱罚则从「最高等级×8」改为原作 `floor(money/2)`（`lossPenalty`），非法数值写入前拒绝。框架侧：`TransitionController.run` 增加通用可选 `holdMs`（遮黑保持），`scene` 剧情命令可传 `coverMs/holdMs/revealMs`，并在 `validateFieldCommand` 校验；`battle-results` 的 `scenes.5` 死对白随之移除。
+
+核心 1106/1106、独立插件 45/45、`npm run check` 全绿。未做浏览器视觉验收：黑场时长与淡入手感按惯例由用户实机确认。
+
 ## 2026-10-06 · 取消复制构建，直接运行源码与生成资源
 
 按用户最新要求撤掉src/generated合并复制为dist的实现：删除构建器、专用构建测试、build及预构建命令和过期部署目录配置。开发服务直接提供src/generated文件；页面以src/index.html为入口，保留启动查询参数，代码及插件以真实路径引用各自模块，素材URL指向generated。内容加载按清单generated标记读取对应目录，Node与浏览器使用同一合同。导入/音频/UI工具直接更新唯一所有者；临时导入视图只建只读链接，不复制素材或创建dist。目录合同见[源码与生成资源](../development/SOURCE_LAYOUT.md)。

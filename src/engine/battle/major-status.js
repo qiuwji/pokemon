@@ -32,7 +32,11 @@ export class BattleMajorStatus {
         sourceSeat: permission.sourceSeat,
         data: { turns: 0 },
       });
-    b.emit("陷入了异常状态！", "status", { targetSeat, status });
+    b.emit("陷入了异常状态！", "status", {
+      targetSeat,
+      status,
+      message: { id: "status-inflicted", params: { status } },
+    });
     b.traits.run("status-applied", permission);
     return true;
   }

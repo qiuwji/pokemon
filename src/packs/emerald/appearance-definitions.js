@@ -25,6 +25,8 @@ export function emeraldAppearanceResources(db) {
     ])),
     ...Object.fromEntries(["poke","great","safari","ultra","master","net","dive","nest","repeat","timer","luxury","premier"].map(ball => ["battle-ball-" + ball, "generated/assets/ui/ball-" + ball + ".png"])),
     "battle-transition-pokeball": "generated/assets/battle-transition-pokeball.png",
+    // Running Shoes are a story flag in the original (no bag icon), so the item's icon is authored here.
+    "running_shoes-icon": "generated/assets/ui/items/running_shoes.png",
     ...(db.resources || {}),
   };
 }

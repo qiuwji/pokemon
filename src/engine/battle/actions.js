@@ -279,6 +279,7 @@ export class BattleActions {
       return;
     }
     b.emit(`投出了${plan.item.name}！`, "ball", {
+      message: { id: "ball-thrown", params: { item: plan.item.name } },
       item: action.item,
       actorSeat: action.seat,
       targetSeat: action.targetSeat,
@@ -298,7 +299,15 @@ export class BattleActions {
         ? `太好了！捉到了 ${b.name(enemy)}！`
         : `${"晃动…".repeat(result.shakes)}宝可梦挣脱了！`,
       "capture",
-      { ...result, item: action.item, actorSeat: action.seat, targetSeat: action.targetSeat },
+      {
+        ...result,
+        item: action.item,
+        actorSeat: action.seat,
+        targetSeat: action.targetSeat,
+        ...(result.caught
+          ? { message: { id: "captured", params: { mon: b.name(enemy) } } }
+          : {}),
+      },
     );
     if (result.caught) b.finish("caught");
   }
@@ -314,7 +323,7 @@ export class BattleActions {
     };
     b.traits?.run("escape-check", permission);
     if (!permission.allowed && !permission.guaranteed) {
-      b.emit("无法逃跑！");
+      b.emit("无法逃跑！", "text", { message: { id: "cannot-flee", params: {} } });
       return;
     }
     b.fleeAttempts++;
@@ -324,7 +333,13 @@ export class BattleActions {
       Math.floor((speed * 128) / Math.max(1, awaySpeed)) + 30 * b.fleeAttempts;
     if (permission.guaranteed || speed >= awaySpeed || b.rng.int(256) < odds) {
       b.finish("escaped");
-      b.emit("成功逃脱了！", "end", { actorSeat: action.seat });
-    } else b.emit("没能逃脱！");
+      b.emit("成功逃脱了！", "end", {
+        actorSeat: action.seat,
+        message: { id: "fled", params: {} },
+      });
+    } else
+      b.emit("没能逃脱！", "text", {
+        message: { id: "escape-failed", params: {} },
+      });
   }
 }

@@ -186,7 +186,10 @@ export class RoundResolver {
             0,
             mon.hp - Math.max(1, Math.floor(mon.stats.hp / residual.divisor)),
           );
-          b.emit("受到了天气伤害！", "hurt", { targetSeat: seat.id });
+          b.emit("受到了天气伤害！", "hurt", {
+            targetSeat: seat.id,
+            message: { id: "weather-damage", params: {} },
+          });
           b.outcomes.observe();
           if (b.ended) break;
         }
@@ -215,7 +218,9 @@ export class RoundResolver {
     if (!b.ended) b.states.tick();
     if (b.weather?.turns && --b.weather.turns === 0) {
       b.weather = null;
-      b.emit("天气恢复了平静。", "weather");
+      b.emit("天气恢复了平静。", "weather", {
+        message: { id: "weather-calm", params: {} },
+      });
     }
   }
 }

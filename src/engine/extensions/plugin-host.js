@@ -65,6 +65,7 @@ export class PluginHost {
     this.spriteClips = new Map();
     this.moveAnimations = new Map();
     this.battleAnimations = new Map();
+    this.battleMessages = new Map();
     this.presentationScenes = new Map();
     this.audioCues = new Map();
     this.transitionPatterns = new Map();
@@ -398,6 +399,19 @@ export class PluginHost {
             return register(staged.moveAnimations, id, {
               moveId: definition.moveId,
               animation: readOnly(definition.animation),
+            });
+          },
+          message: (id, definition) => {
+            if (
+              !definition ||
+              typeof definition.target !== "string" ||
+              !definition.target ||
+              typeof definition.format !== "function"
+            )
+              throw new Error("Battle message requires target and format");
+            return register(staged.battleMessages, id, {
+              target: definition.target,
+              format: (params) => evaluate(definition.format, readOnly(params)),
             });
           },
           play: (id, payload = {}) => {

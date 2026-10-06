@@ -41,7 +41,13 @@ import {
   createEmeraldPresentation,
   emeraldBallResource,
 } from "./packs/emerald/animations.js";
-import { ANIMATION_PROFILES } from "./packs/emerald/animation-profiles.js";
+import {
+  ANIMATION_PROFILES,
+  emeraldMoveProfile,
+} from "./packs/emerald/animation-profiles.js";
+import { EMERALD_BATTLE_INTRO } from "./packs/emerald/battle-intro.js";
+import { EMERALD_BATTLE_BACKGROUNDS } from "./packs/emerald/battle-backgrounds.js";
+import { emeraldTypeColor } from "./packs/emerald/battle-palette.js";
 
 // Composition root: chooses a content pack, adapters and services; no gameplay rules.
 const $ = (id) => document.getElementById(id);
@@ -100,6 +106,7 @@ async function boot() {
       presentation = createEmeraldPresentation({
         host,
         onError: console.error,
+        typeColors: emeraldTypeColor,
       }),
       renderer = new Renderer($("game"), db, assets, {
         projection: (size, now) => game?.cameraProjection(size, now) || null,
@@ -121,6 +128,7 @@ async function boot() {
         }),
         reducedMotion,
         presentation,
+        battleBackgrounds: EMERALD_BATTLE_BACKGROUNDS,
       });
     const pixelDisplay = new PixelDisplay($("game"), (width, height) =>
       renderer.resizeSurface(width, height),
@@ -150,6 +158,10 @@ async function boot() {
       registry: presentation,
       cuePlan: emeraldBattleCues,
       ballResource: emeraldBallResource,
+      resolveMessage: (event) => presentation.resolveMessage(event),
+      intro: EMERALD_BATTLE_INTRO,
+      profileFor: emeraldMoveProfile,
+      typeColors: emeraldTypeColor,
       onCue: (kind) => {
         const id = emeraldBattleSound(kind, audio.cues);
         if (id) audio.play(id);
@@ -246,6 +258,9 @@ async function boot() {
       },
     });
     game.attachUI(ui);
+    // A rejected save silently starts a new adventure; keep the reason visible instead of a fleeting toast.
+    if (adventure.saveWarning)
+      $("save-status").textContent = adventure.saveWarning;
     game.attachSound((cue) => audio.play(cue));
     const startupIssues = await startPlugins(plugins, bus);
     if (startupIssues.length) ui.toast(startupIssues.join("；"));

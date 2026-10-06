@@ -32,12 +32,14 @@ export class Renderer {
       reducedMotion = () => false,
       fieldPriority = () => 2,
       presentation = createDefaultPresentation(),
+      battleBackgrounds = {},
     } = {},
   ) {
     Object.assign(this, {
       canvas,
       db,
       assets,
+      battleBackgrounds,
       projection,
       appearanceView,
       movementPresentation,
@@ -509,7 +511,7 @@ export class Renderer {
     try {
       // Battle layout, HUD and plugin anchors retain their 320x224 reference.
       this.ctx.scale(this.canvas.width / 320, this.canvas.height / 224);
-      drawBattle(this.ctx, this.assets, frame);
+      drawBattle(this.ctx, this.assets, frame, this.battleBackgrounds);
     } finally { this.ctx.restore(); }
   }
 }

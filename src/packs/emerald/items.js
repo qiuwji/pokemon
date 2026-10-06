@@ -22,6 +22,17 @@ export const ITEMS = {
   acro_bike: fieldItem("acro_bike", "越野自行车", "cycling", {
     mode: "acro-bike",
   }),
+  running_shoes: {
+    name: "跑步鞋",
+    pocket: "key",
+    price: 0,
+    icon: "◆",
+    contexts: [],
+    target: "party",
+    effects: [],
+    shopStock: false,
+    description: "妈妈送的鞋子。按住 B / Shift 或触屏跑步键就能奔跑。",
+  },
   old_rod: fieldItem("old_rod", "破旧钓竿", "fishing", { rod: "old" }),
   good_rod: fieldItem("good_rod", "好钓竿", "fishing", { rod: "good" }),
   super_rod: fieldItem("super_rod", "超级钓竿", "fishing", { rod: "super" }),

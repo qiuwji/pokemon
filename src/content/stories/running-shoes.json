@@ -790,6 +790,13 @@
           "dialogue": "switch"
         },
         {
+          "type": "reward",
+          "id": "emerald:running-shoes",
+          "items": {
+            "running_shoes": 1
+          }
+        },
+        {
           "type": "waitSound",
           "channel": "fanfare"
         },

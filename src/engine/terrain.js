@@ -81,8 +81,10 @@ export const arrowWarpDirection = (code) => ({
 })[code];
 /**
  * Arrival facing after a warp, by the destination metatile (src/overworld.c GetAdjustedInitialDirection).
- * Doors and non-animated stairs face south; arrow warps face back into the map; ladders keep the
- * direction the player was travelling. The previous indoor/outdoor guess got 1F↔2F stairs wrong.
+ * Doors and non-animated stairs face south. Arrow warps face opposite the arrow (back into the map),
+ * so a south arrow warp — which is how house door mats are tagged — faces north. Deep-south warps and
+ * ladders keep their own rule. The previous version inverted the arrow warps, which is why entering a
+ * house faced the door instead of the room.
  */
 export const arrivalDirection = (code, previousDir = "down") => {
   if (code === BEHAVIOR.DEEP_SOUTH_WARP) return "up";

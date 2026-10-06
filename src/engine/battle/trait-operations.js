@@ -16,7 +16,10 @@ export const TRAIT_OPERATIONS = {
       return false;
     }
     c.battle.weather = { kind: s.weather, turns: s.turns ?? null };
-    c.emit("天气发生变化！", "weather", { weather: s.weather });
+    c.emit("天气发生变化！", "weather", {
+      weather: s.weather,
+      message: { id: "weather-changed", params: { weather: s.weather } },
+    });
     return true;
   },
   traitHeal(c, s) {

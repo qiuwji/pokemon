@@ -59,6 +59,7 @@ function makeGame(position = { map: "Route101", x: 6, y: 14, dir: "right" }) {
         lines,
         map: game.state.position.map,
         rescued: game.state.flags.rescued,
+        music: game.storyMusic,
         position: { ...game.state.position },
       });
       return Promise.resolve();
@@ -225,6 +226,10 @@ for (const [x, y] of [
     await clock.drain(job, (now) => game.tick(now, [game.state.position.map]));
     assert.equal(messages[0].map, "Route101");
     assert(!messages[0].rescued);
+    // Winning ends the danger theme: the walk back plays the route BGM, then the lab clears the
+    // override so the lab's own map music resolves.
+    assert.equal(messages[0].music, "emerald-audio:mus_route101");
+    assert.equal(messages.at(-1).music, null);
     assert.equal(messages.at(-1).map, "LittlerootTown_ProfessorBirchsLab");
     assert.deepEqual(game.state.position, {
       map: "LittlerootTown_ProfessorBirchsLab",
@@ -305,12 +310,23 @@ test("Failed scene clears input ownership, camera, actor overrides and transient
   assert.equal(writes.length, 0);
 });
 
-test("Defeat return uses the shared entrance choreography and finishes on reachable center floor", async () => {
+test("Defeat white-out arrives at the centre counter, restores the party and plays no dialogue", async () => {
   const { game, clock, messages } = makeGame();
+  game.state.party.push(createMonster("mudkip", 5, db, game.rng));
+  game.state.party[0].hp = 1;
   await clock.drain(game.runStory(RETURN_TO_CENTER));
   assert.equal(game.state.position.map, "OldaleTown_PokemonCenter_1F");
-  assert.equal(game.state.position.y, 5);
-  assert.equal(messages[0].map, "OldaleTown_PokemonCenter_1F");
+  assert.deepEqual(
+    [game.state.position.x, game.state.position.y, game.state.position.dir],
+    [7, 4, "up"],
+    "the player reappears on the tile in front of the centre counter, facing up",
+  );
+  assert(game.state.party.every((m) => m.hp === m.stats.hp), "the party is restored");
+  assert.equal(
+    messages.length,
+    0,
+    "the white-out shows no walk, emote or nurse dialogue",
+  );
 });
 
 test("Route planning honors connected-map destination NPCs and rejects unreachable targets", () => {

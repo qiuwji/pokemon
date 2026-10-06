@@ -8,7 +8,11 @@ export const FORM_OPERATIONS = {
       c.emit("现在无法改变形态。", "failed");
       return;
     }
-    c.emit("形态发生了变化！", "form", { targetSeat: seat, formId: s.id });
+    c.emit("形态发生了变化！", "form", {
+      targetSeat: seat,
+      formId: s.id,
+      message: { id: "form-changed", params: {} },
+    });
     b.traits.enter(seat);
   },
   transform(c) {

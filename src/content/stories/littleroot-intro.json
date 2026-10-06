@@ -378,7 +378,7 @@
             "map": "LittlerootTown_BrendansHouse_1F",
             "x": 8,
             "y": 8,
-            "dir": "down"
+            "dir": "up"
           }
         }
       ]
@@ -725,7 +725,7 @@
             "map": "LittlerootTown_MaysHouse_1F",
             "x": 2,
             "y": 8,
-            "dir": "down"
+            "dir": "up"
           }
         }
       ]

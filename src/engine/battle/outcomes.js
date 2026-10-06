@@ -40,7 +40,10 @@ export class BattleOutcomes {
       this.defeated.add(mon.uid);
       b.replacements.clear(seat.id);
       b.phase = "faint";
-      b.emit(`${b.name(mon)} 倒下了！`, "faint", { targetSeat: seat.id });
+      b.emit(`${b.name(mon)} 倒下了！`, "faint", {
+        targetSeat: seat.id,
+        message: { id: "fainted", params: { mon: b.name(mon) } },
+      });
       b.traits?.run("faint", { targetSeat: seat.id, ownerSeat: seat.id });
       b.states.clear("faint", seat.id);
       b.actionLifecycle.leave(seat.id);

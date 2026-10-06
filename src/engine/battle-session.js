@@ -47,6 +47,10 @@ export class BattleSession {
           trainers: options.trainer ? options.presentation?.trainers || [] : [],
           ...view,
           text: options.trainer ? "训练家发起了挑战！" : "野生宝可梦出现了！",
+          message: {
+            id: options.trainer ? "trainer-challenge" : "wild-appeared",
+            params: {},
+          },
         };
         this.director.stage(entry);
         this.onChange();

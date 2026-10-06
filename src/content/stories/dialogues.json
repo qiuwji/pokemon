@@ -34,11 +34,27 @@
         "小遥在 103 号道路做野外调查。沿 101 号道路向北，穿过古辰镇去找她吧！"
       ]
     },
-    "scenes.5": {
-      "name": "乔伊小姐",
+    "npc.heal.center.before": {
+      "name": "{{speaker}}",
       "lines": [
-        "你被送到了宝可梦中心。伙伴们已经恢复体力，重新出发吧！"
-      ]
+        "我来帮你保管宝可梦一小会儿。"
+      ],
+      "bindings": {
+        "speaker": {
+          "param": "speaker"
+        }
+      }
+    },
+    "npc.heal.center.after": {
+      "name": "{{speaker}}",
+      "lines": [
+        "久等了，你的宝可梦已经完全恢复健康！"
+      ],
+      "bindings": {
+        "speaker": {
+          "param": "speaker"
+        }
+      }
     },
     "scenes.6": {
       "name": "{{speaker}}",

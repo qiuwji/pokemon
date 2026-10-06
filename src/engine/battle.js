@@ -387,11 +387,16 @@ export class Battle {
       permission.allowed &&
       this.conditions.changeStage(targetSeat, key, amount);
     if (changed) {
-      this.emit(stageMessage(this.name(this.roster.occupant(targetSeat)), key, this.conditions.get(targetSeat).stages[key] - before), "stage", {
+      const amount = this.conditions.get(targetSeat).stages[key] - before;
+      this.emit(stageMessage(this.name(this.roster.occupant(targetSeat)), key, amount), "stage", {
         targetSeat,
         actorSeat: this.seatId(sourceSeat),
         stat: key,
-        amount: this.conditions.get(targetSeat).stages[key] - before,
+        amount,
+        message: {
+          id: "stage",
+          params: { name: this.name(this.roster.occupant(targetSeat)), stat: key, amount },
+        },
       });
       this.traits?.run("stage-applied", permission);
     }
@@ -405,7 +410,10 @@ export class Battle {
     this.traits.run("confusion-check", c);
     if (!c.allowed) return false;
     state.confused = 2 + this.rng.int(4);
-    this.emit("陷入了混乱！", "status", { targetSeat });
+    this.emit("陷入了混乱！", "status", {
+      targetSeat,
+      message: { id: "confused", params: {} },
+    });
     this.traits.run("confusion-applied", c);
     return true;
   }
@@ -435,7 +443,10 @@ export class Battle {
     this.traits.run("attraction-check", c);
     if (!c.allowed) return false;
     this.conditions.get(targetSeat).attractedTo = source.uid;
-    this.emit("陷入了着迷！", "trait", { targetSeat });
+    this.emit("陷入了着迷！", "trait", {
+      targetSeat,
+      message: { id: "attracted", params: {} },
+    });
     this.traits.run("attraction-applied", c);
     return true;
   }
@@ -495,6 +506,7 @@ export class Battle {
         targetSeat: prepared.seat,
         actorSeat: prepared.seat,
         formId: prepared.form,
+        message: { id: "form-changed", params: {} },
       });
       this.traits.enter(prepared.seat);
       this.outcomes.observe();

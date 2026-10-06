@@ -38,14 +38,18 @@ export class TransitionController {
       covered: a.phase === "hold",
     };
   }
-  async run(kind, commit, { coverMs, revealMs } = {}) {
+  async run(kind, commit, { coverMs, holdMs, revealMs } = {}) {
     if (this.busy) return false;
     const reduced = this.reducedMotion();
     for (const ms of [coverMs, revealMs])
       if (ms !== undefined && (!Number.isFinite(ms) || ms <= 0 || ms > 60000))
         throw new Error("Invalid transition duration");
+    // A covered hold may legitimately be zero (no pause), unlike the cover/reveal fades.
+    if (holdMs !== undefined && (!Number.isFinite(holdMs) || holdMs < 0 || holdMs > 60000))
+      throw new Error("Invalid transition hold");
     const duration = reduced ? 100 : coverMs ?? (kind === "encounter" ? 480 : 220);
     const revealDuration = reduced ? 100 : revealMs ?? duration;
+    const holdDuration = reduced ? 32 : holdMs ?? 32;
     const phase = (name) => {
       this.active = {
         kind: reduced ? "fade" : kind,
@@ -58,8 +62,8 @@ export class TransitionController {
       phase("cover");
       await this.timeline.wait(duration);
       phase("hold");
-      // Give the rendering adapter a fully covered frame before changing scenes.
-      await this.timeline.wait(32);
+      // Hold the covered frame (the original black-out pauses) before changing scenes.
+      await this.timeline.wait(holdDuration);
       await commit();
       await this.timeline.wait(96);
       phase("reveal");

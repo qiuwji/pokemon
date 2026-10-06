@@ -8,7 +8,16 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { emeraldBattleCues } from "../src/packs/emerald/battle-audio.js";
-import { emeraldBallResource } from "../src/packs/emerald/animations.js";
+import {
+  createEmeraldPresentation,
+  emeraldBallResource,
+} from "../src/packs/emerald/animations.js";
+import {
+  ANIMATION_PROFILES,
+  emeraldMoveProfile,
+} from "../src/packs/emerald/animation-profiles.js";
+import { emeraldTypeColor } from "../src/packs/emerald/battle-palette.js";
+import { EMERALD_BATTLE_INTRO } from "../src/packs/emerald/battle-intro.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { BattleSession } from "../src/engine/battle-session.js";
 import { FieldSession } from "../src/engine/field-session.js";
@@ -84,6 +93,25 @@ test("Transition failures release the input lock", async () => {
       throw new Error("failed");
     }),
   );
+  assert(!transition.busy);
+});
+test("A covered transition can hold the black frame before swapping and revealing", async () => {
+  const clock = manualClock(),
+    transition = new TransitionController(clock.timeline);
+  let committed = 0;
+  const job = transition.run("fade", () => committed++, {
+    coverMs: 100,
+    holdMs: 500,
+    revealMs: 100,
+  });
+  await clock.advance(100);
+  assert.equal(transition.sample().covered, true);
+  assert.equal(committed, 0, "nothing swaps during the hold");
+  await clock.advance(500);
+  assert.equal(committed, 1, "the swap happens only after the hold ends");
+  await clock.advance(96);
+  await clock.advance(100);
+  await job;
   assert(!transition.busy);
 });
 test("HP interpolation is visual only; a zero-HP actor remains visible until faint finishes", async () => {
@@ -548,4 +576,127 @@ test("Capture cues follow visual phases exactly once and a four-check success di
     assert.equal(release.length, 1);
     assert.equal(release[0].id, "emerald:ball.open");
   }
+});
+test("Battle entry scrolls the board per environment and settles; reduced motion skips it", async () => {
+  const clock = manualClock(),
+    director = new BattleDirector(clock.timeline, {
+      intro: EMERALD_BATTLE_INTRO,
+    });
+  director.reset(view());
+  const job = director.play({
+    kind: "entry",
+    environment: { terrain: "grass" },
+    trainers: [{ actor: "BrendanNormal", back: true }],
+    ...view(),
+  });
+  await clock.advance(40);
+  assert(director.sample().background.x > 0, "the board starts offset and scrolls in");
+  await clock.advance(2000);
+  await job;
+  assert.equal(director.sample().background, undefined, "the board settles to rest");
+
+  const reduced = new BattleDirector(clock.timeline, { reducedMotion: () => true });
+  reduced.reset(view());
+  const reducedJob = reduced.play({
+    kind: "entry",
+    environment: { terrain: "grass" },
+    ...view(),
+  });
+  await clock.advance(40);
+  assert.equal(reduced.sample().background, undefined);
+  await clock.advance(2000);
+  await reducedJob;
+
+  // A trainer battle throws a Poké Ball; a wild battle does not.
+  const trainer = new BattleDirector(clock.timeline, {
+    intro: EMERALD_BATTLE_INTRO,
+  });
+  trainer.reset(view());
+  const trainerJob = trainer.play({
+    kind: "entry",
+    environment: { terrain: "indoor" },
+    trainers: [{ actor: "BrendanNormal", back: true }, { actor: "Youngster" }],
+    ...view(),
+  });
+  await clock.advance(700);
+  assert.equal(trainer.sample().balls.length, 2, "both trainers throw a ball");
+  assert(trainer.sample().ball, "the opposing trainer throws a ball");
+  assert(
+    trainer.sample().effects.some((effect) => effect.kind === "release"),
+    "each thrown ball opens with a burst as its Pokémon appears",
+  );
+  await clock.advance(2000);
+  await trainerJob;
+});
+test("A switch recalls the outgoing Pokémon into a ball and throws the next one", async () => {
+  const clock = manualClock(),
+    director = new BattleDirector(clock.timeline, {
+      intro: EMERALD_BATTLE_INTRO,
+    });
+  director.reset(view());
+  const job = director.play({ kind: "switch", side: 0, ...view() });
+  await clock.advance(120);
+  assert(director.sample().ball, "the recall shows a ball");
+  assert(
+    director.sample().effects.some((effect) => effect.kind === "beam"),
+    "a recall beam pulls the outgoing Pokémon back into the ball",
+  );
+  await clock.advance(3000);
+  await job;
+});
+test("A move event lunges the actor and draws the pack recipe's effect through the director", async () => {
+  const clock = manualClock(),
+    registry = createEmeraldPresentation({ typeColors: emeraldTypeColor }),
+    director = new BattleDirector(clock.timeline, {
+      registry,
+      profiles: ANIMATION_PROFILES,
+      profileFor: emeraldMoveProfile,
+    });
+  director.reset(view());
+  const job = director.play({
+    kind: "move",
+    actorSeat: "home:0",
+    targetSeat: "away:0",
+    move: { id: "tackle", type: "normal", successful: true, power: 40 },
+    ...view(),
+  });
+  await clock.advance(380);
+  const frame = director.sample();
+  assert.notEqual(
+    frame.actors.find((a) => a.seatId === "home:0").x,
+    0,
+    "the acting seat lunges at the midpoint",
+  );
+  assert(
+    frame.effects.some((e) => e.kind === "contact" && e.color === "#fff8d8"),
+    "the tactic recipe's parameterised contact effect is sampled",
+  );
+  await clock.advance(380);
+  await job;
+  assert(!director.busy);
+});
+test("Reduced motion suppresses a move's lunge and effects but keeps the event snapshot intact", async () => {
+  const clock = manualClock(),
+    director = new BattleDirector(clock.timeline, {
+      registry: createEmeraldPresentation(),
+      profiles: ANIMATION_PROFILES,
+      reducedMotion: () => true,
+    });
+  director.reset(view());
+  const event = {
+      kind: "move",
+      actorSeat: "home:0",
+      targetSeat: "away:0",
+      move: { id: "tackle", type: "normal", successful: true, power: 40 },
+      ...view(),
+    },
+    before = structuredClone(event);
+  const job = director.play(event);
+  await clock.advance(120);
+  const frame = director.sample();
+  assert.equal(frame.effects.length, 0);
+  assert.equal(frame.actors.find((a) => a.seatId === "home:0").x, 0);
+  await clock.advance(200);
+  await job;
+  assert.deepEqual(event, before);
 });

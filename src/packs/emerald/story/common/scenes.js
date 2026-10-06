@@ -4,6 +4,9 @@ const dialog = (dialogue, parameters = {}) => ({
   dialogue,
   parameters,
 });
+// The Oldale centre nurse field object; the heal story only turns her sideways and back.
+const CENTER_NURSE =
+  "core:npc.OldaleTown_PokemonCenter_1F.LOCALID_OLDALE_NURSE";
 
 export const OPEN_BAG = [
   { type: "move", actor: "player", to: { map: "Route101", x: 6, y: 14 } },
@@ -13,6 +16,10 @@ export const OPEN_BAG = [
 ];
 
 export const RETURN_WITH_BIRCH = [
+  // The danger theme (MUS_HELP) is over once the battle ends, but the rescue flag cannot move up
+  // here: the pursuer/birch projections only exist while !rescued. So override the field music
+  // directly for the walk back, then clear it on entering the lab so the lab's own theme plays.
+  { type: "music", cue: "emerald-audio:mus_route101" },
   { type: "hide", actor: "pursuer" },
   { type: "approach", actor: "birch", target: "player" },
   {
@@ -49,6 +56,8 @@ export const RETURN_WITH_BIRCH = [
       },
     ],
   },
+  // Back on default: clearing the story cue lets emeraldMusic resolve the lab map's own theme.
+  { type: "music" },
   { type: "wait", ms: 180 },
   {
     type: "escort",
@@ -67,19 +76,46 @@ export const RETURN_WITH_BIRCH = [
   dialog("emerald:dialogues.scenes.4", {}),
 ];
 
+// Defeat white-out, from the original DoWhiteOut + CB2_WhiteOut (src/overworld.c): the battle
+// screen clears to black, holds ~120 frames, then the party is restored and the player reappears
+// at the last heal location with a fade in from black (money halved in StoryApplication.lossPenalty).
+// We stage that arrival at the centre counter so the shared heal beat — the party being restored —
+// is visible, without the earlier walk/emote/nurse dialogue.
 export const RETURN_TO_CENTER = [
   {
     type: "scene",
-    kind: "door",
-    position: { map: "OldaleTown_PokemonCenter_1F", x: 7, y: 7, dir: "up" },
+    kind: "fade",
+    coverMs: 220,
+    holdMs: 2000,
+    revealMs: 320,
+    // The tile directly in front of the counter (the counter wall is row 3).
+    position: {
+      map: "OldaleTown_PokemonCenter_1F",
+      x: 7,
+      y: 4,
+      dir: "up",
+    },
   },
-  { type: "move", actor: "player", to: { x: 7, y: 5 } },
-  { type: "emote", actor: "player", kind: "heart", ms: 650 },
-  { type: "heal" },
-  dialog("emerald:dialogues.scenes.5", {}),
+  { type: "face", actor: CENTER_NURSE, dir: "left" },
+  { type: "heal", variant: "center" },
+  { type: "face", actor: CENTER_NURSE, dir: "down" },
 ];
 
 export function healingScene(object) {
+  // The Pokémon Centre nurse runs the full machine animation (balls in, palette blink, out);
+  // other healers (e.g. mom) keep the simple beat.
+  if (object.kind === "heal")
+    return [
+      dialog("emerald:dialogues.npc.heal.center.before", {
+        speaker: object.name,
+      }),
+      { type: "face", actor: CENTER_NURSE, dir: "left" },
+      { type: "heal", variant: "center" },
+      { type: "face", actor: CENTER_NURSE, dir: "down" },
+      dialog("emerald:dialogues.npc.heal.center.after", {
+        speaker: object.name,
+      }),
+    ];
   return [
     dialog("emerald:dialogues.scenes.6", {
       speaker: object.name,

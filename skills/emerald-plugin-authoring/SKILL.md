@@ -1,74 +1,63 @@
 ---
 name: emerald-plugin-authoring
-description: 通过现有插件公开API扩展绿宝石的内容、规则、状态、页面交互、持久化和表现，或用代表例定位真实接口缺口。
+description: 在现有绿宝石工程中制作或修改玩法插件、页面、表现和实时小游戏；定位真实公开接口、接入玩家入口并验证事务与保存。也用于评审插件是否绕过宿主合同；完整原作内容转写按对应领域 Skill 处理。
 ---
 
-# 插件玩法与界面接手
+# 绿宝石插件制作
 
-## 本领域核心名词
+交付一条能被玩家使用的完整链路：**入口 → 预检 → 领域提交 → 反馈 → 保存恢复**。默认复用公开 API；先做最小可用行为，再扩充内容。注册成功、示例通过和真实玩家操作是不同证据。
 
-- **命名空间**：注册局部ID返回owner:localID；跨内容引用应保存返回值，而非拼错字符串。
-- **action / intent**：action接收输入并提交一组事务意图；intent请求既有领域写入，须有对应权限。
-- **store / states**：store保存插件自有记忆；states保存附着对象、可到期的状态；不复制核心队伍/库存。
-- **slot / page / layout**：slot是宿主根位置或注册的子位置；page注册页面；layout是渲染端接受的声明式控件树。
-- **事务 / 事实事件**：事务失败恢复领域及插件数据；事件和视觉反馈在成功提交后才发出。
+## 快速接手
 
+1. **定位真实仓库。** 仓库 `skills/` 是权威副本；本机安装可能是符号链接，先解析 Skill 的真实目录，再向上两级找仓库。确认同时存在 `package.json`、`src/engine/extensions/plugin-host.js` 和 `examples/`。相对链接以仓库里的 Skill 为基准。不要把 ChatGPT 的只读 `sources/` 镜像当开发目录，也不要另建一套引擎。
+2. **确认本次范围。** 看工作树已有改动，保留他人的工作；读 [SCOPE](../../docs/project/SCOPE.md) 与 [STATUS](../../docs/project/STATUS.md) 中相关部分。用户只要方案或评审时不实现；历史方案和验证记录不代表当前代码。
+3. **按下表选一个锚点。** 只读本任务需要的参考、合同和一个最接近的可执行例，不从头加载所有领域文档。先跑这个例确认环境，再改其业务部分。混合玩法先确定状态所有者，再按需补读第二个领域。
+4. **核实公开接线。** 对实际输入查注册器、公开 schema、权限和生命周期；类型、文档与代码冲突时查实现及相关测试，明确差异，不能凭名字猜字段。尤其区分引擎内部对象与命令传输格式。
+5. **做完一条真实路径。** 生产 manifest → catalog 装配 → 正常玩家入口 → 行为与成本 → 保存。缺口属于通用框架任务，按本次授权处理；不能用私有导入、伪造完成结果或直接写状态掩盖缺口。
 
-先读[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)、[PLUGIN_ARCHITECTURE](../../docs/architecture/PLUGINS.md)。现代能力/复杂UI缺口读[PLUGIN_EVOLUTION](../../docs/project/PLUGIN_ROADMAP.md)，但先核对实际代码；历史外部评审不能当当前状态。
+## 按任务选参考和示例
 
-## 最小真实锚点
+| 本次任务 | 先读 | 最接近的可执行例 |
+| --- | --- | --- |
+| 详情入口、表单、页签、HUD、布局替换 | [界面与表现](references/ui-and-presentation.md) | [plugin-page](../../examples/plugin-page.test.js)、[表单夹具](../../tests/fixtures/extensions/form.js) |
+| Canvas、帧动画、外观、相机、环境层 | [界面与表现](references/ui-and-presentation.md) | [plugin-canvas](../../examples/plugin-canvas.test.js)、[sprite-clip](../../examples/sprite-clip.test.js)、[visual-extension](../../examples/visual-extension.test.js) |
+| 战斗规则、形态、招式派生、附加项 | [战斗与实时会话](references/battle-and-interactions.md)的战斗部分 | [battle-effect](../../examples/battle-effect.test.js)、[battle-attachment](../../examples/battle-attachment.test.js) |
+| 持续输入、计时判定、小游戏 | [战斗与实时会话](references/battle-and-interactions.md)的实时会话部分 | [interaction-bar](../../examples/interaction-bar.test.js) |
+| 野外入口、HM、移动玩法 | [世界与玩法](references/world-and-gameplay.md)的野外部分 | [field-action](../../examples/field-action.test.js)、[high-flight](../../examples/high-flight.test.js) |
+| NPC、剧情、告示牌、动态遇敌 | [世界与玩法](references/world-and-gameplay.md) | [story-bundle](../../examples/story-bundle.test.js)、[world-editing](../../examples/world-editing.test.js)、[encounter-extension](../../examples/encounter-extension.test.js) |
+| 设施、纯观察、AI控制、玩家联线 | [世界与玩法](references/world-and-gameplay.md)的对应部分 | [facility](../../examples/facility.test.js)、[automation](../../examples/automation.test.js) |
+| 奖励、持久记忆、事务失败 | 下方边界与 [存档合同](../../docs/engine/SAVES.md) | [handoff](../../examples/handoff.test.js)、[validation](../../examples/validation.test.js) |
 
-[页面例](../../examples/plugin-page.test.js)串联详情入口、action和自有记忆；[plugins.test.js](../../tests/plugins.test.js)用测试专用夹具验证状态、互动、保存及失败回滚。[世界剧情例](../../examples/world-story.test.js)演示内容/世界。[ANIMATION_CONTRACT](../../docs/engine/presentation/ANIMATION_CONTRACT.md)描述注册演出和纯取样。
+## 生产文件与装配
 
-## 编写插件
+- 手写模块放 `src/plugins/<id>/` 或已有同类文件位置；派生素材放 `generated/plugins` / `generated/assets`。两棵输入树直接运行，**没有 dist 或复制构建步骤**，见 [SOURCE_LAYOUT](../../docs/development/SOURCE_LAYOUT.md)。不手改派生数据；原作 `work/pokeemerald/` 与同步 `sources/` 只读。
+- 导出普通 manifest：`id`、`apiVersion:1`、语义版本 `version`、正整数 `dataVersion`、实际需要的 `permissions`、`setup(api)`；依赖及 `validateData` 按 [插件架构](../../docs/architecture/PLUGINS.md) 声明。`setup` 只注册，不查询未装配世界、不发命令、不发奖、不写存档。
+- 在 [catalog](../../src/plugins/catalog.json) 登记 `id/module/export/enabled`；`module` 相对 catalog，工厂参数按 [内容管线](../../docs/development/CONTENT_PIPELINE.md) 配置。可选玩法遵循用户的启用要求；不要向 `app.js` 添加逐插件分支。开发准备动作使用已注册自身动作及合法 startup 配置，不能默认暴露测试发奖入口。
+- `manifest()`、`session()` 来自 `tests/helpers/session.js`，**只用于测试**；生产代码不导入测试夹具或产品测试。插件可复用现有公开辅助函数，不能导入 adventure、应用服务或私有引擎对象绕过 API。
+- `register(localId, ...)` 返回完整 `owner:localId`；保存返回值用于跨内容引用。UID 标识个体，seat/队伍下标标识当前位置；异步结束、换人、换图、读档后重新查询，不保留旧领域对象。
 
-源码在src/plugins，派生资源在generated/plugins或generated/assets；运行时直接访问两棵目录，参照[目录合同](../../docs/development/SOURCE_LAYOUT.md)。通用战斗扩展的[待评审方案](../../docs/project/PLUGIN_EXTENSION_REVIEW.md)不属于当前API；没有用户的新授权不得把拟议字段当作实现。
+## 读、写与表现的边界
 
-manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。setup只注册，不在注册时开始行动/发网络/写存档。保留目录引用、重复/未知ID启动拒绝；插件数据严格当前schema，不引入历史迁移旁路。
+| 需要什么 | 使用什么 | 重要限制 |
+| --- | --- | --- |
+| 看世界、队伍、背包 | `api.query()` / 回调里的 `view.query()` | 深冻结快照；不把整份存档每帧重新投影 |
+| 高频业务观察 | `api.queries.register(id,{schema,read})` | 同步、只读；与 action 的局部名不能重名 |
+| 用户操作或领域写入 | `api.actions.register(id,{schema,run})` + `ctx.intent` | 同步事务，权限与意图合同由宿主校验 |
+| 插件持久记忆 | `ctx.store`、已注册 `ctx.states` | 不复制核心队伍/库存；状态按 UID 与生命周期管理 |
+| 页面与动画 | `api.ui` / `api.presentation` | 只展示已提交事实，不重算规则或取游戏 RNG |
+| 持续小游戏 | `api.interactions.register` | 宿主驱动时钟、语义输入、帧数据与完成事务 |
 
-页面/入口/HUD通过ui注册，点击控件调用action；context携带UID，schema明确允许输入。查询深冻结；写入通过commands或事务intent，不能抓全局game、DOM、localStorage或直接写队伍。ctx.store自有记录和通用states表示插件记忆/状态，既有领域值仍由原所有者修改。
+所有对象 schema 明确 `additionalProperties:false`，数值/字符串/数组给业务边界；这是项目的 [DataSchema 子集](../../src/engine/extensions/values.js)，不支持任意 JSON Schema 关键字。
 
-事件是提交后事实，事务失败恢复领域和插件数据；只读规则回调不能发命令，异步表现不参与规则结果。注册视觉/招式/语义事件编排，复用纯时序、时钟和reducedMotion；音频注册真实资源，不能退回合成提示音。
+action 内只用当次 `ctx`，不缓存写端口，不 `await`，不再次 dispatch。事务外的用户操作可 `api.commands.dispatch`；查询、规则、渲染、实时会话纯回调均不得 dispatch 或修改领域状态。schema 通过也不代表拥有资格，提交点仍需按领域合同复检。
 
-当前宿主区域/布局节点/主题能力以代码和规格为准；不能给未知slot/节点编造支持。大型现代机制同时核对资格、行动增强、资源/PP、限次、清理和事件；不能把形态变换当整个Mega/Z系统。一次招式增强可用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)和[招式增强合同测试](../../tests/battle-augments.test.js)，搜索`core.battle.augments`定位查询；替换范围、消费点及不支持项按该规格。实际公开合同缺口归框架任务，不让插件导入核心绕过。
+多项写入走同一事务；后段失败必须恢复领域值、插件记忆和相关 RNG。事实用 `ctx.emit`，反馈用 `ctx.feedback`，成功提交后才发布。区分抛错、`{ok:false,reason}` 和“提交成功但反馈失败”；最后一种不能重试发奖或重抽随机数。
 
-## 战斗行动附加（B1）
+持久数据变化按当前严格 `dataVersion/validateData` 合同处理，不引入历史迁移旁路。停用插件后的硬引用由宿主暂停区保护，插件自有记忆保留；需要持久依赖时验证同一存储的停用、继续游玩与重新启用。临时相机/环境/页面租约及进行中的实时会话不能当成已保存数据。
 
-除旧 `battleAugments` 的整招替换外，可用 `api.content.register("battleAttachments", id, definition)` 给一次主招式行动附加效果：`commitPoint`（`beforeOrder`/`beforeAction`/`moveStart`）、可选同步 `requires` 谓词、`parameters` schema、`limit`（`scope+key+max`，显式相同 key 与增强共享一个池）、`transition:{form}`、`deriveMove(context)`（受限派生 `power/type/category/target/priority/effect`）、`modifiers`（行动作用域数值修饰，阶段白名单内）、`pp:"clear"`（清空源槽剩余 PP）与 `unavailablePolicy`。行动请求带 `attachments:[{id,parameters?}]`（最多两个：一个形态+一个派生，修饰可叠加，不与 `augment` 混用）；候选用 `core.battle.attachments {index}`；UI/AI 只传注册 ID 与参数。选择不扣 PP/不改形态，提交点复检后才消耗额度；`beforeOrder` 形态变化影响排序，派生只叠加有效招式、PP 仍由源槽支付一次。许可类阶段（`switch-check`/`escape-check`/`hit-check`/`immunity`/`action-permission`/`defense-interaction`）可注册 `decide` 规则返回 `abstain/allow/deny+reason/outcome`；`defense-interaction` 统一保护判定：原生保护作为默认 `protected` 结果，可被 `pass` 覆盖（无视保护），另有 `block`/`scaledDamage`（进正常伤害管线）。默认 Gen3 结果不变。合同见[行动附加](../../docs/engine/battle/ATTACHMENTS.md)，代表例 [battle-attachment](../../examples/battle-attachment.test.js)。
+## 最小可执行锚点
 
-## 插件剧情与对话
-
-扩展地区、NPC或告示牌时，用api.story.registerBundle注册同一目录合同，返回完整脚本/对白/入口引用；不向app.js逐剧情加分支。真实组合例见[story-bundle](../../examples/story-bundle.test.js)，字段见[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，职责/恢复边界见[剧情架构](../../docs/architecture/STORY_CONTENT.md)。
-
-selector绑定对象/原label，priority明确竞争关系；公共call使用schema参数，对话bindings只读取声明标量。直接旗标/变量/奖励写用自身命名空间。选择后果由领域命令提交，不放文字效果/渲染回调；reward.onResult处理真实容量结果，不能提前标记领取。
-
-需要战后自动继续时，脚本声明durable并为每条分支命令设稳定node，checkpoint只放稳定点，battle.onResult接确认结果；短battle只发起，不能假定等待胜负。调用复用用call，不创建嵌套会话；活跃战斗不保存，未知节点/缺依赖不静默跳过。原作业务转写另用剧情Skill，不把框架能力视为全部原作已完成。
-
-## 既有页面与复杂交互
-
-使用 `api.ui.region(id,{slot,mode?,render,when?,priority?})` 直接挂入宿主区域，使用 `api.ui.component(id,{schema,render})` 复用声明式组合。表单字段通过name一次提交，页签由适配器持有临时选择；插件store保存业务记忆，库存仍查核心。宿主名称、字段参数、主题/布局及生命周期查[UI_CONTRACT](../../docs/engine/presentation/UI_CONTRACT.md)。测试锚点是[表单测试夹具](../../tests/fixtures/extensions/form.js)及[plugin-ui测试](../../tests/plugin-ui.test.js)，文件移动搜索 `ui.region`、`resolveLayout`、`Real bag page`。
-
-默认区域追加；party.list、battle.actions/moves/targets支持mode:replace/hide，button.native复用context.controls提供的原控件。按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)调整布局/顺序/文本，不接收DOM，不向render里放命令；原禁用状态与原战斗授权继续由宿主管理。查[native-ui-regions测试](../../tests/native-ui-regions.test.js)确认失败回退、竞争优先级和关闭后句柄失效。不要假定能替换原生HUD、注册任意DOM控件、热卸载，或让普通插件事务在战斗/设施期间执行。真正缺口按领域合同补，不通过页面回调绕过规则。
-
-## 验收
-
-涉及暗雷替换、动态实体接触、外观、相机或迷雾时，先读[公开能力演进](../../docs/project/PLUGIN_ROADMAP.md)的现状表，再核对实际公共类型与测试。不要用剧情触发器代替接触路由，用能力倍率伪装关闭遭遇，用更换移动模式伪装换装，或把视觉雾当作探索状态。未实现的合同应按领域任务补注册/查询/命令/生命周期与代表测试，不让玩法插件导入应用服务。
-
-一个插件通过已有页面入口完成点击→真实行为→状态/反馈→保存重载。验证无权限拒绝、重复/坏引用、事务后段失败回滚、缺插件保护原档、相应表现释放。新UI控件需真实浏览器焦点/取消/输入观察；代码结构通过不能代替可用性。
-
-更新STATUS和领域规格，明确实现能力与后续内容。网络控制复用[NETWORK_ARCHITECTURE](../../docs/architecture/NETWORK.md)的命令协议，不另造任意脚本注入或承诺多人同步。
-
-## 玩家联线与单机控制
-
-需要两个玩家实际交换/对战时，先读[玩家联线设计](../../docs/architecture/PLAYER_LINK.md)并核对STATUS。现有NetworkGateway只控制一份存档，连接内去重不保证跨重连成交；core.trade的本地伙伴池不是远端所有者。设计中的联线API尚未实现，先完成会话、持久决策和领域托管框架，再写业务插件；不能通过远端JSON改队伍或整档覆盖。验收使用两份独立存档和断线/重启后的真实领域状态，而非双方都显示成功。现有网络例和规则证据继续复用，只验证新增边界。
-
-## 最小完整示例
-
-接口锚点：插件 API 1；此示例与仓库可执行文件同步。当前工程版本查 package.json，完成度查 STATUS，不能据本段推断全作已完成。
-
-文件：[examples/plugin-page.test.js](../../examples/plugin-page.test.js)。在项目根执行 `node --test examples/plugin-page.test.js`。示例为项目测试行为；不声称是原作完整内容。
-
-[装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
+下例与 [plugin-page.test.js](../../examples/plugin-page.test.js) 完全同步。在项目根运行 `node --test examples/plugin-page.test.js`。它证明入口定义、布局、action 和保存重载；**没有证明浏览器点击、焦点或返回键**。复制到新的 `examples/*.test.js` 时保留真实宿主装配，生产 manifest 另放 `src/plugins/`。
 
 <!-- runnable-example: examples/plugin-page.test.js -->
 ```js
@@ -100,257 +89,36 @@ test("detail entry renders a clickable action with persistent memory", async () 
 });
 ```
 
-此例验证详情页入口、合法控件、与点击相同的action提交和保存；真实鼠标/焦点/返回键须按浏览器清单另验，不能把dispatch写成已验点击。
+## 选择最小有效验证
 
-## 遇敌与动态世界扩展
+按 [TESTING](../../docs/development/TESTING.md) 对本次行为选证明，避免每次重跑全项目：
 
-读[遇敌/接触合同](../../docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)。插件可注册encounterPolicies关闭指定地图的step暗雷，查询地图格子/有效地区表，经宿主种子无放回选格，创建Actor并prepare唯一个体凭证，最后监听稳定接触请求战斗。比例、游走和视觉属于插件业务；不要复制个体、伪造接触、在绘制中发命令，或调用剧情作为旁路。准备和结果渠道不触发原生剧情。
+- 产品用例放 `examples/`，走真实注册器、应用服务和公开命令；核心合同放 `tests/`，使用最小夹具，不导入产品插件。只替代外部时钟/UI/存储等端口。
+- 对新增行为至少验证成功路径和关键失败边界：资格/权限拒绝、后段失败不半写、重复提交、实际成本、保存恢复；只选与改动有关的边界，不给低影响文字修改加测试。对含随机判定的用例固定合法夹具与输入，不依赖偶然命中或胜负。
+- 参数、组合机制、菜单入口等必须走公开路径；直接调用 `Battle` 或注册表不能证明命令 schema/玩家入口已接通。自动保存测试应检查实际存储内容并据此重载，不能只 `exportDocument()` 再导入证明落盘。
+- 新 UI/持续输入另验键盘、触屏、焦点、取消与关闭释放。按用户授权和约束选择浏览器或端口验证；端口模拟、HTTP 200 与程序 dispatch 均不能声称已观察真实画面。
+- 本 Skill 的纯文档改动只需元数据、`npm run check:docs` 与受影响示例。插件实现先跑专项；公开类型改变加 `check:contracts`；框架阶段收口才跑 `npm run check` / `npm run test:all`。Python工具仅在导入/内容管线变化时验证。
 
-这是独立验收例，使用原有地区表和占位标记，未实现完整可见野生宝可梦插件；外观、相机和环境组合合同见[外观与视图](../../docs/engine/presentation/APPEARANCE_AND_VIEW.md)，探索可见性后续查PLUGIN_ROADMAP。ActorUID/个体UID/凭证ID是三个不同身份。
+交付写明实际玩家入口、启用方式、修改与生成文件、执行命令/结果及未验证项；不要预填版本、测试数量或称整个原作已完成。接口变化同步类型、领域规格、Skill 和代表例；进度/验证记录按任务范围更新，历史证据不改写。用户未请求时不额外提交或发布。
 
-<!-- runnable-example: examples/encounter-extension.test.js -->
-```js
-import test from "node:test";
-import assert from "node:assert/strict";
-import { manifest, session } from "../tests/helpers/session.js";
-test("a plugin controls step encounters and opens a contact-owned wild battle", async () => {
-  let api;
-  const plugin = manifest("visible-demo", value => {
-    api = value;
-    api.content.register("encounterPolicies", "quiet", { channel: "step", priority: 100,
-      when: c => c.position.map === "Route101", decide: () => null });
-    api.content.register("actorTemplates", "marker", {
-      name: "Encounter marker", actor: "ProfBirch", behavior: "still" });
-  }, ["actors", "encounters", "movement"]);
-  const { game } = session([plugin]);
-  game.enter({ map: "Route101", x: 5, y: 11, dir: "up" });
-  const region = await api.commands.dispatch("core.world.cells", { x: 5, y: 10, width: 1, height: 1 });
-  assert.equal(region.cells[0].collision, 0);
-  const { actor } = await api.commands.dispatch("core.actor.spawn", {
-    template: "visible-demo:marker", position: { map: "Route101", x: 5, y: 10, dir: "down" } });
-  const { ticket } = await api.commands.dispatch("core.encounter.prepare", { actor: actor.uid, area: "land" });
-  const story = structuredClone(game.state.story);
-  assert.equal(game.battle, null);
-  assert.equal((await api.commands.dispatch("core.encounter.policy", { channel: "step" })).decision, null);
-  await api.commands.dispatch("core.field.move", { direction: "up" });
-  const contact = api.query().contacts[0].sequence;
-  assert((await api.commands.dispatch("core.encounter.request", { ticket: ticket.id, contact })).ok);
-  assert.equal(game.battle.enemy.species, ticket.species);
-  assert.deepEqual(game.state.story, story);
-});
-```
+## 常见错误与定位
 
-## 外观、相机与独立环境层
-
-先读[外观与视图合同](../../docs/engine/presentation/APPEARANCE_AND_VIEW.md)。外观配方、持久身份选择、临时覆盖租约与规则结果分开；不通过worldPatch或更换移动模式伪装玩家换装。身体/服饰共享方向与时钟，姿态图集和透明衣服素材由插件内容提供。持久Actor可使用appearance模板和emerald-species参数外观，密度明雷通过地区凭证保持个体唯一所有权。
-
-相机profile定义逻辑格数/缩放；租约选择焦点和优先级，剧情镜头覆盖后回到有效选择。绘制和指针反变换必须复用同一投影，不能另写320×224偏移计算。普通雾气使用独立environmentLayers，可与逻辑天气叠加；战争迷雾的探索记忆与视线政策尚未实现，不能承诺灰层就是探索系统。临时租约不会保存，插件需要持久偏好时用自己的store记录业务意图并在合法时机重新申请。
-
-下面是公开API的最小组合例，不安装完整换装/明雷玩法；browser真实画面与点击需另验。若源码移动，搜索`AppearanceSelections`、`core.camera.acquire`、`environmentLayers`。
-
-<!-- runnable-example: examples/visual-extension.test.js -->
-```js
-import test from "node:test";
-import assert from "node:assert/strict";
-import { manifest, session } from "../tests/helpers/session.js";
-test("a plugin composes appearance, camera range and independent fog", async () => {
-  let api;
-  const plugin = manifest("visual-demo", value => {
-    api = value;
-    api.content.register("appearances", "outfit", { name: "示例外观",
-      variants: { default: { layers: [{ kind: "actor", actor: "ProfBirch", y: -16 }] } },
-    });
-    api.content.register("cameraProfiles", "wide", { name: "远景", columns: 30, rows: 20 });
-    api.content.register("environmentLayers", "mist", { name: "雾层", visual: "weather.fog", opacity: 0.3 });
-  }, ["appearance", "camera", "environment"]);
-  const { game } = session([plugin]);
-  const before = structuredClone(game.state.position);
-  await api.commands.dispatch("core.appearance.set", { target: { kind: "player" }, appearance: "visual-demo:outfit" });
-  const camera = await api.commands.dispatch("core.camera.acquire", { profile: "visual-demo:wide" });
-  const mist = await api.commands.dispatch("core.environment.acquire", { layer: "visual-demo:mist" });
-  assert.equal((await api.commands.dispatch("core.camera.view", {})).width, 480);
-  assert.equal(api.query().view.environment.length, 1);
-  assert.deepEqual(game.state.position, before);
-  await api.commands.dispatch("core.camera.release", { token: camera.token });
-  await api.commands.dispatch("core.environment.release", { token: mist.token });
-  game.loadDocument(game.exportDocument());
-  assert.equal(api.query().view.environment.length, 0);
-  assert.equal(game.appearanceFrame({ kind: "player" }, {}).appearance, "visual-demo:outfit");
-});
-```
-
-## 资源帧动画
-
-按[帧片段合同](../../docs/engine/presentation/SPRITE_CLIPS.md)注册 `api.presentation.sprite`。片段是已注册resource、裁切和帧时长，不是绘制函数或规则行为；species/view绑定用于详情页替换。不要在UI按物种添加分支或重复加载图片。缺多帧素材时保持单帧，不凭资源高度宣称原作动画时序已还原。
-
-真实组合例：[examples/sprite-clip.test.js](../../examples/sprite-clip.test.js)，项目根执行 `node --test examples/sprite-clip.test.js`。它使用Canvas/时钟端口，验证真实插件→选择→播放器→停止；浏览器视觉、缩放与页面关闭须另验。宿主清理由ownModalResource管理，不让插件自己握住页面节点。
-
-<!-- runnable-example: examples/sprite-clip.test.js -->
-```js
-import test from "node:test";
-import assert from "node:assert/strict";
-import { manifest, session } from "../tests/helpers/session.js";
-import { SpriteCanvas } from "../src/adapters/sprite-canvas.js";
-test("a registered detail clip is selected, sampled and cleaned up by the real player", () => {
-  const plugin = manifest("sprite-demo", api => {
-    api.presentation.sprite("detail", {
-      width: 64, height: 64, loop: true,
-      match: { species: "mudkip", view: "detail" },
-      frames: [0, 64].map(y => ({ resource: "poochyena-front",
-        rect: { x: 0, y, width: 64, height: 64 }, durationMs: 50 })),
-    });
-  });
-  const { game } = session([plugin]), before = structuredClone(game.state);
-  let now = 0, pending = null;
-  const draws = [], canvas = { width: 64, height: 64, getContext: () => ({
-    clearRect() {}, drawImage: (...args) => draws.push(args),
-  }) };
-  const player = new SpriteCanvas({ canvas,
-    assets: { "poochyena-front": { width: 64, height: 256 } },
-    clock: { now: () => now, request: fn => { pending = fn; return 1; },
-      cancel: () => { pending = null; } },
-  });
-  player.play(game.spriteClips.find("mudkip", "detail"));
-  assert.equal(draws.at(-1)[2], 0); now = 50; pending();
-  assert.equal(draws.at(-1)[2], 64); player.stop();
-  assert.equal(pending, null);
-  assert.deepEqual(game.state, before);
-});
-```
-
-## 内嵌 Canvas 与视觉生命周期
-
-按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)注册presentation视觉，再在页面/区域/HUD返回canvas节点。树仅保存visual、尺寸和schema参数，不能塞draw函数；draw使用冻结frame和第三参数assets，循环由宿主帧驱动。点击由宿主产生pointer坐标并调用action，schema须声明context/input/pointer。不要在绘制里发命令、取游戏RNG或自行启动计时器。隐藏页签暂停，页面重建重新挂载，关闭释放；循环定义不能用于一次性play/feedback。
-
-[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。当前默认插件清单查catalog和STATUS；需要浏览器验收时按作者指南注册自己的示例，生产插件放src/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
-
-<!-- runnable-example: examples/plugin-canvas.test.js -->
-```js
-import test from "node:test";
-import assert from "node:assert/strict";
-import { manifest, session, objectSchema } from "../tests/helpers/session.js";
-import { canvasAdapter } from "../tests/helpers/canvas-extension-fixture.js";
-test("a plugin mounts a looping clickable visual with saved interaction and host cleanup", async () => {
-  let api;
-  const frames = [], plugin = manifest("canvas-demo", value => {
-    api = value;
-    const visual = api.presentation.register("portrait", { duration: 100, loop: true,
-      draw: (_ctx, frame) => frames.push(frame.progress),
-    });
-    const action = api.actions.register("touch", { schema: objectSchema({ pointer: objectSchema({
-      x: { type: "number" }, y: { type: "number" }, source: { type: "string" },
-    }, ["x", "y", "source"]) }, ["pointer"]), run: (ctx, input) => ctx.store.set("point", input.pointer) });
-    const page = api.ui.page("portrait", { title: "互动", render: () => ({
-      kind: "canvas", width: 200, height: 100, visual, action, alt: "互动画像",
-    }) });
-    api.ui.entry("portrait", { slot: "monster.detail", page, label: "互动" });
-  });
-  const s = session([plugin]), a = canvasAdapter(s);
-  a.ext.showPage("canvas-demo:portrait"); a.frame(0); a.frame(125);
-  assert.deepEqual(frames, [0, 0.25]);
-  await a.root.querySelector("button").onclick({ detail: 0 });
-  assert.deepEqual(api.store.get("point"), { x: 100, y: 50, source: "keyboard" });
-  s.game.loadDocument(s.game.exportDocument());
-  assert.equal(api.store.get("point").x, 100);
-  a.shell.closeModal(); a.frame(200);
-  assert.equal(a.ext.layout.canvases.size, 0);
-});
-```
-
-## 宿主驱动实时互动（R1）
-
-用 `api.interactions.register(localId,{version,parameters,state,result,inputs,completion?,init,step,view})` 编写判定条/计时窗口等实时小游戏：宿主拥有固定逻辑时钟、语义输入（held/pressed/released/edges）、独立随机流、帧数据（10 种图元）绘制与完成结算，插件只返回 JSON 状态和受限结果。`completion` 是已注册 action，宿主用现有事务与 `ctx.intent` 结算；`core.interaction.start` 可带可选 `source` 标记来源，完成后宿主发布公开事实 `core:interaction-completed {instance,definition,source,outcome,result}` 供世界/设施/插件消费（世界与遭遇的完成适配器按此事实接续，避免在同步事务里开战）。活动期间 `game.busy` 为真，输入租约取得后方向不再移动主角。首版不保存进行中的会话，原生钓鱼迁移仍属后续。合同见[实时互动会话](../../docs/engine/INTERACTIONS.md)，代表例 [interaction-bar](../../examples/interaction-bar.test.js)；能力用 `api.capabilities.interactions` 识别。
-
-## 常见错误与排查
-
-报错路径和ID会变化，下列为源码原文或可搜索的关键部分；先区分抛错和 `{ok:false,reason}` 返回。
-
-| 报错或关键部分 | 原因与处理 |
+| 现象 | 先检查 |
 | --- | --- |
-| `Core command permission denied` | 插件没有命令要求的权限，或该命令不对插件开放；核对注册permission。 |
-| `Undeclared core permission` | ctx.intent的kind未在manifest.permissions声明；只增加实际使用的权限。 |
-| `Invalid UI definition` | slot不存在或page/render/title/label缺失；先核对UI_SLOTS和宿主表，不凭页面名称猜slot。 |
-| `Unknown layout action` | 控件action不是已注册完整ID；使用actions.register返回值。 |
-| `Expired` | 保留了上次事务ctx；每次在run中新获取context，不闭包缓存store写端口。 |
+| `Core command permission denied` / `Undeclared core permission` | 公开命令的 plugin/permission 与 manifest 的实际权限；意图 kind 是否声明 |
+| `Unsupported schema` / `unknown property` | DataSchema 子集、公开命令 schema 与传输格式，不能用内部类型推导请求 |
+| `Unknown layout action` / `Invalid UI definition` | 完整注册 ID、真实 slot 与 layout 节点；不编造 DOM 或槽位 |
+| `Expired transaction context` / `Nested plugin transactions` | 缓存了 ctx、事务中 dispatch/await，或在纯回调中写入 |
+| 文件和测试都有，玩家看不到入口 | catalog 的 module/export/enabled、宿主实际挂载与正常输入路径 |
+| 确认键触发野外行动却静默无响应 | `triggers:["interact"]` 不配 `menu:false`；确认页会通过 `fieldActionOptions()` 反查过滤后的列表 |
+| 操作成功，刷新后结果丢失 | 自动保存实际落盘、忙碌锁释放时机；别用手动导出代替验证 |
 
-## 文件变动时如何定位
+链接移动时先在真实项目根搜索，不新建同名假接口：
 
-先确认收到完整仓库；链接失效时在项目根使用以下关键词检索，不新建同名假接口：
-
-| 优先文件 | 兜底搜索词 |
+| 合同所有者 | 代码锚点 / 搜索词 |
 | --- | --- |
-| [src/engine/extensions/plugin-host.js](../../src/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" src generated tests docs package.json` |
-| [src/engine/extensions/ui-registry.js](../../src/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" src generated tests docs package.json` |
-| [examples/plugin-page.test.js](../../examples/plugin-page.test.js) | `rg -n "monster.detail" src generated tests docs package.json` |
+| 注册、只读保护、事务 | [plugin-host](../../src/engine/extensions/plugin-host.js)、[plugin-runtime](../../src/engine/extensions/plugin-runtime.js)；`class PluginHost` / `class PluginRuntime` |
+| 公开类型、命令输入、权限 | [contracts](../../src/engine/contracts.d.ts)、[application-commands](../../src/packs/emerald/application-commands.js)、[extension-intents](../../src/packs/emerald/extension-intents.js)；`PluginAPI` / `registerEmeraldCommands` / `validateEmeraldIntent` |
+| 布局与宿主位置 | [ui-registry](../../src/engine/extensions/ui-registry.js)；`UI_SLOTS` / `resolveLayout` |
 
-接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
-
-## 浏览器装配入口
-
-受信任本地插件在src/plugins/catalog.json登记模块/导出名/默认启用及工厂输入；不再向app.js增加逐插件分支。见[内容管线的插件部分](../../docs/development/CONTENT_PIPELINE.md)。新增后验证实际host装配；仅登记文件不证明功能。E2E插件必须显式测试环境启用，不能默认暴露发奖命令。此处没有热卸载或远程沙箱。
-
-## 只读查询与AI消费方
-
-纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件位于src/plugins/ai-control，真实移动回执、连续执行、事件游标和命令附状态见[插件指南](../../src/plugins/ai-control/README.md)。以moved判断移动，不把accepted或网络ok当作走动；查询用detail选择字段并保存nextCursor，gap时刷新状态。长轮询由传输承担，不能在插件事务里嵌套异步路线。测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。
-
-## 修改已有世界
-
-先读[现行世界编辑合同](../../docs/engine/world/STATE_AND_LIFECYCLE.md)，用core.world.objects取得对象ID、availability与capabilities，再通过world.patch修改；写命令需要world权限。不要用坐标临时拼ID或直接改地图/剧情目录。原作来源槽位是身份，导入不能重排；已命名业务对象保留ID。not-instantiated是待转写资料，不可当成已实现NPC；持续Actor使用actor命令。
-
-普通talk/sign可以绑定注册的对白，按id查询可看到dialoguePreview及解析错误。商店/治疗/主线使用对应领域入口；对白模板必须能独立解析，不传调用parameters。feedback:true可附有效对象/地块；反馈报错但ok:true时不可重试已提交的写入。对白与图集来源纳入存档依赖，但不支持任意跨图集铺设、撤销、冲突所有权或跨批事务。
-
-完整链路例：[world-editing](../../examples/world-editing.test.js)，在项目根运行`node --test examples/world-editing.test.js`。验证状态与证据查STATUS；不把示例存在当成已通过。它修改原生告示牌而非新增旁边的对象。失败边界见tests/world-editing.test.js；文件移动后搜索`core.world.objects`、`inspectWorldObjects`和`world.dialogue`。
-
-<!-- runnable-example: examples/world-editing.test.js -->
-```js
-import test from "node:test";
-import assert from "node:assert/strict";
-import { manifest, session } from "../tests/helpers/session.js";
-
-test("a mod discovers, replaces and reads back an existing sign dialogue", async () => {
-  let api, dialogue;
-  const plugin = manifest("sign-mod", value => {
-    api = value;
-    const exports = api.story.registerBundle("speech", { version: 1,
-      dialogues: { greeting: { name: "告示牌", lines: ["桥梁维修中。"] } },
-      scripts: {}, entries: {},
-    });
-    dialogue = exports.dialogues.greeting;
-  }, ["world", "movement"]);
-  const s = session([plugin]), map = "LittlerootTown";
-  const listing = await api.commands.dispatch("core.world.objects", { map });
-  const sign = listing.objects.find(o => o.kind === "sign" && o.x === 15 && o.y === 13);
-  assert(sign.capabilities.fields.includes("dialogue"));
-  const result = await api.commands.dispatch("core.world.patch", { feedback: true,
-    operations: JSON.stringify([{ kind: "object", map, id: sign.id, changes: { dialogue } }]),
-  });
-  assert.equal(result.changes[0].object.dialogue, dialogue);
-  assert(s.game.enter({ map, x: 15, y: 14, dir: "up" }));
-  await api.commands.dispatch("core.field.interact", {}); await s.settle();
-  assert.equal(s.dialogs.at(-1).lines[0].runs[0].text, "桥梁维修中。");
-  s.game.loadDocument(s.game.exportDocument());
-  assert.equal((await api.commands.dispatch("core.world.objects", { map, id: sign.id })).objects[0].dialogue, dialogue);
-});
-```
-
-## 可选移动玩法与骑乘素材
-
-自定义移动仍用movement + fieldActions注册。需要越障/非地面交互时先核对[导航政策](../../docs/engine/field/FIELD_ACTIONS.md)，通过navigation显式声明，不在World写某个插件或徽章分支。表现引用独立appearances/cameraProfiles/environmentLayers；规则不读取绘制结果。requiresLanding的退出需走统一移动提交，不能先把模式改成walk再校验地形。
-
-端到端锚点：[high-flight插件](../../src/plugins/high-flight/index.js)、[作者说明](../../src/plugins/high-flight/README.md)、[专项](../../examples/high-flight.test.js)。入口改名搜索`replacesTravel`、`requiresLanding`、`commitMode`。测试应验证真实命令、非法落地保持原模式、地面高度恢复、空中存读档和关闭后原移动可用；不能只断言注册表里有ID。动画/reducedMotion通过既有纯表现合同处理。
-
-骑乘不要拿战斗精灵图充当野外素材。先追C模板的图片尺寸/调色板槽/主角偏移，再导入透明PNG和输入/输出hash；代表脚本为tools/plugins/export-flight-art.py，带--source和只读--check。新素材在插件自己assets目录，运行不依赖未跟踪work。
-
-游戏外插件面板保存下次启动配置，具体优先级、startup幂等动作和错误反馈按[内容管线](../../docs/development/CONTENT_PIPELINE.md)。不要在setup开始发奖或把本地设置当玩家存档；startup通过已注册的自身动作调用领域意图。现行原作样式约束与生成工具见[界面说明](../../docs/development/EMERALD_UI.md)。
-
-## 原生队伍野外招式入口
-
-给fieldActions增加`partyMove`（已注册招式ID），即可挂入选中宝可梦的操作菜单；参考high-flight的takeoff/land和原生dive/surface。多个行动共用招式时由当前预检和priority选择，不在party-interface里按插件ID分支。查询/执行用`core.movement.party-options {uid}` / `core.movement.party-action {uid,move,destination?}`；所选个体、学会招式与Gen3徽章在执行时重查，普通Fly仍选择目的地。背包HM入口用于学习，发动入口位于菜单→宝可梦→所选个体。合同和定位搜索`partyMove`、`partyFieldMoveOptions`见[野外行动](../../docs/engine/field/FIELD_ACTIONS.md)及[原生界面](../../docs/development/EMERALD_UI.md)。
-
-测试应覆盖未学/蛋/缺徽章/无目标/UID过期与同招式双向行动；核心夹具只注册最小模拟插件，产品插件专项留examples。不要直接改队伍或借队伍中另一只已学招式代替所选个体。页面容器用data-modal-page，按钮导航只绑定button[data-page]，不能让容器也收到导航onclick。
-
-## 位置扩展与关闭插件后的进度
-
-增加挂载位置用api.ui.slot(localId,{parent,priority?})，保存返回ID后交给ui.region/ui.entry。父位置先注册；子位置自动随父位置实际挂载、继承当前UID并一起释放。不要把UI_SLOTS的根锚点数量误当成插件位置上限，也不要把新位置当成任意DOM或原生替换授权。字段、预算和例见[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)，测试搜索`Plugin-defined nested slots`。
-
-停用插件后的存档行为按[存档合同](../../docs/engine/SAVES.md)及STATUS核实。当前硬引用进入有校验的暂停区，原生冒险可继续保存；重新启用仅恢复不覆盖新进度的条目。插件自有extensions保留，当前版本仍严格校验。新增持久领域必须注册暂停/恢复适配器并验证同一存储的启停链路，不能清空依赖或直接删未知精灵/道具。插件地图或空中模式回到有效陆地，位置记录不自动传回。当前没有热卸载或历史schema迁移，模块/配置错误仍是启动问题。
+完整规则边界查 [作者指南](../../docs/development/AUTHORING.md)。设计或历史外部评审中的名字必须先找到当前注册、调用点和行为测试，才能当可用 API。

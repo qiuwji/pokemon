@@ -15,6 +15,12 @@ export function controlSnapshot(game) {
     commands: [...(game.commandBus?.definitions.values() || [])]
       .filter(d => d.network === true)
       .map(d => ({ id: d.id, schema: d.schema, mode: d.mode })),
+    save: {
+      lastSave: game.lastSave || 0,
+      warning: game.saveWarning || null,
+      protected: !!game.saveProtected,
+      conflict: !!game.saveConflict,
+    },
   };
 }
 export function registerControlCommands(game, bus) {

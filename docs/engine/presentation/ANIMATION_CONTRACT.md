@@ -25,6 +25,12 @@
 
 field anchor 使用视口中心/尺寸（默认战斗画面 320×224），驱动可提供其他视口。视图结果包含 anchor/scope、source/target、座位、属性与成功事实。取样返回分离的数据，绘制回调收到只读副本。
 
+## 图元参数与调色板注入
+
+effect 收到的 visual 在通用字段（kind/source/target/anchor/scope/seat/side/type/successful/t/progress）之外，可携带 `track.parameters` 展开的任意有限数值/字符串绘制参数。参数含义由已注册 effect 自行约定，表现层不解释；缺省时每个图元回退到自身既有的绘制行为，因此无参数的旧配方不变。当前内置图元使用的参数（示例）：颜色 `color/color2`、数量 `count`、像素 `pixelSize`、环形 `radius/reach/squash`、弹道 `lead/span/trail/wobble/arc/taper/burstAt/burst*`、火焰 `ember*`、水泡 `speed/gap/cycle/sizeStep`、状态 `base/step/lineWidth`、刀光 `steps/stepX/stepY/spread/origin*`、雷电 `drop/step/zig/zag`、光束 `growth/lineWidth`、落石/沙 `drop/fall/spread/phase`。具体取值属于内容，写在 pack 配方里。
+
+调色板是装配注入端口：`PresentationRegistry({ typeColors })` 与 `BattleDirector({ typeColors })` 接收 `(type) => colour`。取样时若配方未显式给 `color`，则用该端口解析招式属性对应的颜色；表现层不再内置属性色表（原 `TYPE_COLORS` 已移至 pack 的 `battle-palette.js`）。显式配方颜色优先于注入调色板。
+
 ## 战斗语义事件注册
 
 ```js

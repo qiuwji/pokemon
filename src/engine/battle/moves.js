@@ -153,6 +153,7 @@ export class MoveExecutor {
     b.traits?.run("move-start", initial);
     b.phase = "move-start";
     const event = initial.emit(`${b.name(mon)} 使用了 ${move.name}！`, "move", {
+      message: { id: "used-move", params: { mon: b.name(mon), move: move.name } },
       targetSeats: targets.map((s) => s.id),
       move: {
         id: move.id,
@@ -174,7 +175,7 @@ export class MoveExecutor {
         definition.requiresUserStatus &&
         mon.status !== definition.requiresUserStatus
       )
-        initial.emit("没有效果。", "failed");
+        initial.emit("没有效果。", "failed", { message: { id: "no-effect", params: {} } });
       event.move.successful = false;
       b.actionLifecycle.clear(action.seat);
       b.actionLifecycle.record(action, move.id, false);
@@ -330,7 +331,7 @@ export class MoveExecutor {
       return true;
     }
     c.missReason = "accuracy";
-    c.emit("攻击没有命中！");
+    c.emit("攻击没有命中！", "text", { message: { id: "attack-missed", params: {} } });
     return false;
   }
   deal(c) {
@@ -365,6 +366,10 @@ export class MoveExecutor {
         `${result.critical ? "击中了要害！ " : ""}${result.type === 0 ? "没有效果。" : result.type > 1 ? "效果拔群！" : result.type < 1 ? "效果不太好…" : "攻击命中了！"}`,
         "hurt",
         {
+          message: {
+            id: "move-result",
+            params: { critical: !!result.critical, type: result.type },
+          },
           targetSeat: c.other,
           hit: i + 1,
           moveId: c.move.id,

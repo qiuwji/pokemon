@@ -22,6 +22,14 @@
       "enabled": false
     },
     {
+      "id": "dev-scenarios",
+      "name": "开发测试员",
+      "description": "在若干地图放置“测试员”，交互打开传送/治疗/练习战菜单。仅用于开发测试，默认关闭。",
+      "module": "./dev-scenarios/index.js",
+      "export": "devScenariosPlugin",
+      "enabled": false
+    },
+    {
       "id": "facility-content",
       "name": "设施内容示例",
       "description": "加载华丽大赛、游戏厅及开拓区的示例内容。",

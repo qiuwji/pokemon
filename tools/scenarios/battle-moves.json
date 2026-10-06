@@ -1,0 +1,11 @@
+{
+  "name": "Battle move showcase (dev)",
+  "steps": [
+    { "command": "core.battle.start", "input": { "trainerId": "youngster" } },
+    { "command": "ai-control:observe", "input": { "detail": "battle" }, "assert": [
+      { "path": "battle.combatants.0.monster.level", "gte": 1 },
+      { "path": "battle.combatants.1.monster.level", "gte": 1 }
+    ] },
+    { "command": "core.battle.action", "input": { "kind": "move", "index": 0 } }
+  ]
+}

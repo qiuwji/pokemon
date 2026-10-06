@@ -58,7 +58,7 @@ api.story.register('gate', {
 | flag | key，value；写当前旗标，只应用于明确持久业务，不代替TEMP生命周期 |
 | reward | id稳定奖励ID，money可选非负安全整数，items可选{itemID:正整数}，flags可选布尔表；容量失败不记账 |
 | captureMonster | monster完整精灵；通过统一PartyStorageService接收，队伍6/盒子200容量失败在写入前拒绝，重复UID不再次接收 |
-| lossPenalty | 无参数；现有切片按最高队伍等级×8扣款，空队扣0，非法数值在写入前拒绝；这不是全原作罚金规则还原声明 |
+| lossPenalty | 无参数；按原作 DoWhiteOut 将金钱减半（`floor(money/2)`，与队伍无关），非法数值在写入前拒绝 |
 | completeEvent | id已注册事件ID；正常resolve在末尾自动追加，不需要重复写 |
 | battle | trainerId引用已登记训练家；或species、level（1–100）及可选options；同一会话规则，非任意C trainerbattle模式 |
 | worldPatch | operations数组；每项按WorldState合同定义kind/map/坐标/变更及scope，不直接改地图数据 |
@@ -70,7 +70,7 @@ api.story.register('gate', {
 | emote | actor必填，kind默认exclamation且需在FIELD_EMOTES中，ms可选 |
 | hide | actor必填；当前场景隐藏，不自动表示永久删除 |
 | cameraTo / cameraFollow | cameraTo取actor或position:{map,x,y}，ms可选；cameraFollow回到玩家 |
-| teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位；真正需要传送时使用，不代替行走 |
+| teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位，并可用coverMs/holdMs/revealMs（0–60000）控制遮黑/保持/淡入时长（如战败白屏保持）；真正需要传送时使用，不代替行走 |
 | wait | ms必填，有限且0–60000 |
 | presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头/objects纯对象像素偏移回调，等待场景结束；不写规则 |
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |

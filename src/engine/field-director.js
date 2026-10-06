@@ -401,6 +401,13 @@ export function validateFieldCommand(c, maps) {
     !(c.position ? coordinate(c.position) && id(c.position.map) : id(c.actor))
   )
     fail();
+  if (
+    ["scene", "teleport"].includes(c.type) &&
+    [c.coverMs, c.holdMs, c.revealMs].some(
+      (ms) => ms !== undefined && (!Number.isFinite(ms) || ms < 0 || ms > 60000),
+    )
+  )
+    fail();
   if (c.type === "scene" || c.type === "teleport") {
     if (!placed(c.position) || !DIRECTIONS[c.position.dir || "up"]) fail();
     const ids = new Set(),

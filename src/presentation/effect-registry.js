@@ -6,12 +6,38 @@ import {
 import { sampleAnimationTrack } from "./animation-timing.js";
 /** Startup registrations only. Samples contain detached data; drawing never owns domain state. */
 export class PresentationRegistry {
-  constructor({ onError = () => {} } = {}) {
+  constructor({ onError = () => {}, typeColors = null } = {}) {
     this.effects = new Map();
     this.moves = new Map();
     this.battleAnimations = new Map();
+    this.messages = new Map();
     this.sealed = false;
     this.onError = onError;
+    // Injected palette port: the pack maps an opaque damage-type id to a colour; the
+    // presentation layer never carries the type table itself.
+    this.typeColors = typeColors;
+  }
+  /**
+   * Register a battle narration template (id -> params => text). Assembly order is
+   * pack base first, then plugin overrides, so a later registration replaces an earlier one.
+   */
+  message(id, format) {
+    if (
+      this.sealed ||
+      typeof id !== "string" ||
+      !id ||
+      typeof format !== "function"
+    )
+      throw new Error("Invalid battle message");
+    this.messages.set(id, format);
+    return this;
+  }
+  /** Resolve an event's `message:{id,params}` through registered templates, else fall back to text. */
+  resolveMessage(event) {
+    const message = event?.message;
+    if (message && this.messages.has(message.id))
+      return this.messages.get(message.id)(message.params || {});
+    return event?.text || "";
   }
   effect(id, draw) {
     if (
@@ -113,7 +139,10 @@ export class PresentationRegistry {
       effects = [],
       poses = [];
     if (!source || reducedMotion) return { effects, poses };
-    const anchors = (track) =>
+    const paletteColor = this.typeColors
+        ? this.typeColors(event.move?.type)
+        : null,
+      anchors = (track) =>
       track.anchor === "targets"
         ? event.targetSeats || [event.targetSeat]
         : [sourceSeat];
@@ -129,6 +158,9 @@ export class PresentationRegistry {
         if (!target || !sampled) continue;
         effects.push({
           ...sampled.parameters,
+          ...(sampled.parameters.color === undefined && paletteColor
+            ? { color: paletteColor }
+            : {}),
           kind: track.effect,
           source: { ...source },
           target: { ...target },
@@ -137,7 +169,7 @@ export class PresentationRegistry {
           sourceSeat,
           targetSeat: seat,
           side: source.back ? 0 : 1,
-          type: event.move?.type || "normal",
+          type: event.move?.type ?? null,
           successful: success(seat),
           t: sampled.t,
           progress: sampled.progress,

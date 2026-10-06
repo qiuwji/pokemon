@@ -17,6 +17,7 @@ export const aiControl = {
           hasMore: (entries.at(-1)?.sequence ?? cursor) < journal.cursor, entries };
         const fullParty = ["party", "battle", "all"].includes(detail);
         return { protocol: 1, observationVersion: 2, busy: q.busy, position: q.position, ui: q.control.ui,
+          save: q.control.save,
           availability: o.availability, tasks: o.tasks, events,
           party: fullParty ? o.party : o.party.map(m => ({ uid: m.uid, species: m.species, name: m.name,
             level: m.level, hp: m.hp, maxHP: m.maxHP, status: m.status, types: m.types, stats: m.stats })),
