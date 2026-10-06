@@ -47,7 +47,7 @@ await api.commands.dispatch("core.field.fishing-input", { cancel: true });
 
 ## 物品、对象与地形共用的交互入口
 
-行动可声明 `triggers:["interact"]` 或 `["blocked"]`。前者由确认键选择并展示既有行动确认页；后者在普通移动受阻后选择并执行。`priority` 为整数，较小者先匹配，同优先级按完整ID的字典序；只选择资格和目标均有效的第一个定义。自动触发必须能以空输入通过schema；需要参数的行动仍走显式命令/道具入口。选择不等于提交，演出后会再次核对条件和占位。
+行动可声明 `triggers:["interact"]` 或 `["blocked"]`。前者由确认键选择并展示既有行动确认页；后者在普通移动受阻后选择并执行。`priority` 为整数，较小者先匹配，同优先级按完整ID的字典序；只选择资格和目标均有效的第一个定义。自动触发必须能以空输入通过schema；需要参数的行动仍走显式命令/道具入口。选择不等于提交，演出后会再次核对条件和占位。`interact` 触发的行动不要声明 `menu:false`：确认页按选中 id 通过 `fieldActionOptions()` 反查，`menu:false` 会在那里被过滤，导致按确认键静默无响应；`menu:false` 仅用于 `blocked` 触发或纯命令入口。
 
 `allowed/target/plan` 接收冻结视图，不直接写背包、坐标或地形。物品的 `items.actions` 仍绑定行动ID与输入，并额外检查物品持有；没有另一套物品脚本执行器。对象种类、地形行为值、徽章与招式是内容政策。移动内核不识别箱子、石块或怪力。公开纯辅助函数 `frontCell(position)` 位于 `src/engine/extensions/field-utils.js`。
 

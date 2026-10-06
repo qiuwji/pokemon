@@ -147,11 +147,12 @@ export function createDoorWarp({ director, sound = () => {}, reducedMotion = () 
   };
 }
 
-/** The door this arrival cell came out of: straight behind the player, then any neighbour. */
+/** The door this arrival cell came out of: the cell itself, then straight behind, then any neighbour. */
 function neighbourDoor(director, map, position) {
   const [bx, by] = DIRECTIONS[position.dir] || [0, 1];
   const offset = [-bx, -by];
   const order = [
+    [0, 0],
     offset,
     ...Object.values(DIRECTIONS).filter(([dx, dy]) => dx !== offset[0] || dy !== offset[1]),
   ];

@@ -233,8 +233,7 @@
       "trigger": "interact",
       "selector": {
         "map": "InsideOfTruck",
-        "script": "InsideOfTruck_EventScript_MovingBox",
-        "kind": "sign"
+        "script": "InsideOfTruck_EventScript_MovingBox"
       },
       "script": "box.read"
     },

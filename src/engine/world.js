@@ -1,5 +1,6 @@
 import {
   arrowWarpDirection,
+  arrivalDirection,
   ledgeDirection,
   blockedDirection,
   isWater,
@@ -113,7 +114,9 @@ export class World {
     if (!id) return false;
     const preview = this.entryPreview(id), destination = preview.map.warps[Number(warp.dest_warp_id)];
     if (!destination) return false;
-    const target = { map: id, ...this.warpArrival(preview, destination), dir: preview.map.indoor ? "up" : "down" };
+    const land = preview.map, index = destination.y * land.width + destination.x;
+    const target = { map: id, ...this.warpArrival(preview, destination),
+      dir: arrivalDirection(land.behavior[index], this.position.dir) };
     if (this.deferWarps) return { jump, warp: target };
     if (!this.enter(id, target.x, target.y, target.dir, preview)) return false;
     this.onStep(this.cell(target.x, target.y));

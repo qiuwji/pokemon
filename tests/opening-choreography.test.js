@@ -85,7 +85,8 @@ for(const gender of ['male','female']) {
       assert.equal(g.state.flags.neighborMet,true);
       const rival=g.field.npcs.objects(other+'2F').find(o=>o.id==='neighbor.rival');
       assert.deepEqual(pose(rival),[female?0:8,2,'up']);
-      assert(!g.field.npcs.objects(other+'2F').some(o=>o.id==='neighbor.ball'));
+      // The rival's Poké Ball stays on the desk after the first meeting.
+      assert(g.field.npcs.objects(other+'2F').some(o=>o.id==='neighbor.ball'));
       assert.equal(g.storyMusic,null); assert.equal(g.storyBusy,false); valid(s);
     });
   const downstairs=female?[[7,3],[8,4],[9,3]]:[[1,3],[2,4],[3,3]];
@@ -207,10 +208,14 @@ for (const gender of ['male','female']) {
     await enter(s,own+'1F',x,3);
     await finishStep(s,'up');
     assert.equal(g.state.position.map,own+'2F');
+    // Non-animated stair doors face south on arrival (overworld.c GetAdjustedInitialDirection).
+    assert.equal(g.state.position.dir,'down');
     const stair=g.world.map.warps[0],pos=g.state.position;
     const dir=stair.x===pos.x?(stair.y<pos.y?'up':'down'):(stair.x<pos.x?'left':'right');
     await finishStep(s,dir);
-    assert.equal(g.state.position.map,own+'1F');valid(s);
+    assert.equal(g.state.position.map,own+'1F');
+    assert.equal(g.state.position.dir,'down');
+    valid(s);
   });
   test(`${gender}: entering the neighbor home lands on the mat and mom approaches adjacent to the player`,async()=>{
     const s=setup(gender),g=s.game,female=gender==='female';

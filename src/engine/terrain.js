@@ -4,7 +4,11 @@ export const BEHAVIOR = Object.freeze({
   WEST_ARROW_WARP: 0x63,
   NORTH_ARROW_WARP: 0x64,
   SOUTH_ARROW_WARP: 0x65,
+  NON_ANIMATED_DOOR: 0x60,
+  LADDER: 0x61,
+  ANIMATED_DOOR: 0x69,
   WATER_SOUTH_ARROW_WARP: 0x6d,
+  DEEP_SOUTH_WARP: 0x6e,
   GRASS: 2,
   LONG_GRASS: 3,
   COUNTER: 128,
@@ -75,3 +79,18 @@ export const arrowWarpDirection = (code) => ({
   [BEHAVIOR.NORTH_ARROW_WARP]: "up", [BEHAVIOR.SOUTH_ARROW_WARP]: "down",
   [BEHAVIOR.WATER_SOUTH_ARROW_WARP]: "down",
 })[code];
+/**
+ * Arrival facing after a warp, by the destination metatile (src/overworld.c GetAdjustedInitialDirection).
+ * Doors and non-animated stairs face south; arrow warps face back into the map; ladders keep the
+ * direction the player was travelling. The previous indoor/outdoor guess got 1F↔2F stairs wrong.
+ */
+export const arrivalDirection = (code, previousDir = "down") => {
+  if (code === BEHAVIOR.DEEP_SOUTH_WARP) return "up";
+  if (code === BEHAVIOR.NON_ANIMATED_DOOR || code === BEHAVIOR.ANIMATED_DOOR) return "down";
+  if (code === BEHAVIOR.SOUTH_ARROW_WARP || code === BEHAVIOR.WATER_SOUTH_ARROW_WARP) return "up";
+  if (code === BEHAVIOR.NORTH_ARROW_WARP) return "down";
+  if (code === BEHAVIOR.WEST_ARROW_WARP) return "right";
+  if (code === BEHAVIOR.EAST_ARROW_WARP) return "left";
+  if (code === BEHAVIOR.LADDER) return previousDir;
+  return "down";
+};

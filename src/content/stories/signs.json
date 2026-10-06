@@ -21,16 +21,56 @@
     "littleroottown.2": {
       "commands": [
         {
-          "type": "dialog",
-          "dialogue": "littleroottown.2"
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "littleroottown.3"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "littleroottown.2"
+            }
+          ]
         }
       ]
     },
     "littleroottown.3": {
       "commands": [
         {
-          "type": "dialog",
-          "dialogue": "littleroottown.3"
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "littleroottown.2"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "littleroottown.3"
+            }
+          ]
         }
       ]
     },
@@ -533,7 +573,8 @@
     "route103.0": {
       "name": "",
       "lines": [
-        "103号道路"
+        "103号道路",
+        "↓ 古辰镇"
       ],
       "mode": "instant"
     },

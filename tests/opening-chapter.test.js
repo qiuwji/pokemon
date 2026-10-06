@@ -71,7 +71,7 @@ for (const gender of ['male', 'female']) test(`Opening ${gender}: truck, exact d
   await enter(s, other+'2F', gender === 'male' ? 5 : 3, 5);
   g.interact(); await s.settle();
   assert.equal(g.state.flags.neighborMet, true);
-  assert(!g.field.npcs.objects(other+'2F').some((o)=>o.id==='neighbor.ball'));
+  assert(g.field.npcs.objects(other+'2F').some((o)=>o.id==='neighbor.ball'));
   // Existing rescue/rival battle rules are verified in cutscene/battle suites; arrange the dex receipt here.
   g.state.flags.pokedex = true;
   await enter(s, 'LittlerootTown', 11, 2);

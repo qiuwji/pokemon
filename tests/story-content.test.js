@@ -476,3 +476,39 @@ test("Dialogue history trims oldest confirmed entries within both persistence li
   assert.equal(progress.history.length, 8);
   assert(validDialogueHistory(progress.history));
 });
+
+test("The rival's Poké Ball still reads after the first meeting", async () => {
+  const s = session();
+  const g = s.game, map = "LittlerootTown_MaysHouse_2F";
+  g.state.playerGender = "male";
+  const ball = { id: "neighbor.ball", map, kind: "talk", name: "精灵球", x: 5, y: 4 };
+  g.state.flags.neighborMet = false;
+  assert(
+    JSON.stringify(g.story.resolve("interact", g.state, { map, object: ball })).includes("meet.male"),
+    "the ball triggers the first meeting before it is read",
+  );
+  g.state.flags.neighborMet = true;
+  await g.runStory(g.story.resolve("interact", g.state, { map, object: ball }));
+  await s.settle();
+  const lines = s.dialogs.at(-1).lines.flatMap((l) =>
+    typeof l === "string" ? [l] : l.runs.map((r) => r.text),
+  );
+  assert.match(lines.join(""), /精灵球/);
+});
+
+test("Every imported sign resolves to a real script instead of the untranslated fallback", () => {
+  const s = session();
+  for (const map of Object.keys(s.db.maps))
+    for (const sign of s.db.maps[map].signs || [])
+      for (const gender of ["male", "female"]) {
+        s.game.state.playerGender = gender;
+        const commands = s.game.story.resolve("interact", s.game.state, {
+          map,
+          object: { map, script: sign.script, kind: "sign", x: sign.x, y: sign.y },
+        });
+        assert(
+          !JSON.stringify(commands).includes("common.interactions.2"),
+          `${map} ${sign.script} (${gender}) falls back to the untranslated sign text`,
+        );
+      }
+});

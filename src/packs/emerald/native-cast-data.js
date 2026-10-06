@@ -13,7 +13,7 @@ export const NATIVE_CAST = readOnly({
       { when: all(not("rescued"), not("neighborMet")), changes: { movementType: "MOVEMENT_TYPE_FACE_DOWN" } },
       { when: all(not("rescued"), flag("neighborMet")), changes: { movementType: "MOVEMENT_TYPE_FACE_UP" } },
     ] }),
-    { id: "littleroot.truck", actor: "Truck", kind: "talk", x: 3, y: 10, sourceLocalId: "5", name: "搬运卡车", text: "", when: not("introDone"), gender: { female: { x: 12, sourceLocalId: "6" } } },
+    { id: "littleroot.truck", actor: "Truck", kind: "prop", x: 3, y: 10, sourceLocalId: "5", name: "搬运卡车", text: "", when: not("introDone"), gender: { female: { x: 12, sourceLocalId: "6" } } },
     talk(12, 13, "FatMan", "npc.talk.2", { when: flag("introDone") }),
     talk(5, 8, "Mom", "npc.mom.welcome", { id: "littleroot.mom", sourceLocalId: "LOCALID_LITTLEROOT_MOM", when: any(all(not("introDone"), flag("momOutside")), all(flag("pokedex"), not("runningShoes"))), gender: { female: { x: 14 } } }),
     talk(14, 17, "Boy2", "npc.talk.3"),

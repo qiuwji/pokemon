@@ -1094,16 +1094,7 @@
         "map": "LittlerootTown_BrendansHouse_2F",
         "script": "LittlerootTown_BrendansHouse_2F_EventScript_WallClock"
       },
-      "script": "clock.male",
-      "requires": {
-        "compare": {
-          "query": {
-            "id": "playerGender"
-          },
-          "op": "eq",
-          "value": "male"
-        }
-      }
+      "script": "clock.male"
     },
     "tv.male": {
       "trigger": "mapEnter",
@@ -1245,16 +1236,7 @@
         "map": "LittlerootTown_MaysHouse_2F",
         "script": "LittlerootTown_MaysHouse_2F_EventScript_WallClock"
       },
-      "script": "clock.female",
-      "requires": {
-        "compare": {
-          "query": {
-            "id": "playerGender"
-          },
-          "op": "eq",
-          "value": "female"
-        }
-      }
+      "script": "clock.female"
     },
     "tv.female": {
       "trigger": "mapEnter",

@@ -7,9 +7,9 @@ export function openingObjects(state) {
     ...extra,
   });
   if (map === 'InsideOfTruck') return [
-    native('truck.box.top', 'MovingBox', 'LOCALID_TRUCK_BOX_TOP'),
-    native('truck.box.left', 'MovingBox', 'LOCALID_TRUCK_BOX_BOTTOM_L'),
-    native('truck.box.right', 'MovingBox', 'LOCALID_TRUCK_BOX_BOTTOM_R'),
+    native('truck.box.top', 'MovingBox', 'LOCALID_TRUCK_BOX_TOP', { script: 'InsideOfTruck_EventScript_MovingBox' }),
+    native('truck.box.left', 'MovingBox', 'LOCALID_TRUCK_BOX_BOTTOM_L', { script: 'InsideOfTruck_EventScript_MovingBox' }),
+    native('truck.box.right', 'MovingBox', 'LOCALID_TRUCK_BOX_BOTTOM_R', { script: 'InsideOfTruck_EventScript_MovingBox' }),
   ];
   const home = /LittlerootTown_(Brendans|Mays)House_(1F|2F)/.exec(map);
   if (!home) return null;
@@ -26,19 +26,20 @@ export function openingObjects(state) {
       { kind: 'healMom', name: '妈妈', text: '旅行中要注意安全。' })];
     if (stage < 6) cast.push(
       native('house.mover.0', 'VigorothCarryingBox', mirrored ? '3' : '2', { name: '过动猿', text: '咕哦！' }),
-      native('house.mover.1', 'VigorothFacingAway', mirrored ? '2' : '3', { name: '过动猿', text: '咕哦！' }),
+      native('house.mover.1', 'VigorothFacingAway', mirrored ? '2' : '3', { name: '过动猿', text: '呜呜！' }),
     );
     return cast;
   }
   if (isOwn) return state.clock?.initialized && !f.roomChecked
     ? [native('house.mom.upstairs', 'Mom', 'LOCALID_PLAYERS_HOUSE_2F_MOM')]
     : [];
-  const cast = [];
-  if (!f.neighborMet) cast.push({
+  const cast = [{
+    // The rival's Poké Ball stays on the desk after the first meeting; it is the
+    // trigger before, and an inspectable keepsake afterwards.
     id: 'neighbor.ball', x: mirrored ? 5 : 3, y: 4, actor: 'ItemBall', kind: 'talk', name: '精灵球',
     script: `LittlerootTown_${home[1]}House_2F_EventScript_RivalsPokeBall`,
     movement: { mode: 'still', dir: 'down', rangeX: 0, rangeY: 0 },
-  });
+  }];
   if (f.meetingRival || f.neighborMet) cast.push(native('neighbor.rival',
     mirrored ? 'MayNormal' : 'BrendanNormal', 'LOCALID_RIVALS_HOUSE_2F_RIVAL',
     { name: mirrored ? '小遥' : '小悠', text: '爸爸还在野外研究宝可梦呢。' }));

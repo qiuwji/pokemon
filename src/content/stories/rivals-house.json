@@ -114,6 +114,22 @@
         "你有没有自己的宝可梦呀？"
       ]
     },
+    "rival-ball.may": {
+      "name": "精灵球",
+      "lines": [
+        "这是小遥的精灵球！",
+        "还是原样放着比较好。"
+      ],
+      "mode": "instant"
+    },
+    "rival-ball.brendan": {
+      "name": "精灵球",
+      "lines": [
+        "这是小悠的精灵球！",
+        "还是原样放着比较好。"
+      ],
+      "mode": "instant"
+    },
     "mom-before": {
       "name": "小田卷博士的妻子",
       "lines": [
@@ -143,6 +159,34 @@
     }
   },
   "scripts": {
+    "ball.read": {
+      "commands": [
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "rival-ball.brendan"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "rival-ball.may"
+            }
+          ]
+        }
+      ]
+    },
     "mom.male": {
       "commands": [
         {
@@ -2177,6 +2221,14 @@
     }
   },
   "entries": {
+    "ball.read": {
+      "trigger": "interact",
+      "priority": 10,
+      "selector": {
+        "objectId": "neighbor.ball"
+      },
+      "script": "ball.read"
+    },
     "mom.male": {
       "trigger": "mapEnter",
       "priority": 30,
