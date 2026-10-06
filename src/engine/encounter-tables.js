@@ -1,12 +1,35 @@
 import { ConditionQueries } from "./condition-queries.js";
-import { readOnly } from "./extensions/values.js";
+import { readOnly, validateSchema } from "./extensions/values.js";
 import { validateCondition, matchesCondition } from "./conditions.js";
+import { validateAiBinding } from "./battle/strategy-contract.js";
+const emptySchema = () => ({
+  type: "object",
+  properties: {},
+  required: [],
+  additionalProperties: false,
+});
 /** Named encounter tables can target existing maps without replacing the immutable map catalog. */
 export class EncounterTableRegistry {
   constructor(definitions = {}, db) {
     this.maps = db.maps;
     this.tables = [];
     this.queries = new ConditionQueries(db.conditionQueries);
+    // A wild encounter may carry a creature-only `ai`; it is content on the table, not saved with
+    // the ticket, and is the only fair "intelligence" lever for wild creatures.
+    this.aiLookups =
+      db.creatureStrategies && db.battleStrategies
+        ? {
+            trainerLookup: (sid) => {
+              const d = db.battleStrategies[sid];
+              return d?.version === 2 ? d : null;
+            },
+            creatureLookup: (sid) => db.creatureStrategies[sid] || null,
+            attachment: (aid) => {
+              const d = db.battleAttachments?.[aid];
+              return d ? validateSchema(d.parameters || emptySchema()) : null;
+            },
+          }
+        : null;
     for (const [id, t] of Object.entries(definitions)) {
       if (
         !t ||
@@ -20,6 +43,7 @@ export class EncounterTableRegistry {
               "requires",
               "priority",
               "rod",
+              "ai",
             ].includes(k),
         ) ||
         !db.maps[t.map] ||
@@ -59,13 +83,26 @@ export class EncounterTableRegistry {
         "encounter.requires",
         this.queries,
       );
-      this.tables.push(readOnly({ id, ...t }));
+      const ai =
+        t.ai === undefined
+          ? undefined
+          : this.aiLookups
+            ? validateAiBinding(t.ai, { path: id, ...this.aiLookups })
+            : (() => {
+                throw new Error(
+                  `Encounter table ${id}: ai requires registered strategies`,
+                );
+              })();
+      this.tables.push(readOnly({ id, ...t, ...(ai ? { ai } : {}) }));
     }
     this.tables.sort(
       (a, b) =>
         (b.priority || 0) - (a.priority || 0) ||
         (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
     );
+  }
+  table(id) {
+    return this.tables.find((t) => t.id === id) || null;
   }
   select(map, area, state, { rod } = {}) {
     return (

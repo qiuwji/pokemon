@@ -45,6 +45,7 @@ export const CONTENT_KINDS = Object.freeze([
   "encounters",
   "encounterPolicies",
   "battleStrategies",
+  "creatureStrategies",
   "conditionQueries",
   "battleStates",
   "forms",

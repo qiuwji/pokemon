@@ -6,6 +6,7 @@ import { FieldContacts } from "../src/engine/field-contacts.js";
 import { GEN3_ELEVATION } from "../src/engine/rules/gen3/elevation.js";
 
 import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
 import { encounterFixture } from "./helpers/encounter-extension-fixture.js";
 
 test("Channel policies select one eligible priority and explicit suppression never falls through", () => {
@@ -667,4 +668,44 @@ test("Rejected encounter custody leaves its ticket and actor reusable and does n
   assert.equal(s.api.query().encounters[0].claimed, false);
   assert(s.api.query().actors[actor.uid]);
   assert(validateSave(s.game.exportDocument().state, s.db, s.catalog, s.host));
+});
+
+test("A wild encounter table's creature ai flows through prepare and request into the real battle", async () => {
+  const s = encounterFixture({
+      strategies: (api) => ({
+        wary: api.content.register("creatureStrategies", "wary", {
+          version: 1,
+          memory: objectSchema({}),
+          score: (view) => ({
+            scores: view.candidates.map((c) => ({
+              candidateId: c.id,
+              value: 1,
+            })),
+          }),
+        }),
+      }),
+      ai: (registered) => ({
+        creature: { id: registered.wary },
+        information: "observed",
+        choice: { mode: "best", band: 0 },
+      }),
+    }),
+    { actor } = await s.spawn(),
+    { ticket } = await s.api.commands.dispatch("core.encounter.prepare", {
+      actor: actor.uid,
+      area: "land",
+    });
+  await s.api.commands.dispatch("core.field.move", { direction: "right" });
+  const edge = s.api.query().contacts[0];
+  const started = await s.api.commands.dispatch("core.encounter.request", {
+    ticket: ticket.id,
+    contact: edge.sequence,
+  });
+  assert.equal(started.ok, true);
+  const controller = [...s.game.battle.roster.controllers.values()].find(
+    (c) => c.kind === "ai",
+  );
+  assert.equal(controller.ai.creature.id, "encounter-lab:wary");
+  assert.equal(controller.ai.information, "observed");
+  assert.deepEqual(controller.ai.choice, { mode: "best", band: 0 });
 });

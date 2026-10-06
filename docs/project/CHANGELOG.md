@@ -1,5 +1,22 @@
 # 当前开发与验证记录
 
+## 2026-10-06 · 两层战斗 AI（训练家 + 个体）
+
+按技术方案实现两层策略闭环，**旧策略逐字节保留**：
+
+- **注册/绑定**：`creatureStrategies` 新内容种类；`battleStrategies` 兼容旧 `decide` 与新版 `version:2`（`score`/`scoreJoint`/`init`）。训练家/队员 `ai`（`trainer`/`creature`/`information`/`choice`/`variants`）启动校验，队员优先→训练家默认；`strategy` 与 `ai` 不可并存；按 **UID** 绑定到 `controller.ai.creatures`，不写 `Monster`。共享校验 `battle/strategy-contract.js`（候选集成员/去重/有限值/`[-1e6,1e6]`/理由≤8×80/`nextMemory` schema/`scoreJoint`/`choice`/`variants`）。
+- **候选**：`battle/candidate-service.js` 统一生成带稳定 ID 的合法候选（招式/合法目标/旧增强/声明式 `ai.variants` 附加/换人/道具/接替）；不消费 PP/道具/额度/RNG。旧路径经同一服务投影回原 action，集合与顺序不变。
+- **决策**：`battle/decision-service.js` 的 `BattleAiRuntime` 合成两层评分、`best`/`topBand`（独立 AI RNG，派生自战斗种子 + 控制者 ID，不动游戏 RNG）、按 UID/控制者/观察方记忆、解释记录；`scoreJoint` 只加组合分不写记忆。
+- **信息边界**：`battle/ai-observation.js` 的 `observed` 结构上不读隐藏数据（对手未登场/未公开招式、特性、持有物、精确能力值与隐藏派生估计都不在投影内）；`full` 仅测试/特殊规则。`analysis.js` 增 `coverage`/`confidence`，`publicOnly` 不加特性修饰，隐藏数据无法从精确伤害反推。
+- **接替**：倒下候补与自主/接棒接替复用同一服务；吼叫等规则强制换人仍走原 `replacementPolicies`。`BattleCheckpoint` 覆盖记忆/知识/AI RNG/决策/计划/解释，失败整体回滚。双打按控制者联合评分（每席位保留候选 + 基础退路，组合前排除同候补/道具/共享额度冲突，叠加 `scoreJoint`）。
+- **入口**：`core.battle.ai-view` 只读解释查询。野生配置放在**注册遇敌表**的可选 `ai`（仅个体层，无训练家层），由 `EncounterTableRegistry` 校验规范化；凭证仍只存 table id，`encounter.request` 按 table 解析后经 `startEncounterBattle(..., ai)` 传入战斗——**暗雷/钓鱼/碎岩/Actor 四条入口共用此路径，不改存档合同**（`EncounterTickets` 保持 species/level）。未配置野生仍原随机（最弱）。
+- **难度/智能程度约定（内容层，无引擎特判）**：野生默认不绑训练家层（随机或个体层弱策略）；训练家按剧情在 `ai` 里选不同 `battleStrategies`/`creatureStrategies` 实现、传 `parameters`、并用 `choice.mode:"best"|"topBand"+band` 调宽容度。`information` 只区分观察边界，不作难度，符合"不偷看/不加数值/不改命中"。
+- **类型/文档**：`contracts.d.ts`、`STATES_AND_ACTIONS.md`、`emerald-battle-rules` Skill 同步；代表例 `examples/ai-strategy.test.js`。
+
+**验证**：核心 **1120/1120**、插件 **54/54**、`npm run check` 全绿。
+
+**未完成/边界**（据实记录）：分析项仍以现有纯公式为主，未覆盖全部效果类别的结构化收益；双打联合经有状态 AI 回调完成，未新增独立"每控制者计划"命令；难度分层目前是内容约定（选策略 id/参数/band），未内置具体档位策略实现。以上不影响旧行为与已通过项。
+
 ## 2026-10-06 · 治疗机精灵球右移、跑步鞋物品图标
 
 - **宝可梦中心治疗球位置**：治疗球基准由原作锚点 `(93,36)` 右移 4 像素到 `(97,36)`，使其落在本作治疗机贴图的格槽中心。

@@ -36,6 +36,10 @@ description: 演进现有绿宝石战斗规则、招式效果、状态、训练�
 
 以一个真实新效果/状态/策略完成公开战斗。验证合法/非法选择、涉及的阶段次序、目标/来源离场、回合期限、失败回滚与PP/RNG；只查影响范围。更新审计对应条目、STATUS和证据，不写“354招式全部完成”之类无法由当前证明支持的结论。
 
+## 两层策略（训练家 + 个体）
+
+保留旧 `battleStrategies.decide(view)→index`（原视图/原索引/原随机消费）。新版训练家策略 `version:2`（`score`/`scoreJoint`/`init` + `parameters`/`memory`）与个体策略 `creatureStrategies`（`version:1`，按 UID）由宿主 `BattleAiRuntime` 合成为 `训练家贡献 + 个体贡献`；`best`/`topBand` 用独立 AI 随机流，不动游戏 RNG。绑定在训练家/队员 `ai`（`strategy` 与 `ai` 不可并存），队员优先、训练家默认。候选由 `BattleCandidateService` 统一生成（招式/目标/旧增强/声明式 `ai.variants`/换人/道具/接替），不消费 PP/道具/额度/RNG。`observed` 结构上不读隐藏数据，`full` 仅测试/特殊规则；未支持效果返回未知。记忆按控制者/UID、知识按观察方保存，`BattleCheckpoint` 一并恢复记忆/知识/AI RNG/决策/计划/解释。接替复用同一服务，规则强制换人仍走 `replacementPolicies`。只读解释查询 `core.battle.ai-view`。野生只带个体策略：配置放**注册遇敌表**的可选 `ai`，`encounter.request` 按 table 解析后经 `startEncounterBattle(..., ai)` 进战斗（暗雷/钓鱼/碎岩/Actor 共用，凭证只存 species/level，不改存档）。难度是内容约定：选不同策略实现 + `parameters` + `choice.band`（野生默认不绑训练家层=弱；训练家按剧情给 id/参数/宽容度），`information` 只区分观察边界、不作难度。代表例见 [ai-strategy.test.js](../../examples/ai-strategy.test.js) 与 [encounter-extensions.test.js](../../tests/encounter-extensions.test.js)。
+
 ## 招式注册与效果速查
 
 `api.content.register(kind, localId, definition)` 返回 `插件ID:localId`。先注册 `moveEffects`，再把返回ID放到 `moves.effect`；具体招式基础字段见下方可运行示例。招式的 `target` 是战斗选目标模式；效果的 `target` 只允许 self/opponent，二者不要混用。

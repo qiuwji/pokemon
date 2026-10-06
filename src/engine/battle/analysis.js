@@ -1,7 +1,11 @@
 import { actionMove } from "./moves.js";
 import { effectiveness } from "../model.js";
-/** Conservative decision observations. Pure formulas use a local mean roll, never gameplay RNG. */
-export function analyzeCandidate(b, action) {
+/**
+ * Conservative decision observations. Pure formulas use a local mean roll, never gameplay RNG.
+ * `publicOnly` skips trait modifiers entirely so an `observed` AI cannot infer hidden abilities or
+ * held items from a precise damage estimate (the value must not be computed and then hidden).
+ */
+export function analyzeCandidate(b, action, { publicOnly = false } = {}) {
   const mon = b.roster.occupant(action.seat);
   if (action.kind === "switch") {
     const target = b.roster.owner(action.seat).party[action.index];
@@ -27,10 +31,13 @@ export function analyzeCandidate(b, action) {
     action.target?.kind === "seat"
       ? [b.roster.seat(action.target.id)]
       : b.targeting.candidates(action.seat, move);
+  const known = definition?.supported !== false;
   return {
     kind: "move",
     move,
     definition,
+    coverage: !known ? "unknown" : move.power > 0 ? "estimated" : "exact",
+    confidence: !known ? "none" : publicOnly ? "public" : "full",
     actor: {
       uid: mon.uid,
       hp: mon.hp,
@@ -50,8 +57,9 @@ export function analyzeCandidate(b, action) {
       const types = b.traits.types(s.id),
         type = effectiveness(move.type, types, b.db.typeChart);
       // Formula approximation excludes dynamic preparation, fixed damage, criticals and secondary effects.
+      // `publicOnly` uses no trait modifier at all, so hidden abilities/items cannot be inferred.
       const amount =
-        move.power > 0
+        move.power > 0 && known
           ? b.rules.damage(
               b.forms.effective(mon),
               b.forms.effective(target),
@@ -65,8 +73,10 @@ export function analyzeCandidate(b, action) {
                 spread: mode === "opponents" && targets.length > 1 ? 0.5 : 1,
                 attackerTypes: b.traits.types(action.seat),
                 defenderTypes: types,
-                modifier: (phase, v, c) =>
-                  b.traits.calculate(phase, v, { ...context, ...c }),
+                modifier: publicOnly
+                  ? (_phase, value) => value
+                  : (phase, v, c) =>
+                      b.traits.calculate(phase, v, { ...context, ...c }),
               },
             ).amount
           : 0;

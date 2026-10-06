@@ -584,9 +584,76 @@ export type ContentKind =
   | "encounters"
   | "encounterPolicies"
   | "battleStrategies"
+  | "creatureStrategies"
   | "conditionQueries"
   | "battleStates"
   | "forms";
+/** Information boundary declared by a controller's `ai` block. */
+export type InformationMode = "observed" | "full";
+export interface StrategyScoreEntry {
+  candidateId: string;
+  value: number;
+  reasons?: readonly string[];
+}
+export interface StrategyScoreResult {
+  scores: readonly StrategyScoreEntry[];
+  nextMemory?: unknown;
+}
+export interface JointScoreEntry {
+  proposalId: string;
+  value: number;
+  reasons?: readonly string[];
+}
+/** Detached, read-only views handed to strategy callbacks; the host owns legality, RNG and memory. */
+export interface StrategyInitView {
+  readonly controller: string;
+  readonly team: readonly unknown[];
+  readonly opponents: readonly unknown[];
+  readonly parameters: Readonly<Record<string, unknown>>;
+}
+export interface TrainerStrategyView extends StrategyInitView {
+  readonly decisionId: string;
+  readonly mode: "turn" | "replacement";
+  readonly candidates: readonly unknown[];
+  readonly analyses: readonly unknown[];
+  readonly knowledge: Readonly<Record<string, unknown>>;
+  readonly memory: Readonly<Record<string, unknown>>;
+}
+export interface JointStrategyView extends TrainerStrategyView {
+  readonly proposals: readonly unknown[];
+}
+export interface CreatureStrategyView extends TrainerStrategyView {
+  readonly actor: string;
+}
+/** Controller-level plan; combined with creature-level preferences by the host decision service. */
+export interface TrainerStrategyV2 {
+  version: 2;
+  parameters?: unknown;
+  memory?: unknown;
+  init?(view: Readonly<StrategyInitView>): unknown;
+  score(view: Readonly<TrainerStrategyView>): StrategyScoreResult;
+  scoreJoint?(view: Readonly<JointStrategyView>): readonly JointScoreEntry[];
+}
+/** Individual action preference, bound by creature UID and inherited from the trainer default. */
+export interface CreatureStrategyDefinition {
+  version: 1;
+  parameters?: unknown;
+  memory?: unknown;
+  init?(view: Readonly<StrategyInitView>): unknown;
+  score(view: Readonly<CreatureStrategyView>): StrategyScoreResult;
+}
+export interface TrainerAiBinding {
+  trainer?: { id: string; parameters?: Readonly<Record<string, unknown>> };
+  creature?: { id: string; parameters?: Readonly<Record<string, unknown>> };
+  information?: InformationMode;
+  choice?: { mode: "best" | "topBand"; band?: number };
+  variants?: readonly {
+    attachments: readonly {
+      id: string;
+      parameters?: Readonly<Record<string, unknown>>;
+    }[];
+  }[];
+}
 export type EncounterArea = "land" | "water" | "fishing" | "rock";
 export interface EncounterPolicyContext {
   readonly position: Readonly<Position>;

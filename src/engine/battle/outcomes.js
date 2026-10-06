@@ -154,10 +154,15 @@ export class BattleOutcomes {
     if (b.ended) return;
     for (const seat of b.roster.seats.values()) {
       if (b.roster.occupant(seat.id)?.hp > 0) continue;
-      const next = b.roster.bench(seat.id)[0];
-      if (next && b.roster.owner(seat.id).kind === "ai") {
+      const owner = b.roster.owner(seat.id),
+        next = b.roster.bench(seat.id)[0];
+      if (next && owner.kind === "ai") {
         b.phase = "replacement";
-        b.actions.switch(seat.id, next.index);
+        const chosen =
+          b.aiRuntime && owner.ai
+            ? b.aiRuntime.decideReplacement(seat.id, "faint")
+            : { index: next.index };
+        b.actions.switch(seat.id, chosen.index);
       } else if (!next && seat.index !== -1) {
         const old = b.roster.occupant(seat.id);
         seat.index = -1;

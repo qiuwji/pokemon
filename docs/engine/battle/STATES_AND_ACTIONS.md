@@ -79,6 +79,14 @@ RoundResolver 保存尚未执行的同回合行动；遇到待选择立即暂停
 
 tactical 参考原作“避免无效招式、争取击倒、考虑存活和状态”的策略分类，但没有解释原作 AI 脚本。原作精确 AI 的范围与证据需后续独立维护，不把这种策略等同原作训练家全部决策。
 
+上层两层策略为独立新增合同，旧 `decide(view)→index` 路径保持原视图/原索引/原随机消费不变：
+- 训练家策略 `battleStrategies` 支持 `version:2`（`score`/`scoreJoint`/`init` + `parameters`/`memory` schema），控制者层；个体策略 `creatureStrategies`（`version:1`）按 UID 绑定，评价自身招式与目标。绑定在训练家/队员 `ai`（`trainer`/`creature`/`information`/`choice`/`variants`），队员优先、训练家默认、未配置则零贡献；`strategy` 与 `ai` 不可并存。
+- 宿主 `BattleAiRuntime` 合成 `训练家贡献 + 个体贡献`，`best` 取最高分、`topBand` 在阈值内用**独立 AI 随机流**采样；不改游戏 RNG。`BattleCandidateService` 统一生成带稳定 ID 的合法候选（招式/目标/旧增强/声明式附加变体/换人/道具/接替），不消费 PP/道具/额度/RNG。
+- `observed` 信息模式结构上不读取隐藏数据（对手未登场/未公开的招式、特性、持有物、精确能力值与隐藏派生估计都不在投影内）；`full` 仅用于测试/特殊规则。分析项声明 `coverage`/`confidence`，未支持效果返回未知而非伪造零收益。
+- 团队记忆按控制者、个体记忆按 UID、公开知识按观察方保存；完整决策验证后宿主才应用 `nextMemory`。记忆、知识、AI RNG、决策序号、计划缓存与解释记录一并纳入 `BattleCheckpoint`，失败整体回滚。
+- 接替三类：倒下候补与自主/接棒接替进入同一决策服务；吼叫等规则强制换人仍按原 `replacementPolicies`。双打按控制者联合评分（每席位保留前若干候选 + 一个基础退路，组合前排除同一候补/道具/共享额度冲突，再叠加 `scoreJoint`）。`core.battle.ai-view` 只读读取已记录的解释，不重新评分或取随机。
+- 野生遭遇只带个体策略：配置放在**注册遇敌表**的可选 `ai`，`encounter.request` 按凭证的 table 解析后经 `startEncounterBattle(..., ai)` 传入战斗，凭证仍只存 species/level（不改存档合同）；暗雷/钓鱼/碎岩/Actor 共用该路径。未配置的野生遭遇继续走原随机行为（最弱）。难度是内容约定：选不同策略实现 + `parameters` + `choice.band`（宽容度），`information` 只区分观察边界、不作难度，招式名称/形态特判不进入引擎。
+
 
 ---
 

@@ -65,6 +65,7 @@ export class BattleCheckpoint {
     this.events = [...b.recorder.events];
     this.rng =
       typeof b.rng.snapshot === "function" ? b.rng.snapshot() : undefined;
+    this.ai = b.aiRuntime ? b.aiRuntime.snapshot() : null;
   }
   restore() {
     const b = this.battle;
@@ -93,5 +94,6 @@ export class BattleCheckpoint {
     b.recorder.sequence = this.sequence;
     b.recorder.events = this.events;
     if (this.rng !== undefined) b.rng.restore(this.rng);
+    if (this.ai) b.aiRuntime.restore(this.ai);
   }
 }

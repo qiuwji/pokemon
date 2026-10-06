@@ -73,6 +73,7 @@ export class EmeraldAdventure {
     this.trainerDefinitions = catalog.trainers || TRAINERS;
     this.battleStrategies = new BattleStrategyRegistry(
       catalog.battleStrategies,
+      catalog.creatureStrategies,
     );
     this.encounterTables = new EncounterTableRegistry(catalog.encounters, db);
     Object.assign(this, createEmeraldStory({

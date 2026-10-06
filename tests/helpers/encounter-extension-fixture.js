@@ -5,6 +5,8 @@ export function encounterFixture({
   permissions = ["actors", "encounters", "movement"],
   decide = () => null,
   behavior = null,
+  strategies = () => ({}),
+  ai = null,
   extra = () => {},
 } = {}) {
   let api;
@@ -12,6 +14,7 @@ export function encounterFixture({
     "encounter-lab",
     (a) => {
       api = a;
+      const registered = strategies(a) || {};
       a.content.register("maps", "field", {
         ...base.maps.LittlerootTown,
         id: "encounter-lab:field",
@@ -31,6 +34,7 @@ export function encounterFixture({
         map: "encounter-lab:field",
         area: "land",
         rate: 180,
+        ...(ai ? { ai: typeof ai === "function" ? ai(registered) : ai } : {}),
         entries: [{ species: "zigzagoon", weight: 1, min: 2, max: 2 }],
       });
       a.content.register("encounterPolicies", "control", {

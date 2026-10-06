@@ -540,6 +540,12 @@ export function registerEmeraldCommands(game, bus) {
     { concurrent: true, ready: () => !!game.battle },
   );
   register(
+    "battle.ai-view",
+    objectSchema({}),
+    () => game.battle?.aiRuntime?.explanations() ?? [],
+    { concurrent: true, ready: () => !!game.battle, permission: "battle" },
+  );
+  register(
     "battle.action",
     objectSchema(
       {

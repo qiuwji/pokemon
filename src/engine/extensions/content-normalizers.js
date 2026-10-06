@@ -1,5 +1,9 @@
 import { readOnly, validateSchema } from "./values.js";
 import { safeTrait } from "./catalog.js";
+import {
+  normalizeTrainerStrategy,
+  normalizeCreatureStrategy,
+} from "../battle/strategy-contract.js";
 
 const wrapContext = (fn, evaluate) => (context) =>
   evaluate(fn, readOnly(context));
@@ -127,10 +131,10 @@ export const CONTENT_NORMALIZERS = Object.freeze({
     };
   },
   battleStrategies(value, evaluate) {
-    const original = value;
-    if (typeof original.decide !== "function")
-      throw new Error("Battle strategy requires decide");
-    return { ...value, decide: (c) => evaluate(original.decide, readOnly(c)) };
+    return normalizeTrainerStrategy(value, evaluate);
+  },
+  creatureStrategies(value, evaluate) {
+    return normalizeCreatureStrategy(value, evaluate);
   },
   encounterPolicies(value, evaluate) {
     return {

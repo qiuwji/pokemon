@@ -38,6 +38,7 @@ import { GEN3_HELD_ITEMS } from "./rules/gen3/held-items.js";
 import { GEN3_GLOBAL_HOOKS } from "./rules/gen3/global-rules.js";
 import { GEN3_ABILITIES } from "./rules/gen3/abilities.js";
 import { randomDecision } from "./battle/ai.js";
+import { BattleAiRuntime } from "./battle/decision-service.js";
 
 /** Composition facade. Domain services use seat IDs; numeric convenience references are singles aliases. */
 export class Battle {
@@ -56,7 +57,9 @@ export class Battle {
     items = createItemService({}),
     topology,
     format = "singles",
-    ai = randomDecision,
+    ai = null,
+    strategies = null,
+    aiBindings = null,
     environment = {},
     weatherDefinitions = GEN3_BATTLE_WEATHER,
     states = {},
@@ -72,7 +75,10 @@ export class Battle {
   }) {
     if (!["singles", "doubles"].includes(format))
       throw new Error("Unknown battle format");
-    Object.assign(this, { db, rng, trainer, trainerId, script, items, ai });
+    Object.assign(this, { db, rng, trainer, trainerId, script, items });
+    // The isolated AI stream never advances the gameplay RNG; it is derived from this snapshot.
+    this.aiSeed = typeof rng.snapshot === "function" ? rng.snapshot() : 0;
+    this.injectedAi = ai;
     this.weatherRegistry = new BattleWeatherRegistry(weatherDefinitions);
     if (environment.weather !== undefined && environment.weather !== null)
       this.weatherRegistry.get(environment.weather);
@@ -215,6 +221,17 @@ export class Battle {
       hooks: [...(traits.hooks || []), ...attachmentModifierHooks],
     });
     this.statuses = new BattleMajorStatus(this);
+    if (aiBindings)
+      for (const [controllerId, config] of Object.entries(aiBindings))
+        if (this.roster.controllers.has(controllerId))
+          this.roster.controllers.get(controllerId).ai = config;
+    this.aiRuntime = strategies ? new BattleAiRuntime(this, strategies) : null;
+    this.ai =
+      this.injectedAi ||
+      ((battle, seat) =>
+        battle.aiRuntime
+          ? battle.aiRuntime.decideSeat(seat)
+          : randomDecision(battle, seat));
     this.entryView = this.snapshot();
     const initial = new BattleCheckpoint(this);
     try {

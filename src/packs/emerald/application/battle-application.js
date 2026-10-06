@@ -92,6 +92,7 @@ export class BattleApplication {
       rng: this.rng,
       strategies: this.battleStrategies,
       inventory: this.inventory,
+      attachments: this.catalog.battleAttachments,
     });
     return this.startBattle(
       encounter.enemyParty,
@@ -114,6 +115,7 @@ export class BattleApplication {
       rng: this.rng,
       strategies: this.battleStrategies,
       inventory: this.inventory,
+      attachments: this.catalog.battleAttachments,
     });
     return this.startBattle(
       encounter.enemyParty,
@@ -126,9 +128,15 @@ export class BattleApplication {
       recover,
     );
   }
-  async startEncounterBattle(monster, resultPlan, recover = null) {
+  async startEncounterBattle(monster, resultPlan, recover = null, ai = null) {
     return this.startBattle(
-      monster, {}, null,
+      monster,
+      // A configured wild encounter carries its strategy with the battle only; the captured
+      // creature never stores callbacks, memory or the binding.
+      ai
+        ? { strategies: this.battleStrategies, aiBindings: { opponent: ai } }
+        : {},
+      null,
       (b) => this.directResultPlan(b, resultPlan(b)),
       recover,
     );

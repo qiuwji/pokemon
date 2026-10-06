@@ -148,8 +148,15 @@ export function createEmeraldPlugins(db, plugins, onError) {
       c.abilities,
       c.heldItems,
     );
-    const strategies = new BattleStrategyRegistry(c.battleStrategies);
-    validateTrainers(c.trainers, c, strategies, inventory);
+    const strategies = new BattleStrategyRegistry(
+      c.battleStrategies,
+      c.creatureStrategies,
+    );
+    validateTrainers(c.trainers, c, {
+      strategies,
+      inventory,
+      attachments: c.battleAttachments,
+    });
     new FacilityRegistry({
       definitions: c.facilities,
       activities: c.facilityActivities,

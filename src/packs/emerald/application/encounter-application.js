@@ -136,10 +136,16 @@ export class EncounterApplication {
       return { ok: false, reason: "需要能战斗的伙伴和可用的收纳空间。" };
     if (!this.tickets.claim(id))
       return { ok: false, reason: "遭遇凭证已被使用。" };
-    const monster = this.tickets.record(id).monster;
+    const record = this.tickets.record(id),
+      monster = record.monster,
+      // Wild AI lives on the registered encounter table (dark grass, fishing, rocks, actor
+      // tickets all share this path); it is never written into the ticket or the creature data.
+      ai = record.table
+        ? (this.encounterTables.table(record.table)?.ai ?? null)
+        : null;
     try {
       const started = await this.startEncounterBattle(monster,
-        (b) => this.resultPlan(id, b), () => this.tickets.unclaim(id));
+        (b) => this.resultPlan(id, b), () => this.tickets.unclaim(id), ai);
       if (!started) {
         this.tickets.unclaim(id);
         return { ok: false, reason: "现在无法开始战斗。" };

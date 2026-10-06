@@ -4,28 +4,67 @@ import { analyzeCandidate } from "./analysis.js";
 import { readOnly, callSync } from "../extensions/values.js";
 import { randomDecision } from "./ai.js";
 
+const validTrainerStrategy = (definition) =>
+  typeof definition?.decide === "function" ||
+  (definition?.version === 2 && typeof definition.score === "function");
+
 /** A policy chooses a candidate index from detached observations; the battle owns legality and RNG. */
 export class BattleStrategyRegistry {
-  constructor(definitions = {}) {
+  constructor(definitions = {}, creatureDefinitions = {}) {
     this.definitions = new Map([
       ["random", null],
       ["tactical", TACTICAL_STRATEGY],
     ]);
     for (const [id, definition] of Object.entries(definitions)) {
-      if (this.definitions.has(id) || typeof definition?.decide !== "function")
+      if (this.definitions.has(id) || !validTrainerStrategy(definition))
         throw new Error(`Invalid battle strategy ${id}`);
       this.definitions.set(id, definition);
+    }
+    this.creatures = new Map();
+    for (const [id, definition] of Object.entries(creatureDefinitions)) {
+      if (
+        this.creatures.has(id) ||
+        definition?.version !== 1 ||
+        typeof definition.score !== "function"
+      )
+        throw new Error(`Invalid creature strategy ${id}`);
+      this.creatures.set(id, definition);
     }
   }
   has(id) {
     return this.definitions.has(id);
   }
+  hasCreature(id) {
+    return this.creatures.has(id);
+  }
+  definition(id) {
+    return this.definitions.get(id);
+  }
+  trainerV2(id) {
+    const definition = this.definitions.get(id);
+    return definition?.version === 2 ? definition : null;
+  }
+  creature(id) {
+    return this.creatures.get(id) || null;
+  }
+  isV2(id) {
+    return this.definitions.get(id)?.version === 2;
+  }
+  /** Router: controllers bound to the new `ai` contract go through the host decision service. */
   decide(battle, seat) {
+    if (battle.roster.owner(seat).ai && battle.aiRuntime)
+      return battle.aiRuntime.decideSeat(seat);
+    return this.decideLegacy(battle, seat);
+  }
+  /** The unchanged legacy path: original view, index return and RNG semantics. */
+  decideLegacy(battle, seat) {
     const strategy = battle.roster.owner(seat).strategy || "random";
     if (!this.has(strategy))
       throw new Error(`Unknown battle strategy ${strategy}`);
     const definition = this.definitions.get(strategy);
     if (!definition) return randomDecision(battle, seat);
+    if (typeof definition.decide !== "function")
+      throw new Error(`Battle strategy ${strategy} requires the decision service`);
     const mon = battle.roster.occupant(seat),
       candidates = [];
     const slots = battle

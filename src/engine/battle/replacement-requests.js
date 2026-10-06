@@ -53,16 +53,22 @@ export class BattleReplacementRequests {
       policy = this.policies[reason];
     if (!policy) throw new Error(`Unknown replacement policy ${reason}`);
     if (this.get(seat) || !b.roster.bench(seat).length) return false;
-    if (b.roster.owner(seat).kind === "ai") {
-      const index = b.rules.replacementIndex({
-        battle: b,
-        seat,
-        reason,
-        candidates: b.roster.bench(seat),
-      });
-      if (!b.roster.canReplace(seat, index))
+    const owner = b.roster.owner(seat);
+    if (owner.kind === "ai") {
+      const chosen =
+        b.aiRuntime && owner.ai
+          ? b.aiRuntime.decideReplacement(seat, reason)
+          : {
+              index: b.rules.replacementIndex({
+                battle: b,
+                seat,
+                reason,
+                candidates: b.roster.bench(seat),
+              }),
+            };
+      if (!b.roster.canReplace(seat, chosen.index))
         throw new Error("Invalid automatic replacement choice");
-      b.actions.switch(seat, index, { policy });
+      b.actions.switch(seat, chosen.index, { policy });
     } else {
       this.pending.set(seat, {
         seat,
