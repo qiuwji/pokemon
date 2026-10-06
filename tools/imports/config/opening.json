@@ -40,10 +40,6 @@
     }
   },
   "audio": {
-    "bicycle-bell.wav": "bicycle_bell.wav",
-    "register-noise.wav": "register_noise.wav",
-    "kick.wav": "sc88pro_rnd_kick.wav",
-    "snare.wav": "sd90_solo_snare.wav",
     "cry-mudkip.wav": "cries/mudkip.wav",
     "cry-treecko.wav": "cries/treecko.wav",
     "cry-torchic.wav": "cries/torchic.wav"

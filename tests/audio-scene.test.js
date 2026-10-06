@@ -282,7 +282,7 @@ test("Plugin sounds request only owned registered resources outside rules/transa
           kind: "sound",
           volume: 0.2,
           loop: false,
-          source: "assets/audio/bicycle-bell.wav",
+          source: "assets/audio/emerald-audio/sounds/se_select.wav",
         });
       },
     },

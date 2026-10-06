@@ -9,6 +9,10 @@ import json
 import os
 import shutil
 import tempfile
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from workspace import WorkspaceView
 from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parent.parent.parent
@@ -59,7 +63,8 @@ def install(pack_file, build, project, check=False):
     if not track_id or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789-' for c in track_id):
         raise ValueError('Invalid audio pack identity')
     available = load_track_packs(build)
-    root = project.resolve() / 'dist'
+    workspace = WorkspaceView(project)
+    root = workspace.root
     changes, tracks, superseded, removals = {}, [], set(), []
     input_sets = {}
     for section, kind in zip(SOUND_SECTIONS, ('music', 'sound')):
@@ -78,7 +83,7 @@ def install(pack_file, build, project, check=False):
                 raise ValueError(f'Track checksum differs from its manifest: {song}')
             if not asset.startswith(f'assets/audio/{track_id}/'):
                 raise ValueError('Invalid consolidated asset destination')
-            changes[(root / asset).resolve()] = audio.read_bytes()
+            changes[root / asset] = audio.read_bytes()
             inputs = {item['path']: item['sha256'] for item in data.get('inputs', [])}
             input_set = hashlib.sha256(json.dumps(inputs, sort_keys=True).encode()).hexdigest()
             input_sets[input_set] = inputs
@@ -154,6 +159,8 @@ def install(pack_file, build, project, check=False):
         stale = root / 'assets' / 'audio' / old
         if stale.is_dir():
             removals.append(stale)
+    changes = {workspace.destination(path, generated=True): data for path, data in changes.items()}
+    removals = [workspace.destination(path, generated=True) for path in removals]
     written = {}
     for path, content in changes.items():
         if content is not None and (not path.exists() or path.read_bytes() != content):

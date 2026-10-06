@@ -1,5 +1,6 @@
 # 架构与扩展约定
 
+`src/`保存手写运行时与可编辑内容，`generated/`保存派生输入；`dist/`仅是构建后的同路径部署树。详见[构建合同](docs/development/BUILD_PIPELINE.md)。
 本工程：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
 
 首先阅读 [README.md](README.md) 的运行入口和[文档导航](docs/README.md)；当前框架范围看[SCOPE](docs/project/SCOPE.md)，任务与欠账看[STATUS](docs/project/STATUS.md)，按需选择[领域Skill](docs/project/SKILLS.md)。原路线保留在 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md)，验证与历史看 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md)。本文定义当前结构，不把历史里程碑当作当前能力。
@@ -12,7 +13,7 @@
 ## 层次与依赖方向
 
 ```text
-dist/
+src/
   app.js                         浏览器组合入口、生命周期与画面更新
   engine/                        通用领域服务，无 DOM/绘图/绿宝石包依赖
     battle/                      队伍/席位、目标、行动、阶段结算、状态、历史、事件
@@ -148,9 +149,9 @@ SpriteClips拥有封闭资源帧目录和species/view绑定，纯采样与Sprite
 
 默认AI插件只消费这些公开接口；测试插件仅在测试环境装配。PollingTransport与WebSocket遵循同一传输合同，Python本机桥只转发协议，不持有领域状态或决策。所有权与CLI见[AI控制指南](docs/development/AI_CONTROL.md)，不会增加Adventure职责或让核心导入产品插件。
 
-AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用架构](docs/architecture/APPLICATION.md)和[网络架构](docs/architecture/NETWORK.md)，操作字段与实例见[插件指南](dist/plugins/ai-control/README.md)。
+AI控制的应用服务、时序执行器、事实缓冲与长轮询见[应用架构](docs/architecture/APPLICATION.md)和[网络架构](docs/architecture/NETWORK.md)，操作字段与实例见[插件指南](src/plugins/ai-control/README.md)。
 
-设施的纯JSON作者路径：registerFacilityContent编译独立的battle-sequence/score-contest/reel-machine策略，策略返回计划，FacilityApplication继续唯一持有RNG、临时队伍与经济提交。原生连战复用同一策略；可选插件只加载JSON并通过公开API注册，app.js不增加设施分支。动作when由查询和执行共用，插件回调受规则守卫和深冻结约束。配置范围及原作欠账见[JSON作者说明](dist/plugins/facility-content/README.md)。
+设施的纯JSON作者路径：registerFacilityContent编译独立的battle-sequence/score-contest/reel-machine策略，策略返回计划，FacilityApplication继续唯一持有RNG、临时队伍与经济提交。原生连战复用同一策略；可选插件只加载JSON并通过公开API注册，app.js不增加设施分支。动作when由查询和执行共用，插件回调受规则守卫和深冻结约束。配置范围及原作欠账见[JSON作者说明](src/plugins/facility-content/README.md)。
 
 原作角色装配由native-cast/opening-objects选择业务角色，native-object-bindings核准唯一来源身份及坐标，native-movement使用原作初始朝向表；不以名称子串猜方向。家具行为由内容包投射为统一交互对象，世界引擎不识别家具台词。明确的剧情并行移动可声明ignoreActors及keepFacing；只有脚本移动应用该占位例外，地形/高度/边界仍照常校验。实现场次与保真边界见[开场说明](docs/regions/LITTLEROOT_OPENING.md)。
 

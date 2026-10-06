@@ -12,13 +12,13 @@ Start的遮罩透明，但菜单窗口明确保留原作窗口图和填充；队
 
 ## 代码放哪
 
-- `dist/packs/emerald/ui/emerald-theme.css`：外层画面、窗口、Start与六席队伍的基础样式。
-- `dist/packs/emerald/ui/native-pages.css`：独立页面的240×160坐标、原作背景层与文字窗口；在基础主题之后加载。
-- `dist/packs/emerald/ui/native-view.js` / `summary-view.js` / `flight-view.js`：纯显示数据和导航，不能写领域状态。
-- `dist/packs/emerald/ui-shell.js`：为modal标注data-modal-page和data-gender，不依靠内容猜页面类别。
-- `dist/packs/emerald/interface.js`：装配页面；Start按进度显示原作纵向菜单，图鉴和队伍未解锁时不出现；设置页承载已支持的文字速度、声音和窗口边框，扩展功能承载工程入口。菜单项仍通过原页面工厂执行。
-- `dist/adapters/plugin-manager-dom.js`：游戏外dialog。只写下次启动配置，不操作核心状态；BrowserInput在面板开启时屏蔽游戏按键/触控/道具快捷。
-- `dist/adapters/plugin-settings.js` / `plugin-loader.js`：配置存取、启动动作与catalog装配；具体优先级见[内容管线](CONTENT_PIPELINE.md)。
+- `src/packs/emerald/ui/emerald-theme.css`：外层画面、窗口、Start与六席队伍的基础样式。
+- `src/packs/emerald/ui/native-pages.css`：独立页面的240×160坐标、原作背景层与文字窗口；在基础主题之后加载。
+- `src/packs/emerald/ui/native-view.js` / `summary-view.js` / `flight-view.js`：纯显示数据和导航，不能写领域状态。
+- `src/packs/emerald/ui-shell.js`：为modal标注data-modal-page和data-gender，不依靠内容猜页面类别。
+- `src/packs/emerald/interface.js`：装配页面；Start按进度显示原作纵向菜单，图鉴和队伍未解锁时不出现；设置页承载已支持的文字速度、声音和窗口边框，扩展功能承载工程入口。菜单项仍通过原页面工厂执行。
+- `src/adapters/plugin-manager-dom.js`：游戏外dialog。只写下次启动配置，不操作核心状态；BrowserInput在面板开启时屏蔽游戏按键/触控/道具快捷。
+- `src/adapters/plugin-settings.js` / `plugin-loader.js`：配置存取、启动动作与catalog装配；具体优先级见[内容管线](CONTENT_PIPELINE.md)。
 
 ## 原作素材生成
 

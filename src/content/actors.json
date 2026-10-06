@@ -1,0 +1,863 @@
+{
+  "BrendanNormal": {
+    "w": 16,
+    "h": 32
+  },
+  "MayNormal": {
+    "w": 16,
+    "h": 32
+  },
+  "ProfBirch": {
+    "w": 16,
+    "h": 32
+  },
+  "Twin": {
+    "w": 16,
+    "h": 32
+  },
+  "FatMan": {
+    "w": 16,
+    "h": 32
+  },
+  "Boy1": {
+    "w": 16,
+    "h": 32
+  },
+  "Boy2": {
+    "w": 16,
+    "h": 32
+  },
+  "Youngster": {
+    "w": 16,
+    "h": 32
+  },
+  "Nurse": {
+    "w": 16,
+    "h": 32
+  },
+  "Gentleman": {
+    "w": 16,
+    "h": 32
+  },
+  "Girl1": {
+    "w": 16,
+    "h": 32
+  },
+  "Man3": {
+    "w": 16,
+    "h": 32
+  },
+  "Woman1": {
+    "w": 16,
+    "h": 32
+  },
+  "Scientist1": {
+    "w": 16,
+    "h": 32
+  },
+  "BirchsBag": {
+    "w": 16,
+    "h": 16
+  },
+  "Mom": {
+    "w": 16,
+    "h": 32
+  },
+  "LittleBoy": {
+    "w": 16,
+    "h": 16
+  },
+  "BrendanRun": {
+    "w": 16,
+    "h": 32,
+    "frameCount": 9,
+    "animations": {
+      "normal": {
+        "idle": {
+          "loop": true,
+          "directions": {
+            "down": [
+              {
+                "index": 0,
+                "durationMs": 266.6666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 1,
+                "durationMs": 266.6666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 2,
+                "durationMs": 266.6666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 2,
+                "durationMs": 266.6666666666667
+              }
+            ]
+          }
+        },
+        "move": {
+          "loop": true,
+          "directions": {
+            "down": [
+              {
+                "index": 3,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 0,
+                "durationMs": 50.0
+              },
+              {
+                "index": 4,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 0,
+                "durationMs": 50.0
+              }
+            ],
+            "up": [
+              {
+                "index": 5,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 1,
+                "durationMs": 50.0
+              },
+              {
+                "index": 6,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 1,
+                "durationMs": 50.0
+              }
+            ],
+            "left": [
+              {
+                "index": 7,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              },
+              {
+                "index": 8,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              }
+            ],
+            "right": [
+              {
+                "index": 7,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              },
+              {
+                "index": 8,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              }
+            ]
+          },
+          "clock": "stride"
+        }
+      }
+    }
+  },
+  "BrendanMachBike": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
+  },
+  "BrendanAcroBike": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frameCount": 27,
+    "animations": {
+      "wheelie-rise": {
+        "idle": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 9,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 13,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        },
+        "move": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 9,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 13,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        }
+      },
+      "wheelie-lower": {
+        "idle": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 9,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 0,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 13,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 1,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 2,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 2,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        },
+        "move": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 9,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 0,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 13,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 1,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 2,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 2,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        }
+      },
+      "wheelie": {
+        "idle": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        },
+        "move": {
+          "loop": true,
+          "directions": {
+            "down": [
+              {
+                "index": 21,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 22,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 23,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 24,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 25,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 26,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 25,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 26,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        }
+      },
+      "hop": {
+        "idle": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 9,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 13,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        },
+        "move": {
+          "loop": false,
+          "directions": {
+            "down": [
+              {
+                "index": 9,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 10,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 13,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 14,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 17,
+                "durationMs": 66.66666666666667
+              },
+              {
+                "index": 18,
+                "durationMs": 66.66666666666667
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "BrendanSurf": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 2,
+        "left": 4,
+        "right": 4
+      },
+      "walk": {
+        "down": [
+          0,
+          1
+        ],
+        "up": [
+          2,
+          3
+        ],
+        "left": [
+          4,
+          5
+        ],
+        "right": [
+          4,
+          5
+        ]
+      }
+    },
+    "underlay": {
+      "actor": "SurfBlob",
+      "offsetY": 8
+    }
+  },
+  "SurfBlob": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 1,
+        "left": 2,
+        "right": 2
+      },
+      "walk": {
+        "down": [
+          0
+        ],
+        "up": [
+          1
+        ],
+        "left": [
+          2
+        ],
+        "right": [
+          2
+        ]
+      }
+    }
+  },
+  "FlyBird": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 0,
+        "left": 0,
+        "right": 0
+      },
+      "walk": {
+        "down": [
+          0
+        ],
+        "up": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ]
+      }
+    }
+  },
+  "MovingBox": {
+    "w": 16,
+    "h": 16
+  },
+  "MayRun": {
+    "w": 16,
+    "h": 32
+  },
+  "MayMachBike": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
+  },
+  "MayAcroBike": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
+  },
+  "MaySurf": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 2,
+        "left": 4,
+        "right": 4
+      },
+      "walk": {
+        "down": [
+          0,
+          1
+        ],
+        "up": [
+          2,
+          3
+        ],
+        "left": [
+          4,
+          5
+        ],
+        "right": [
+          4,
+          5
+        ]
+      }
+    },
+    "underlay": {
+      "actor": "SurfBlob",
+      "offsetY": 8
+    }
+  },
+  "ItemBall": {
+    "w": 16,
+    "h": 16
+  },
+  "VigorothCarryingBox": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 0,
+        "left": 0,
+        "right": 0
+      },
+      "walk": {
+        "down": [
+          1,
+          2
+        ],
+        "up": [
+          1,
+          2
+        ],
+        "left": [
+          1,
+          2
+        ],
+        "right": [
+          1,
+          2
+        ]
+      }
+    }
+  },
+  "VigorothFacingAway": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8,
+    "frames": {
+      "facing": {
+        "down": 3,
+        "up": 3,
+        "left": 3,
+        "right": 3
+      },
+      "walk": {
+        "down": [
+          4,
+          3
+        ],
+        "up": [
+          4,
+          3
+        ],
+        "left": [
+          4,
+          3
+        ],
+        "right": [
+          4,
+          3
+        ]
+      }
+    }
+  },
+  "Truck": {
+    "w": 48,
+    "h": 48,
+    "offsetX": -16,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 0,
+        "left": 0,
+        "right": 0
+      },
+      "walk": {
+        "down": [
+          0
+        ],
+        "up": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ]
+      }
+    }
+  },
+  "Woman4": {
+    "w": 16,
+    "h": 32
+  },
+  "LittleGirl": {
+    "w": 16,
+    "h": 16
+  },
+  "Girl3": {
+    "w": 16,
+    "h": 32
+  },
+  "Maniac": {
+    "w": 16,
+    "h": 32
+  },
+  "MartEmployee": {
+    "w": 16,
+    "h": 32
+  },
+  "Woman5": {
+    "w": 16,
+    "h": 32
+  },
+  "EnemyZigzagoon": {
+    "w": 32,
+    "h": 32,
+    "offsetX": -8
+  },
+  "NinjaBoy": {
+    "w": 16,
+    "h": 16
+  },
+  "Woman2": {
+    "w": 16,
+    "h": 32
+  },
+  "PokefanF": {
+    "w": 16,
+    "h": 32
+  },
+  "SchoolKidM": {
+    "w": 16,
+    "h": 32
+  }
+}

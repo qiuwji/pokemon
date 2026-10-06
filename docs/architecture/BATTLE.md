@@ -6,7 +6,7 @@
 
 | 模块 | 职责 |
 | --- | --- |
-| dist/engine/battle.js · Battle | 战斗会话装配与公开行动；不把业务扩展堆回executeMove |
+| src/engine/battle.js · Battle | 战斗会话装配与公开行动；不把业务扩展堆回executeMove |
 | battle/roster.js · BattleRoster | 联盟、控制者、席位、队伍、候补及在场身份 |
 | battle/targeting.js、decisions.js | 合法目标与各席位行动收集、预留及取消 |
 | battle/round.js · RoundResolver | 提交后行动顺序、替换暂停/恢复、回合末及结束检查 |

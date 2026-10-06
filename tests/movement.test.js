@@ -206,7 +206,7 @@ test("Bike normalizes to walking inside a doorway and transient running does not
   s.movement.normalize({ indoor: true });
   assert.equal(s.state.mode, "walk");
   assert(s.field.move("right", { running: true }));
-  assert.equal(s.field.motion.duration, 96);
+  assert.equal(s.field.motion.duration, 8000 / 60);
   s.finish();
   assert.equal(s.state.mode, "walk");
 });

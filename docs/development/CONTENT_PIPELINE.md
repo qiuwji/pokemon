@@ -2,14 +2,18 @@
 
 本页描述当前可执行合同。原作完整地图/台词仍在业务开发范围，缺少业务不能靠关闭引用检查隐藏。
 
+源码/派生输入与构建的分工见[构建合同](BUILD_PIPELINE.md)。Node消费者仍读取构建后的manifest，浏览器路径保持原状；作者不要编辑dist。
+
 ## 从哪里修改
 
 ```text
 dist/content/
   manifest.json                    唯一装配清单；版本1
   maps/<地图>/map.json              名称、尺寸、图集、连接、warp、原作对象与遭遇
+generated/content/
   maps/<地图>/grid.json             生成的blocks/behavior/border；平面数组
   tilesets/<图集>.json              生成的metatile、查找表、动画、实际atlas尺寸
+src/content/
   species/<物种>.json               单个物种定义
   actors.json / moves.json          Actor素材描述与切片招式表
   evolutions.json / type-chart.json  进化定义与属性表
@@ -34,9 +38,9 @@ dist/content/
 
 同一目标字段只能出现一次，后加载文件不能覆盖前一个片段。文件缺失、坏JSON、重复字段和不合法引用会中止加载，并报告文件URL或内容路径。浏览器采用并行完整加载，尚未实现按区域懒加载；本次改造解决组织和正确性，不声称已解决全作资源流送。
 
-- 浏览器：[content-loader.js](../../dist/adapters/content-loader.js)，通过manifest URL解析全部资源，保留部署子路径。
+- 浏览器：[content-loader.js](../../src/adapters/content-loader.js)，通过manifest URL解析全部资源，保留部署子路径。
 - Node工具和测试：[content-io.mjs](../../tools/content-io.mjs)的`loadContentSync()`，每次读取独立数据。
-- 共同纯合同：[content-manifest.js](../../dist/engine/content-manifest.js)和[引用校验](../../dist/engine/content-references.js)。
+- 共同纯合同：[content-manifest.js](../../src/engine/content-manifest.js)和[引用校验](../../src/engine/content-references.js)。
 
 ```js
 import { loadContentSync } from "../../tools/content-io.mjs";
@@ -53,7 +57,7 @@ const db = loadContentSync(); // 示例位置：tests/helpers/；其他位置调
 
 ## 导入如何保护数据
 
-所有受支持导入脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，输出归dist；`--target`可指向另一份输出目录。内容脚本需要现有清单，独立规则/资源生成器可写空的临时目标。
+所有受支持导入脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，默认输出归src/generated的唯一输入所有者，构建后部署到dist；`--target`可指向另一份输出目录。内容脚本需要现有清单，独立规则/资源生成器可写空的临时目标。
 
 ```sh
 python3 tools/import.py encounters /绝对路径/pokeemerald --check
@@ -72,9 +76,9 @@ python3 tools/import.py encounters /绝对路径/pokeemerald
 
 ## 测试夹具与插件
 
-五张E2E地图在[独立夹具](../../dist/fixtures/world.json)，不在正式清单中。默认插件清单不启用测试支持；只有明确`?e2e=1`的测试环境才加载夹具并通过公开内容注册形成命名空间地图，不给正式未白镇插入测试入口。
+五张E2E地图在[独立夹具](../../generated/fixtures/world.json)，不在正式清单中。默认插件清单不启用测试支持；只有明确`?e2e=1`的测试环境才加载夹具并通过公开内容注册形成命名空间地图，不给正式未白镇插入测试入口。
 
-插件装配来自[catalog.json](../../dist/plugins/catalog.json)，新增受信任本地插件无需修改app.js。配置项指定模块、导出名、默认启用、开关与工厂输入；`?plugins=id1,id2`追加启用，`?disable-plugins=id`关闭。`requires`用于装配依赖检查和排序；实际插件manifest依赖仍由PluginHost校验。加载失败明确报错，没有热卸载、远程沙箱或旧档迁移。
+插件装配来自[catalog.json](../../src/plugins/catalog.json)，新增受信任本地插件无需修改app.js。配置项指定模块、导出名、默认启用、开关与工厂输入；`?plugins=id1,id2`追加启用，`?disable-plugins=id`关闭。`requires`用于装配依赖检查和排序；实际插件manifest依赖仍由PluginHost校验。加载失败明确报错，没有热卸载、远程沙箱或旧档迁移。
 
 游戏外顶部「插件」面板保存下次启动的开关，点击「保存并重启」才重建宿主；当前游戏不热切换。优先级：URL disable > URL enable/单独flag=1 > 本地开关 > catalog默认。重启按钮去掉一次性插件URL开关，保留control/e2e等环境参数。设置键为 `emerald.plugin-selection.v1`，与玩家存档分开；禁用带存档依赖的插件仍走缺依赖保护，不把它当坏档覆盖。
 
@@ -88,4 +92,4 @@ catalog可配置 `name/description` 用于面板，以及 `startup:["owner:actio
 
 ## 剧情内容所有权
 
-stories由内容作者维护，现有十九个导入器不拥有它；统一Python/Node/浏览器装配保留这一分类。新增片段必须登记manifest，目录/局部引用校验由StoryCatalog完成，check-content同时检查原生目录。NPC来源script的pending清单独立说明原作还原债，不因为新增项目对白自动删除。写法、结果和稳定节点见[剧情合同](../engine/story/STORY_LANGUAGE.md)。
+stories由内容作者维护，现有二十一个导入器不拥有它；统一Python/Node/浏览器装配保留这一分类。新增片段必须登记manifest，目录/局部引用校验由StoryCatalog完成，check-content同时检查原生目录。NPC来源script的pending清单独立说明原作还原债，不因为新增项目对白自动删除。写法、结果和稳定节点见[剧情合同](../engine/story/STORY_LANGUAGE.md)。

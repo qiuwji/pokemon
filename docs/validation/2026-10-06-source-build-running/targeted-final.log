@@ -1,0 +1,38 @@
+✔ Acro ordinary motion takes 6 frames; idle turn waits 6 without steps or direction jitter (7.763167ms)
+✔ Recent direction and secondary edges side-hop one tile with locked facing; stale edge only turns (1.791083ms)
+✔ Opposite-direction jump turns halfway in place without advancing field counters (0.406167ms)
+✔ Standing wheelie uses native rise timing, 40-frame charge and repeated 16-frame in-place hops (1.136208ms)
+✔ Wheelie moves in 8 frames, blocked wheelie pedals in place and bumpy slope retains raised wheel (1.058125ms)
+✔ Side-hop rail entry is perpendicular; rejected side-hop returns ordinary facing (1.041958ms)
+✔ Pausing or changing modes clears Acro input and idle pose while preserving an active interpolation (0.41ms)
+✔ Native Acro frame metadata is validated and sampled without browser, RNG or directional leakage (8.486875ms)
+✔ Acro ledge hop retains two-tile landing and native 32-frame high jump rather than ordinary riding duration (1.113833ms)
+✔ Build is deterministic, portable and removes retired outputs (6.014584ms)
+✔ Duplicate source paths fail before replacing the previous build (7.390041ms)
+✔ Edited, extra or missing deployment files are detected (4.413834ms)
+✔ Native running alternates feet through two eight-frame steps and rests after landing (2.281083ms)
+✔ Canvas consumes stride progress for each direction and mirrors the west atlas only (0.220458ms)
+✔ Sprite clock registration rejects unknown and non-looping stride clocks (0.613792ms)
+✔ Browser startup validates the native pack and each source NPC has a stable identity (15.342417ms)
+✔ Source identities do not depend on coordinates; listing distinguishes pending and special objects (59.84075ms)
+✔ Sign patches affect interaction and readback without creating an NPC blocker (88.507959ms)
+✔ Region queries report effective appearance and revision; actor endpoints use the effective map (28.707708ms)
+✔ Numeric tile overlays retain their registered tileset owner as a save dependency (0.163792ms)
+✔ Navigation changes immediately when an effective land tile becomes water (0.65025ms)
+✔ Persistent overlays share collision/projection, preserve source arrays, and restore after serialization (2.231833ms)
+✔ Invalid batch leaves no partial tile write; unknown references and stale plans fail (0.465458ms)
+✔ Object spawn/hide and changed positions invalidate autonomous and scene-pinned NPC state (0.506875ms)
+✔ Public world command and story worldPatch persist a created actor and grid update; load uses the same overlay (88.214709ms)
+✔ Visit overlays compose field by field, survive active-visit serialization and expire only on entry (0.362958ms)
+✔ Temporary object edits inherit permanent visibility, expire spawned objects, and reject invalid scopes atomically (0.328083ms)
+✔ A map-entry preview restores connected collision and invalidates patch plans (0.24725ms)
+✔ Every accepted tile payload survives prepare, commit and save reload, including appearance removal (0.140166ms)
+✔ Operation parsing rejects extra fields consistently without state changes (0.173917ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 357.921542

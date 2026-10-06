@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import tempfile
+from workspace import WorkspaceView
 from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parents[2]
@@ -14,7 +15,7 @@ GRID_FIELDS = {'blocks', 'behavior', 'border'}
 
 def arguments(parser, selectors=(), profile=False):
     parser.add_argument('--check', action='store_true', help='Compute and report changes without writing any output')
-    parser.add_argument('--target', type=Path, default=PROJECT / 'dist', help='Existing output pack directory')
+    parser.add_argument('--target', type=Path, default=None, help='Explicit portable output pack; default writes project source inputs')
     parser.add_argument('--strict', action='store_true', help='Reject reported omissions before committing')
     for section in selectors:
         parser.add_argument('--' + section, nargs='+', help='Only import these ' + section)
@@ -71,7 +72,8 @@ def encoded(value):
 
 class ImportSession:
     def __init__(self, args, owner, policy=None):
-        self.dist = args.target.resolve()
+        self.workspace = WorkspaceView(PROJECT) if args.target is None else None
+        self.dist = self.workspace.root if self.workspace else args.target.resolve()
         self.source = Path(getattr(args, 'source', PROJECT / 'work/pokeemerald')).resolve()
         self.check = args.check
         self.args = args
@@ -88,6 +90,12 @@ class ImportSession:
         self.pending = {}
         self.changes = []
         self.policy = policy if policy is not None else json.loads((PROJECT / 'tools/imports/ownership.json').read_text())[owner]
+
+    def validation_command(self):
+        if not hasattr(self, '_validation_view'):
+            self._validation_view = self.workspace or WorkspaceView(PROJECT)
+        return ['node', '--preserve-symlinks', str(PROJECT / 'tools/validate-import.mjs'),
+                str(self._validation_view.root)]
 
     def configuration(self, name):
         value = self.profile[name]
@@ -131,7 +139,9 @@ class ImportSession:
         return json.loads(json.dumps(self.original))
 
     def _path(self, path):
-        path = Path(path).resolve()
+        # In source mode the read projection contains symlinked files. Preserve
+        # their logical paths until finish maps them to the canonical source.
+        path = Path(os.path.abspath(path)) if self.workspace else Path(path).resolve()
         try:
             relative = path.relative_to(PROJECT / 'dist')
             path = self.dist / relative
@@ -160,7 +170,7 @@ class ImportSession:
             if not any(fnmatch.fnmatchcase(path, pattern) for pattern in self.policy['content']):
                 raise ValueError(f'{self.owner} cannot modify {path}')
         # Validate the complete proposed pack before any content or image is written.
-        validation = subprocess.run(['node', str(PROJECT / 'tools/validate-import.mjs')],
+        validation = subprocess.run(self.validation_command(),
                                     input=json.dumps(data), text=True, capture_output=True)
         if validation.returncode:
             raise ValueError('Invalid imported content: ' + validation.stderr.strip())
@@ -220,8 +230,20 @@ class ImportSession:
             relative = path.relative_to(self.dist).as_posix()
             if not relative.startswith('content/') and not any(fnmatch.fnmatchcase(relative, rule) for rule in self.policy['outputs']):
                 raise ValueError(f'{self.owner} cannot write {relative}')
+        if self.workspace:
+            manifest_path = self.dist / 'content/manifest.json'
+            manifest_bytes = self.pending.get(manifest_path)
+            if manifest_bytes is None and manifest_path.exists():
+                manifest_bytes = manifest_path.read_bytes()
+            generated_content = {'content/' + entry['path'] for entry in
+                json.loads(manifest_bytes)['files'] if entry.get('generated')} if manifest_bytes else set()
+            pending = {self.workspace.destination(path,
+                generated=not path.relative_to(self.dist).as_posix().startswith('content/')
+                    or path.relative_to(self.dist).as_posix() in generated_content): data
+                for path, data in pending.items()}
+        report_root = self.workspace.project if self.workspace and self.workspace.sources else self.dist
         print(json.dumps({'script': self.owner, 'check': self.check,
-                          'files': [str(path.relative_to(self.dist)) for path in sorted(pending)],
+                          'files': [str(path.relative_to(report_root)) for path in sorted(pending)],
                           'contentChanges': self.changes,
                           'omissions': self.omissions}, ensure_ascii=False, indent=2))
         if self.check or not pending:

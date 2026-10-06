@@ -82,7 +82,7 @@ NPC对白逐字、告示牌/家具查看即时显示：在内容中明确mode，
 1. 为本次切片列出触发入口、参与角色、前置状态、各分支、奖励/费用、结束状态、取消/背包满/失败及重入行为。追踪特殊函数直到知道谁产生结果、何时解锁。
 2. 记录来源文件、label、固定修订和依赖；画出分支或用表表示即可，不复制整套C代码。对话本地化与规则还原分开验收。
 3. 地图使用metatile网格、碰撞/高度、connections与warps；原对象放地图元素，新运行期角色走Actor身份。入口校验合法落点，不用整场景PNG。
-4. 原生地区优先写`dist/content/stories/`的bundle，在现有manifest声明stories片段；`dist/packs/emerald/story.js`只装配现有地区/公共事件，动态短构建放story/regions或common。独立扩展setup通过`api.story.registerBundle`登记同一合同，不改app按地区接线。先读[剧情内容架构](../../docs/architecture/STORY_CONTENT.md)和[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，核对真实字段。普通短battle只发起；需要战后续接必须用durable脚本、稳定node及battle.onResult。已有call是typed词法输入展开，不是任意C返回值/可变调用帧。
+4. 原生地区优先写`src/content/stories/`的bundle，在现有manifest声明stories片段；`src/packs/emerald/story.js`只装配现有地区/公共事件，动态短构建放story/regions或common。独立扩展setup通过`api.story.registerBundle`登记同一合同，不改app按地区接线。先读[剧情内容架构](../../docs/architecture/STORY_CONTENT.md)和[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，核对真实字段。普通短battle只发起；需要战后续接必须用durable脚本、稳定node及battle.onResult。已有call是typed词法输入展开，不是任意C返回值/可变调用帧。
 5. 把条件转成requires/after/if和已注册只读查询；变量转setVariable/choice；对话、行走、镜头及领域动作转现有命令。参数见[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，世界合同见[world-content](../emerald-world-content/SKILL.md)。领域结果确实无法表达时登记接口缺口，作为框架任务处理，不能直接改队伍/库存。
 6. 显式映射寿命：永久领取/推进标记、地图visit覆盖、原FLAG_TEMP清理、对象可见性各归所属服务。原作TEMP寿命须追C确认，不能默认等于本引擎visit，更不能统统永久化。
 7. 演出走move/approach/face/escort/camera和必要门转场；跨相邻道路走连接。不要用teleport跳过本该自动行走的过程；不能并行争抢角色或镜头。finally释放锁由现有导演负责。
@@ -177,16 +177,16 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 
 | 首选文件 | 搜索词 |
 | --- | --- |
-| [story.js](../../dist/packs/emerald/story.js) / [内容目录](../../dist/content/stories/dialogues.json) | `STORY_EVENTS`、`emerald:dialogues` |
-| [StoryCatalog](../../dist/engine/story-catalog.js) / [StorySession](../../dist/engine/story-session.js) | `registerBundle`、`class StorySession`、`Stable story node required` |
-| [StoryApplication](../../dist/packs/emerald/application/story-application.js) | `class StoryApplication`、`runStory` |
-| [StoryEngine](../../dist/engine/story.js) | `class StoryEngine`、`unknown prerequisite` |
-| [触发端](../../dist/packs/emerald/application/triggers-application.js) | `story.resolve("step"` |
+| [story.js](../../src/packs/emerald/story.js) / [内容目录](../../src/content/stories/dialogues.json) | `STORY_EVENTS`、`emerald:dialogues` |
+| [StoryCatalog](../../src/engine/story-catalog.js) / [StorySession](../../src/engine/story-session.js) | `registerBundle`、`class StorySession`、`Stable story node required` |
+| [StoryApplication](../../src/packs/emerald/application/story-application.js) | `class StoryApplication`、`runStory` |
+| [StoryEngine](../../src/engine/story.js) | `class StoryEngine`、`unknown prerequisite` |
+| [触发端](../../src/packs/emerald/application/triggers-application.js) | `story.resolve("step"` |
 | [现有示例测试](../../tests/story-language.test.js) | `Data-only plugin story` |
 
 接口变化时更新规格、Skill和对应可执行例；`npm run check:docs`验证链接及片段一致，行为例运行一次并记录。项目代码、文档、Skill、资源及固定参考必须一起交接。
 
-剧情目录/事件引擎的接线与区域预检位于`dist/packs/emerald/story/runtime.js`（搜索`createEmeraldStory`）。新增地区通常只改内容清单/地区包，不把目录装配搬回adventure.js；职责见[剧情架构](../../docs/architecture/STORY_CONTENT.md)。
+剧情目录/事件引擎的接线与区域预检位于`src/packs/emerald/story/runtime.js`（搜索`createEmeraldStory`）。新增地区通常只改内容清单/地区包，不把目录装配搬回adventure.js；职责见[剧情架构](../../docs/architecture/STORY_CONTENT.md)。
 
 ## 长剧情接手时的具体约束
 

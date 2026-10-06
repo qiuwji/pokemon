@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "d736d74cdea599773b7873294f1456588eb6295c",
+  "scope": [
+    "src/generated/dist build separation",
+    "world operation single field declarations",
+    "native running timing and stride sampling",
+    "plugin extension design only"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "migration": {
+    "trackedFilesRenamed": 1312,
+    "newRuntimeContentFiles": 0,
+    "removedOSMetadataFiles": 7,
+    "trackedDistFiles": 0
+  },
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1042,
+      "pluginsPassed": 36,
+      "failed": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "python3 -m unittest discover -s tools/tests -q",
+      "passed": 31,
+      "failed": 0,
+      "log": "python-tools.log"
+    },
+    {
+      "command": "node --test tests/build.test.js tests/running-animation.test.js tests/world-state.test.js tests/world-editing.test.js tests/acro-input.test.js",
+      "passed": 30,
+      "failed": 0,
+      "log": "targeted-final.log"
+    },
+    {
+      "command": "source route tests and tools/audio/test_tools.py after canonical temporary-path fix",
+      "sourcePassed": 3,
+      "audioPassed": 7,
+      "failed": 0,
+      "log": "source-audio-final.log"
+    },
+    {
+      "command": "node tools/build.mjs --check",
+      "files": 1312,
+      "passed": true
+    },
+    {
+      "command": "actor-animations, opening-art, UI export --check",
+      "changedFiles": 0,
+      "passed": true
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-full.log"
+    },
+    {
+      "command": "check-content/contracts/modules followed by check:docs/check:lint/check:engine-types after evidence file creation",
+      "passed": true,
+      "logs": [
+        "quality-last-before-evidence.log",
+        "quality-tail-final.log"
+      ],
+      "note": "The last chain initially stopped at documentation because this evidence file had not yet been written. All remaining checks passed after creating it."
+    },
+    {
+      "command": "clean source-only checkout fixture portability",
+      "passed": 2,
+      "failed": 0,
+      "log": "clean-source-final.log"
+    }
+  ],
+  "repairedFailures": [
+    "Running test initially named a nonexistent Renderer export; corrected fixture.",
+    "New stride sampling exposed floating point residue at a declared frame boundary; ignore sub-1e-7 ms residue.",
+    "Source-mode audio installation exposed macOS /var versus /private/var aliases; canonicalize temporary view root."
+  ],
+  "notExecuted": [
+    "Browser/Computer Use",
+    "in-game visual or audio acceptance",
+    "implementation of proposed battle-plugin APIs"
+  ],
+  "invalidatedBy": [
+    "source layout or source routing changes",
+    "operation fields or merged-state validation changes",
+    "sprite clocks, movement duration or renderer sampling changes"
+  ],
+  "sha256": {
+    "tools/build.mjs": "f30b6fff083e0508b71c7c66ecb5a55a7d358b97905bd5611d430c284611e4b1",
+    "tools/workspace.py": "c9e20456872457bd9def228396ec16c5c224efeda1934fbc92e1c7ba8ddcc8bc",
+    "tools/imports/context.py": "acd4d6060a9731dfcc487ff65d845dc8c3587434c76f234ef4f4e4340a13fa6f",
+    "tools/serve.py": "6bf09fb1058048380d0d9147f52a82ac810d0f6ba3c531eac368447b197ac3d2",
+    "tools/audio/install-bgm.py": "0f6324dd25b26a37a1beb5f43ef479609edb202f0d7188cb1a013bcef96df9a7",
+    "tools/audio/bundle-audio.py": "b85e8b55b3518c2c1f2f5d16b52cec217bf03325e568eb4ce068b6a5f2231725",
+    "tools/imports/commands/actors/import-actor-animations.py": "c77cc8bafcc4293f6f608ab32152336e78daefa61d13614dcff6be02506036e4",
+    "tools/imports/commands/region/import-grid.py": "03661e76271fee72c64d71883707df879fdd56e7662597ba03c67745e6d9d2a3",
+    "tools/imports/config/slice.json": "98eecaba6e728ebd52cf53a2dbf10863d95d607aecce947a68c54a7e1a0a6593",
+    "src/engine/world-state.js": "f2aa34807614efa7d70b00cc87a9792771495519ce055dfaa6d8fbd00f61ef70",
+    "src/presentation/sprite-animation.js": "a1b87f835110c9978c9996554d9c1da5cca957db22afa510c17d6b933202c2c8",
+    "src/adapters/canvas-renderer.js": "1d3a5a9c7adaedf62d721965ceaadc3226e08f7c099a474c471d43fc21fa60cb",
+    "src/engine/extensions/sprite-contracts.js": "eb1a593cc32407840bd643f3552696772bd70089480f231e62c7968ff8b95be9",
+    "src/engine/contracts.d.ts": "fc033742b7ee7f0acca0ca19554bab60f12dbe1bf1103628970bd43824c0bbef",
+    "src/packs/emerald/movement.js": "f590b1a3b578e79622d983adf3937a7ef656ce035b55c5d1d0eb3a1952341cb3",
+    "src/content/actors.json": "2d5e5d28b7d7a5f5c3acd428d71f492faddd57324c6f3cfe22d46929913aa4bf",
+    "tests/build.test.js": "78bc428c7aa0cb6661618a52020a85f6d70ffc728d8ac1063018f76c46c3df73",
+    "tests/running-animation.test.js": "548a6494562e449e87f06bfeed1ec1f49dbce0ea2a23b4b280fde2012b6535a0",
+    "tests/world-state.test.js": "90a5b502269f2eb4553f341249e84863f63157337bac2958e5e7ddf68d910d2d",
+    "tools/tests/test_source_layout.py": "52c5bd713cec38c6d28ff2db681da390ea845a4c191a46ea805600ddc7d2e7a4",
+    "tools/tests/test_fixture_portability.py": "b3ee322973583626e1f8744aa00d79217c62b95c214d8893e0b2d345579db96b",
+    "tools/audio/test_tools.py": "358b92e903f742492c9eedee3a1f12700f4d3a337f1a1c5b44d39e5323e32c14",
+    "tools/imports/config/opening.json": "553a2c7db3b77a97d5779b4ecd3031453e104830e2bd941e921df43660a70670",
+    "generated/assets/audio/provenance.json": "0c29e01936b0613a59d862067b000139a6ceef75bcf07553ef3f2b2ac9115a03",
+    "tests/audio-scene.test.js": "cd976b19c780cf415fe2ee75ef8405913047e5d7405b293caf274ccf2e6c6957",
+    "tests/contracts.typecheck.ts": "fc84237a98a8628ce976d45f0170546e2903bec6e579ecba06e79878d1f3d7da"
+  },
+  "battleImplementationUnchanged": {
+    "files": 44,
+    "confirmed": true
+  },
+  "cleanup": {
+    "files": 95,
+    "bytes": 6417953,
+    "ignoredScratchFiles": 90,
+    "removedRootMetadataFiles": 1,
+    "retiredAudioFiles": [
+      "bicycle-bell.wav",
+      "kick.wav",
+      "register-noise.wav",
+      "snare.wav"
+    ],
+    "scratchCategories": {
+      "pythonScripts": 15,
+      "javascriptScriptsAndSnapshots": 9,
+      "temporaryJson": 18,
+      "logs": 46,
+      "downloadArchive": 1,
+      "osMetadata": 1
+    },
+    "verification": {
+      "buildFiles": 1308,
+      "buildConsistency": "passed",
+      "audioTestsPassed": 14,
+      "importTestsPassed": 13,
+      "sampleImportCheckChangedFiles": 0,
+      "contentAndAssets": "passed",
+      "publicContracts": "passed",
+      "documentation": "passed",
+      "browserExecuted": false
+    }
+  }
+}

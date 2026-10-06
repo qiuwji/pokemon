@@ -15,7 +15,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--source', type=Path, default=ROOT / 'work/pokeemerald')
-parser.add_argument('--target', type=Path, default=ROOT / 'dist/assets/ui')
+parser.add_argument('--target', type=Path, default=ROOT / 'generated/assets/ui')
 parser.add_argument('--check', action='store_true')
 args = parser.parse_args()
 inputs = {}

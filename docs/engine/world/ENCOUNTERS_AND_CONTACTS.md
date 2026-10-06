@@ -1,6 +1,6 @@
 # 插件遇敌、格子查询与接触合同
 
-此页是实际 API 1 的增量合同，当前保存格式以 [pack.js](../../../dist/packs/emerald/pack.js) 为准。能力验证见 [encounter-extensions.test.js](../../../tests/encounter-extensions.test.js)，最小完整装配见 [encounter-extension.test.js](../../../examples/encounter-extension.test.js)。这不是已启用的明雷玩法；当前启动数组没有比例生成、野生精灵游走或接触自动战斗插件。
+此页是实际 API 1 的增量合同，当前保存格式以 [pack.js](../../../src/packs/emerald/pack.js) 为准。能力验证见 [encounter-extensions.test.js](../../../tests/encounter-extensions.test.js)，最小完整装配见 [encounter-extension.test.js](../../../examples/encounter-extension.test.js)。这不是已启用的明雷玩法；当前启动数组没有比例生成、野生精灵游走或接触自动战斗插件。
 
 ## 插件如何组合“每十格一只、接触才遇敌”
 
@@ -54,7 +54,7 @@ area为`land/water/fishing/rock`。三个检查默认true：概率、队伍特�
 
 cells为行优先序，正尺寸、不得越界、最多4096格。occupants记录id/elevation/reserved，包含真实实体及移动两端预约；隐藏对象不占位。原始地形高度15是多层协议，不能直接等同普通Actor高度或通行资格。格子可通过动态覆盖改变；最终`core.actor.spawn/update`仍重新校验。
 
-选格先通过只读查询筛选，再声明count。例如草格使用公共SDK `dist/engine/extensions/terrain-utils.js`的`isGrass(cell.behavior)`，还要排除碰撞、warp和occupants。`Math.floor(validCells.length / 10)`属于插件业务比例，不写进引擎。values最多4096项、64KiB，count为0..256且不大于数组长度。零抽取不消耗随机数，坏输入在抽取前拒绝；成功后持久化宿主随机源。生产插件不自行调用Math.random，也不导入Random取得第二份核心随机状态。
+选格先通过只读查询筛选，再声明count。例如草格使用公共SDK `src/engine/extensions/terrain-utils.js`的`isGrass(cell.behavior)`，还要排除碰撞、warp和occupants。`Math.floor(validCells.length / 10)`属于插件业务比例，不写进引擎。values最多4096项、64KiB，count为0..256且不大于数组长度。零抽取不消耗随机数，坏输入在抽取前拒绝；成功后持久化宿主随机源。生产插件不自行调用Math.random，也不导入Random取得第二份核心随机状态。
 
 table按照注册优先级、条件和rod选取；默认land/water回退到地图数据。rod只接受fishing下的old/good/super。结果的source是registered/map，地图嵌入表id为null。天气/队伍特性与个体生成仍由EncounterService处理。
 

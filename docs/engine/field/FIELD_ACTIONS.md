@@ -49,7 +49,7 @@ await api.commands.dispatch("core.field.fishing-input", { cancel: true });
 
 行动可声明 `triggers:["interact"]` 或 `["blocked"]`。前者由确认键选择并展示既有行动确认页；后者在普通移动受阻后选择并执行。`priority` 为整数，较小者先匹配，同优先级按完整ID的字典序；只选择资格和目标均有效的第一个定义。自动触发必须能以空输入通过schema；需要参数的行动仍走显式命令/道具入口。选择不等于提交，演出后会再次核对条件和占位。
 
-`allowed/target/plan` 接收冻结视图，不直接写背包、坐标或地形。物品的 `items.actions` 仍绑定行动ID与输入，并额外检查物品持有；没有另一套物品脚本执行器。对象种类、地形行为值、徽章与招式是内容政策。移动内核不识别箱子、石块或怪力。公开纯辅助函数 `frontCell(position)` 位于 `dist/engine/extensions/field-utils.js`。
+`allowed/target/plan` 接收冻结视图，不直接写背包、坐标或地形。物品的 `items.actions` 仍绑定行动ID与输入，并额外检查物品持有；没有另一套物品脚本执行器。对象种类、地形行为值、徽章与招式是内容政策。移动内核不识别箱子、石块或怪力。公开纯辅助函数 `frontCell(position)` 位于 `src/engine/extensions/field-utils.js`。
 
 [野外交互测试夹具](../../../tests/fixtures/extensions/field.js)注册箱子推动、草地整理、提灯、照明效果和重量感应器，不注册任何剧情；[合同测试](../../../tests/field-interactions.test.js)验证实际行为。夹具不部署进游戏，原作地图业务及素材另行开发。
 
@@ -136,7 +136,7 @@ api.content.register("fieldActions", "open-gate", {
 
 可选 `presentation` 引用注册的cameraProfile、environmentLayer、appearance，另含aboveTerrain / freezeAnimation。它们只控制相机、雾/外观、前景绘制顺序及步态，不改变规则；关闭模式即取消模式表现，保存模式后可推导恢复。显式相机租约优先于模式默认相机；显式外观覆盖优先于模式外观。`view.environmentFrames` 返回最终有效环境层，`view.environment` 仍是临时租约列表。
 
-代表组合：[自由飞行插件说明](../../../dist/plugins/high-flight/README.md)及[插件专项](../../../examples/high-flight.test.js)；核心导航合同独立于安装插件，见[导航测试](../../../tests/movement-navigation.test.js)。
+代表组合：[自由飞行插件说明](../../../src/plugins/high-flight/README.md)及[插件专项](../../../examples/high-flight.test.js)；核心导航合同独立于安装插件，见[导航测试](../../../tests/movement-navigation.test.js)。
 
 ## 所选宝可梦的招式菜单
 

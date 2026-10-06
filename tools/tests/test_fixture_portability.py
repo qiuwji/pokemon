@@ -16,13 +16,16 @@ class FixturePortabilityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             clone = Path(temporary) / 'project'
             shutil.copytree(PROJECT / 'tools',clone / 'tools',ignore=shutil.ignore_patterns('__pycache__'))
-            for name in ['content','engine','packs']:
-                shutil.copytree(PROJECT / 'dist' / name,clone / 'dist' / name)
+            for name in ['src','generated']:
+                shutil.copytree(PROJECT / name,clone / name,ignore=shutil.ignore_patterns('assets'))
+            shutil.copy(PROJECT / 'package.json', clone / 'package.json')
+            (clone / 'generated/fixtures/world.json').unlink()
             self.assertFalse((clone / 'work').exists())
             result = subprocess.run([sys.executable,str(clone / 'tools/fixtures/generate.py')],
                                     cwd=temporary,text=True,capture_output=True)
             self.assertEqual(result.returncode,0,result.stderr)
-            output = clone / 'dist/fixtures/world.json'
+            output = clone / 'generated/fixtures/world.json'
+            self.assertFalse((clone / 'dist').exists())
             maps = json.loads(output.read_text())
             self.assertEqual(len(maps),5)
             field = maps['E2ETestField']

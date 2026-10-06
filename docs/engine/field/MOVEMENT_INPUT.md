@@ -77,8 +77,15 @@ Acro 的输入与帧序列现已补充，具体范围见下节。骑行道路强
 
 资料：固定参考 src/bike.c、field_player_avatar.c、event_object_movement.c（Acro handlers、跳跃高度、JumpInPlaceTurnAround），及 src/data/object_events/object_event_anims.h。`tools/import-actor-animations.py work/pokeemerald` 导入只读 C 序列与已存在 PNG 的帧数，不更改像素/参考；重新运行 import-movement.py 后再运行此元数据导入。
 
-Actor 可配置 animations[pose]={idle,move?}，序列含 loop 与四方向 {index,durationMs}[]，frameCount 校验边界。presentation/sprite-animation.js 无浏览器/RNG，按时钟采样、统一 reducedMotion；Canvas 只选纹理和绘制。原 Acro 27 帧中的抬轮、收轮、抬轮移动已接线，其他 pose 使用既有方向帧。其他游戏可注册自己的序列。
+Actor 可配置 animations[pose]={idle,move?}，序列含 loop、可选clock（elapsed默认/stride）与四方向 {index,durationMs}[]，frameCount 校验边界。presentation/sprite-animation.js 无浏览器/RNG，按时钟采样、统一 reducedMotion；Canvas 只选纹理和绘制。原 Acro 27 帧中的抬轮、收轮、抬轮移动已接线，其他 pose 使用既有方向帧。其他游戏可注册自己的序列。
 
 新增 Acro 9 项分别通过：真实 FieldSession 输入/普通骑行、历史侧跳、半程转向跳、蓄跳、颠簸坡/受阻、轨道拒绝/接受、暂停/模式与位移、原序列/校验/减动效、跳崖。初始夹具缺 transitions 已修；截止浮点残差和轨道分支绕过在失败用例修正，只重查失败。相关 65 项首次 64 通过，独立策略测试误带另一模式 inputRule 后修正，只重查失败项通过。后加 ledge 新证明通过。公开类型检查通过，新增 ledge 字段在音频阶段合并检查。全工程/浏览器回归留 E。
 
 不宣称逐位重放 GBA 帧任务、全部碰撞回调、骑行道路成绩或全部地图素材。原 C/D/E 继续。输入/碰撞/位移/采样/资源字段改动使对应证据失效，未变化模块沿用记录。
+
+
+## 跑步时序与步幅采样
+
+跑步素材与配置的时序由`tools/import.py actor-animations`从同一C参考导出。Run动画在原合并图集用9–17帧，独立running.png重映射为0–8；每一步对应5帧腿部姿态＋3帧中间姿态，两步完整循环。移动包按MOVE_SPEED_FAST_1的8个Step2设为8000/60 ms。
+
+`clock:stride`必须是循环序列，表示两步一个周期；采样消费GridMotion的progress与foot，不在每格重置成同一只脚。未提供progress的普通时间消费方仍按elapsed取样。默认elapsed的Acro/插件片段合同不变；reducedMotion保持静态末姿态。新姿态属于表现声明，不改碰撞、计步、存档或战斗。实际观感与输入端到端由用户确认。

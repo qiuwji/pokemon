@@ -5,6 +5,10 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from workspace import WorkspaceView
 
 
 def install(pack, project, check=False):
@@ -15,9 +19,10 @@ def install(pack, project, check=False):
     audio = (pack / asset_name).read_bytes()
     if hashlib.sha256(audio).hexdigest() != metadata['assetSha256']:
         raise ValueError('Pack audio checksum differs from manifest')
-    root = project.resolve() / 'dist'
+    workspace = WorkspaceView(project)
+    root = workspace.root
     cue = metadata['cue']
-    asset = (root / cue['source']).resolve()
+    asset = Path(os.path.abspath(root / cue['source']))
     if not asset.is_relative_to(root.resolve()) or not cue['source'].startswith('assets/audio/'):
         raise ValueError('Invalid pack asset destination')
     identifier = metadata['id']
@@ -45,7 +50,7 @@ def install(pack, project, check=False):
     for record in manifest['files']:
         if record['section'] != 'maps' or record.get('generated'):
             continue
-        path = (root / 'content' / record['path']).resolve()
+        path = Path(os.path.abspath(root / 'content' / record['path']))
         if not path.is_relative_to((root / 'content').resolve()):
             raise ValueError('Invalid content path')
         data = json.loads(path.read_text())
@@ -56,6 +61,9 @@ def install(pack, project, check=False):
         changes[path] = (json.dumps(data, ensure_ascii=False, indent=2) + '\n').encode()
     if not maps and not metadata.get('selection'):
         raise ValueError('No current map uses this original song; no installation performed')
+    changes = {workspace.destination(path, generated=path != catalog_path and path not in
+                 [root / 'content' / entry['path'] for entry in manifest['files']]): data
+               for path, data in changes.items()}
     changes = {p: b for p, b in changes.items() if not p.exists() or p.read_bytes() != b}
     report = {'maps': maps, 'files': [str(p.relative_to(project.resolve())) for p in changes],
               'selection': metadata.get('selection', 'map-music'),

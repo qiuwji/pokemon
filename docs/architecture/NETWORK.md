@@ -95,7 +95,7 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 
 ## 控制观察与连续执行
 
-AI产品的操作例和字段以[插件指南](../../dist/plugins/ai-control/README.md)为准。core.field.move返回moved/blocked/animating/busy/interacted结构化回执；UI命令适配器取accepted用于原输入反馈。core.control.walk由独立ControlApplication与可测ControlWalk编排，等待实际野外结算，事件边界停止，取消不会回滚已完成步。ObservationJournal保存有界瞬时事实，剧情领域另保存已确认对象对白身份；引擎不依赖产品插件。
+AI产品的操作例和字段以[插件指南](../../src/plugins/ai-control/README.md)为准。core.field.move返回moved/blocked/animating/busy/interacted结构化回执；UI命令适配器取accepted用于原输入反馈。core.control.walk由独立ControlApplication与可测ControlWalk编排，等待实际野外结算，事件边界停止，取消不会回滚已完成步。ObservationJournal保存有界瞬时事实，剧情领域另保存已确认对象对白身份；引擎不依赖产品插件。
 
 CommandDefinition.query用于声明纯同步读命令；core.query、控制查询及插件queries已标记。网络头可携带observe/observeInput（查询ID/JSON字符串）。网关在动作前验证查询资格和输入，执行后取状态；动作已经提交后观察失败只附observationError，不能把它报告为需重试的动作失败。请求指纹包含观察选项，去重复用整个结果。
 

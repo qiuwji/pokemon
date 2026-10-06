@@ -79,4 +79,4 @@ core.trade.prepare/exchange交换的是当前存档中的伙伴池，不是另�
 
 必须验证：旧epoch/乱序/重复载荷冲突、内容不匹配、非参与者、同时接受/拒绝、准备后断开、commit后单端失败、进程重启恢复、容量变化、同UID跨玩家映射、奖励/资产不重复。交换以两份独立存档实际领域状态断言；战斗以同一回合输入和权威事实断言。真实WebSocket与浏览器分别观察，测试peer不能冒充生产协调者。
 
-现有代码定位：[network-session.js](../../dist/engine/extensions/network-session.js)、[network-gateway.js](../../dist/engine/extensions/network-gateway.js)、[network-transport.js](../../dist/adapters/network-transport.js)、[network.test.js](../../tests/network.test.js)。改名时搜索`class NetworkSession`、`createLoopbackTransport`、`core.trade.exchange`。原作行为参考只读[link.c](../../work/pokeemerald/src/link.c)和[trade.c](../../work/pokeemerald/src/trade.c)及固定修订[SCOPE](../project/SCOPE.md)；原硬件通信不等于网页持久协调协议。
+现有代码定位：[network-session.js](../../src/engine/extensions/network-session.js)、[network-gateway.js](../../src/engine/extensions/network-gateway.js)、[network-transport.js](../../src/adapters/network-transport.js)、[network.test.js](../../tests/network.test.js)。改名时搜索`class NetworkSession`、`createLoopbackTransport`、`core.trade.exchange`。原作行为参考只读[link.c](../../work/pokeemerald/src/link.c)和[trade.c](../../work/pokeemerald/src/trade.c)及固定修订[SCOPE](../project/SCOPE.md)；原硬件通信不等于网页持久协调协议。

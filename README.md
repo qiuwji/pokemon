@@ -8,9 +8,9 @@
 
 当前阶段为**七个方向的可扩展框架 + 各一个代表例 + 分领域接手Skill**，暂缓全部原作内容填充。先读[范围](docs/project/SCOPE.md)、[真实进度](docs/project/STATUS.md)和[Skill导航](docs/project/SKILLS.md)；设施活动框架与代表例已接线；其余欠账见STATUS，接手文档不作为实现证明。
 
-新增可选[JSON设施插件](dist/plugins/facility-content/README.md)：连战、轮次表演评分和老虎机转轮可配置；启用 `?plugins=facility-content` 后从菜单进入。它们是业务模板，完整原作特殊规则仍待补充。
+新增可选[JSON设施插件](src/plugins/facility-content/README.md)：连战、轮次表演评分和老虎机转轮可配置；启用 `?plugins=facility-content` 后从菜单进入。它们是业务模板，完整原作特殊规则仍待补充。
 
-本轮新增游戏外的插件开关面板（保存后重启生效）、原作窗口/背包/队伍素材与240×160画面比例，以及可选[自由飞行插件](dist/plugins/high-flight/README.md)：越障、1.5倍视野、薄雾、安全降落，骑乘使用原作Fly鸟与男女主角图。通用移动政策和插件业务分开；当前UI未宣称全页面逐像素还原，浏览器画面待用户验收。源码落点看[代码地图](docs/development/CODE_MAP.md)。
+本轮新增游戏外的插件开关面板（保存后重启生效）、原作窗口/背包/队伍素材与240×160画面比例，以及可选[自由飞行插件](src/plugins/high-flight/README.md)：越障、1.5倍视野、薄雾、安全降落，骑乘使用原作Fly鸟与男女主角图。通用移动政策和插件业务分开；当前UI未宣称全页面逐像素还原，浏览器画面待用户验收。源码落点看[代码地图](docs/development/CODE_MAP.md)。
 
 本轮按固定原作图块、调色板、窗口和sprite坐标接入背包、详情四页、图鉴、PC、训练家卡、商店、保存、选初始精灵与地区地图，并保留插件区域。告示牌即时、NPC逐字；捕捉先播放动画再显示结果；确认音效统一入口。具体已支持功能和未验边界见[界面说明](docs/development/EMERALD_UI.md)。
 
@@ -35,7 +35,7 @@ npm run test:plugins
 npm run check:docs
 ```
 
-`npm test`仅运行核心合同（含插件宿主API），`npm run test:plugins`独立运行可选插件作者示例；`npm run test:all`显式运行两组。最新通过数量、输入指纹、日志及未验范围统一看[验证记录](docs/project/VALIDATION.md)，避免在多个入口维护过期数字。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及配置的引擎类型。可部署dist/到静态HTTP服务；ES模块与fetch需要HTTP。
+`npm test`仅运行核心合同（含插件宿主API），`npm run test:plugins`独立运行可选插件作者示例；`npm run test:all`显式运行两组。最新通过数量、输入指纹、日志及未验范围统一看[验证记录](docs/project/VALIDATION.md)，避免在多个入口维护过期数字。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及配置的引擎类型。`src/`是可编辑输入，`generated/`是派生输入，`npm run build`生成不入库的`dist/`；详见[构建合同](docs/development/BUILD_PIPELINE.md)。可部署dist/到静态HTTP服务；ES模块与fetch需要HTTP。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前结果以验证记录为准，代码通过不代表浏览器视觉和听音通过。
 
@@ -55,9 +55,9 @@ npm run check:docs
 - 注册式野外行动支持自行车、鱼竿、冲浪与飞行：自行车/鱼竿要求实际库存，HM 行动要求徽章与招式。研究装备领取旁路已删除；原作获得剧情尚待地图业务补齐。
 - 对象、地形和道具共用资格/目标/计划/提交；可注册受阻行动、对象位移与持续效果。怪力/闪光为规则包政策，箱子/草地/提灯/重量感应器由测试夹具证明组合；地图可声明局部照明。示例尚未默认接入原作业务地图，见[野外合同](docs/engine/field/FIELD_ACTIONS.md)。
 - 研究所育成页面：寄存、产蛋、领取、步数孵化、交换；详情页支持装备、进化石，成长流程支持遗传和复杂进化条件。
-- 默认启用[AI控制插件](dist/plugins/ai-control/README.md)，提供真实移动回执、行动条件、事件增量、连续执行、详细观察及命令附带状态；`?control=1`连接本机开发通道。测试插件需`?control=1&e2e=1&test-harness=1`显式开启，提供测试室、原子准备和结果查询。用法见[插件使用指南](dist/plugins/ai-control/README.md)；核心/插件测试继续分开。
+- 默认启用[AI控制插件](src/plugins/ai-control/README.md)，提供真实移动回执、行动条件、事件增量、连续执行、详细观察及命令附带状态；`?control=1`连接本机开发通道。测试插件需`?control=1&e2e=1&test-harness=1`显式开启，提供测试室、原子准备和结果查询。用法见[插件使用指南](src/plugins/ai-control/README.md)；核心/插件测试继续分开。
 - 扩展连接页面：本地协议验证及可替换 WebSocket 传输。网络消息经过校验进入与 UI 相同的命令系统，控制当前单机。
-- 注册式战斗效果与多轨招式脚本，持续天气/异常状态、升降能力、逐次命中、训练家入场、地形背景；野外影子、昼夜、天气和表情。六类转场及六个独立场景演出示例。声音由用户开启，采用真实WAV资源；插件可注册音效/音乐，支持通道、循环和暂停续播。原声统一装在[单一音频包](dist/assets/audio/emerald-audio/manifest.json)并默认启用：第一章6首地图曲与野生/训练家/劲敌3首战斗曲都按原作`midi.cfg`音量渲染，地图保留原曲常量由运行时解析；完整SE、剧情切曲与恢复政策仍待补齐。
+- 注册式战斗效果与多轨招式脚本，持续天气/异常状态、升降能力、逐次命中、训练家入场、地形背景；野外影子、昼夜、天气和表情。六类转场及六个独立场景演出示例。声音由用户开启，采用真实WAV资源；插件可注册音效/音乐，支持通道、循环和暂停续播。原声统一装在[单一音频包](generated/assets/audio/emerald-audio/manifest.json)并默认启用：第一章6首地图曲与野生/训练家/劲敌3首战斗曲都按原作`midi.cfg`音量渲染，地图保留原曲常量由运行时解析；完整SE、剧情切曲与恢复政策仍待补齐。
 
 当前有 44 个具体招式脚本，其中 25 个对应已导入的 87 个招式；其他招式使用通用视觉回退。场景菜单中的徽章、联盟、选美、战斗塔、标题、图鉴是演出能力示例，已有独立设施会话、两场连战和非战斗活动合同，完整原作设施玩法尚未开放。
 
@@ -69,7 +69,7 @@ npm run check:docs
 
 ## 剧情与对话扩充
 
-原生地区包放`dist/content/stories/`，同一manifest装配；插件通过`api.story.registerBundle`注册。支持显式对象/原脚本绑定、参数化公共call、领域结果分支、条件选项，以及durable稳定节点和战斗结果关联续接。对白按行定义角色、立绘/表情与标量插值，确认后的记录可以保存回看。
+原生地区包放`src/content/stories/`，同一manifest装配；插件通过`api.story.registerBundle`注册。支持显式对象/原脚本绑定、参数化公共call、领域结果分支、条件选项，以及durable稳定节点和战斗结果关联续接。对白按行定义角色、立绘/表情与标量插值，确认后的记录可以保存回看。
 
 字段与用法见[剧情语言](docs/engine/story/STORY_LANGUAGE.md)、[对话合同](docs/engine/presentation/DIALOGUE.md)，职责与限制见[剧情架构](docs/architecture/STORY_CONTENT.md)，完整组合见[story-bundle示例](examples/story-bundle.test.js)。普通短battle不等待胜负；持久脚本必须声明durable与稳定node，不支持活跃战斗中途存档。新增机制不等于原作全部NPC/剧情已经转写。
 
@@ -131,7 +131,7 @@ npm run check:docs
 
 精灵、招式、道具通过内容数据注册。新效果由唯一操作/招式效果表与规则阶段组合；道具在受限草稿上试算，再校验字段、库存和目标后提交。未知效果明确报错；基础内容中已没有显式禁用效果，但完整语义仍须按机制清单逐项核对。表现独立通过 effect/move/scene/transition/audio 注册，新增视觉不修改绘制分支。
 
-转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；内容通过[分类清单](dist/content/manifest.json)装配，全部19个导入入口支持预演和独立目标，按字段/产物所有权更新。详见[内容管线](docs/development/CONTENT_PIPELINE.md)与[脚本索引](docs/development/IMPORT_SCRIPTS.md)。测试地图只在显式?e2e=1环境加载。
+转换工具可读取本地 pret/pokeemerald 源码导出选定数据和图块，不加载或执行 ROM。工具需要 Pillow；内容通过[分类清单](src/content/manifest.json)装配，全部21个导入入口支持预演和独立目标，按字段/产物所有权更新。详见[内容管线](docs/development/CONTENT_PIPELINE.md)与[脚本索引](docs/development/IMPORT_SCRIPTS.md)。测试地图只在显式?e2e=1环境加载。
 
 #天气合同、插件示例和原作映射见 [WEATHER.md](docs/engine/world/WEATHER.md)。
 
@@ -154,6 +154,6 @@ npm run check:docs
 
 原作图像/地图/数据来自 [pret/pokeemerald](https://github.com/pret/pokeemerald)，导入固定修订 `731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。Pokémon、角色、地图、名称和原图权利属于 Nintendo、Creatures、GAME FREAK；本项目是非官方同人演示，不附带 ROM。新增粒子和演出由代码绘制；音频参考来源与当前临时映射见 docs/engine/presentation/AUDIO.md。
 
-中文界面使用本地 [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)，SIL OFL 1.1；许可在 `dist/assets/licenses/`。制作其他同类游戏可复用引擎和适配器，替换成自有世界、内容、名称和素材。
+中文界面使用本地 [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)，SIL OFL 1.1；许可在 `src/assets/licenses/`。制作其他同类游戏可复用引擎和适配器，替换成自有世界、内容、名称和素材。
 
 插件现在可以组合地区表/种子选格/接触战斗、按身份切换外观与服饰图层、二维相机范围/焦点/缩放及独立雾层。见[外观与视图](docs/engine/presentation/APPEARANCE_AND_VIEW.md)和[27行公开组合示例](examples/visual-extension.test.js)。未安装完整明雷或换装业务；3D视角、探索迷雾、逐字对话及详情帧播放器仍按STATUS排期。

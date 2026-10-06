@@ -27,7 +27,7 @@
 | 战斗 `import-move-metadata.py` | battle_moves/battle_util → 已导入招式目标/接触/声音字段 | 可选source、--moves；先有招式表，候选招式须在此参考中存在；共用严格解析器 | 是 |
 | 战斗 `import-rule-metadata.py` | battle_moves/pokedex_entries/battle_util → rules/gen3/reference-metadata.js | 可选source及`--config`；数量/Nature Power清单来自gen3.json，共用严格解析器 | 是 |
 | 人物 `import-movement.py` | 原作交通/水面/鸟PNG → actor定义与PNG | 可选source、--actors/--profile；资源/帧定义来自配置，保留后续姿态字段 | 是 |
-| 人物 `import-actor-animations.py` | object_event_anims及现有Acro PNG → Acro动画/帧数 | 可选source、--profile；先导入movement素材，姿态/序列映射来自配置 | 是 |
+| 人物 `import-actor-animations.py` | object_event_anims及现有跑步/Acro PNG → 配置的Actor动画/帧数 | 可选source、--profile；先导入movement素材，姿态/序列映射来自配置 | 是 |
 | 孵化 `import-egg-assets.py` | egg目录的四张PNG → egg-front/icon/hatch/shard.png | 可选source、--profile；只导入图像，不生成成长规则 | 是 |
 | 音频 `import-audio.py` | direct_sound_samples WAV → audio资源及来源记录 | 可选source、--profile；不是整部原作BGM转换器，记录实际参考修订 | 是 |
 | 剧情 `import-script-text.py` | 各地图scripts.inc的`.string` → 原作对白label参考JSON | 可选source、--maps、--out（相对路径落在--target内）；只读抽取，不写游戏内容，供逐字转写对照 | 否 |
@@ -62,7 +62,7 @@ B：图鉴、战斗与成长
 - 不同脚本共写物种或地图时按字段分工，不能用“最后执行者优先”解决冲突。具体范围以ownership.json为准，越界提交失败。
 - 当业务需要变更写入范围，同次更新所有权、管线文档和保留/越权测试；不要直接让一个脚本写所有section。
 - 六个原作规则数据生成器使用统一`@generated`头，含实际只读参考Git修订；业务处理器仍为手写，不可覆盖。默认区域/物种、人物/音频/蛋资源映射和图块动画区间来自slice配置，中文名在独立locale文件。导入器报告所选内容的缺失依赖；预演不证明原作完整内容已经导入。
-- `work/*.py`历史一次性脚本不是受支持导入入口，仍可能依赖已删除的旧content.json；本轮不执行它们。复现或归档作为后续工具治理任务，不能继续字符串替换核心源码。
+- 旧`work/`一次性重构/调试脚本、临时QA存档和日志已清理；它们依赖旧content.json或历史结构。当前导入和控制入口均在tools，不能继续用字符串替换脚本改写核心源码。
 
 ## 参数与生成物示例
 
@@ -104,6 +104,6 @@ python3 tools/fixtures/generate.py --check
 python3 tools/fixtures/generate.py --scenes E2ETestField
 ```
 
-只写dist/fixtures/world.json。terrain表记录水/冰/岩壁的视觉来源；泥坡、凸坡、横/竖轨道另以原图集行为属性和渲染截图确认。水动画区间与grid导入共读tile-animations.json，花动画不算水。自动检查只能证明索引/动画/行为合同；外观另做图片观察，不把生成成功当视觉还原。安装图像工具依赖用`python3 -m pip install -r tools/requirements.txt`。干净副本无work/的生成与第二次无差异预演由Python可携带性测试覆盖。
+只写generated/fixtures/world.json。terrain表记录水/冰/岩壁的视觉来源；泥坡、凸坡、横/竖轨道另以原图集行为属性和渲染截图确认。水动画区间与grid导入共读tile-animations.json，花动画不算水。自动检查只能证明索引/动画/行为合同；外观另做图片观察，不把生成成功当视觉还原。安装图像工具依赖用`python3 -m pip install -r tools/requirements.txt`。干净副本无work/的生成与第二次无差异预演由Python可携带性测试覆盖。
 
 剧情工具入口为`tools/story/extract.py extract/verify/movement`；movement子命令连接`tools/story/movement.py`，先回校验固定来源再输出命令。参数及支持范围见[提取流程](STORY_EXTRACTION.md)，不写游戏数据。opening-art同时导出原作转场精灵球，固定透明色与调色板，纳入opening-art-source.json来源清单。门帧不再写死是哪几扇：脚本按`field_door.c`的图组和`metatile_labels.h`，只为本内容实际走到的门格追加派生metatile，`door-anims.js`是运行时唯一门表，未列入的门不播放；重新运行按图集尾部的自有门图块整体替换，不累加。

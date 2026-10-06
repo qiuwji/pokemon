@@ -7,7 +7,8 @@ export default [
   },
   {
     files: [
-      "dist/**/*.js",
+      "src/**/*.js",
+      "generated/**/*.js",
       "tests/**/*.js",
       "examples/**/*.js",
       "tools/**/*.mjs",
@@ -39,7 +40,7 @@ export default [
     },
   },
   {
-    files: ["dist/adapters/**/*.js", "dist/packs/**/*.js", "dist/app.js"],
+    files: ["src/adapters/**/*.js", "src/packs/**/*.js", "src/app.js"],
     languageOptions: { globals: globals.browser },
   },
   {

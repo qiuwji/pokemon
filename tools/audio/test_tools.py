@@ -145,5 +145,23 @@ class AudioBundleTools(unittest.TestCase):
                 self.assertEqual(hashlib.sha256(asset.read_bytes()).hexdigest(), track['assetSha256'])
 
 
+class SourceAudioTests(unittest.TestCase):
+    def test_portable_pack_installs_into_source_inputs_and_repeated_preview_is_empty(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project, pack = fixture(Path(temp))
+            (project / 'dist').rename(project / 'src')
+            (project / 'generated').mkdir()
+            before = files(project)
+            installer.install(pack, project, check=True)
+            self.assertEqual(files(project), before)
+            installer.install(pack, project)
+            self.assertFalse((project / 'dist').exists())
+            self.assertTrue((project / 'generated/plugins/test-music.js').exists())
+            self.assertTrue((project / 'generated/assets/audio/test-music/mus_test.wav').exists())
+            self.assertEqual(json.loads((project / 'src/content/maps/town.json').read_text())['music'],
+                             'test-music:mus_test')
+            self.assertEqual(installer.install(pack, project, check=True)['files'], [])
+
+
 if __name__ == '__main__':
     unittest.main()

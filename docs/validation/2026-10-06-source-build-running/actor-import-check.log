@@ -1,0 +1,9 @@
+Imported actor sprite timelines from C: BrendanAcroBike frames: 27
+Imported actor sprite timelines from C: BrendanRun frames: 9
+{
+  "script": "import-actor-animations.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": []
+}

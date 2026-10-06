@@ -22,6 +22,8 @@ description: 通过现有插件公开API扩展绿宝石的内容、规则、状�
 
 ## 编写插件
 
+源码在src/plugins，派生资源在generated/plugins或generated/assets；dist只部署，参照[构建合同](../../docs/development/BUILD_PIPELINE.md)。通用战斗扩展的[待评审方案](../../docs/project/PLUGIN_EXTENSION_REVIEW.md)不属于当前API；没有用户的新授权不得把拟议字段当作实现。
+
 manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。setup只注册，不在注册时开始行动/发网络/写存档。保留目录引用、重复/未知ID启动拒绝；插件数据严格当前schema，不引入历史迁移旁路。
 
 页面/入口/HUD通过ui注册，点击控件调用action；context携带UID，schema明确允许输入。查询深冻结；写入通过commands或事务intent，不能抓全局game、DOM、localStorage或直接写队伍。ctx.store自有记录和通用states表示插件记忆/状态，既有领域值仍由原所有者修改。
@@ -269,19 +271,19 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [dist/engine/extensions/plugin-host.js](../../dist/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" dist tests docs package.json` |
-| [dist/engine/extensions/ui-registry.js](../../dist/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" dist tests docs package.json` |
+| [src/engine/extensions/plugin-host.js](../../src/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" dist tests docs package.json` |
+| [src/engine/extensions/ui-registry.js](../../src/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" dist tests docs package.json` |
 | [examples/plugin-page.test.js](../../examples/plugin-page.test.js) | `rg -n "monster.detail" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 
 ## 浏览器装配入口
 
-受信任本地插件在dist/plugins/catalog.json登记模块/导出名/默认启用及工厂输入；不再向app.js增加逐插件分支。见[内容管线的插件部分](../../docs/development/CONTENT_PIPELINE.md)。新增后验证实际host装配；仅登记文件不证明功能。E2E插件必须显式测试环境启用，不能默认暴露发奖命令。此处没有热卸载或远程沙箱。
+受信任本地插件在src/plugins/catalog.json登记模块/导出名/默认启用及工厂输入；不再向app.js增加逐插件分支。见[内容管线的插件部分](../../docs/development/CONTENT_PIPELINE.md)。新增后验证实际host装配；仅登记文件不证明功能。E2E插件必须显式测试环境启用，不能默认暴露发奖命令。此处没有热卸载或远程沙箱。
 
 ## 只读查询与AI消费方
 
-纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件位于dist/plugins/ai-control，真实移动回执、连续执行、事件游标和命令附状态见[插件指南](../../dist/plugins/ai-control/README.md)。以moved判断移动，不把accepted或网络ok当作走动；查询用detail选择字段并保存nextCursor，gap时刷新状态。长轮询由传输承担，不能在插件事务里嵌套异步路线。测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。
+纯观察使用api.queries.register(localId,{schema,network?,read(view,input)})；冻结view支持query/store.get/states.list，回调同步且禁止dispatch。不要用action事务承载频繁观察，也不要给写动作开放concurrent绕过锁。查询与action的局部命令名不可重复。默认AI插件位于src/plugins/ai-control，真实移动回执、连续执行、事件游标和命令附状态见[插件指南](../../src/plugins/ai-control/README.md)。以moved判断移动，不把accepted或网络ok当作走动；查询用detail选择字段并保存nextCursor，gap时刷新状态。长轮询由传输承担，不能在插件事务里嵌套异步路线。测试插件、语义UI端口和命令行通道见[AI控制指南](../../docs/development/AI_CONTROL.md)；当前默认装配只查catalog，Skill不维护固定名单。
 
 ## 修改已有世界
 
@@ -327,7 +329,7 @@ test("a mod discovers, replaces and reads back an existing sign dialogue", async
 
 自定义移动仍用movement + fieldActions注册。需要越障/非地面交互时先核对[导航政策](../../docs/engine/field/FIELD_ACTIONS.md)，通过navigation显式声明，不在World写某个插件或徽章分支。表现引用独立appearances/cameraProfiles/environmentLayers；规则不读取绘制结果。requiresLanding的退出需走统一移动提交，不能先把模式改成walk再校验地形。
 
-端到端锚点：[high-flight插件](../../dist/plugins/high-flight/index.js)、[作者说明](../../dist/plugins/high-flight/README.md)、[专项](../../examples/high-flight.test.js)。入口改名搜索`replacesTravel`、`requiresLanding`、`commitMode`。测试应验证真实命令、非法落地保持原模式、地面高度恢复、空中存读档和关闭后原移动可用；不能只断言注册表里有ID。动画/reducedMotion通过既有纯表现合同处理。
+端到端锚点：[high-flight插件](../../src/plugins/high-flight/index.js)、[作者说明](../../src/plugins/high-flight/README.md)、[专项](../../examples/high-flight.test.js)。入口改名搜索`replacesTravel`、`requiresLanding`、`commitMode`。测试应验证真实命令、非法落地保持原模式、地面高度恢复、空中存读档和关闭后原移动可用；不能只断言注册表里有ID。动画/reducedMotion通过既有纯表现合同处理。
 
 骑乘不要拿战斗精灵图充当野外素材。先追C模板的图片尺寸/调色板槽/主角偏移，再导入透明PNG和输入/输出hash；代表脚本为tools/plugins/export-flight-art.py，带--source和只读--check。新素材在插件自己assets目录，运行不依赖未跟踪work。
 

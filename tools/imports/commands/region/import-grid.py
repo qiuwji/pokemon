@@ -38,7 +38,7 @@ for name in session.select('maps', db['maps']):
  session.image(atlas,A/f'tiles-{key}.png');packs[key]={'tileSize':8,'gridSize':16,'columns':32,'atlas':{'width':width,'height':height,'tileCount':len(tiles)},'lookup':lookup,'metatiles':meta,'attributes':attrs,'animations':animations,'background':list(pals[0][0])};print(key,len(tiles),'8x8 tiles',len(meta),'metatiles')
 db['tilesets'].update(packs)
 # Include the native running poses, which share the same directional frame layout.
-run=painted(Image.open(R/'graphics/object_events/pics/people/brendan/running.png'),pal(R/'graphics/object_events/palettes/brendan.pal'));session.image(run,A/'actor-BrendanRun.png');db['actors']['BrendanRun']={'w':16,'h':32}
+run=painted(Image.open(R/'graphics/object_events/pics/people/brendan/running.png'),pal(R/'graphics/object_events/palettes/brendan.pal'));session.image(run,A/'actor-BrendanRun.png');db['actors']['BrendanRun']={**db['actors'].get('BrendanRun',{}),'w':16,'h':32}
 session.content(db)
 
 session.finish()

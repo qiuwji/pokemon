@@ -1,5 +1,8 @@
 # 在现有工程中写业务与插件
 
+源码编辑src，资源/网格等派生输入由工具写generated；dist只构建，见[构建合同](BUILD_PIPELINE.md)。
+
+
 这份指南面向第一次拿到项目的开发者。先读[当前范围](../project/SCOPE.md)和[状态](../project/STATUS.md)，再选[领域Skill](../project/SKILLS.md)。默认任务是在已有框架上写内容，不是重新设计引擎。Skill保存工作方法，本页说明公共写法；状态和验证数量只在项目记录中维护。
 
 目录与任务落点统一见[代码地图](CODE_MAP.md)，以下表格规定修改边界。
@@ -8,11 +11,11 @@
 
 | 任务 | 代码位置 | 修改边界 |
 | --- | --- | --- |
-| 原作地图、事件、训练家、物种、道具与默认政策 | dist/packs/emerald的对应定义文件、dist/content/manifest.json及对应分类文件、dist/assets | 使用已有领域注册；原生地区数据放content/stories，动态短事件由story.js装配；不往world或battle里加地图ID分支 |
-| 独立玩法/现代机制/新页面 | dist/plugins/中的独立模块 | 导出manifest，setup注册；通过查询/命令/intent运行；禁止导入adventure、应用服务或抓window.game |
-| 新资源/导出流程 | dist/assets及tools | 以grid/metatile组织地图；保留来源；不能写回work/pokeemerald或sources |
-| 必要的新通用规则/生命周期 | dist/engine和明确的应用所有者 | 先写缺口合同及验收例，作为框架任务；核心不依赖内容包、DOM、Canvas |
-| 新演出/视觉 | 注册定义、dist/presentation及dist/adapters | 描述、纯取样和绘制分离；不重算规则、不使用游戏RNG；统一时钟及reducedMotion |
+| 原作地图、事件、训练家、物种、道具与默认政策 | src/packs/emerald的对应定义文件、src/content/manifest.json及对应分类文件、generated/assets | 使用已有领域注册；原生地区数据放content/stories，动态短事件由story.js装配；不往world或battle里加地图ID分支 |
+| 独立玩法/现代机制/新页面 | src/plugins/中的独立模块 | 导出manifest，setup注册；通过查询/命令/intent运行；禁止导入adventure、应用服务或抓window.game |
+| 新资源/导出流程 | generated/assets及tools | 以grid/metatile组织地图；保留来源；不能写回work/pokeemerald或sources |
+| 必要的新通用规则/生命周期 | src/engine和明确的应用所有者 | 先写缺口合同及验收例，作为框架任务；核心不依赖内容包、DOM、Canvas |
+| 新演出/视觉 | 注册定义、src/presentation及src/adapters | 描述、纯取样和绘制分离；不重算规则、不使用游戏RNG；统一时钟及reducedMotion |
 | 验证 | 核心合同放tests/；产品插件专属用例和入门例放examples/ | tests不得导入已安装产品插件或examples；共享夹具放tests/helpers、tests/fixtures，替代项明确标注 |
 
 默认领域不支持的能力记录为缺口，不能假装插件API已经支持。复杂UI与现代行动增强按各自领域合同编写；完整NPC日程、部分持续HM及未提供的渲染/替换能力，以STATUS为准。
@@ -21,14 +24,14 @@
 
 最小示例见[examples](../../examples/README.md)。`manifest(id,setup,permissions)`和`session()`只是**测试辅助函数**。生产插件是导出的普通对象，包含id、apiVersion、version、dataVersion、permissions和setup；版本是语义版本字符串如1.0.0。浏览器不会扫描examples自动装载插件。
 
-1. 在`dist/plugins/my-feature.js`导出manifest。setup只注册，不开始战斗、查询未就绪游戏或写存档。
+1. 在`src/plugins/my-feature.js`导出manifest。setup只注册，不开始战斗、查询未就绪游戏或写存档。
 2. `api.content.register(kind,"local-id",definition)`返回带插件命名空间的ID。后续引用保存返回值，避免把局部ID当成全局引用。故事、页面、行为和视觉用各自注册入口。
-3. 在`dist/plugins/catalog.json`登记模块路径和装配配置；app.js统一加载目录，不逐个导入插件。不要把规则、库存或剧情分支移入启动入口。宿主创建目录并seal校验，然后建立EmeraldAdventure并attach扩展端口。
+3. 在`src/plugins/catalog.json`登记模块路径和装配配置；app.js统一加载目录，不逐个导入插件。不要把规则、库存或剧情分支移入启动入口。宿主创建目录并seal校验，然后建立EmeraldAdventure并attach扩展端口。
 4. 玩家点击布局控件或菜单时，通过已注册action执行。插件外部使用`api.commands.dispatch(id,input)`；action内部通过ctx.store、ctx.states及ctx.intent提交，**不能在事务中再次dispatch**。
 5. 查询快照只读；完整个体UID随精灵而保持，不能用席位/队伍数组下标替代。插件保存自有记忆，已有队伍/背包/位置仍由原领域所有者保存。
 6. 页签、HUD及表现根据已提交事实更新。等待动画不能改变命中、伤害或奖励结果。真实UI可用性和资源音频需另做浏览器观察。
 
-公开命令/schema实际在[application-commands.js](../../dist/packs/emerald/application-commands.js)，权限/意图在[extension-intents.js](../../dist/packs/emerald/extension-intents.js)，注册面在[plugin-host.js](../../dist/engine/extensions/plugin-host.js)。文件移动时搜索`registerEmeraldCommands`、`validateEmeraldIntent`、`class PluginHost`。网络沿同一命令协议，不提供任意脚本注入，也不因此承诺联机同步。
+公开命令/schema实际在[application-commands.js](../../src/packs/emerald/application-commands.js)，权限/意图在[extension-intents.js](../../src/packs/emerald/extension-intents.js)，注册面在[plugin-host.js](../../src/engine/extensions/plugin-host.js)。文件移动时搜索`registerEmeraldCommands`、`validateEmeraldIntent`、`class PluginHost`。网络沿同一命令协议，不提供任意脚本注入，也不因此承诺联机同步。
 
 ## 写法与代码质量
 
@@ -58,7 +61,7 @@
 | `node tools/audit-mechanisms.mjs work/pokeemerald` | 读取固定C参考，更新docs/engine/battle下生成审计；登记/无引用不等于规则已验证 |
 | `python3 tools/import.py emerald work/pokeemerald` | 先加--check预演；通过内容清单及字段所有权合并选定内容，不自动调用grid；详见[导入索引](IMPORT_SCRIPTS.md) |
 | `python3 tools/import.py encounters work/pokeemerald` | 先加--check预演；只写地图陆地遭遇字段，禁止触碰进化；详见[内容管线](CONTENT_PIPELINE.md) |
-| `python3 tools/import.py audio work/pokeemerald` | 复制选定真实WAV并记录来源hash，写dist/assets/audio；不是整部原作BGM自动转换 |
+| `python3 tools/import.py audio work/pokeemerald` | 复制选定真实WAV并记录来源hash，写generated/assets/audio；不是整部原作BGM自动转换 |
 
 其他导入工具按`tools/`实际参数解析和输出路径读取，不根据名字猜用法。宽导入器需要在临时**项目副本**中生成、比较和挑选本次数据，不在参考目录创建输出，也不对主树整包覆盖。不需要重新下载已提供资料；缺参考时按[项目导航](../../skills/emerald-project-handoff/references/project-map.md)的固定修订获取。
 
@@ -68,6 +71,6 @@
 
 ## 新地区剧情与对话
 
-内容数据放dist/content/stories并登记manifest；插件通过registerBundle，不修改app.js硬接剧情。对象绑定用selector.objectId或map+localId/script，公共call传schema参数，对话用目录及显式bindings；条件/选择结果仍由领域命令处理。持久脚本需要durable、每条稳定node、checkpoint和battle.onResult，不把动画帧或闭包写存档。完整示例、字段与错误说明读[剧情架构](../architecture/STORY_CONTENT.md)、[剧情语言](../engine/story/STORY_LANGUAGE.md)和[组合例](../../examples/story-bundle.test.js)。
+内容数据放src/content/stories并登记manifest；插件通过registerBundle，不修改app.js硬接剧情。对象绑定用selector.objectId或map+localId/script，公共call传schema参数，对话用目录及显式bindings；条件/选择结果仍由领域命令处理。持久脚本需要durable、每条稳定node、checkpoint和battle.onResult，不把动画帧或闭包写存档。完整示例、字段与错误说明读[剧情架构](../architecture/STORY_CONTENT.md)、[剧情语言](../engine/story/STORY_LANGUAGE.md)和[组合例](../../examples/story-bundle.test.js)。
 
 观察、AI控制及测试插件参考[AI控制指南](AI_CONTROL.md)。纯只读扩展注册queries，业务修改继续用actions/intent；产品模块测试放examples，核心只依赖最小测试夹具。

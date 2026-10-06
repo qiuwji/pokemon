@@ -1,6 +1,6 @@
 # 绿宝石应用服务与组合入口
 
-`dist/packs/emerald/adventure.js`是EmeraldAdventure组合入口，连接内容服务、UI、忙碌状态和会话重绑顺序。应用用例归各自所有者，公共端口由`application/public-ports.js`显式登记。剧情内容装配由`story/runtime.js`的`createEmeraldStory`负责：合并原生/插件目录、创建StoryCatalog与StoryEngine、检查事件区域引用；入口不再承担这段装配细节。门面规模守卫保持少于160行，不通过放宽阈值容纳新功能。
+`src/packs/emerald/adventure.js`是EmeraldAdventure组合入口，连接内容服务、UI、忙碌状态和会话重绑顺序。应用用例归各自所有者，公共端口由`application/public-ports.js`显式登记。剧情内容装配由`story/runtime.js`的`createEmeraldStory`负责：合并原生/插件目录、创建StoryCatalog与StoryEngine、检查事件区域引用；入口不再承担这段装配细节。门面规模守卫保持少于160行，不通过放宽阈值容纳新功能。
 
 ## 职责与状态所有权
 
@@ -73,7 +73,7 @@ AppearanceApplication拥有视觉选择，ViewApplication组合相机配置与�
 - 可见遭遇：`PartyStorageService.receive()`返回true后才释放凭证并记录捕获。结算拒绝时撤销claim、保留Actor/凭证；普通暗雷的失败结果不作为待支付奖励保存，错误明确返回，玩家可继续探索。
 - 设施：`FacilitySession.cancelBattle(ticket)`只解除匹配票据的等待，回到ready，允许退出或再次行动；不发奖、不记成功。已经在开战前支付的入场/行动成本保留。设施commit与notify分开，已提交状态不因通知故障回滚。
 
-通用货币模块为`dist/engine/currency.js`：`validateMoney(value)`检查非负安全整数，`changeMoney(current, delta, {clamp?})`纯计算余额，`settleMoney(state, value)`作为写入口。购物先计算合法余额，再提交库存；奖励、罚金、拾取结算和设施经济使用同一不变量。罚金显式允许下限为0，其他扣款不足即拒绝；小数、无穷值和溢出均在写入前拒绝。注入的rewardCurrency规则仍决定收益，宿主验证规则返回值。
+通用货币模块为`src/engine/currency.js`：`validateMoney(value)`检查非负安全整数，`changeMoney(current, delta, {clamp?})`纯计算余额，`settleMoney(state, value)`作为写入口。购物先计算合法余额，再提交库存；奖励、罚金、拾取结算和设施经济使用同一不变量。罚金显式允许下限为0，其他扣款不足即拒绝；小数、无穷值和溢出均在写入前拒绝。注入的rewardCurrency规则仍决定收益，宿主验证规则返回值。
 
 本次复审修复与新测试尚未执行验证，见[当前记录](../project/VALIDATION.md)。
 

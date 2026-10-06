@@ -44,7 +44,7 @@ api.story.register('gate', {
 
 序章图鉴资格依赖`rival.prize`已领取，胜利对话失败或重载不阻塞博士；原作图鉴与随后赠球分成professor.pokedex/professor.pokeballs两笔：球袋满只拒绝赠球，不撤销图鉴也不阻塞跑步鞋。`Reward inventory plan expired`发生在reward提交之前，不能据此认定同一奖励的旗标已写入；更早已提交的命令仍保留。
 
-训练家奖励统一用[trainerRewardId](../../../dist/packs/emerald/trainers.js)：`trainer.<trainerId>.prize`，包括练习、双打、混战和通用结算。视线资格读取同一ID，交互重战仍可开放但不重复付奖。事件ID如`trainer.practice.prize`另属completed，不是奖励账本的别名。
+训练家奖励统一用[trainerRewardId](../../../src/packs/emerald/trainers.js)：`trainer.<trainerId>.prize`，包括练习、双打、混战和通用结算。视线资格读取同一ID，交互重战仍可开放但不重复付奖。事件ID如`trainer.practice.prize`另属completed，不是奖励账本的别名。
 
 每行均需`type`；表中省略它，仅列其余参数。角色ID是当前场景对象ID或持久Actor UID，player是保留角色名；精灵UID不是角色ID。
 
@@ -76,7 +76,7 @@ api.story.register('gate', {
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |
 | heal / starter / shop | 无必需额外参数；分别调用现有治疗、选择伙伴和商店界面端口 |
 
-更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../dist/packs/emerald/application/story-application.js)、[CommandRunner](../../../dist/engine/commands.js)、[FieldDirector](../../../dist/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
+更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../src/packs/emerald/application/story-application.js)、[CommandRunner](../../../src/engine/commands.js)、[FieldDirector](../../../src/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
 
 预检全部树不等于整段剧情原子回滚；已经成功提交的奖励/世界操作不会因后续演出失败自动撤销。once控制重触发，completed与实际领取账本分开。背包满的原作专用分支需明确结果/容量政策，不能因为事件一次性就提前标记领取。当前语言还没有自动翻译C特殊函数、完整离图回调或任意设施启动命令；按实际缺口单独演进，不能在内容中伪造。
 

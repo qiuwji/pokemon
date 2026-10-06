@@ -35,7 +35,7 @@ for name in selected:
                     'border':[METATILES[k] for k in TERRAIN['border']]}
 # Validate the fixture world together with its production destinations before staging bytes.
 candidate = {**content,'maps':{**content['maps'],**output}}
-result = subprocess.run(['node',str(PROJECT / 'tools/validate-import.mjs')],input=json.dumps(candidate),text=True,capture_output=True)
+result = subprocess.run(session.validation_command(),input=json.dumps(candidate),text=True,capture_output=True)
 if result.returncode:raise ValueError('Invalid fixture world: '+result.stderr)
 session.text(target,json.dumps(output,ensure_ascii=False,indent=2)+'\n')
 session.finish()

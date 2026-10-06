@@ -10,7 +10,7 @@ function markdown(directory) {
 }
 const files = [
   ...fs.readdirSync(root).filter(name => name.endsWith(".md")).map(name => path.join(root, name)),
-  ...["docs", "skills", "examples"].flatMap(name => markdown(path.join(root, name))),
+  ...["docs", "skills", "examples", "src", "generated"].flatMap(name => markdown(path.join(root, name))),
 ];
 const errors = [];
 let links = 0, examples = 0;

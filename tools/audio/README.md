@@ -54,15 +54,15 @@ python3 tools/audio/bundle-audio.py --build /tmp/audio-build
 音效配置带`oneShot:true`：原作SE没有循环标记，渲染器整段渲一遍，cue为`kind:"sound"`、`loop:false`，不套用曲子的引子+两遍曲身策略。安装结果固定为：
 
 ```text
-dist/assets/audio/emerald-audio/music/<原曲常量小写>.wav
-dist/assets/audio/emerald-audio/sounds/<音效常量小写>.wav   # 音效渲染后才有
-dist/assets/audio/emerald-audio/manifest.json                # 来源、循环帧、哈希、验证状态
-dist/plugins/emerald-audio.js                               # 一个插件注册全部 cue
+generated/assets/audio/emerald-audio/music/<原曲常量小写>.wav
+generated/assets/audio/emerald-audio/sounds/<音效常量小写>.wav   # 音效渲染后才有
+generated/assets/audio/emerald-audio/manifest.json                # 来源、循环帧、哈希、验证状态
+generated/plugins/emerald-audio.js                               # 一个插件注册全部 cue
 ```
 
 合并安装器逐首校验参考修订、渲染器修订与音频哈希，把资源复制到统一目录，重写catalog只保留`emerald-audio`（默认启用），并删除被取代的单曲插件模块与资源目录。重复安装无改动，`--check`不写盘，写入异常回滚。地图内容始终保留原作常量（如`MUS_ROUTE101`），运行时按原曲身份解析cue，因此重新导入地图不需要再装一次。
 
-选曲政策在`dist/packs/emerald/audio-library.js`：`ORIGINAL_SONG_CUES`是常量到cue的唯一映射，`emeraldMusic`先读地图`music`，战斗时按`emeraldBattleSong`取`MUS_VS_WILD`/`MUS_VS_TRAINER`/`MUS_VS_RIVAL`，与原作`GetBattleBGM`一致。声音仍由玩家点击♪开启。
+选曲政策在`src/packs/emerald/audio-library.js`：`ORIGINAL_SONG_CUES`是常量到cue的唯一映射，`emeraldMusic`先读地图`music`，战斗时按`emeraldBattleSong`取`MUS_VS_WILD`/`MUS_VS_TRAINER`/`MUS_VS_RIVAL`，与原作`GetBattleBGM`一致。声音仍由玩家点击♪开启。
 
 剧情曲也登记pack.json的story用途：MUS_HELP配置在tracks/mus-help.json，按midi.cfg的help音色组/-V078/-R50渲染，仍循环第二遍曲身。求救音乐跨对白持续及存读档恢复由pack剧情阶段旗标选曲；战斗准备时切入战斗曲，不等入场转场的中点。曲目生成、选择和播放是不同验收环节，听感仍由实际游戏试听确认。
 

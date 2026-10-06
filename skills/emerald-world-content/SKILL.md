@@ -40,7 +40,7 @@ description: 给现有绿宝石工程添加网格地图、连接、动态对象�
 
 ## 分类内容与导入入口
 
-基础内容从[manifest](../../dist/content/manifest.json)及其分类文件装配，不再读取旧content.json。地图属性与网格分离；Node消费者统一loadContentSync，浏览器统一loadContent。修改原作资料先读[内容管线](../../docs/development/CONTENT_PIPELINE.md)和[导入索引](../../docs/development/IMPORT_SCRIPTS.md)，运行支持的--check再正式导入；不得越过字段所有权。未实现地图/脚本在references中明确分类，不能据此宣称已实现。原始npcs资料仍不等于全部运行时Actor；运行时扩展继续走mapExtensions。
+基础内容从[manifest](../../src/content/manifest.json)及其分类文件装配，不再读取旧content.json。地图属性与网格分离；Node消费者统一loadContentSync，浏览器统一loadContent。修改原作资料先读[内容管线](../../docs/development/CONTENT_PIPELINE.md)和[导入索引](../../docs/development/IMPORT_SCRIPTS.md)，运行支持的--check再正式导入；不得越过字段所有权。未实现地图/脚本在references中明确分类，不能据此宣称已实现。原始npcs资料仍不等于全部运行时Actor；运行时扩展继续走mapExtensions。
 
 ## 最小完整示例
 
@@ -180,15 +180,15 @@ test("a registered field scene focuses the view and gates a subsequent reward", 
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [dist/engine/story.js](../../dist/engine/story.js) | `rg -n "class StoryEngine" dist tests docs package.json` |
-| [dist/engine/world-state.js](../../dist/engine/world-state.js) | `rg -n "validateOperations" dist tests docs package.json` |
+| [src/engine/story.js](../../src/engine/story.js) | `rg -n "class StoryEngine" dist tests docs package.json` |
+| [src/engine/world-state.js](../../src/engine/world-state.js) | `rg -n "validateOperations" dist tests docs package.json` |
 | [tests/story-language.test.js](../../tests/story-language.test.js) | `rg -n "Data-only plugin story" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 
 ## 地区包的写入位置
 
-原生对白/脚本/绑定放dist/content/stories并登记manifest；插件用api.story.registerBundle(localId,{version:1,scripts,dialogues,entries,projections?,sources?})。最小组合见[story-bundle例](../../examples/story-bundle.test.js)，参数和限制统一读剧情语言，不另维护一套字段表。局部脚本/对白引用在bundle内解析，跨包用注册返回的完整ID。
+原生对白/脚本/绑定放src/content/stories并登记manifest；插件用api.story.registerBundle(localId,{version:1,scripts,dialogues,entries,projections?,sources?})。最小组合见[story-bundle例](../../examples/story-bundle.test.js)，参数和限制统一读剧情语言，不另维护一套字段表。局部脚本/对白引用在bundle内解析，跨包用注册返回的完整ID。
 
 地图准备对象用纯projections；进入自动剧情用mapEnter，selector.reason区分start/travel/restore。触发后由宿主排队，不在渲染时执行命令。条件重叠用明确priority，默认0、通用兜底-100；同级同时命中报错，不依赖注册顺序。长剧情需durable+稳定node，公共call词法展开；稳定checkpoint和battle.onResult恢复规则见架构。旧短事件不自动获得战斗等待能力。
 

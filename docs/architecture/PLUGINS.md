@@ -82,7 +82,7 @@ const plugin = {
 
 `api.events.on(type, listener)`在setup注册。type必须是完整的`namespace:event`，允许自己的命名空间、manifest显式声明的直接依赖，以及内容包公开清单。`core`为保留命名空间，不能用作插件ID；未知core事件和未声明的其他插件事件在注册时抛出`Event subscription denied`，整批注册失败不留下监听器或内容。
 
-通用宿主由`publicEvents`注入公开core事实，不依赖绿宝石业务。绿宝石清单在[public-events.js](../../dist/packs/emerald/public-events.js)，包括移动、接触、天气、时钟、Actor、战斗等事实。新增公开事件须审查其载荷并加入该清单；内部事件默认不公开。监听器收到的事件包为`{type,payload,sequence}`，整包为深冻结的副本。
+通用宿主由`publicEvents`注入公开core事实，不依赖绿宝石业务。绿宝石清单在[public-events.js](../../src/packs/emerald/public-events.js)，包括移动、接触、天气、时钟、Actor、战斗等事实。新增公开事件须审查其载荷并加入该清单；内部事件默认不公开。监听器收到的事件包为`{type,payload,sequence}`，整包为深冻结的副本。
 
 `core:command-complete`的id/args/result只供可信宿主内部观察，插件不能订阅。插件等待命令完成改监听`core:command-settled`，其payload固定为`{}`，然后用只读query判断是否可行动；手记插件由此保持异步步数累计。公开事实供观察，不授予执行命令的权限。插件仍是受信任模块，这个API边界不等于隔离恶意JavaScript的沙箱。
 

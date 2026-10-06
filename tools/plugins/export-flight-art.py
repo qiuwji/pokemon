@@ -56,7 +56,7 @@ def export(source, target, check):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, default=ROOT / 'work/pokeemerald')
-    parser.add_argument('--target', type=Path, default=ROOT / 'dist/plugins/high-flight/assets')
+    parser.add_argument('--target', type=Path, default=ROOT / 'generated/plugins/high-flight/assets')
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     export(args.source, args.target, args.check)

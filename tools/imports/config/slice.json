@@ -67,10 +67,6 @@
     }
   },
   "audio": {
-    "bicycle-bell.wav": "bicycle_bell.wav",
-    "register-noise.wav": "register_noise.wav",
-    "kick.wav": "sc88pro_rnd_kick.wav",
-    "snare.wav": "sd90_solo_snare.wav",
     "cry-mudkip.wav": "cries/mudkip.wav",
     "cry-treecko.wav": "cries/treecko.wav",
     "cry-torchic.wav": "cries/torchic.wav"
@@ -209,39 +205,65 @@
       }
     ]
   },
-  "actorAnimations": {
-    "actor": "BrendanAcroBike",
-    "directions": {
-      "down": "South",
-      "up": "North",
-      "left": "West",
-      "right": "East"
-    },
-    "sequences": {
-      "rise": "BunnyHopBackWheel",
-      "lower": "StandingWheelieBackWheel",
-      "moving": "MovingWheelie"
-    },
-    "held": {
-      "raised": "rise"
-    },
-    "poses": {
-      "wheelie-rise": {
-        "idle": "rise",
-        "move": "rise"
+  "actorAnimations": [
+    {
+      "actor": "BrendanAcroBike",
+      "directions": {
+        "down": "South",
+        "up": "North",
+        "left": "West",
+        "right": "East"
       },
-      "wheelie-lower": {
-        "idle": "lower",
-        "move": "lower"
+      "sequences": {
+        "rise": "BunnyHopBackWheel",
+        "lower": "StandingWheelieBackWheel",
+        "moving": "MovingWheelie"
       },
-      "wheelie": {
-        "idle": "raised",
-        "move": "moving"
+      "held": {
+        "raised": "rise"
       },
-      "hop": {
-        "idle": "rise",
-        "move": "rise"
+      "poses": {
+        "wheelie-rise": {
+          "idle": "rise",
+          "move": "rise"
+        },
+        "wheelie-lower": {
+          "idle": "lower",
+          "move": "lower"
+        },
+        "wheelie": {
+          "idle": "raised",
+          "move": "moving"
+        },
+        "hop": {
+          "idle": "rise",
+          "move": "rise"
+        }
+      }
+    },
+    {
+      "actor": "BrendanRun",
+      "directions": {
+        "down": "South",
+        "up": "North",
+        "left": "West",
+        "right": "East"
+      },
+      "sequences": {
+        "facing": "Face",
+        "running": {
+          "name": "Run",
+          "indexOffset": -9,
+          "clock": "stride"
+        }
+      },
+      "held": {},
+      "poses": {
+        "normal": {
+          "idle": "facing",
+          "move": "running"
+        }
       }
     }
-  }
+  ]
 }

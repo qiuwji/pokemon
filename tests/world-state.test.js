@@ -353,3 +353,31 @@ test("A map-entry preview restores connected collision and invalidates patch pla
   assert.equal(s.state.visits.Other, undefined);
   assert.throws(() => s.commit(oldPlan), /Stale/);
 });
+
+test("Every accepted tile payload survives prepare, commit and save reload, including appearance removal", () => {
+  const s = service();
+  const payload = { block: 1, behavior: 7, appearance: 1 };
+  const op = { kind: "tile", map: "Meadow", x: 1, y: 1, ...payload };
+  assert.deepEqual(s.validateOperations([op]), [op]);
+  const draft = s.prepare([op]);
+  assert.deepEqual(draft.maps.Meadow.tiles[5], payload);
+  assert.deepEqual(s.state.maps, {});
+  s.commit(draft);
+  const restored = service(JSON.parse(JSON.stringify(s.state)));
+  assert.equal(restored.map("Meadow").blocks[5], 1);
+  assert.equal(restored.map("Meadow").behavior[5], 7);
+  assert.equal(restored.map("Meadow").appearances[5], 1);
+  restored.apply([{ ...op, appearance: null }]);
+  assert.equal(restored.map("Meadow").appearances[5], undefined);
+});
+test("Operation parsing rejects extra fields consistently without state changes", () => {
+  const s = service(), before = structuredClone(s.state);
+  for (const op of [
+    { kind: "tile", map: "Meadow", x: 1, y: 1, block: 1, unexpected: 2 },
+    { kind: "object", map: "Meadow", id: "rock", hidden: true, unexpected: 2 },
+  ]) {
+    assert.throws(() => s.validateOperations([op]), /Invalid .* operation/);
+    assert.throws(() => s.prepare([op]), /Invalid .* operation/);
+    assert.deepEqual(s.state, before);
+  }
+});

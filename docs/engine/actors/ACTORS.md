@@ -32,7 +32,7 @@ spawn/位置变更验证真实碰撞、玩家及预约；外部位置/可见性�
 
 ## 日程注册、时钟与地点交接
 
-日程是一份内容政策，不是第二份时钟或行为状态。通过 `api.content.register("actorSchedules", localId, definition)` 注册，模板的 `schedule` 引用返回 ID。公开类型见 [ActorScheduleDefinition](../../../dist/engine/contracts.d.ts)，搜索 `class ActorScheduleRegistry` 可找到校验实现。
+日程是一份内容政策，不是第二份时钟或行为状态。通过 `api.content.register("actorSchedules", localId, definition)` 注册，模板的 `schedule` 引用返回 ID。公开类型见 [ActorScheduleDefinition](../../../src/engine/contracts.d.ts)，搜索 `class ActorScheduleRegistry` 可找到校验实现。
 
 | 字段 | 合同 |
 | --- | --- |

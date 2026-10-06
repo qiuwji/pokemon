@@ -95,8 +95,8 @@ test("plugin actor identity and memory survive save restore", async () => {
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [dist/engine/actor-repository.js](../../dist/engine/actor-repository.js) | `rg -n "class ActorTemplateRegistry" dist tests docs package.json` |
-| [dist/packs/emerald/application/actor-application.js](../../dist/packs/emerald/application/actor-application.js) | `rg -n "class ActorApplication" dist tests docs package.json` |
+| [src/engine/actor-repository.js](../../src/engine/actor-repository.js) | `rg -n "class ActorTemplateRegistry" dist tests docs package.json` |
+| [src/packs/emerald/application/actor-application.js](../../src/packs/emerald/application/actor-application.js) | `rg -n "class ActorApplication" dist tests docs package.json` |
 | [tests/actors.test.js](../../tests/actors.test.js) | `rg -n "Public spawn" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
@@ -104,3 +104,6 @@ test("plugin actor identity and memory survive save restore", async () => {
 ## 稳定接触事实
 
 主动interaction请求和玩家碰撞可通过统一 `core:field-contact` 事实消费；payload及去重/预约/高度、读档和战斗凭证合同见[遇敌与接触](../../docs/engine/world/ENCOUNTERS_AND_CONTACTS.md)。setup注册监听，接触在命令完成或帧末发布。Actor.data保存关系/行为记忆，不能保存一份核心野生个体；需要捕捉时通过encounter.prepare关联UID。文件改名搜索 `FieldContacts` 和 `core:field-contact`。
+
+
+移动姿态可声明elapsed时钟或stride循环时钟；后者按统一GridMotion的progress/foot采样两步周期，不能在插件每格另起计时器。字段与原跑步导入见[移动输入合同](../../docs/engine/field/MOVEMENT_INPUT.md)。

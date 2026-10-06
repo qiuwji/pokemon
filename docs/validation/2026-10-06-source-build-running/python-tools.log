@@ -1,0 +1,26 @@
+----------------------------------------------------------------------
+Ran 31 tests in 9.118s
+
+OK
+{
+  "script": "example",
+  "check": false,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+{
+  "script": "example",
+  "check": true,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+----------------------------------------------------------------------
+Ran 6 tests in 0.027s
+
+OK

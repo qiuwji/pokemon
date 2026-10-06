@@ -109,6 +109,6 @@ PixelDisplay按Canvas实际CSS尺寸及devicePixelRatio设置绘制缓冲，避�
 
 ## 移动模式派生表现
 
-模式可以引用外观、相机和环境层作为默认表现，无需把短期租约永久写入存档。绑定、清理、优先级与查询字段见[野外行动合同](../field/FIELD_ACTIONS.md)的移动政策段。Fly骑乘素材示例见[插件说明](../../../dist/plugins/high-flight/README.md)：原生32px鸟图加男女角色共享浮动时钟；不是战斗正面图。
+模式可以引用外观、相机和环境层作为默认表现，无需把短期租约永久写入存档。绑定、清理、优先级与查询字段见[野外行动合同](../field/FIELD_ACTIONS.md)的移动政策段。Fly骑乘素材示例见[插件说明](../../../src/plugins/high-flight/README.md)：原生32px鸟图加男女角色共享浮动时钟；不是战斗正面图。
 
 默认游戏画布为原作240×160（15×10格），原作菜单素材导入与页面职责见[界面说明](../../../docs/development/EMERALD_UI.md)。完整页面布局逐像素还原仍需逐页验收。

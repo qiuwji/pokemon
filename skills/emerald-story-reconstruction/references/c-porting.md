@@ -58,11 +58,11 @@ rg -n 'registerBundle|onResult|inventoryFull' dist/content/stories dist/engine/s
 
 | 责任 | 落点与写法 |
 | --- | --- |
-| 默认地图/图集/物种等基础数据 | dist/content/manifest.json对应分类文件；Node统一loadContentSync，浏览器统一loadContent；不要恢复content.json |
-| 默认地区剧情/对白/对象绑定 | dist/content/stories/的bundle并登记manifest；script身份显式绑定，禁止用includes猜台词 |
-| 必须运行时构建的短事件 | dist/packs/emerald/story/regions或common，由现有runtime装配；不让story.js或adventure.js重新成为巨型业务文件 |
-| 默认Gen3通用政策 | 对应dist/packs/emerald定义或engine/rules/gen3合同；生成文件有@generated，改输入/生成器而非手工补生成物 |
-| 独立扩展或现代规则 | dist/plugins/普通manifest，通过api注册、只读查询和受控命令/intent；catalog装配，不改app逐插件接线 |
+| 默认地图/图集/物种等基础数据 | src/content/manifest.json对应分类文件；Node统一loadContentSync，浏览器统一loadContent；不要恢复content.json |
+| 默认地区剧情/对白/对象绑定 | src/content/stories/的bundle并登记manifest；script身份显式绑定，禁止用includes猜台词 |
+| 必须运行时构建的短事件 | src/packs/emerald/story/regions或common，由现有runtime装配；不让story.js或adventure.js重新成为巨型业务文件 |
+| 默认Gen3通用政策 | 对应src/packs/emerald定义或engine/rules/gen3合同；生成文件有@generated，改输入/生成器而非手工补生成物 |
+| 独立扩展或现代规则 | src/plugins/普通manifest，通过api注册、只读查询和受控命令/intent；catalog装配，不改app逐插件接线 |
 | 新通用框架缺口 | dist/engine所属领域、窄应用端口及相应适配器；须明确任务，不从业务包直接访问内部状态 |
 | 图像/音频 | dist/assets及来源记录；地图按metatile/grid，PNG整场景不能代替地图 |
 | 测试 | 通用核心合同放tests；产品插件专属测试及作者例放examples；共享夹具在tests/helpers，不跨层导入 |

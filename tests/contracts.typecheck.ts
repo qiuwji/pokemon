@@ -121,7 +121,7 @@ const plugin: PluginManifest = {
     });
     const cue = api.presentation.audio("confirm", {
       kind: "sound",
-      source: "assets/audio/bicycle-bell.wav",
+      source: "assets/audio/emerald-audio/sounds/se_select.wav",
       volume: 0.3,
       loop: false,
       maxVoices: 2,

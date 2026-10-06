@@ -14,11 +14,11 @@
 
 | 落点 | 唯一职责 |
 | --- | --- |
-| `dist/engine/content-suspension.js` | JSON边界、暂停区合同、领域计划装配、逐条试恢复和整档验收；不知道绿宝石或存储设备。 |
-| `dist/packs/emerald/save/creature-suspension.js` | 个体UID、队伍/PC/寄养/交换对象、附加招式、特性、持有物及图鉴的暂停/恢复。 |
-| `dist/packs/emerald/save/runtime-suspension.js` | 库存槽、快捷道具、Actor、外观、遭遇凭证、形态、天气、机关、作物、定时任务、设施结果和剧情会话。 |
-| `dist/packs/emerald/save/world-suspension.js` | 世界覆盖引用和安全落点；对白等按字段暂停，不覆盖同对象的原生坐标与文字改动。 |
-| `dist/packs/emerald/save/content-resolver.js` | 内容包装配、当前插件可用性与依赖计算。 |
+| `src/engine/content-suspension.js` | JSON边界、暂停区合同、领域计划装配、逐条试恢复和整档验收；不知道绿宝石或存储设备。 |
+| `src/packs/emerald/save/creature-suspension.js` | 个体UID、队伍/PC/寄养/交换对象、附加招式、特性、持有物及图鉴的暂停/恢复。 |
+| `src/packs/emerald/save/runtime-suspension.js` | 库存槽、快捷道具、Actor、外观、遭遇凭证、形态、天气、机关、作物、定时任务、设施结果和剧情会话。 |
+| `src/packs/emerald/save/world-suspension.js` | 世界覆盖引用和安全落点；对白等按字段暂停，不覆盖同对象的原生坐标与文字改动。 |
+| `src/packs/emerald/save/content-resolver.js` | 内容包装配、当前插件可用性与依赖计算。 |
 | `SaveApplication` / `SaveStore` | 启动读取与手工导入使用同一解析器；存储冲突、备份、保存失败与界面反馈。 |
 
 新增一个持久领域时，必须添加其引用处理适配器、暂停负载校验、恢复前置条件和真实保存/关闭/重开测试；不能在 `adventure.js` 或浏览器入口增加插件ID分支。保存契约会验证暂停区，不接受任意根路径写入。

@@ -120,3 +120,8 @@ Actor的运行时位置初始化、高度、日程到达判定使用WorldStateSe
 世界对象的dialogue引用纳入storyDependencies；保存与导出均记录其插件命名空间，缺失插件先分类为missing_dependency并保护原档。地块覆盖使用该地图所属tileset，保存依赖补记注册tileset及其资源的所有者。当前patch不能给已有地图更换tileset，也不能把数字索引解释成任意插件的地块；跨图集铺设仍属于未实现的结构扩展。
 
 本轮没有增加修改层、撤销、跨批事务、所有权仲裁、地图扩容或区域复制。仍使用permanent/visit、单批原子提交与revision检查，物品布局使用ROOM_LAYOUTS设计中的独立领域提交。
+
+
+## 世界操作字段的单一声明
+
+WorldStateService的tile字段用于操作白名单、值校验与提取；object的hidden/spawn字段用于白名单、布尔校验和提交提取。validateOperations校验完整批次，prepare直接消费这份结果，不再复制外层字段清单。prepare仍检查对象存在/重复、合并后的完整对象/训练家视线；commit仍验证完整候选状态和revision。这是不同阶段的不变量，不删除防护检查。新增tile或对象顶层可提交字段先更新唯一声明与其语义校验，并证明prepare/提交/序列化后实际保留。

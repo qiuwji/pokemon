@@ -49,9 +49,9 @@ python3 tools/import.py audio work/pokeemerald --profile tools/imports/config/sl
 # 审阅预演后去掉 --check，执行相同选择。
 ```
 
-profile的audio是“输出文件名 → sound/direct_sound_samples下源文件”映射。输出归dist/assets/audio；现有provenance.json描述采样，不能冒充BGM清单。入口见[采样导入器](../../../tools/imports/commands/audio/import-audio.py)，写入归属见[ownership.json](../../../tools/imports/ownership.json)。文件移动后搜索`Copy selected real WAV samples`、`session.profile['audio']`。
+profile的audio是“输出文件名 → sound/direct_sound_samples下源文件”映射。输出归generated/assets/audio，构建后位于dist/assets/audio；现有provenance.json描述采样，不能冒充BGM清单。入口见[采样导入器](../../../tools/imports/commands/audio/import-audio.py)，写入归属见[ownership.json](../../../tools/imports/ownership.json)。文件移动后搜索`Copy selected real WAV samples`、`session.profile['audio']`。
 
-当前UI/战斗提示音仍是临时真实采样映射，初始精灵叫声使用相应采样；完整SE序列和叫声处理需另补。原作BGM优先复用下面已执行的单曲生产链；不要新建第二套转换器或虚构import-bgm命令。当前曲目与听音进度读STATUS及包内manifest。
+当前UI/战斗提示音使用已安装的原版SE；旧铃声、收银噪声、鼓点占位采样已删除，默认采样profile仅保留初始精灵叫声。完整招式SE映射与叫声处理需另补。原作BGM优先复用下面已执行的单曲生产链；不要新建第二套转换器或虚构import-bgm命令。当前曲目与听音进度读STATUS及包内manifest。
 
 ## 已执行的单曲生产链与命名
 

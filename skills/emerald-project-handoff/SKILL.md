@@ -17,7 +17,7 @@ description: 接手现有绿宝石网页复刻工程，定位项目、确认范�
 
 ## 定位与范围
 
-先读[项目导航](references/project-map.md)，找到包含`emerald-web-engine` package和dist/engine的项目根。不要根据上一个机器的绝对路径另建项目。若从符号链接读Skill，先解析到仓库真实目录再解析相对文档链接。
+先读[项目导航](references/project-map.md)，找到包含`emerald-web-engine` package和src/engine的项目根。不要根据上一个机器的绝对路径另建项目。若从符号链接读Skill，先解析到仓库真实目录再解析相对文档链接。
 
 先按[代码地图](../../docs/development/CODE_MAP.md)找到本次代码落点，再从项目根读取[范围](../../docs/project/SCOPE.md)、[当前状态](../../docs/project/STATUS.md)、[架构](../../ARCHITECTURE.md)。范围由最近用户决定和SCOPE控制；当前进度只能在STATUS/代码/证据确认，不能把Skill、旧路线或聊天里的已完成当成事实。
 
@@ -41,7 +41,9 @@ description: 接手现有绿宝石网页复刻工程，定位项目、确认范�
 
 ## 分类内容与导入入口
 
-基础内容从[manifest](../../dist/content/manifest.json)及其分类文件装配，不再读取旧content.json。地图属性与网格分离；Node消费者统一loadContentSync，浏览器统一loadContent。修改原作资料先读[内容管线](../../docs/development/CONTENT_PIPELINE.md)和[导入索引](../../docs/development/IMPORT_SCRIPTS.md)，运行支持的--check再正式导入；不得越过字段所有权。未实现地图/脚本在references中明确分类，不能据此宣称已实现。原始npcs资料仍不等于全部运行时Actor；运行时扩展继续走mapExtensions。
+按[构建合同](../../docs/development/BUILD_PIPELINE.md)编辑src、在generated保留导入结果；dist是可删除的部署产物，不写源码。测试继续导入构建后的模块，npm测试/质量入口先构建；手动Node测试先npm run build。导入默认使用临时只读源投影并向唯一输入所有者提交，--check不改输入或dist。
+
+基础内容从[manifest](../../src/content/manifest.json)及其分类文件装配，不再读取旧content.json。地图属性与网格分离；Node消费者统一loadContentSync，浏览器统一loadContent。修改原作资料先读[内容管线](../../docs/development/CONTENT_PIPELINE.md)和[导入索引](../../docs/development/IMPORT_SCRIPTS.md)，运行支持的--check再正式导入；不得越过字段所有权。未实现地图/脚本在references中明确分类，不能据此宣称已实现。原始npcs资料仍不等于全部运行时Actor；运行时扩展继续走mapExtensions。
 
 ## 最小完整示例
 
@@ -97,8 +99,8 @@ test("first plugin uses registered content and public reward transaction", async
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
 | [package.json](../../package.json) | `rg -n "emerald-web-engine" dist tests docs package.json` |
-| [dist/packs/emerald/extensions.js](../../dist/packs/emerald/extensions.js) | `rg -n "createEmeraldPlugins" dist tests docs package.json` |
-| [dist/packs/emerald/extension-ports.js](../../dist/packs/emerald/extension-ports.js) | `rg -n "attachEmeraldExtensions" dist tests docs package.json` |
+| [src/packs/emerald/extensions.js](../../src/packs/emerald/extensions.js) | `rg -n "createEmeraldPlugins" dist tests docs package.json` |
+| [src/packs/emerald/extension-ports.js](../../src/packs/emerald/extension-ports.js) | `rg -n "attachEmeraldExtensions" dist tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 
