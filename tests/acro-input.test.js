@@ -69,6 +69,7 @@ function setup() {
     world: field.world,
     timeline: { now: () => now },
     canManageParty: () => !field.busy,
+    storyPending: () => false,
     ui: { blocked: false },
     growthDirector: { busy: false },
     transitions: { busy: false },

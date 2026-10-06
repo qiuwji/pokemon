@@ -39,6 +39,7 @@ export const FIELD_ACTION_PORTS = Object.freeze([
   "rng",
   "save",
   "startBattle",
+  "startInteraction",
   "state",
   "storyBusy",
   "timeline",
@@ -136,6 +137,7 @@ export class FieldActionApplication {
       travel: ["kind", "position", "mode"],
       route: ["kind", "directions", "mode"],
       fishing: ["kind", "rod"],
+      interaction: ["kind", "id", "parameters", "source"],
       movement: ["kind", "mode"],
       effect: ["kind", "id", "data", "remove"],
       displace: [
@@ -217,6 +219,16 @@ export class FieldActionApplication {
       if (!result.ok) throw new Error(result.reason);
     } else if (operation.kind === "fishing") {
       gen3FishingRules(operation.rod);
+    } else if (operation.kind === "interaction") {
+      if (
+        typeof operation.id !== "string" ||
+        !operation.id ||
+        (operation.parameters !== undefined &&
+          (!operation.parameters ||
+            typeof operation.parameters !== "object" ||
+            Array.isArray(operation.parameters)))
+      )
+        throw new Error("Invalid field interaction");
     } else {
       if (
         !Array.isArray(operation.directions) ||
@@ -272,6 +284,15 @@ export class FieldActionApplication {
       if (!result.ok) throw new Error(result.reason);
     }
     if (operation.kind === "fishing") return this.runFishing(operation.rod);
+    if (operation.kind === "interaction")
+      return {
+        ok: true,
+        interaction: this.startInteraction(
+          operation.id,
+          operation.parameters || {},
+          operation.source || null,
+        ),
+      };
     return { ok: true };
   }
   inspect(id, input = {}) {

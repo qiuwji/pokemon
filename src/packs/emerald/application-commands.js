@@ -530,6 +530,16 @@ export function registerEmeraldCommands(game, bus) {
     { concurrent: true, ready: () => !!game.battle },
   );
   register(
+    "battle.attachments",
+    objectSchema(
+      { seat: id, index: { type: "integer", minimum: 0, maximum: 3 } },
+      ["index"],
+    ),
+    ({ seat, index }) =>
+      game.battle.attachments.options(seat || game.battle.commandSeat, index),
+    { concurrent: true, ready: () => !!game.battle },
+  );
+  register(
     "battle.action",
     objectSchema(
       {
@@ -542,6 +552,18 @@ export function registerEmeraldCommands(game, bus) {
         slot: inventorySlot,
         form: id,
         augment: id,
+        attachments: {
+          type: "array",
+          minItems: 1,
+          maxItems: 2,
+          items: objectSchema(
+            {
+              id,
+              parameters: { type: "string", minLength: 2, maxLength: 65536 },
+            },
+            ["id"],
+          ),
+        },
         seat: id,
         actor: id,
         target: objectSchema(

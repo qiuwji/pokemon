@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "pluginApi": 1,
+  "scope": [
+    "review fixes: 9 P1/P2 defects plus flake stabilization from the external review",
+    "host-only completion handlers, post-completion save, derived-move fallback, public battle schema",
+    "read-guarded session callbacks, fault isolation, focus pause, idle start gate",
+    "candidate discovery without required params, multi-source input merge, fixed-damage scaling"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "issues": [
+    { "id": "1", "severity": "P1", "fixed": "Completion handlers are host-only: attached PluginHost no longer registers a completion action on the command bus, and settlement only runs on finishing sessions with a frozen result." },
+    { "id": "2", "severity": "P1", "fixed": "After session.complete releases the busy lock, the bridge calls the host changed() again so the settled result is persisted." },
+    { "id": "3", "severity": "P1", "fixed": "When a commit-point recheck fails with continueBase, the prepared derivedMove is dropped and the base move is used." },
+    { "id": "4", "severity": "P1", "fixed": "core.battle.action attachments now allow up to two entries with JSON-string parameters; the engine parses parameters before schema validation." },
+    { "id": "5", "severity": "P1", "fixed": "init/step/view run under the host read guard (runtime.evaluate): dispatch/writes are rejected inside these callbacks." },
+    { "id": "6", "severity": "P1", "fixed": "step/view faults are contained: a step fault fails the session instead of throwing; a view fault returns an empty frame; app frame loop wraps the session branch so scheduling continues." },
+    { "id": "7", "severity": "P2", "fixed": "pauseOnFocusLoss is implemented: pause freezes the clock, resume rebases it, and app visibilitychange pauses/resumes sessions." },
+    { "id": "8", "severity": "P2", "fixed": "core.interaction.start ready now requires an idle host (no battle/story/facility/modal/busy); parent flows use the internal bridge." },
+    { "id": "9", "severity": "P2", "fixed": "Candidate discovery skips required-parameter validation; only prepare/commit validate filled parameters." },
+    { "id": "10", "severity": "P2", "fixed": "BrowserInput records held actions per physical source (key/pointer) and merges them; touch dpad buttons feed the session bridge." },
+    { "id": "11", "severity": "P2", "fixed": "Fixed-damage and plan damage results now pass through the same scaledDamage step as formula damage." }
+  ],
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1081,
+      "coreFailed": 0,
+      "pluginsPassed": 41,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log"
+    },
+    {
+      "command": "npm run test:all repeated x4 after flake fixes",
+      "failed": 0,
+      "note": "Previously the attachment-modifier test was ~5-35% flaky (Tackle 95% accuracy, and the lvl-10 player could faint before acting); the test now pins accuracy and gives the player speed/HP so the modifier resolves."
+    }
+  ],
+  "repairedFailures": [
+    "Reviewer-observed failure tests/battle-permissions.test.js 'plugin defense decision can block or scale' was RNG-dependent; rewritten deterministically with an engine battle.",
+    "tests/battle-attachments.test.js modifier test was flaky: pinned accuracy and survivability."
+  ],
+  "newTests": [
+    "tests/interaction-completion.test.js (host-only completion, persisted result, idle start gate, read-guarded view)",
+    "tests/interaction-session.test.js (step fault isolation, pause/resume rebase)",
+    "tests/battle-attachments.test.js (skipped derivation fallback, parameter candidate discovery)",
+    "tests/battle-permissions.test.js (deterministic block/scale, fixed-damage scaling)",
+    "tests/browser-input-interaction.test.js (multi-source merge, touch dpad bridge)"
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game visual acceptance"
+  ],
+  "invalidatedBy": [
+    "session lifecycle, completion settlement or save ordering changes",
+    "battle action schema, attachment request parsing or damage branch changes",
+    "input source merging or frame-loop scheduling changes"
+  ],
+  "sha256": {
+    "src/engine/interactions.js": "315af335c5bb040229f77fa223bdf49e55064ea665a8e5469f2be3d8eaff93a5",
+    "src/engine/extensions/plugin-host.js": "e8c3e8c001f138402665ac3be399e17e010e73f791033450faf6376dc6a4d5d6",
+    "src/engine/battle/attachments.js": "30ce26a899b4a495ef7088d82901b54499e46627508717769c5f39a0c4760386",
+    "src/engine/battle/actions.js": "7d4c8318c563844b52cd56f495baa569125b1c35c22064b06ca2fa85e079b0a3",
+    "src/engine/battle/damage-calculation.js": "13d4f3f3fa65f7b25104602dec6e73466d7991e7985f092898112793862e0967",
+    "src/packs/emerald/interaction-ports.js": "9fe03654202025a44d3a0101add62cc87b817f2f75c80a2f894c31f2fdd1aebb",
+    "src/packs/emerald/application-commands.js": "f90fe80395bb3da0ef18475981db5d4f4a93cf1d1b12714bf548b1c3c5733559",
+    "src/adapters/browser-input.js": "b4e9e22de14162ae7b85cb12e9a646cc07ae13048a2f2f1d872e60652a398b52",
+    "src/app.js": "45916179e4f1bdb3b2bdade2032e75f7cd5b99d5a3045faa78b64e501e34ef5d",
+    "tests/interaction-session.test.js": "3aa9dcfe79365285320c17c296649ef7e32fdc378d7738c46b7d86097e5f2fd4",
+    "tests/interaction-completion.test.js": "e3370b20d86c4419b5af742651b15db8df94ed438068d23dc0f8d158b19345b8",
+    "tests/battle-attachments.test.js": "e42f6ae3e24400f6cd43c337c9253a8907b1ffe2cf8411661a23ba871d034a18",
+    "tests/battle-permissions.test.js": "29dca22e29db2f5c4eef0cd39281ff8d987d3bffb58a29211322eb6ee990e3e6",
+    "tests/browser-input-interaction.test.js": "2c992821491aa4a0c611be1ee2cc3a455cdc7a9df419259a045d5fcc2aac7851",
+    "examples/battle-attachment.test.js": "27c93c59588d44e275d9c50cf5ec4389af39dc5f3f8e331b675f3618a0b34581",
+    "docs/engine/INTERACTIONS.md": "9c67d7105a557065c9a521e9294e526118fabcccc3a92af65ff6e2a97af3d47b",
+    "docs/engine/battle/ATTACHMENTS.md": "6b1345c89afe720fb065d2cc3ec91f007899024ab6215d56afb241aea43df5ad"
+  }
+}

@@ -19,6 +19,7 @@ import {
 } from "./packs/emerald/audio-library.js";
 import { SceneDirector } from "./presentation/scene-director.js";
 import { SceneDOM } from "./adapters/scene-dom.js";
+import { InteractionDOM } from "./adapters/interaction-dom.js";
 import { createEmeraldSceneDefinitions } from "./packs/emerald/presentation-scenes.js";
 import { createEmeraldCommandFacade } from "./packs/emerald/command-facade.js";
 import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
@@ -218,7 +219,19 @@ async function boot() {
         mapName.show(title, db.maps[id]);
       },
     });
-    const { bus } = attachEmeraldExtensions(adventure, host);
+    const { bus, interactions } = attachEmeraldExtensions(adventure, host);
+    const interactionInput = {
+      active: () => interactions.active(),
+      declares: (action) => interactions.declares(action),
+      set: (action, active) => interactions.input(action, active),
+      cancel: () => interactions.cancel(),
+      clear: () => interactions.clearInput(),
+    };
+    const interactionLayer = new InteractionDOM({
+      canvas: $("interaction-layer"),
+      assets,
+      onError: console.error,
+    });
     game = createEmeraldCommandFacade(adventure, bus);
     const ui = createEmeraldInterface(game, {
       sound: (id) => audio.play(emeraldDoorSound(id, audio.cues)),
@@ -241,6 +254,7 @@ async function boot() {
       game,
       ui,
       externalBlocked: () => pluginManager.active,
+      interactionInput,
     });
     $("loading").hidden = true;
     $("save").onclick = () => game.save(true);
@@ -260,14 +274,29 @@ async function boot() {
       audio.play("emerald:confirm");
       ui.toast(audio.enabled ? "音效已开启。" : "音效已关闭。");
     };
-    $("touch-a").onclick = () => ui.confirm();
-    $("touch-b").onclick = () => ui.back();
+    $("touch-a").onclick = () => {
+      if (!interactionInput.active()) return ui.confirm();
+      if (input.route("confirm", "touch:a", true)) {
+        input.route("confirm", "touch:a", false);
+        return;
+      }
+      if (!interactions.declares("confirm")) return;
+      interactions.input("confirm", true);
+      interactions.input("confirm", false);
+    };
+    $("touch-b").onclick = () =>
+      interactionInput.active() ? interactions.cancel() : ui.back();
     $("dialogue").onclick = () => ui.nextDialogue();
     $("game").onclick = () => {
       $("game").focus({ preventScroll: true });
       if (ui.dialog) ui.nextDialogue();
     };
-    document.addEventListener("visibilitychange", () => game.pausePlayTime());
+    document.addEventListener("visibilitychange", () => {
+      game.pausePlayTime();
+      // Freeze the session clock while hidden and rebase it on return.
+      if (document.hidden) interactions.pauseAll();
+      else interactions.resumeAll();
+    });
     await registerGameTools({
       inspect: () => game.inspect(),
       interact: () => game.interact(),
@@ -288,7 +317,18 @@ async function boot() {
     });
     function frame(now) {
       if (!document.hidden) {
-        audio.setMusic(
+        if (interactions.active()) {
+          try {
+            interactions.advance(now);
+            const view = interactions.view();
+            interactionLayer.render(view.frame);
+          } catch (error) {
+            console.error(error);
+            interactionLayer.clear();
+          }
+        } else {
+          interactionLayer.clear();
+          audio.setMusic(
           emeraldMusic(
             {
               battle: game.battleMusicContext(),
@@ -317,10 +357,11 @@ async function boot() {
         sceneOverlay.render(sceneDirector.sample(now));
         overlay.render(transitions.sample(now));
         growthOverlay.render(game.growthDirector.sample(now));
-        ui.extensions?.render(now, {
-          mode: game.battle ? "battle" : "field",
-          position: { ...game.state.position },
-        });
+          ui.extensions?.render(now, {
+            mode: game.battle ? "battle" : "field",
+            position: { ...game.state.position },
+          });
+        }
       }
       requestAnimationFrame(frame);
     }

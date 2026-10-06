@@ -1,4 +1,5 @@
 import { controlSnapshot, registerControlCommands } from "./control-ports.js";
+import { attachInteractionSessions } from "./interaction-ports.js";
 import { registerEmeraldCommands } from "./application-commands.js";
 import { validateEmeraldIntent } from "./extension-intents.js";
 import { CommandBus } from "../../engine/extensions/command-bus.js";
@@ -219,5 +220,14 @@ export function attachEmeraldExtensions(game, host) {
     },
   });
   game.commandBus = bus;
-  return { bus, runtime, query };
+  const interactions = attachInteractionSessions({
+    host,
+    game,
+    runtime,
+    bus,
+    onError: host.onError,
+  });
+  game.interactionSessions = interactions.service;
+  game.applications.interaction.attachBridge(interactions);
+  return { bus, runtime, query, interactions };
 }

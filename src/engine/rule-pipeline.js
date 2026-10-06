@@ -42,6 +42,7 @@ export const RULE_PHASES = Object.freeze([
   "attraction-check",
   "switch-check",
   "escape-check",
+  "defense-interaction",
   "round-end",
   "faint",
   "outcome",
@@ -79,6 +80,15 @@ export const RULE_PHASES = Object.freeze([
   "friendship-modifier",
   "evolution-check",
 ]);
+/** Permission-like phases where a plugin may return a bounded allow/deny/outcome decision. */
+export const DECISION_PHASES = Object.freeze([
+  "switch-check",
+  "escape-check",
+  "hit-check",
+  "immunity",
+  "action-permission",
+  "defense-interaction",
+]);
 export class RulePipeline {
   constructor(operations) {
     this.operations = operations;
@@ -86,7 +96,8 @@ export class RulePipeline {
     this.sequence = 0;
     this.cache = new Map();
   }
-  register({ id, phase, priority = 0, when = () => true, apply, modify }) {
+  register({ id, phase, priority = 0, when = () => true, apply, modify, decide }) {
+    const forms = [apply, modify, decide].filter((fn) => fn !== undefined).length;
     if (
       typeof id !== "string" ||
       !id ||
@@ -94,9 +105,10 @@ export class RulePipeline {
       !RULE_PHASES.includes(phase) ||
       !Number.isFinite(priority) ||
       typeof when !== "function" ||
-      Boolean(apply) === Boolean(modify) ||
+      forms !== 1 ||
       (apply && typeof apply !== "function") ||
-      (modify && typeof modify !== "function")
+      (modify && typeof modify !== "function") ||
+      (decide && (typeof decide !== "function" || !DECISION_PHASES.includes(phase)))
     )
       throw new Error(`Invalid rule hook ${id}`);
     const hook = {
@@ -106,6 +118,7 @@ export class RulePipeline {
       when,
       apply,
       modify,
+      decide,
       sequence: this.sequence++,
     };
     this.hooks.set(id, hook);
@@ -128,7 +141,21 @@ export class RulePipeline {
     return this.cache.get(phase);
   }
   run(phase, c) {
-    for (const h of this.ordered(phase)) if (h.apply && h.when(c)) h.apply(c);
+    for (const h of this.ordered(phase)) {
+      if (!h.when(c)) continue;
+      if (h.apply) h.apply(c);
+      else if (h.decide) {
+        const decision = h.decide(c);
+        if (!decision || decision.kind === "abstain" || decision.kind === "allow")
+          continue;
+        if (decision.kind === "deny") {
+          c.allowed = false;
+          if (decision.reason !== undefined) c.reason = decision.reason;
+        } else if (decision.kind === "outcome") {
+          c.outcome = decision.outcome;
+        } else throw new Error(`Invalid rule decision ${h.id}`);
+      }
+    }
   }
   calculate(phase, value, c) {
     for (const h of this.ordered(phase))

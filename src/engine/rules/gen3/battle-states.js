@@ -1,7 +1,7 @@
 import { GEN3_CONTINUOUS_STATES } from "./continuous-states.js";
 import { GEN3_SUPPORT_STATES } from "./support-states.js";
 import { GEN3_CONTROL_STATES } from "./control-states.js";
-import { PHYSICAL_TYPES } from "../../model.js";
+import { moveIsPhysical } from "../../model.js";
 import { objectSchema } from "../../extensions/values.js";
 const empty = objectSchema();
 const screen = (physical) => ({
@@ -14,7 +14,7 @@ const screen = (physical) => ({
       role: "target",
       priority: -20,
       modify: (value, c) => {
-        if (c.critical || PHYSICAL_TYPES.has(c.move.type) !== physical)
+        if (c.critical || moveIsPhysical(c.move) !== physical)
           return value;
         const count = c.battle.roster
           .occupied()

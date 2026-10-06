@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "scope": [
+    "refactor only: extract the per-kind content.register branches into a normalizer registry",
+    "no public API, schema or gameplay behaviour change"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "change": {
+    "removed": "src/engine/extensions/plugin-host.js giant kind if-chain (~258 lines)",
+    "added": "src/engine/extensions/content-normalizers.js CONTENT_NORMALIZERS map + normalizeContent(kind,value,evaluate)",
+    "pluginHostLines": 557,
+    "behaviour": "For every kind the same spread/validation/evaluate wrapping order is preserved, including truthy-vs-undefined filters and per-kind error messages."
+  },
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1055,
+      "coreFailed": 0,
+      "pluginsPassed": 39,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log"
+    }
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game visual acceptance"
+  ],
+  "invalidatedBy": [
+    "any content kind callback contract change",
+    "plugin-host registration order or evaluate semantics change"
+  ],
+  "sha256": {
+    "src/engine/extensions/plugin-host.js": "fef22ef51ab54312b052c1cfff14157519d38dd11616f0ebf2b52e7e29b71e6b",
+    "src/engine/extensions/content-normalizers.js": "2424a401fcfcf80415e61732da8e31e23d95d9ed05e0905ac7d88f657e53d70c"
+  }
+}

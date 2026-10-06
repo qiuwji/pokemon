@@ -1,5 +1,9 @@
 import { stageMessage } from "./battle/messages.js";
 import { BattleAugmentRegistry, BattleAugments } from "./battle/augments.js";
+import {
+  BattleAttachmentRegistry,
+  BattleAttachments,
+} from "./battle/attachments.js";
 import { BattleWeatherRegistry } from "./battle/weather.js";
 import { GEN3_BATTLE_WEATHER } from "./rules/gen3/weather.js";
 import { BattleHeldItems } from "./battle/held-items.js";
@@ -11,6 +15,7 @@ import { BattleActionLifecycle } from "./battle/action-lifecycle.js";
 import { stageMultiplier } from "./model.js";
 import { createBattleRules } from "./battle-rules.js";
 import { MoveEffectRegistry } from "./move-effects.js";
+import { ruleContext } from "./extensions/catalog.js";
 import { createItemService } from "./items.js";
 import { BattleRoster, teamRoster } from "./battle/roster.js";
 import {
@@ -56,6 +61,7 @@ export class Battle {
     weatherDefinitions = GEN3_BATTLE_WEATHER,
     states = {},
     augmentDefinitions = {},
+    attachmentDefinitions = {},
     formDefinitions = {},
     formRecords = {},
     traits = {
@@ -102,6 +108,11 @@ export class Battle {
       creatures: () =>
         [...this.roster.controllers.values()].flatMap((c) => c.party),
     });
+    this.quotas = { used: new Map() };
+    this.attachments = new BattleAttachments(
+      this,
+      new BattleAttachmentRegistry(attachmentDefinitions, db, this.forms.registry),
+    );
     const human = [...this.roster.seats.values()].find(
       (s) => this.roster.owner(s.id).kind === "human",
     );
@@ -188,7 +199,21 @@ export class Battle {
     this.rounds = new RoundResolver(this);
     this.equipment = new BattleHeldItems(this);
     this.spoils = new BattleSpoils(this);
-    this.traits = new BattleTraits(this, traits);
+    const attachmentModifierHooks = [];
+    for (const [id, d] of this.attachments.registry.definitions)
+      d.modifiers?.forEach((mod, i) =>
+        attachmentModifierHooks.push({
+          id: `attachment:${id}:${i}`,
+          phase: mod.phase,
+          priority: mod.priority || 0,
+          modify: (value, c) =>
+            c.activeAttachments?.includes(id) ? mod.modify(value, ruleContext(c)) : value,
+        }),
+      );
+    this.traits = new BattleTraits(this, {
+      ...traits,
+      hooks: [...(traits.hooks || []), ...attachmentModifierHooks],
+    });
     this.statuses = new BattleMajorStatus(this);
     this.entryView = this.snapshot();
     const initial = new BattleCheckpoint(this);
@@ -222,6 +247,32 @@ export class Battle {
   }
   get seatIds() {
     return [this.homeSeat, this.awaySeat];
+  }
+  quotaKey(limit) {
+    return JSON.stringify([limit.scope, limit.subject, limit.key]);
+  }
+  /** Counts pending reservations across augments and attachments sharing one limit key. */
+  reservedQuota(key) {
+    let count = 0;
+    for (const action of this.decisions?.pending.values() || []) {
+      if (action.augment) {
+        const limit = this.augments.limit(
+          action,
+          this.augments.registry.get(action.augment),
+        );
+        if (limit && this.quotaKey(limit) === key) count++;
+        continue;
+      }
+      for (const entry of action.attachments || []) {
+        const limit = this.attachments.limit(
+          action,
+          entry,
+          this.attachments.registry.get(entry.id),
+        );
+        if (limit && this.quotaKey(limit) === key) count++;
+      }
+    }
+    return count;
   }
   get commandSeat() {
     return this.decisions.next() || this.homeSeat;

@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "pluginApi": 1,
+  "scope": [
+    "B2 first slice: limited move derivation on battle attachments",
+    "deriveMove returns power/type/target/priority with bounds",
+    "effective move overlays derivation while source slot pays PP once",
+    "derived plan is internal-only; forged request field is dropped"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "notImplemented": [
+    "category/effect derivation and per-move category policy",
+    "action-scoped modifiers",
+    "defense interaction (block/pass/scaledDamage)",
+    "permission results (allow/deny+reason)",
+    "multiple attachments and parameterization",
+    "cross-mechanism shared quotas",
+    "browser battle UI for attachments"
+  ],
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1057,
+      "coreFailed": 0,
+      "pluginsPassed": 40,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log"
+    }
+  ],
+  "newTests": [
+    "tests/battle-attachments.test.js (derived power/priority, source PP once, forged derivedMove dropped, out-of-range derivation rejected)",
+    "examples/battle-attachment.test.js (deriveMove through public commands)"
+  ],
+  "knownFlakes": [
+    "tests/native-ui-regions.test.js async click race; reproduces at baseline, unrelated to this change (see 2026-10-06-battle-attachments manifest)."
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game battle visual and audio acceptance"
+  ],
+  "invalidatedBy": [
+    "derivation field bounds or effective-move overlay changes",
+    "battle action request schema or internal field redaction changes"
+  ],
+  "sha256": {
+    "src/engine/battle/attachments.js": "d6302f974e827b76a6d1f4847048bfbea77e7d01fe2ecfb8cfe74691dbc20b95",
+    "src/engine/battle/moves.js": "2242229a5f29cf9d426b574288ce8813d66b79f5bdad4a0880b7e00b92b5925f",
+    "src/engine/battle/actions.js": "b7825622abe7592024d74876610e0649897015857ae38b3eac6152233c949038",
+    "src/engine/extensions/content-normalizers.js": "9806b18ec25063fc1012d82c6d85dca879725089f82c53bc2e7f12b3669960b2",
+    "src/engine/contracts.d.ts": "8eba139f72ce2565cd236b847e1eda04e2429ebd12df0e087725bdd9c6fad424",
+    "tests/battle-attachments.test.js": "07994baa788600edee4a79fab291e51b5fbc51b4dccb8f2e32083507a6e06d87",
+    "examples/battle-attachment.test.js": "28c09fd1bfd7e704b44dd88b07da78718d8d1c0126172c61d179b5d79e3902c0",
+    "docs/engine/battle/ATTACHMENTS.md": "3a6a73c1e2f604ce8a9a5881ec002d5ea1d1a9fa29da879a3e73bb70dd2c163d"
+  }
+}

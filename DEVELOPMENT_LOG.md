@@ -1,5 +1,41 @@
 # 开发记录入口
 
+## 2026-10-06 · 外部评审 11 项修复
+
+宿主专用完成处理器、完成后补存、跳过派生回退、公开指令多附加/参数、只读回调保护、异常隔离、失焦暂停、空闲启动门禁、候选发现、来源合并输入、固定伤害缩放。并稳定两处 flake。核心1081、插件41、检查通过，全量连跑4次0失败。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · 下楼错位、互动入口与 flake
+
+修换图后输入空窗导致的楼下站位错位（mapEnter 有脚本即锁输入，无脚本不锁）；新增 `InteractionApplication` 与 fieldAction `interaction` 操作作为会话入口；稳定 native-ui-regions 异步点击 flake。核心1070、插件40、质量检查通过。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · 复核并修复评审硬缺口
+
+核对三条：灼伤不成立；保护成立；PP 部分成立。修复：原生保护并入 `defense-interaction`（默认 `protected`，可被 `pass` 覆盖）；附加项新增 `pp:"clear"` 清空源槽 PP。核心1067、插件40、质量检查通过。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · B2 收口与 R2 完成事实
+
+B2 补齐类别/效果派生、行动作用域修饰、许可 `decide` 与防御交互（block/scaledDamage）、多附加项与参数、跨机制共享额度；R2 为实时会话加 `source` 与公开完成事实 `core:interaction-completed`。核心1065、插件40、质量检查通过；未做浏览器验收。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · B2 首片：受限招式派生
+
+为战斗附加项加 `deriveMove`：受限 `power/type/target/priority`，源槽支付 PP 一次、有效招式叠加派生；伪造内部字段被丢弃。核心1057、插件40、质量检查通过；未做浏览器验收。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · 插件宿主 content.register 归一化重构
+
+把 `plugin-host.js` 的逐种类 `if` 链抽成 `content-normalizers.js` 的归一化表，宿主只做一次分派；行为/API 不变，plugin-host 815→557 行。核心1055、插件39、质量检查通过。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · B1 战斗行动附加选择
+
+新增 `battleAttachments` 内容与宿主服务：一次主招式行动可附加一个效果（首版为形态转换），声明提交点、资格、额度与不可用策略；候选查询与行动请求经公开命令；选择不消耗，提交点复检后生效并消耗额度，默认 Gen3 不变，旧增强保持兼容。核心1050、插件39、质量检查通过；未做浏览器验收。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · R1 宿主驱动实时互动会话
+
+为插件补通用实时互动能力（代表例为通用判定条，不含钓鱼）：`api.interactions.register` 注册定义，宿主 `InteractionSessionService` 持有时钟、语义输入、独立随机与完成结算；公开 `core.interaction.*` 命令；浏览器由帧循环驱动并用 `InteractionDOM` 绘制 FrameData。核心1045、插件38、质量检查通过；未做浏览器/听音验收。详见[当前状态](docs/project/STATUS.md)。
+
+## 2026-10-06 · 插件扩展合并评审
+
+核对Z/灼伤与Mega/离场的错误前提，同时区分内部检查阶段和公开插件许可能力。现有评审稿补全宿主驱动实时会话的时钟/输入/动态绘制/结果提交、失败清理与保存边界，提出两条增量实施线。只更新现有文档，接口和玩法均未实现，待共同评审；详见[方案](docs/project/PLUGIN_EXTENSION_REVIEW.md)。
+
 
 ## 2026-10-06 · 直接运行两棵输入目录
 

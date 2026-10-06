@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "pluginApi": 1,
+  "scope": [
+    "close review gap: protection is now a defense-interaction outcome and can be passed/ignored",
+    "close review gap: first-class attachment pp:'clear' consumes the source slot's remaining PP",
+    "verified review gap 1 (burn) is already expressible via burn-modifier returning 1"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "reviewVerdict": {
+    "burn": "not a hard gap: model.js applies modifier('burn-modifier', 0.5) only under the Gen3 burn condition; returning 1 cancels the halving. The branch gates whether the modifier runs, not whether it is effective.",
+    "protection": "was a real gap: native protected returned false after defense-interaction, so scaledDamage never applied and there was no public pass. Closed by making protected the default defense outcome.",
+    "pp": "was a partial gap: no pp field and no augment+attachment mixing; pp-cost could force 0 only for non-self targets. Closed with pp:'clear'."
+  },
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1067,
+      "coreFailed": 0,
+      "pluginsPassed": 40,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log"
+    }
+  ],
+  "newTests": [
+    "tests/battle-permissions.test.js (defense pass overrides native protection; default protection still blocks; deterministic damage/accuracy)",
+    "tests/battle-attachments.test.js (pp:'clear' zeroes the source slot; forged ppClear dropped; invalid pp rejected)"
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game battle visual acceptance"
+  ],
+  "invalidatedBy": [
+    "defense-interaction default outcome, hit-check order or protection state changes",
+    "move PP settlement changes"
+  ],
+  "sha256": {
+    "src/engine/battle/moves.js": "da9a0e5207b4ccf09c5d98fdd9f208d441627e8d09f9d15b9be55d7ed562150e",
+    "src/engine/battle/attachments.js": "a7ebda3bb59ef132314044818b43ca699beda61ce765af141b3145f753324444",
+    "src/engine/battle/actions.js": "e8296717d820b60c8e85cb85407489a50c9407b16899ec2b80e3d114b603ecca",
+    "src/engine/contracts.d.ts": "755f9d10bad710b3b6079e51dc8fc060097cfd9284c3691c1a4e7779e17d767c",
+    "tests/battle-attachments.test.js": "6fc164d075a32cbb0b262a9cd95c659f8a14a59008a3a5ef1b2d01e91e6f196b",
+    "tests/battle-permissions.test.js": "580e5c8903ad142cb9673d6d11404a615076b115cb18c6a4b2e594a15407985a",
+    "docs/engine/battle/ATTACHMENTS.md": "efc5d36fda3530446ed2b3ced1f03ec803e6da9a250e60694cbca9263d7a9604"
+  }
+}

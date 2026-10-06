@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "pluginApi": 1,
+  "scope": [
+    "B1 first slice: battle action attachments",
+    "content kind battleAttachments with registry and host service",
+    "commit points beforeOrder/beforeAction/moveStart",
+    "controller/alliance/battle/creature quota with reservation",
+    "form transition at a commit point",
+    "core.battle.attachments candidate query and battle.action attachments field",
+    "checkpoint restores attachment ledger and form records"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "notImplemented": [
+    "B2 derived moves, action-scoped modifiers, defense interaction, permission results",
+    "multiple attachments per action and parameterization",
+    "sharing quotas across augments/forms/attachments",
+    "form entry/transition trigger distinction",
+    "browser battle UI menu for attachments"
+  ],
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1055,
+      "coreFailed": 0,
+      "pluginsPassed": 39,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log",
+      "note": "The first run stopped at check:docs only because this manifest did not exist yet; all checks pass after creating it."
+    }
+  ],
+  "repairedFailures": [
+    "CreatureForms.effective returns the base creature (form undefined) when no record exists; assertions aligned."
+  ],
+  "knownFlakes": [
+    "tests/native-ui-regions.test.js 'A native replacement activates the original battle command' intermittently fails under the full parallel suite (pp 35 !== 34). Reproduced at the baseline commit 89b6b11 in a clean worktree (2/24 concurrent runs); not caused by this change. Isolated runs pass. Left untouched; candidate fix is test/async-click synchronization."
+  ],
+  "newTests": [
+    "tests/battle-attachments.test.js (beforeOrder form + reorder, default unchanged, cancel releases, mix rejected, bad registration, rollback)",
+    "examples/battle-attachment.test.js (public commands: candidate query and battle.action attachments)"
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game battle visual and audio acceptance",
+    "battle UI attachment menu"
+  ],
+  "invalidatedBy": [
+    "battle attachment contract, commit points or quota semantics changes",
+    "battle action request schema changes",
+    "BattleCheckpoint, forms or round ordering changes"
+  ],
+  "sha256": {
+    "src/engine/battle/attachments.js": "6765bb395ef94ce6dce2eec1162a67ef01752ee70e550114bb9aa587e91d15e1",
+    "src/engine/battle.js": "438b279feccf1b0a9f3e690335392fb1c2ca4b8c30c0ab75974b179ec6b0f409",
+    "src/engine/battle/actions.js": "e037841ba78e151340f56d33bccc5278f55af90b56acb676a3a0c4713f7b689c",
+    "src/engine/battle/round.js": "9fd549cebebb863b015fa1ef76ea0a765296bc642d6f42caee005fe07a2a8923",
+    "src/engine/battle/moves.js": "c4771ed75b8962eb268a56d338c752d17d539ca511cc885de512429e389b3f2d",
+    "src/engine/battle/checkpoint.js": "ca79aa2d3e02d5155450052c193fe02a9222aea9fa42ff9a5899c70f00ed0e6f",
+    "src/engine/extensions/catalog.js": "e932054bd7e8cccdcbdafb890290b44e2613da0b5e72faa181870d05a704584c",
+    "src/engine/extensions/plugin-host.js": "5e1de8a9fd7f9ed84ead21e199d1841e3a86148ac7b53c957050309697c90db3",
+    "src/packs/emerald/extensions.js": "b3c60d16effb5c61a7f8c5e592a9db943dfa38c60b3fa884895662300542c561",
+    "src/packs/emerald/application-commands.js": "87744ed61b5b6242183ece78720ba21ace94e680f1292db22c0ef0ea2d842c88",
+    "src/packs/emerald/application/battle-application.js": "12e268c4885b9bff17f38a585108559e55756da8597ec3b778b15895196ee611",
+    "src/engine/contracts.d.ts": "e6291c5857d728fbf8868fcca9d6fad7a3c9edf96598ae386424574c52b036a5",
+    "tests/battle-attachments.test.js": "370630e8d4113bbe5f62014f0789b8ae07ab081a5214e511a3f2858c1da42822",
+    "tests/fixtures/extensions/attachment.js": "896b062bdf27081c759494f2357a8b64a705d62d696148e57bd4f3ad26a6c3aa",
+    "examples/battle-attachment.test.js": "48b12446ddf0b20a74cdc8c19f708e2f697d46cb9b8cd8cf341a0602965f9aa7",
+    "docs/engine/battle/ATTACHMENTS.md": "fa94bfd27cb75a617b7b4d544a9ccf4e42823773b4a19c90e97e3d455d9f09fc"
+  }
+}

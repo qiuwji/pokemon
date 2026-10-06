@@ -193,6 +193,7 @@ export class BattleApplication {
       effects: this.moveEffects,
       states: this.catalog.battleStates,
       augmentDefinitions: this.catalog.battleAugments,
+      attachmentDefinitions: this.catalog.battleAttachments,
       formDefinitions: this.catalog.forms,
       formRecords: context
         ? {}

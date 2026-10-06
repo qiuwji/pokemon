@@ -21,6 +21,7 @@ export function actionMove(b, action) {
   const id = action.overrideMove || action.augmentedMove;
   return {
     ...(id ? b.db.moves[id] : selectedMove(b, action.seat, action.index)),
+    ...(action.derivedMove || {}),
     id: id || b.movesFor(action.seat)[action.index]?.id || "struggle",
   };
 }
@@ -124,6 +125,18 @@ export class MoveExecutor {
     }
     initial.action = action;
     if (augmentation) b.augments.commit(action, augmentation);
+    const attachment = b.attachments.applyPoint(action, "moveStart");
+    if (attachment?.failed) {
+      b.emit(attachment.reason, "failed", { actorSeat: action.seat });
+      b.actionLifecycle.clear(action.seat);
+      b.actionLifecycle.record(action, move.id, false);
+      return false;
+    }
+    if (attachment?.skipped)
+      b.emit(attachment.reason, "failed", { actorSeat: action.seat });
+    initial.activeAttachments = (action.attachments || [])
+      .filter((entry) => entry.committed)
+      .map((entry) => entry.id);
     const lifecycle = b.actionLifecycle.begin(action, initial);
     const slot = b.movesFor(action.seat)[action.index];
     let ppCost = augmentation?.cost.pp || 1;
@@ -136,6 +149,7 @@ export class MoveExecutor {
           }) ?? ppCost;
     if (slot && !lifecycle.skipPP && !action.skipPP)
       slot.pp = Math.max(0, slot.pp - ppCost);
+    if (slot && action.ppClear) slot.pp = 0;
     b.traits?.run("move-start", initial);
     b.phase = "move-start";
     const event = initial.emit(`${b.name(mon)} 使用了 ${move.name}！`, "move", {
@@ -192,6 +206,7 @@ export class MoveExecutor {
     for (const target of targets) {
       if (!(b.roster.occupant(target.id)?.hp > 0)) continue;
       const c = this.context(action.seat, target.id, move, definition);
+      c.activeAttachments = initial.activeAttachments;
       c.action = action;
       c.targetCount = targets.length;
       c.targetMode = b.targeting.mode(move);
@@ -254,6 +269,20 @@ export class MoveExecutor {
   hits(c) {
     if (c.definition.target === "self" || c.definition.bypassHitChecks)
       return true;
+    const defense = {
+      ...c,
+      allowed: true,
+      outcome: c.targetState.protected ? "protected" : null,
+    };
+    this.battle.traits?.run("defense-interaction", defense);
+    if (defense.outcome === "block" || defense.outcome === "protected") {
+      c.missReason = defense.outcome;
+      c.emit(
+        defense.outcome === "protected" ? "对方保护了自己！" : "被防御住了！",
+      );
+      return false;
+    }
+    if (defense.outcome?.kind === "scaledDamage") c.damageScale = defense.outcome;
     const hitPermission = { ...c, allowed: true, guaranteed: false };
     this.battle.traits?.run("hit-check", hitPermission);
     if (!hitPermission.allowed) {
@@ -271,11 +300,6 @@ export class MoveExecutor {
       return false;
     }
     if (hidden) c.power *= c.definition.hiddenMultiplier || 1;
-    if (c.targetState.protected) {
-      c.missReason = "protected";
-      c.emit("对方保护了自己！");
-      return false;
-    }
     if (
       c.definition.requiresStatus &&
       c.opponent.status !== c.definition.requiresStatus

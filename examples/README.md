@@ -16,9 +16,11 @@
 | 对话表现 | [dialogue.test.js](dialogue.test.js) | 注册文字效果→NPC触发→结构化文本/速度转发→确认后奖励；UI替身不证明动画 |
 | 世界剧情 | [world-story.test.js](world-story.test.js) | 注册地图NPC→真实交互触发→对话/一次奖励→重试 |
 | 战斗 | [battle-effect.test.js](battle-effect.test.js) | 注册效果/招式→真实训练家回合→能力阶段和PP |
+| 战斗附加选择 | [battle-attachment.test.js](battle-attachment.test.js) | 注册附加项→候选查询→携带行动→形态与额度在提交点生效 |
 | 非战斗设施 | [facility.test.js](facility.test.js) | 注册活动/设施→推进→待领取→结算/去重→重载 |
 | 页面插件 | [plugin-page.test.js](plugin-page.test.js) | 详情入口→布局校验→控件action→自有记忆→重载 |
 | 内嵌 Canvas | [plugin-canvas.test.js](plugin-canvas.test.js) | 注册循环视觉→声明式页面→帧取样→键盘互动→保存→关闭释放；DOM端口替身 |
+| 实时互动会话 | [interaction-bar.test.js](interaction-bar.test.js) | 注册判定条→公开开始/输入/推进→判定→奖励结算→保存重载；无需浏览器绘制 |
 | 遇敌插件 | [encounter-extension.test.js](encounter-extension.test.js) | 关闭step→查询格子→Actor与凭证→接触→真实野生战斗，不经过剧情 |
 | 外观/相机/环境插件 | [visual-extension.test.js](visual-extension.test.js) | 外观选择→可见格数租约→独立雾层→释放与重载 |
 | Actor | [actor.test.js](actor.test.js) | 模板→公开创建/更新→持久UID和记忆→移除 |
@@ -28,4 +30,4 @@
 
 [共享装配夹具](../tests/helpers/session.js)只用于测试：固定时钟、内存存储及无浏览器UI，准备已解锁场景和一只精灵。对话立即完成、选择取首项，未播放真实Canvas/DOM/音频。原作剧情例注入与FieldSession相同的到达回调，不证明玩家行走；页面例dispatch与点击相同的action，不证明鼠标和焦点。夹具的直接赋值是场景安排，禁止复制成生产插件写法。
 
-浏览器插件是普通manifest对象，放到dist/plugins并加入dist/plugins/catalog.json装配清单，具体见[作者指南](../docs/development/AUTHORING.md)。示例中的bus代表玩家/测试入口；插件运行时dispatch同一核心命令仍须声明该命令权限，直接bus通过不能证明权限通过。测试写法、复用证据和最终验收见[测试指南](../docs/development/TESTING.md)。Skill代码块由`npm run check:docs`与真实文件比对，修改时同步二者。
+浏览器插件是普通manifest对象，放到src/plugins并加入src/plugins/catalog.json装配清单，具体见[作者指南](../docs/development/AUTHORING.md)。示例中的bus代表玩家/测试入口；插件运行时dispatch同一核心命令仍须声明该命令权限，直接bus通过不能证明权限通过。测试写法、复用证据和最终验收见[测试指南](../docs/development/TESTING.md)。Skill代码块由`npm run check:docs`与真实文件比对，修改时同步二者。

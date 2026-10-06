@@ -129,6 +129,7 @@ export class EmeraldAdventure {
       this.growthDirector.busy ||
       this.growthBusy ||
       this.actionBusy ||
+      !!this.interactionSessions?.active ||
       !!this.sceneDirector?.busy
     );
   }

@@ -1,5 +1,63 @@
 # 当前框架交付与接手进度
 
+## 2026-10-06 · 外部评审 11 项修复
+
+逐条核实并修复外部评审：①完成处理器改为**宿主专用**（不再登记为公开命令，只在 `finishing`+冻结结果时结算）；②结算提交、释放占用后**补一次保存**；③提交点复检失败时**丢弃派生、回退基础招式**；④`core.battle.action` 支持最多两个附加项 + JSON 参数字符串；⑤`init/step/view` 走宿主只读执行保护（禁止 dispatch/写）；⑥`step/view` 异常隔离为会话失败/空帧，主帧循环继续调度；⑦实现 `pauseOnFocusLoss`（失焦冻结、恢复重建基准，可见性切换接入）；⑧公开 `start` 仅在宿主空闲时可用；⑨候选发现不校验必填参数；⑩按物理来源（键/指针）合并语义输入，触屏方向进入会话桥；⑪固定伤害/plan 分支也走统一缩放缓伤。
+
+顺带修复两处测试级 flake：`battle-attachments` 的修饰测试（Tackle 95% 命中且低级可能先倒）与 `battle-permissions` 的防御测试改为确定性。核心1081/1081、插件41/41、`npm run check`通过，`test:all` 连跑 4 次 0 失败。合同见[实时互动会话](../engine/INTERACTIONS.md)与[战斗行动附加](../engine/battle/ATTACHMENTS.md)；证据见[本轮记录](../validation/2026-10-06-review-fixes/manifest.json)。未做浏览器实机验收。
+
+## 2026-10-06 · 下楼按住方向错位修复 + 互动入口 + flake
+
+修复用户报告的错位：换图后 `mapEnter` 剧情在 `flushStoryQueue` 真正接管前有一段输入空窗，按住方向会多走一步，导致"上楼调钟后下楼被妈妈劝回"的站位与脚本预期不符。现在 `storyMapEntered` 立即解析该地图的 `mapEnter` 脚本并置 `mapPending`，`MovementApplication` 将 `storyPending` 视为暂停，`flush` 时清除；**无脚本的普通换图不锁输入**（路线连接照常连续行走）。新增回归 `tests/opening-input-lock.test.js`。
+
+补齐 R2 入口：新增薄适配器 `InteractionApplication`（`startInteraction`/`interactionActive`/`interactionInput`/`cancelInteraction`/`interactionAdvance`/`interactionView`），fieldAction 计划可用 `{kind:"interaction",id,parameters?,source?}` 在提交时开始会话。原生钓鱼迁移仍暂缓。
+
+一并稳定 `tests/native-ui-regions.test.js` 的预存在异步点击偶发失败（点击后等待 settle 并有限重试；16×3 并发零失败）。
+
+核心1070/1070、插件40/40、`npm run check`通过。未做浏览器实机验收；证据见[本轮记录](../validation/2026-10-06-opening-input-lock-and-interaction-entry/manifest.json)。
+
+## 2026-10-06 · 复核外部评审三条硬缺口
+
+核对外部评审：灼伤一条**不成立**（`burn-modifier` 返回 `1` 即可抵消减半，硬分支只决定是否调用与该修改阶段）；保护一条**成立**（原生 `protected` 在 `defense-interaction` 之后无条件拦截，`scaledDamage` 对受保护目标无效，也无忽略保护路径）；PP 一条**部分成立**（无 `pp` 字段、不可与增强 `cost.pp` 混用，`pp-cost` 对自目标不套用）。
+
+已修复：把原生保护并入 `defense-interaction`——`protected` 作为默认结果，插件可返回 `outcome:"pass"` 覆盖（无视保护），`block`/`scaledDamage` 保留；新增附加项 `pp:"clear"` 在提交点后清空源槽剩余 PP，`ppClear` 伪造字段被丢弃。核心1067/1067、插件40/40、`npm run check`通过；证据见[本轮记录](../validation/2026-10-06-battle-gaps-protection-pp/manifest.json)，合同见[战斗行动附加](../engine/battle/ATTACHMENTS.md)。
+
+## 2026-10-06 · B2 收口与 R2 完成事实
+
+补齐 B2：`deriveMove` 增加 `category/effect`（类别派生进入伤害公式，缺省仍按 Gen3 属性）；`modifiers` 行动作用域修饰绑定 actor/行动/阶段，结算结束即失效；许可类阶段新增插件 `decide` 规则返回 `abstain/allow/deny+reason/outcome`，`defense-interaction` 支持 `block` 与 `scaledDamage`（进正常伤害管线与取整一次）；附加项支持最多两个（一个形态+一个派生，修饰叠加）与 `parameters` 参数、`requires` 谓词；附加项与旧增强共用 `scope+subject+key` 额度池，同池容量冲突启动拒绝。
+
+R2（部分）：`core.interaction.start` 支持可选 `source`；完成后宿主发布公开事实 `core:interaction-completed {instance,definition,source,outcome,result}` 供世界/设施/插件接续，不同步开战。fieldAction/设施内部入口与原生钓鱼迁移仍待后续。
+
+核心1065/1065、插件40/40、`npm run check`通过；合同见[战斗行动附加](../engine/battle/ATTACHMENTS.md)与[实时互动会话](../engine/INTERACTIONS.md)。未做浏览器/视觉/听音验收，由用户负责；证据见[本轮记录](../validation/2026-10-06-battle-b2-and-interaction-r2/manifest.json)。已知 `tests/native-ui-regions.test.js` 一个预存在异步点击偶发失败（基线可复现，未改）。
+
+## 2026-10-06 · B2 首片：受限招式派生
+
+在 B1 附加项上补 `deriveMove(context)`：返回受限的 `power/type/target/priority`（各自上下界校验）。`sourceMove` 支付 PP 与身份识别，`effectiveMove` 叠加派生后的目标/命中/伤害/优先级视图，`id` 仍为源招式；类别继续按 Gen3 属性政策。派生值在提交点复算比对，选择后状态变化即拒绝。请求中的 `derivedMove` 为内部字段，伪造被丢弃。默认 Gen3 结果不变。
+
+核心1057/1057、插件40/40、`npm run check`通过；合同见[战斗行动附加](../engine/battle/ATTACHMENTS.md)。类别/效果派生、作用域修饰、防御交互、许可返回仍待后续。未做浏览器验收；证据见[本轮记录](../validation/2026-10-06-battle-attachment-derivation/manifest.json)。
+
+## 2026-10-06 · 插件宿主 content.register 归一化重构
+
+纯重构：把 `plugin-host.js` 中按内容种类堆叠的 `if (kind === ...)` 分支抽到新模块[content-normalizers.js](../../src/engine/extensions/content-normalizers.js) 的 `CONTENT_NORMALIZERS` 表与 `normalizeContent(kind,value,evaluate)` 分派；plugin-host 从 815 行降到 557 行。逐种类保留原有展开顺序、truthy/undefined 过滤与错误文案，公开 API/schema/玩法不变。核心1055/1055、插件39/39、`npm run check`通过；证据见[本轮记录](../validation/2026-10-06-content-normalizer-refactor/manifest.json)。
+
+## 2026-10-06 · B1 战斗行动附加选择（插件能力）
+
+按方案顺序实现 B1 首版：新增内容种类 `battleAttachments` 与 `BattleAttachmentRegistry`/`BattleAttachments`。一次主招式行动可携带一个附加项，声明 `commitPoint`（`beforeOrder`/`beforeAction`/`moveStart`）、可选同步 `requires`、`limit`（`scope+key+max`）、`transition:{form}` 与 `unavailablePolicy`。选择只读预检、不扣 PP/不改形态；提交点复检后消耗额度并切换形态；`beforeOrder` 形态变化影响本回合排序。旧 `battleAugments` 保持原语义，二者首版互斥；默认 Gen3 结果不变。公开 `core.battle.attachments {index}` 候选查询，`battle.action` 支持 `attachments:[{id}]`；`BattleCheckpoint` 恢复附加账本与形态记录。
+
+派生招式、行动作用域修饰、防御交互、许可返回值、多附加项/参数化、跨机制共享额度属 **B2**（未实现）。核心1050/1050、插件39/39、`npm run check`通过；合同见[战斗行动附加](../engine/battle/ATTACHMENTS.md)。未做浏览器/视觉验收，由用户负责；证据见[本轮记录](../validation/2026-10-06-battle-attachments/manifest.json)。
+
+## 2026-10-06 · R1 宿主驱动实时互动会话（插件能力）
+
+按用户授权先做 R1：为插件补通用实时互动能力，代表例用通用判定条，不实现钓鱼。新增 `api.interactions.register` 定义校验；宿主 `InteractionSessionService` 拥有固定 60Hz 逻辑时钟、语义输入（held/pressed/released/edges，同 tick 双边沿）、独立种子随机流、终态冻结与完成结算。公开命令 `core.interaction.start/input/advance/cancel/view`；完成走现有插件事务与 `ctx.intent`，活动期间 `game.busy`。浏览器侧：`app.js` 帧循环驱动 `advance`、`BrowserInput` 路由语义输入并加输入租约、`FrameData` 经新 `InteractionDOM` 叠加层绘制。
+
+首版不保存进行中的会话，R2（fieldAction/设施入口、世界/遭遇完成适配器、原生钓鱼迁移）待后续。核心1045/1045、插件38/38、`npm run check`通过；合同见[实时互动会话](../engine/INTERACTIONS.md)。未做浏览器游玩、触屏与听音验收，由用户负责；证据见[本轮记录](../validation/2026-10-06-interaction-session/manifest.json)。设计背景仍是[扩展评审稿](PLUGIN_EXTENSION_REVIEW.md)（战斗 B1/B2 与实时 R2 未实现）。
+
+## 2026-10-06 · 战斗与实时会话插件扩展共同评审
+
+核对外部评审：物理Z招式不普遍免除灼伤；现有burn-modifier返回1即可取消数值减半，无需改status。Mega没有整回合离场禁令；现有switch/escape检查与活体中途接替请求不能误称缺失。但公开插件缺少完整许可返回/原因投影，行动附加选择、作用域及提交时机仍有真实缺口。
+
+扩展[现有评审稿](PLUGIN_EXTENSION_REVIEW.md)，合并战斗行动计划与宿主驱动实时会话方案。会话复用帧循环、输入采集、已有Canvas和事务/存档保护；补逻辑时钟、held及边沿、动态帧数据、结果凭据和受限领域完成适配器，明确暂停/回放、失败恢复、费用、幂等和保存边界。全部为待评审设计，本轮不实现接口、不增加玩法或代码文件；未新增运行测试/浏览器验收，文档链接检查单独执行。
+
 ## 2026-10-06 · 取消复制构建，直接运行源码与生成资源
 
 按用户最新要求撤掉src/generated合并复制为dist的实现：删除构建器、专用构建测试、build及预构建命令和过期部署目录配置。开发服务直接提供src/generated文件；页面以src/index.html为入口，保留启动查询参数，代码及插件以真实路径引用各自模块，素材URL指向generated。内容加载按清单generated标记读取对应目录，Node与浏览器使用同一合同。导入/音频/UI工具直接更新唯一所有者；临时导入视图只建只读链接，不复制素材或创建dist。目录合同见[源码与生成资源](../development/SOURCE_LAYOUT.md)。

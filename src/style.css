@@ -854,6 +854,15 @@ footer {
 .warning {
   color: #b85848;
 }
+.interaction-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 48;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
 .scene-transition {
   position: absolute;
   inset: 0;

@@ -14,6 +14,28 @@ export class BattleActions {
       return { error: "无效的增强标识。" };
     if (action.augment !== undefined && action.kind !== "move")
       return { error: "增强只能用于招式行动。" };
+    if (action.attachments !== undefined) {
+      if (action.kind !== "move") return { error: "附加效果只能用于招式行动。" };
+      if (action.augment !== undefined)
+        return { error: "同一行动不能同时使用增强与附加效果。" };
+      if (
+        !Array.isArray(action.attachments) ||
+        !action.attachments.length ||
+        action.attachments.length > 2 ||
+        action.attachments.some(
+          (entry) =>
+            !entry ||
+            typeof entry.id !== "string" ||
+            !entry.id ||
+            (entry.parameters !== undefined &&
+              typeof entry.parameters !== "string" &&
+              (!entry.parameters ||
+                typeof entry.parameters !== "object" ||
+                Array.isArray(entry.parameters))),
+        )
+      )
+        return { error: "无效的附加效果选择。" };
+    }
     if (action.slot !== undefined && action.kind !== "item")
       return { error: "道具位置只能用于道具行动。" };
     if (action.kind === "cancel" && !automaticSeat)
@@ -47,6 +69,10 @@ export class BattleActions {
       callDepth,
       requestedReplacement,
       forced,
+      attachments,
+      attachment: _forgedAttachment,
+      derivedMove: _forgedDerivedMove,
+      ppClear: _forgedPpClear,
       ...request
     } = action;
     const base = { ...request, seat, actor: mon?.uid ?? null };
@@ -66,9 +92,24 @@ export class BattleActions {
               ? { effect: "recoil", target: "selected" }
               : b.db.moves[slot.id];
         if (action.augment && index < 0) return { error: "挣扎不能进行增强。" };
+        // Public command input may carry parameters as a JSON string; the engine
+        // always receives a plain object.
+        const requested = Array.isArray(attachments)
+          ? attachments.map((entry) => ({
+              id: entry.id,
+              parameters:
+                typeof entry.parameters === "string"
+                  ? JSON.parse(entry.parameters)
+                  : entry.parameters ?? {},
+            }))
+          : [];
+        if (requested.length && index < 0)
+          return { error: "挣扎不能附加效果。" };
         const enhanced = action.augment
           ? b.augments.prepare({ ...base, index })
-          : { ...base, index };
+          : requested.length
+            ? b.attachments.prepare({ ...base, index, attachments: requested })
+            : { ...base, index };
         if (enhanced.error) return enhanced;
         const effectiveMove = enhanced.augmentedMove
           ? b.db.moves[enhanced.augmentedMove]

@@ -32,6 +32,10 @@ manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。se
 
 当前宿主区域/布局节点/主题能力以代码和规格为准；不能给未知slot/节点编造支持。大型现代机制同时核对资格、行动增强、资源/PP、限次、清理和事件；不能把形态变换当整个Mega/Z系统。一次招式增强可用[battleAugments合同](../../docs/engine/battle/AUGMENTS.md)和[招式增强合同测试](../../tests/battle-augments.test.js)，搜索`core.battle.augments`定位查询；替换范围、消费点及不支持项按该规格。实际公开合同缺口归框架任务，不让插件导入核心绕过。
 
+## 战斗行动附加（B1）
+
+除旧 `battleAugments` 的整招替换外，可用 `api.content.register("battleAttachments", id, definition)` 给一次主招式行动附加效果：`commitPoint`（`beforeOrder`/`beforeAction`/`moveStart`）、可选同步 `requires` 谓词、`parameters` schema、`limit`（`scope+key+max`，显式相同 key 与增强共享一个池）、`transition:{form}`、`deriveMove(context)`（受限派生 `power/type/category/target/priority/effect`）、`modifiers`（行动作用域数值修饰，阶段白名单内）、`pp:"clear"`（清空源槽剩余 PP）与 `unavailablePolicy`。行动请求带 `attachments:[{id,parameters?}]`（最多两个：一个形态+一个派生，修饰可叠加，不与 `augment` 混用）；候选用 `core.battle.attachments {index}`；UI/AI 只传注册 ID 与参数。选择不扣 PP/不改形态，提交点复检后才消耗额度；`beforeOrder` 形态变化影响排序，派生只叠加有效招式、PP 仍由源槽支付一次。许可类阶段（`switch-check`/`escape-check`/`hit-check`/`immunity`/`action-permission`/`defense-interaction`）可注册 `decide` 规则返回 `abstain/allow/deny+reason/outcome`；`defense-interaction` 统一保护判定：原生保护作为默认 `protected` 结果，可被 `pass` 覆盖（无视保护），另有 `block`/`scaledDamage`（进正常伤害管线）。默认 Gen3 结果不变。合同见[行动附加](../../docs/engine/battle/ATTACHMENTS.md)，代表例 [battle-attachment](../../examples/battle-attachment.test.js)。
+
 ## 插件剧情与对话
 
 扩展地区、NPC或告示牌时，用api.story.registerBundle注册同一目录合同，返回完整脚本/对白/入口引用；不向app.js逐剧情加分支。真实组合例见[story-bundle](../../examples/story-bundle.test.js)，字段见[剧情语言](../../docs/engine/story/STORY_LANGUAGE.md)，职责/恢复边界见[剧情架构](../../docs/architecture/STORY_CONTENT.md)。
@@ -252,6 +256,10 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
   assert.equal(a.ext.layout.canvases.size, 0);
 });
 ```
+
+## 宿主驱动实时互动（R1）
+
+用 `api.interactions.register(localId,{version,parameters,state,result,inputs,completion?,init,step,view})` 编写判定条/计时窗口等实时小游戏：宿主拥有固定逻辑时钟、语义输入（held/pressed/released/edges）、独立随机流、帧数据（10 种图元）绘制与完成结算，插件只返回 JSON 状态和受限结果。`completion` 是已注册 action，宿主用现有事务与 `ctx.intent` 结算；`core.interaction.start` 可带可选 `source` 标记来源，完成后宿主发布公开事实 `core:interaction-completed {instance,definition,source,outcome,result}` 供世界/设施/插件消费（世界与遭遇的完成适配器按此事实接续，避免在同步事务里开战）。活动期间 `game.busy` 为真，输入租约取得后方向不再移动主角。首版不保存进行中的会话，原生钓鱼迁移仍属后续。合同见[实时互动会话](../../docs/engine/INTERACTIONS.md)，代表例 [interaction-bar](../../examples/interaction-bar.test.js)；能力用 `api.capabilities.interactions` 识别。
 
 ## 常见错误与排查
 

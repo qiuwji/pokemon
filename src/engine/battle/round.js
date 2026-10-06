@@ -37,7 +37,17 @@ export class RoundResolver {
     b.turn++;
     b.actionLifecycle.received.clear();
     b.conditions.startRound();
-    const order = this.order(actions);
+    const kept = [];
+    for (const action of actions) {
+      const outcome = b.attachments.applyPoint(action, "beforeOrder");
+      if (outcome?.failed) {
+        b.emit(outcome.reason, "failed", { actorSeat: action.seat });
+        continue;
+      }
+      if (outcome?.skipped) b.emit(outcome.reason, "failed", { actorSeat: action.seat });
+      kept.push(action);
+    }
+    const order = this.order(kept);
     b.turnOrder = order.map((a) => a.seat);
     for (const action of order) {
       if (action.kind !== "move") continue;
@@ -68,6 +78,15 @@ export class RoundResolver {
       const action = this.queue.shift();
       const mon = b.roster.occupant(action.seat);
       if (!mon || mon.hp <= 0 || mon.uid !== action.actor) continue;
+      const attachment = b.attachments.applyPoint(action, "beforeAction");
+      if (attachment?.failed) {
+        b.emit(attachment.reason, "failed", { actorSeat: action.seat });
+        b.actionLifecycle.clear(action.seat);
+        b.actionLifecycle.record(action, actionMove(b, action).id, false);
+        continue;
+      }
+      if (attachment?.skipped)
+        b.emit(attachment.reason, "failed", { actorSeat: action.seat });
       b.actionId = action.actionId;
       b.traits?.run("action", { actorSeat: action.seat, action });
       b.phase = "action";

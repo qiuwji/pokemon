@@ -1,5 +1,5 @@
 import { readOnly } from "../extensions/values.js";
-import { PHYSICAL_TYPES } from "../model.js";
+import { moveIsPhysical } from "../model.js";
 /** Owns scheduled actions and bounded history. Effect definitions describe policy, never the round loop. */
 export class BattleActionLifecycle {
   constructor(battle) {
@@ -157,7 +157,7 @@ export class BattleActionLifecycle {
   }
   recordDamage(c, amount) {
     if (amount <= 0 || c.actorSeat === c.targetSeat) return;
-    const category = PHYSICAL_TYPES.has(c.move.type) ? "physical" : "special";
+    const category = moveIsPhysical(c.move) ? "physical" : "special";
     const record = {
       turn: this.battle.turn,
       sourceSeat: c.actorSeat,

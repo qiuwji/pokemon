@@ -19,6 +19,7 @@ export const CONTENT_KINDS = Object.freeze([
   "heldItems",
   "moveEffects",
   "battleAugments",
+  "battleAttachments",
   "movement",
   "movementInputs",
   "fieldActions",
@@ -285,6 +286,9 @@ export function ruleContext(context) {
     "stage",
     "canAct",
     "allowed",
+    "forced",
+    "guaranteed",
+    "activeAttachments",
   ]) {
     if (context[key] !== undefined && typeof context[key] !== "function") {
       if (key === "attachment") continue;

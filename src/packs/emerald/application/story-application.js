@@ -74,6 +74,7 @@ export class StoryApplication {
     bindApplicationPorts(this, ports, STORY_PORTS);
     this.storyBusy = false;
     this.mapQueue = [];
+    this.mapPending = false;
     this.sounds = new Map();
     this.storyMusic = null;
     const dialogue = createStoryDialoguePorts({
@@ -308,6 +309,17 @@ export class StoryApplication {
   storyMapEntered(map, reason) {
     // Earlier-map arrivals become stale; only the current destination may acquire control.
     this.mapQueue = [{ map, reason }];
+    // Lock field input immediately when this arrival owns a real mapEnter script, so a
+    // held direction cannot step the player off the tile the script expects.
+    try {
+      this.mapPending =
+        this.story.resolve("mapEnter", this.state, { map, reason }).length > 0;
+    } catch {
+      this.mapPending = true;
+    }
+  }
+  storyPending() {
+    return !!this.mapPending;
   }
   async flushStoryQueue() {
     if (
@@ -320,7 +332,11 @@ export class StoryApplication {
     )
       return;
     const entry = this.mapQueue.shift();
-    if (!entry || entry.map !== this.state.position.map) return;
+    if (!entry || entry.map !== this.state.position.map) {
+      this.mapPending = false;
+      return;
+    }
+    this.mapPending = false;
     try {
       if (this.state.story.session) {
         if (

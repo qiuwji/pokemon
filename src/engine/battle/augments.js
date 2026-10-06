@@ -82,7 +82,10 @@ export class BattleAugments {
   constructor(battle, registry) {
     this.battle = battle;
     this.registry = registry;
-    this.used = new Map();
+  }
+  /** Shared with attachments so an explicit limit key spends one cross-mechanism pool. */
+  get used() {
+    return this.battle.quotas.used;
   }
   limit(action, d) {
     if (!d.limit) return null;
@@ -119,16 +122,8 @@ export class BattleAugments {
       return { ok: false, reason: "增强行动的原招式当前不可用。" };
     const limit = this.limit(action, d),
       pending = reserve ? [...(b.decisions?.pending.values() || [])] : [];
-    const reserved = limit
-      ? pending.filter(
-          (a) =>
-            a.augment &&
-            (() => {
-              const l = this.limit(a, this.registry.get(a.augment));
-              return l && this.key(l) === this.key(limit);
-            })(),
-        ).length
-      : 0;
+    const reserved =
+      limit && reserve ? b.reservedQuota(this.key(limit)) : 0;
     const used = limit ? this.used.get(this.key(limit))?.count || 0 : 0;
     if (limit && used + reserved >= limit.max)
       return { ok: false, reason: "这项增强的使用次数已用完或被预留。" };

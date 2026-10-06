@@ -5,7 +5,8 @@ import {
   presentationPayload,
 } from "./presentation-contracts.js";
 import { validateAudioCue } from "./audio-contracts.js";
-import { ExtensionCatalog, safeTrait, ruleContext } from "./catalog.js";
+import { ExtensionCatalog, ruleContext } from "./catalog.js";
+import { normalizeContent } from "./content-normalizers.js";
 import { PluginUIRegistry } from "./ui-registry.js";
 import { PluginRuntime } from "./plugin-runtime.js";
 import { validateStateDefinition } from "./plugin-state.js";
@@ -24,8 +25,13 @@ import {
   validateMoveAnimation,
   validateBattleAnimation,
 } from "./visual-contracts.js";
-import { RULE_PHASES } from "../rule-pipeline.js";
+import { RULE_PHASES, DECISION_PHASES } from "../rule-pipeline.js";
+import { validateInteraction } from "../interactions.js";
 export const PLUGIN_API_VERSION = 1;
+export const PLUGIN_CAPABILITIES = Object.freeze({
+  interactions: 1,
+  "presentation.frames": 1,
+});
 /** Startup host: content + declarative interfaces + runtime ports. Trusted code, explicit API, no hot unload. */
 export class PluginHost {
   constructor({
@@ -51,6 +57,7 @@ export class PluginHost {
     this.states = new Map();
     this.actions = new Map();
     this.queries = new Map();
+    this.interactions = new Map();
     this.rules = new Map();
     this.presentation = new Map();
     this.visualEffects = new Map();
@@ -142,254 +149,10 @@ export class PluginHost {
       const api = Object.freeze({
         version: PLUGIN_API_VERSION,
         id: owner,
+        capabilities: PLUGIN_CAPABILITIES,
         content: Object.freeze({
-          register: (kind, id, value) => {
-            if (kind === "facilityActivities") {
-              const original = value;
-              value = {
-                ...value,
-                actions: Object.fromEntries(
-                  Object.entries(value.actions || {}).map(([id, action]) => [
-                    id,
-                    {
-                      ...action,
-                      ...(action.when !== undefined ? {
-                        when: typeof action.when === "function"
-                          ? (context) => evaluate(action.when, readOnly(context))
-                          : action.when,
-                      } : {}),
-                      decide: (context) =>
-                        evaluate(action.decide, readOnly(context)),
-                    },
-                  ]),
-                ),
-                ...(original.onBattle
-                  ? {
-                      onBattle: (context, result) =>
-                        evaluate(original.onBattle, readOnly(context), result),
-                    }
-                  : {}),
-                ...(original.validate
-                  ? {
-                      validate: (definition, references) =>
-                        evaluate(
-                          original.validate,
-                          readOnly(definition),
-                          readOnly(references),
-                        ),
-                    }
-                  : {}),
-              };
-            }
-            if (kind === "appearances" && value.select !== undefined) {
-              if (typeof value.select !== "function")
-                throw new Error("Invalid appearance selector");
-              const select = value.select;
-              value = {
-                ...value,
-                select: (data, context) =>
-                  evaluate(select, readOnly(data), readOnly(context)),
-              };
-            }
-            if (kind === "conditionQueries") {
-              const original = value;
-              if (typeof original.read !== "function")
-                throw new Error("Condition query requires read");
-              value = {
-                ...value,
-                schema: validateSchema(value.schema),
-                read: (state, input) =>
-                  evaluate(original.read, readOnly(state), readOnly(input)),
-              };
-            }
-            if (kind === "battleAugments") {
-              const original = value;
-              if (
-                typeof original.select !== "function" ||
-                (original.requires !== undefined &&
-                  typeof original.requires !== "function")
-              )
-                throw new Error(
-                  "Battle augment requires synchronous selection/eligibility callbacks",
-                );
-              value = {
-                ...value,
-                select: (c) => evaluate(original.select, readOnly(c)),
-                ...(original.requires
-                  ? {
-                      requires: (c) => evaluate(original.requires, readOnly(c)),
-                    }
-                  : {}),
-              };
-            }
-            if (kind === "battleStrategies") {
-              const original = value;
-              if (typeof original.decide !== "function")
-                throw new Error("Battle strategy requires decide");
-              value = {
-                ...value,
-                decide: (c) => evaluate(original.decide, readOnly(c)),
-              };
-            }
-            if (kind === "encounterPolicies") {
-              const original = value;
-              value = {
-                ...value,
-                ...Object.fromEntries(
-                  ["when", "decide"]
-                    .filter((key) => original[key] !== undefined)
-                    .map((key) => {
-                      if (typeof original[key] !== "function")
-                        throw new Error(
-                          "Encounter policy requires synchronous callbacks",
-                        );
-                      return [
-                        key,
-                        (context) => evaluate(original[key], readOnly(context)),
-                      ];
-                    }),
-                ),
-              };
-            }
-            if (kind === "npcBehaviors") {
-              const original = value;
-              if (typeof original.decide !== "function")
-                throw new Error("NPC behavior requires decide");
-              value = {
-                ...value,
-                decide: (c) => evaluate(original.decide, readOnly(c)),
-              };
-            }
-            if (kind === "learningMethods" && value.eligible !== undefined) {
-              const original = value;
-              if (typeof original.eligible !== "function")
-                throw new Error(
-                  "Learning method requires eligibility predicate",
-                );
-              value = {
-                ...value,
-                eligible: (context) =>
-                  evaluate(original.eligible, readOnly(context)),
-              };
-            }
-            if (kind === "fieldMechanisms") {
-              const original = value;
-              value = {
-                ...value,
-                ...Object.fromEntries(
-                  [
-                    "activate",
-                    "enter",
-                    "leave",
-                    "settle",
-                    "timer",
-                    "interact",
-                    "occupancy",
-                  ]
-                    .filter((key) => original[key])
-                    .map((key) => [
-                      key,
-                      (context) => evaluate(original[key], readOnly(context)),
-                    ]),
-                ),
-              };
-            }
-            if (kind === "fieldEffects") {
-              const original = value;
-              value = {
-                ...value,
-                ...Object.fromEntries(
-                  ["retain", "presentation"]
-                    .filter((key) => original[key] !== undefined)
-                    .map((key) => {
-                      if (typeof original[key] !== "function")
-                        throw new Error(
-                          "Field effect requires synchronous callbacks",
-                        );
-                      return [
-                        key,
-                        (...args) =>
-                          evaluate(
-                            original[key],
-                            ...args.map((arg) => readOnly(arg)),
-                          ),
-                      ];
-                    }),
-                ),
-              };
-            }
-            if (kind === "growthConditions") {
-              if (typeof value.test !== "function")
-                throw new Error("Growth condition requires predicate");
-              value = { ...value, schema: validateSchema(value.schema) };
-            }
-            if (["abilities", "heldItems", "battleStates"].includes(kind))
-              value = safeTrait(value, evaluate);
-            if (kind === "movementInputs") {
-              const original = value;
-              if (typeof original.decide !== "function")
-                throw new Error("Movement input requires decide");
-              value = {
-                ...value,
-                decide: (c) => evaluate(original.decide, readOnly(c)),
-              };
-            }
-            if (kind === "movement") {
-              const original = value;
-              value = {
-                ...value,
-                ...Object.fromEntries(
-                  ["allowed", "traverse", "afterStep"]
-                    .filter((key) => value[key])
-                    .map((key) => [
-                      key,
-                      (c) => evaluate(original[key], readOnly(c)),
-                    ]),
-                ),
-              };
-            }
-            if (kind === "fieldActions") {
-              const original = value;
-              value = {
-                ...value,
-                ...Object.fromEntries(
-                  ["allowed", "target", "plan"].map((key) => {
-                    if (typeof original[key] !== "function")
-                      throw new Error("Field action requires rule callbacks");
-                    return [
-                      key,
-                      (...args) =>
-                        evaluate(
-                          original[key],
-                          ...args.map((arg) => readOnly(arg)),
-                        ),
-                    ];
-                  }),
-                ),
-              };
-            }
-            if (kind === "terrainRules") {
-              const original = value;
-              value = {
-                ...value,
-                ...Object.fromEntries(
-                  ["when", "before", "after"]
-                    .filter((key) => original[key])
-                    .map((key) => {
-                      if (typeof original[key] !== "function")
-                        throw new Error(
-                          "Terrain rules require synchronous callbacks",
-                        );
-                      return [
-                        key,
-                        (context) => evaluate(original[key], readOnly(context)),
-                      ];
-                    }),
-                ),
-              };
-            }
-            return content.register(kind, id, value);
-          },
+          register: (kind, id, value) =>
+            content.register(kind, id, normalizeContent(kind, value, evaluate)),
         }),
         states: Object.freeze({
           register: (id, definition) =>
@@ -416,12 +179,41 @@ export class PluginHost {
             });
           },
         }),
+        interactions: Object.freeze({
+          register: (id, definition) => {
+            const normalized = validateInteraction(
+              qualified(owner, id),
+              definition,
+            );
+            // init/step/view run under the host read guard: no dispatch, no writes.
+            return register(staged.interactions, id, {
+              ...normalized,
+              init: (context, parameters, random) =>
+                evaluate(
+                  normalized.init,
+                  readOnly(context),
+                  readOnly(parameters),
+                  random,
+                ),
+              step: (state, frame) =>
+                evaluate(normalized.step, readOnly(state), readOnly(frame)),
+              view: (state, context) =>
+                evaluate(normalized.view, readOnly(state), readOnly(context)),
+            });
+          },
+        }),
         rules: Object.freeze({
           register: (id, definition) => {
+            const forms = ["modify", "effects", "decide"].filter(
+              (key) => definition[key] !== undefined,
+            ).length;
             if (
               !RULE_PHASES.includes(definition.phase) ||
-              Boolean(definition.modify) === Boolean(definition.effects) ||
-              definition.apply
+              forms !== 1 ||
+              definition.apply ||
+              (definition.decide !== undefined &&
+                (typeof definition.decide !== "function" ||
+                  !DECISION_PHASES.includes(definition.phase)))
             )
               throw new Error("Invalid plugin rule");
             return register(staged.rules, id, definition);
@@ -699,7 +491,15 @@ export class PluginHost {
     this.runtime = runtime;
     if (this.apiHost) this.apiHost.runtime = runtime;
     runtime.bind();
-    for (const [id, definition] of this.actions)
+    // Completion handlers stay host-only: they settle a frozen session result and are
+    // never exposed as public commands a caller could invoke without playing.
+    const completionActions = new Set(
+      [...this.interactions.values()]
+        .map((definition) => definition.completion)
+        .filter(Boolean),
+    );
+    for (const [id, definition] of this.actions) {
+      if (completionActions.has(id)) continue;
       bus.register(id, {
         schema: definition.schema,
         network: definition.network === true,
@@ -715,6 +515,7 @@ export class PluginHost {
               )
           : undefined,
       });
+    }
     for (const [id, definition] of this.queries)
       bus.register(id, {
         schema: definition.schema,
@@ -756,7 +557,16 @@ export class PluginHost {
                 this.runtime.view(h.owner),
               ),
           }
-        : {
+        : h.decide
+          ? {
+              decide: (c) =>
+                this.runtime.evaluate(
+                  h.decide,
+                  ruleContext(c),
+                  this.runtime.view(h.owner),
+                ),
+            }
+          : {
             apply: (c) => {
               const steps = this.runtime.evaluate(
                 h.effects,

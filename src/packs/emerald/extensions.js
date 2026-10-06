@@ -13,6 +13,7 @@ import { ActorScheduleRegistry } from "../../engine/actor-schedules.js";
 import { FieldEffectRegistry } from "../../engine/field-effects.js";
 import { EMERALD_FIELD_EFFECTS } from "./field-effects.js";
 import { BattleAugmentRegistry } from "../../engine/battle/augments.js";
+import { BattleAttachmentRegistry } from "../../engine/battle/attachments.js";
 import { FacilityRegistry } from "../../engine/facilities.js";
 import {
   EMERALD_FACILITIES,
@@ -183,7 +184,22 @@ export function createEmeraldPlugins(db, plugins, onError) {
         throw new Error("Unknown battle weather visual");
     const effects = new MoveEffectRegistry({ definitions: c.moveEffects });
     effects.validateMoves(c.moves);
-    new BattleAugmentRegistry(c.battleAugments, c, effects);
+    const augmentRegistry = new BattleAugmentRegistry(c.battleAugments, c, effects);
+    const attachmentRegistry = new BattleAttachmentRegistry(
+      c.battleAttachments,
+      c,
+      forms,
+    );
+    // Explicit limit keys may be shared across kinds; their capacities must agree.
+    const sharedCaps = new Map();
+    for (const registry of [augmentRegistry, attachmentRegistry])
+      for (const d of registry.definitions.values()) {
+        if (!d.limit?.key) continue;
+        const key = JSON.stringify([d.limit.scope, d.limit.key]);
+        if (sharedCaps.has(key) && sharedCaps.get(key) !== d.limit.max)
+          throw new Error("Conflicting shared battle quota");
+        sharedCaps.set(key, d.limit.max);
+      }
     battleWeather.validateEffects(effects, [
       ...Object.values(c.abilities),
       ...Object.values(c.heldItems),

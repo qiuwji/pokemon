@@ -22,7 +22,7 @@ export class BattleCheckpoint {
       used: clone(b.equipment.used),
     };
     this.spoils = { coins: b.spoils.coins, reward: b.spoils.reward };
-    this.augments = clone(b.augments.used);
+    this.quotas = clone(b.quotas.used);
     this.forms = { records: clone(b.forms.records), used: clone(b.forms.used) };
     this.conditions = clone(b.conditions.states);
     this.battleStates = clone(b.states.instances);
@@ -74,7 +74,7 @@ export class BattleCheckpoint {
       replace(owner.bag, bag);
     }
     for (const { seat, index } of this.seats) seat.index = index;
-    b.augments.used = clone(this.augments);
+    b.quotas.used = clone(this.quotas);
     Object.assign(b.forms, clone(this.forms));
     Object.assign(b.equipment, clone(this.equipment));
     Object.assign(b.spoils, this.spoils);

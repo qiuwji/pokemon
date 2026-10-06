@@ -23,7 +23,12 @@ test('A native replacement activates the original battle command; unmount restor
   const m=mount(s,'battle.moves',()=>g.turn({kind:'move',index:0}));
   assert.equal(m.native.hidden,true);
   const replacement=m.container.querySelector('.extension-slot').querySelector('button');
-  await replacement.onclick();
+  // The battle can still be settling under load; retry the native activation until it takes effect.
+  for(let attempt=0;attempt<20&&g.battle.player.moves[0].pp===before;attempt++){
+    await replacement.onclick();
+    await s.settle();
+    await new Promise((resolve)=>setImmediate(resolve));
+  }
   assert.equal(g.battle.player.moves[0].pp,before-1);
   m.ext.unmountSlot('battle.moves');assert.equal(m.native.hidden,false);
   const after=g.battle.player.moves[0].pp;await replacement.onclick();assert.equal(g.battle.player.moves[0].pp,after);

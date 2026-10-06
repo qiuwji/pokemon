@@ -39,6 +39,10 @@ import { TriggersApplication, TRIGGERS_PORTS } from "./triggers-application.js";
 import { SaveApplication, SAVE_PORTS } from "./save-application.js";
 import { FrameApplication, FRAME_PORTS } from "./frame-application.js";
 import {
+  InteractionApplication,
+  INTERACTION_PORTS,
+} from "./interaction-application.js";
+import {
   InspectionApplication,
   INSPECTION_PORTS,
 } from "./inspection-application.js";
@@ -205,5 +209,8 @@ export function composeApplications(applications, read, { storage }) {
   );
   applications.presentation = new PresentationApplication(
     liveApplicationPorts(read, PRESENTATION_PORTS, {}),
+  );
+  applications.interaction = new InteractionApplication(
+    liveApplicationPorts(read, INTERACTION_PORTS, {}),
   );
 }

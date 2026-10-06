@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "pluginApi": 1,
+  "scope": [
+    "R1 host-driven real-time interaction sessions (plugin capability)",
+    "engine InteractionRegistry and InteractionSessionService",
+    "public api.interactions.register with capabilities query",
+    "core.interaction.start/input/advance/cancel/view commands",
+    "completion through the existing plugin transaction and intents",
+    "browser frame driver, semantic input lease and FrameData overlay",
+    "FrameData primitives expanded to rect/panel/line/circle/ellipse/arc/polygon/text/meter/sprite with host validation"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "notImplemented": [
+    "fieldAction/facility session entry (R2)",
+    "world/encounter completion adapters (R2)",
+    "native fishing migration to the host-driven session (R2)",
+    "saving an in-progress session or cross-reload idempotency",
+    "battle action plans B1/B2"
+  ],
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1050,
+      "coreFailed": 0,
+      "pluginsPassed": 38,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log",
+      "note": "The first run stopped at check:docs only because this manifest did not exist yet; all checks pass after creating it."
+    }
+  ],
+  "repairedFailures": [
+    "Session start context initially forwarded raw Position (extra elevation) and failed completion schema validation; the host now projects map/x/y/dir only.",
+    "Fixture completion action context schema rejected unknown fields; aligned with the projected start context.",
+    "Frame validation exposed meter nodes without geometry in test/fixture views; views now declare full primitives."
+  ],
+  "newTests": [
+    "tests/interaction-session.test.js (fixed steps, same-tick edges, catch-up budget, cancel, frame validation)",
+    "tests/interaction-completion.test.js (host commands, reward settlement, save/reload)",
+    "tests/frame-data.test.js (all primitives valid; invalid structures rejected)",
+    "tests/interaction-dom.test.js (overlay draws every primitive; missing sprite and bad frame isolated)",
+    "examples/interaction-bar.test.js (success reward and early-press failure)"
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game visual, touch and audio acceptance",
+    "frame pacing across real 30/60/144Hz displays"
+  ],
+  "invalidatedBy": [
+    "interaction contract, clock or input semantics changes",
+    "frame node vocabulary or validation bounds changes",
+    "plugin transaction or intent permission changes",
+    "frame loop, BrowserInput or FrameData rendering changes"
+  ],
+  "sha256": {
+    "src/engine/interactions.js": "1d31b33c4d7a40458fcf3c8997f6acaff302e8128c7310c04d6cb6cf3fa1e8b2",
+    "src/engine/frame-data.js": "538476d78cc95da3e48a28067a82e2c5ac5fb510de49d37b848f9206a998893e",
+    "src/packs/emerald/interaction-ports.js": "d2ec10c3b6400f95d6d1e33d88e3be2470f756d2d094cfa68acf92622b4b836f",
+    "src/engine/extensions/plugin-host.js": "2456d50b723fd1590e590a9e87ec30d977ba9030ed90ed33151697132a870f63",
+    "src/adapters/interaction-dom.js": "22fec41b5052c89e51b862f2547252bdc00eba960afda8f82486af7d5626f727",
+    "src/adapters/browser-input.js": "aa12c141c47aeaf1a4c2e3404729e64897a34df99467c7ed2337427a0d4e4c1d",
+    "src/app.js": "2db43b3d7b36c9c4807e9a6fd199995bec967b4df20aa3f0a1547c1ac37b0c14",
+    "src/engine/contracts.d.ts": "9c2e1bebc7f5dc2af371267b57856467df9a0423cede3756fa76be5cf763eaaf",
+    "tests/interaction-session.test.js": "41f6998e5a8354532f2dc297c7b245f17f5664dc98bd8fc009fb771150c56a71",
+    "tests/interaction-completion.test.js": "c47e65ce7d25b4b5a72031b508411bb959a8e2b72f5e394adab060dddf41474a",
+    "tests/frame-data.test.js": "c661a6abd10e8c043e55361696e8ae5d5c16351e0d4c8768d7a5e1d001ea8197",
+    "tests/interaction-dom.test.js": "16bccc880e9a21e3ebe3e110100a32ffee429b2854384f658280008026fdca01",
+    "tests/fixtures/extensions/interaction-session.js": "aea6f54d43c7e4964a43ccf8ea0d68a2b07b37778fce6371ff3459f37924e597",
+    "examples/interaction-bar.test.js": "30544f62e32ad3766b85702b1d8bf789bbbe266340fabf562b40f216136c4d87",
+    "docs/engine/INTERACTIONS.md": "f68ad58317794930c606ab5a200674e415de5fb37b1205cace459975b01d72d0"
+  }
+}

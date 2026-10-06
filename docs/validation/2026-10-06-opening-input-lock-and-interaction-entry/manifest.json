@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "scope": [
+    "fix: a held direction could step the player off the expected tile in the window between a warp and its mapEnter story",
+    "leftover: fieldAction/facility interaction entry via InteractionApplication and fieldAction operation interaction",
+    "leftover: stabilize the pre-existing native-ui-regions async click flake"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "bug": {
+    "symptom": "After adjusting the clock upstairs and walking back downstairs while holding a direction, the player desynced from the tile the return-early interception expects.",
+    "cause": "mapEnter stories are queued at warp time but only lock input when flushStoryQueue runs; a held direction could take an extra step in between.",
+    "fix": "StoryApplication.storyMapEntered resolves the mapEnter script immediately and sets mapPending; MovementApplication treats storyPending as paused, and flushes clear it. A map entry without a script does not lock movement.",
+    "tests": "tests/opening-input-lock.test.js (held input cannot move before a scripted entry takes control; unscripted entries do not lock)."
+  },
+  "entry": {
+    "adapter": "src/packs/emerald/application/interaction-application.js (start/input/cancel/advance/view)",
+    "fieldAction": "operation { kind: \"interaction\", id, parameters?, source? } starts a registered session at commit",
+    "test": "tests/interaction-completion.test.js (field/facility entry through the interaction application)"
+  },
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1070,
+      "coreFailed": 0,
+      "pluginsPassed": 40,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log"
+    },
+    {
+      "command": "stress: node --test tests/native-ui-regions.test.js x16 concurrent x3 rounds",
+      "failed": 0,
+      "log": "native-ui-stress.txt",
+      "note": "Before the test synchronization, the same stress reproduced 2/48 failures; the test now waits for settle and retries a bounded number of times."
+    }
+  ],
+  "notImplemented": [
+    "native fishing migration to the host-driven session (user deferred)",
+    "world/encounter completion adapters beyond the public completion fact"
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game visual acceptance of the downstairs interception"
+  ],
+  "invalidatedBy": [
+    "mapEnter queue, input-lock or flush ordering changes",
+    "interaction application or fieldAction operation contract changes"
+  ],
+  "sha256": {
+    "src/packs/emerald/application/story-application.js": "e0b92d849be1112ebad13b83ff497dc19c8fc873b2c51825e4ca86deafa695bb",
+    "src/packs/emerald/application/movement-application.js": "66e051fa3b7fd2a3de74363425cec5a3e5f7612beacc3bca3b5c6ebd1cd59d09",
+    "src/packs/emerald/application/public-ports.js": "6613b701cbb491e5c36147110d0d9d4c57456e486d3808a364f03d4a8cfafe53",
+    "src/packs/emerald/application/composition.js": "0c6cbd1c98616950b08845037d0f7e2a61d17bc1893eb61d912adbabb32898a2",
+    "src/packs/emerald/application/interaction-application.js": "f8768570965f951b24b9e083dcefae9a15932a406535e17b9d0f11be17bb3025",
+    "src/packs/emerald/application/field-action-application.js": "7171d02c0144b8d41bdd0e9f38255f66725a59acc420be973d90379039bc5082",
+    "src/packs/emerald/interaction-ports.js": "55d13c669c8bed0966104d9938a246407527864777214ae127d9474ef5d1392f",
+    "src/packs/emerald/extension-ports.js": "c233b9937c8e2b11a0abb440c07319ae5c19c735295d677f986d52be0cae9129",
+    "tests/opening-input-lock.test.js": "4a64a86fa8a708ea8f8b70291778d606409ab535e5fc3a5943076c995ddced3d",
+    "tests/acro-input.test.js": "1b949eec79cf69570480c3dc0b59700b2914608529196a6b7823c162423c7afd",
+    "tests/native-ui-regions.test.js": "41ce63902205982cd408a0a27ba0ee78d2756a649f26ce4d0f114391e6e7fe4a",
+    "tests/interaction-completion.test.js": "31687148f447b3c06e3cd5a6dd1ef05d052631467e00447492205f43d3a3a295",
+    "docs/engine/INTERACTIONS.md": "8bbafb5e341e8f8f97dcab0cf0096da14dce2aaad1bf41df9f2ca4503d3ba97f"
+  }
+}

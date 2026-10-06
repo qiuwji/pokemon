@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-06",
+  "timezone": "Asia/Shanghai",
+  "baseline": "89b6b11521a13328d529a7c2735e438c58fba5c6",
+  "version": "0.37.0",
+  "pluginApi": 1,
+  "scope": [
+    "B2 remainder: category/effect derivation, action-scoped modifiers, permission results, defense interaction, multiple attachments and parameters, cross-mechanism shared quota",
+    "R2 bounded: interaction session source tagging and public completion fact",
+    "damage category honors a derived category while default Gen3 stays type-based"
+  ],
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "notImplemented": [
+    "form ability transition vs entry re-trigger distinction",
+    "arbitrary new effect ops for attachments",
+    "battle UI menu for attachments/permissions",
+    "fieldAction/facility session entry wired into FieldActionApplication",
+    "native fishing migration to the host-driven session"
+  ],
+  "verification": [
+    {
+      "command": "npm run test:all",
+      "corePassed": 1065,
+      "coreFailed": 0,
+      "pluginsPassed": 40,
+      "pluginsFailed": 0,
+      "skipped": 0,
+      "log": "test-all.log"
+    },
+    {
+      "command": "npm run check",
+      "passed": true,
+      "log": "quality-final.log"
+    }
+  ],
+  "newTests": [
+    "tests/battle-attachments.test.js (category derivation, parameterized derivation, two attachments, one-transition rule, modifier scope, shared augment/attachment quota and conflict)",
+    "tests/battle-permissions.test.js (switch-check deny vs forced, defense block and scaledDamage, invalid decide hooks)",
+    "tests/interaction-completion.test.js (source-tagged core:interaction-completed fact)"
+  ],
+  "knownFlakes": [
+    "tests/native-ui-regions.test.js async click race (pp unchanged): reproduced at baseline 89b6b11 and under concurrent isolated runs; a readiness await did not clear it and was reverted to keep the diff focused. Unrelated to this change; left for a dedicated fix."
+  ],
+  "notExecuted": [
+    "Browser/Computer Use operation",
+    "in-game battle visual and audio acceptance"
+  ],
+  "invalidatedBy": [
+    "attachment definition/commit/threshold contract changes",
+    "rule-pipeline decide semantics or decision phases changes",
+    "damage category policy changes",
+    "interaction completion fact or session source changes"
+  ],
+  "sha256": {
+    "src/engine/battle/attachments.js": "d9603100e0639f137fda8cbff833965acd98880df59ad672f09c41fec6534166",
+    "src/engine/battle.js": "22a7db82b43b60b894791826b1b4f9b04662811f34a743d9c711bd714ff5223b",
+    "src/engine/battle/actions.js": "bc80c7ffe912e2c44b6081b6b4d3639823f2d2fe789df5748170372b2af850f3",
+    "src/engine/battle/moves.js": "8258f6a5d085cc8a72e5fd8979cede5b47f3e468bb1376eb9950738cc9382cc2",
+    "src/engine/battle/round.js": "9fd549cebebb863b015fa1ef76ea0a765296bc642d6f42caee005fe07a2a8923",
+    "src/engine/battle/checkpoint.js": "21f2919e0dccf7bee247f3343efdfdda886c58d595c256b030f195a2b679d77f",
+    "src/engine/battle/damage-calculation.js": "9660cd00b5261426f8338eab06e7bd13c61d52968f2aca5f75223cdb456f04e9",
+    "src/engine/battle/action-lifecycle.js": "baa40bbc1057ef0608c71e486b9ee09bf2f09915e9af085622287b8849dc7e55",
+    "src/engine/rule-pipeline.js": "194459a73ffccc0f77df406bd81f51f4aa4e24710947181e4c1413036df9bc8d",
+    "src/engine/model.js": "5c333448adccdff45d2b46f442f0be0c23b8b860d614774a61ec77ce1002f85e",
+    "src/engine/rules/gen3/battle-states.js": "9091a1f8acaa887d30230bdd73b9f2c3f2c4b7278ee36950d9fe5ed8566d4e18",
+    "src/engine/extensions/plugin-host.js": "0cee2af0b8e2d15104eebae067acd6b56e1b1280985b3a13fb79a90ada0d3237",
+    "src/engine/extensions/content-normalizers.js": "15b11085e0a5bc40c52d59bf140b44c87a288f74592d9dc87bdaf7a522d296df",
+    "src/engine/extensions/catalog.js": "7a7bbe6305b629796afb6ddbcc7aec276b64d971bc1e206ea8ee84d700d7830a",
+    "src/engine/contracts.d.ts": "45cc33dcc33fa6fa83fbeec32c0269d67f359cccaa48982f934045504823a73a",
+    "src/packs/emerald/extensions.js": "e13c12f5dd1adb326d1f28a1abecb5047db9e7f01a6746db66e9c90b5f26b334",
+    "src/packs/emerald/application-commands.js": "87744ed61b5b6242183ece78720ba21ace94e680f1292db22c0ef0ea2d842c88",
+    "src/packs/emerald/public-events.js": "0b4c45dc68abf5d32650b617e3720bfaadd50998a4584e7d3238a55edd5602fa",
+    "src/packs/emerald/interaction-ports.js": "63c561cb2913fc08fbfc519a183140a048994a4224fa7cd7803ff837c239f4c5",
+    "src/engine/interactions.js": "a3ab5d509daaa92eff4a3639196cf8b7462dba8a75c04f7374ea1ffd562a9a96",
+    "tests/battle-attachments.test.js": "c0107b8bbeb4442e79911f08a3cc93bbf62253c07326b386069a62d27ede9ac8",
+    "tests/battle-permissions.test.js": "e74eb6a03c20ea67a8d162b3aab75fd2a19cc205c54fa69c63fb5214ddeaa340",
+    "tests/interaction-completion.test.js": "a12c04f056ba072630e90a099271c4aa156ea14488dc08252e79c7180a91795a"
+  }
+}

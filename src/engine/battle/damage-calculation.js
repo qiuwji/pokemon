@@ -44,7 +44,7 @@ export class BattleDamageCalculation {
         chances: b.rules.criticalChances,
       });
     if (plan)
-      return {
+      return this.scale(c, {
         amount: Math.max(
           1,
           Math.floor(
@@ -53,9 +53,9 @@ export class BattleDamageCalculation {
         ),
         type: 1,
         critical,
-      };
+      });
     if (c.fixedDamage !== undefined)
-      return {
+      return this.scale(c, {
         amount: c.fixedDamage,
         type: effectiveness(
           c.move.type,
@@ -63,8 +63,8 @@ export class BattleDamageCalculation {
           b.db.typeChart,
         ),
         critical: false,
-      };
-    return this.formula(c, {
+      });
+    const result = this.formula(c, {
       critical,
       power: b.rules.environmentPower({
         power: c.power,
@@ -74,6 +74,23 @@ export class BattleDamageCalculation {
       }),
       spread: c.targetMode === "opponents" && c.targetCount > 1 ? 0.5 : 1,
     });
+    return this.scale(c, result);
+  }
+  /** ScaledDamage from a defense interaction enters the normal damage pipeline once. */
+  scale(c, result) {
+    const scale = c.damageScale;
+    if (
+      scale &&
+      Number.isFinite(scale.numerator) &&
+      Number.isFinite(scale.denominator) &&
+      scale.numerator > 0 &&
+      scale.denominator > 0
+    )
+      result.amount = Math.max(
+        1,
+        Math.floor((result.amount * scale.numerator) / scale.denominator),
+      );
+    return result;
   }
   preview(c) {
     const result = this.formula(c, {
@@ -93,6 +110,6 @@ export class BattleDamageCalculation {
           substitute: !!this.battle.states.lookup("substitute", c.targetSeat),
         },
       );
-    return result;
+    return this.scale(c, result);
   }
 }

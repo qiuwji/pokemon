@@ -31,6 +31,7 @@ export const MOVEMENT_PORTS = Object.freeze([
   "save",
   "state",
   "storyBusy",
+  "storyPending",
   "timeline",
   "transitions",
   "ui",
@@ -56,6 +57,7 @@ export class MovementApplication {
     const paused = !!(
         this.battle ||
         this.storyBusy ||
+        this.storyPending() ||
         this.ui?.blocked ||
         this.actionBusy ||
         this.growthBusy ||

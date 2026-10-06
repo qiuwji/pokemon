@@ -177,7 +177,13 @@ export type BattleAction = {
   actor?: string;
   target?: TargetRef;
 } & (
-  | { kind: "move"; index: number; augment?: string }
+  | {
+      kind: "move";
+      index: number;
+      augment?: string;
+      /** Up to two prepared attachments; mutually exclusive with augment in this version. */
+      attachments?: readonly { id: string; parameters?: Json }[];
+    }
   | { kind: "switch"; index: number }
   | {
       kind: "item";
@@ -188,6 +194,47 @@ export type BattleAction = {
   | { kind: "form"; form: string }
   | { kind: "run" | "cancel" }
 );
+export type AttachmentCommitPoint = "beforeOrder" | "beforeAction" | "moveStart";
+export interface MoveDerivation {
+  power?: number;
+  type?: string;
+  category?: "physical" | "special";
+  target?:
+    | "selected"
+    | "user-or-selected"
+    | "self"
+    | "opponents"
+    | "opponents-field"
+    | "random"
+    | "all-others"
+    | "field";
+  priority?: number;
+  effect?: string;
+}
+export interface BattleAttachmentDefinition {
+  name: string;
+  commitPoint: AttachmentCommitPoint;
+  parameters?: DataSchema;
+  requires?(context: Readonly<Json>): boolean;
+  limit?: {
+    scope: "battle" | "alliance" | "controller" | "creature";
+    key?: string;
+    max: number;
+  };
+  transition?: { form: string };
+  deriveMove?(context: Readonly<Json>): MoveDerivation;
+  /** Optional first-class PP policy: consume the source slot's remaining PP after use. */
+  pp?: "clear";
+  unavailablePolicy?: "failAction" | "continueBase";
+}
+export interface BattleAttachmentCandidate {
+  id: string;
+  name: string;
+  commitPoint: AttachmentCommitPoint;
+  transition: string | null;
+  derives: boolean;
+  remaining: number | null;
+}
 export interface EffectStep {
   op: string;
   [parameter: string]: unknown;
@@ -511,6 +558,7 @@ export type ContentKind =
   | "heldItems"
   | "moveEffects"
   | "battleAugments"
+  | "battleAttachments"
   | "movement"
   | "movementInputs"
   | "timeTasks"
@@ -857,9 +905,152 @@ export interface PluginQueryDefinition {
   /** Pure synchronous projection; no transactions or command dispatch. */
   read(view: PluginUIView, input: Readonly<Json>): Readonly<Json>;
 }
+export interface InteractionStartContext {
+  readonly map: string;
+  readonly position: Readonly<Position>;
+}
+export interface InteractionClock {
+  readonly tick: number;
+  readonly nowMs: number;
+  readonly elapsedMs: number;
+  readonly dtMs: number;
+}
+export interface InteractionInputEdge {
+  readonly action: string;
+  readonly kind: "pressed" | "released";
+  readonly sequence: number;
+  readonly tick?: number;
+}
+export interface InteractionInput {
+  readonly held: readonly string[];
+  readonly pressed: readonly string[];
+  readonly released: readonly string[];
+  readonly edges: readonly InteractionInputEdge[];
+}
+export interface InteractionRandom {
+  int(exclusiveMax: number): number;
+}
+export type InteractionStepResult =
+  | { readonly kind: "running"; readonly state: Json }
+  | {
+      readonly kind: "terminal";
+      readonly state: Json;
+      readonly outcome: "success" | "failure";
+      readonly result: Json;
+    };
+export type FrameNode =
+  | { kind: "rect"; x: number; y: number; width: number; height: number; color?: string }
+  | {
+      kind: "panel";
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      background?: string;
+      border?: string;
+      borderWidth?: number;
+    }
+  | { kind: "line"; x1: number; y1: number; x2: number; y2: number; width: number; color?: string }
+  | { kind: "circle"; x: number; y: number; radius: number; color?: string; fill?: boolean }
+  | {
+      kind: "ellipse";
+      x: number;
+      y: number;
+      radiusX: number;
+      radiusY: number;
+      color?: string;
+      fill?: boolean;
+    }
+  | {
+      kind: "arc";
+      x: number;
+      y: number;
+      radius: number;
+      startAngle: number;
+      endAngle: number;
+      width?: number;
+      color?: string;
+    }
+  | {
+      kind: "polygon";
+      points: readonly (readonly [number, number])[];
+      color?: string;
+      fill?: boolean;
+      width?: number;
+    }
+  | {
+      kind: "text";
+      x: number;
+      y: number;
+      text: string;
+      color?: string;
+      size?: number;
+      align?: "left" | "center" | "right";
+    }
+  | {
+      kind: "meter";
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      value: number;
+      color?: string;
+      background?: string;
+    }
+  | {
+      kind: "sprite";
+      x: number;
+      y: number;
+      resource: string;
+      width?: number;
+      height?: number;
+      frame?: number;
+    };
+export interface FrameData {
+  readonly nodes: readonly FrameNode[];
+  readonly statusText?: string;
+}
+/** A host-driven real-time session; step/view are synchronous JSON-only callbacks. */
+export interface InteractionDefinition {
+  version: number;
+  parameters: DataSchema;
+  state: DataSchema;
+  result: DataSchema;
+  inputs: readonly string[];
+  visual?: string;
+  completion?: string;
+  pausePolicy?: "pauseOnFocusLoss";
+  cancellationPolicy?: "discardUncommitted";
+  init(
+    context: Readonly<InteractionStartContext>,
+    parameters: Readonly<Json>,
+    random: InteractionRandom,
+  ): Json;
+  step(
+    state: Readonly<Json>,
+    frame: Readonly<{
+      clock: InteractionClock;
+      input: InteractionInput;
+      context: Readonly<InteractionStartContext>;
+    }>,
+  ): InteractionStepResult;
+  view(
+    state: Readonly<Json>,
+    context: Readonly<{
+      clock: InteractionClock;
+      viewport: Readonly<{ width: number; height: number }>;
+      reducedMotion: boolean;
+    }>,
+  ): FrameData;
+}
 export interface PluginAPI {
   readonly version: 1;
   readonly id: string;
+  /** Feature detection for host capabilities; absent plugins fail explicitly at startup. */
+  readonly capabilities: Readonly<Record<string, number>>;
+  interactions: {
+    register(id: string, definition: InteractionDefinition): string;
+  };
   content: { register(kind: ContentKind, id: string, value: unknown): string };
   states: { register(id: string, definition: PluginStateDefinition): string };
   queries: { register(id: string, definition: PluginQueryDefinition): string };

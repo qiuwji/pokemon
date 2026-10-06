@@ -1,6 +1,9 @@
 import { validCreatureValues } from "./creature-contract.js";
 import { PHYSICAL_TYPES } from "./type-rules.js";
 export { PHYSICAL_TYPES } from "./type-rules.js";
+/** Derived moves may declare a category; otherwise the Gen3 policy stays type-based. */
+export const moveIsPhysical = (move) =>
+  move.category ? move.category === "physical" : PHYSICAL_TYPES.has(move.type);
 import { defaultAbilityModifier } from "./rules/gen3/numeric.js";
 import { CREATION_POLICY } from "./rule-policy.js";
 // Portable RPG domain layer: no browser, DOM, or game-specific story dependencies.
@@ -212,7 +215,7 @@ export function damage(
     defenderTypes = db.species[defender.species].types,
   } = {},
 ) {
-  const physical = PHYSICAL_TYPES.has(move.type),
+  const physical = moveIsPhysical(move),
     a = physical ? "atk" : "spa",
     d = physical ? "def" : "spd";
   const context = { attacker, defender, move, critical };

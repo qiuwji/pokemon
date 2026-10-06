@@ -8,11 +8,35 @@ const DIRECTIONS = {
   arrowright: "right",
   d: "right",
 };
+const SEMANTIC = {
+  arrowup: "up",
+  w: "up",
+  arrowdown: "down",
+  s: "down",
+  arrowleft: "left",
+  a: "left",
+  arrowright: "right",
+  d: "right",
+  z: "confirm",
+  enter: "confirm",
+  " ": "confirm",
+  x: "back",
+  escape: "back",
+};
 /** Input mapping is replaceable; field and battle services don't inspect keys. */
 export class BrowserInput {
-  constructor({ document: doc = document, window: win = window, game, ui, externalBlocked = () => false }) {
-    Object.assign(this, { doc, win, game, ui, externalBlocked });
+  constructor({
+    document: doc = document,
+    window: win = window,
+    game,
+    ui,
+    externalBlocked = () => false,
+    interactionInput = null,
+  }) {
+    Object.assign(this, { doc, win, game, ui, externalBlocked, interactionInput });
     this.keys = new Set();
+    // action -> set of physical sources (keys/pointers) currently holding it.
+    this.semanticSources = new Map();
     this.held = null;
     this.running = false;
     this.abort = new AbortController();
@@ -21,6 +45,7 @@ export class BrowserInput {
     doc.addEventListener(
       "keyup",
       (e) => {
+        if (this.semantic(e, false)) return;
         this.keys.delete(e.key.toLowerCase());
         if (e.key === "Shift") this.running = false;
         this.held = DIRECTIONS[[...this.keys].at(-1)] || null;
@@ -46,17 +71,21 @@ export class BrowserInput {
       options,
     );
     doc.querySelectorAll("[data-dir]").forEach((button) => {
+      const dir = button.dataset.dir;
       button.addEventListener(
         "pointerdown",
         (e) => {
           if (this.externalBlocked()) return;
           e.preventDefault();
+          if (this.route(dir, `touch:${dir}`, true)) {
+            button.setPointerCapture(e.pointerId);
+            return;
+          }
           if (!ui.modalType && !game.battle && this.fieldBlocked()) {
             this.clear();
             return;
           }
           button.setPointerCapture(e.pointerId);
-          const dir = button.dataset.dir;
           if (ui.modalType) ui.navigateMenu(dir);
           else if (game.battle) ui.navigateBattle(dir);
           else {
@@ -67,13 +96,59 @@ export class BrowserInput {
         options,
       );
       for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
-        button.addEventListener(type, () => (this.held = null), options);
+        button.addEventListener(
+          type,
+          () => {
+            if (this.route(dir, `touch:${dir}`, false)) return;
+            this.held = null;
+          },
+          options,
+        );
     });
+  }
+  /** Merge one physical source into a semantic action; release only when the last source lets go. */
+  route(action, source, active) {
+    const bridge = this.interactionInput;
+    if (!bridge?.active() || !bridge.declares(action)) return false;
+    let sources = this.semanticSources.get(action);
+    if (!sources) {
+      sources = new Set();
+      this.semanticSources.set(action, sources);
+    }
+    if (active) {
+      sources.add(source);
+      if (sources.size === 1) bridge.set(action, true);
+    } else {
+      sources.delete(source);
+      if (sources.size === 0) {
+        this.semanticSources.delete(action);
+        bridge.set(action, false);
+      }
+    }
+    return true;
+  }
+  semantic(event, pressed) {
+    const bridge = this.interactionInput;
+    if (!bridge?.active()) return false;
+    const key = (event.key || "").toLowerCase();
+    const action = SEMANTIC[key];
+    if (!action || !bridge.declares(action)) return false;
+    if (pressed) event.preventDefault();
+    if (action === "back") {
+      if (pressed) bridge.cancel?.();
+      return true;
+    }
+    this.route(action, `key:${key}`, pressed);
+    return true;
   }
   clear() {
     this.keys.clear();
     this.held = null;
     this.running = false;
+    if (this.semanticSources.size) {
+      this.semanticSources.clear();
+      this.interactionInput?.clear?.();
+    }
     // Input cancellation must not cancel the director-owned scripted pose/motion.
     if (!this.game.storyBusy) this.game.resetFieldInput();
   }
@@ -82,6 +157,7 @@ export class BrowserInput {
   }
   tick() {
     if (this.externalBlocked()) return;
+    if (this.interactionInput?.active()) return;
     if (this.fieldBlocked()) {
       this.clear();
       return;
@@ -101,6 +177,7 @@ export class BrowserInput {
   keydown(e) {
     if (this.externalBlocked()) return;
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (this.semantic(e, true)) return;
     if (e.key.toLowerCase() === "tab") {
       this.ui.focusTrap(e);
       return;
