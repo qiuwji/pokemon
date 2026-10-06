@@ -47,6 +47,40 @@ export const TRAINERS = {
       { species: "poochyena", level: 4 },
     ],
   },
+  // Route 102 sight trainers: reference opponents TRAINER_CALVIN_1/RICK/TIANA/ALLEN.
+  calvin: {
+    name: "短裤小子",
+    script: "route102.calvin",
+    prize: 80,
+    party: [{ species: "poochyena", level: 5 }],
+  },
+  rick: {
+    name: "捕虫少年",
+    script: "route102.rick",
+    prize: 96,
+    party: [
+      { species: "wurmple", level: 4 },
+      { species: "wurmple", level: 4 },
+    ],
+  },
+  tiana: {
+    name: "少女",
+    script: "route102.tiana",
+    prize: 80,
+    party: [
+      { species: "zigzagoon", level: 4 },
+      { species: "shroomish", level: 4 },
+    ],
+  },
+  allen: {
+    name: "短裤小子",
+    script: "route102.allen",
+    prize: 80,
+    party: [
+      { species: "zigzagoon", level: 4 },
+      { species: "taillow", level: 3 },
+    ],
+  },
 };
 
 /** One persistent prize identity for story rewards, generic settlement and trainer sight. */

@@ -483,6 +483,158 @@
           "dialogue": "tv-movie"
         }
       ]
+    },
+    "petalburgcity.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.0"
+        }
+      ]
+    },
+    "petalburgcity.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.1"
+        }
+      ]
+    },
+    "petalburgcity.2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.2"
+        }
+      ]
+    },
+    "route102.0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route102.0"
+        }
+      ]
+    },
+    "route102.1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route102.1"
+        }
+      ]
+    },
+    "petalburggym.door0": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door0"
+        }
+      ]
+    },
+    "petalburggym.door1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door1"
+        }
+      ]
+    },
+    "petalburggym.door2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door2"
+        }
+      ]
+    },
+    "petalburggym.door3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door3"
+        }
+      ]
+    },
+    "petalburggym.door4": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door4"
+        }
+      ]
+    },
+    "petalburggym.door5": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door5"
+        }
+      ]
+    },
+    "petalburggym.door6": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door6"
+        }
+      ]
+    },
+    "petalburggym.door7": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door7"
+        }
+      ]
+    },
+    "petalburggym.door8": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door8"
+        }
+      ]
+    },
+    "petalburggym.door9": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door9"
+        }
+      ]
+    },
+    "petalburggym.door10": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door10"
+        }
+      ]
+    },
+    "petalburggym.door11": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.door11"
+        }
+      ]
+    },
+    "petalburggym.statue.l": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.statue.l"
+        }
+      ]
+    },
+    "petalburggym.statue.r": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburggym.statue.r"
+        }
+      ]
     }
   },
   "dialogues": {
@@ -893,6 +1045,160 @@
         "电视上正在放一部电影。",
         "两个人正随着钢琴声跳舞。",
         "还是出发吧！"
+      ],
+      "mode": "instant"
+    },
+    "petalburgcity.0": {
+      "name": "路边的告示",
+      "lines": [
+        "橙华市 宝可梦道馆",
+        "馆主：千里",
+        "“追求力量的男人！”"
+      ],
+      "mode": "instant"
+    },
+    "petalburgcity.1": {
+      "name": "路边的告示",
+      "lines": [
+        "橙华市",
+        "“人与自然交融的城镇。”"
+      ],
+      "mode": "instant"
+    },
+    "petalburgcity.2": {
+      "name": "路边的告示",
+      "lines": [
+        "小光的家"
+      ],
+      "mode": "instant"
+    },
+    "route102.0": {
+      "name": "路边的告示",
+      "lines": [
+        "102 号道路",
+        "← 橙华市"
+      ],
+      "mode": "instant"
+    },
+    "route102.1": {
+      "name": "路边的告示",
+      "lines": [
+        "102 号道路",
+        "→ 古辰镇"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door0": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door1": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door2": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door3": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door4": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door5": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door6": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door7": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door8": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door9": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door10": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.door11": {
+      "name": "道馆的门",
+      "lines": [
+        "门关着。",
+        "要先打倒这个房间里的训练家，门才会打开。"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.statue.l": {
+      "name": "道馆雕像",
+      "lines": [
+        "橙华市 宝可梦道馆",
+        "馆主：千里",
+        "“追求力量的男人！”"
+      ],
+      "mode": "instant"
+    },
+    "petalburggym.statue.r": {
+      "name": "道馆雕像",
+      "lines": [
+        "橙华市 宝可梦道馆",
+        "馆主：千里",
+        "“追求力量的男人！”"
       ],
       "mode": "instant"
     }
@@ -1378,6 +1684,177 @@
         "kind": "sign"
       },
       "script": "tv-movie"
+    },
+    "petalburgcity.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity",
+        "script": "PetalburgCity_EventScript_GymSign",
+        "kind": "sign"
+      },
+      "script": "petalburgcity.0"
+    },
+    "petalburgcity.1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity",
+        "script": "PetalburgCity_EventScript_CitySign",
+        "kind": "sign"
+      },
+      "script": "petalburgcity.1"
+    },
+    "petalburgcity.2": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity",
+        "script": "PetalburgCity_EventScript_WallyHouseSign",
+        "kind": "sign"
+      },
+      "script": "petalburgcity.2"
+    },
+    "route102.0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "Route102",
+        "script": "Route102_EventScript_RouteSignPetalburg",
+        "kind": "sign"
+      },
+      "script": "route102.0"
+    },
+    "route102.1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "Route102",
+        "script": "Route102_EventScript_RouteSignOldale",
+        "kind": "sign"
+      },
+      "script": "route102.1"
+    },
+    "petalburggym.door0": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_SpeedRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door0"
+    },
+    "petalburggym.door1": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_AccuracyRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door1"
+    },
+    "petalburggym.door2": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_ConfusionRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door2"
+    },
+    "petalburggym.door3": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_LeftDefenseRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door3"
+    },
+    "petalburggym.door4": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_RightDefenseRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door4"
+    },
+    "petalburggym.door5": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_RecoveryRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door5"
+    },
+    "petalburggym.door6": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_LeftStrengthRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door6"
+    },
+    "petalburggym.door7": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_RightStrengthRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door7"
+    },
+    "petalburggym.door8": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_LeftOHKORoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door8"
+    },
+    "petalburggym.door9": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_RightOHKORoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door9"
+    },
+    "petalburggym.door10": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_LeftGymLeadersRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door10"
+    },
+    "petalburggym.door11": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_RightGymLeadersRoomDoor",
+        "kind": "sign"
+      },
+      "script": "petalburggym.door11"
+    },
+    "petalburggym.statue.l": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_LeftGymStatue",
+        "kind": "sign"
+      },
+      "script": "petalburggym.statue.l"
+    },
+    "petalburggym.statue.r": {
+      "trigger": "interact",
+      "selector": {
+        "map": "PetalburgCity_Gym",
+        "script": "PetalburgCity_Gym_EventScript_RightGymStatue",
+        "kind": "sign"
+      },
+      "script": "petalburggym.statue.r"
     }
   },
   "sources": [

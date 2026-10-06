@@ -60,7 +60,7 @@ api.story.register('gate', {
 | captureMonster | monster完整精灵；通过统一PartyStorageService接收，队伍6/盒子200容量失败在写入前拒绝，重复UID不再次接收 |
 | lossPenalty | 无参数；按原作 DoWhiteOut 将金钱减半（`floor(money/2)`，与队伍无关），非法数值在写入前拒绝 |
 | completeEvent | id已注册事件ID；正常resolve在末尾自动追加，不需要重复写 |
-| battle | trainerId引用已登记训练家；或species、level（1–100）及可选options；同一会话规则，非任意C trainerbattle模式 |
+| battle | trainerId引用已登记训练家；或species、level（1–100）及可选options；同一会话规则，非任意C trainerbattle模式。`options.borrowedParty`（`[{species,level}]`）临时替换玩家出战队伍（如小光教学借用的蛇纹熊，战斗后自动还原真实队伍，并配一枚借来的精灵球）；`options.capture:"cinematic"`强制捕捉并作为演出，精灵不入玩家队伍/盒子，且禁用会心一击；`options.autoActions`（`[{kind,index/item...}]`）让玩家席位按固定顺序自动行动、隐藏战斗菜单——整场演示只观看。以上均为通用选项，不按物种或训练家特判 |
 | worldPatch | operations数组；每项按WorldState合同定义kind/map/坐标/变更及scope，不直接改地图数据 |
 | fieldAction | id已注册行动，input可选对象，variable可选保存ok结果；未指定variable时失败抛错 |
 | move | actor默认player，path方向数组或to:{x,y,map?}二选一，running可选，mode/jump可选；jump为表现跳步，不绕过通行；keepFacing保持移动前朝向；ignoreActors为最多32个明确角色ID的脚本占位例外，正常移动不应用；地形/高度/边界仍校验，不直接改坐标 |
@@ -69,6 +69,7 @@ api.story.register('gate', {
 | escort | actor必填且不能player，to:{x,y,map?}，followers可选1–32个唯一ID（默认[player]）；同图有序相邻队列协调步行，非任意队形 |
 | emote | actor必填，kind默认exclamation且需在FIELD_EMOTES中，ms可选 |
 | hide | actor必填；当前场景隐藏，不自动表示永久删除 |
+| spawn | def:{id,actor,kind?,name?,text?,x,y,dir,movement}在脚本中途加入一个走进场景的演员（对应原作`addobject`，如角色推门进来）；无需遮黑转场，场景结束即移除；id不能为player |
 | cameraTo / cameraFollow | cameraTo取actor或position:{map,x,y}，ms可选；cameraFollow回到玩家 |
 | teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位，并可用coverMs/holdMs/revealMs（0–60000）控制遮黑/保持/淡入时长（如战败白屏保持）；真正需要传送时使用，不代替行走 |
 | wait | ms必填，有限且0–60000 |

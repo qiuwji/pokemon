@@ -283,6 +283,15 @@ export class FieldDirector {
       this.field.npcs.stage(map, def);
     }
   }
+  /**
+   * Add an actor that walks into a scene mid-script (the reference `addobject`), e.g. a
+   * character entering through a door. Unlike `stage`, no covered transition is needed.
+   */
+  spawn(def) {
+    if (!def?.id || !this.field.world.cell(def.x, def.y))
+      throw new Error("Invalid spawned actor");
+    this.field.npcs.stage(this.field.position.map, def);
+  }
 }
 
 /** Parallel tracks may share a scene, but cannot fight over the same pose/UI/camera. */
@@ -290,6 +299,7 @@ export function storyResources(c) {
   if (["script", "checkpoint", "screen"].includes(c.type)) return ["*"];
   if (["move", "face", "approach", "hide"].includes(c.type))
     return [`actor:${c.actor || "player"}`];
+  if (c.type === "spawn") return [`actor:${c.def?.id}`];
   if (c.type === "escort")
     return [c.actor, ...(c.followers || ["player"])].map((id) => `actor:${id}`);
   if (c.type === "emote") return [`emote:${c.actor}`];
@@ -406,6 +416,16 @@ export function validateFieldCommand(c, maps) {
     [c.coverMs, c.holdMs, c.revealMs].some(
       (ms) => ms !== undefined && (!Number.isFinite(ms) || ms < 0 || ms > 60000),
     )
+  )
+    fail();
+  if (
+    c.type === "spawn" &&
+    (!c.def ||
+      !id(c.def.id) ||
+      c.def.id === "player" ||
+      !id(c.def.actor) ||
+      !coordinate(c.def) ||
+      !DIRECTIONS[c.def.dir || "down"])
   )
     fail();
   if (c.type === "scene" || c.type === "teleport") {

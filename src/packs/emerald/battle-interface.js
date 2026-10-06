@@ -204,7 +204,7 @@ export function createBattleInterface(
       away.map((c, i) => status(c, false, multi, i)).join("") +
       home.map((c, i) => status(c, true, multi, i)).join("") +
       plan +
-      `<div class="battle-menu" data-battle-page="${page}">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
+      `<div class="battle-menu" data-battle-page="${page}">${game.busy || game.autoBattle ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
     root.querySelectorAll("[data-action]").forEach(
       (button) =>
         (button.onclick = () => {

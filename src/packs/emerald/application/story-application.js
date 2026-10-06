@@ -112,11 +112,13 @@ export class StoryApplication {
         shop: () => this.ui.showShop(),
         battle: (c) => {
           if (c.trainerId) return this.startTrainerBattle(c.trainerId);
+          const { options, context } = this.prepareBattle(c);
           return this.startBattle(
             createMonster(c.species, c.level, this.db, this.rng, {
-              trainer: c.options?.trainer,
+              trainer: options?.trainer,
             }),
-            c.options,
+            options,
+            context,
           );
         },
         teleport: (c) =>
@@ -167,6 +169,7 @@ export class StoryApplication {
         escort: (c) => this.fieldDirector.escort(c),
         emote: (c) => this.fieldDirector.emote(c),
         hide: (c) => this.fieldDirector.hide(c),
+        spawn: (c) => this.fieldDirector.spawn(c.def),
         cameraTo: (c) => this.fieldDirector.cameraTo(c),
         cameraFollow: (c) => this.fieldDirector.cameraFollow(c),
         flag: (c) => {
@@ -394,6 +397,39 @@ export class StoryApplication {
       this.fieldDirector.begin();
     }
   }
+  /**
+   * A scripted battle may substitute the player's party (a borrowed Pokémon) and/or force a
+   * cinematic capture. Both are generic battle options any content can request; the engine
+   * never names a species or trainer.
+   */
+  prepareBattle(command) {
+    const options = { ...(command.options || {}) };
+    const borrowed = options.borrowedParty;
+    delete options.borrowedParty;
+    const cinematic = options.capture === "cinematic";
+    delete options.capture;
+    const context = borrowed
+      ? {
+          party: borrowed.map((t) =>
+            createMonster(t.species, t.level, this.db, this.rng, { trainer: false }),
+          ),
+          // The reference hands Wally a borrowed Poké Ball (PetalburgCity_Gym_Text_WallyThankYou...),
+          // so the demonstration always has a ball without spending the player's.
+          bag: this.inventory.create({ pokeball: 1 }),
+        }
+      : null;
+    if (cinematic) {
+      options.cinematicCapture = true;
+      options.rules = {
+        ...options.rules,
+        captureCheck: () => ({ caught: true, shakes: 3 }),
+        // The reference Wally tutorial also disables critical hits so the demonstration runs the
+        // same way every time (src/battle_script_commands.c).
+        critical: () => false,
+      };
+    }
+    return { options, context };
+  }
   async startSessionBattle(command, token) {
     const waiting = this.state.story.session;
     const recover = () => this.sessions.cancelBattle(this.state.story, waiting);
@@ -431,10 +467,11 @@ export class StoryApplication {
     };
     if (command.trainerId)
       return this.startTrainerBattle(command.trainerId, owner, recover);
+    const { options, context } = this.prepareBattle(command);
     return this.startBattle(
       createMonster(command.species, command.level, this.db, this.rng),
-      command.options || {},
-      null,
+      options,
+      context,
       owner,
       recover,
     );

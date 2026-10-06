@@ -44,6 +44,9 @@ export class BattleApplication {
   }
   constructor(ports) {
     bindApplicationPorts(this, ports, BATTLE_PORTS);
+    // A scripted battle drives the player's seat from a fixed action queue so the scene is
+    // watched, not played; the UI suppresses the action menu while it runs.
+    this.autoBattle = false;
     this.combat = new BattleSession({
       director: this.director,
       transitions: this.transitions,
@@ -191,7 +194,7 @@ export class BattleApplication {
     this.ui.closeModal();
     this.resultOwner = resultOwner || context?.resultPlan || null;
     this.resultRecovery = recover || context?.recover || null;
-    return this.combat.start({
+    const started = await this.combat.start({
       party,
       enemyParty: enemies,
       db: this.db,
@@ -249,8 +252,35 @@ export class BattleApplication {
           (!!context || this.partyStorage.canReceive(this.state)),
       },
     });
+    // The demonstration plays outside the story lock so the battle-result continuation can run
+    // when the capture lands (the story command has already returned).
+    if (started && options.autoActions?.length)
+      void this.runAutoBattle(options.autoActions).catch((error) => {
+        this.ui?.toast?.("演示战斗未能完成。");
+        console.error(error);
+      });
+    return started;
+  }
+  /**
+   * A scripted demonstration battle: the player's seat follows a fixed action queue while the
+   * menu stays hidden. Actions are submitted through the same public turn path as manual input.
+   */
+  async runAutoBattle(actions) {
+    this.autoBattle = true;
+    try {
+      for (const action of actions) {
+        if (!this.combat.battle || this.combat.battle.ended) break;
+        await this.combat.act(action);
+      }
+    } finally {
+      this.autoBattle = false;
+    }
   }
   async turn(action) {
+    if (this.autoBattle) return false;
+    return this.applyAction(action);
+  }
+  async applyAction(action) {
     if (this.busy || !this.battle) return false;
     this.clearInput();
     this.ui.closeModal();
@@ -325,7 +355,8 @@ export class BattleApplication {
                 ],
               }),
           );
-        if (b.result === "caught") {
+        // A cinematic capture (a scripted demonstration) never enters the player's storage.
+        if (b.result === "caught" && !b.cinematicCapture) {
           if (!this.partyStorage.receive(this.state, structuredClone(b.enemy)))
             throw new Error("Captured monster could not be received");
           this.seen(b.enemy.species, true);

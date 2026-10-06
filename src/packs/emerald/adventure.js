@@ -121,6 +121,10 @@ export class EmeraldAdventure {
   get battle() {
     return this.combat.battle;
   }
+  /** A scripted demonstration battle runs itself; the UI shows the log instead of the menu. */
+  get autoBattle() {
+    return !!this.applications.battle?.autoBattle;
+  }
   get busy() {
     return (
       this.storyBusy ||

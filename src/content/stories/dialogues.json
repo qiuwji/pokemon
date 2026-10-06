@@ -476,6 +476,397 @@
       "lines": [
         "如果你带的宝可梦变强了，就能去更远的地方了。"
       ]
+    },
+    "regions.petalburg.norman.first": {
+      "name": "诺曼",
+      "lines": [
+        "哦？这不是 {{player}} 吗！",
+        "搬家的东西都安顿好了吗？",
+        "没想到你能自己走到这里来。",
+        "原来如此，你已经和宝可梦在一起了。",
+        "嗯……看来你也想成为像我一样的训练家啊。",
+        "这真是太好了！我很期待哦！"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.wally.request": {
+      "name": "小光",
+      "lines": [
+        "那个……我……",
+        "我想得到一只宝可梦……"
+      ]
+    },
+    "regions.petalburg.norman.wally": {
+      "name": "诺曼",
+      "lines": [
+        "嗯？你是……呃……对了，你是小光吧？"
+      ]
+    },
+    "regions.petalburg.wally.story": {
+      "name": "小光",
+      "lines": [
+        "我要去绿岭镇的亲戚家住一阵子。",
+        "一个人去会很孤单，所以想带一只宝可梦一起去。",
+        "可是我从没捉过宝可梦，不知道该怎么办……"
+      ]
+    },
+    "regions.petalburg.norman.isee": {
+      "name": "诺曼",
+      "lines": [
+        "嗯，原来是这样。"
+      ]
+    },
+    "regions.petalburg.norman.go": {
+      "name": "诺曼",
+      "lines": [
+        "{{player}}，你也听到了吧？",
+        "陪小光一起去，确保他安全地捉到宝可梦。"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.norman.loan": {
+      "name": "诺曼",
+      "lines": [
+        "小光，我把我的宝可梦借给你用吧。",
+        "小光得到了蛇纹熊！"
+      ]
+    },
+    "regions.petalburg.wally.wow": {
+      "name": "小光",
+      "lines": [
+        "哇！是宝可梦！"
+      ]
+    },
+    "regions.petalburg.norman.ball": {
+      "name": "诺曼",
+      "lines": [
+        "嗯，也给你一个精灵球。加油吧！",
+        "小光得到了精灵球！"
+      ]
+    },
+    "regions.petalburg.wally.really": {
+      "name": "小光",
+      "lines": [
+        "{{player}}……你真的愿意陪我去吗？"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.watch": {
+      "name": "小光",
+      "lines": [
+        "{{player}}……宝可梦就藏在这种草丛里对吧？",
+        "请你看着我，看看我能不能好好地捉到一只。",
+        "……哇！"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.caught": {
+      "name": "小光",
+      "lines": [
+        "我成功了……这是我的……我的宝可梦！"
+      ]
+    },
+    "regions.petalburg.letsgo": {
+      "name": "小光",
+      "lines": [
+        "{{player}}，谢谢你！我们回橙华道馆吧！"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.dad.return": {
+      "name": "诺曼",
+      "lines": [
+        "那么，顺利吗？"
+      ]
+    },
+    "regions.petalburg.wally.bye": {
+      "name": "小光",
+      "lines": [
+        "嗯，多亏了你。宝可梦还给你。",
+        "{{player}}，谢谢你陪我一起去。",
+        "正是有你们，我才能捉到自己的宝可梦。",
+        "我一定会好好照顾它的。",
+        "啊！妈妈还在等我，我得走了！",
+        "再见，{{player}}！"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.dad.badges": {
+      "name": "诺曼",
+      "lines": [
+        "那么……",
+        "{{player}}，如果你想成为强大的训练家，我有个建议。",
+        "离开这个城镇，前往卡那兹市吧。",
+        "在那里，去挑战道馆馆主——杜鹃。",
+        "之后再去其他的宝可梦道馆，击败它们的馆主。",
+        "收集他们的徽章，明白了吗？",
+        "当然，我也是道馆馆主。总有一天我们会交手的。",
+        "不过，那要等你变得更强之后。"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.norman.after": {
+      "name": "诺曼",
+      "lines": [
+        "嗯？你不是要去卡那兹市的道馆吗？",
+        "让我和初出茅庐的训练家对战，可没什么挑战性。",
+        "{{player}}，等你变得更强了再来挑战我吧。",
+        "等你拿到四枚道馆徽章，我就和你对战，好吗？"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.wallysmom": {
+      "name": "小光的妈妈",
+      "lines": [
+        "我们家小光去哪儿了？",
+        "我们很快就要出发去绿岭镇了……"
+      ]
+    },
+    "regions.petalburg.gentleman": {
+      "name": "绅士",
+      "lines": [
+        "假如你有六只宝可梦。",
+        "要是再捉到一只……",
+        "它就会通过电脑连接，自动传送到存储箱里。"
+      ]
+    },
+    "regions.petalburg.boy": {
+      "name": "少年",
+      "lines": [
+        "水面映出我的脸。",
+        "那是充满希望的灿烂笑容……",
+        "还是在恐惧中挣扎的沉重表情……",
+        "你的脸上，又映出了什么呢？"
+      ]
+    },
+    "regions.petalburg.route102.boy": {
+      "name": "少年",
+      "lines": [
+        "我要捉好多好多的宝可梦！"
+      ]
+    },
+    "regions.petalburg.route102.littleboy": {
+      "name": "小男孩",
+      "lines": [
+        "我……个子不高，一走进高草丛，",
+        "草就会没到我身上。",
+        "草会钻进鼻子里，呼哇呼哇呼哇……",
+        "啊嚏！"
+      ]
+    },
+    "regions.petalburg.calvin": {
+      "name": "短裤小子",
+      "lines": [
+        "我一直在等路过的训练家！"
+      ]
+    },
+    "regions.petalburg.calvin.after": {
+      "name": "短裤小子",
+      "lines": [
+        "你的宝可梦真强……我还得再练练。"
+      ]
+    },
+    "regions.petalburg.rick": {
+      "name": "捕虫少年",
+      "lines": [
+        "我的虫宝可梦可一点都不弱！"
+      ]
+    },
+    "regions.petalburg.rick.after": {
+      "name": "捕虫少年",
+      "lines": [
+        "我的虫宝可梦还差得远呢……"
+      ]
+    },
+    "regions.petalburg.tiana": {
+      "name": "少女",
+      "lines": [
+        "我的宝可梦又可爱又强哦！"
+      ]
+    },
+    "regions.petalburg.tiana.after": {
+      "name": "少女",
+      "lines": [
+        "唔，我输了……你要继续加油哦。"
+      ]
+    },
+    "regions.petalburg.allen": {
+      "name": "短裤小子",
+      "lines": [
+        "嘿，来一场宝可梦对战吧！"
+      ]
+    },
+    "regions.petalburg.allen.after": {
+      "name": "短裤小子",
+      "lines": [
+        "好强啊……我会变得更强的！"
+      ]
+    },
+    "regions.petalburg.center.fatman": {
+      "name": "男子",
+      "lines": [
+        "用电脑连接的宝可梦寄放系统……",
+        "能做出来的人，简直是科学怪才！"
+      ]
+    },
+    "regions.petalburg.center.youngster": {
+      "name": "短裤小子",
+      "lines": [
+        "我的宝可梦吃了橙橙果，HP 就恢复了！"
+      ]
+    },
+    "regions.petalburg.center.woman": {
+      "name": "女子",
+      "lines": [
+        "宝可梦有很多种属性。",
+        "每种属性都有它擅长和不擅长的对手。",
+        "根据属性的不同，对战有时轻松，有时艰难。"
+      ]
+    },
+    "regions.petalburg.center.man": {
+      "name": "男子",
+      "lines": [
+        "你的宝可梦培育得怎么样？",
+        "要好好照顾它们哦。"
+      ]
+    },
+    "regions.petalburg.mart.woman": {
+      "name": "女子",
+      "lines": [
+        "就算宝可梦现在很弱，也会慢慢变强。",
+        "最重要的是爱！对宝可梦的爱！"
+      ]
+    },
+    "regions.petalburg.mart.boy": {
+      "name": "少年",
+      "lines": [
+        "你用驱虫喷雾吗？",
+        "它能让宝可梦不靠近，赶路的时候很方便。"
+      ]
+    },
+    "regions.petalburg.mart.man": {
+      "name": "男子",
+      "lines": [
+        "你带解毒药了吗？",
+        "带着中毒的宝可梦走路，它会不断掉 HP，最后倒下。",
+        "记得随身带上解毒药。"
+      ]
+    },
+    "regions.petalburg.house1.man": {
+      "name": "老爷爷",
+      "lines": [
+        "旅行真是太棒了！",
+        "我年轻的时候，曾周游四海、翻山越岭！"
+      ]
+    },
+    "regions.petalburg.house1.woman": {
+      "name": "女子",
+      "lines": [
+        "唉……",
+        "我也想和宝可梦一起去冒险啊……",
+        "钻进潮湿的草丛……",
+        "爬上崎岖的山岩……",
+        "横渡汹涌的大海……",
+        "在漆黑的洞窟里徘徊……",
+        "有时还会吃一点苦……"
+      ]
+    },
+    "regions.petalburg.house2.woman": {
+      "name": "女子",
+      "lines": [
+        "千里成了我们镇上的新道馆馆主。",
+        "听说他把家人从很远的地方接了过来。"
+      ]
+    },
+    "regions.petalburg.house2.schoolkid": {
+      "name": "学生",
+      "lines": [
+        "我曾和千里对战过一次，不过，唉，他实在太强了。",
+        "怎么说呢……",
+        "我感觉他就是为宝可梦而生的。"
+      ]
+    },
+    "regions.petalburg.gymboy": {
+      "name": "少年",
+      "lines": [
+        "嗨！你……是不是个新手训练家？",
+        "你知道训练家到了新城镇会先做什么吗？",
+        "先看看城镇里有什么样的道馆。",
+        "看，这就是橙华市的道馆。"
+      ]
+    },
+    "regions.petalburg.wallyhouse.dad": {
+      "name": "男子",
+      "lines": [
+        "你是……啊，你一定就是 {{player}} 吧？",
+        "刚才谢谢你陪我们家小光。",
+        "他从小就体弱多病，所以我们打算送他去绿岭镇的亲戚家住一阵子。",
+        "那里的空气比这里清新得多。",
+        "什么？你问小光在哪？",
+        "他已经出发了，我们的孩子。",
+        "不知道他现在到哪儿了。"
+      ],
+      "bindings": {
+        "player": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "regions.petalburg.wallyhouse.mom": {
+      "name": "女子",
+      "lines": [
+        "我们家小光看起来真的很开心。"
+      ]
     }
   }
 }

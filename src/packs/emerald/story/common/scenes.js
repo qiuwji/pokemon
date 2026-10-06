@@ -4,8 +4,8 @@ const dialog = (dialogue, parameters = {}) => ({
   dialogue,
   parameters,
 });
-// The Oldale centre nurse field object; the heal story only turns her sideways and back.
-const CENTER_NURSE =
+// The whiteout return is still the Oldale centre, so its nurse is the one to turn there.
+const OLDALE_CENTER_NURSE =
   "core:npc.OldaleTown_PokemonCenter_1F.LOCALID_OLDALE_NURSE";
 
 export const OPEN_BAG = [
@@ -96,9 +96,9 @@ export const RETURN_TO_CENTER = [
       dir: "up",
     },
   },
-  { type: "face", actor: CENTER_NURSE, dir: "left" },
+  { type: "face", actor: OLDALE_CENTER_NURSE, dir: "left" },
   { type: "heal", variant: "center" },
-  { type: "face", actor: CENTER_NURSE, dir: "down" },
+  { type: "face", actor: OLDALE_CENTER_NURSE, dir: "down" },
 ];
 
 export function healingScene(object) {
@@ -109,9 +109,10 @@ export function healingScene(object) {
       dialog("emerald:dialogues.npc.heal.center.before", {
         speaker: object.name,
       }),
-      { type: "face", actor: CENTER_NURSE, dir: "left" },
+      // Turn the nurse this interaction belongs to toward the machine, then back.
+      { type: "face", actor: object.id, dir: "left" },
       { type: "heal", variant: "center" },
-      { type: "face", actor: CENTER_NURSE, dir: "down" },
+      { type: "face", actor: object.id, dir: "down" },
       dialog("emerald:dialogues.npc.heal.center.after", {
         speaker: object.name,
       }),

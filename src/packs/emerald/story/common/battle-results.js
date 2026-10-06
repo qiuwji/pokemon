@@ -5,7 +5,9 @@ export const COMMON_BATTLE_RESULTS_EVENTS = [
     id: "battle.capture",
     priority: -100,
     trigger: "battleResult",
-    match: ({ battle: b }) => b.result === "caught",
+    // A cinematic capture is a scripted demonstration (the caught mon belongs to the scene,
+    // not the player), so it never runs the ordinary capture receipt.
+    match: ({ battle: b }) => b.result === "caught" && !b.cinematicCapture,
     build: (s, { battle: b, db }) => [
       { type: "captureMonster", monster: structuredClone(b.enemy) },
       dialog(

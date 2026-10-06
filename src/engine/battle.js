@@ -52,6 +52,7 @@ export class Battle {
     trainer = false,
     trainerId = null,
     script = null,
+    cinematicCapture = false,
     effects = {},
     rules = {},
     items = createItemService({}),
@@ -75,7 +76,7 @@ export class Battle {
   }) {
     if (!["singles", "doubles"].includes(format))
       throw new Error("Unknown battle format");
-    Object.assign(this, { db, rng, trainer, trainerId, script, items });
+    Object.assign(this, { db, rng, trainer, trainerId, script, cinematicCapture, items });
     // The isolated AI stream never advances the gameplay RNG; it is derived from this snapshot.
     this.aiSeed = typeof rng.snapshot === "function" ? rng.snapshot() : 0;
     this.injectedAi = ai;

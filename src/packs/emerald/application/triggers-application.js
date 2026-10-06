@@ -64,6 +64,9 @@ export class TriggersApplication {
         ? [
             { type: "emote", actor: object.id, kind: "exclamation", ms: 450 },
             { type: "approach", actor: object.id },
+            // The reference trainer_see.c turns both battlers to face each other before the line.
+            { type: "face", actor: object.id, target: "player" },
+            { type: "face", actor: "player", target: object.id },
           ]
         : []),
       {
