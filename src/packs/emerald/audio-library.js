@@ -123,6 +123,8 @@ export const ORIGINAL_SONG_CUES = Object.freeze({
   MUS_ROUTE101: "emerald-audio:mus_route101",
   MUS_HELP: "emerald-audio:mus_help",
   MUS_OLDALE: "emerald-audio:mus_oldale",
+  MUS_PETALBURG: "emerald-audio:mus_petalburg",
+  MUS_GYM: "emerald-audio:mus_gym",
   MUS_BIRCH_LAB: "emerald-audio:mus_birch_lab",
   MUS_POKE_CENTER: "emerald-audio:mus_poke_center",
   MUS_POKE_MART: "emerald-audio:mus_poke_mart",

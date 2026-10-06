@@ -74,6 +74,16 @@
       "song": "MUS_FOLLOW_ME",
       "config": "tracks/mus-follow-me.json",
       "selection": "story"
+    },
+    {
+      "song": "MUS_PETALBURG",
+      "config": "tracks/petalburg.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_GYM",
+      "config": "tracks/gym.json",
+      "selection": "map-music"
     }
   ],
   "sounds": [
@@ -174,7 +184,7 @@
     }
   ],
   "musicFades": {
-    "fadeInMs": 500,
-    "fadeOutMs": 250
+    "fadeInMs": 1500,
+    "fadeOutMs": 1200
   }
 }

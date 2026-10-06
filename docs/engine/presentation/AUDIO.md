@@ -71,6 +71,6 @@ AudioAdapter的播放句柄提供`finished` Promise，声部自然结束、停�
 
 ## 场景切曲的渐变
 
-合并音频包的 `tools/audio/pack.json.musicFades` 控制BGM：当前渐入500ms、渐出250ms；bundle-audio负责写进实际注册cue和资源manifest，不能只手改生成插件。音效保留即时播放。循环采样边界和WAV内容不变。
+合并音频包的 `tools/audio/pack.json.musicFades` 控制BGM：当前渐入1500ms、渐出1200ms；bundle-audio负责写进实际注册cue和资源manifest，不能只手改生成插件。音效保留即时播放。循环采样边界和WAV内容不变。
 
 AudioAdapter等新曲解码成功后才让旧曲渐出；失败保留旧声并允许重试，快速切场景只接受最新请求。回到仍在播放的原曲会取消待加载替换，不重新从头播放。禁音、后台暂停和释放继续清理全部声音。听感由用户在游戏内验收。
