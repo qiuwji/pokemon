@@ -11,6 +11,10 @@
       "sha256": "c17687ece4bb432d345b43b4e806ebba741553b1ed83b0f46207ce537db5d25c"
     },
     {
+      "path": "data/tilesets/secondary/petalburg/palettes/05.pal",
+      "sha256": "8356b54b4d39ed880b83f39c82b61699dd720e28eb2ebc2d80a4bd360d8720e2"
+    },
+    {
       "path": "data/tilesets/secondary/petalburg/palettes/06.pal",
       "sha256": "d19ac2cc38bf373a77ca9067bb62fa3860d7efc3b2e3662287e077016becb685"
     },
@@ -33,6 +37,14 @@
     {
       "path": "graphics/door_anims/birchs_lab.png",
       "sha256": "98dd6b1ebeae340109881e404a2ea08e893155890b7f203de052a646291485a7"
+    },
+    {
+      "path": "graphics/door_anims/general.png",
+      "sha256": "77ac8995e4910bda4f80056cbe613534da36cf65303c925676bcca829fdc07fc"
+    },
+    {
+      "path": "graphics/door_anims/gym.png",
+      "sha256": "79a7d039061063c0c5c9865c13307393b096d14cdac838c0011ed6a142dafa99"
     },
     {
       "path": "graphics/door_anims/littleroot.png",
@@ -92,7 +104,7 @@
     }
   ],
   "doorMetatiles": {
-    "65": [
+    "33": [
       [
         906,
         907
@@ -106,7 +118,7 @@
         911
       ]
     ],
-    "97": [
+    "65": [
       [
         912,
         913
@@ -118,6 +130,34 @@
       [
         916,
         917
+      ]
+    ],
+    "97": [
+      [
+        918,
+        919
+      ],
+      [
+        920,
+        921
+      ],
+      [
+        922,
+        923
+      ]
+    ],
+    "461": [
+      [
+        924,
+        925
+      ],
+      [
+        926,
+        927
+      ],
+      [
+        928,
+        929
       ]
     ],
     "584": [
@@ -136,30 +176,30 @@
     ],
     "585": [
       [
-        918,
-        919
+        930,
+        931
       ],
       [
-        920,
-        921
+        932,
+        933
       ],
       [
-        922,
-        923
+        934,
+        935
       ]
     ],
     "647": [
       [
-        924,
-        925
+        936,
+        937
       ],
       [
-        926,
-        927
+        938,
+        939
       ],
       [
-        928,
-        929
+        940,
+        941
       ]
     ]
   }

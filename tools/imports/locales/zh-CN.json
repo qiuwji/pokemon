@@ -13,7 +13,15 @@
     "LittlerootTown_MaysHouse_1F": "小遥的家 · 一楼",
     "LittlerootTown_MaysHouse_2F": "小遥的家 · 二楼",
     "OldaleTown_House1": "古辰镇 · 民宅 1F",
-    "OldaleTown_House2": "古辰镇 · 民宅"
+    "OldaleTown_House2": "古辰镇 · 民宅",
+    "Route102": "102 号道路",
+    "PetalburgCity": "橙华市",
+    "PetalburgCity_Gym": "橙华道馆",
+    "PetalburgCity_WallysHouse": "橙华市 · 小光的家",
+    "PetalburgCity_House1": "橙华市 · 民宅 1F",
+    "PetalburgCity_House2": "橙华市 · 民宅",
+    "PetalburgCity_Mart": "橙华市 · 友好商店",
+    "PetalburgCity_PokemonCenter_1F": "橙华市 · 宝可梦中心"
   },
   "species": {
     "treecko": {
@@ -87,6 +95,10 @@
     "seedot": {
       "name": "橡实果",
       "dex": 273
+    },
+    "shroomish": {
+      "name": "蘑蘑菇",
+      "dex": 285
     },
     "ralts": {
       "name": "拉鲁拉丝",

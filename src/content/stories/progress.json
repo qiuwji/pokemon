@@ -1,0 +1,515 @@
+{
+  "id": "emerald:progress",
+  "version": 1,
+  "dialogues": {
+    "pokedex": {
+      "name": "测试员",
+      "lines": [
+        "已应用测试进度：拿到图鉴（未白镇）",
+        "状态：图鉴✓ 小光教学未开始"
+      ]
+    },
+    "oldale": {
+      "name": "测试员",
+      "lines": [
+        "已应用测试进度：古辰镇（图鉴+跑步鞋）",
+        "状态：图鉴✓ 跑步鞋✓"
+      ]
+    },
+    "petalburg": {
+      "name": "测试员",
+      "lines": [
+        "已应用测试进度：橙华市（小光教学前）",
+        "下一步：去橙华道馆找诺曼，开始小光教学"
+      ]
+    },
+    "wallydone": {
+      "name": "测试员",
+      "lines": [
+        "已应用测试进度：小光教学完成（橙华道馆）",
+        "状态：小光教学已完成"
+      ]
+    }
+  },
+  "scripts": {
+    "pokedex": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "pokedex"
+        },
+        {
+          "type": "flag",
+          "key": "introDone",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 7
+        },
+        {
+          "type": "flag",
+          "key": "roomChecked",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "tvWatched",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "playerConfigured",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "truckLeft",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "runningShoes",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rescued",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "heardBirch",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "pokedex",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "wallyTutorial",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "wallyCaught",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "wallyDone",
+          "value": false
+        },
+        {
+          "type": "reward",
+          "id": "rival.prize"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokedex"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokeballs",
+          "items": {
+            "pokeball": 5
+          }
+        },
+        {
+          "type": "reward",
+          "id": "emerald:running-shoes",
+          "items": {
+            "running_shoes": 1
+          }
+        },
+        {
+          "type": "heal"
+        },
+        {
+          "type": "scene",
+          "kind": "fade",
+          "position": {
+            "map": "LittlerootTown",
+            "x": 10,
+            "y": 10,
+            "dir": "down"
+          }
+        }
+      ]
+    },
+    "oldale": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldale"
+        },
+        {
+          "type": "flag",
+          "key": "introDone",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 7
+        },
+        {
+          "type": "flag",
+          "key": "roomChecked",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "tvWatched",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "playerConfigured",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "truckLeft",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "runningShoes",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rescued",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "heardBirch",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "pokedex",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "wallyTutorial",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "wallyCaught",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "wallyDone",
+          "value": false
+        },
+        {
+          "type": "reward",
+          "id": "rival.prize"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokedex"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokeballs",
+          "items": {
+            "pokeball": 5
+          }
+        },
+        {
+          "type": "reward",
+          "id": "emerald:running-shoes",
+          "items": {
+            "running_shoes": 1
+          }
+        },
+        {
+          "type": "heal"
+        },
+        {
+          "type": "scene",
+          "kind": "fade",
+          "position": {
+            "map": "OldaleTown",
+            "x": 8,
+            "y": 2,
+            "dir": "down"
+          }
+        }
+      ]
+    },
+    "petalburg": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburg"
+        },
+        {
+          "type": "flag",
+          "key": "introDone",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 7
+        },
+        {
+          "type": "flag",
+          "key": "roomChecked",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "tvWatched",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "playerConfigured",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "truckLeft",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "runningShoes",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rescued",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "heardBirch",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "pokedex",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "wallyTutorial",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "wallyCaught",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "wallyDone",
+          "value": false
+        },
+        {
+          "type": "reward",
+          "id": "rival.prize"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokedex"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokeballs",
+          "items": {
+            "pokeball": 5
+          }
+        },
+        {
+          "type": "reward",
+          "id": "emerald:running-shoes",
+          "items": {
+            "running_shoes": 1
+          }
+        },
+        {
+          "type": "heal"
+        },
+        {
+          "type": "scene",
+          "kind": "fade",
+          "position": {
+            "map": "PetalburgCity_Gym",
+            "x": 4,
+            "y": 110,
+            "dir": "up"
+          }
+        }
+      ]
+    },
+    "wallydone": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "wallydone"
+        },
+        {
+          "type": "flag",
+          "key": "introDone",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "introState",
+          "value": 7
+        },
+        {
+          "type": "flag",
+          "key": "roomChecked",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "tvWatched",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "neighborMet",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "playerConfigured",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "truckLeft",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "runningShoes",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rescued",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "heardBirch",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "rivalWon",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "pokedex",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "wallyTutorial",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "wallyCaught",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "wallyDone",
+          "value": true
+        },
+        {
+          "type": "reward",
+          "id": "rival.prize"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokedex"
+        },
+        {
+          "type": "reward",
+          "id": "professor.pokeballs",
+          "items": {
+            "pokeball": 5
+          }
+        },
+        {
+          "type": "reward",
+          "id": "emerald:running-shoes",
+          "items": {
+            "running_shoes": 1
+          }
+        },
+        {
+          "type": "heal"
+        },
+        {
+          "type": "scene",
+          "kind": "fade",
+          "position": {
+            "map": "PetalburgCity_Gym",
+            "x": 4,
+            "y": 108,
+            "dir": "up"
+          }
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "label": "development-only",
+      "status": "project-derived",
+      "note": "开发/联调用章节预设；由测试插件菜单调用，非原作剧情。核心包拥有这些 flag/奖励，插件不得直接写。"
+    }
+  ]
+}

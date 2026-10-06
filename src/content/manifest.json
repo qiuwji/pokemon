@@ -546,6 +546,11 @@
       "path": "stories/route101.json"
     },
     {
+      "section": "stories",
+      "key": "progress",
+      "path": "stories/progress.json"
+    },
+    {
       "section": "maps",
       "key": "OldaleTown_House2",
       "path": "maps/OldaleTown_House2/grid.json",
@@ -572,6 +577,105 @@
       "key": "building-generic_building",
       "path": "tilesets/building-generic_building.json",
       "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route102",
+      "path": "maps/Route102/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route102",
+      "path": "maps/Route102/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_Mart",
+      "path": "maps/PetalburgCity_Mart/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_Mart",
+      "path": "maps/PetalburgCity_Mart/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_House1",
+      "path": "maps/PetalburgCity_House1/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_House1",
+      "path": "maps/PetalburgCity_House1/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity",
+      "path": "maps/PetalburgCity/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity",
+      "path": "maps/PetalburgCity/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_PokemonCenter_1F",
+      "path": "maps/PetalburgCity_PokemonCenter_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_PokemonCenter_1F",
+      "path": "maps/PetalburgCity_PokemonCenter_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_House2",
+      "path": "maps/PetalburgCity_House2/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_House2",
+      "path": "maps/PetalburgCity_House2/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_Gym",
+      "path": "maps/PetalburgCity_Gym/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_Gym",
+      "path": "maps/PetalburgCity_Gym/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_WallysHouse",
+      "path": "maps/PetalburgCity_WallysHouse/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgCity_WallysHouse",
+      "path": "maps/PetalburgCity_WallysHouse/map.json"
+    },
+    {
+      "section": "tilesets",
+      "key": "building-petalburg_gym",
+      "path": "tilesets/building-petalburg_gym.json",
+      "generated": true
+    },
+    {
+      "section": "species",
+      "key": "shroomish",
+      "path": "species/shroomish.json"
     }
   ]
 }

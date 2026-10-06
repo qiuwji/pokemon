@@ -1515,5 +1515,45 @@
       "FLAG_KINGS_ROCK_AFFECTED"
     ],
     "sound": false
+  },
+  "stun_spore": {
+    "power": 0,
+    "accuracy": 75,
+    "pp": 30,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "paralyze",
+    "name": "Stun Spore"
+  },
+  "leech_seed": {
+    "power": 0,
+    "accuracy": 90,
+    "pp": 10,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "leech_seed",
+    "name": "Leech Seed"
+  },
+  "poison_powder": {
+    "power": 0,
+    "accuracy": 75,
+    "pp": 35,
+    "priority": 0,
+    "chance": 0,
+    "type": "poison",
+    "effect": "poison",
+    "name": "Poison Powder"
+  },
+  "spore": {
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "priority": 0,
+    "chance": 0,
+    "type": "grass",
+    "effect": "sleep",
+    "name": "Spore"
   }
 }

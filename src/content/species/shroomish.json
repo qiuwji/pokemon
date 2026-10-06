@@ -1,0 +1,72 @@
+{
+  "name": "蘑蘑菇",
+  "dex": 285,
+  "types": [
+    "grass"
+  ],
+  "stats": {
+    "hp": 60,
+    "atk": 40,
+    "def": 60,
+    "spe": 35,
+    "spa": 40,
+    "spd": 60
+  },
+  "catchRate": 255,
+  "expYield": 65,
+  "growth": "fluctuating",
+  "femaleRatio": 0.5,
+  "abilities": [
+    "effect_spore"
+  ],
+  "evYield": {
+    "hp": 1,
+    "atk": 0,
+    "def": 0,
+    "spe": 0,
+    "spa": 0,
+    "spd": 0
+  },
+  "learnset": [
+    {
+      "level": 1,
+      "move": "absorb"
+    },
+    {
+      "level": 4,
+      "move": "tackle"
+    },
+    {
+      "level": 7,
+      "move": "stun_spore"
+    },
+    {
+      "level": 10,
+      "move": "leech_seed"
+    },
+    {
+      "level": 16,
+      "move": "mega_drain"
+    },
+    {
+      "level": 22,
+      "move": "headbutt"
+    },
+    {
+      "level": 28,
+      "move": "poison_powder"
+    },
+    {
+      "level": 36,
+      "move": "growth"
+    },
+    {
+      "level": 45,
+      "move": "giga_drain"
+    },
+    {
+      "level": 54,
+      "move": "spore"
+    }
+  ]
+}

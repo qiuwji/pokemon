@@ -25,7 +25,7 @@ for name,title in zip(map_names,titles):
  w,h=lay['width'],lay['height'];data=u16(R/lay['blockdata_filepath']);beh=[]
  for val in data:
   mid=val&1023;side=0 if mid<512 else 1;beh.append(attrs[side][mid if side==0 else mid-512]&255)
- output[name]={'id':name,'indoor':m['map_type']=='MAP_TYPE_INDOOR','allowRunning':bool(m['allow_running']),'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':[w for w in m['warp_events'] if w['dest_map']!='MAP_DYNAMIC'],'signs':m['bg_events'],'npcs':m['object_events'],'music':m['music']}
+ output[name]={'id':name,'indoor':m['map_type']=='MAP_TYPE_INDOOR','allowRunning':bool(m['allow_running']),'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':[w for w in m['warp_events'] if w['dest_map']!='MAP_DYNAMIC'],'signs':[b for b in m['bg_events'] if b.get('type')=='sign'],'npcs':m['object_events'],'music':m['music']}
 # Standard field objects, using the palettes declared by the engine.
 info=(R/'src/data/object_events/object_event_graphics_info.h').read_text(); gfx=(R/'src/data/object_events/object_event_graphics.h').read_text(); npcs={}
 for key in session.profile['actors']:
@@ -76,10 +76,15 @@ for section, records in {'maps':output,'actors':npcs,'species':species,'moves':m
   existing[section][ident]=merged
 existing['typeChart']=types
 for name in map_names:
- dropped=[w for w in json.loads((R/f'data/maps/{name}/map.json').read_text())['warp_events'] if w['dest_map']=='MAP_DYNAMIC']
+ reference=json.loads((R/f'data/maps/{name}/map.json').read_text())
+ dropped=[w for w in reference['warp_events'] if w['dest_map']=='MAP_DYNAMIC']
  if dropped:
   session.omit('warps','maps.'+name,'MAP_DYNAMIC',
                'Reference warps to MAP_DYNAMIC are set at runtime; content owns the exit as a story trigger.')
+ for event in reference['bg_events']:
+  if event.get('type')!='sign':
+   session.omit('signs','maps.'+name,event.get('type','unknown'),
+                'Non-sign background events (hidden items) are not yet executable content.')
 session.content(existing)
 print('Prepared',len(output),'maps,',len(species),'species,',len(moves),'moves; actors:',npcs)
 

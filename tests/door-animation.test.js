@@ -41,17 +41,21 @@ async function step(s, dir) {
 }
 
 test('Imported door frames cover exactly the reference door metatiles this content uses', () => {
-  // metatile_labels.h: Petalburg_Door_Littleroot/BirchsLab, General_Door_PokeCenter/PokeMart,
-  // Petalburg_Door_Oldale. field_door.c assigns the sound per metatile.
-  assert.deepEqual(Object.keys(DOOR_ANIMATIONS).map(Number).sort((a, b) => a - b), [65, 97, 584, 585, 647]);
+  // metatile_labels.h: Petalburg_Door_Littleroot/BirchsLab/Oldale/Petalburg, General_Door_PokeCenter/PokeMart.
+  // field_door.c assigns the sound per metatile.
+  const doors = Object.keys(DOOR_ANIMATIONS).map(Number).sort((a, b) => a - b);
+  assert.deepEqual(doors, [33, 65, 97, 461, 584, 585, 647]);
   assert.equal(DOOR_ANIMATIONS[584].sound, 'normal');
+  assert.equal(DOOR_ANIMATIONS[33].sound, 'normal');
   assert.equal(DOOR_ANIMATIONS[65].sound, 'sliding');
   assert.equal(DOOR_ANIMATIONS[97].sound, 'sliding');
+  assert.equal(DOOR_ANIMATIONS[461].sound, 'sliding');
+  const reserved = 900 + doors.length * 6;
   for (const door of Object.values(DOOR_ANIMATIONS)) {
     assert.equal(door.open.length, 3, 'sDoorOpenAnimFrames paints three frames');
     for (const pair of door.open) {
       assert.equal(pair.length, 2, 'a door is one top and one bottom metatile');
-      for (const id of pair) assert(id >= 900 && id <= 929);
+      for (const id of pair) assert(id >= 900 && id < reserved);
     }
   }
   // The last painted frame is the fully open door; a door that never changes is not a door.
