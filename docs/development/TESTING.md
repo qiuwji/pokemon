@@ -30,7 +30,7 @@
 
 失败后保留命令和原日志，判断是实现、合同还是夹具错，再修正最小范围。不要删断言、skip失败、关闭校验、放宽权限、恢复旧格式来让数字变绿。修复后复查失败项和新增影响范围；无关已经通过的项不再重跑。异步任务未结束时继续观察同一进程，不启动第二份测试。
 
-`npm test`（或`npm run test:core`）只执行tests核心合同；`npm run test:plugins`单独执行examples作者示例和已安装插件清单检查，`test:examples`是其别名。`npm run test:all`显式执行两组。`npm run check:docs`检查Skill代码块与文件完全一致，并检查项目本地Markdown链接、导入索引/所有权/入口文件的一致性；示例改动后必须同步Skill。元数据校验使用接手工具已有Skill校验器，或按普通YAML frontmatter确认name/description；不要把流程绑定到某个模型专属工具。
+`npm test`（或`npm run test:core`）只执行tests核心合同；`npm run test:plugins`单独执行examples作者示例和已安装插件清单检查，`test:examples`是其别名。`npm run test:all`显式执行两组。Python导入/工具测试独立为`npm run test:tools`（`tools/tests`、`tools/audio`、`tools/story`），只在改动内容管线、导入器、音频或剧情抽取时运行，不随默认测试或`npm run check`执行。`npm run check:docs`检查Skill代码块与文件完全一致，并检查项目本地Markdown链接、导入索引/所有权/入口文件的一致性；示例改动后必须同步Skill。元数据校验使用接手工具已有Skill校验器，或按普通YAML frontmatter确认name/description；不要把流程绑定到某个模型专属工具。
 
 ## 核心与产品插件隔离
 

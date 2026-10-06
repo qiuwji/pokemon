@@ -15,6 +15,7 @@
     "check:engine-types": "tsc -p tsconfig.engine.json",
     "test:core": "node --test tests/*.test.js",
     "test:plugins": "node --test examples/*.test.js",
+    "test:tools": "python3 -m unittest discover -s tools/tests -q && python3 tools/audio/test_tools.py && python3 tools/story/test_reference.py",
     "test:all": "npm run test:core && npm run test:plugins"
   },
   "devDependencies": {

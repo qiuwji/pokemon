@@ -14,6 +14,14 @@
       ]
     },
     {
+      "id": "star-catch",
+      "name": "接星星小游戏",
+      "description": "宿主驱动实时小游戏：左右移动接住落下的星星。在野外面向空地按确认键开始，成功奖励金钱。",
+      "module": "./star-catch/index.js",
+      "export": "starCatch",
+      "enabled": false
+    },
+    {
       "id": "facility-content",
       "name": "设施内容示例",
       "description": "加载华丽大赛、游戏厅及开拓区的示例内容。",
