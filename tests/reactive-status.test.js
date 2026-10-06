@@ -1,13 +1,13 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { validStatusValues } from "../dist/engine/creature-contract.js";
-import { EffectRegistry } from "../dist/engine/effects.js";
+import { Battle } from "../src/engine/battle.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { validStatusValues } from "../src/engine/creature-contract.js";
+import { EffectRegistry } from "../src/engine/effects.js";
 const base = loadContentSync();
 function fixture({ format = "singles", hooks = [] } = {}) {
   const effects = {

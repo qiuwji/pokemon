@@ -34,7 +34,8 @@ def install(pack, project, check=False):
     catalog = json.loads(catalog_path.read_text())
     previous = next((e for e in catalog['plugins'] if e['id'] == identifier), None)
     default_enabled = bool(metadata.get('defaultEnabled', False))
-    entry = {'id': identifier, 'module': './' + identifier + '.js', 'export': 'bgmPlugin', 'enabled': default_enabled}
+    module_path = f'../../generated/plugins/{identifier}.js' if workspace.sources else './' + identifier + '.js'
+    entry = {'id': identifier, 'module': module_path, 'export': 'bgmPlugin', 'enabled': default_enabled}
     if previous:
         if previous['module'] != entry['module'] or previous['export'] != entry['export']:
             raise ValueError('Existing plugin identity belongs to a different module')
@@ -43,7 +44,10 @@ def install(pack, project, check=False):
         catalog['plugins'][catalog['plugins'].index(previous)] = entry
     else:
         catalog['plugins'].append(entry)
-    changes = {asset: audio, root / 'plugins' / (identifier + '.js'): (pack / 'plugin.js').read_bytes(),
+    plugin = (pack / 'plugin.js').read_bytes()
+    if workspace.sources:
+        plugin = plugin.replace(b'"assets/', b'"generated/assets/').replace(b"'assets/", b"'generated/assets/")
+    changes = {asset: audio, root / 'plugins' / (identifier + '.js'): plugin,
                catalog_path: (json.dumps(catalog, ensure_ascii=False, indent=2) + '\n').encode()}
     manifest = json.loads((root / 'content/manifest.json').read_text())
     maps = []

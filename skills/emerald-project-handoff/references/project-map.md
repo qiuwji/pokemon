@@ -8,8 +8,8 @@
 | 启动/概览 | [README](../../../README.md)、[package.json](../../../package.json)；npm run dev，端口参数见tools/serve.py，浏览器需HTTP |
 | 架构/公开类型 | [ARCHITECTURE](../../../ARCHITECTURE.md)、[contracts.d.ts](../../../src/engine/contracts.d.ts) |
 | 浏览器组合 | src/app.js；只装配服务和宿主 |
-| 核心/应用/内容 | dist/engine、src/packs/emerald/application、src/packs/emerald及dist/plugins |
-| 渲染/音频资源 | dist/presentation、dist/adapters、dist/assets；素材来源见README及AUDIO规格 |
+| 核心/应用/内容 | src/engine、src/packs/emerald/application、src/packs/emerald及src/plugins |
+| 渲染/音频资源 | src/presentation、src/adapters、generated/assets；素材来源见README及AUDIO规格 |
 | 机制与规格 | [文档导航](../../../docs/README.md)、docs/engine和docs/architecture；按当前领域读取 |
 | 验证与过程 | [FINAL_VALIDATION](../../../docs/project/VALIDATION.md)、docs/validation、tests、DEVELOPMENT_LOG |
 | 原路线历史 | [ENGINE_ROADMAP](../../../ENGINE_ROADMAP.md)；当前范围调整优先于旧追加记录 |

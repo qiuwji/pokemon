@@ -4,15 +4,15 @@ import {
   FieldDirector,
   storyResources,
   validateFieldCommand,
-} from "../dist/engine/field-director.js";
-import { CommandRunner } from "../dist/engine/commands.js";
-import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
-import { FieldSession } from "../dist/engine/field-session.js";
-import { CameraRig } from "../dist/engine/camera.js";
-import { TransitionController } from "../dist/engine/timeline.js";
-import { SceneDirector } from "../dist/presentation/scene-director.js";
-import { SceneDOM } from "../dist/adapters/scene-dom.js";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
+} from "../src/engine/field-director.js";
+import { CommandRunner } from "../src/engine/commands.js";
+import { SceneGraph, GridMotion } from "../src/engine/motion.js";
+import { FieldSession } from "../src/engine/field-session.js";
+import { CameraRig } from "../src/engine/camera.js";
+import { TransitionController } from "../src/engine/timeline.js";
+import { SceneDirector } from "../src/presentation/scene-director.js";
+import { SceneDOM } from "../src/adapters/scene-dom.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
 import { manualStoryClock } from "./helpers/story-clock.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import {
@@ -20,7 +20,7 @@ import {
   session,
   objectSchema,
 } from "./helpers/session.js";
-import { emeraldDatabase } from "../dist/packs/emerald/database.js";
+import { emeraldDatabase } from "../src/packs/emerald/database.js";
 function escortFixture() {
   const clock = manualStoryClock(),
     map = {
@@ -329,7 +329,7 @@ test("Pack bootstrap materializes native sprite resources for headless and plugi
   const s = session(),
     base = { ...s.db, resources: undefined },
     normalized = emeraldDatabase(base);
-  assert.equal(normalized.resources["mudkip-front"], "assets/mudkip-front.png");
+  assert.equal(normalized.resources["mudkip-front"], "generated/assets/mudkip-front.png");
   assert.equal(
     emeraldDatabase(normalized).resources["mudkip-front"],
     normalized.resources["mudkip-front"],

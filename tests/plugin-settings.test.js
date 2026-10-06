@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readPluginSettings, writePluginSettings, startPlugins } from '../dist/adapters/plugin-settings.js';
-import { loadPluginCatalog } from '../dist/adapters/plugin-loader.js';
-import { createPluginManager } from '../dist/adapters/plugin-manager-dom.js';
+import { readPluginSettings, writePluginSettings, startPlugins } from '../src/adapters/plugin-settings.js';
+import { loadPluginCatalog } from '../src/adapters/plugin-loader.js';
+import { createPluginManager } from '../src/adapters/plugin-manager-dom.js';
 const storage = () => {
   const records=new Map();
   return {getItem:key=>records.get(key)||null,setItem:(key,value)=>records.set(key,value)};

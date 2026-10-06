@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { PixelDisplay } from '../dist/adapters/pixel-display.js';
-import { cameraProjection,projectWorld,unprojectScreen,pixelProjection } from '../dist/engine/camera-view.js';
-import { Renderer } from '../dist/adapters/canvas-renderer.js';
+import { PixelDisplay } from '../src/adapters/pixel-display.js';
+import { cameraProjection,projectWorld,unprojectScreen,pixelProjection } from '../src/engine/camera-view.js';
+import { Renderer } from '../src/adapters/canvas-renderer.js';
 
 test('Raster resizing matches real device pixels, keeps smoothing off and disconnects listeners',()=>{
   const ctx={},canvas={width:320,height:224,getContext:()=>ctx,getBoundingClientRect:()=>({width:613,height:429})};

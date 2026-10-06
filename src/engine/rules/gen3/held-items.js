@@ -1,6 +1,6 @@
 import { matchesStatus } from "../../creatures/status.js";
-import { ITEM_METADATA } from "./item-metadata.js";
-import { HELD_ITEM_METADATA } from "./held-catalog.js";
+import { ITEM_METADATA } from "../../../../generated/engine/rules/gen3/item-metadata.js";
+import { HELD_ITEM_METADATA } from "../../../../generated/engine/rules/gen3/held-catalog.js";
 import { natureMultiplier } from "../../model.js";
 /** Hold effects are declarative phase attachments, not a second battle dispatcher. */
 export const HOLD_EFFECTS = {};

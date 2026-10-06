@@ -4,20 +4,20 @@ import assert from "node:assert/strict";
 import {
   ActorRepository,
   ActorTemplateRegistry,
-} from "../dist/engine/actor-repository.js";
-import { NPCBehaviorRegistry } from "../dist/engine/npc-behaviors.js";
+} from "../src/engine/actor-repository.js";
+import { NPCBehaviorRegistry } from "../src/engine/npc-behaviors.js";
 import {
   perceive,
   nextActorDirection,
-} from "../dist/engine/actor-navigation.js";
-import { objectSchema } from "../dist/engine/extensions/values.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
+} from "../src/engine/actor-navigation.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 const map = {
   id: "a",
   title: "A",

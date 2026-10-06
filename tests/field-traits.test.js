@@ -2,18 +2,18 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { EncounterService } from "../dist/engine/encounters.js";
-import { PartyTraits } from "../dist/engine/rules/party-traits.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
-import { experienceDistribution } from "../dist/engine/experience.js";
+import { EncounterService } from "../src/engine/encounters.js";
+import { PartyTraits } from "../src/engine/rules/party-traits.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
+import { experienceDistribution } from "../src/engine/experience.js";
 import {
   createMonster,
   Random,
   grantExperience,
   damage,
-} from "../dist/engine/model.js";
-import { Battle } from "../dist/engine/battle.js";
+} from "../src/engine/model.js";
+import { Battle } from "../src/engine/battle.js";
 const db = loadContentSync();
 const creationRng = new Random(1);
 const mon = (species = "treecko", level = 10) =>

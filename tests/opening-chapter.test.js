@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { validateSave } from '../dist/packs/emerald/save-contract.js';
-import { WallClockDial, clockHands } from '../dist/presentation/wall-clock-dial.js';
-import { SceneDirector } from '../dist/presentation/scene-director.js';
+import { validateSave } from '../src/packs/emerald/save-contract.js';
+import { WallClockDial, clockHands } from '../src/presentation/wall-clock-dial.js';
+import { SceneDirector } from '../src/presentation/scene-director.js';
 
 const enter = async (s, map, x, y, dir = 'up') => {
   assert(s.game.enter({ map, x, y, dir }), `Entry rejected ${map}/${x},${y}`);

@@ -73,7 +73,7 @@ def encoded(value):
 class ImportSession:
     def __init__(self, args, owner, policy=None):
         self.workspace = WorkspaceView(PROJECT) if args.target is None else None
-        self.dist = self.workspace.root if self.workspace else args.target.resolve()
+        self.target = self.workspace.root if self.workspace else args.target.resolve()
         self.source = Path(getattr(args, 'source', PROJECT / 'work/pokeemerald')).resolve()
         self.check = args.check
         self.args = args
@@ -92,10 +92,7 @@ class ImportSession:
         self.policy = policy if policy is not None else json.loads((PROJECT / 'tools/imports/ownership.json').read_text())[owner]
 
     def validation_command(self):
-        if not hasattr(self, '_validation_view'):
-            self._validation_view = self.workspace or WorkspaceView(PROJECT)
-        return ['node', '--preserve-symlinks', str(PROJECT / 'tools/validate-import.mjs'),
-                str(self._validation_view.root)]
+        return ['node', str(PROJECT / 'tools/validate-import.mjs'), str(PROJECT)]
 
     def configuration(self, name):
         value = self.profile[name]
@@ -119,7 +116,7 @@ class ImportSession:
             raise ValueError('Import omissions: ' + json.dumps(self.omissions, ensure_ascii=False))
 
     def load(self):
-        self.manifest = json.loads((self.dist / 'content/manifest.json').read_text())
+        self.manifest = json.loads((self.target / 'content/manifest.json').read_text())
         if self.manifest.get('version') != 1:
             raise ValueError('Unsupported content manifest')
         self.original = {key: {} for key in SECTIONS}
@@ -128,7 +125,7 @@ class ImportSession:
             path = Path(entry['path'])
             if path.is_absolute() or '..' in path.parts:
                 raise ValueError('Unsafe content path: ' + str(path))
-            fragment = json.loads((self.dist / 'content' / path).read_text())
+            fragment = json.loads((self.target / 'content' / path).read_text())
             target = self.original[entry['section']]
             if 'key' in entry:
                 target = target.setdefault(entry['key'], {})
@@ -142,12 +139,7 @@ class ImportSession:
         # In source mode the read projection contains symlinked files. Preserve
         # their logical paths until finish maps them to the canonical source.
         path = Path(os.path.abspath(path)) if self.workspace else Path(path).resolve()
-        try:
-            relative = path.relative_to(PROJECT / 'dist')
-            path = self.dist / relative
-        except ValueError:
-            pass
-        if not path.is_relative_to(self.dist):
+        if not path.is_relative_to(self.target):
             raise ValueError('Output outside target: ' + str(path))
         return path
 
@@ -194,7 +186,7 @@ class ImportSession:
                 else:
                     value = {key: value[key] for key in fields if key in value} | {
                         key: item for key, item in value.items() if key not in fields}
-            path = self.dist / 'content' / entry['path']
+            path = self.target / 'content' / entry['path']
             # JSON formatting belongs to its author, not an unrelated importer.
             # Remove earlier staging too when a later proposal reverts a change.
             if value != self.fragments[entry['path']]:
@@ -215,8 +207,8 @@ class ImportSession:
                     if generated:
                         entry['generated'] = True
                     manifest['files'].append(entry)
-                    self.pending[self.dist / 'content' / path] = encoded(value)
-        manifest_path = self.dist / 'content/manifest.json'
+                    self.pending[self.target / 'content' / path] = encoded(value)
+        manifest_path = self.target / 'content/manifest.json'
         if manifest != self.manifest:
             self.pending[manifest_path] = encoded(manifest)
         else:
@@ -227,21 +219,21 @@ class ImportSession:
         pending = {path: data for path, data in self.pending.items()
                    if not path.exists() or path.read_bytes() != data}
         for path in pending:
-            relative = path.relative_to(self.dist).as_posix()
+            relative = path.relative_to(self.target).as_posix()
             if not relative.startswith('content/') and not any(fnmatch.fnmatchcase(relative, rule) for rule in self.policy['outputs']):
                 raise ValueError(f'{self.owner} cannot write {relative}')
         if self.workspace:
-            manifest_path = self.dist / 'content/manifest.json'
+            manifest_path = self.target / 'content/manifest.json'
             manifest_bytes = self.pending.get(manifest_path)
             if manifest_bytes is None and manifest_path.exists():
                 manifest_bytes = manifest_path.read_bytes()
             generated_content = {'content/' + entry['path'] for entry in
                 json.loads(manifest_bytes)['files'] if entry.get('generated')} if manifest_bytes else set()
             pending = {self.workspace.destination(path,
-                generated=not path.relative_to(self.dist).as_posix().startswith('content/')
-                    or path.relative_to(self.dist).as_posix() in generated_content): data
+                generated=not path.relative_to(self.target).as_posix().startswith('content/')
+                    or path.relative_to(self.target).as_posix() in generated_content): data
                 for path, data in pending.items()}
-        report_root = self.workspace.project if self.workspace and self.workspace.sources else self.dist
+        report_root = self.workspace.project if self.workspace and self.workspace.sources else self.target
         print(json.dumps({'script': self.owner, 'check': self.check,
                           'files': [str(path.relative_to(report_root)) for path in sorted(pending)],
                           'contentChanges': self.changes,

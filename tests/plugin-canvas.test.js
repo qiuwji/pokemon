@@ -6,12 +6,12 @@ import {
   objectSchema,
 } from "./helpers/session.js";
 import { canvasAdapter } from "./helpers/canvas-extension-fixture.js";
-import { validateLayout } from "../dist/engine/extensions/layout-contracts.js";
+import { validateLayout } from "../src/engine/extensions/layout-contracts.js";
 import {
   sampleVisual,
   VisualTimeline,
-} from "../dist/presentation/visual-timeline.js";
-import { ExtensionFeedback } from "../dist/presentation/extension-feedback.js";
+} from "../src/presentation/visual-timeline.js";
+import { ExtensionFeedback } from "../src/presentation/extension-feedback.js";
 
 const pointerSchema = objectSchema(
   {

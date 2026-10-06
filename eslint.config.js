@@ -34,6 +34,7 @@ export default [
         TextDecoder: "readonly",
         structuredClone: "readonly",
         performance: "readonly",
+        URL: "readonly",
         setTimeout: "readonly",
         clearTimeout: "readonly",
       },

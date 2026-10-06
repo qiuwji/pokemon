@@ -7,7 +7,7 @@ export function partyMenuCards(party, { db, escapeHTML: escape, hpTrack, selecte
     if (!mon) return index ? `<div class="native-party-card empty slot-${index}" aria-hidden="true"></div>` : '';
     const name = mon.egg ? '蛋' : mon.nickname || db.species[mon.species].name;
     const iconId = mon.egg ? 'egg' : mon.species;
-    const icon = db.resources?.[`${iconId}-icon`] || `assets/${iconId}-icon.png`;
+    const icon = db.resources?.[`${iconId}-icon`] || `generated/assets/${iconId}-icon.png`;
     const gender = mon.gender === 'male' || mon.gender === '♂' ? '♂' : mon.gender === 'female' || mon.gender === '♀' ? '♀' : '';
     return `<button class="native-party-card slot-${index}${mon.egg ? ' egg' : ''}${selectedUid === mon.uid ? ' active' : ''}" data-mon="${index}" aria-label="${escape(name)}${mon.egg ? '' : `，等级${mon.level}，HP ${mon.hp}/${mon.stats.hp}`}"><span class="party-icon"><img src="${escape(icon)}" alt=""></span><span class="party-name">${escape(name)}</span>${mon.egg ? '' : `<span class="party-level">Lv.${mon.level}</span><span class="party-gender">${gender}</span>${hpTrack(mon)}<span class="party-hp">${mon.hp}/${mon.stats.hp}</span>${mon.status || mon.hp === 0 ? '<span class="party-status">' + escape(mon.hp === 0 ? '濒死' : mon.status) + '</span>' : ''}`}</button>`;
   }).join('');

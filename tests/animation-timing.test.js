@@ -5,16 +5,16 @@ import {
   ANIMATION_EASINGS,
   validateMoveAnimation,
   placeAnimationTracks,
-} from "../dist/engine/extensions/visual-contracts.js";
+} from "../src/engine/extensions/visual-contracts.js";
 import {
   sampleAnimationTrack,
   EASINGS,
-} from "../dist/presentation/animation-timing.js";
-import { PresentationRegistry } from "../dist/presentation/effect-registry.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { Timeline } from "../dist/engine/timeline.js";
-import { PluginHost } from "../dist/engine/extensions/plugin-host.js";
-import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
+} from "../src/presentation/animation-timing.js";
+import { PresentationRegistry } from "../src/presentation/effect-registry.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { Timeline } from "../src/engine/timeline.js";
+import { PluginHost } from "../src/engine/extensions/plugin-host.js";
+import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
 
 const track = { effect: "glow", anchor: "targets", start: 0, end: 1 };
 const frames = [

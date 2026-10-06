@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
 import { layoutDocument } from "./helpers/layout-document.js";
-import { ControlDOM } from "../dist/adapters/control-dom.js";
+import { ControlDOM } from "../src/adapters/control-dom.js";
 
 test("UI identities reject stale and disabled choices and dispatch through the actual button", () => {
   const doc = layoutDocument(), root = doc.getElementById("modal-root");

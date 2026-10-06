@@ -11,7 +11,7 @@ data = {}
 for path in require_files(session.source / 'data/maps', '*/map.json'):
     header = json.loads(path.read_text())
     data[header['name']] = header['allow_cycling']
-session.text(session.dist / 'engine/rules/gen3/map-cycling.js',
+session.text(session.target / 'engine/rules/gen3/map-cycling.js',
              generated_header(session.owner, session.source) +
              '// Metadata does not imply playable maps.\nexport const GEN3_MAP_CYCLING = ' + json.dumps(data, indent=2) + ';\n')
 print(f'{len(data)} map cycling permissions')

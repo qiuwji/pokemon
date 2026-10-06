@@ -5,20 +5,20 @@ import assert from "node:assert/strict";
 import {
   FieldTerrainRegistry,
   FieldTerrainService,
-} from "../dist/engine/field-terrain.js";
-import { FieldSession } from "../dist/engine/field-session.js";
-import { MovementRegistry, MovementService } from "../dist/engine/movement.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { FieldDirector } from "../dist/engine/field-director.js";
+} from "../src/engine/field-terrain.js";
+import { FieldSession } from "../src/engine/field-session.js";
+import { MovementRegistry, MovementService } from "../src/engine/movement.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { FieldDirector } from "../src/engine/field-director.js";
 import {
   BEHAVIOR as B,
   isWater,
   hasEncounterTerrain,
-} from "../dist/engine/terrain.js";
-import { EMERALD_TERRAIN_RULES } from "../dist/packs/emerald/terrain-rules.js";
-import { MOVEMENT_MODES } from "../dist/packs/emerald/movement.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
+} from "../src/engine/terrain.js";
+import { EMERALD_TERRAIN_RULES } from "../src/packs/emerald/terrain-rules.js";
+import { MOVEMENT_MODES } from "../src/packs/emerald/movement.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
 
 const map = (row) => ({
   width: row.length,
@@ -376,13 +376,13 @@ test("Plugins register terrain policies without altering the executor and receiv
 
 test("Application commands select techniques; a paused cutscene stops current drift and queued steps resume afterward", async () => {
   const { EmeraldAdventure } = await import(
-    "../dist/packs/emerald/adventure.js"
+    "../src/packs/emerald/adventure.js"
   );
   const { BattleDirector } = await import(
-    "../dist/presentation/battle-director.js"
+    "../src/presentation/battle-director.js"
   );
   const { attachEmeraldExtensions } = await import(
-    "../dist/packs/emerald/extension-ports.js"
+    "../src/packs/emerald/extension-ports.js"
   );
   const base = loadContentSync();
   const lab = {

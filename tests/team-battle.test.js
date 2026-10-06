@@ -1,29 +1,29 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
-import { emptyFieldEffects } from "../dist/engine/field-effects.js";
+import { emptyEncounterTickets } from "../src/engine/encounter-tickets.js";
+import { emptyFieldEffects } from "../src/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
   inventoryQuantity,
 } from "./helpers/inventory-fixture.js";
-import { createItemService } from "../dist/engine/items.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { emptyWeather } from "../dist/engine/weather.js";
+import { createItemService } from "../src/engine/items.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { emptyWeather } from "../src/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { BattleRoster, duelRoster } from "../dist/engine/battle/roster.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { Timeline } from "../dist/engine/timeline.js";
-import { BattleSession } from "../dist/engine/battle-session.js";
-import { TRAINERS, createTrainerTeam } from "../dist/packs/emerald/trainers.js";
-import { battleOutcome } from "../dist/packs/emerald/story.js";
+import { Battle } from "../src/engine/battle.js";
+import { BattleRoster, duelRoster } from "../src/engine/battle/roster.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { Timeline } from "../src/engine/timeline.js";
+import { BattleSession } from "../src/engine/battle-session.js";
+import { TRAINERS, createTrainerTeam } from "../src/packs/emerald/trainers.js";
+import { battleOutcome } from "../src/packs/emerald/story.js";
 import {
   emptyStoryProgress,
   grantReward,
   completeEvent,
-} from "../dist/engine/story.js";
+} from "../src/engine/story.js";
 const db = loadContentSync();
 function setup(overrides = {}) {
   const rng = new Random(1234);
@@ -421,7 +421,7 @@ test("Invalid battle construction precedes transition, and failed exit releases 
 
 test("Save validation rejects missing or duplicated creature identities and missing story ledger", async () => {
   const { validateSave } = await import(
-    "../dist/packs/emerald/save-contract.js"
+    "../src/packs/emerald/save-contract.js"
   );
   const { party } = setup();
   const state = {

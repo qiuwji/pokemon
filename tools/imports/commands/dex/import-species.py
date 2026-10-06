@@ -5,7 +5,7 @@ import argparse, json, re
 from pathlib import Path
 from PIL import Image
 parser=argparse.ArgumentParser();source_argument(parser);parser.add_argument('entries',nargs='*',help='species-id:localized-name:dex-number');args=arguments(parser, selectors=('species',), profile=True);session=ImportSession(args,"import-species.py")
-r=Path(args.source);d=session.dist;data=session.load()
+r=Path(args.source);d=session.target;data=session.load()
 source=(r/'src/data/pokemon/species_info.h').read_text();learnsets=(r/'src/data/pokemon/level_up_learnsets.h').read_text()
 entries=args.entries or [key+':'+session.locale['species'][key]['name']+':'+str(session.locale['species'][key]['dex']) for key in session.select('species', session.locale['species'], session.profile['species'])]
 for entry in entries:

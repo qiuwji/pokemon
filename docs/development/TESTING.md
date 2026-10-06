@@ -34,13 +34,13 @@
 
 ## 核心与产品插件隔离
 
-核心测试验证引擎、应用服务以及插件宿主公开合同，不依赖任何已安装产品插件。共享装配在tests/helpers/session.js，最小扩展定义在tests/fixtures/extensions/；这些夹具不部署。架构守卫禁止tests导入dist/plugins或examples，新增核心合同测试也遵循这一边界。
+核心测试验证引擎、应用服务以及插件宿主公开合同，不依赖任何已安装产品插件。共享装配在tests/helpers/session.js，最小扩展定义在tests/fixtures/extensions/；这些夹具不部署。架构守卫禁止tests导入src/plugins、generated/plugins或examples，新增核心合同测试也遵循这一边界。
 
 产品插件业务用例放examples/的独立.test.js文件，登记插件时补对应测试；撤下产品插件时一并撤下其专属用例。保留通用宿主失败、权限、事务和保存测试，不靠skip或忽略缺模块掩盖问题。examples/catalog.test.js专门验证实际装配清单，空清单是有效状态。
 
 ## 静态质量检查
 
-`npm run check`已串联`check:lint`与`check:engine-types`，CI沿用同一入口。ESLint覆盖dist、测试、示例和工具MJS，检查未定义名称、未使用导入/局部变量、重复键等；浏览器和Node全局按目录区分。未使用参数/捕获异常、主动拆除字段的rest绑定及以下划线命名的弃值是显式政策，不通过批量禁用规则掩盖缺陷。删除未使用绑定时必须保留有副作用的调用、随机数消费与测试断言。
+`npm run check`已串联`check:lint`与`check:engine-types`，CI沿用同一入口。ESLint覆盖src/generated、测试、示例和工具MJS，检查未定义名称、未使用导入/局部变量、重复键等；浏览器和Node全局按目录区分。未使用参数/捕获异常、主动拆除字段的rest绑定及以下划线命名的弃值是显式政策，不通过批量禁用规则掩盖缺陷。删除未使用绑定时必须保留有副作用的调用、随机数消费与测试断言。
 
 `tsconfig.engine.json`当前以checkJs/strict检查剧情变量、动画轨道和精灵帧采样三个真实JS模块。`tests/engine.typecheck.ts`含正确用法与`@ts-expect-error`反例；若接口误放宽，反例会因不再报错而失败。新增范围逐模块补JSDoc，不改为any或关闭strict换取通过，也不把消费方d.ts检查宣称为全部JS已检查。
 
@@ -57,7 +57,7 @@
 
 ## 框架阶段最后一次系统与浏览器验收
 
-收口时分别执行`npm run test:all`和`npm run check`，避免再重复同等全量。覆盖率需求时以`npm run test:coverage`替代核心测试，插件组仍独立执行；覆盖统计dist运行时模块，不把测试文件计入产品覆盖。CI分别运行check、核心覆盖率和插件测试，固定只读参考用于文档链接；本地通过不代表远端CI已经运行。记录实际结果，不预填测试数。
+收口时分别执行`npm run test:all`和`npm run check`，避免再重复同等全量。覆盖率需求时以`npm run test:coverage`替代核心测试，插件组仍独立执行；覆盖统计src运行时模块，不把测试文件计入产品覆盖。CI分别运行check、核心覆盖率和插件测试，固定只读参考用于文档链接；本地通过不代表远端CI已经运行。记录实际结果，不预填测试数。
 
 浏览器沿正常入口验输入/朝向、连续地图与门转场、剧情自动移动/选择、代表训练家战斗、非战斗设施、详情互动、Actor、保存重载、触屏与reducedMotion、真实资源音频。至少让内容作者完成一次“新区域→机关→分支剧情→训练家→奖励→保存重载”，记录被迫改核心的缺口。
 

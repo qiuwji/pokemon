@@ -1,5 +1,5 @@
 import { SpriteClips } from "../../presentation/sprite-clips.js";
-import { DETAIL_SPRITE_FRAMES } from "./detail-sprite-frames.js";
+import { DETAIL_SPRITE_FRAMES } from "../../../generated/packs/emerald/detail-sprite-frames.js";
 /** Pack asset layout and baseline selection, independent of rules and the generic playback host. */
 export function createEmeraldSpriteClips(db, host = null) {
   const registry = new SpriteClips(db);

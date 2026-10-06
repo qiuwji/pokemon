@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadContentSync } from "../tools/content-io.mjs";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { MOVEMENT_MODES } from "../dist/packs/emerald/movement.js";
-import { sampleSpriteAnimation } from "../dist/presentation/sprite-animation.js";
-import { validateSpriteAnimations } from "../dist/engine/extensions/sprite-contracts.js";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { MOVEMENT_MODES } from "../src/packs/emerald/movement.js";
+import { sampleSpriteAnimation } from "../src/presentation/sprite-animation.js";
+import { validateSpriteAnimations } from "../src/engine/extensions/sprite-contracts.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
 const db = loadContentSync(), actor = db.actors.BrendanRun;
 
 test("Native running alternates feet through two eight-frame steps and rests after landing", () => {

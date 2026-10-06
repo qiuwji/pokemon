@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { NPCBehaviorRegistry } from "../dist/engine/npc-behaviors.js";
-import { NPCSystem } from "../dist/engine/npcs.js";
+import { NPCBehaviorRegistry } from "../src/engine/npc-behaviors.js";
+import { NPCSystem } from "../src/engine/npcs.js";
 const map = {
   width: 5,
   height: 5,

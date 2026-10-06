@@ -1,5 +1,5 @@
-import { contentFiles, assembleContent } from "../engine/content-manifest.js";
-/** The URL of the manifest is the base for every fragment; deployment prefixes are preserved. */
+import { contentFiles, contentFileURL, assembleContent } from "../engine/content-manifest.js";
+/** The manifest selects authored or generated fragments while retaining the project URL prefix. */
 export async function loadContent(
   url,
   {
@@ -17,7 +17,7 @@ export async function loadContent(
   const files = contentFiles(manifest);
   const values = await Promise.all(
     files.map(async (entry) => {
-      const location = new URL(entry.path, url);
+      const location = contentFileURL(entry, url);
       try {
         return await readJSON(location);
       } catch (error) {

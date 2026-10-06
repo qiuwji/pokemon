@@ -1,4 +1,4 @@
-import { DOOR_ANIMATIONS } from "./generated/door-anims.js";
+import { DOOR_ANIMATIONS } from "../../../generated/packs/emerald/generated/door-anims.js";
 import { DIRECTIONS } from "../../engine/world.js";
 
 /** src/field_door.c holds each door frame for four native ticks at 60 fps. */

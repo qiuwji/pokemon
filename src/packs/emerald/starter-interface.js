@@ -10,7 +10,7 @@ export function createStarterInterface(
       species = game.db.species[id];
     modal(
       "选择宝可梦",
-      `<div class="starter-balls">${PACK.starters.map((id, index) => `<button class="starter-ball starter-ball-${index}" data-starter="${id}" ${preview ? "disabled" : ""} aria-label="${esc(game.db.species[id].name)}"><span class="starter-ball-art"><img src="assets/ui/starter-balls.png" alt=""></span></button>`).join("")}</div>${preview ? `<div class="starter-preview"><img src="${esc(spriteURL(id))}" alt="${esc(species.name)}"></div><div class="native-window starter-label">${esc(TYPE_NAMES[species.types[0]])}属性宝可梦<br>${esc(species.name)}</div><div class="native-window starter-confirm"><button id="choose-starter">是</button><button id="rechoose">否</button></div>` : '<div class="native-window starter-instruction">请选择宝可梦。</div>'}`,
+      `<div class="starter-balls">${PACK.starters.map((id, index) => `<button class="starter-ball starter-ball-${index}" data-starter="${id}" ${preview ? "disabled" : ""} aria-label="${esc(game.db.species[id].name)}"><span class="starter-ball-art"><img src="generated/assets/ui/starter-balls.png" alt=""></span></button>`).join("")}</div>${preview ? `<div class="starter-preview"><img src="${esc(spriteURL(id))}" alt="${esc(species.name)}"></div><div class="native-window starter-label">${esc(TYPE_NAMES[species.types[0]])}属性宝可梦<br>${esc(species.name)}</div><div class="native-window starter-confirm"><button id="choose-starter">是</button><button id="rechoose">否</button></div>` : '<div class="native-window starter-instruction">请选择宝可梦。</div>'}`,
       {
         type: "starter",
         close: false,

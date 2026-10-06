@@ -54,8 +54,8 @@ for gender in ('male', 'female'):
                 if word & 2048:
                     tile = tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
                 screen.paste(tile, (x * 8, y * 8))
-        session.image(screen, session.dist / f'assets/wallclock-{gender}-{mode}.png')
-    session.image(paint(hands, palette('graphics/wallclock/male.pal'), True), session.dist / f'assets/wallclock-{gender}-hands.png')
+        session.image(screen, session.target / f'assets/wallclock-{gender}-{mode}.png')
+    session.image(paint(hands, palette('graphics/wallclock/male.pal'), True), session.target / f'assets/wallclock-{gender}-hands.png')
 
 native = read('src/wallclock.c').read_text()
 table = re.search(r'sClockHandCoords\[\]\[2\]\s*=\s*\{(.*?)\n\};', native, re.S)
@@ -65,7 +65,7 @@ coordinates = [[int(x, 0), int(y, 0)] for x, y in re.findall(
     r'\{\s*(-?0x[0-9a-fA-F]+),\s*(-?0x[0-9a-fA-F]+)\s*\}', table[1])]
 if len(coordinates) != 360:
     raise ValueError('Expected 360 native clock hand offsets')
-session.text(session.dist / 'packs/emerald/generated/wall-clock.js',
+session.text(session.target / 'packs/emerald/generated/wall-clock.js',
              generated_header('import-opening-art.py', source) +
              'export const WALL_CLOCK_HAND_OFFSETS = Object.freeze(' +
              json.dumps(coordinates, separators=(',', ':')) + '.map(Object.freeze));\n')
@@ -155,7 +155,7 @@ order = door_plan(table, doors)
 if not order:
     raise ValueError('Content uses no door the reference can animate')
 pack = data['tilesets']['general-petalburg']
-image = Image.open(session.dist / 'assets/tiles-general-petalburg.png').convert('RGBA')
+image = Image.open(session.target / 'assets/tiles-general-petalburg.png').convert('RGBA')
 count = DOOR_TILES * len(order)
 # A raw tile number is 10 bits; the palette nibble above it is free here, so the whole door
 # block lives under one unused palette slot instead of overflowing into the flip bits.
@@ -198,11 +198,11 @@ for metatile in order:
             frames[-1].append(plan['base'] + frame * 2 + half)
     animations[metatile] = {'sound': plan['sound'], 'open': frames}
 pack['atlas'] = {'width': atlas.width, 'height': atlas.height, 'tileCount': total}
-session.image(atlas, session.dist / 'assets/tiles-general-petalburg.png')
+session.image(atlas, session.target / 'assets/tiles-general-petalburg.png')
 ball = Image.open(read('graphics/battle_transitions/pokeball.png'))
 session.image(paint(ball, palette('graphics/field_effects/palettes/pokeball.pal'), True),
-              session.dist / 'assets/battle-transition-pokeball.png')
-session.text(session.dist / 'packs/emerald/generated/door-anims.js',
+              session.target / 'assets/battle-transition-pokeball.png')
+session.text(session.target / 'packs/emerald/generated/door-anims.js',
              generated_header('import-opening-art.py', source) +
              'export const DOOR_ANIMATIONS = Object.freeze({' +
              ','.join(
@@ -213,7 +213,7 @@ session.text(session.dist / 'packs/emerald/generated/door-anims.js',
                  '])})'
                  for metatile in sorted(animations)) +
              '});\n')
-session.text(session.dist / 'assets/opening-art-source.json', json.dumps({
+session.text(session.target / 'assets/opening-art-source.json', json.dumps({
     'generator': 'tools/import.py opening-art', 'revision': source_revision(source),
     'inputs': sorted({x['path']: x for x in inputs}.values(), key=lambda x: x['path']),
     'doorMetatiles': {str(metatile): [pair for pair in animations[metatile]['open']]

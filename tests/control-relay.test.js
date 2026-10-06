@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { PollingTransport } from "../dist/adapters/polling-transport.js";
+import { PollingTransport } from "../src/adapters/polling-transport.js";
 
 test("Local HTTP control relay handles real HTTP, sequencing, deduplication and scenario assertions", () => {
   assert.doesNotThrow(() => execFileSync("python3", ["tools/tests/test_control_relay.py"], { cwd: new URL("../", import.meta.url), encoding: "utf8" }));
@@ -26,9 +26,9 @@ test("Polling transport sends hello before responses and closes on a broken rela
 
 // A command waiting on UI must not prevent the very input that releases it.
 test("Concurrent ingress observes and confirms an awaited domain action while ordinary mutations remain ordered", async () => {
-  const { CommandBus } = await import("../dist/engine/extensions/command-bus.js");
-  const { NetworkGateway } = await import("../dist/engine/extensions/network-gateway.js");
-  const { objectSchema } = await import("../dist/engine/extensions/values.js");
+  const { CommandBus } = await import("../src/engine/extensions/command-bus.js");
+  const { NetworkGateway } = await import("../src/engine/extensions/network-gateway.js");
+  const { objectSchema } = await import("../src/engine/extensions/values.js");
   const bus = new CommandBus(), order = [];
   let release;
   const awaited = new Promise(resolve => { release = resolve; });

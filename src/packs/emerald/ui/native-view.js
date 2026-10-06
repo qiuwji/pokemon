@@ -1,5 +1,5 @@
-import { ITEM_ICONS } from "../../../assets/ui/item-icons.js";
-import { MACHINES } from "../../../engine/rules/gen3/machine-learning.js";
+import { ITEM_ICONS } from "../../../../generated/assets/ui/item-icons.js";
+import { MACHINES } from "../../../../generated/engine/rules/gen3/machine-learning.js";
 /** Formatting and temporary focus only. The application remains the only writer of game state. */
 export function itemIconURL(id, resources = {}) {
   const machine = MACHINES[id];
@@ -9,12 +9,12 @@ export function itemIconURL(id, resources = {}) {
   return (
     resources[`${id}-icon`] ||
     ITEM_ICONS[key.replaceAll("_", "")] ||
-    "assets/ui/items/none.png"
+    "generated/assets/ui/items/none.png"
   );
 }
 export function monsterIconURL(mon, resources = {}) {
   const id = mon.egg ? "egg" : mon.species;
-  return resources[`${id}-icon`] || `assets/${id}-icon.png`;
+  return resources[`${id}-icon`] || `generated/assets/${id}-icon.png`;
 }
 export function playTime(seconds) {
   return `${Math.floor(seconds / 3600)}:${String(Math.floor(seconds / 60) % 60).padStart(2, "0")}`;
@@ -78,7 +78,7 @@ export function bagPockets(pockets) {
   return keys.map((id) => [id, pockets[id]]);
 }
 export function bagPicture(pocket, gender) {
-  return `assets/ui/bag-sprite-${gender}-${["items", "balls", "machines", "berries", "key"].includes(pocket) ? pocket : "items"}.png`;
+  return `generated/assets/ui/bag-sprite-${gender}-${["items", "balls", "machines", "berries", "key"].includes(pocket) ? pocket : "items"}.png`;
 }
 
 export const BADGE_KEYS = Object.freeze([

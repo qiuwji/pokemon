@@ -3,16 +3,16 @@ import assert from "node:assert/strict";
 import {
   MovementInputRegistry,
   MovementInputSession,
-} from "../dist/engine/movement-input.js";
-import { MovementRegistry } from "../dist/engine/movement.js";
+} from "../src/engine/movement-input.js";
+import { MovementRegistry } from "../src/engine/movement.js";
 import {
   GEN3_MOVEMENT_INPUTS,
   GEN3_MACH_DURATIONS,
-} from "../dist/engine/rules/gen3/bike-input.js";
-import { MOVEMENT_MODES } from "../dist/packs/emerald/movement.js";
-import { BrowserInput } from "../dist/adapters/browser-input.js";
-import { BEHAVIOR as B } from "../dist/engine/terrain.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
+} from "../src/engine/rules/gen3/bike-input.js";
+import { MOVEMENT_MODES } from "../src/packs/emerald/movement.js";
+import { BrowserInput } from "../src/adapters/browser-input.js";
+import { BEHAVIOR as B } from "../src/engine/terrain.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 const input = (direction) => ({ direction, secondary: false, running: false });
 function fixture(rules = GEN3_MOVEMENT_INPUTS, definitions = MOVEMENT_MODES) {
   const registry = new MovementInputRegistry(rules),

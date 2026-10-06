@@ -1,5 +1,5 @@
 import { PACK } from "./pack.js";
-import { DETAIL_SPRITE_FRAMES } from "./detail-sprite-frames.js";
+import { DETAIL_SPRITE_FRAMES } from "../../../generated/packs/emerald/detail-sprite-frames.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 // field_special_scene.c resting sprite offsets; these never change grid occupancy.
 const truckBoxes = { 'truck.box.top': [3, 3], 'truck.box.left': [0, -3], 'truck.box.right': [-3, 0] };
@@ -17,14 +17,14 @@ export function emeraldAppearanceResources(db) {
     ...Object.fromEntries(
       Object.keys(db.species).map((id) => [
         id + "-front",
-        `assets/${id}-front.png`,
+        `generated/assets/${id}-front.png`,
       ]),
     ),
     ...Object.fromEntries(Object.keys(db.species).filter(id => Object.hasOwn(DETAIL_SPRITE_FRAMES, id)).map(id => [
-      id + "-detail", `assets/${id}-detail.png`,
+      id + "-detail", `generated/assets/${id}-detail.png`,
     ])),
-    ...Object.fromEntries(["poke","great","safari","ultra","master","net","dive","nest","repeat","timer","luxury","premier"].map(ball => ["battle-ball-" + ball, "assets/ui/ball-" + ball + ".png"])),
-    "battle-transition-pokeball": "assets/battle-transition-pokeball.png",
+    ...Object.fromEntries(["poke","great","safari","ultra","master","net","dive","nest","repeat","timer","luxury","premier"].map(ball => ["battle-ball-" + ball, "generated/assets/ui/ball-" + ball + ".png"])),
+    "battle-transition-pokeball": "generated/assets/battle-transition-pokeball.png",
     ...(db.resources || {}),
   };
 }

@@ -4,10 +4,14 @@ from types import SimpleNamespace
 import sys
 import tempfile
 import unittest
+import threading
+import urllib.request
+import urllib.error
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from workspace import WorkspaceView
 from imports.context import ImportSession
+from serve import create_server
 
 
 class SourceLayoutTests(unittest.TestCase):
@@ -29,8 +33,8 @@ class SourceLayoutTests(unittest.TestCase):
 
     def test_preview_leaves_sources_and_dist_untouched(self):
         session = self.session(True)
-        self.assertEqual((session.dist / 'assets/example.bin').read_bytes(), b'old')
-        session.binary(session.dist / 'assets/example.bin', b'new')
+        self.assertEqual((session.target / 'assets/example.bin').read_bytes(), b'old')
+        session.binary(session.target / 'assets/example.bin', b'new')
         with patch('imports.context.PROJECT', self.project):
             session.finish()
         self.assertEqual((self.project / 'generated/assets/example.bin').read_bytes(), b'old')
@@ -38,12 +42,12 @@ class SourceLayoutTests(unittest.TestCase):
 
     def test_commit_routes_to_generated_and_cannot_write_unowned_output(self):
         session = self.session(False)
-        session.binary(session.dist / 'assets/example.bin', b'new')
+        session.binary(session.target / 'assets/example.bin', b'new')
         with patch('imports.context.PROJECT', self.project):
             session.finish()
         self.assertEqual((self.project / 'generated/assets/example.bin').read_bytes(), b'new')
         self.assertFalse((self.project / 'dist').exists())
-        session.binary(session.dist / 'app.js', b'unowned')
+        session.binary(session.target / 'app.js', b'unowned')
         with self.assertRaisesRegex(ValueError, 'cannot write'):
             session.finish()
         self.assertFalse((self.project / 'src/app.js').exists())
@@ -51,13 +55,49 @@ class SourceLayoutTests(unittest.TestCase):
     def test_duplicate_input_is_rejected_and_unsafe_paths_cannot_route(self):
         (self.project / 'src/assets').mkdir()
         (self.project / 'src/assets/example.bin').write_bytes(b'conflict')
-        with self.assertRaisesRegex(ValueError, 'Duplicate build input'):
+        with self.assertRaisesRegex(ValueError, 'Duplicate source input'):
             WorkspaceView(self.project)
         (self.project / 'src/assets/example.bin').unlink()
         view = WorkspaceView(self.project)
         self.addCleanup(view.close)
         with self.assertRaises(ValueError):
             view.destination(view.root / '../escape', generated=True)
+
+    def test_server_reads_both_owners_and_edits_without_materializing_output(self):
+        (self.project / 'src/index.html').write_text('<base href="../">source')
+        server = create_server(self.project, 0)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            base = f'http://127.0.0.1:{server.server_port}'
+            response = urllib.request.urlopen(base + '/?control=1')
+            self.assertTrue(response.url.endswith('/src/index.html?control=1'))
+            self.assertEqual(response.read(), b'<base href="../">source')
+            self.assertEqual(urllib.request.urlopen(base + '/generated/assets/example.bin').read(), b'old')
+            (self.project / 'generated/assets/example.bin').write_bytes(b'edited')
+            self.assertEqual(urllib.request.urlopen(base + '/generated/assets/example.bin').read(), b'edited')
+            self.assertEqual(urllib.request.urlopen(base + '/control/status').status, 200)
+            self.assertEqual({p.name for p in self.project.iterdir()}, {'src', 'generated'})
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+
+    def test_server_does_not_expose_other_project_files_or_traversal(self):
+        (self.project / 'private.txt').write_text('not a game resource')
+        server = create_server(self.project, 0)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            base = f'http://127.0.0.1:{server.server_port}'
+            for route in ['/private.txt', '/src/../private.txt', '/src/%2e%2e/private.txt', '/src/content/']:
+                with self.assertRaises(urllib.error.HTTPError) as error:
+                    urllib.request.urlopen(base + route)
+                self.assertEqual(error.exception.code, 404)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
 
 
 if __name__ == '__main__':

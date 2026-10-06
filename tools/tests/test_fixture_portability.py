@@ -39,7 +39,7 @@ class FixturePortabilityTests(unittest.TestCase):
     def test_water_semantics_exclude_flowers_and_fail_when_atlas_animation_disappears(self):
         from imports.context import ImportSession
         from types import SimpleNamespace
-        data = ImportSession(SimpleNamespace(target=PROJECT/'dist',check=True),'import-grid.py').load()
+        data = ImportSession(SimpleNamespace(target=None,check=True),'import-grid.py').load()
         self.assertNotIn(508,WATER_TILE_IDS)
         self.assertEqual(verify_metatiles(data),[])
         data['tilesets']['general-petalburg']['animations']={}

@@ -11,22 +11,22 @@ import assert from "node:assert/strict";
 import {
   ItemActionService,
   validateItemActions,
-} from "../dist/engine/item-actions.js";
-import { FieldActionRegistry } from "../dist/engine/field-actions.js";
-import { createItemService } from "../dist/engine/items.js";
-import { objectSchema } from "../dist/engine/extensions/values.js";
-import { Battle } from "../dist/engine/battle.js";
-import { createMonster } from "../dist/engine/model.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { createEmeraldCommandFacade } from "../dist/packs/emerald/command-facade.js";
-import { createBagInterface } from "../dist/packs/emerald/bag-interface.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { BEHAVIOR } from "../dist/engine/terrain.js";
+} from "../src/engine/item-actions.js";
+import { FieldActionRegistry } from "../src/engine/field-actions.js";
+import { createItemService } from "../src/engine/items.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
+import { Battle } from "../src/engine/battle.js";
+import { createMonster } from "../src/engine/model.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
+import { createBagInterface } from "../src/packs/emerald/bag-interface.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { BEHAVIOR } from "../src/engine/terrain.js";
 const base = loadContentSync();
 const action = {
   name: "Paint",
@@ -252,7 +252,7 @@ test("Native cycling metadata permits an indoor cave and forbids a building; exp
   const s = fixture();
   assert.equal(s.db.maps.OldaleTown_Mart.allowBike, false);
   const cave = { ...base.maps.Route101, indoor: true };
-  const { emeraldDatabase } = await import("../dist/packs/emerald/database.js");
+  const { emeraldDatabase } = await import("../src/packs/emerald/database.js");
   assert.equal(
     emeraldDatabase({ ...base, maps: { GraniteCave_1F: cave } }).maps
       .GraniteCave_1F.allowBike,
@@ -444,7 +444,7 @@ test("Plugin content composes a new key item with a registered field action and 
 });
 
 test("Gen III fishing distinguishes shore elevations, surfable water and bridge edges without consuming RNG", async () => {
-  const { gen3CanFish } = await import("../dist/engine/rules/gen3/fishing.js");
+  const { gen3CanFish } = await import("../src/engine/rules/gen3/fishing.js");
   const shore = {
     mode: "walk",
     underwater: false,

@@ -1,5 +1,5 @@
 import { manifest, objectSchema } from "../../helpers/session.js";
-import { frontCell } from "../../../dist/engine/extensions/field-utils.js";
+import { frontCell } from "../../../src/engine/extensions/field-utils.js";
 /** Test-only object displacement, terrain, light and occupancy definitions. */
 export function createFieldFixture(baseMap) {
   return manifest("fixture-field", api => {

@@ -9,9 +9,9 @@
     "moduleResolution": "NodeNext"
   },
   "include": [
-    "dist/engine/story-variables.js",
-    "dist/presentation/animation-timing.js",
-    "dist/presentation/sprite-animation.js",
+    "src/engine/story-variables.js",
+    "src/presentation/animation-timing.js",
+    "src/presentation/sprite-animation.js",
     "tests/engine.typecheck.ts"
   ]
 }

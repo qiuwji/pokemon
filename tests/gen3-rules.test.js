@@ -2,12 +2,12 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { BATTLE_RULES } from "../dist/engine/battle-rules.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
-import { HELD_ITEM_METADATA } from "../dist/engine/rules/gen3/held-catalog.js";
+import { Battle } from "../src/engine/battle.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { BATTLE_RULES } from "../src/engine/battle-rules.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
+import { HELD_ITEM_METADATA } from "../generated/engine/rules/gen3/held-catalog.js";
 const original = loadContentSync();
 function setup({
   ability = "overgrow",

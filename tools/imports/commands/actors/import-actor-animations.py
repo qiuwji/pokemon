@@ -10,7 +10,7 @@ source_argument(parser)
 args = arguments(parser, profile=True)
 session = ImportSession(args, "import-actor-animations.py")
 root = Path(args.source)
-dist = session.dist
+target = session.target
 text = (root / 'src/data/object_events/object_event_anims.h').read_text()
 data = session.load()
 def sequence(spec, directions):
@@ -36,7 +36,7 @@ for config in session.profile['actorAnimations']:
     if actor_id not in data['actors']:
         raise ValueError('Missing prerequisite actor: ' + actor_id)
     actor = data['actors'][actor_id]
-    header = (dist / f'assets/actor-{actor_id}.png').read_bytes()[:24]
+    header = (target / f'assets/actor-{actor_id}.png').read_bytes()[:24]
     width = struct.unpack('>I', header[16:20])[0]
     actor['frameCount'] = width // actor['w']
     clips = {key: sequence(spec, config['directions']) for key, spec in config['sequences'].items()}

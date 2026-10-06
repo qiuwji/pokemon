@@ -32,11 +32,11 @@
 [data-modal-page="menu"][data-native-layout="field"] .modal {
   background: #f8f8f8;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill / 3.333cqw;
 }
 [data-native-layout="tools"] {
-  background: #739c73 url("../../../assets/ui/party-background.png") center/100%
+  background: #739c73 url("../../../../generated/assets/ui/party-background.png") center/100%
     100%;
 }
 [data-native-layout="tools"] .modal {
@@ -90,7 +90,7 @@
   color: #424242;
   background: #f8f8f8;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill/3.333cqw;
   padding: 1%;
 }
@@ -179,15 +179,15 @@
 }
 /* Party layout is reused for item targets and storage exchanges, no second card system. */
 :is([data-modal-page="item-target"], [data-modal-page="box-swap"]) .modal {
-  background: #739c73 url("../../../assets/ui/party-background.png") center/100%
+  background: #739c73 url("../../../../generated/assets/ui/party-background.png") center/100%
     100%;
 }
 /* Native bag: list (112,16,120,128), pocket title (32,8,64,16), description (0,104,112,48). */
 [data-modal-page="bag"] .modal {
-  background: #e6e6ce url("../../../assets/ui/bag-male.png") center/100% 100%;
+  background: #e6e6ce url("../../../../generated/assets/ui/bag-male.png") center/100% 100%;
 }
 [data-modal-page="bag"][data-gender="female"] .modal {
-  background-image: url("../../../assets/ui/bag-female.png");
+  background-image: url("../../../../generated/assets/ui/bag-female.png");
 }
 .bag-pocket {
   position: absolute;
@@ -379,7 +379,7 @@
 }
 /* Pokédex: native green list and entry screen; no gallery of unrevealed monsters. */
 [data-modal-page="dex"] .modal {
-  background: #306038 url("../../../assets/ui/dex-list.png") center/100% 100%;
+  background: #306038 url("../../../../generated/assets/ui/dex-list.png") center/100% 100%;
 }
 .dex-counts {
   position: absolute;
@@ -419,7 +419,7 @@
   font-size: 3.333cqw;
 }
 [data-modal-page="dex-info"] .modal {
-  background: #f8f8f8 url("../../../assets/ui/dex-info.png") center/100% 100%;
+  background: #f8f8f8 url("../../../../generated/assets/ui/dex-info.png") center/100% 100%;
 }
 .dex-entry-sprite {
   position: absolute;
@@ -451,7 +451,7 @@
 }
 /* Storage uses native forest wallpaper and two-frame 32px icons, thirty slots per box. */
 [data-modal-page="box"] .modal {
-  background: #7b8494 url("../../../assets/ui/storage.png") center/100% 100%;
+  background: #7b8494 url("../../../../generated/assets/ui/storage.png") center/100% 100%;
 }
 .box-heading {
   position: absolute;
@@ -492,7 +492,7 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(5, 1fr);
-  background: url("../../../assets/ui/storage-forest.png") center/100% 100%;
+  background: url("../../../../generated/assets/ui/storage-forest.png") center/100% 100%;
 }
 .storage-slots button {
   border: 0;
@@ -522,7 +522,7 @@
 }
 /* Shop retains the field behind the money/list/message windows. */
 [data-modal-page="shop"] .modal {
-  background: transparent url("../../../assets/ui/shop.png") center/100% 100%;
+  background: transparent url("../../../../generated/assets/ui/shop.png") center/100% 100%;
 }
 .shop-money {
   position: absolute;
@@ -665,7 +665,7 @@
 .trainer-badge {
   width: 6.667cqw;
   height: 6.667cqw;
-  background: url("../../../assets/ui/badges.png") left center/800% 100%;
+  background: url("../../../../generated/assets/ui/badges.png") left center/800% 100%;
   background-position-x: calc(var(--badge) * -6.667cqw);
   opacity: 0;
 }
@@ -674,7 +674,7 @@
 }
 /* Birch's bag: original three ball positions (60,64),(120,88),(180,64). */
 [data-modal-page="starter"] .modal {
-  background: #42633b url("../../../assets/ui/starter.png") center/100% 100%;
+  background: #42633b url("../../../../generated/assets/ui/starter.png") center/100% 100%;
 }
 .starter-ball {
   position: absolute;
@@ -725,7 +725,7 @@
   top: 10%;
   width: 40%;
   height: 60%;
-  background: url("../../../assets/ui/starter-circle.png") center/100% 100%;
+  background: url("../../../../generated/assets/ui/starter-circle.png") center/100% 100%;
 }
 .starter-preview img {
   position: absolute;
@@ -778,14 +778,14 @@
 .flight-native {
   position: absolute;
   inset: 0;
-  background: #639cc6 url("../../../assets/ui/region-map.png") center/100% 100%;
+  background: #639cc6 url("../../../../generated/assets/ui/region-map.png") center/100% 100%;
 }
 .flight-native:before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url("../../../assets/ui/region-frame.png") center/100% 100%;
+  background: url("../../../../generated/assets/ui/region-frame.png") center/100% 100%;
 }
 .flight-heading {
   position: absolute;
@@ -828,7 +828,7 @@
   background: #fff;
   padding: 3%;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill/3.333cqw;
 }
 :is(
@@ -846,7 +846,7 @@
   flex-direction: column;
   background: #fff;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill/3.333cqw;
   padding: 1%;
 }
@@ -879,7 +879,7 @@
   margin: 0;
   height: 100%;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8/3.333cqw;
   padding: 1%;
   background: #315a73;
@@ -897,7 +897,7 @@
   height: 100%;
   padding: 1% 0;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill/3.333cqw;
   overflow: auto;
   scrollbar-width: none;
@@ -929,7 +929,7 @@
   line-height: 1.6;
 }
 .battle-status {
-  background: transparent url("../../../assets/ui/healthbox-singles-player.png")
+  background: transparent url("../../../../generated/assets/ui/healthbox-singles-player.png")
     center/100% 100%;
   border: 0;
   box-shadow: none;
@@ -938,7 +938,7 @@
   padding: 0;
 }
 .battle-status.enemy {
-  background-image: url("../../../assets/ui/healthbox-singles-opponent.png");
+  background-image: url("../../../../generated/assets/ui/healthbox-singles-opponent.png");
   height: 20%;
   top: 10%;
   left: 0;
@@ -988,10 +988,10 @@
 }
 .battle-status.multi {
   height: 20%;
-  background-image: url("../../../assets/ui/healthbox-doubles-player.png");
+  background-image: url("../../../../generated/assets/ui/healthbox-doubles-player.png");
 }
 .battle-status.enemy.multi {
-  background-image: url("../../../assets/ui/healthbox-doubles-opponent.png");
+  background-image: url("../../../../generated/assets/ui/healthbox-doubles-opponent.png");
 }
 .battle-status.multi .exp-track,
 .battle-status.multi .hp-number {
@@ -1173,7 +1173,7 @@
   top: 10%;
   width: 66.667%;
   height: 90%;
-  background: url("../../../assets/ui/storage-forest.png") center/100% 100%;
+  background: url("../../../../generated/assets/ui/storage-forest.png") center/100% 100%;
 }
 
 /* PC icons are centered at (100+24c,44+24r), not stretched to fit the viewport. */
@@ -1274,7 +1274,7 @@
   top: -100%;
   width: 100%;
   height: 100%;
-  background: url("../../../assets/ui/starter-hand.png") center/100% 100%;
+  background: url("../../../../generated/assets/ui/starter-hand.png") center/100% 100%;
 }
 .starter-ball:focus img {
   animation: starter-ball-roll 500ms step-end infinite;

@@ -1,36 +1,36 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
-import { PresentationRegistry } from "../dist/presentation/effect-registry.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
+import { PresentationRegistry } from "../src/presentation/effect-registry.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
   WeatherRegistry,
   WorldWeather,
   emptyWeather,
-} from "../dist/engine/weather.js";
+} from "../src/engine/weather.js";
 import {
   GEN3_WORLD_WEATHER,
   GEN3_BATTLE_WEATHER,
-} from "../dist/engine/rules/gen3/weather.js";
-import { GEN3_MAP_WEATHER } from "../dist/engine/rules/gen3/map-weather.js";
-import { Battle } from "../dist/engine/battle.js";
-import { BattleWeatherRegistry } from "../dist/engine/battle/weather.js";
-import { TRAIT_OPERATIONS } from "../dist/engine/battle/trait-operations.js";
-import { RANDOM_POWER_OPERATIONS } from "../dist/engine/battle/random-power-operations.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { WeatherDirector } from "../dist/presentation/weather-director.js";
-import { drawWeather } from "../dist/presentation/environment-canvas.js";
+} from "../src/engine/rules/gen3/weather.js";
+import { GEN3_MAP_WEATHER } from "../generated/engine/rules/gen3/map-weather.js";
+import { Battle } from "../src/engine/battle.js";
+import { BattleWeatherRegistry } from "../src/engine/battle/weather.js";
+import { TRAIT_OPERATIONS } from "../src/engine/battle/trait-operations.js";
+import { RANDOM_POWER_OPERATIONS } from "../src/engine/battle/random-power-operations.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { WeatherDirector } from "../src/presentation/weather-director.js";
+import { drawWeather } from "../src/presentation/environment-canvas.js";
 
-import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { PACK } from "../dist/packs/emerald/pack.js";
+import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { PACK } from "../src/packs/emerald/pack.js";
 const base = loadContentSync();
 const registry = () =>
   new WeatherRegistry(GEN3_WORLD_WEATHER, {

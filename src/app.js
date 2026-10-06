@@ -171,7 +171,7 @@ async function boot() {
         onError: console.error,
       });
     const growthOverlay = new GrowthDOM($("growth-animation"), {
-      asset: (id) => db.resources?.[id + "-front"] || `assets/${id}-front.png`,
+      asset: (id) => db.resources?.[id + "-front"] || `generated/assets/${id}-front.png`,
     });
     const patterns = new TransitionPatterns();
     for (const [id, draw] of Object.entries(emeraldTransitionPatterns(assets)))

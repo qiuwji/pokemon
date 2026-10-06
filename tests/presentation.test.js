@@ -6,23 +6,23 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { emeraldBattleCues } from "../dist/packs/emerald/battle-audio.js";
-import { emeraldBallResource } from "../dist/packs/emerald/animations.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { BattleSession } from "../dist/engine/battle-session.js";
-import { FieldSession } from "../dist/engine/field-session.js";
-import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
-import { CommandRunner } from "../dist/engine/commands.js";
-import { validateContent } from "../dist/engine/content.js";
-import { Battle } from "../dist/engine/battle.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { createItemService } from "../dist/engine/items.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { EvolutionService } from "../dist/engine/growth/evolution.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { emeraldBattleCues } from "../src/packs/emerald/battle-audio.js";
+import { emeraldBallResource } from "../src/packs/emerald/animations.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { BattleSession } from "../src/engine/battle-session.js";
+import { FieldSession } from "../src/engine/field-session.js";
+import { SceneGraph, GridMotion } from "../src/engine/motion.js";
+import { CommandRunner } from "../src/engine/commands.js";
+import { validateContent } from "../src/engine/content.js";
+import { Battle } from "../src/engine/battle.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { createItemService } from "../src/engine/items.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { EvolutionService } from "../src/engine/growth/evolution.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
 const db = loadContentSync();
 function manualClock() {
   let time = 0;
@@ -366,7 +366,7 @@ test("Pack application rejects out-of-context inventory commands and preserves c
   assert.throws(() => game.loadDocument(doc));
 });
 test("Versioned storage accepts only the current save format without rewriting rejected source", async () => {
-  const { SaveStore } = await import("../dist/engine/save-store.js");
+  const { SaveStore } = await import("../src/engine/save-store.js");
   const raw = { version: 1, savedAt: 100, state: { name: "player" } };
   const storage = {
     getItem: () => JSON.stringify(raw),

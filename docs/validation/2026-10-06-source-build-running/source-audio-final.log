@@ -24,3 +24,11 @@ OK
 Ran 7 tests in 0.032s
 
 OK
+
+2026-10-06 direct source operation, no dist (supersedes the copied build):
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.035s
+
+OK
+

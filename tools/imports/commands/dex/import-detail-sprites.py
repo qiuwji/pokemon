@@ -16,8 +16,8 @@ source_argument(parser)
 args = arguments(parser, selectors=('species',))
 session = ImportSession(args, 'import-detail-sprites.py')
 content = session.load()
-metadata = session.dist / 'packs/emerald/detail-sprite-frames.js'
-provenance_path = session.dist / 'assets/detail-sprite-source.json'
+metadata = session.target / 'packs/emerald/detail-sprite-frames.js'
+provenance_path = session.target / 'assets/detail-sprite-source.json'
 provenance = json.loads(provenance_path.read_text()) if provenance_path.exists() else {'inputs': {}}
 # Partial imports preserve the other species' frame metadata.
 clips = dict((key, int(count)) for key, count in re.findall(r'^  (\w+): (\d+),$', metadata.read_text(), re.M)) if metadata.exists() else {}
@@ -39,11 +39,11 @@ for species in sorted(session.select('species', content['species'])):
         alpha = frame.getchannel('A')
         if alpha.getextrema() != (0, 255) or not alpha.getbbox():
             raise ValueError(f'Invalid detail frame (no transparent background or foreground): {species}/{index}')
-    session.image(painted, session.dist / f'assets/{species}-detail.png')
+    session.image(painted, session.target / f'assets/{species}-detail.png')
     icon_source = folder / 'icon.png'
     icon_palette = icon_palette_path(session.source, species)
     with Image.open(icon_source) as indexed:
-        session.image(paint_4bpp(indexed, read_palette(icon_palette), transparent=True), session.dist / f'assets/{species}-icon.png')
+        session.image(paint_4bpp(indexed, read_palette(icon_palette), transparent=True), session.target / f'assets/{species}-icon.png')
     for path in (source, palette_path, icon_source, icon_palette,
                  session.source / 'src/pokemon_icon.c', session.source / 'src/graphics.c'):
         provenance['inputs'][str(path.relative_to(session.source))] = hashlib.sha256(path.read_bytes()).hexdigest()

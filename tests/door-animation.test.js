@@ -1,16 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { validateSave } from '../dist/packs/emerald/save-contract.js';
+import { validateSave } from '../src/packs/emerald/save-contract.js';
 import {
   DOOR_CLOSE_FRAMES,
   DOOR_FRAME_MS,
   DOOR_OPEN_FRAMES,
   DoorDirector,
   createDoorWarp,
-} from '../dist/packs/emerald/door-animation.js';
-import { DOOR_ANIMATIONS } from '../dist/packs/emerald/generated/door-anims.js';
-import { emeraldDoorSound } from '../dist/packs/emerald/audio-library.js';
+} from '../src/packs/emerald/door-animation.js';
+import { DOOR_ANIMATIONS } from '../generated/packs/emerald/generated/door-anims.js';
+import { emeraldDoorSound } from '../src/packs/emerald/audio-library.js';
 
 const pose = (p) => [p.x, p.y, p.dir];
 const valid = (s) => assert(validateSave(s.game.state, s.db, s.catalog, s.host));

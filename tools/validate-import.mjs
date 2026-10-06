@@ -1,8 +1,8 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-const root = process.argv[2] ? pathToFileURL(`${path.resolve(process.argv[2])}/`) : new URL("../dist/", import.meta.url);
-const { assertPackContent } = await import(new URL("packs/emerald/content.js", root));
-const { validateContentReferences } = await import(new URL("engine/content-references.js", root));
+const root = process.argv[2] ? pathToFileURL(`${path.resolve(process.argv[2])}/`) : new URL("../", import.meta.url);
+const { assertPackContent } = await import(new URL("src/packs/emerald/content.js", root));
+const { validateContentReferences } = await import(new URL("src/engine/content-references.js", root));
 let input = "";
 for await (const chunk of process.stdin) input += chunk;
 const content = assertPackContent(JSON.parse(input));

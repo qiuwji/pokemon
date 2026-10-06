@@ -1,6 +1,6 @@
-import { createEmeraldInventory } from "../../dist/packs/emerald/inventory.js";
-import { ITEMS } from "../../dist/packs/emerald/items.js";
-import { inventoryQuantity } from "../../dist/engine/inventory.js";
+import { createEmeraldInventory } from "../../src/packs/emerald/inventory.js";
+import { ITEMS } from "../../src/packs/emerald/items.js";
+import { inventoryQuantity } from "../../src/engine/inventory.js";
 export { inventoryQuantity };
 export const fixtureInventory = (definitions = {}) =>
   createEmeraldInventory({ items: { ...ITEMS, ...definitions } });

@@ -1,10 +1,10 @@
-import { createMonster } from "../dist/engine/model.js";
+import { createMonster } from "../src/engine/model.js";
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BrowserInput } from '../dist/adapters/browser-input.js';
-import { battleOptionIndex } from '../dist/packs/emerald/battle-interface.js';
-import { stageMessage } from '../dist/engine/battle/messages.js';
-import { openingBattleTransition, sampleOpeningTransition } from '../dist/packs/emerald/battle-transitions.js';
+import { BrowserInput } from '../src/adapters/browser-input.js';
+import { battleOptionIndex } from '../src/packs/emerald/battle-interface.js';
+import { stageMessage } from '../src/engine/battle/messages.js';
+import { openingBattleTransition, sampleOpeningTransition } from '../src/packs/emerald/battle-transitions.js';
 import { session } from './helpers/session.js';
 
 test('Space and Enter confirm battle choices directly; modal confirmation retains precedence',()=>{

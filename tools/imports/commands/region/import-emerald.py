@@ -7,7 +7,7 @@ import argparse
 parser=argparse.ArgumentParser(description='Import original tiles, maps and species into the web content pack.')
 source_argument(parser)
 args=arguments(parser, selectors=('maps','species'), profile=True);session=ImportSession(args,"import-emerald.py")
-R=Path(args.source); O=session.dist; A=O/'assets'
+R=Path(args.source); O=session.target; A=O/'assets'
 def pal(p): return [tuple(map(int,l.split())) for l in p.read_text().splitlines()[3:19]]
 def recolor(p,palette):
  im=Image.open(p); out=Image.new('RGBA',im.size); out.putdata([(*palette[v%16],255 if v%16 else 0) for v in im.getdata()]); return out

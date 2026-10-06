@@ -6,20 +6,20 @@ import {
   FieldDeviceCatalog,
   FieldDevices,
   emptyFieldDevices,
-} from "../dist/engine/field-devices.js";
-import { FieldActionRegistry } from "../dist/engine/field-actions.js";
-import { objectSchema } from "../dist/engine/extensions/values.js";
+} from "../src/engine/field-devices.js";
+import { FieldActionRegistry } from "../src/engine/field-actions.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
 
-import { EMERALD_FIELD_ACTIONS } from "../dist/packs/emerald/field-actions.js";
-import { BEHAVIOR as B } from "../dist/engine/terrain.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { FieldActionDirector } from "../dist/presentation/field-action-director.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { createMonster } from "../dist/engine/model.js";
+import { EMERALD_FIELD_ACTIONS } from "../src/packs/emerald/field-actions.js";
+import { BEHAVIOR as B } from "../src/engine/terrain.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { FieldActionDirector } from "../src/presentation/field-action-director.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createMonster } from "../src/engine/model.js";
 const base = loadContentSync();
 const destination = { map: "Landing", x: 1, y: 1, dir: "down" };
 function engine(

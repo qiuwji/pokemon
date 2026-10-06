@@ -2,20 +2,20 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { CropRegistry, CropService } from "../dist/engine/crop-growth.js";
+import { CropRegistry, CropService } from "../src/engine/crop-growth.js";
 import {
   EMERALD_CROP_POLICY,
   EMERALD_CROPS,
   emeraldBerryYield,
-} from "../dist/packs/emerald/berries.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
+} from "../src/packs/emerald/berries.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 const registry = new CropRegistry(EMERALD_CROPS, { items: ITEMS });
 function crops(state) {
   return new CropService({

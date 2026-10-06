@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session, manifest } from './helpers/session.js';
-import { ExtensionDOM } from '../dist/adapters/extension-dom.js';
-import { nativeUIControls } from '../dist/adapters/native-ui-controls.js';
+import { ExtensionDOM } from '../src/adapters/extension-dom.js';
+import { nativeUIControls } from '../src/adapters/native-ui-controls.js';
 import { layoutDocument } from './helpers/layout-document.js';
-import { createMonster } from '../dist/engine/model.js';
+import { createMonster } from '../src/engine/model.js';
 
 function mount(s, slot='battle.moves', activate=()=>{}) {
   const doc=layoutDocument(),container=doc.createElement('div'), native=doc.createElement('div'),errors=[];

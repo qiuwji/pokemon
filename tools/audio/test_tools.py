@@ -26,15 +26,16 @@ def files(directory):
 
 def fixture(root):
     project, pack = root / 'project', root / 'pack'
-    (project / 'dist/plugins').mkdir(parents=True)
-    (project / 'dist/content/maps').mkdir(parents=True)
+    (project / 'src/plugins').mkdir(parents=True)
+    (project / 'src/content/maps').mkdir(parents=True)
+    (project / 'generated').mkdir()
     pack.mkdir()
-    (project / 'dist/plugins/catalog.json').write_text('{"version":1,"plugins":[]}')
-    (project / 'dist/content/manifest.json').write_text(json.dumps({'files': [
+    (project / 'src/plugins/catalog.json').write_text('{"version":1,"plugins":[]}')
+    (project / 'src/content/manifest.json').write_text(json.dumps({'files': [
         {'section': 'maps', 'key': 'town', 'path': 'maps/town.json'},
         {'section': 'maps', 'key': 'other', 'path': 'maps/other.json'}]}))
-    (project / 'dist/content/maps/town.json').write_text('{"music":"MUS_TEST","title":"town"}')
-    (project / 'dist/content/maps/other.json').write_text('{"music":"OTHER"}')
+    (project / 'src/content/maps/town.json').write_text('{"music":"MUS_TEST","title":"town"}')
+    (project / 'src/content/maps/other.json').write_text('{"music":"OTHER"}')
     audio = b'fixture-resource'
     (pack / 'mus_test.wav').write_bytes(audio)
     (pack / 'plugin.js').write_text('// fixture')
@@ -63,9 +64,9 @@ class AudioTools(unittest.TestCase):
             report = installer.install(pack, project, True)
             self.assertEqual(report['maps'], ['town']); self.assertEqual(files(project), before)
             installer.install(pack, project)
-            self.assertEqual(json.loads((project / 'dist/content/maps/town.json').read_text())['music'], 'test-music:mus_test')
-            self.assertEqual((project / 'dist/content/maps/other.json').read_bytes(), before['dist/content/maps/other.json'])
-            self.assertFalse(json.loads((project / 'dist/plugins/catalog.json').read_text())['plugins'][0]['enabled'])
+            self.assertEqual(json.loads((project / 'src/content/maps/town.json').read_text())['music'], 'test-music:mus_test')
+            self.assertEqual((project / 'src/content/maps/other.json').read_bytes(), before['src/content/maps/other.json'])
+            self.assertFalse(json.loads((project / 'src/plugins/catalog.json').read_text())['plugins'][0]['enabled'])
             self.assertEqual(installer.install(pack, project, True)['files'], [])
 
     def test_corrupt_audio_fails_before_any_game_write(self):
@@ -136,12 +137,12 @@ class AudioBundleTools(unittest.TestCase):
             bundler.install(spec, build, project, check=True)
             self.assertEqual(files(project), before)
             bundler.install(spec, build, project)
-            manifest = json.loads((project / 'dist/assets/audio/bundle/manifest.json').read_text())
+            manifest = json.loads((project / 'generated/assets/audio/bundle/manifest.json').read_text())
             self.assertEqual(len(manifest['sourceInputSets']), 1)
             for track in manifest['tracks']:
                 self.assertEqual(manifest['sourceInputSets'][track['inputSet']],
                                  {'sound/sample.wav': 'a' * 64})
-                asset = project / 'dist' / track['source']
+                asset = project / track['source']
                 self.assertEqual(hashlib.sha256(asset.read_bytes()).hexdigest(), track['assetSha256'])
 
 
@@ -149,8 +150,7 @@ class SourceAudioTests(unittest.TestCase):
     def test_portable_pack_installs_into_source_inputs_and_repeated_preview_is_empty(self):
         with tempfile.TemporaryDirectory() as temp:
             project, pack = fixture(Path(temp))
-            (project / 'dist').rename(project / 'src')
-            (project / 'generated').mkdir()
+            (project / 'generated').mkdir(exist_ok=True)
             before = files(project)
             installer.install(pack, project, check=True)
             self.assertEqual(files(project), before)

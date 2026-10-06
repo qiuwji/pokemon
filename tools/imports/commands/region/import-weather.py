@@ -18,7 +18,7 @@ for path in require_files(source, '*/map.json'):
             regions.append({k:event[k] for k in ('x','y','elevation')} | {'weather':ids[event['weather'].removeprefix('COORD_EVENT_WEATHER_')]})
     output[data['name']] = {'default':ids[data['weather'].removeprefix('WEATHER_')]}
     if regions: output[data['name']]['regions'] = regions
-session.text(session.dist / 'engine/rules/gen3/map-weather.js', generated_header(session.owner, session.source) + '// Metadata does not imply playable maps.\nexport const GEN3_MAP_WEATHER = ' + json.dumps(output, ensure_ascii=False, indent=2) + ';\n')
+session.text(session.target / 'engine/rules/gen3/map-weather.js', generated_header(session.owner, session.source) + '// Metadata does not imply playable maps.\nexport const GEN3_MAP_WEATHER = ' + json.dumps(output, ensure_ascii=False, indent=2) + ';\n')
 print(f'{len(output)} headers, {sum(len(m.get("regions", [])) for m in output.values())} coordinate weather events')
 
 session.finish()

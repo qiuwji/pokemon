@@ -1,34 +1,34 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
-import { emptyFieldEffects } from "../dist/engine/field-effects.js";
+import { emptyEncounterTickets } from "../src/engine/encounter-tickets.js";
+import { emptyFieldEffects } from "../src/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
   inventoryQuantity,
   setQuantity,
 } from "./helpers/inventory-fixture.js";
-import { emptyWeather } from "../dist/engine/weather.js";
-import { emptyFacilities } from "../dist/engine/facilities.js";
+import { emptyWeather } from "../src/engine/weather.js";
+import { emptyFacilities } from "../src/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { GEN3_ABILITIES as abilities } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS as heldItems } from "../dist/engine/rules/gen3/held-items.js";
-import { GrowthSession } from "../dist/engine/growth/session.js";
-import { EvolutionService } from "../dist/engine/growth/evolution.js";
-import { BreedingService } from "../dist/engine/growth/breeding.js";
-import { DaycareService } from "../dist/engine/growth/daycare.js";
-import { TradeService } from "../dist/engine/growth/trading.js";
-import { applyNutrition } from "../dist/engine/growth/nutrition.js";
-import { GrowthDirector } from "../dist/presentation/growth-director.js";
-import { Timeline } from "../dist/engine/timeline.js";
-import { ItemService, createItemService } from "../dist/engine/items.js";
-import { EffectRegistry } from "../dist/engine/effects.js";
-import { PartyStorageService } from "../dist/engine/party-storage.js";
-import { BattleRoster, duelRoster } from "../dist/engine/battle/roster.js";
-import { learnPendingMove } from "../dist/engine/party.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { GEN3_ABILITIES as abilities } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS as heldItems } from "../src/engine/rules/gen3/held-items.js";
+import { GrowthSession } from "../src/engine/growth/session.js";
+import { EvolutionService } from "../src/engine/growth/evolution.js";
+import { BreedingService } from "../src/engine/growth/breeding.js";
+import { DaycareService } from "../src/engine/growth/daycare.js";
+import { TradeService } from "../src/engine/growth/trading.js";
+import { applyNutrition } from "../src/engine/growth/nutrition.js";
+import { GrowthDirector } from "../src/presentation/growth-director.js";
+import { Timeline } from "../src/engine/timeline.js";
+import { ItemService, createItemService } from "../src/engine/items.js";
+import { EffectRegistry } from "../src/engine/effects.js";
+import { PartyStorageService } from "../src/engine/party-storage.js";
+import { BattleRoster, duelRoster } from "../src/engine/battle/roster.js";
+import { learnPendingMove } from "../src/engine/party.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
 const db = loadContentSync();
 const rng = new Random(3947),
   mon = (id = "treecko", level = 5) => createMonster(id, level, db, rng);
@@ -476,14 +476,14 @@ test("Save owns daycare and trade identities, keeps egg clocks, and rejects dupl
 
 test("A failed post-trade evolution restores both parties, identities, friendship and RNG", async () => {
   const { EmeraldAdventure } = await import(
-    "../dist/packs/emerald/adventure.js"
+    "../src/packs/emerald/adventure.js"
   );
-  const { TransitionController } = await import("../dist/engine/timeline.js");
+  const { TransitionController } = await import("../src/engine/timeline.js");
   const { BattleDirector } = await import(
-    "../dist/presentation/battle-director.js"
+    "../src/presentation/battle-director.js"
   );
-  const { GridMotion } = await import("../dist/engine/motion.js");
-  const { SceneGraph } = await import("../dist/engine/motion.js");
+  const { GridMotion } = await import("../src/engine/motion.js");
+  const { SceneGraph } = await import("../src/engine/motion.js");
   const timeline = new Timeline({ now: () => 0, wait: async () => {} });
   const game = new EmeraldAdventure({
     db,

@@ -48,7 +48,7 @@
       "id": "emerald-audio",
       "name": "绿宝石原作音乐",
       "description": "原作BGM、场景选曲与真实音效资源。",
-      "module": "./emerald-audio.js",
+      "module": "../../generated/plugins/emerald-audio.js",
       "export": "audioPlugin",
       "enabled": true
     }

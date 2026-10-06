@@ -24,3 +24,42 @@ OK
 Ran 6 tests in 0.027s
 
 OK
+
+2026-10-06 direct source operation, no dist (supersedes the copied build):
+127.0.0.1 - - [06/Oct/2026 11:21:47] code 404, message Not Found
+127.0.0.1 - - [06/Oct/2026 11:21:47] "GET /private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [06/Oct/2026 11:21:47] code 404, message Not Found
+127.0.0.1 - - [06/Oct/2026 11:21:47] "GET /src/../private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [06/Oct/2026 11:21:47] code 404, message Not Found
+127.0.0.1 - - [06/Oct/2026 11:21:47] "GET /src/%2e%2e/private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [06/Oct/2026 11:21:47] code 404, message Not Found
+127.0.0.1 - - [06/Oct/2026 11:21:47] "GET /src/content/ HTTP/1.1" 404 -
+127.0.0.1 - - [06/Oct/2026 11:21:48] "GET /?control=1 HTTP/1.1" 302 -
+127.0.0.1 - - [06/Oct/2026 11:21:48] "GET /src/index.html?control=1 HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 11:21:48] "GET /generated/assets/example.bin HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 11:21:48] "GET /generated/assets/example.bin HTTP/1.1" 200 -
+----------------------------------------------------------------------
+Ran 33 tests in 4.951s
+
+OK
+{
+  "script": "example",
+  "check": false,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+{
+  "script": "example",
+  "check": true,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+
+HTTP source entry, preserved query, modules, content, CSS, catalog and assets: 1284 URLs passed; dist absent before and after.
+

@@ -1,5 +1,5 @@
 import { executeCalledMove } from "./called-moves.js";
-import { GEN3_REFERENCE_MOVES } from "../rules/gen3/reference-metadata.js";
+import { GEN3_REFERENCE_MOVES } from "../../../generated/engine/rules/gen3/reference-metadata.js";
 const forbiddenCopy = new Set([
   "metronome",
   "struggle",

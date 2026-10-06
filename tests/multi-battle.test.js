@@ -4,19 +4,19 @@ import {
   fixtureInventory,
   inventoryQuantity,
 } from "./helpers/inventory-fixture.js";
-import { createItemService } from "../dist/engine/items.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
+import { createItemService } from "../src/engine/items.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { teamRoster } from "../dist/engine/battle/roster.js";
+import { Battle } from "../src/engine/battle.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { teamRoster } from "../src/engine/battle/roster.js";
 import {
   createTrainerEncounter,
   TRAINERS,
-} from "../dist/packs/emerald/trainers.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { Timeline } from "../dist/engine/timeline.js";
+} from "../src/packs/emerald/trainers.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { Timeline } from "../src/engine/timeline.js";
 const db = loadContentSync();
 function setup({ reserve = false, rules = {}, effects = {} } = {}) {
   const rng = new Random(87),

@@ -9,10 +9,10 @@ import { formFixture } from "./fixtures/extensions/form.js";
 import {
   validateLayout,
   resolveLayout,
-} from "../dist/engine/extensions/ui-registry.js";
-import { LAYOUT_NODES } from "../dist/engine/extensions/layout-contracts.js";
-import { ExtensionDOM } from "../dist/adapters/extension-dom.js";
-import { LayoutDOM } from "../dist/adapters/layout-dom.js";
+} from "../src/engine/extensions/ui-registry.js";
+import { LAYOUT_NODES } from "../src/engine/extensions/layout-contracts.js";
+import { ExtensionDOM } from "../src/adapters/extension-dom.js";
+import { LayoutDOM } from "../src/adapters/layout-dom.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 
 function adapter(s) {
@@ -152,7 +152,7 @@ test("Real bag page mounts a plugin form; typed submit saves plugin memory witho
     before = structuredClone(s.game.state.bag),
     slots = [];
   const { createBagInterface } = await import(
-    "../dist/packs/emerald/bag-interface.js"
+    "../src/packs/emerald/bag-interface.js"
   );
   s.game.ui = { ...s.game.ui, extensions: a.ext };
   const ui = createBagInterface(s.game, {
@@ -250,7 +250,7 @@ test("Form duplicate submission is locked; closing before completion cannot remo
   assert.equal(a.root.children.length, 0);
 });
 test("Native editable controls retain game keys, Escape returns, and widget-handled arrows do not navigate the game", async () => {
-  const { BrowserInput } = await import("../dist/adapters/browser-input.js");
+  const { BrowserInput } = await import("../src/adapters/browser-input.js");
   let back = 0,
     move = 0;
   const input = Object.create(BrowserInput.prototype);

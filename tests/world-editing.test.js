@@ -1,14 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session } from "./helpers/session.js";
-import { sourceObjectId } from "../dist/engine/world-object-index.js";
-import { WorldStateService } from "../dist/engine/world-state.js";
-import { nextActorDirection } from "../dist/engine/actor-navigation.js";
-import { BEHAVIOR } from "../dist/engine/terrain.js";
-import { ExtensionCatalog } from "../dist/engine/extensions/catalog.js";
+import { sourceObjectId } from "../src/engine/world-object-index.js";
+import { WorldStateService } from "../src/engine/world-state.js";
+import { nextActorDirection } from "../src/engine/actor-navigation.js";
+import { BEHAVIOR } from "../src/engine/terrain.js";
+import { ExtensionCatalog } from "../src/engine/extensions/catalog.js";
 import { loadContentSync } from "../tools/content-io.mjs";
-import { assertPackContent } from "../dist/packs/emerald/content.js";
-import { objectsFor } from "../dist/packs/emerald/pack.js";
+import { assertPackContent } from "../src/packs/emerald/content.js";
+import { objectsFor } from "../src/packs/emerald/pack.js";
 
 test("Browser startup validates the native pack and each source NPC has a stable identity", () => {
   const db=loadContentSync(); assert.equal(assertPackContent(db),db);

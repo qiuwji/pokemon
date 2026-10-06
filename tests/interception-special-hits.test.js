@@ -1,13 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { battleFixture } from "./helpers/battle-fixture.js";
-import { damage } from "../dist/engine/model.js";
-import { MoveEffectRegistry } from "../dist/engine/move-effects.js";
+import { damage } from "../src/engine/model.js";
+import { MoveEffectRegistry } from "../src/engine/move-effects.js";
 import {
   BattleApplication,
   BATTLE_PORTS,
-} from "../dist/packs/emerald/application/battle-application.js";
-import { liveApplicationPorts } from "../dist/packs/emerald/application/ports.js";
+} from "../src/packs/emerald/application/battle-application.js";
+import { liveApplicationPorts } from "../src/packs/emerald/application/ports.js";
 const moves = {
   magic_coat: {},
   snatch: {},

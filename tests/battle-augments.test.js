@@ -2,9 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { session, manifest } from "./helpers/session.js";
 import { augmentFixture } from "./fixtures/extensions/augment.js";
-import { Battle } from "../dist/engine/battle.js";
-import { createMonster } from "../dist/engine/model.js";
-import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
+import { Battle } from "../src/engine/battle.js";
+import { createMonster } from "../src/engine/model.js";
+import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
 
 function extension(overrides = {}) {
   return manifest("augment-test", (api) => {
@@ -253,7 +253,7 @@ test("AI strategy receives valid augmented candidates and replacement priority o
   });
   const s = await setup(plugin);
   const { BattleStrategyRegistry } = await import(
-    "../dist/engine/battle/strategy-registry.js"
+    "../src/engine/battle/strategy-registry.js"
   );
   const strategies = new BattleStrategyRegistry(s.catalog.battleStrategies);
   s.b.roster.owner(s.b.awaySeat).strategy = "priority:burst";
@@ -277,7 +277,7 @@ test("Forged internal replacement fields cannot bypass source choice or augment 
 });
 test("Battle menu adapter forwards the registered augment instead of silently using the base move", async () => {
   const { createBattleInterface } = await import(
-    "../dist/packs/emerald/battle-interface.js"
+    "../src/packs/emerald/battle-interface.js"
   );
   const s = session([augmentFixture]);
   await s.bus.execute("core.battle.start", { trainerId: "youngster" });

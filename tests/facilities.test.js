@@ -5,18 +5,18 @@ import {
   FacilityRegistry,
   FacilitySession,
   emptyFacilities,
-} from "../dist/engine/facilities.js";
-import { objectSchema } from "../dist/engine/extensions/values.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { createEmeraldCommandFacade } from "../dist/packs/emerald/command-facade.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
+} from "../src/engine/facilities.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { SceneGraph, GridMotion } from "../src/engine/motion.js";
 import { facilityFixture } from "./fixtures/extensions/facility.js";
-import { validateSave } from "../dist/packs/emerald/pack.js";
+import { validateSave } from "../src/packs/emerald/pack.js";
 const base = loadContentSync();
 function fixture(plugins = [], storage = new Map()) {
   const { db, catalog, host } = createEmeraldPlugins(

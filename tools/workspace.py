@@ -1,4 +1,4 @@
-"""Project source view for importers. Never write the built dist tree in source mode."""
+"""Temporary read-only links for importer planning; commits go to each file's owner."""
 from pathlib import Path
 import tempfile
 
@@ -10,7 +10,7 @@ class WorkspaceView:
         self.temporary = None
         if not self.sources:
             # Explicit portable output packs used by tools/tests retain their own layout.
-            self.root = self.project / 'dist'
+            self.root = self.project
             return
         self.temporary = tempfile.TemporaryDirectory(prefix='emerald-inputs-')
         self.root = Path(self.temporary.name).resolve()
@@ -27,7 +27,7 @@ class WorkspaceView:
                         continue
                     relative = source.relative_to(base)
                     if relative in self.origins:
-                        raise ValueError('Duplicate build input: ' + str(relative))
+                        raise ValueError('Duplicate source input: ' + str(relative))
                     self.origins[relative] = source
                     target = self.root / relative
                     target.parent.mkdir(parents=True, exist_ok=True)

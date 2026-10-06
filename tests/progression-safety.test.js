@@ -2,17 +2,17 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { interaction, battleOutcome } from "../dist/packs/emerald/story.js";
-import { objectsFor } from "../dist/packs/emerald/pack.js";
-import { assertPackContent } from "../dist/packs/emerald/content.js";
-import { TRAINERS, trainerRewardId } from "../dist/packs/emerald/trainers.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { interaction, battleOutcome } from "../src/packs/emerald/story.js";
+import { objectsFor } from "../src/packs/emerald/pack.js";
+import { assertPackContent } from "../src/packs/emerald/content.js";
+import { TRAINERS, trainerRewardId } from "../src/packs/emerald/trainers.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
 import {
   TriggersApplication,
   TRIGGERS_PORTS,
-} from "../dist/packs/emerald/application/triggers-application.js";
-import { liveApplicationPorts } from "../dist/packs/emerald/application/ports.js";
+} from "../src/packs/emerald/application/triggers-application.js";
+import { liveApplicationPorts } from "../src/packs/emerald/application/ports.js";
 
 function fill(s, partyCount, boxCount) {
   while (s.game.state.party.length < partyCount)

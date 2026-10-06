@@ -1,5 +1,5 @@
 import { layoutDocument } from "./layout-document.js";
-import { ExtensionDOM } from "../../dist/adapters/extension-dom.js";
+import { ExtensionDOM } from "../../src/adapters/extension-dom.js";
 
 /** External DOM ports only; registration, layout resolution, rendering and commands are production code. */
 export function canvasAdapter(session) {

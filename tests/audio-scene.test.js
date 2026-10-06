@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { AudioAdapter } from "../dist/adapters/audio.js";
-import { validateAudioCue } from "../dist/engine/extensions/audio-contracts.js";
-import { createEmeraldAudio } from "../dist/packs/emerald/audio-library.js";
-import { SceneDirector } from "../dist/presentation/scene-director.js";
-import { createEmeraldSceneDefinitions } from "../dist/packs/emerald/presentation-scenes.js";
-import { Timeline } from "../dist/engine/timeline.js";
+import { AudioAdapter } from "../src/adapters/audio.js";
+import { validateAudioCue } from "../src/engine/extensions/audio-contracts.js";
+import { createEmeraldAudio } from "../src/packs/emerald/audio-library.js";
+import { SceneDirector } from "../src/presentation/scene-director.js";
+import { createEmeraldSceneDefinitions } from "../src/packs/emerald/presentation-scenes.js";
+import { Timeline } from "../src/engine/timeline.js";
 function fakeAudio({ fetchAsset } = {}) {
   const nodes = [],
     requests = [];
@@ -223,13 +223,13 @@ test("Sound limits, channel volume, ended cleanup and synchronous host failure r
 test("Real Emerald sample library has existing WAV resources and music is selected by explicit content IDs", async () => {
   const fs = await import("node:fs");
   const { emeraldMusic, emeraldBattleSound } = await import(
-    "../dist/packs/emerald/audio-library.js"
+    "../src/packs/emerald/audio-library.js"
   );
   const cues = createEmeraldAudio();
   assert(cues.size >= 9);
   for (const cue of cues.values()) {
     const data = fs.readFileSync(
-      new URL("../dist/" + cue.source, import.meta.url),
+      new URL("../" + cue.source, import.meta.url),
     );
     assert.equal(data.toString("ascii", 0, 4), "RIFF");
     assert.equal(data.toString("ascii", 8, 12), "WAVE");
@@ -262,10 +262,10 @@ test("Real Emerald sample library has existing WAV resources and music is select
 });
 test("Plugin sounds request only owned registered resources outside rules/transactions and never receive host nodes", async () => {
   const { PluginHost } = await import(
-    "../dist/engine/extensions/plugin-host.js"
+    "../src/engine/extensions/plugin-host.js"
   );
   const { CommandBus } = await import(
-    "../dist/engine/extensions/command-bus.js"
+    "../src/engine/extensions/command-bus.js"
   );
   let api, cue;
   const host = new PluginHost({ base: {} });
@@ -305,10 +305,10 @@ test("Plugin sounds request only owned registered resources outside rules/transa
 });
 test("Current plugin records are required; mismatched data does not invoke an old migration callback", async () => {
   const { PluginHost } = await import(
-    "../dist/engine/extensions/plugin-host.js"
+    "../src/engine/extensions/plugin-host.js"
   );
   const { CommandBus } = await import(
-    "../dist/engine/extensions/command-bus.js"
+    "../src/engine/extensions/command-bus.js"
   );
   const host = new PluginHost({ base: {} });
   let migrated = false;
@@ -399,7 +399,7 @@ test("Scene clock validates before taking control, rejects overlaps and releases
 });
 test("UI scene facade serializes typed payload through the shared command envelope", async () => {
   const { createEmeraldCommandFacade } = await import(
-    "../dist/packs/emerald/command-facade.js"
+    "../src/packs/emerald/command-facade.js"
   );
   let received;
   const game = createEmeraldCommandFacade(

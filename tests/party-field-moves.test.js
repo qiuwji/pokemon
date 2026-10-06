@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session, manifest } from './helpers/session.js';
-import { createMonster } from '../dist/engine/model.js';
-import { FieldActionRegistry } from '../dist/engine/field-actions.js';
-import { partyMenuCards, partyMenuNavigation } from '../dist/packs/emerald/party-menu-view.js';
+import { createMonster } from '../src/engine/model.js';
+import { FieldActionRegistry } from '../src/engine/field-actions.js';
+import { partyMenuCards, partyMenuNavigation } from '../src/packs/emerald/party-menu-view.js';
 
 const teach=(s,id)=>{if(s.mon.moves.length>=4)s.mon.moves.shift();s.mon.moves.push({id,pp:s.db.moves[id].pp});};
 test('Party field menu follows the selected monster move order, exposes badge failures and rejects other identities',async()=>{

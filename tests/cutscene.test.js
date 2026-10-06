@@ -3,24 +3,24 @@ import { manualStoryClock as manualClock } from "./helpers/story-clock.js";
 import { inventoryQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { TransitionController } from "../dist/engine/timeline.js";
-import { CameraRig } from "../dist/engine/camera.js";
+import { TransitionController } from "../src/engine/timeline.js";
+import { CameraRig } from "../src/engine/camera.js";
 import {
   FieldDirector,
   storyResources,
-} from "../dist/engine/field-director.js";
-import { FieldSession } from "../dist/engine/field-session.js";
-import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
-import { CommandRunner } from "../dist/engine/commands.js";
-import { findRoute } from "../dist/engine/pathfinding.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { createMonster } from "../dist/engine/model.js";
-import { battleOutcome } from "../dist/packs/emerald/story.js";
+} from "../src/engine/field-director.js";
+import { FieldSession } from "../src/engine/field-session.js";
+import { SceneGraph, GridMotion } from "../src/engine/motion.js";
+import { CommandRunner } from "../src/engine/commands.js";
+import { findRoute } from "../src/engine/pathfinding.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { createMonster } from "../src/engine/model.js";
+import { battleOutcome } from "../src/packs/emerald/story.js";
 import {
   OPEN_BAG,
   RETURN_TO_CENTER,
-} from "../dist/packs/emerald/story/common/scenes.js";
+} from "../src/packs/emerald/story/common/scenes.js";
 const db = loadContentSync();
 function makeGame(position = { map: "Route101", x: 6, y: 14, dir: "right" }) {
   const clock = manualClock(),

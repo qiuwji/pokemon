@@ -20,7 +20,7 @@ class ClockAssetsTests(unittest.TestCase):
                          [(0, 0, 0, 0), (15, 15, 15, 255)])
 
     def test_shipped_hands_do_not_cover_the_dial_and_period_tiles_are_present(self):
-        assets = Path(__file__).resolve().parents[2] / 'dist/assets'
+        assets = Path(__file__).resolve().parents[2] / 'generated/assets'
         for gender in ('male', 'female'):
             image = Image.open(assets / f'wallclock-{gender}-hands.png')
             self.assertEqual(image.size, (64, 144))

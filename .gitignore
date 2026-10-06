@@ -12,6 +12,5 @@ work/audio-build/
 emerald-*-bgm/
 emerald-*-bgm.zip
 
-# Rebuilt deployment output and atomic build staging
+# Retired deployment tree must not enter source control
 /dist/
-/.build-*/

@@ -13,7 +13,7 @@ export const highFlight = {
       name: '高空薄雾', visual: 'weather.fog', opacity: 0.18,
     });
     const birds = Object.fromEntries(['male', 'female'].map(gender => [gender,
-      api.content.register('resources', `bird-${gender}`, `plugins/high-flight/assets/fly-bird-${gender}.png`),
+      api.content.register('resources', `bird-${gender}`, `generated/plugins/high-flight/assets/fly-bird-${gender}.png`),
     ]));
     const bob = { amplitude: 1.5, periodMs: 960 };
     const appearance = api.content.register('appearances', 'rider', {

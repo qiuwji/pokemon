@@ -1,4 +1,4 @@
-import { ITEM_METADATA } from "../../engine/rules/gen3/item-metadata.js";
+import { ITEM_METADATA } from "../../../generated/engine/rules/gen3/item-metadata.js";
 const names = {
   berry_juice: "树果汁",
   cheri_berry: "樱子果",

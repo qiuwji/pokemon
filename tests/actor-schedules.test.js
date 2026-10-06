@@ -2,13 +2,13 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session } from "./helpers/session.js";
-import { ActorScheduleRegistry } from "../dist/engine/actor-schedules.js";
-import { NPCBehaviorRegistry } from "../dist/engine/npc-behaviors.js";
+import { ActorScheduleRegistry } from "../src/engine/actor-schedules.js";
+import { NPCBehaviorRegistry } from "../src/engine/npc-behaviors.js";
 import {
   WorldClock,
   emptyWorldClock,
   DAY_MS,
-} from "../dist/engine/world-clock.js";
+} from "../src/engine/world-clock.js";
 const base = loadContentSync();
 const position = (map, x = 2, y = 1) => ({
   map: `routine:${map}`,

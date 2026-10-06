@@ -17,7 +17,7 @@ problems = verify_metatiles(content)
 if problems:raise ValueError('Unverified E2E terrain: '+ '; '.join(problems))
 recipe = json.loads((PROJECT / 'tools/imports/config/e2e-scenes.json').read_text())
 selected = session.select('scenes',recipe['scenes'])
-target = session.dist / 'fixtures/world.json'
+target = session.target / 'fixtures/world.json'
 output = json.loads(target.read_text()) if target.exists() else {}
 for name in selected:
     source = recipe['scenes'][name]

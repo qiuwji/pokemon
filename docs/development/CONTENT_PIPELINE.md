@@ -2,23 +2,21 @@
 
 本页描述当前可执行合同。原作完整地图/台词仍在业务开发范围，缺少业务不能靠关闭引用检查隐藏。
 
-源码/派生输入与构建的分工见[构建合同](BUILD_PIPELINE.md)。Node消费者仍读取构建后的manifest，浏览器路径保持原状；作者不要编辑dist。
+源码/派生数据的分工见[目录合同](SOURCE_LAYOUT.md)。Node和浏览器共用清单：generated:true读取generated/content，其他片段读取src/content；不生成部署副本。
 
 ## 从哪里修改
 
 ```text
-dist/content/
-  manifest.json                    唯一装配清单；版本1
-  maps/<地图>/map.json              名称、尺寸、图集、连接、warp、原作对象与遭遇
-generated/content/
-  maps/<地图>/grid.json             生成的blocks/behavior/border；平面数组
-  tilesets/<图集>.json              生成的metatile、查找表、动画、实际atlas尺寸
 src/content/
-  species/<物种>.json               单个物种定义
-  actors.json / moves.json          Actor素材描述与切片招式表
-  evolutions.json / type-chart.json  进化定义与属性表
-  references.json                  未实现地图/脚本与明确空脚本的分类
-  stories/*.json                   手写剧情包/对白/绑定；可选stories分类
+  manifest.json
+  maps/<map-id>/map.json
+  species/<species-id>.json
+  stories/<story-id>.json
+  actors.json, moves.json, evolutions.json, type-chart.json, references.json
+
+generated/content/
+  maps/<map-id>/grid.json
+  tilesets/<tileset-id>.json
 ```
 
 没有旧content.json回退，也不生成另一份可写聚合JSON。运行时仍得到原来的db对象形状，所以战斗/世界/剧情领域不需要了解文件组织。新增的references仅用于源资料完整性审计，不是可执行剧情注册器。
@@ -27,7 +25,7 @@ src/content/
 
 ## 清单与加载合同
 
-清单每项含`section/path`，可选`key/generated`。路径相对manifest，仅允许本地JSON相对路径；禁止上跳、绝对路径、重复文件、未知字段和原型键。原八个section必须全部声明；stories为可选第九分类，key是包记录键（包内id另有命名空间）。`key`指定单条记录，没有key则文件是一张完整表。
+清单每项含`section/path`，可选`key/generated`。路径在其所属内容目录内解析：generated:true归generated/content，其余归src/content；仅允许本地JSON相对路径；禁止上跳、绝对路径、重复文件、未知字段和原型键。原八个section必须全部声明；stories为可选第九分类，key是包记录键（包内id另有命名空间）。`key`指定单条记录，没有key则文件是一张完整表。
 
 同一地图的两个片段这样登记：
 
@@ -57,7 +55,7 @@ const db = loadContentSync(); // 示例位置：tests/helpers/；其他位置调
 
 ## 导入如何保护数据
 
-所有受支持导入脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，默认输出归src/generated的唯一输入所有者，构建后部署到dist；`--target`可指向另一份输出目录。内容脚本需要现有清单，独立规则/资源生成器可写空的临时目标。
+所有受支持导入脚本统一使用[ImportSession](../../tools/imports/context.py)。写入范围由[ownership.json](../../tools/imports/ownership.json)声明，不由脚本名或“我知道不会影响”决定。原作目录只读，默认输出归src/generated的唯一所有者；`--target`可指向另一份输出目录。内容脚本需要现有清单，独立规则/资源生成器可写空的临时目标。
 
 ```sh
 python3 tools/import.py encounters /绝对路径/pokeemerald --check

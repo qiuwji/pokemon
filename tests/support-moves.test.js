@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { battleFixture } from "./helpers/battle-fixture.js";
-import { damage } from "../dist/engine/model.js";
+import { damage } from "../src/engine/model.js";
 const moves = Object.fromEntries(
   [
     "charge",

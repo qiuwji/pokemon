@@ -1,27 +1,27 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { World } from "../dist/engine/world.js";
-import { ElevationPolicy } from "../dist/engine/elevation.js";
-import { GEN3_ELEVATION as height } from "../dist/engine/rules/gen3/elevation.js";
-import { findRoute } from "../dist/engine/pathfinding.js";
-import { NPCSystem } from "../dist/engine/npcs.js";
-import { NPCBehaviorRegistry } from "../dist/engine/npc-behaviors.js";
+import { World } from "../src/engine/world.js";
+import { ElevationPolicy } from "../src/engine/elevation.js";
+import { GEN3_ELEVATION as height } from "../src/engine/rules/gen3/elevation.js";
+import { findRoute } from "../src/engine/pathfinding.js";
+import { NPCSystem } from "../src/engine/npcs.js";
+import { NPCBehaviorRegistry } from "../src/engine/npc-behaviors.js";
 import {
   FieldTerrainRegistry,
   FieldTerrainService,
-} from "../dist/engine/field-terrain.js";
-import { EMERALD_TERRAIN_RULES } from "../dist/packs/emerald/terrain-rules.js";
-import { findWatchingTrainer } from "../dist/engine/field-triggers.js";
-import { emeraldFieldPriority } from "../dist/packs/emerald/field-layers.js";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
+} from "../src/engine/field-terrain.js";
+import { EMERALD_TERRAIN_RULES } from "../src/packs/emerald/terrain-rules.js";
+import { findWatchingTrainer } from "../src/engine/field-triggers.js";
+import { emeraldFieldPriority } from "../src/packs/emerald/field-layers.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
 const map = (levels, width = levels.length) => ({
   id: "bridge",
   title: "Bridge",

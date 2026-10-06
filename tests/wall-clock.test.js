@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { drawWallClock } from "../dist/presentation/wall-clock-dial.js";
-import { WALL_CLOCK_HAND_OFFSETS } from "../dist/packs/emerald/generated/wall-clock.js";
+import { drawWallClock } from "../src/presentation/wall-clock-dial.js";
+import { WALL_CLOCK_HAND_OFFSETS } from "../generated/packs/emerald/generated/wall-clock.js";
 
 test("Native wall-clock assets keep transparent hand backgrounds and both period indicators", () => {
   const result = spawnSync("python3", [fileURLToPath(new URL("../tools/tests/test_clock_assets.py", import.meta.url))], { encoding: "utf8" });

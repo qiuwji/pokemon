@@ -32,7 +32,7 @@ python3 tools/ui/export-theme.py
 # 不在默认work/pokeemerald时添加 --source /path/to/pokeemerald
 ```
 
-依赖Pillow；只写dist/assets/ui及该目录source.json。不改变地图网格、人物、C源码或内容清单。运行时不依赖work；source.json保存所有输入/输出SHA-256。新增页面样式应继续使用独立data-modal-page，不恢复根据menu-grid压缩整页的旧样式。
+依赖Pillow；只写generated/assets/ui及该目录source.json。不改变地图网格、人物、C源码或内容清单。运行时不依赖work；source.json保存所有输入/输出SHA-256。新增页面样式应继续使用独立data-modal-page，不恢复根据menu-grid压缩整页的旧样式。
 
 ## 当前实现与待验
 

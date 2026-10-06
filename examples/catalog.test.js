@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { loadPluginCatalog } from "../dist/adapters/plugin-loader.js";
+import { loadPluginCatalog } from "../src/adapters/plugin-loader.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import { session } from "../tests/helpers/session.js";
 
 test("Installed plugin catalog references existing modules and default startup composes its actual contents", async () => {
-  const url = new URL("../dist/plugins/catalog.json", import.meta.url);
+  const url = new URL("../src/plugins/catalog.json", import.meta.url);
   const readJSON = location => JSON.parse(fs.readFileSync(location));
   const catalog = readJSON(url);
   for (const entry of catalog.plugins)

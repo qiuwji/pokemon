@@ -6,28 +6,28 @@ import {
   inventoryQuantity,
   setQuantity,
 } from "./helpers/inventory-fixture.js";
-import { BreedingService } from "../dist/engine/growth/breeding.js";
+import { BreedingService } from "../src/engine/growth/breeding.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { MoveLearningService } from "../dist/engine/growth/move-learning.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { learnPendingMove } from "../dist/engine/party.js";
-import { emeraldDatabase } from "../dist/packs/emerald/database.js";
-import { EMERALD_LEARNING_METHODS } from "../dist/packs/emerald/machine-learning.js";
+import { MoveLearningService } from "../src/engine/growth/move-learning.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { learnPendingMove } from "../src/engine/party.js";
+import { emeraldDatabase } from "../src/packs/emerald/database.js";
+import { EMERALD_LEARNING_METHODS } from "../src/packs/emerald/machine-learning.js";
 import {
   MACHINES,
   MACHINE_LEARNSETS,
   MACHINE_SOURCE,
-} from "../dist/engine/rules/gen3/machine-learning.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { createEmeraldCommandFacade } from "../dist/packs/emerald/command-facade.js";
-import { createBagInterface } from "../dist/packs/emerald/bag-interface.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
+} from "../generated/engine/rules/gen3/machine-learning.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
+import { createBagInterface } from "../src/packs/emerald/bag-interface.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
 const base = loadContentSync();
 const db = emeraldDatabase(base);
 function fixture({ friendship, methods = EMERALD_LEARNING_METHODS } = {}) {

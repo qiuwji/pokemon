@@ -16,7 +16,7 @@
 
 ## 先定位项目与资料
 
-从[项目地图](../../emerald-project-handoff/references/project-map.md)找到项目根，确认package.json和dist/engine。项目是现有自研ES模块网页工程。先看docs/project/SCOPE.md、STATUS.md和工作树，不新建第二套工程。
+从[项目地图](../../emerald-project-handoff/references/project-map.md)找到项目根，确认package.json和src/engine。项目是现有自研ES模块网页工程。先看docs/project/SCOPE.md、STATUS.md和工作树，不新建第二套工程。
 
 在项目根运行：
 
@@ -49,7 +49,7 @@ python3 tools/import.py --list
 rg -n 'OldaleTown_EventScript_MartEmployee|FLAG_RECEIVED_POTION_OLDALE|VAR_RESULT' work/pokeemerald/data/maps/OldaleTown work/pokeemerald/include
 rg -n 'ScrCmd_special|ScrCmd_waitstate|ScrCmd_giveitem' work/pokeemerald/src
 rg -n 'giveitem|special|waitstate' work/pokeemerald/asm/macros work/pokeemerald/data/specials.inc
-rg -n 'registerBundle|onResult|inventoryFull' dist/content/stories dist/engine/story-catalog.js docs/engine/story
+rg -n 'registerBundle|onResult|inventoryFull' src/content/stories src/engine/story-catalog.js docs/engine/story
 ```
 
 搜索找不到具体实现时继续追宏展开；例如giveitem可能是宏组合，不能因为没有名为ScrCmd_giveitem的函数就判定原作缺实现。
@@ -63,8 +63,8 @@ rg -n 'registerBundle|onResult|inventoryFull' dist/content/stories dist/engine/s
 | 必须运行时构建的短事件 | src/packs/emerald/story/regions或common，由现有runtime装配；不让story.js或adventure.js重新成为巨型业务文件 |
 | 默认Gen3通用政策 | 对应src/packs/emerald定义或engine/rules/gen3合同；生成文件有@generated，改输入/生成器而非手工补生成物 |
 | 独立扩展或现代规则 | src/plugins/普通manifest，通过api注册、只读查询和受控命令/intent；catalog装配，不改app逐插件接线 |
-| 新通用框架缺口 | dist/engine所属领域、窄应用端口及相应适配器；须明确任务，不从业务包直接访问内部状态 |
-| 图像/音频 | dist/assets及来源记录；地图按metatile/grid，PNG整场景不能代替地图 |
+| 新通用框架缺口 | src/engine所属领域、窄应用端口及相应适配器；须明确任务，不从业务包直接访问内部状态 |
+| 图像/音频 | generated/assets及来源记录；地图按metatile/grid，PNG整场景不能代替地图 |
 | 测试 | 通用核心合同放tests；产品插件专属测试及作者例放examples；共享夹具在tests/helpers，不跨层导入 |
 
 ## 脚本命令怎样映射

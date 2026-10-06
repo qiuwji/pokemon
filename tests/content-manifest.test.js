@@ -1,5 +1,5 @@
 import { assertContentAssets } from "../tools/check-content-assets.mjs";
-import { validateContentReferences } from "../dist/engine/content-references.js";
+import { validateContentReferences } from "../src/engine/content-references.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -10,13 +10,14 @@ import { spawnSync } from "node:child_process";
 import { CONTENT_MANIFEST, loadContentSync } from "../tools/content-io.mjs";
 import {
   contentFiles,
+  contentFileURL,
   assembleContent,
-} from "../dist/engine/content-manifest.js";
-import { loadContent } from "../dist/adapters/content-loader.js";
+} from "../src/engine/content-manifest.js";
+import { loadContent } from "../src/adapters/content-loader.js";
 const manifest = JSON.parse(fs.readFileSync(CONTENT_MANIFEST));
 const values = () =>
   manifest.files.map((entry) =>
-    JSON.parse(fs.readFileSync(new URL(entry.path, CONTENT_MANIFEST))),
+    JSON.parse(fs.readFileSync(contentFileURL(entry, CONTENT_MANIFEST))),
   );
 test("Browser and Node assemble the same production pack from readable metadata and generated grids", async () => {
   const readJSON = (url) => JSON.parse(fs.readFileSync(url));
@@ -40,11 +41,11 @@ test("Browser and Node assemble the same production pack from readable metadata 
 });
 test("Content deployment prefixes are preserved and file failures identify the failing fragment", async () => {
   const url = new URL(
-    "https://example.test/games/emerald/content/manifest.json",
+    "https://example.test/games/emerald/src/content/manifest.json",
   );
   const data = new Map(
     manifest.files.map((entry, i) => [
-      new URL(entry.path, url).href,
+      contentFileURL(entry, url).href,
       values()[i],
     ]),
   );
@@ -56,7 +57,7 @@ test("Content deployment prefixes are preserved and file failures identify the f
   assert.deepEqual(await loadContent(url, { readJSON }), loadContentSync());
   assert(
     seen.every((location) =>
-      location.startsWith("https://example.test/games/emerald/content/"),
+      location.startsWith("https://example.test/games/emerald/"),
     ),
   );
   const broken = async (location) => {

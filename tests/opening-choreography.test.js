@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { nativeMovement } from '../dist/packs/emerald/native-movement.js';
-import { validateSave } from '../dist/packs/emerald/save-contract.js';
+import { nativeMovement } from '../src/packs/emerald/native-movement.js';
+import { validateSave } from '../src/packs/emerald/save-contract.js';
 
 const enter = async (s, map, x, y, dir='up') => {
   assert(s.game.enter({map,x,y,dir}));

@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import {
   AppearanceRegistry,
   emptyAppearances,
-} from "../dist/engine/appearances.js";
-import { drawAppearance } from "../dist/presentation/appearance-canvas.js";
+} from "../src/engine/appearances.js";
+import { drawAppearance } from "../src/presentation/appearance-canvas.js";
 import { session, manifest } from "./helpers/session.js";
 const definition = {
   name: "Layered",

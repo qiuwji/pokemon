@@ -10,10 +10,10 @@ import {
   cameraProjection,
   projectWorld,
   unprojectScreen,
-} from "../dist/engine/camera-view.js";
-import { drawEnvironmentLayers } from "../dist/presentation/environment-layers-canvas.js";
-import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
+} from "../src/engine/camera-view.js";
+import { drawEnvironmentLayers } from "../src/presentation/environment-layers-canvas.js";
+import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
 const viewPlugin = (capture) =>
   manifest(
     "views",
@@ -300,7 +300,7 @@ test("Public density composition selects distinct grass cells, prepares regional
     "./helpers/encounter-extension-fixture.js"
   );
   const { isGrass } = await import(
-    "../dist/engine/extensions/terrain-utils.js"
+    "../src/engine/extensions/terrain-utils.js"
   );
   const s = encounterFixture({
     permissions: ["actors", "encounters", "movement", "random", "appearance"],

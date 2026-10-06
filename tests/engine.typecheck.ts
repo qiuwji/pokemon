@@ -1,6 +1,6 @@
-import { changeStoryVariable } from "../dist/engine/story-variables.js";
-import { sampleAnimationTrack } from "../dist/presentation/animation-timing.js";
-import { sampleSpriteAnimation } from "../dist/presentation/sprite-animation.js";
+import { changeStoryVariable } from "../src/engine/story-variables.js";
+import { sampleAnimationTrack } from "../src/presentation/animation-timing.js";
+import { sampleSpriteAnimation } from "../src/presentation/sprite-animation.js";
 
 changeStoryVariable({}, { name: "count", operation: "add", value: 1 });
 sampleAnimationTrack({ start: 0, end: 10, easing: "smoothstep" }, 5);

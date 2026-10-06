@@ -1,4 +1,4 @@
-import { MACHINES } from "../../engine/rules/gen3/machine-learning.js";
+import { MACHINES } from "../../../generated/engine/rules/gen3/machine-learning.js";
 export const EMERALD_LEARNING_METHODS = Object.fromEntries(
   Object.entries(MACHINES).map(([id, machine]) => [
     id,

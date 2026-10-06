@@ -146,7 +146,7 @@ export function createUIShell(
   }
 
   const spriteURL = (id) =>
-    game.db.resources?.[id + "-front"] || `assets/${id}-front.png`;
+    game.db.resources?.[id + "-front"] || `generated/assets/${id}-front.png`;
   function hpColor(m) {
     const r = m.hp / m.stats.hp;
     return r > 0.5 ? "#81c989" : r > 0.2 ? "#dcb652" : "#cf6860";
@@ -159,7 +159,7 @@ export function createUIShell(
   function partyCard(m, i) {
     const s = db.species[m.species];
     if (m.egg)
-      return `<button class="party-card" data-mon="${i}"><img src="assets/egg-front.png" alt="蛋"><div class="mon-main"><div class="mon-heading">宝可梦的蛋</div><p>${m.egg.cycles > 10 ? "一起行走，等待孵化。" : "里面传来了细小的声音。"}</p></div></button>`;
+      return `<button class="party-card" data-mon="${i}"><img src="generated/assets/egg-front.png" alt="蛋"><div class="mon-main"><div class="mon-heading">宝可梦的蛋</div><p>${m.egg.cycles > 10 ? "一起行走，等待孵化。" : "里面传来了细小的声音。"}</p></div></button>`;
     return `<button class="party-card" data-mon="${i}"><img src="${escapeHTML(spriteURL(m.species))}" alt=""><div class="mon-main"><div class="mon-heading">${s.name}<span>Lv.${m.level}</span></div>${hpTrack(m)}<div class="hp-value"><span class="type-pill">${m.status ? STATUS_NAMES[m.status] : s.types.map((t) => TYPE_NAMES[t]).join(" / ")}</span><span>${m.hp} / ${m.stats.hp}</span></div></div></button>`;
   }
 

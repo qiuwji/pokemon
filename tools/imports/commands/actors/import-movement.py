@@ -20,7 +20,7 @@ for ident in session.select('actors', sheets):
     image = Image.open(session.source / entry['path'])
     output = Image.new('RGBA', image.size)
     output.putdata([(*palette[int(v)%16],255 if int(v)%16 else 0) for v in image.getdata()])
-    session.image(output, session.dist / f'assets/actor-{ident}.png')
+    session.image(output, session.target / f'assets/actor-{ident}.png')
     data['actors'][ident] = {**data['actors'].get(ident,{}), **entry['definition']}
 session.content(data)
 session.finish()

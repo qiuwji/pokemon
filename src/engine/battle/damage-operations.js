@@ -1,4 +1,4 @@
-import { SPECIES_WEIGHTS } from "../rules/gen3/reference-metadata.js";
+import { SPECIES_WEIGHTS } from "../../../generated/engine/rules/gen3/reference-metadata.js";
 const failed = (c) => {
   c.successful = false;
   c.skipDamage = true;

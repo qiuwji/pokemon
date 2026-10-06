@@ -32,7 +32,7 @@ for raw, body in re.findall(r'\[NATIONAL_DEX_(\w+)\]\s*=\s*\{(.*?)\n\s*\},',
     weights[raw.lower()] = int(match[1])
 if not weights:
     raise ValueError('No species weights parsed')
-session.text(session.dist / 'engine/rules/gen3/reference-metadata.js',
+session.text(session.target / 'engine/rules/gen3/reference-metadata.js',
              generated_header(session.owner, source) +
              "// Curse's TYPE_MYSTERY uses normal metadata; the effect chooses its branch.\n" +
              '// Species weights are hectograms, as in the original.\n' +

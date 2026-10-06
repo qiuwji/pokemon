@@ -49,7 +49,7 @@ python3 tools/import.py audio work/pokeemerald --profile tools/imports/config/sl
 # 审阅预演后去掉 --check，执行相同选择。
 ```
 
-profile的audio是“输出文件名 → sound/direct_sound_samples下源文件”映射。输出归generated/assets/audio，构建后位于dist/assets/audio；现有provenance.json描述采样，不能冒充BGM清单。入口见[采样导入器](../../../tools/imports/commands/audio/import-audio.py)，写入归属见[ownership.json](../../../tools/imports/ownership.json)。文件移动后搜索`Copy selected real WAV samples`、`session.profile['audio']`。
+profile的audio是“输出文件名 → sound/direct_sound_samples下源文件”映射。输出归generated/assets/audio，构建后位于generated/assets/audio；现有provenance.json描述采样，不能冒充BGM清单。入口见[采样导入器](../../../tools/imports/commands/audio/import-audio.py)，写入归属见[ownership.json](../../../tools/imports/ownership.json)。文件移动后搜索`Copy selected real WAV samples`、`session.profile['audio']`。
 
 当前UI/战斗提示音使用已安装的原版SE；旧铃声、收银噪声、鼓点占位采样已删除，默认采样profile仅保留初始精灵叫声。完整招式SE映射与叫声处理需另补。原作BGM优先复用下面已执行的单曲生产链；不要新建第二套转换器或虚构import-bgm命令。当前曲目与听音进度读STATUS及包内manifest。
 
@@ -111,7 +111,7 @@ rg -n 'PlayNewMapMusic|PlayFanfare|PlayBGM|PlaySE' work/pokeemerald/src/sound.c 
 3. **离线渲染**：在隔离工作区输出无损WAV主文件，再选择部署编码。核对压缩后实际解码时长和循环点；不假设编码前后完全一致，未验证压缩边界时优先使用已验证WAV。
 4. **来源记录**：每曲保存符号、固定修订、全部输入及哈希、转换器版本/配置、采样率、帧数、循环起止帧、部署文件哈希和验证状态。cue秒数由对应资源的帧与采样率计算；一次性短曲不伪设无限循环。
 5. **原子导入**：接统一工具入口、所有权、--check、选择参数、遗漏报告与严格失败；全部预检再提交。缺采样、未知音色/指令、错误循环要写前失败，不生成静音占位骗过引用检查。不覆盖其他作者文件或现有采样provenance。
-6. **注册绑定**：成品放dist/assets/audio并带来源记录，生成cue模块标记@generated。默认包在现有audio-library装配，独立音乐包走插件audio注册。地图music/battleMusic引用真正的cue ID；播放器不认识地图名，不在AudioAdapter硬编码曲目规则。
+6. **注册绑定**：成品放generated/assets/audio并带来源记录，生成cue模块标记@generated。默认包在现有audio-library装配，独立音乐包走插件audio注册。地图music/battleMusic引用真正的cue ID；播放器不认识地图名，不在AudioAdapter硬编码曲目规则。
 7. **还原选曲**：分别追地图、冲浪/骑车、遇敌、训练家、胜利、获得道具和特殊剧情的调用及恢复。当前emeraldMusic只读map.music/map.battleMusic，不完整覆盖这些语境；短曲恢复/等待等合同不足时补窄接口并验证，不用定时器猜领域结束。
 
 转换器应输出机器可读清单，预演报告新增/改变/遗漏。具体渲染工具、依赖安装及命令在选定并执行验证后写进[导入索引](../../../docs/development/IMPORT_SCRIPTS.md)，不能让接手模型照抄不存在的命令。产物不依赖本机绝对路径。

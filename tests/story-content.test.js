@@ -1,24 +1,24 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { StoryCatalog } from "../dist/engine/story-catalog.js";
-import { StoryEngine } from "../dist/engine/story.js";
-import { dialogueDescription } from "../dist/engine/dialogue.js";
-import { resolveDialogue, textRuns } from "../dist/engine/dialogue-content.js";
-import { DEFAULT_CONDITION_QUERIES } from "../dist/engine/condition-queries.js";
+import { StoryCatalog } from "../src/engine/story-catalog.js";
+import { StoryEngine } from "../src/engine/story.js";
+import { dialogueDescription } from "../src/engine/dialogue.js";
+import { resolveDialogue, textRuns } from "../src/engine/dialogue-content.js";
+import { DEFAULT_CONDITION_QUERIES } from "../src/engine/condition-queries.js";
 import {
   choiceOptions,
   validateChoicePolicy,
-} from "../dist/engine/story-choice.js";
-import { ChoiceDOM } from "../dist/adapters/choice-dom.js";
-import { DialogueDOM } from "../dist/adapters/dialogue-dom.js";
-import { createTextEffects } from "../dist/presentation/text-effects.js";
+} from "../src/engine/story-choice.js";
+import { ChoiceDOM } from "../src/adapters/choice-dom.js";
+import { DialogueDOM } from "../src/adapters/dialogue-dom.js";
+import { createTextEffects } from "../src/presentation/text-effects.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import {
   session,
   manifest,
   objectSchema,
 } from "./helpers/session.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
 
 test("Story bundle binds an exact NPC, calls a parameterized script and persists dialogue without touching app imports", async () => {
   let exported;
@@ -455,7 +455,7 @@ test("Structured runs interpolate literal scalars and malformed templates fail w
 
 test("Dialogue history trims oldest confirmed entries within both persistence limits", async () => {
   const { recordDialogue, validDialogueHistory } = await import(
-    "../dist/engine/dialogue-history.js"
+    "../src/engine/dialogue-history.js"
   );
   const progress = {};
   for (let i = 0; i < 140; i++)

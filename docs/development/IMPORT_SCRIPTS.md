@@ -34,7 +34,7 @@
 
 新地图分两步导入：`emerald` 写入地图数据并标记 `pendingGrid`，`grid` 补图集与 border 后清除该标记。标记是显式的未完成态，不放宽 tileset/border 校验。指向 `MAP_DYNAMIC` 的 warp 在运行时才设定，导入器按遗漏报告并交给剧情接管。
 
-表中21个入口都支持`--target /另一份/dist`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
+表中21个入口都支持`--target /另一份/pack`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
 
 ## 推荐顺序
 
@@ -68,7 +68,7 @@ B：图鉴、战斗与成长
 
 ```sh
 python3 /项目路径/tools/import.py weather --check
-python3 /项目路径/tools/import.py audio /参考路径/pokeemerald --target /临时路径/dist --check
+python3 /项目路径/tools/import.py audio /参考路径/pokeemerald --target /临时路径/pack --check
 python3 /项目路径/tools/import.py machine-learning --config /配置路径/rules.json --check
 ```
 

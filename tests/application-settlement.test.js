@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { BattleSession } from "../dist/engine/battle-session.js";
-import { changeMoney, settleMoney } from "../dist/engine/currency.js";
+import { BattleSession } from "../src/engine/battle-session.js";
+import { changeMoney, settleMoney } from "../src/engine/currency.js";
 import { session } from "./helpers/session.js";
-import { InventoryApplication, INVENTORY_PORTS } from "../dist/packs/emerald/application/inventory-application.js";
-import { liveApplicationPorts } from "../dist/packs/emerald/application/ports.js";
-import { createMonster } from "../dist/engine/model.js";
+import { InventoryApplication, INVENTORY_PORTS } from "../src/packs/emerald/application/inventory-application.js";
+import { liveApplicationPorts } from "../src/packs/emerald/application/ports.js";
+import { createMonster } from "../src/engine/model.js";
 
 for (const phase of ["plan", "commit", "exit-before", "exit-after"]) {
   test(`Battle settlement ${phase} failure releases control and only committed results continue`, async () => {

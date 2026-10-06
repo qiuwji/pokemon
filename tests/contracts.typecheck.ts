@@ -1,4 +1,4 @@
-import { frontCell } from "../dist/engine/extensions/field-utils.js";
+import { frontCell } from "../src/engine/extensions/field-utils.js";
 import type {
   PluginManifest,
   NetworkCommand,
@@ -14,7 +14,7 @@ import type {
   LearningMethodDefinition,
   InventoryView,
   InventoryFailure,
-} from "../dist/engine/contracts.js";
+} from "../src/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
   tracks: [{ effect: "demo:trail", anchor: "targets", start: 0, end: 1 }],
@@ -59,7 +59,7 @@ const plugin: PluginManifest = {
       plan: () => ({ kind: "effect", id: fieldEffectId, data: { radius: 80 } }),
     };
     api.content.register("fieldActions", "light", activateLight);
-    const pocket: import("../dist/engine/contracts.js").InventoryPocketDefinition =
+    const pocket: import("../src/engine/contracts.js").InventoryPocketDefinition =
       {
         label: "材料",
         capacity: 12,
@@ -264,31 +264,31 @@ const terrain: TerrainRuleDefinition = {
 };
 void terrain;
 
-const timer: import("../dist/engine/contracts.js").TimeTaskDefinition = {
+const timer: import("../src/engine/contracts.js").TimeTaskDefinition = {
   intervalMs: 60000,
   catchUp: "aggregate",
 };
 void timer;
 
-const crop: import("../dist/engine/contracts.js").CropDefinition = {
+const crop: import("../src/engine/contracts.js").CropDefinition = {
   item: "oran_berry",
   name: "Oran",
   durationMinutes: 180,
   minYield: 2,
   maxYield: 3,
 };
-const plot: import("../dist/engine/contracts.js").BerryPlotDefinition = {
+const plot: import("../src/engine/contracts.js").BerryPlotDefinition = {
   map: "garden:field",
   objectId: "soil",
 };
 void [crop, plot];
 
-const worker: import("../dist/engine/contracts.js").ActorTemplateDefinition = {
+const worker: import("../src/engine/contracts.js").ActorTemplateDefinition = {
   name: "Worker",
   actor: "ProfBirch",
   behavior: "still",
 };
-const navigationIntent: import("../dist/engine/contracts.js").NPCIntent = {
+const navigationIntent: import("../src/engine/contracts.js").NPCIntent = {
   move: false,
   pose: "walk",
   goal: { map: "meadow", x: 1, y: 2, adjacent: true },
@@ -296,7 +296,7 @@ const navigationIntent: import("../dist/engine/contracts.js").NPCIntent = {
 };
 void [worker, navigationIntent];
 
-const actorPose: import("../dist/engine/contracts.js").NPCPoseDefinition = {
+const actorPose: import("../src/engine/contracts.js").NPCPoseDefinition = {
   height: 4,
   periodMs: 400,
   actor: "Boy1",
@@ -366,12 +366,12 @@ const readonlyLearning: LearningMethodDefinition = {
   },
 };
 
-const storm: import("../dist/engine/contracts.js").WeatherDefinition = {
+const storm: import("../src/engine/contracts.js").WeatherDefinition = {
   label: "自定义风暴",
   visual: "garden:storm",
   battle: "garden:storm",
 };
-const workerSchedule: import("../dist/engine/contracts.js").ActorScheduleDefinition =
+const workerSchedule: import("../src/engine/contracts.js").ActorScheduleDefinition =
   {
     offscreen: "hold",
     entries: [
@@ -385,27 +385,27 @@ const workerSchedule: import("../dist/engine/contracts.js").ActorScheduleDefinit
       },
     ],
   };
-const workerTemplate: import("../dist/engine/contracts.js").ActorTemplateDefinition =
+const workerTemplate: import("../src/engine/contracts.js").ActorTemplateDefinition =
   {
     name: "Worker",
     actor: "ProfBirch",
     behavior: "still",
     schedule: "garden:worker",
   };
-const stormBattle: import("../dist/engine/contracts.js").BattleWeatherDefinition =
+const stormBattle: import("../src/engine/contracts.js").BattleWeatherDefinition =
   { residual: { divisor: 16, immuneTypes: ["steel"] } };
-const regionWeather: import("../dist/engine/contracts.js").MapWeatherDefinition =
+const regionWeather: import("../src/engine/contracts.js").MapWeatherDefinition =
   { default: "clear", regions: [{ x: 1, y: 1, weather: "garden:storm" }] };
 void [storm, stormBattle, regionWeather];
 
-const selectedRemoval: import("../dist/engine/contracts.js").InventoryOperation =
+const selectedRemoval: import("../src/engine/contracts.js").InventoryOperation =
   {
     kind: "remove",
     item: "potion",
     count: 1,
     slot: { pocket: "items", item: "potion", index: 3 },
   };
-const invalidSlotAddition: import("../dist/engine/contracts.js").InventoryOperation =
+const invalidSlotAddition: import("../src/engine/contracts.js").InventoryOperation =
   {
     kind: "add",
     item: "potion",
@@ -426,7 +426,7 @@ function inventoryReader(view: InventoryView, failure: InventoryFailure) {
 }
 void inventoryReader;
 
-const augment: import("../dist/engine/contracts.js").BattleAugmentDefinition = {
+const augment: import("../src/engine/contracts.js").BattleAugmentDefinition = {
   name: "Burst",
   moves: ["demo:burst"],
   select: () => "demo:burst",
@@ -434,7 +434,7 @@ const augment: import("../dist/engine/contracts.js").BattleAugmentDefinition = {
   limit: { scope: "controller", max: 1 },
   cost: { pp: 1 },
 };
-const augmentedAction: import("../dist/engine/contracts.js").BattleAction = {
+const augmentedAction: import("../src/engine/contracts.js").BattleAction = {
   kind: "move",
   index: 0,
   augment: "demo:burst",
@@ -442,7 +442,7 @@ const augmentedAction: import("../dist/engine/contracts.js").BattleAction = {
 void augment;
 void augmentedAction;
 
-const region: import("../dist/engine/contracts.js").UIRegionDefinition = {
+const region: import("../src/engine/contracts.js").UIRegionDefinition = {
   slot: "bag.content",
   when: (view) => view.context.inBattle === false,
   render: () => ({
@@ -463,7 +463,7 @@ const region: import("../dist/engine/contracts.js").UIRegionDefinition = {
 };
 void region;
 
-const encounterPolicy: import("../dist/engine/contracts.js").EncounterPolicyDefinition =
+const encounterPolicy: import("../src/engine/contracts.js").EncounterPolicyDefinition =
   {
     channel: "step",
     priority: 100,
@@ -476,8 +476,8 @@ const encounterPolicy: import("../dist/engine/contracts.js").EncounterPolicyDefi
   };
 void encounterPolicy;
 
-declare const visualAPI: import("../dist/engine/contracts.js").PluginAPI;
-const layeredAppearance: import("../dist/engine/contracts.js").AppearanceDefinition =
+declare const visualAPI: import("../src/engine/contracts.js").PluginAPI;
+const layeredAppearance: import("../src/engine/contracts.js").AppearanceDefinition =
   {
     name: "outfit",
     variants: {
@@ -494,19 +494,19 @@ const layeredAppearance: import("../dist/engine/contracts.js").AppearanceDefinit
     },
   };
 visualAPI.content.register("appearances", "outfit", layeredAppearance);
-const wideCamera: import("../dist/engine/contracts.js").CameraProfileDefinition =
+const wideCamera: import("../src/engine/contracts.js").CameraProfileDefinition =
   { name: "wide", columns: 30, rows: 20 };
 visualAPI.content.register("cameraProfiles", "wide", wideCamera);
-const fogLayer: import("../dist/engine/contracts.js").EnvironmentLayerDefinition =
+const fogLayer: import("../src/engine/contracts.js").EnvironmentLayerDefinition =
   { name: "fog", visual: "weather.fog", opacity: 0.2 };
 visualAPI.content.register("environmentLayers", "mist", fogLayer);
 
-const jsonFacility: import("../dist/engine/extensions/facility-content.js").FacilityContentPack = {
+const jsonFacility: import("../src/engine/extensions/facility-content.js").FacilityContentPack = {
   version: 1, facilities: [{ id: "tower", name: "Tower", template: "battle-sequence",
     parameters: { trainers: ["mod:trainer"], money: 10 }, team: { min: 1,max: 3 } }],
 };
 void jsonFacility;
-const wrongJSONFacility: import("../dist/engine/extensions/facility-content.js").JSONFacilityDefinition = {
+const wrongJSONFacility: import("../src/engine/extensions/facility-content.js").JSONFacilityDefinition = {
   id: "slots", name: "Slots", template: "reel-machine",
   // @ts-expect-error Reel parameters cannot use battle-sequence fields.
   parameters: { trainers: ["trainer"], money: 20 },

@@ -94,9 +94,9 @@ test("plugin field plan commits through the public command", async () => {
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [src/engine/field-actions.js](../../src/engine/field-actions.js) | `rg -n "class FieldActionRegistry" dist tests docs package.json` |
-| [src/packs/emerald/application/field-action-application.js](../../src/packs/emerald/application/field-action-application.js) | `rg -n "prepareOperation" dist tests docs package.json` |
-| [tests/field-actions.test.js](../../tests/field-actions.test.js) | `rg -n "content-only" dist tests docs package.json` |
+| [src/engine/field-actions.js](../../src/engine/field-actions.js) | `rg -n "class FieldActionRegistry" src generated tests docs package.json` |
+| [src/packs/emerald/application/field-action-application.js](../../src/packs/emerald/application/field-action-application.js) | `rg -n "prepareOperation" src generated tests docs package.json` |
+| [tests/field-actions.test.js](../../tests/field-actions.test.js) | `rg -n "content-only" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

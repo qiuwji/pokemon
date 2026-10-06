@@ -11,17 +11,17 @@ import {
   FieldEffectRegistry,
   FieldEffects,
   emptyFieldEffects,
-} from "../dist/engine/field-effects.js";
-import { EMERALD_FIELD_EFFECTS } from "../dist/packs/emerald/field-effects.js";
-import { FieldActionRegistry } from "../dist/engine/field-actions.js";
+} from "../src/engine/field-effects.js";
+import { EMERALD_FIELD_EFFECTS } from "../src/packs/emerald/field-effects.js";
+import { FieldActionRegistry } from "../src/engine/field-actions.js";
 import {
   LightingDirector,
   lightMask,
   drawLighting,
-} from "../dist/presentation/lighting.js";
-import { validateContent } from "../dist/engine/content.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { planObjectMotion } from "../dist/engine/object-motion.js";
+} from "../src/presentation/lighting.js";
+import { validateContent } from "../src/engine/content.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { planObjectMotion } from "../src/engine/object-motion.js";
 import { setQuantity, inventoryQuantity } from "./helpers/inventory-fixture.js";
 const base = loadContentSync();
 const room = "fixture-field:room";

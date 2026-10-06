@@ -16,7 +16,7 @@ for ident,body in re.findall(r'\[ITEM_(\w+)\]\s*=\s*\{(.*?)\n    \}',source,re.S
     key=ident.lower();key='pokeball' if key=='poke_ball' else key
     items[key]={'name':name.group(1),'price':int(price.group(1)) if price else 0,'holdable':pocket.group(1)!='POCKET_KEY_ITEMS' and not ident.startswith('HM_'),'holdEffect':effect.group(1).lower() if effect else 'none','parameter':int(param.group(1)) if param else 0,'fieldUse':use.group(1) if use else None,'pocket':pocket.group(1)}
 if not items: raise ValueError('No item records parsed from reference')
-session.text(session.dist / 'engine/rules/gen3/item-metadata.js', generated_header(session.owner, session.source) + 'export const ITEM_METADATA = '+json.dumps(items,ensure_ascii=False,indent=2)+';\n')
+session.text(session.target / 'engine/rules/gen3/item-metadata.js', generated_header(session.owner, session.source) + 'export const ITEM_METADATA = '+json.dumps(items,ensure_ascii=False,indent=2)+';\n')
 print(len(items),'canonical items,',sum(i['holdable'] for i in items.values()),'holdable')
 
 session.finish()

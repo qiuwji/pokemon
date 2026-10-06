@@ -154,5 +154,54 @@
       "documentation": "passed",
       "browserExecuted": false
     }
+  },
+  "directSourceRun": {
+    "supersedes": "Copied dist build from the initial source separation; previous evidence/hashes retain their historical scope.",
+    "baseline": "cb2b0e0",
+    "distExists": false,
+    "buildCommandsRemoved": true,
+    "removed": [
+      "tools/build.mjs",
+      "tests/build.test.js",
+      ".openai/hosting.json"
+    ],
+    "corePassed": 1039,
+    "pluginsPassed": 36,
+    "pythonPassed": 33,
+    "audioToolsPassed": 7,
+    "quality": "passed",
+    "httpURLsPassed": 1284,
+    "zeroChangePreviews": [
+      "actor-animations",
+      "opening-art",
+      "UI export",
+      "audio bundle"
+    ],
+    "browserExecuted": false,
+    "repairedPathFailures": [
+      "Core assertions and audio/Fly examples referenced the retired merged tree; updated to each physical owner.",
+      "Source-collision error wording and executable skill examples were updated to the source layout."
+    ],
+    "logs": [
+      "test-all.log",
+      "python-tools.log",
+      "source-audio-final.log",
+      "quality-tail-final.log"
+    ],
+    "sha256": {
+      "package.json": "329f3a7b83aed08b5d1e9056a3a690c43ae76bbf7ea24ee3486755782d627770",
+      "tools/serve.py": "535e5159be8e2269f58f98c42935d9ae1b51da6f67c23d937922e5bda08995cc",
+      "tools/workspace.py": "0e5d68e7167313f35204e7d67ee39cf74b795fe9f2ea79cbe56bcf8bcf84a021",
+      "tools/imports/context.py": "c681a248806da755c8464cd798e5487eed79c5f6939ef05e303270adcf0e8e35",
+      "tools/content-io.mjs": "05c0ecc871d2809b724f477257c2d04429f411858a77ae46638866a75b3750cc",
+      "src/index.html": "5833676626e3b52037746c274edb75906612f22ecafa2d409e7fc9b7b7546966",
+      "src/engine/content-manifest.js": "f08e835721cb29c3fea4ad8fd0230b26d3c68d8b60bf5e7f991372ce1bffa280",
+      "src/adapters/content-loader.js": "e675cbef0aa3d381600b88d07296d8ed0d909614e89147244c514f083faf615d",
+      "src/plugins/catalog.json": "c2fe54d7b5ddf4a1ab8c99e997d59af34a5debd8fa10e736601e1289f2aadc73",
+      "tools/tests/test_source_layout.py": "dca6ec4cfb5ad4b126778a8a1a8dd60bac5480cfdf946a93c013e31b70b3ab76",
+      "generated/plugins/emerald-audio.js": "5de2590aff9edded17ad5cea06551d3e99c4c6de34d748e3685822ecbb7982b7",
+      "generated/assets/ui/source.json": "d60d1b5be640abb9dead5cafcd3c3fc64e10394befda82e9f1e9bb6b2a70dd19"
+    },
+    "finalArchitectureChecksPassed": 8
   }
 }

@@ -5,15 +5,15 @@ import {
   inventoryQuantity,
   setQuantity,
 } from "./helpers/inventory-fixture.js";
-import { createItemService } from "../dist/engine/items.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
+import { createItemService } from "../src/engine/items.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { BattleStrategyRegistry } from "../dist/engine/battle/strategy-registry.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { analyzeCandidate } from "../dist/engine/battle/analysis.js";
+import { Battle } from "../src/engine/battle.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { BattleStrategyRegistry } from "../src/engine/battle/strategy-registry.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { analyzeCandidate } from "../src/engine/battle/analysis.js";
 const base = loadContentSync();
 function fixture(definitions = {}) {
   const { db } = createEmeraldPlugins(base, []),

@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { session } from '../tests/helpers/session.js';
-import { createMonster } from '../dist/engine/model.js';
-import { highFlight } from '../dist/plugins/high-flight/index.js';
-import { startPlugins } from '../dist/adapters/plugin-settings.js';
+import { createMonster } from '../src/engine/model.js';
+import { highFlight } from '../src/plugins/high-flight/index.js';
+import { startPlugins } from '../src/adapters/plugin-settings.js';
 async function ready(){
   const s=session([highFlight]);
   assert.deepEqual(await startPlugins([{...highFlight,startup:['high-flight:prepare','high-flight:teach']}],s.bus),[]);
@@ -89,7 +89,7 @@ test('Flight cannot start indoors or land on occupants, reserved cells, water or
   assert.equal(g.inspectMovementMode('walk').ok,false);
 });
 test('Committed Fly art matches recorded hashes, is native 32x32 and belongs to the plugin directory',()=>{
-  const root=new URL('../dist/plugins/high-flight/assets/',import.meta.url);
+  const root=new URL('../generated/plugins/high-flight/assets/',import.meta.url);
   const source=JSON.parse(fs.readFileSync(new URL('source.json',root),'utf8'));
   assert.equal(source.source,'pret/pokeemerald');
   for(const [file,hash] of Object.entries(source.outputs)){

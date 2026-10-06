@@ -7,14 +7,14 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { GEN3_ABILITIES as abilities } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS as heldItems } from "../dist/engine/rules/gen3/held-items.js";
-import { FriendshipService } from "../dist/engine/growth/friendship.js";
-import { HatchService } from "../dist/engine/growth/hatching.js";
-import { EvolutionService } from "../dist/engine/growth/evolution.js";
-import { BreedingService } from "../dist/engine/growth/breeding.js";
-import { DaycareService } from "../dist/engine/growth/daycare.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { GEN3_ABILITIES as abilities } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS as heldItems } from "../src/engine/rules/gen3/held-items.js";
+import { FriendshipService } from "../src/engine/growth/friendship.js";
+import { HatchService } from "../src/engine/growth/hatching.js";
+import { EvolutionService } from "../src/engine/growth/evolution.js";
+import { BreedingService } from "../src/engine/growth/breeding.js";
+import { DaycareService } from "../src/engine/growth/daycare.js";
 const original = loadContentSync();
 const rng = new Random(671);
 const mon = (id = "treecko", level = 20) =>

@@ -180,9 +180,9 @@ test("a registered field scene focuses the view and gates a subsequent reward", 
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [src/engine/story.js](../../src/engine/story.js) | `rg -n "class StoryEngine" dist tests docs package.json` |
-| [src/engine/world-state.js](../../src/engine/world-state.js) | `rg -n "validateOperations" dist tests docs package.json` |
-| [tests/story-language.test.js](../../tests/story-language.test.js) | `rg -n "Data-only plugin story" dist tests docs package.json` |
+| [src/engine/story.js](../../src/engine/story.js) | `rg -n "class StoryEngine" src generated tests docs package.json` |
+| [src/engine/world-state.js](../../src/engine/world-state.js) | `rg -n "validateOperations" src generated tests docs package.json` |
+| [tests/story-language.test.js](../../tests/story-language.test.js) | `rg -n "Data-only plugin story" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

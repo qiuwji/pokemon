@@ -1,20 +1,20 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { WorldStateService } from "../dist/engine/world-state.js";
-import { World } from "../dist/engine/world.js";
+import { WorldStateService } from "../src/engine/world-state.js";
+import { World } from "../src/engine/world.js";
 import {
   FieldDevices,
   FieldDeviceCatalog,
-} from "../dist/engine/field-devices.js";
-import { BEHAVIOR as B } from "../dist/engine/terrain.js";
+} from "../src/engine/field-devices.js";
+import { BEHAVIOR as B } from "../src/engine/terrain.js";
 
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
 const frames = (n) => (n * 1000) / 60;
 const base = loadContentSync();
 function fixture(style = "fortree-bridge", { lowerOnEntry = false } = {}) {

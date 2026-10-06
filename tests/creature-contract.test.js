@@ -1,22 +1,22 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
-import { emptyFieldEffects } from "../dist/engine/field-effects.js";
+import { emptyEncounterTickets } from "../src/engine/encounter-tickets.js";
+import { emptyFieldEffects } from "../src/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
   inventoryQuantity,
   setQuantity,
 } from "./helpers/inventory-fixture.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { emptyWeather } from "../dist/engine/weather.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { emptyWeather } from "../src/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { validCreatureValues } from "../dist/engine/creature-contract.js";
-import { createItemService, ItemService } from "../dist/engine/items.js";
-import { EffectRegistry } from "../dist/engine/effects.js";
-import { CREATION_POLICY } from "../dist/engine/rule-policy.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validCreatureValues } from "../src/engine/creature-contract.js";
+import { createItemService, ItemService } from "../src/engine/items.js";
+import { EffectRegistry } from "../src/engine/effects.js";
+import { CREATION_POLICY } from "../src/engine/rule-policy.js";
 const db = loadContentSync();
 const state = () => ({
   weather: emptyWeather(),
@@ -143,7 +143,7 @@ test("Invalid injected creation policy restores seeded randomness and returns no
   assert.equal(rng.snapshot(), seed);
 });
 test("Invalid writes and unsupported versions preserve source text until explicit replacement", async () => {
-  const { SaveStore } = await import("../dist/engine/save-store.js");
+  const { SaveStore } = await import("../src/engine/save-store.js");
   let raw = JSON.stringify({ version: 6, state: state() });
   const original = raw,
     store = new SaveStore(

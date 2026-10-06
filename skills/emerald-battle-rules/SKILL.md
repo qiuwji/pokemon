@@ -65,7 +65,7 @@ description: 演进现有绿宝石战斗规则、招式效果、状态、训练�
 完整清单由 [MoveEffectRegistry](../../src/engine/move-effects.js) 构造器汇合 `MOVE_OPERATIONS`、COMMON_OPERATIONS、traits/state/special及其他operation模块，**并非只读一个常量就完整**。搜索 `new EffectRegistry`、`OPERATIONS`、`.validate` 定位实现/参数校验；也可只读运行：
 
 ```sh
-node --input-type=module -e 'import {MoveEffectRegistry} from "./dist/engine/move-effects.js"; console.log(Object.keys(new MoveEffectRegistry().operations.operations).sort().join("\n"))'
+node --input-type=module -e 'import {MoveEffectRegistry} from "./src/engine/move-effects.js"; console.log(Object.keys(new MoveEffectRegistry().operations.operations).sort().join("\n"))'
 ```
 
 自定义moveEffects是现有op的组合；插件公开API目前不提供任意函数注册新op。确需新规则语义时提交框架接口任务，不能让插件导入引擎并覆写注册表。具体类型入口：[contracts.d.ts](../../src/engine/contracts.d.ts)，兜底搜索 `MoveEffectRegistry`、`ContentKind`、`EffectStep`；无类型的部分以校验器和实际例为准，不能把类型声明当额外能力。
@@ -124,8 +124,8 @@ test("registered move effect runs in a real trainer turn", async () => {
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [src/engine/move-effects.js](../../src/engine/move-effects.js) | `rg -n "class MoveEffectRegistry" dist tests docs package.json` |
-| [src/engine/battle/roster.js](../../src/engine/battle/roster.js) | `rg -n "class BattleRoster" dist tests docs package.json` |
-| [src/engine/rules/attachments.js](../../src/engine/rules/attachments.js) | `rg -n "AttachedRules" dist tests docs package.json` |
+| [src/engine/move-effects.js](../../src/engine/move-effects.js) | `rg -n "class MoveEffectRegistry" src generated tests docs package.json` |
+| [src/engine/battle/roster.js](../../src/engine/battle/roster.js) | `rg -n "class BattleRoster" src generated tests docs package.json` |
+| [src/engine/rules/attachments.js](../../src/engine/rules/attachments.js) | `rg -n "AttachedRules" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

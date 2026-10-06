@@ -30,7 +30,7 @@ for kind, moves in [('tm', tms), ('hm', hms)]:
         key = kind + '_' + move.lower()
         machines[key] = {'move': move.lower(), 'number': number, 'kind': kind, 'consume': int(kind == 'tm'), 'protected': kind == 'hm'}
 metadata = {'revision': source_revision(root), 'sources': ['include/constants/tms_hms.h', 'src/data/pokemon/tmhm_learnsets.h', 'src/party_menu.c', 'src/pokemon.c', 'src/pokemon_summary_screen.c']}
-session.text(session.dist / 'engine/rules/gen3/machine-learning.js', generated_header(session.owner, root) + 'export const MACHINE_SOURCE = ' + json.dumps(metadata, indent=2) + ';\nexport const MACHINES = ' + json.dumps(machines, indent=2) + ';\nexport const MACHINE_LEARNSETS = ' + json.dumps(learnsets, indent=2) + ';\n')
+session.text(session.target / 'engine/rules/gen3/machine-learning.js', generated_header(session.owner, root) + 'export const MACHINE_SOURCE = ' + json.dumps(metadata, indent=2) + ';\nexport const MACHINES = ' + json.dumps(machines, indent=2) + ';\nexport const MACHINE_LEARNSETS = ' + json.dumps(learnsets, indent=2) + ';\n')
 if not learnsets: raise ValueError('No machine learnsets parsed')
 print(f'{len(machines)} machines, {len(learnsets)} species learnsets')
 

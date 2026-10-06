@@ -4,24 +4,24 @@ import assert from "node:assert/strict";
 import {
   MovementInputRegistry,
   MovementInputSession,
-} from "../dist/engine/movement-input.js";
-import { MovementRegistry, MovementService } from "../dist/engine/movement.js";
-import { GEN3_MOVEMENT_INPUTS } from "../dist/engine/rules/gen3/bike-input.js";
-import { MOVEMENT_MODES } from "../dist/packs/emerald/movement.js";
+} from "../src/engine/movement-input.js";
+import { MovementRegistry, MovementService } from "../src/engine/movement.js";
+import { GEN3_MOVEMENT_INPUTS } from "../src/engine/rules/gen3/bike-input.js";
+import { MOVEMENT_MODES } from "../src/packs/emerald/movement.js";
 import {
   MovementApplication,
   MOVEMENT_PORTS,
-} from "../dist/packs/emerald/application/movement-application.js";
-import { FieldSession } from "../dist/engine/field-session.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
+} from "../src/packs/emerald/application/movement-application.js";
+import { FieldSession } from "../src/engine/field-session.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import {
   FieldTerrainRegistry,
   FieldTerrainService,
-} from "../dist/engine/field-terrain.js";
-import { EMERALD_TERRAIN_RULES } from "../dist/packs/emerald/terrain-rules.js";
-import { BEHAVIOR as B } from "../dist/engine/terrain.js";
-import { validateSpriteAnimations } from "../dist/engine/extensions/sprite-contracts.js";
-import { sampleSpriteAnimation } from "../dist/presentation/sprite-animation.js";
+} from "../src/engine/field-terrain.js";
+import { EMERALD_TERRAIN_RULES } from "../src/packs/emerald/terrain-rules.js";
+import { BEHAVIOR as B } from "../src/engine/terrain.js";
+import { validateSpriteAnimations } from "../src/engine/extensions/sprite-contracts.js";
+import { sampleSpriteAnimation } from "../src/presentation/sprite-animation.js";
 function setup() {
   let now = 0;
   const registry = new MovementRegistry(MOVEMENT_MODES),

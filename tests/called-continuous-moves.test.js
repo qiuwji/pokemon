@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { battleFixture } from "./helpers/battle-fixture.js";
-import { MoveEffectRegistry } from "../dist/engine/move-effects.js";
-import { GEN3_REFERENCE_MOVES } from "../dist/engine/rules/gen3/reference-metadata.js";
+import { MoveEffectRegistry } from "../src/engine/move-effects.js";
+import { GEN3_REFERENCE_MOVES } from "../generated/engine/rules/gen3/reference-metadata.js";
 const moves = {
   sleep_talk: {},
   snore: { power: 40, chance: 100, sound: true },

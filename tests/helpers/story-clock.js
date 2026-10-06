@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Timeline } from "../../dist/engine/timeline.js";
+import { Timeline } from "../../src/engine/timeline.js";
 export function manualStoryClock(start = 1000) {
   let time = start;
   const waits = [];

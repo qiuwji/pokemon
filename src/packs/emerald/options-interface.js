@@ -23,7 +23,7 @@ export function createOptionsInterface({
         .getElementById("screen")
         ?.style?.setProperty(
           "--native-window-image",
-          `url('assets/ui/window-${frame}.png')`,
+          `url('generated/assets/ui/window-${frame}.png')`,
         );
     } else if (key === "sound")
       audioSettings?.setEnabled(!audioSettings.enabled());

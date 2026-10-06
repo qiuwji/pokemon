@@ -257,7 +257,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
     for (const [id, resource] of Object.entries(c.resources))
       if (
         typeof resource !== "string" ||
-        !/^(assets\/|plugins\/|https:\/\/)/.test(resource) ||
+        !/^(assets\/|plugins\/|generated\/(?:assets|plugins)\/|https:\/\/)/.test(resource) ||
         resource.length > 4096
       )
         throw new Error(`Invalid resource ${id}`);

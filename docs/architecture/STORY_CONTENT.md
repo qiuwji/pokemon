@@ -28,13 +28,13 @@
 ## 代码和数据放哪里
 
 ```text
-dist/content/manifest.json              # 同一装配清单，stories是可选分类
+src/content/manifest.json              # 同一装配清单，stories是可选分类
   stories/signs.json                   # 显式告示牌绑定与文本
   stories/oldale.json                  # 赠药成功/满包/重复领取代表流程
   stories/clock.json                   # 原作墙钟交互绑定
   stories/dialogues.json               # 现有序章/训练家/NPC本地化文本
 
-dist/packs/emerald/story.js             # 本作事件装配，不放地区实现
+src/packs/emerald/story.js             # 本作事件装配，不放地区实现
   story/runtime.js                    # 目录/事件引擎装配及地区引用预检
   story/regions/*.js                   # 尚需状态构建的现有序章切片
   story/common/*.js                    # 治疗、普通交互和战后桥接

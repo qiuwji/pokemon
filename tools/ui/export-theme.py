@@ -182,7 +182,7 @@ for item, graphic, palette in re.findall(r'\[ITEM_(\w+)\]\s*=\s*\{(gItemIcon_\w+
     if graphic not in paths or palette not in paths: raise ValueError('Unknown item icon symbol '+item)
     filename = 'items/'+item.lower()+'.png'
     add(filename,sprite(paths[graphic],colors(paths[palette])))
-    icon_map[item.lower()] = 'assets/ui/'+filename
+    icon_map[item.lower()] = 'generated/assets/ui/'+filename
 outputs['item-icons.json']=(json.dumps(icon_map,sort_keys=True,indent=2)+'\n').encode()
 # Browser-ready lookup avoids an asynchronous asset fetch during a menu click.
 lookup = {key.replace('_',''):value for key,value in icon_map.items()}

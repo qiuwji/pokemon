@@ -1,17 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { dialogueDescription } from "../dist/engine/dialogue.js";
+import { dialogueDescription } from "../src/engine/dialogue.js";
 import {
   compileDialogueLine,
   sampleDialogue,
   DialoguePlayer,
-} from "../dist/presentation/dialogue-player.js";
+} from "../src/presentation/dialogue-player.js";
 import {
   createTextEffects,
   TextEffectRegistry,
-} from "../dist/presentation/text-effects.js";
-import { DialogueDOM } from "../dist/adapters/dialogue-dom.js";
-import { createUIShell } from "../dist/packs/emerald/ui-shell.js";
+} from "../src/presentation/text-effects.js";
+import { DialogueDOM } from "../src/adapters/dialogue-dom.js";
+import { createUIShell } from "../src/packs/emerald/ui-shell.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import { session, manifest } from "./helpers/session.js";
 function clockPort() {

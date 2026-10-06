@@ -28,7 +28,7 @@ export function validateAudioCue(value) {
     throw new Error("Invalid audio cue");
   if (
     typeof cue.source !== "string" ||
-    !/^assets\/[a-zA-Z0-9_./:-]+\.(ogg|wav|mp3|m4a)$/i.test(cue.source) ||
+    !/^(?:generated\/)?assets\/[a-zA-Z0-9_./:-]+\.(ogg|wav|mp3|m4a)$/i.test(cue.source) ||
     cue.source.split("/").includes("..")
   )
     throw new Error("Invalid audio asset");

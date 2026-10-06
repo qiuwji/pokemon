@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { battleFixture } from "./helpers/battle-fixture.js";
-import { BattleSession } from "../dist/engine/battle-session.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { BattleStateRegistry } from "../dist/engine/battle/state-registry.js";
-import { objectSchema } from "../dist/engine/extensions/values.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { GEN3_REFERENCE_MOVES } from "../dist/engine/rules/gen3/reference-metadata.js";
+import { BattleSession } from "../src/engine/battle-session.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { BattleStateRegistry } from "../src/engine/battle/state-registry.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { GEN3_REFERENCE_MOVES } from "../generated/engine/rules/gen3/reference-metadata.js";
 const moves = { baton_pass: {}, hit: { power: 30 }, metronome: {} };
 function fixture(options = {}) {
   const f = battleFixture({ ...options, moves });

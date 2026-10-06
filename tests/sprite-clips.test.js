@@ -1,15 +1,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { validateSpriteClip } from "../dist/engine/extensions/sprite-clip-contracts.js";
+import { validateSpriteClip } from "../src/engine/extensions/sprite-clip-contracts.js";
 import {
   SpriteClips,
   sampleSpriteClip,
-} from "../dist/presentation/sprite-clips.js";
-import { SpriteCanvas } from "../dist/adapters/sprite-canvas.js";
-import { DETAIL_SPRITE_FRAMES } from "../dist/packs/emerald/detail-sprite-frames.js";
-import { createUIShell } from "../dist/packs/emerald/ui-shell.js";
-import { createPartyInterface } from "../dist/packs/emerald/party-interface.js";
+} from "../src/presentation/sprite-clips.js";
+import { SpriteCanvas } from "../src/adapters/sprite-canvas.js";
+import { DETAIL_SPRITE_FRAMES } from "../generated/packs/emerald/detail-sprite-frames.js";
+import { createUIShell } from "../src/packs/emerald/ui-shell.js";
+import { createPartyInterface } from "../src/packs/emerald/party-interface.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import { manifest, session } from "./helpers/session.js";
 const clip = () =>
@@ -264,7 +264,7 @@ test("Every generated native clip has real asset rectangles; current single and 
   assert(r.find("poochyena").frames.length > 1);
   for (const [species, count] of Object.entries(DETAIL_SPRITE_FRAMES)) {
     const raw = fs.readFileSync(
-      new URL(`../dist/assets/${species}-detail.png`, import.meta.url),
+      new URL(`../generated/assets/${species}-detail.png`, import.meta.url),
     );
     assert.equal(raw.readUInt32BE(16), 64);
     assert.equal(raw.readUInt32BE(20), count * 64);

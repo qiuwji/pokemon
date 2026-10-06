@@ -3,26 +3,26 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import crypto from "node:crypto";
 import { loadContentSync } from "../tools/content-io.mjs";
-import { MACHINES } from "../dist/engine/rules/gen3/machine-learning.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { summaryPage } from "../dist/packs/emerald/ui/summary-view.js";
+import { MACHINES } from "../generated/engine/rules/gen3/machine-learning.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { summaryPage } from "../src/packs/emerald/ui/summary-view.js";
 import {
   bagPockets,
   bagPicture,
   itemIconURL,
   listNavigation,
-} from "../dist/packs/emerald/ui/native-view.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
+} from "../src/packs/emerald/ui/native-view.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
 import { session } from "./helpers/session.js";
-import { readOnly } from "../dist/engine/extensions/values.js";
+import { readOnly } from "../src/engine/extensions/values.js";
 const root = new URL("../", import.meta.url);
 test("All exported native assets match the tracked provenance manifest and item selections resolve real files", () => {
   const manifest = JSON.parse(
-    fs.readFileSync(new URL("dist/assets/ui/source.json", root)),
+    fs.readFileSync(new URL("generated/assets/ui/source.json", root)),
   );
   assert.equal(manifest.revision, "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881");
   for (const [file, hash] of Object.entries(manifest.outputs)) {
-    const data = fs.readFileSync(new URL("dist/assets/ui/" + file, root));
+    const data = fs.readFileSync(new URL("generated/assets/ui/" + file, root));
     assert.equal(
       crypto.createHash("sha256").update(data).digest("hex"),
       hash,
@@ -30,7 +30,7 @@ test("All exported native assets match the tracked provenance manifest and item 
     );
   }
   for (const id of Object.keys(ITEMS))
-    assert(fs.existsSync(new URL("dist/" + itemIconURL(id), root)), id);
+    assert(fs.existsSync(new URL("" + itemIconURL(id), root)), id);
   for (const [id, machine] of Object.entries(MACHINES))
     assert(
       itemIconURL(id).endsWith(
@@ -62,7 +62,7 @@ test("Pocket order and sprite selection remain native without dropping plugin po
   for (const pocket of ["items", "balls", "machines", "berries", "key"])
     for (const gender of ["male", "female"])
       assert(
-        fs.existsSync(new URL("dist/" + bagPicture(pocket, gender), root)),
+        fs.existsSync(new URL("" + bagPicture(pocket, gender), root)),
       );
   assert(
     bagPicture("custom", "female").endsWith("bag-sprite-female-items.png"),
@@ -125,10 +125,10 @@ test("Native list navigation skips disabled items, wraps, reveals the focused ro
 });
 test("Sign content is immediate while ordinary character dialogue remains typewritten through the real catalog", () => {
   const signs = JSON.parse(
-      fs.readFileSync(new URL("dist/content/stories/signs.json", root)),
+      fs.readFileSync(new URL("src/content/stories/signs.json", root)),
     ),
     common = JSON.parse(
-      fs.readFileSync(new URL("dist/content/stories/dialogues.json", root)),
+      fs.readFileSync(new URL("src/content/stories/dialogues.json", root)),
     );
   const catalog = session().game.storyCatalog;
   for (const id of Object.keys(signs.dialogues))

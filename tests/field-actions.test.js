@@ -5,25 +5,25 @@ import assert from "node:assert/strict";
 import {
   FieldActionRegistry,
   FieldActionService,
-} from "../dist/engine/field-actions.js";
-import { FishingSession } from "../dist/engine/fishing.js";
-import { gen3FishingRules } from "../dist/engine/rules/gen3/fishing.js";
-import { FieldActionDirector } from "../dist/presentation/field-action-director.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { createMonster } from "../dist/engine/model.js";
-import { EncounterTableRegistry } from "../dist/engine/encounter-tables.js";
-import { EncounterService } from "../dist/engine/encounters.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS } from "../dist/engine/rules/gen3/held-items.js";
-import { Random } from "../dist/engine/model.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { createEmeraldPresentation } from "../dist/packs/emerald/animations.js";
-import { drawFieldAction } from "../dist/presentation/field-action-canvas.js";
+} from "../src/engine/field-actions.js";
+import { FishingSession } from "../src/engine/fishing.js";
+import { gen3FishingRules } from "../src/engine/rules/gen3/fishing.js";
+import { FieldActionDirector } from "../src/presentation/field-action-director.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { createMonster } from "../src/engine/model.js";
+import { EncounterTableRegistry } from "../src/engine/encounter-tables.js";
+import { EncounterService } from "../src/engine/encounters.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
+import { Random } from "../src/engine/model.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { drawFieldAction } from "../src/presentation/field-action-canvas.js";
 
 const base = loadContentSync();
 const definition = {

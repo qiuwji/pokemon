@@ -15,7 +15,7 @@ for ident,body in re.findall(r'\[ITEM_(\w+)\]\s*=\s*\{(.*?)\n    \}',source,re.S
     param=re.search(r'\.holdEffectParam\s*=\s*(\d+)',body)
     items[ident.lower()]={'name':name,'holdEffect':effect.group(1).lower(),'parameter':int(param.group(1)) if param else 0,'price':int(re.search(r'\.price\s*=\s*(\d+)',body).group(1))}
 if not items: raise ValueError('No item records parsed from reference')
-session.text(session.dist / 'engine/rules/gen3/held-catalog.js', generated_header(session.owner, session.source) + 'export const HELD_ITEM_METADATA = '+json.dumps(items,ensure_ascii=False,indent=2)+';\n')
+session.text(session.target / 'engine/rules/gen3/held-catalog.js', generated_header(session.owner, session.source) + 'export const HELD_ITEM_METADATA = '+json.dumps(items,ensure_ascii=False,indent=2)+';\n')
 print(len(items),'items,',len(set(i['holdEffect'] for i in items.values())),'effect types')
 
 session.finish()

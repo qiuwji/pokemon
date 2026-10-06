@@ -2,19 +2,19 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { createHash } from "node:crypto";
-import { audioPlugin } from "../dist/plugins/emerald-audio.js";
-import { AudioAdapter } from "../dist/adapters/audio.js";
-import { createEmeraldAudio, emeraldMusic } from "../dist/packs/emerald/audio-library.js";
+import { audioPlugin } from "../generated/plugins/emerald-audio.js";
+import { AudioAdapter } from "../src/adapters/audio.js";
+import { createEmeraldAudio, emeraldMusic } from "../src/packs/emerald/audio-library.js";
 import { session } from "../tests/helpers/session.js";
 
 /** Chapter-one songs ship as one pack; the map keeps the original constant. */
 const manifest = JSON.parse(
-  fs.readFileSync(new URL("../dist/assets/audio/emerald-audio/manifest.json", import.meta.url)),
+  fs.readFileSync(new URL("../generated/assets/audio/emerald-audio/manifest.json", import.meta.url)),
 );
 const track = manifest.tracks.find((t) => t.song === "MUS_LITTLEROOT");
 
 test("Installed original-song pack selects its named asset and loops without restarting the intro", async () => {
-  const bytes = fs.readFileSync(new URL("../dist/" + track.source, import.meta.url));
+  const bytes = fs.readFileSync(new URL("../" + track.source, import.meta.url));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), track.assetSha256);
   assert.equal(bytes.toString("ascii", 8, 12), "WAVE");
   const sampleRate = bytes.readUInt32LE(24), frameSize = bytes.readUInt16LE(32);
@@ -58,7 +58,7 @@ test("Every manifest track has a matching registered cue, and the pack owns no s
     assert.equal(cues.get(entry.cueId).kind, entry.kind, entry.cueId);
   }
   for (const old of manifest.supersededPacks) {
-    assert.equal(fs.existsSync(new URL(`../dist/plugins/${old}.js`, import.meta.url)), false, old);
-    assert.equal(fs.existsSync(new URL(`../dist/assets/audio/${old}`, import.meta.url)), false, old);
+    assert.equal(fs.existsSync(new URL(`../src/plugins/${old}.js`, import.meta.url)), false, old);
+    assert.equal(fs.existsSync(new URL(`../generated/assets/audio/${old}`, import.meta.url)), false, old);
   }
 });

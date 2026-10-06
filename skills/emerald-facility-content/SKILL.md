@@ -102,9 +102,9 @@ test("non-battle facility progresses and settles once", async () => {
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [src/engine/facilities.js](../../src/engine/facilities.js) | `rg -n "class FacilitySession" dist tests docs package.json` |
-| [examples/facility.test.js](../../examples/facility.test.js) | `rg -n "facilityActivities" dist tests docs package.json` |
-| [tests/facilities.test.js](../../tests/facilities.test.js) | `rg -n "Non-battle plugin activity" dist tests docs package.json` |
+| [src/engine/facilities.js](../../src/engine/facilities.js) | `rg -n "class FacilitySession" src generated tests docs package.json` |
+| [examples/facility.test.js](../../examples/facility.test.js) | `rg -n "facilityActivities" src generated tests docs package.json` |
+| [tests/facilities.test.js](../../tests/facilities.test.js) | `rg -n "Non-battle plugin activity" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

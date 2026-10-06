@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { World } from '../dist/engine/world.js';
-import { ElevationPolicy } from '../dist/engine/elevation.js';
-import { MovementRegistry } from '../dist/engine/movement.js';
+import { World } from '../src/engine/world.js';
+import { ElevationPolicy } from '../src/engine/elevation.js';
+import { MovementRegistry } from '../src/engine/movement.js';
 
 const mode = { allowed:()=>true, traverse:()=>true, durations:[100] };
 const map = () => ({width:3,height:2,blocks:Array(6).fill(3<<12),behavior:Array(6).fill(0),

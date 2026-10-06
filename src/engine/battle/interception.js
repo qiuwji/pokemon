@@ -1,4 +1,4 @@
-import { GEN3_REFERENCE_MOVES } from "../rules/gen3/reference-metadata.js";
+import { GEN3_REFERENCE_MOVES } from "../../../generated/engine/rules/gen3/reference-metadata.js";
 import { executeCalledMove } from "./called-moves.js";
 import { normalizeMoveFlags } from "../move-flags.js";
 /** Reassigns a declared move to a live interceptor; the selecting actor has already paid PP. */

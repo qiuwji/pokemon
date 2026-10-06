@@ -11,7 +11,7 @@ function walk(directory) {
         : [];
   });
 }
-const files = walk(new URL("../dist/", import.meta.url).pathname);
+const files = ["src", "generated"].flatMap(tree => walk(new URL(`../${tree}/`, import.meta.url).pathname));
 for (const file of files) {
   const result = spawnSync(process.execPath, ["--check", file], {
     encoding: "utf8",

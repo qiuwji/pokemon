@@ -107,7 +107,7 @@ footer {
 .launch-panel {
   border: solid transparent;
   border-width: 3.333cqw;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill / 3.333cqw / 0 stretch;
   background: #f8f8f8;
   box-shadow: none;
@@ -231,7 +231,7 @@ footer {
 }
 /* Party: native green background and blue selection panels, lead card on the left. */
 [data-modal-page="party"] .modal {
-  background: #739c73 url("../../../assets/ui/party-background.png") center /
+  background: #739c73 url("../../../../generated/assets/ui/party-background.png") center /
     100% 100%;
 }
 .modal .mon-heading {
@@ -404,7 +404,7 @@ footer {
   padding: 0;
   border: 0;
   box-shadow: none;
-  background: transparent url("../../../assets/ui/party-slot-wide.png") center /
+  background: transparent url("../../../../generated/assets/ui/party-slot-wide.png") center /
     100% 100%;
   width: 60%;
   height: 15%;
@@ -421,7 +421,7 @@ footer {
   top: 15%;
   width: 33.333333%;
   height: 35%;
-  background-image: url("../../../assets/ui/party-slot-main.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-main.png");
 }
 .native-party-card.slot-1 {
   top: 5%;
@@ -441,28 +441,28 @@ footer {
 .native-party-card:focus,
 .native-party-card.active {
   outline: none;
-  background-image: url("../../../assets/ui/party-slot-wide-selected.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-selected.png");
 }
 .native-party-card.slot-0:focus,
 .native-party-card.slot-0.active {
-  background-image: url("../../../assets/ui/party-slot-main-selected.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-main-selected.png");
 }
 .native-party-card.egg {
-  background-image: url("../../../assets/ui/party-slot-wide-no-hp.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-no-hp.png");
 }
 .native-party-card.egg:focus,
 .native-party-card.egg.active {
-  background-image: url("../../../assets/ui/party-slot-wide-no-hp-selected.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-no-hp-selected.png");
 }
 .native-party-card.slot-0.egg {
-  background-image: url("../../../assets/ui/party-slot-main-no-hp.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-main-no-hp.png");
 }
 .native-party-card.slot-0.egg:focus,
 .native-party-card.slot-0.egg.active {
-  background-image: url("../../../assets/ui/party-slot-main-no-hp-selected.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-main-no-hp-selected.png");
 }
 .native-party-card.empty {
-  background-image: url("../../../assets/ui/party-slot-wide-empty.png");
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-empty.png");
 }
 .party-icon {
   position: absolute;
@@ -556,7 +556,7 @@ footer {
   background: #f8f8f8;
   font-size: 3.333cqw;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill / 3.333cqw;
 }
 .party-cancel {
@@ -587,7 +587,7 @@ footer {
   padding: 2% 1%;
   background: #f8f8f8;
   border: 3.333cqw solid transparent;
-  border-image: var(--native-window-image, url("../../../assets/ui/window.png"))
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
     8 fill / 3.333cqw;
 }
 .party-action-menu button {

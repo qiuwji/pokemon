@@ -2,7 +2,7 @@ import { loadContentSync } from "./content-io.mjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MOVE_EFFECTS } from "../dist/engine/move-effects.js";
+import { MOVE_EFFECTS } from "../src/engine/move-effects.js";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.resolve(
   process.argv[2] || path.join(root, "work/pokeemerald"),

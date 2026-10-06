@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
-import { TRAVEL_DESTINATIONS } from "../dist/packs/emerald/movement.js";
-import { objectsFor } from "../dist/packs/emerald/pack.js";
+import { TRAVEL_DESTINATIONS } from "../src/packs/emerald/movement.js";
+import { objectsFor } from "../src/packs/emerald/pack.js";
 
 const said = (s) =>
   s.dialogs

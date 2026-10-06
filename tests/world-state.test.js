@@ -4,16 +4,16 @@ import assert from "node:assert/strict";
 import {
   WorldStateService,
   emptyWorldState,
-} from "../dist/engine/world-state.js";
-import { World } from "../dist/engine/world.js";
-import { NPCSystem } from "../dist/engine/npcs.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
+} from "../src/engine/world-state.js";
+import { World } from "../src/engine/world.js";
+import { NPCSystem } from "../src/engine/npcs.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
 const db = {
   maps: {
     Meadow: {

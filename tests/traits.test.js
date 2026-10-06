@@ -6,16 +6,16 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { createMonster, Random, damage } from "../dist/engine/model.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
+import { Battle } from "../src/engine/battle.js";
+import { createMonster, Random, damage } from "../src/engine/model.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
 import {
   GEN3_HELD_ITEMS,
   HOLD_EFFECTS,
-} from "../dist/engine/rules/gen3/held-items.js";
-import { RulePipeline } from "../dist/engine/rule-pipeline.js";
-import { EffectRegistry } from "../dist/engine/effects.js";
-import { EquipmentService } from "../dist/engine/equipment.js";
+} from "../src/engine/rules/gen3/held-items.js";
+import { RulePipeline } from "../src/engine/rule-pipeline.js";
+import { EffectRegistry } from "../src/engine/effects.js";
+import { EquipmentService } from "../src/engine/equipment.js";
 const db = loadContentSync();
 function setup({
   ability = "overgrow",

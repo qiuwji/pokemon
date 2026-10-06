@@ -95,9 +95,9 @@ test("plugin actor identity and memory survive save restore", async () => {
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [src/engine/actor-repository.js](../../src/engine/actor-repository.js) | `rg -n "class ActorTemplateRegistry" dist tests docs package.json` |
-| [src/packs/emerald/application/actor-application.js](../../src/packs/emerald/application/actor-application.js) | `rg -n "class ActorApplication" dist tests docs package.json` |
-| [tests/actors.test.js](../../tests/actors.test.js) | `rg -n "Public spawn" dist tests docs package.json` |
+| [src/engine/actor-repository.js](../../src/engine/actor-repository.js) | `rg -n "class ActorTemplateRegistry" src generated tests docs package.json` |
+| [src/packs/emerald/application/actor-application.js](../../src/packs/emerald/application/actor-application.js) | `rg -n "class ActorApplication" src generated tests docs package.json` |
+| [tests/actors.test.js](../../tests/actors.test.js) | `rg -n "Public spawn" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

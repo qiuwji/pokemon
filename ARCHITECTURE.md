@@ -1,6 +1,6 @@
 # 架构与扩展约定
 
-`src/`保存手写运行时与可编辑内容，`generated/`保存派生输入；`dist/`仅是构建后的同路径部署树。详见[构建合同](docs/development/BUILD_PIPELINE.md)。
+`src/`保存手写运行时与可编辑内容，`generated/`保存派生数据和素材；运行、测试和导入直接访问各自目录，不复制为dist。详见[目录合同](docs/development/SOURCE_LAYOUT.md)。
 本工程：绿宝石序章内容包运行在可复用的格子探索、队伍/席位回合战斗引擎上。规则、应用协调、内容、演出与浏览器宿主分层；引擎合同与完整原作业务内容的完成度分别记录。
 
 首先阅读 [README.md](README.md) 的运行入口和[文档导航](docs/README.md)；当前框架范围看[SCOPE](docs/project/SCOPE.md)，任务与欠账看[STATUS](docs/project/STATUS.md)，按需选择[领域Skill](docs/project/SKILLS.md)。原路线保留在 [ENGINE_ROADMAP.md](ENGINE_ROADMAP.md)，验证与历史看 [docs/project/CHANGELOG.md](docs/project/CHANGELOG.md)。本文定义当前结构，不把历史里程碑当作当前能力。

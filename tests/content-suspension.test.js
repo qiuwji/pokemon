@@ -1,16 +1,16 @@
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session, manifest } from './helpers/session.js';
 import { loadContentSync } from '../tools/content-io.mjs';
-import { createEmeraldPlugins } from '../dist/packs/emerald/extensions.js';
-import { EmeraldAdventure } from '../dist/packs/emerald/adventure.js';
-import { attachEmeraldExtensions } from '../dist/packs/emerald/extension-ports.js';
-import { createMonster } from '../dist/engine/model.js';
-import { inventoryQuantity } from '../dist/engine/inventory.js';
-import { PACK, validateSave } from '../dist/packs/emerald/pack.js';
+import { createEmeraldPlugins } from '../src/packs/emerald/extensions.js';
+import { EmeraldAdventure } from '../src/packs/emerald/adventure.js';
+import { attachEmeraldExtensions } from '../src/packs/emerald/extension-ports.js';
+import { createMonster } from '../src/engine/model.js';
+import { inventoryQuantity } from '../src/engine/inventory.js';
+import { PACK, validateSave } from '../src/packs/emerald/pack.js';
 const base=loadContentSync();
 const mod=manifest('suspend-demo',api=>{
   api.content.register('items','snack',{name:'点心',price:10,contexts:['field'],target:'party',effects:[{op:'restoreHP',amount:10}],icon:'◇',description:'测试'});

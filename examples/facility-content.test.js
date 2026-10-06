@@ -2,11 +2,11 @@ import fs from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "../tests/helpers/session.js";
-import { createFacilityContent } from "../dist/plugins/facility-content/index.js";
-import { loadPluginCatalog } from "../dist/adapters/plugin-loader.js";
+import { createFacilityContent } from "../src/plugins/facility-content/index.js";
+import { loadPluginCatalog } from "../src/adapters/plugin-loader.js";
 test("JSON-only facility plugin loads through the catalog and runs all three authored templates", async () => {
-  const url = new URL("../dist/plugins/catalog.json", import.meta.url);
-  const pack = JSON.parse(fs.readFileSync(new URL("../dist/plugins/facility-content/content.json", import.meta.url)));
+  const url = new URL("../src/plugins/catalog.json", import.meta.url);
+  const pack = JSON.parse(fs.readFileSync(new URL("../src/plugins/facility-content/content.json", import.meta.url)));
   const plugins = await loadPluginCatalog({ url, parameters: new URLSearchParams("plugins=facility-content&disable-plugins=ai-control,emerald-audio"),
     readJSON: location => JSON.parse(fs.readFileSync(location)) });
   assert.deepEqual(plugins.map(p => p.id), ["facility-content"]);

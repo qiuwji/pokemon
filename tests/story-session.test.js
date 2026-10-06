@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session, manifest } from "./helpers/session.js";
-import { StoryCatalog } from "../dist/engine/story-catalog.js";
+import { StoryCatalog } from "../src/engine/story-catalog.js";
 import {
   StorySession,
   validStorySession,
-} from "../dist/engine/story-session.js";
-import { DEFAULT_CONDITION_QUERIES } from "../dist/engine/condition-queries.js";
+} from "../src/engine/story-session.js";
+import { DEFAULT_CONDITION_QUERIES } from "../src/engine/condition-queries.js";
 
 function program(commands, suffix = "demo") {
   let id;
@@ -257,7 +257,7 @@ test("A suspended durable script cannot leak into trailing commands, and waiting
 });
 
 test("Parallel result branches claim resources and durable programs reject suspension inside parallel tracks", async () => {
-  const { CommandRunner } = await import("../dist/engine/commands.js");
+  const { CommandRunner } = await import("../src/engine/commands.js");
   const runner = new CommandRunner(
     { reward: () => {}, move: () => {} },
     { resources: (c) => (c.type === "move" ? [c.actor] : []) },

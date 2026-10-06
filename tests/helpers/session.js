@@ -1,14 +1,14 @@
 import { loadContentSync } from "../../tools/content-io.mjs";
-import { SceneDirector } from "../../dist/presentation/scene-director.js";
-import { createEmeraldSceneDefinitions } from "../../dist/packs/emerald/presentation-scenes.js";
-import { createEmeraldPlugins } from "../../dist/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../../dist/packs/emerald/extension-ports.js";
-import { EmeraldAdventure } from "../../dist/packs/emerald/adventure.js";
-import { createMonster } from "../../dist/engine/model.js";
-import { Timeline, TransitionController } from "../../dist/engine/timeline.js";
-import { BattleDirector } from "../../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../../dist/engine/motion.js";
-export { objectSchema } from "../../dist/engine/extensions/values.js";
+import { SceneDirector } from "../../src/presentation/scene-director.js";
+import { createEmeraldSceneDefinitions } from "../../src/packs/emerald/presentation-scenes.js";
+import { createEmeraldPlugins } from "../../src/packs/emerald/extensions.js";
+import { attachEmeraldExtensions } from "../../src/packs/emerald/extension-ports.js";
+import { EmeraldAdventure } from "../../src/packs/emerald/adventure.js";
+import { createMonster } from "../../src/engine/model.js";
+import { Timeline, TransitionController } from "../../src/engine/timeline.js";
+import { BattleDirector } from "../../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../../src/engine/motion.js";
+export { objectSchema } from "../../src/engine/extensions/values.js";
 
 export function manifest(id, setup, permissions = []) {
   return { id, setup, permissions, apiVersion: 1, version: "1.0.0", dataVersion: 1 };

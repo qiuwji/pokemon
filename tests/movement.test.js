@@ -1,25 +1,25 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
-import { emptyFieldEffects } from "../dist/engine/field-effects.js";
+import { emptyEncounterTickets } from "../src/engine/encounter-tickets.js";
+import { emptyFieldEffects } from "../src/engine/field-effects.js";
 import { createBag } from "./helpers/inventory-fixture.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { emptyWeather } from "../dist/engine/weather.js";
-import { emptyFacilities } from "../dist/engine/facilities.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { emptyWeather } from "../src/engine/weather.js";
+import { emptyFacilities } from "../src/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { MovementRegistry, MovementService } from "../dist/engine/movement.js";
-import { FieldSession } from "../dist/engine/field-session.js";
-import { FieldDirector } from "../dist/engine/field-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { TravelService } from "../dist/engine/travel.js";
-import { TravelDirector } from "../dist/presentation/travel-director.js";
+import { MovementRegistry, MovementService } from "../src/engine/movement.js";
+import { FieldSession } from "../src/engine/field-session.js";
+import { FieldDirector } from "../src/engine/field-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { TravelService } from "../src/engine/travel.js";
+import { TravelDirector } from "../src/presentation/travel-director.js";
 import {
   MOVEMENT_MODES,
   TRAVEL_DESTINATIONS,
-} from "../dist/packs/emerald/movement.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
+} from "../src/packs/emerald/movement.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
 
 const map = (behavior = Array(15).fill(0)) => ({
   width: 5,
@@ -329,7 +329,7 @@ test("Imported mode frames have valid native grid sizes and fly destinations res
     "FlyBird",
   ]) {
     const image = fs.readFileSync(
-        new URL(`../dist/assets/actor-${id}.png`, import.meta.url),
+        new URL(`../generated/assets/actor-${id}.png`, import.meta.url),
       ),
       d = db.actors[id],
       width = image.readUInt32BE(16),

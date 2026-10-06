@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import { loadContentSync } from "./content-io.mjs";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { createFacilityContent } from "../dist/plugins/facility-content/index.js";
-const input = process.argv[2] || new URL("../dist/plugins/facility-content/content.json", import.meta.url);
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createFacilityContent } from "../src/plugins/facility-content/index.js";
+const input = process.argv[2] || new URL("../src/plugins/facility-content/content.json", import.meta.url);
 try {
   const pack = JSON.parse(fs.readFileSync(input, "utf8"));
   createEmeraldPlugins(loadContentSync(), [createFacilityContent(pack)]);

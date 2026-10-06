@@ -27,7 +27,7 @@ python3 tools/plugins/export-flight-art.py
 # 参考资料不在默认位置时添加 --source /path/to/pokeemerald
 ```
 
-Pillow依赖在 `tools/requirements.txt`；运行游戏只需已提交的 `assets/`，不依赖work目录。`assets/source.json` 保存输入与产物SHA-256；导入器只拥有本插件的三个资源文件，不修改C资料、图鉴或地图。
+Pillow依赖在 `tools/requirements.txt`；运行游戏只需已提交的 `generated/plugins/high-flight/assets/`，不依赖work目录。`generated/plugins/high-flight/assets/source.json` 保存输入与产物SHA-256；导入器只拥有本插件的三个资源文件，不修改C资料、图鉴或地图。
 
 ## 实现和验证入口
 

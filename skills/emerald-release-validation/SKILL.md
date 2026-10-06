@@ -91,8 +91,8 @@ test("late invalid intent rolls back plugin memory and world money", async () =>
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [package.json](../../package.json) | `rg -n "check:contracts" dist tests docs package.json` |
-| [tests/architecture.test.js](../../tests/architecture.test.js) | `rg -n "interface" dist tests docs package.json` |
-| [docs/project/VALIDATION.md](../../docs/project/VALIDATION.md) | `rg -n "证据失效条件" dist tests docs package.json` |
+| [package.json](../../package.json) | `rg -n "check:contracts" src generated tests docs package.json` |
+| [tests/architecture.test.js](../../tests/architecture.test.js) | `rg -n "interface" src generated tests docs package.json` |
+| [docs/project/VALIDATION.md](../../docs/project/VALIDATION.md) | `rg -n "证据失效条件" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

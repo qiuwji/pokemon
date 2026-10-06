@@ -1,9 +1,9 @@
 import { loadContentSync } from "../../tools/content-io.mjs";
 import { createBag } from "./inventory-fixture.js";
-import { Battle } from "../../dist/engine/battle.js";
-import { Random, createMonster } from "../../dist/engine/model.js";
-import { GEN3_ABILITIES } from "../../dist/engine/rules/gen3/abilities.js";
-import { GEN3_HELD_ITEMS } from "../../dist/engine/rules/gen3/held-items.js";
+import { Battle } from "../../src/engine/battle.js";
+import { Random, createMonster } from "../../src/engine/model.js";
+import { GEN3_ABILITIES } from "../../src/engine/rules/gen3/abilities.js";
+import { GEN3_HELD_ITEMS } from "../../src/engine/rules/gen3/held-items.js";
 const base = loadContentSync();
 /** Real creature values and complete default attachments; individual tests override only relevant rules. */
 export function battleFixture({

@@ -1,40 +1,40 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
-import { emptyFieldEffects } from "../dist/engine/field-effects.js";
+import { emptyEncounterTickets } from "../src/engine/encounter-tickets.js";
+import { emptyFieldEffects } from "../src/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
   inventoryQuantity,
 } from "./helpers/inventory-fixture.js";
-import { emptyWeather } from "../dist/engine/weather.js";
-import { emptyFacilities } from "../dist/engine/facilities.js";
+import { emptyWeather } from "../src/engine/weather.js";
+import { emptyFacilities } from "../src/engine/facilities.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { Battle } from "../dist/engine/battle.js";
-import { EffectRegistry } from "../dist/engine/effects.js";
-import { MoveEffectRegistry } from "../dist/engine/move-effects.js";
-import { createItemService } from "../dist/engine/items.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { Battle } from "../src/engine/battle.js";
+import { EffectRegistry } from "../src/engine/effects.js";
+import { MoveEffectRegistry } from "../src/engine/move-effects.js";
+import { createItemService } from "../src/engine/items.js";
 import {
   StoryEngine,
   emptyStoryProgress,
   grantReward,
   completeEvent,
-} from "../dist/engine/story.js";
+} from "../src/engine/story.js";
 import {
   matchesCondition,
   validateCondition,
-} from "../dist/engine/conditions.js";
-import { SaveStore } from "../dist/engine/save-store.js";
-import { CommandRunner } from "../dist/engine/commands.js";
-import { NPCSystem } from "../dist/engine/npcs.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { validateSave } from "../dist/packs/emerald/pack.js";
+} from "../src/engine/conditions.js";
+import { SaveStore } from "../src/engine/save-store.js";
+import { CommandRunner } from "../src/engine/commands.js";
+import { NPCSystem } from "../src/engine/npcs.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { validateSave } from "../src/packs/emerald/pack.js";
 import {
   EMERALD_STORY,
   interaction,
   battleOutcome,
-} from "../dist/packs/emerald/story.js";
+} from "../src/packs/emerald/story.js";
 const db = loadContentSync();
 function setup(options = {}) {
   const rng = new Random(123);

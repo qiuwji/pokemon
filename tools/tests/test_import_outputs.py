@@ -17,44 +17,44 @@ class ImportOutputTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
-        self.dist = Path(temporary.name) / 'dist'
-        self.args = SimpleNamespace(target=self.dist, check=True)
+        self.target = Path(temporary.name) / 'pack'
+        self.args = SimpleNamespace(target=self.target, check=True)
 
     def test_binary_preview_does_not_create_target(self):
         session = ImportSession(self.args, 'import-audio.py')
-        session.binary(self.dist / 'assets/audio/cry.wav', b'new-wave')
+        session.binary(self.target / 'assets/audio/cry.wav', b'new-wave')
         with redirect_stdout(io.StringIO()) as report:
             session.finish()
         self.assertEqual(json.loads(report.getvalue())['files'], ['assets/audio/cry.wav'])
-        self.assertFalse(self.dist.exists())
+        self.assertFalse(self.target.exists())
 
     def test_binary_commit_and_wrong_owner_reject(self):
         self.args.check = False
         session = ImportSession(self.args, 'import-audio.py')
-        target = self.dist / 'assets/audio/cry.wav'
+        target = self.target / 'assets/audio/cry.wav'
         session.binary(target, b'wave')
         with redirect_stdout(io.StringIO()):
             session.finish()
         self.assertEqual(target.read_bytes(), b'wave')
-        session.text(self.dist / 'engine/rules/gen3/map-weather.js', 'overwrite')
+        session.text(self.target / 'engine/rules/gen3/map-weather.js', 'overwrite')
         with self.assertRaisesRegex(ValueError, 'cannot write'):
             session.finish()
-        self.assertFalse((self.dist / 'engine').exists())
+        self.assertFalse((self.target / 'engine').exists())
         self.assertEqual(target.read_bytes(), b'wave')
 
     def test_missing_glob_fails_before_empty_generation(self):
         with self.assertRaisesRegex(ValueError, 'Missing required reference files'):
-            require_files(self.dist, '*/map.json')
+            require_files(self.target, '*/map.json')
 
     def test_machine_count_policy_is_configured_and_fails_before_writes(self):
-        config = self.dist.parent / 'invalid-config.json'
+        config = self.target.parent / 'invalid-config.json'
         config.write_text(json.dumps({'expectedTMCount': 51, 'expectedHMCount': 8}))
         result = subprocess.run([sys.executable, str(PROJECT / 'tools/import.py'), 'machine-learning',
-                                 '--config', str(config), '--target', str(self.dist)],
-                                cwd=self.dist.parent, text=True, capture_output=True)
+                                 '--config', str(config), '--target', str(self.target)],
+                                cwd=self.target.parent, text=True, capture_output=True)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('expectedTMCount: expected 51, parsed 50', result.stderr)
-        self.assertFalse(self.dist.exists())
+        self.assertFalse(self.target.exists())
 
     def test_shared_parser_matches_full_existing_reference(self):
         # This test uses the fixed read-only reference; it never regenerates production data.

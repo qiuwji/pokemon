@@ -22,7 +22,7 @@ description: 通过现有插件公开API扩展绿宝石的内容、规则、状�
 
 ## 编写插件
 
-源码在src/plugins，派生资源在generated/plugins或generated/assets；dist只部署，参照[构建合同](../../docs/development/BUILD_PIPELINE.md)。通用战斗扩展的[待评审方案](../../docs/project/PLUGIN_EXTENSION_REVIEW.md)不属于当前API；没有用户的新授权不得把拟议字段当作实现。
+源码在src/plugins，派生资源在generated/plugins或generated/assets；运行时直接访问两棵目录，参照[目录合同](../../docs/development/SOURCE_LAYOUT.md)。通用战斗扩展的[待评审方案](../../docs/project/PLUGIN_EXTENSION_REVIEW.md)不属于当前API；没有用户的新授权不得把拟议字段当作实现。
 
 manifest声明命名空间、当前apiVersion/dataVersion、权限和依赖。setup只注册，不在注册时开始行动/发网络/写存档。保留目录引用、重复/未知ID启动拒绝；插件数据严格当前schema，不引入历史迁移旁路。
 
@@ -71,7 +71,7 @@ selector绑定对象/原label，priority明确竞争关系；公共call使用sch
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session, objectSchema } from "../tests/helpers/session.js";
-import { validateLayout } from "../dist/engine/extensions/ui-registry.js";
+import { validateLayout } from "../src/engine/extensions/ui-registry.js";
 test("detail entry renders a clickable action with persistent memory", async () => {
   let api;
   const plugin = manifest("page-demo", value => {
@@ -186,7 +186,7 @@ test("a plugin composes appearance, camera range and independent fog", async () 
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session } from "../tests/helpers/session.js";
-import { SpriteCanvas } from "../dist/adapters/sprite-canvas.js";
+import { SpriteCanvas } from "../src/adapters/sprite-canvas.js";
 test("a registered detail clip is selected, sampled and cleaned up by the real player", () => {
   const plugin = manifest("sprite-demo", api => {
     api.presentation.sprite("detail", {
@@ -218,7 +218,7 @@ test("a registered detail clip is selected, sampled and cleaned up by the real p
 
 按[UI合同](../../docs/engine/presentation/UI_CONTRACT.md)注册presentation视觉，再在页面/区域/HUD返回canvas节点。树仅保存visual、尺寸和schema参数，不能塞draw函数；draw使用冻结frame和第三参数assets，循环由宿主帧驱动。点击由宿主产生pointer坐标并调用action，schema须声明context/input/pointer。不要在绘制里发命令、取游戏RNG或自行启动计时器。隐藏页签暂停，页面重建重新挂载，关闭释放；循环定义不能用于一次性play/feedback。
 
-[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。当前默认插件清单查catalog和STATUS；需要浏览器验收时按作者指南注册自己的示例，生产插件放dist/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
+[最小完整例](../../examples/plugin-canvas.test.js)在项目根运行 `node --test examples/plugin-canvas.test.js`；[Canvas端口夹具](../../tests/helpers/canvas-extension-fixture.js)只替代外部DOM，不替代注册器、时间采样或命令事务。当前默认插件清单查catalog和STATUS；需要浏览器验收时按作者指南注册自己的示例，生产插件放src/plugins，入口只装配。文件改名搜索 `class VisualTimeline`、`class VisualCanvas`、`kind: "canvas"`。
 
 <!-- runnable-example: examples/plugin-canvas.test.js -->
 ```js
@@ -271,9 +271,9 @@ test("a plugin mounts a looping clickable visual with saved interaction and host
 
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
-| [src/engine/extensions/plugin-host.js](../../src/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" dist tests docs package.json` |
-| [src/engine/extensions/ui-registry.js](../../src/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" dist tests docs package.json` |
-| [examples/plugin-page.test.js](../../examples/plugin-page.test.js) | `rg -n "monster.detail" dist tests docs package.json` |
+| [src/engine/extensions/plugin-host.js](../../src/engine/extensions/plugin-host.js) | `rg -n "class PluginHost" src generated tests docs package.json` |
+| [src/engine/extensions/ui-registry.js](../../src/engine/extensions/ui-registry.js) | `rg -n "UI_SLOTS" src generated tests docs package.json` |
+| [examples/plugin-page.test.js](../../examples/plugin-page.test.js) | `rg -n "monster.detail" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

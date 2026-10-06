@@ -1,6 +1,6 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { createEmeraldSpriteClips } from "../dist/packs/emerald/sprite-clips.js";
-import { emeraldAppearanceResources } from "../dist/packs/emerald/appearance-definitions.js";
+import { createEmeraldSpriteClips } from "../src/packs/emerald/sprite-clips.js";
+import { emeraldAppearanceResources } from "../src/packs/emerald/appearance-definitions.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import {
   createBag,
@@ -9,11 +9,11 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createEmeraldInterface } from "../dist/packs/emerald/interface.js";
-import { createUIShell } from "../dist/packs/emerald/ui-shell.js";
-import { createMonster, Random } from "../dist/engine/model.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { readOnly } from "../dist/engine/extensions/values.js";
+import { createEmeraldInterface } from "../src/packs/emerald/interface.js";
+import { createUIShell } from "../src/packs/emerald/ui-shell.js";
+import { createMonster, Random } from "../src/engine/model.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { readOnly } from "../src/engine/extensions/values.js";
 /** Minimal DOM port double, intentionally without gameplay globals. Browser tests cover layout and clicks. */
 function documentPort() {
   const elements = new Map(),

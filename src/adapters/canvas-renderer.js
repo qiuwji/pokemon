@@ -534,7 +534,7 @@ export async function loadAssets(db) {
             resolve();
           };
           image.onerror = () => reject(new Error(`无法加载图像 ${id}`));
-          image.src = db.resources?.[id] || `assets/${id}.png`;
+          image.src = db.resources?.[id] || `generated/assets/${id}.png`;
         }),
     ),
   );

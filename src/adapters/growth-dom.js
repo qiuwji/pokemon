@@ -1,6 +1,6 @@
 /** A pixel presentation adapter driven by the shared animation clock. No domain mutations. */
 export class GrowthDOM {
-  constructor(element, { asset = (id) => `assets/${id}-front.png` } = {}) {
+  constructor(element, { asset = (id) => `generated/assets/${id}-front.png` } = {}) {
     Object.assign(this, { element, asset });
     element.className = "growth-overlay";
     element.innerHTML =

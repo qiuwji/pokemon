@@ -78,6 +78,8 @@ def install(pack_file, build, project, check=False):
             if data.get('renderer', {}).get('revision') != spec['rendererRevision']:
                 raise ValueError(f'Renderer revision differs for {song}')
             local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data, spec.get('musicFades'))
+            if workspace.sources:
+                cue['source'] = 'generated/' + asset
             audio = folder / data['assetName']
             if digest(audio) != data['assetSha256']:
                 raise ValueError(f'Track checksum differs from its manifest: {song}')
@@ -94,7 +96,7 @@ def install(pack_file, build, project, check=False):
                 'title': entry.get('title', data.get('renderConfig', {}).get('title', song)),
                 'config': entry.get('config'),
                 'cueId': f'{track_id}:{local}',
-                'source': asset,
+                'source': cue['source'],
                 'cue': cue,
                 'assetSha256': data['assetSha256'],
                 'frames': data['frames'],
@@ -122,6 +124,7 @@ def install(pack_file, build, project, check=False):
     changes[module] = ('\n'.join(lines)).encode()
     catalog_path = root / 'plugins/catalog.json'
     catalog = json.loads(catalog_path.read_text())
+    module_path = f'../../generated/plugins/{track_id}.js' if workspace.sources else f'./{track_id}.js'
     kept, removed = [], []
     for entry in catalog['plugins']:
         if entry.get('export') == 'bgmPlugin' and entry['id'] in superseded:
@@ -130,12 +133,12 @@ def install(pack_file, build, project, check=False):
             if stale_module.is_file():
                 removals.append(stale_module)
         elif entry['id'] == track_id:
-            kept.append({**entry, 'module': f'./{track_id}.js', 'export': 'audioPlugin',
+            kept.append({**entry, 'module': module_path, 'export': 'audioPlugin',
                          'enabled': bool(spec.get('defaultEnabled', True)) or entry.get('enabled', False)})
         else:
             kept.append(entry)
     if not any(e['id'] == track_id for e in kept):
-        kept.append({'id': track_id, 'module': f'./{track_id}.js', 'export': 'audioPlugin',
+        kept.append({'id': track_id, 'module': module_path, 'export': 'audioPlugin',
                      'enabled': bool(spec.get('defaultEnabled', True))})
     changes[catalog_path] = (json.dumps({'version': catalog.get('version', 1), 'plugins': kept},
                                         ensure_ascii=False, indent=2) + '\n').encode()

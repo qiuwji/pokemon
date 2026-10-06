@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-const base = new URL("../dist/", import.meta.url);
+const base = new URL("../src/", import.meta.url);
 function modules(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const file = path.join(directory, entry.name);
@@ -83,7 +83,8 @@ test("Every local ES module import resolves after refactors", () => {
       }
     }
   }
-  walk(new URL("../dist/", import.meta.url).pathname);
+  walk(new URL("../src/", import.meta.url).pathname);
+  walk(new URL("../generated/", import.meta.url).pathname);
 });
 test("Every Emerald page and UI shell sends commands without mutating persisted state", () => {
   const files = modules(new URL("packs/emerald/", base).pathname).filter(
@@ -169,7 +170,8 @@ test("Core tests and fixtures do not import installed plugins or authoring examp
     const source = fs.readFileSync(file, "utf8");
     for (const match of source.matchAll(/from\s+["']([^"']+)["']/g)) {
       const target = path.resolve(path.dirname(file), match[1]);
-      assert(!target.startsWith(new URL("../dist/plugins/", import.meta.url).pathname), file);
+      assert(!target.startsWith(new URL("../src/plugins/", import.meta.url).pathname), file);
+      assert(!target.startsWith(new URL("../generated/plugins/", import.meta.url).pathname), file);
       assert(!target.startsWith(new URL("../examples/", import.meta.url).pathname), file);
     }
   }

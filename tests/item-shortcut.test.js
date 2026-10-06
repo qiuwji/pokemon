@@ -10,22 +10,22 @@ import assert from "node:assert/strict";
 import {
   ItemShortcutService,
   validItemShortcut,
-} from "../dist/engine/item-shortcut.js";
-import { createItemService } from "../dist/engine/items.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { createEmeraldCommandFacade } from "../dist/packs/emerald/command-facade.js";
-import { createBagInterface } from "../dist/packs/emerald/bag-interface.js";
+} from "../src/engine/item-shortcut.js";
+import { createItemService } from "../src/engine/items.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
+import { createBagInterface } from "../src/packs/emerald/bag-interface.js";
 
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { createMonster } from "../dist/engine/model.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { BrowserInput } from "../dist/adapters/browser-input.js";
-import { BEHAVIOR } from "../dist/engine/terrain.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { createMonster } from "../src/engine/model.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { BrowserInput } from "../src/adapters/browser-input.js";
+import { BEHAVIOR } from "../src/engine/terrain.js";
 const base = loadContentSync();
 const kit = {
   name: "Kit",

@@ -18,7 +18,7 @@ export function summaryPage(
   const identity = `<div class="summary-dex">No.${String(species.dex).padStart(3, "0")}</div><div class="summary-name">${esc(name)}</div><div class="summary-species">${esc(species.name)}</div><div class="summary-level">${mon.egg ? "" : `Lv.${mon.level} ${mon.gender === "male" ? "♂" : mon.gender === "female" ? "♀" : ""}`}</div>`;
   let content;
   if (mon.egg)
-    content = `<img class="summary-sprite" src="assets/egg-front.png" alt="蛋"><div class="summary-right">宝可梦的蛋<br><br>${mon.egg.cycles > 10 ? "还需要一段时间才能孵化。" : "里面传来了声音，快要孵化了！"}</div>`;
+    content = `<img class="summary-sprite" src="generated/assets/egg-front.png" alt="蛋"><div class="summary-right">宝可梦的蛋<br><br>${mon.egg.cycles > 10 ? "还需要一段时间才能孵化。" : "里面传来了声音，快要孵化了！"}</div>`;
   else if (page === 0)
     content = `<div class="summary-profile">训练家 ${esc(mon.originalTrainer === "player" ? playerName || "—" : "其他训练家")}</div><div class="summary-types">属性 ${species.types.map((t) => esc(TYPE_NAMES[t])).join(" / ")}</div><div class="summary-ability">${esc(ABILITIES[mon.ability] || mon.ability)}</div><div class="summary-memo">${esc(NATURES[mon.nature] || mon.nature)}性格。</div>`;
   else if (page === 1) {
@@ -57,5 +57,5 @@ export function summaryPage(
   const tools = mon.egg
     ? ""
     : '<details class="summary-tools"><summary>其他操作</summary><div class="native-window"><button id="growth-options">成长</button><button id="held-item">道具</button><button id="lead">首发</button><button id="use-potion">伤药</button></div></details>';
-  return `<div class="summary-native" data-summary-page-index="${page}" style="background-image:url('assets/ui/${mon.egg ? "summary-info-egg" : backgrounds[page]}.png')">${heading}${identity}${mon.egg ? "" : `<canvas id="detail-sprite" class="summary-sprite" width="64" height="64" role="img" aria-label="${esc(name)}"></canvas><span class="summary-status">${esc(STATUS_NAMES[mon.status] || "")}</span>`}${content}${tools}<div class="summary-extensions"><div data-extension-slot="monster.detail"></div><div data-extension-slot="monster.content"></div></div></div>`;
+  return `<div class="summary-native" data-summary-page-index="${page}" style="background-image:url('generated/assets/ui/${mon.egg ? "summary-info-egg" : backgrounds[page]}.png')">${heading}${identity}${mon.egg ? "" : `<canvas id="detail-sprite" class="summary-sprite" width="64" height="64" role="img" aria-label="${esc(name)}"></canvas><span class="summary-status">${esc(STATUS_NAMES[mon.status] || "")}</span>`}${content}${tools}<div class="summary-extensions"><div data-extension-slot="monster.detail"></div><div data-extension-slot="monster.content"></div></div></div>`;
 }

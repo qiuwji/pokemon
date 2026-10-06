@@ -14,8 +14,9 @@ PROJECT = Path(__file__).resolve().parents[2]
 class DetailSpriteImportTests(unittest.TestCase):
     def test_animation_source_preview_transparency_and_partial_metadata(self):
         with tempfile.TemporaryDirectory() as temporary:
-            target = Path(temporary) / 'dist'
-            shutil.copytree(PROJECT / 'dist/content', target / 'content')
+            target = Path(temporary) / 'pack'
+            shutil.copytree(PROJECT / 'src/content', target / 'content')
+            shutil.copytree(PROJECT / 'generated/content', target / 'content', dirs_exist_ok=True)
             metadata = target / 'packs/emerald/detail-sprite-frames.js'
             metadata.parent.mkdir(parents=True)
             metadata.write_text('export const DETAIL_SPRITE_FRAMES = {\n  custom: 1,\n};\n')

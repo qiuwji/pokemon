@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { aiControl } from "../dist/plugins/ai-control/index.js";
-import { createTestHarness } from "../dist/plugins/test-harness.js";
-import { loadPluginCatalog } from "../dist/adapters/plugin-loader.js";
+import { aiControl } from "../src/plugins/ai-control/index.js";
+import { createTestHarness } from "../src/plugins/test-harness.js";
+import { loadPluginCatalog } from "../src/adapters/plugin-loader.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import { session } from "../tests/helpers/session.js";
 
@@ -19,7 +19,7 @@ test("Default AI observer exposes compact live state and commands; observation d
 
 test("Actual catalog defaults to AI control and the original BGM packs; the test fixture requires an explicit test environment", async () => {
   const fs = await import("node:fs");
-  const options = { url: new URL("../dist/plugins/catalog.json", import.meta.url), content: loadContentSync(),
+  const options = { url: new URL("../src/plugins/catalog.json", import.meta.url), content: loadContentSync(),
     readJSON: url => JSON.parse(fs.readFileSync(url)) };
   // The consolidated original-sound pack is content, not an opt-in experiment: the reference plays music.
   const defaults = (await loadPluginCatalog(options)).map(p => p.id);

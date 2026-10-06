@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session, objectSchema } from "./helpers/session.js";
-import { registerFacilityContent } from "../dist/engine/extensions/facility-content.js";
+import { registerFacilityContent } from "../src/engine/extensions/facility-content.js";
 const slots = { id: "slots", template: "reel-machine", name: "Configured reels", parameters: {
   stake: 10, reels: [["a","a"],["a","a"],["a","a"]], lines: [[0,0,0]],
   payouts: [{ pattern: ["a","a","a"], multiplier: 3 }],

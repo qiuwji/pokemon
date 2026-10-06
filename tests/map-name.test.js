@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MapNameDOM } from '../dist/adapters/map-name-dom.js';
+import { MapNameDOM } from '../src/adapters/map-name-dom.js';
 test('Interior entry cancels the exterior name; exterior policy remains configurable', () => {
   const visible = new Set(), jobs = new Map(); let next = 0;
   const element = {textContent:'',classList:{add:k=>visible.add(k),remove:k=>visible.delete(k)}};

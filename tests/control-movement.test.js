@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { session, manifest } from "./helpers/session.js";
 import { loadContentSync } from "../tools/content-io.mjs";
-import { ObservationJournal } from "../dist/engine/observation-journal.js";
-import { NetworkGateway } from "../dist/engine/extensions/network-gateway.js";
+import { ObservationJournal } from "../src/engine/observation-journal.js";
+import { NetworkGateway } from "../src/engine/extensions/network-gateway.js";
 const base = loadContentSync().maps.LittlerootTown_ProfessorBirchsLab;
 function room() {
   const s = session([manifest("control-fixture", api => {
@@ -78,7 +78,7 @@ test("Network observations validate before movement, attach the real final state
 });
 
 test("Walk stops on a map transition or dialogue fact even when the blocking UI has already disappeared", async () => {
-  const { ControlWalk } = await import("../dist/engine/control-walk.js");
+  const { ControlWalk } = await import("../src/engine/control-walk.js");
   for (const type of ["map.changed", "teleport", "dialogue.started", "choice.opened", "battle.started"]) {
     let y = 0, now = 0;
     const j = new ObservationJournal();

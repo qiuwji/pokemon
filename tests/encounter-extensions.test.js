@@ -1,11 +1,11 @@
-import { isGrass } from "../dist/engine/extensions/terrain-utils.js";
+import { isGrass } from "../src/engine/extensions/terrain-utils.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { EncounterPolicyRegistry } from "../dist/engine/encounter-policies.js";
-import { FieldContacts } from "../dist/engine/field-contacts.js";
-import { GEN3_ELEVATION } from "../dist/engine/rules/gen3/elevation.js";
+import { EncounterPolicyRegistry } from "../src/engine/encounter-policies.js";
+import { FieldContacts } from "../src/engine/field-contacts.js";
+import { GEN3_ELEVATION } from "../src/engine/rules/gen3/elevation.js";
 
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
 import { encounterFixture } from "./helpers/encounter-extension-fixture.js";
 
 test("Channel policies select one eligible priority and explicit suppression never falls through", () => {

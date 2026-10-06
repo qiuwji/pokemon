@@ -9,7 +9,7 @@ source_argument(parser)
 args=arguments(parser, profile=True)
 session=ImportSession(args, 'import-audio.py')
 root=session.source
-target=session.dist/'assets/audio'
+target=session.target/'assets/audio'
 files=session.profile['audio']
 records=[]
 for name,ref in files.items():

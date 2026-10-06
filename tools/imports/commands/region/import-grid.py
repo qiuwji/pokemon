@@ -3,7 +3,7 @@ from imports.context import PROJECT, ImportSession, arguments, source_argument
 import argparse,json,re,struct,math
 from pathlib import Path
 from PIL import Image
-parser=argparse.ArgumentParser();source_argument(parser);args=arguments(parser, selectors=('maps',), profile=True);session=ImportSession(args,"import-grid.py");R=Path(args.source);D=session.dist;A=D/'assets';db=session.load();layouts={l['id']:l for l in json.loads((R/'data/layouts/layouts.json').read_text())['layouts']}
+parser=argparse.ArgumentParser();source_argument(parser);args=arguments(parser, selectors=('maps',), profile=True);session=ImportSession(args,"import-grid.py");R=Path(args.source);D=session.target;A=D/'assets';db=session.load();layouts={l['id']:l for l in json.loads((R/'data/layouts/layouts.json').read_text())['layouts']}
 def pal(p):return [tuple(map(int,l.split())) for l in p.read_text().splitlines()[3:19]]
 def words(p):b=p.read_bytes();return list(struct.unpack('<'+'H'*(len(b)//2),b))
 def painted(im,palette):

@@ -11,3 +11,51 @@ Documentation: 88 Markdown files, 923 local links, 17 synchronized examples vali
 > emerald-web-engine@0.37.0 check:engine-types
 > tsc -p tsconfig.engine.json
 
+
+2026-10-06 direct source operation, no dist (supersedes the copied build):
+
+> emerald-web-engine@0.37.0 check
+> node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs && npm run check:lint && npm run check:engine-types
+
+Explicit pending source references: 4 maps, 77 scripts (see src/content/references.json)
+Content valid: 14 maps, 58 species, 87 moves, 310 items, 27 events.
+Explicitly unavailable move mechanics (0): 
+Story content valid: 128 scripts, 169 dialogues, 119 bindings.
+Runtime content valid: 354 moves, 58 learning methods, 310 items.
+
+> emerald-web-engine@0.37.0 check:contracts
+> tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+
+Module syntax valid: 378 files.
+
+> emerald-web-engine@0.37.0 check:docs
+> node tools/check-docs.mjs
+
+Documentation: 88 Markdown files, 923 local links, 17 synchronized examples valid
+
+> emerald-web-engine@0.37.0 check:lint
+> eslint .
+
+
+> emerald-web-engine@0.37.0 check:engine-types
+> tsc -p tsconfig.engine.json
+
+
+
+Final generated-module and installed-plugin boundary check:
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (19.699584ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (2.377042ms)
+✔ Composition root does not own story, inventory or damage rules (0.24675ms)
+✔ Every local ES module import resolves after refactors (25.350125ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.091667ms)
+✔ Example plugins depend only on public extension utilities (0.311375ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (8.098959ms)
+✔ Core tests and fixtures do not import installed plugins or authoring examples (16.444292ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 137.562333

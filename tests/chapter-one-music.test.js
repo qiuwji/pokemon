@@ -2,20 +2,21 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emeraldMusic, ORIGINAL_SONG_CUES } from "../dist/packs/emerald/audio-library.js";
-import { validateAudioCue } from "../dist/engine/extensions/audio-contracts.js";
+import { emeraldMusic, ORIGINAL_SONG_CUES } from "../src/packs/emerald/audio-library.js";
+import { validateAudioCue } from "../src/engine/extensions/audio-contracts.js";
 
-const DIST = new URL("../dist/", import.meta.url);
-const catalog = JSON.parse(fs.readFileSync(new URL("plugins/catalog.json", DIST), "utf8"));
+const ROOT = new URL("../", import.meta.url);
+const SOURCE = new URL("../src/", import.meta.url);
+const catalog = JSON.parse(fs.readFileSync(new URL("plugins/catalog.json", SOURCE), "utf8"));
 const packManifest = JSON.parse(
-  fs.readFileSync(new URL("assets/audio/emerald-audio/manifest.json", DIST), "utf8"),
+  fs.readFileSync(new URL("generated/assets/audio/emerald-audio/manifest.json", ROOT), "utf8"),
 );
 
 /** Register the real generated audio plugin exactly as the host would. */
 async function installedMusicCues() {
   const cues = new Map();
   for (const entry of catalog.plugins.filter((p) => p.export === "audioPlugin")) {
-    const module = await import(new URL(`plugins/${entry.module.slice(2)}`, DIST));
+    const module = await import(new URL(entry.module, new URL("plugins/catalog.json", SOURCE)));
     module[entry.export].setup({
       presentation: {
         audio: (localId, cue) => cues.set(`${entry.id}:${localId}`, validateAudioCue(cue)),
@@ -32,8 +33,8 @@ test("The game ships one enabled audio pack covering every rendered original son
   // No per-track plugins or per-track asset directories are left behind.
   assert.deepEqual(catalog.plugins.filter((p) => p.export === "bgmPlugin"), []);
   for (const old of packManifest.supersededPacks) {
-    assert.equal(fs.existsSync(new URL(`plugins/${old}.js`, DIST)), false, old);
-    assert.equal(fs.existsSync(new URL(`assets/audio/${old}`, DIST)), false, old);
+    assert.equal(fs.existsSync(new URL(`generated/plugins/${old}.js`, ROOT)), false, old);
+    assert.equal(fs.existsSync(new URL(`generated/assets/audio/${old}`, ROOT)), false, old);
   }
   const cues = await installedMusicCues();
   assert.equal(cues.size, packManifest.tracks.length);
@@ -42,12 +43,12 @@ test("The game ships one enabled audio pack covering every rendered original son
     assert.ok(cue, track.cueId);
     assert.equal(cue.kind, track.kind);
     assert.equal(cue.source, track.source);
-    assert.equal(fs.existsSync(new URL(track.source, DIST)), true, track.source);
+    assert.equal(fs.existsSync(new URL(track.source, ROOT)), true, track.source);
   }
 });
 
 test("Chapter-one battle songs follow the original wild/trainer/rival selection", async () => {
-  const { emeraldBattleSong } = await import("../dist/packs/emerald/audio-library.js");
+  const { emeraldBattleSong } = await import("../src/packs/emerald/audio-library.js");
   const cues = await installedMusicCues();
   assert.equal(emeraldBattleSong({ trainer: false }), "MUS_VS_WILD");
   assert.equal(emeraldBattleSong({ trainer: true, trainerId: "youngster" }), "MUS_VS_TRAINER");
@@ -60,7 +61,7 @@ test("Chapter-one battle songs follow the original wild/trainer/rival selection"
 });
 
 test("Every imported map keeps its original song constant and resolves to an installed loopable track", async () => {
-  const db = loadContentSync(new URL("content/manifest.json", DIST));
+  const db = loadContentSync(new URL("content/manifest.json", SOURCE));
   const cues = await installedMusicCues();
   const maps = Object.values(db.maps);
   assert.ok(maps.length >= 9);
@@ -76,7 +77,7 @@ test("Every imported map keeps its original song constant and resolves to an ins
     assert.ok(id, `${map.id} has no installed track for ${map.music}`);
     seen.add(map.music);
     const cue = cues.get(id);
-    const data = fs.readFileSync(new URL(cue.source, DIST));
+    const data = fs.readFileSync(new URL(cue.source, ROOT));
     assert.equal(data.toString("ascii", 0, 4), "RIFF");
     assert.equal(data.toString("ascii", 8, 12), "WAVE");
     assert.equal(cue.loop, true);

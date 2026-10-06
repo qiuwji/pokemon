@@ -5,22 +5,22 @@ import assert from "node:assert/strict";
 import {
   CommandBus,
   CommandError,
-} from "../dist/engine/extensions/command-bus.js";
-import { objectSchema } from "../dist/engine/extensions/values.js";
-import { NetworkGateway } from "../dist/engine/extensions/network-gateway.js";
-import { NetworkSession } from "../dist/engine/extensions/network-session.js";
+} from "../src/engine/extensions/command-bus.js";
+import { objectSchema } from "../src/engine/extensions/values.js";
+import { NetworkGateway } from "../src/engine/extensions/network-gateway.js";
+import { NetworkSession } from "../src/engine/extensions/network-session.js";
 import {
   createLoopbackTransport,
   WebSocketTransport,
-} from "../dist/adapters/network-transport.js";
-import { createEmeraldCommandFacade } from "../dist/packs/emerald/command-facade.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { createMonster } from "../dist/engine/model.js";
+} from "../src/adapters/network-transport.js";
+import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { createMonster } from "../src/engine/model.js";
 import { interactionFixture } from "./fixtures/extensions/interaction.js";
 const wire = (sequence, command = "test.increment", input = {}, extras = {}) =>
   JSON.stringify({

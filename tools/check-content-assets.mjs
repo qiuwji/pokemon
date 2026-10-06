@@ -2,7 +2,7 @@ import fs from "node:fs";
 /** PNG metadata is checked without browser decoding or loading the read-only reference. */
 export function assertContentAssets(
   db,
-  root = new URL("../dist/assets/", import.meta.url),
+  root = new URL("../generated/assets/", import.meta.url),
 ) {
   for (const [id, tiles] of Object.entries(db.tilesets)) {
     const location = new URL(`tiles-${id}.png`, root),

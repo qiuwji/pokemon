@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { PluginHost } from "../dist/engine/extensions/plugin-host.js";
-import { Battle } from "../dist/engine/battle.js";
-import { createMonster } from "../dist/engine/model.js";
+import { PluginHost } from "../src/engine/extensions/plugin-host.js";
+import { Battle } from "../src/engine/battle.js";
+import { createMonster } from "../src/engine/model.js";
 import {
   manifest,
   session,

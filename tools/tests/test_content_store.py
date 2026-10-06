@@ -17,15 +17,16 @@ class ContentStoreTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
-        self.dist = Path(self.temporary.name) / 'dist'
-        shutil.copytree(PROJECT / 'dist/content', self.dist / 'content')
+        self.target = Path(self.temporary.name) / 'pack'
+        shutil.copytree(PROJECT / 'src/content', self.target / 'content')
+        shutil.copytree(PROJECT / 'generated/content', self.target / 'content', dirs_exist_ok=True)
 
     def session(self, check=False):
-        return ImportSession(SimpleNamespace(target=self.dist, check=check), 'import-encounters.py')
+        return ImportSession(SimpleNamespace(target=self.target, check=check), 'import-encounters.py')
 
     def hashes(self):
-        return {str(path.relative_to(self.dist)): hashlib.sha256(path.read_bytes()).hexdigest()
-                for path in self.dist.rglob('*') if path.is_file()}
+        return {str(path.relative_to(self.target)): hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in self.target.rglob('*') if path.is_file()}
 
     def edit(self, session):
         data = session.load()
@@ -53,7 +54,7 @@ class ContentStoreTests(unittest.TestCase):
         self.assertEqual(self.session().load()['maps']['Route101']['encounterRate'], 21)
 
     def test_noop_preserves_noncanonical_fragments_and_manifest_bytes(self):
-        for path in self.dist.rglob('*.json'):
+        for path in self.target.rglob('*.json'):
             path.write_text(json.dumps(json.loads(path.read_text()),
                                        ensure_ascii=False, separators=(',', ':')) + '\n\n')
         before = self.hashes()
@@ -119,7 +120,7 @@ class ContentStoreTests(unittest.TestCase):
             with self.assertRaisesRegex(OSError, 'injected write failure'):
                 session.finish()
         self.assertEqual(before, self.hashes())
-        self.assertFalse(list(self.dist.rglob('.import-*')))
+        self.assertFalse(list(self.target.rglob('.import-*')))
 
 if __name__ == '__main__':
     unittest.main()

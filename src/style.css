@@ -1098,7 +1098,7 @@ button {
   display: block;
   width: 32px;
   height: 64px;
-  background: url(assets/actor-BrendanNormal.png) 0 0/288px 64px no-repeat;
+  background: url(../generated/assets/actor-BrendanNormal.png) 0 0/288px 64px no-repeat;
   image-rendering: pixelated;
   flex: none;
 }

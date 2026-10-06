@@ -45,11 +45,11 @@ def verify_metatiles(content):
     return errors
 
 
-def render(content, dist, ident, frame=0, zoom=6):
+def render(content, resources, ident, frame=0, zoom=6):
     """Match canvas grid's background, two layers and flip bits for visual review."""
     from PIL import Image
     pack = content['tilesets'][TILESET]
-    atlas = Image.open(dist / f'assets/tiles-{TILESET}.png').convert('RGBA')
+    atlas = Image.open(resources / f'assets/tiles-{TILESET}.png').convert('RGBA')
     out = Image.new('RGBA',(16,16),(*pack['background'],255))
     for i,value in enumerate(metatile_tiles(pack,ident)):
         base = str(value & ~3072)

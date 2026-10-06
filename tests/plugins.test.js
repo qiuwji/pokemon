@@ -2,29 +2,29 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { PluginHost } from "../dist/engine/extensions/plugin-host.js";
-import { CommandBus } from "../dist/engine/extensions/command-bus.js";
-import { EventBus } from "../dist/engine/extensions/event-bus.js";
+import { PluginHost } from "../src/engine/extensions/plugin-host.js";
+import { CommandBus } from "../src/engine/extensions/command-bus.js";
+import { EventBus } from "../src/engine/extensions/event-bus.js";
 import {
   readOnly,
   objectSchema,
   jsonValue,
   validateSchema,
   validateValue,
-} from "../dist/engine/extensions/values.js";
-import { validateLayout } from "../dist/engine/extensions/ui-registry.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
+} from "../src/engine/extensions/values.js";
+import { validateLayout } from "../src/engine/extensions/ui-registry.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
 import { interactionFixture } from "./fixtures/extensions/interaction.js";
 import { createWorldFixture } from "./fixtures/extensions/world.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
-import { Battle } from "../dist/engine/battle.js";
-import { GEN3_GLOBAL_HOOKS } from "../dist/engine/rules/gen3/global-rules.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { Battle } from "../src/engine/battle.js";
+import { GEN3_GLOBAL_HOOKS } from "../src/engine/rules/gen3/global-rules.js";
 const base = loadContentSync();
 const manifest = (id, setup, rest = {}) => ({
   id,
@@ -156,7 +156,7 @@ test("Two independent plugins register pages and slots without modifying the bui
     db.maps.LittlerootTown_ProfessorBirchsLab.warps.length,
     base.maps.LittlerootTown_ProfessorBirchsLab.warps.length + 1,
   );
-  assert.equal(db.resources["mudkip-front"], "assets/mudkip-front.png");
+  assert.equal(db.resources["mudkip-front"], "generated/assets/mudkip-front.png");
   const naked = gameWith([]);
   assert.equal(naked.host.ui.pages.size, 0);
   assert.equal(naked.host.ui.inSlot("monster.detail").length, 0);
@@ -519,7 +519,7 @@ test("A state fault restores its clock and memory and missing plugin core conten
 });
 
 test("Two live sessions cannot silently overwrite each other and read-only save inspection does not adopt a changed baseline", async () => {
-  const { SaveStore } = await import("../dist/engine/save-store.js");
+  const { SaveStore } = await import("../src/engine/save-store.js");
   let raw = null;
   const storage = {
     getItem: () => raw,

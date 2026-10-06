@@ -2,7 +2,7 @@ import {
   WallClockDial,
   drawWallClock,
 } from "../../presentation/wall-clock-dial.js";
-import { WALL_CLOCK_HAND_OFFSETS } from "./generated/wall-clock.js";
+import { WALL_CLOCK_HAND_OFFSETS } from "../../../generated/packs/emerald/generated/wall-clock.js";
 /** A pixel menu observes the saved world clock; initial setup is an application command. */
 export function createTimeInterface(
   game,
@@ -68,7 +68,7 @@ export function createTimeInterface(
         image.onerror = () => {
           if (!settled) toast("时钟资源加载失败，请刷新重试。");
         };
-        image.src = `assets/wallclock-${gender}-${suffix}.png`;
+        image.src = `generated/assets/wallclock-${gender}-${suffix}.png`;
       }
     const render = () => {
       const value = dial.value();

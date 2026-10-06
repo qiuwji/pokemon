@@ -10,18 +10,12 @@
     "check:contracts": "tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts",
     "test:examples": "npm run test:plugins",
     "check:docs": "node tools/check-docs.mjs",
-    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"dist/**/*.js\" tests/*.test.js",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"src/**/*.js\" tests/*.test.js",
     "check:lint": "eslint .",
     "check:engine-types": "tsc -p tsconfig.engine.json",
     "test:core": "node --test tests/*.test.js",
     "test:plugins": "node --test examples/*.test.js",
-    "test:all": "npm run test:core && npm run test:plugins",
-    "build": "node tools/build.mjs",
-    "build:check": "node tools/build.mjs --check",
-    "precheck": "npm run build",
-    "pretest:core": "npm run build",
-    "pretest:plugins": "npm run build",
-    "pretest:coverage": "npm run build"
+    "test:all": "npm run test:core && npm run test:plugins"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

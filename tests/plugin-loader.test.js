@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { loadPluginCatalog } from "../dist/adapters/plugin-loader.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
+import { loadPluginCatalog } from "../src/adapters/plugin-loader.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
 import { loadContentSync } from "../tools/content-io.mjs";
-const url = new URL("../dist/plugins/catalog.json", import.meta.url);
+const url = new URL("../src/plugins/catalog.json", import.meta.url);
 const content = loadContentSync();
 const fixtureCatalog = {
   version: 1,

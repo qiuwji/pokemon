@@ -1,6 +1,6 @@
 # 在现有工程中写业务与插件
 
-源码编辑src，资源/网格等派生输入由工具写generated；dist只构建，见[构建合同](BUILD_PIPELINE.md)。
+源码编辑src，资源/网格等派生输入由工具写generated；直接运行两棵输入树，见[目录合同](SOURCE_LAYOUT.md)。
 
 
 这份指南面向第一次拿到项目的开发者。先读[当前范围](../project/SCOPE.md)和[状态](../project/STATUS.md)，再选[领域Skill](../project/SKILLS.md)。默认任务是在已有框架上写内容，不是重新设计引擎。Skill保存工作方法，本页说明公共写法；状态和验证数量只在项目记录中维护。
@@ -57,7 +57,7 @@
 | `node --test --test-name-pattern="case关键词" tests/领域.test.js` | 只复查匹配用例；确认有实际匹配，不把零用例视为通过 |
 | `npm run check:contracts` | TypeScript严格检查公开合同消费；不验证规则语义 |
 | `npm run check:docs` | 本地文档链接及Skill代码片段同步；不执行游戏规则 |
-| `npm run check` | 内容启动引用、公开类型和dist语法；阶段合并/收口或相关合同改变时执行 |
+| `npm run check` | 内容启动引用、公开类型和src/generated语法；阶段合并/收口或相关合同改变时执行 |
 | `node tools/audit-mechanisms.mjs work/pokeemerald` | 读取固定C参考，更新docs/engine/battle下生成审计；登记/无引用不等于规则已验证 |
 | `python3 tools/import.py emerald work/pokeemerald` | 先加--check预演；通过内容清单及字段所有权合并选定内容，不自动调用grid；详见[导入索引](IMPORT_SCRIPTS.md) |
 | `python3 tools/import.py encounters work/pokeemerald` | 先加--check预演；只写地图陆地遭遇字段，禁止触碰进化；详见[内容管线](CONTENT_PIPELINE.md) |

@@ -2,11 +2,11 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { Battle } from "../dist/engine/battle.js";
-import { BattleSession } from "../dist/engine/battle-session.js";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { MoveEffectRegistry } from "../dist/engine/move-effects.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { Battle } from "../src/engine/battle.js";
+import { BattleSession } from "../src/engine/battle-session.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { MoveEffectRegistry } from "../src/engine/move-effects.js";
 const base = loadContentSync();
 const skill = (effect, power = 50, type = "normal", target = "selected") => ({
   name: effect,

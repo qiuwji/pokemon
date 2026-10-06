@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Renderer } from "../dist/adapters/canvas-renderer.js";
+import { Renderer } from "../src/adapters/canvas-renderer.js";
 
 // Capture device-space rectangles, including flip transforms, without a browser.
 function surface(camera) {

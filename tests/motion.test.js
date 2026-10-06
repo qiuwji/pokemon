@@ -1,9 +1,9 @@
 import { loadContentSync } from "../tools/content-io.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { SceneGraph, GridMotion, actorFrame } from "../dist/engine/motion.js";
-import { NPCSystem } from "../dist/engine/npcs.js";
-import { objectsFor } from "../dist/packs/emerald/pack.js";
+import { SceneGraph, GridMotion, actorFrame } from "../src/engine/motion.js";
+import { NPCSystem } from "../src/engine/npcs.js";
+import { objectsFor } from "../src/packs/emerald/pack.js";
 const db = loadContentSync();
 test("Native directional walk frames never mix south, north or west poses", () => {
   const sequences = {

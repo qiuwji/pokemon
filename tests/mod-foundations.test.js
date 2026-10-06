@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BrowserInput } from '../dist/adapters/browser-input.js';
-import { createBattleRules, BATTLE_RULES } from '../dist/engine/battle-rules.js';
-import { nativeCast, projectNativeCast } from '../dist/packs/emerald/native-cast.js';
-import { NATIVE_CAST } from '../dist/packs/emerald/native-cast-data.js';
-import { bindNativeObjects } from '../dist/packs/emerald/native-object-bindings.js';
-import { ExtensionDOM } from '../dist/adapters/extension-dom.js';
+import { BrowserInput } from '../src/adapters/browser-input.js';
+import { createBattleRules, BATTLE_RULES } from '../src/engine/battle-rules.js';
+import { nativeCast, projectNativeCast } from '../src/packs/emerald/native-cast.js';
+import { NATIVE_CAST } from '../src/packs/emerald/native-cast-data.js';
+import { bindNativeObjects } from '../src/packs/emerald/native-object-bindings.js';
+import { ExtensionDOM } from '../src/adapters/extension-dom.js';
 import { layoutDocument } from './helpers/layout-document.js';
 import { session, manifest, objectSchema } from './helpers/session.js';
 
@@ -132,7 +132,7 @@ test('An invalid automatic save is observable, preserves the last good record, a
 });
 
 test('An unreadable storage port records a read failure instead of presenting it as an empty save', async () => {
-  const { SaveStore } = await import('../dist/engine/save-store.js');
+  const { SaveStore } = await import('../src/engine/save-store.js');
   const store = new SaveStore({ getItem() { throw new Error('denied'); } }, 'test', () => true);
   assert.equal(store.load(), null); assert.equal(store.lastIssue.code, 'storage_unavailable');
 });

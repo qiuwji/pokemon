@@ -2,17 +2,17 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Random, createMonster } from "../dist/engine/model.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { createTrainerEncounter } from "../dist/engine/trainer-encounters.js";
-import { BattleStrategyRegistry } from "../dist/engine/battle/strategy-registry.js";
-import { EncounterTableRegistry } from "../dist/engine/encounter-tables.js";
-import { Battle } from "../dist/engine/battle.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { SceneGraph, GridMotion } from "../dist/engine/motion.js";
+import { Random, createMonster } from "../src/engine/model.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { createTrainerEncounter } from "../src/engine/trainer-encounters.js";
+import { BattleStrategyRegistry } from "../src/engine/battle/strategy-registry.js";
+import { EncounterTableRegistry } from "../src/engine/encounter-tables.js";
+import { Battle } from "../src/engine/battle.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { SceneGraph, GridMotion } from "../src/engine/motion.js";
 const base = loadContentSync();
 const plugin = (setup) => ({
   id: "trainer-pack",

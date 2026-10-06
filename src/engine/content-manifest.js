@@ -17,6 +17,13 @@ const safeKey = (key) =>
   typeof key === "string" &&
   key.length > 0 &&
   !["__proto__", "prototype", "constructor"].includes(key);
+/** Generated fragments keep their own tree beside src; paths within either tree stay constrained. */
+export function contentFileURL(entry, manifestURL) {
+  const base = entry.generated
+    ? new URL("../../generated/content/", manifestURL)
+    : manifestURL;
+  return new URL(entry.path, base);
+}
 export function contentFiles(manifest) {
   if (
     !record(manifest) ||

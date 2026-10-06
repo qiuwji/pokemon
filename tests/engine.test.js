@@ -1,14 +1,14 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { emptyEncounterTickets } from "../dist/engine/encounter-tickets.js";
-import { emptyFieldEffects } from "../dist/engine/field-effects.js";
+import { emptyEncounterTickets } from "../src/engine/encounter-tickets.js";
+import { emptyFieldEffects } from "../src/engine/field-effects.js";
 import {
   createBag,
   fixtureInventory,
   inventoryQuantity,
 } from "./helpers/inventory-fixture.js";
-import { createItemService } from "../dist/engine/items.js";
-import { ITEMS } from "../dist/packs/emerald/items.js";
-import { emptyWeather } from "../dist/engine/weather.js";
+import { createItemService } from "../src/engine/items.js";
+import { ITEMS } from "../src/packs/emerald/items.js";
+import { emptyWeather } from "../src/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -21,10 +21,10 @@ import {
   grantExperience,
   healMonster,
   PHYSICAL_TYPES,
-} from "../dist/engine/model.js";
-import { Battle } from "../dist/engine/battle.js";
-import { World, SaveStore } from "../dist/engine/world.js";
-import { objectsFor, validateSave } from "../dist/packs/emerald/pack.js";
+} from "../src/engine/model.js";
+import { Battle } from "../src/engine/battle.js";
+import { World, SaveStore } from "../src/engine/world.js";
+import { objectsFor, validateSave } from "../src/packs/emerald/pack.js";
 const db = loadContentSync();
 const state = () => ({
   weather: emptyWeather(),

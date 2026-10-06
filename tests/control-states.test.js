@@ -2,8 +2,8 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { Random, createMonster } from "../dist/engine/model.js";
+import { Battle } from "../src/engine/battle.js";
+import { Random, createMonster } from "../src/engine/model.js";
 const base = loadContentSync();
 function fixture() {
   const names = [

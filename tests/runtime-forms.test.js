@@ -2,14 +2,14 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { Battle } from "../dist/engine/battle.js";
-import { createMonster, Random, calculateStats } from "../dist/engine/model.js";
+import { Battle } from "../src/engine/battle.js";
+import { createMonster, Random, calculateStats } from "../src/engine/model.js";
 import {
   CreatureFormRegistry,
   CreatureForms,
-} from "../dist/engine/creatures/forms.js";
-import { GEN3_ABILITIES } from "../dist/engine/rules/gen3/abilities.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
+} from "../src/engine/creatures/forms.js";
+import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
 const base = loadContentSync();
 const forms = {
   boost: {

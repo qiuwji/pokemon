@@ -7,20 +7,20 @@ import {
   validateWorldClock,
   DAY_MS,
   MINUTE_MS,
-} from "../dist/engine/world-clock.js";
+} from "../src/engine/world-clock.js";
 import {
   WorldSchedule,
   TimeTaskRegistry,
-} from "../dist/engine/world-schedule.js";
-import { ConditionQueries } from "../dist/engine/condition-queries.js";
-import { emeraldTide } from "../dist/packs/emerald/time.js";
-import { createEmeraldPlugins } from "../dist/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../dist/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../dist/packs/emerald/extension-ports.js";
-import { Timeline, TransitionController } from "../dist/engine/timeline.js";
-import { BattleDirector } from "../dist/presentation/battle-director.js";
-import { GridMotion, SceneGraph } from "../dist/engine/motion.js";
-import { validateSave } from "../dist/packs/emerald/save-contract.js";
+} from "../src/engine/world-schedule.js";
+import { ConditionQueries } from "../src/engine/condition-queries.js";
+import { emeraldTide } from "../src/packs/emerald/time.js";
+import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { Timeline, TransitionController } from "../src/engine/timeline.js";
+import { BattleDirector } from "../src/presentation/battle-director.js";
+import { GridMotion, SceneGraph } from "../src/engine/motion.js";
+import { validateSave } from "../src/packs/emerald/save-contract.js";
 const base = loadContentSync();
 function setupClock(options = {}) {
   let wall = 100000;
