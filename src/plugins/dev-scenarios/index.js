@@ -81,6 +81,17 @@ const WILD = Object.freeze([
 // A bulky, low-offence dummy so the demo mon survives long enough to act each turn.
 const DEMO = Object.freeze({ species: "wurmple", level: 20 });
 
+/**
+ * Progress checkpoints live in the core story bundle `emerald:progress` (the pack owns the
+ * flags/reward ledger); the tester only picks a chapter and calls that script by id.
+ */
+const PROGRESS_PRESETS = Object.freeze([
+  ["pokedex", "拿到图鉴（未白镇）"],
+  ["oldale", "古辰镇（图鉴+跑步鞋）"],
+  ["petalburg", "橙华市（小光教学前）"],
+  ["wallydone", "小光教学完成（橙华道馆）"],
+]);
+
 const terminalId = (index) => `dev-scenarios:terminal.${index}`;
 const moveTrainer = (moveId) => `dev-scenarios:move.${moveId}`;
 const teleport = (map, x, y) => ({
@@ -129,11 +140,18 @@ export function devScenarios(api) {
         party: [{ ...DEMO, moves: [moveId] }],
       });
 
+  // One flat menu; the native window is scrollable and keyboard navigation scrolls the focused
+  // row into view, so every entry stays reachable.
   const scripts = {
     menu: {
       parameters: objectSchema(),
       commands: [
         choice("开发测试菜单", [
+          ...PROGRESS_PRESETS.map(([preset, label]) => ({
+            id: `progress.${preset}`,
+            label: `进度·${label}`,
+            commands: [{ type: "script", id: `emerald:progress.${preset}` }],
+          })),
           {
             id: "practice",
             label: "训练家入场（抛球）",
@@ -144,7 +162,7 @@ export function devScenarios(api) {
           },
           { id: "wild", label: "遇敌演示", commands: [call("wild")] },
           { id: "moves", label: "招式演示", commands: [call("movemenu")] },
-          { id: "travel", label: "传送", commands: [call("travel")] },
+          { id: "travel", label: "仅传送·不改进度", commands: [call("travel")] },
           { id: "healdemo", label: "治疗画面（宝可梦中心）", commands: [call("healdemo")] },
           {
             id: "itemdemo",
@@ -256,6 +274,7 @@ export function devScenarios(api) {
         { kind: "heading", text: "开发者工具" },
         { kind: "button", text: "加入一只 Lv20 测试宝可梦", action: giveMon },
         { kind: "text", text: "加入后进入战斗，用「宝可梦」菜单替换即可看到换人动画。" },
+        { kind: "text", text: "进度跳转：与地图上的「测试员」交互选「通关进度」。" },
       ],
     }),
   });

@@ -37,8 +37,8 @@ class DevelopmentHandler(ControlHandler, SimpleHTTPRequestHandler):
         super().end_headers()
 
 
-def create_server(project, port=5173):
-    server = ThreadingHTTPServer(('127.0.0.1', port),
+def create_server(project, port=5173, host='127.0.0.1'):
+    server = ThreadingHTTPServer((host, port),
                                  partial(DevelopmentHandler, directory=str(project)))
     server.control_relay = ControlRelay()
     return server
@@ -47,6 +47,8 @@ def create_server(project, port=5173):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=5173)
+    parser.add_argument('--host', default='127.0.0.1',
+                        help='Bind address; use 0.0.0.0 to serve on the local network.')
     args = parser.parse_args()
-    with create_server(Path(__file__).resolve().parents[1], args.port) as server:
+    with create_server(Path(__file__).resolve().parents[1], args.port, args.host) as server:
         server.serve_forever()

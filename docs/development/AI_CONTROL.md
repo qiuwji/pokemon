@@ -8,7 +8,7 @@ AI 控制的完整用法以[插件使用指南](../../src/plugins/ai-control/REA
 
 在项目根运行`npm run dev`，打开`http://127.0.0.1:5173/?control=1`。若换端口，以实际端口为准。这会连接同源`/control`本地开发通道；也可正常打开游戏，在“扩展连接”页面手动连接默认HTTP地址。不要同时开启自动连接和第二条手动连接。
 
-`npm run dev`的Python服务器只监听127.0.0.1。HTTP桥接采用现有协议1的hello/命令/结果，转交同一个NetworkGateway和CommandBus，不解析规则、不读写存档。浏览器以有界长轮询等待命令，结果经同一通道返回；WebSocket接口继续可用。静态部署没有Python控制通道，需要另配已有WebSocket传输。
+`npm run dev`的Python服务器默认只监听127.0.0.1；要让**同一局域网**的其他设备访问，用`python3 tools/serve.py --host 0.0.0.0`（或`npm run dev -- --host 0.0.0.0`），再用`http://<本机局域网IP>:5173/`访问，首次会触发macOS防火墙放行提示。HTTP桥接采用现有协议1的hello/命令/结果，转交同一个NetworkGateway和CommandBus，不解析规则、不读写存档。浏览器以有界长轮询等待命令，结果经同一通道返回；WebSocket接口继续可用。静态部署没有Python控制通道，需要另配已有WebSocket传输。注意`--host 0.0.0.0`会把控制通道一并暴露到局域网，仅在你信任的网络里使用。
 
 先建立一次浏览器连接，后续AI可通过命令行读取JSON并操作，无需每步截图。命令行只用Python标准库：
 

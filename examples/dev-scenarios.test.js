@@ -84,3 +84,26 @@ test("every placed tester resolves its interact entry", async () => {
     assert.equal(s.game.state.position.map, map, `${map} tester is reachable`);
   }
 });
+test("the tester menu jumps the save to a named chapter", async () => {
+  const s = session([devScenariosPlugin]);
+  choose(s, ["progress.wallydone"]);
+  openTerminal(s);
+  await s.settle();
+  assert.equal(s.game.state.flags.pokedex, true);
+  assert.equal(s.game.state.flags.wallyDone, true);
+  assert.equal(s.game.state.position.map, "PetalburgCity_Gym");
+  assert(s.game.state.story.rewards.includes("professor.pokedex"));
+  assert(s.game.inventory.quantity(s.game.state.bag, "pokeball") >= 5);
+});
+test("a chapter jump clears later-chapter flags so earlier scenes replay", async () => {
+  const s = session([devScenariosPlugin]);
+  // Simulate a save that already finished the Wally tutorial.
+  Object.assign(s.game.state.flags, { wallyTutorial: true, wallyCaught: true, wallyDone: true });
+  choose(s, ["progress.petalburg"]);
+  openTerminal(s);
+  await s.settle();
+  assert.equal(s.game.state.flags.pokedex, true);
+  assert.equal(s.game.state.flags.wallyTutorial, false, "the tutorial flag is cleared");
+  assert.equal(s.game.state.flags.wallyCaught, false);
+  assert.equal(s.game.state.flags.wallyDone, false);
+});

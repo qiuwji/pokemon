@@ -1,5 +1,29 @@
 # 当前开发与验证记录
 
+## 2026-10-06 · BGM 淡入淡出加长
+
+切场景时音乐渐变太短显得突兀：`tools/audio/pack.json` 的 `musicFades` 由渐入 500 / 渐出 250ms 改为 **渐入 1500 / 渐出 1200ms**，用 `bundle-audio.py --build` 重新合并写进统一音频包（不改 WAV、不改循环边界）。SE 仍即时播放。
+
+核心 1131/1131、插件 55/55、`npm run test:tools`、`npm run check` 全绿；听感由用户实机确认。
+
+## 2026-10-06 · 橙华市与韦莉（小光）捉拉鲁拉丝教学
+
+从 102 号道路到橙华市，并转写小光的捕捉教学。详见[地区切片](../regions/PETALBURG_WALLY.md)。
+
+- **地图**：导入 `Route102`、`PetalburgCity`、`PetalburgCity_Gym`、`PetalburgCity_WallysHouse`、`PetalburgCity_House1/House2/Mart/PokemonCenter_1F`（含网格与图集）。`general-petalburg` 因新增橙华门新增 metatile 33/461、门帧扩到 941，`opening-art` 重跑后幂等。
+- **音乐**：新增 `tools/audio/tracks/petalburg.json`(MUS_PETALBURG) 与 `gym.json`(MUS_GYM)，按 `midi.cfg` 渲染并入唯一音频包；`ORIGINAL_SONG_CUES` 增两项。听感待人工验收。
+- **通用战斗能力**（无小光/物种特判）：剧情 `battle` 命令新增 `options.borrowedParty`（`[{species,level}]` 临时替换玩家出战队伍并配一枚借来的精灵球）、`options.capture:"cinematic"`（强制捕捉、精灵不入玩家账本、禁用会心）与 `options.autoActions`（玩家席位按固定顺序自动行动、隐藏战斗菜单）。`prepareBattle` 组装 context/`captureCheck`/`critical`；`Battle` 保留 `cinematicCapture`；`resultPlan`/`battle.capture` 对演出捕捉不入账；自动战斗在原作 `battle_controller_wally.c` 的顺序（攻击×2→投球）下跑完，玩家只观看。
+- **开发者进度控制**：核心内容包新增 `emerald:progress` story 脚本（`src/content/stories/progress.json`，由核心拥有 flag/奖励账本/治疗/落点；插件命名空间不允许直接写核心状态，故放在核心内容）；dev-scenarios 的测试员菜单直接列出四个章节（拿到图鉴/古辰镇/橙华市/小光教学完成），按 id 调用 `emerald:progress.<章节>`，免去从 0 重打。
+- **剧情**：`story/regions/petalburg.js`——诺曼初见对白后小光才**推门进场**（新增通用 `spawn` 命令，对应原作 `addobject`，脚本中途加入演员、无需转场）并参与对白 → `wallyTutorial` → **玩家与小光一起走出橙华市、在城镇边缘无缝跨连接进入 102 号道路走到草丛**（无转场；城镇/道路小光为互斥投影，跨界时隐藏城镇小光，全程只有一个小光）→ 自动教学战 → `wallyCaught` 回馆 → `wallyDone` 诺曼指点去卡那兹市。对白入 `dialogues.json`，告示牌入 `signs.json`，NPC 绑定入 `native-cast-data.js`。
+- **进度预设**：每个章节显式写出该章应有的**完整** flag 集合，并把后续章节的 flag 置 false（如 `wallyTutorial/Caught/Done`），因此从已完成旧存档往回跳也能重放早期场景（否则诺曼仍会走已完成的台词）。
+- **102 号道路视线训练家**：Calvin/Rick/Tiana/Allen（导入蘑蘑菇以还原 Tiana 队伍）按原作 `trainer_type`+`sight`（3/2/3/3）配置。`triggers-application.trainerScene` 按 `trainer_see.c` 补上**双方互相转身面向**；`petalburg.trainer.result` 在胜利后播放败北台词并只发一次 `trainer.<id>.prize`；已胜者不再主动拦截。
+- **橙华市室内 NPC**：宝可梦中心、友好商店、民宅 1F/2F、小光家均按来源绑定登记为内容 NPC。修复 `healingScene` 把护士写死为未白镇对象的问题——改为使用当前交互护士 `object.id`，橙华市乔伊治疗因此可用（`RETURN_TO_CENTER` 白屏返回仍是未白镇，保留其护士常量）。室外的小光妈妈在道馆交接开始后隐藏（对应原作 `FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM`），避免与小光家里的妈妈重复。
+- **导入器**：`import-emerald.py` 仅把 `type:"sign"` 的 `bg_events` 写入地图 `signs`，隐藏道具等背景事件记为 omission（不再污染告示牌解析）。
+
+**验证**：核心 **1131/1131**、插件 **55/55**、`npm run test:tools`、`npm run check` 全绿。
+
+**未验收/边界**：跨道路连接的原作逐格走位以场景转场代替；道馆机关门/雕像为占位告示文本；道馆挑战、小光家、102 号道具与 Scott/向导事件待后续；音乐与画面听感/观感由用户实机确认。
+
 ## 2026-10-06 · 两层战斗 AI（训练家 + 个体）
 
 按技术方案实现两层策略闭环，**旧策略逐字节保留**：

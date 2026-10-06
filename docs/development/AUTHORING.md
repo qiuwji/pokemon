@@ -53,6 +53,7 @@
 | --- | --- |
 | `npm ci` | 安装锁定开发依赖；Node/npm与Python3需可用，项目依赖用于严格类型检查 |
 | `npm run dev -- --port 5175` | Python HTTP服务器；浏览器打开http://127.0.0.1:5175/；端口已占时先观察，不重复启动同一服务 |
+| `npm run dev -- --host 0.0.0.0` | 监听所有网卡，供同一局域网的其他设备用http://<本机IP>:5173/访问；会把控制通道一并暴露，仅限可信网络；首次触发系统防火墙放行 |
 | `node --test examples/battle-effect.test.js` | 运行一个真实端到端无浏览器例；按实际任务选择文件 |
 | `node --test --test-name-pattern="case关键词" tests/领域.test.js` | 只复查匹配用例；确认有实际匹配，不把零用例视为通过 |
 | `npm run check:contracts` | TypeScript严格检查公开合同消费；不验证规则语义 |

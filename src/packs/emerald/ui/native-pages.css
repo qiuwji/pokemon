@@ -850,6 +850,14 @@
     8 fill/3.333cqw;
   padding: 1%;
 }
+/* A long story menu (e.g. the test tools) keeps its rows reachable instead of clipping the top. */
+[data-modal-page="story-choice"] .menu-grid {
+  max-height: 66%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
 :is([data-modal-page="field-action"], [data-modal-page="fishing"])
   .modal
   > button {
