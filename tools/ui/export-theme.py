@@ -193,21 +193,37 @@ for actor, name in [('BrendanNormal','brendan'),('MayNormal','may'),('Wally','wa
 # Berry trees use palette slots from berry_tree_graphics_tables.h, not the
 # palette embedded in the example Pecha sheet for every berry species.
 berry_table = read('src/data/object_events/berry_tree_graphics_tables.h').decode()
-for kind in ['oran','cheri','pecha','leppa']:
-    slots = re.search(r'gBerryTreePaletteSlotTable_'+kind.title()+r'\[\] = \{([^}]+)',berry_table)[1]
+def sprite_frame(image, frame, width, height):
+    columns = image.width // width
+    if not columns or image.width % width or image.height % height:
+        raise ValueError('Invalid native sprite sheet bounds')
+    x, y = frame % columns * width, frame // columns * height
+    if y + height > image.height:
+        raise ValueError('Native sprite frame outside sheet')
+    result = image.crop((x, y, x + width, y + height))
+    if result.getchannel('A').getbbox() is None:
+        raise ValueError('Empty native berry sprite frame')
+    return result
+
+for kind in ['oran','cheri','pecha','leppa','chesto','rawst','aspear','persim','pinap']:
+    # Some logical berries reuse a different species' source tree art/palette.
+    symbol = 'ITEM_' + kind.upper() + '_BERRY'
+    picture = re.search(r'\['+symbol+r' - FIRST_BERRY_INDEX\]\s*= sPicTable_(\w+)BerryTree',berry_table)[1].lower()
+    palette_name = re.search(r'\['+symbol+r' - FIRST_BERRY_INDEX\]\s*= gBerryTreePaletteSlotTable_(\w+)',berry_table)[1]
+    slots = re.search(r'gBerryTreePaletteSlotTable_'+palette_name+r'\[\] = \{([^}]+)',berry_table)[1]
     slot = int(slots.split(',')[2].strip())
-    image = sprite('object_events/pics/berry_trees/'+kind+'.png',colors('object_events/palettes/npc_'+str(slot)+'.pal'))
+    image = sprite('object_events/pics/berry_trees/'+picture+'.png',colors('object_events/palettes/npc_'+str(slot)+'.pal'))
     for stage, frame in [('taller',0),('flowering',2),('ripe',4)]:
-        add('berry-'+kind+'-'+stage+'.png',image.crop((0,frame*32,16,(frame+1)*32)))
+        add('berry-'+kind+'-'+stage+'.png',sprite_frame(image,frame,16,32))
 # Native berry NPC graphics declaration; the explicit berry appearance selects its
 # growth frame. Complete actor bounds also support generic appearance overrides.
 berry_actor = sprite('object_events/pics/berry_trees/pecha.png',colors('object_events/palettes/npc_4.pal'))
-atlas = Image.new('RGBA',(16,384))
-atlas.paste(berry_actor,(0,0)); atlas.paste(berry_actor,(0,192))
+atlas = Image.new('RGBA',(192,32))
+atlas.paste(berry_actor,(0,0)); atlas.paste(berry_actor,(96,0))
 add('actor-BerryTreeLateStages.png',atlas)
-for stage, relative, frame in [('planted','dirt_pile',0),('sprouted','sprout',1)]:
+for stage, relative, frame in [('planted','dirt_pile',0),('sprouted','sprout',0)]:
     image = sprite('object_events/pics/berry_trees/'+relative+'.png',colors('object_events/palettes/npc_'+('3' if stage == 'planted' else '4')+'.pal'))
-    add('berry-'+stage+'.png',image.crop((0,frame*16,16,(frame+1)*16)))
+    add('berry-'+stage+'.png',sprite_frame(image,frame,16,16))
 for terrain, folder in [('grass','tall_grass'),('long_grass','long_grass'),
                          ('pond','pond_water'),('water','water'),('cave','cave'),
                          ('sand','sand'),('mountain','rock'),('indoor','building'),

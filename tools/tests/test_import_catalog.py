@@ -5,6 +5,8 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import struct
+from PIL import Image
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from imports.context import PROJECT
@@ -55,6 +57,28 @@ class ImportCatalogTests(unittest.TestCase):
         check = self.run_import('opening-art', '--check', '--strict')
         self.assertEqual(check.returncode, 0, check.stderr)
         self.assertEqual(json.loads(check.stdout)['files'], [])
+        # Check the delivered logos against source BG tile indices/palette, rather
+        # than accepting an arbitrary PNG with the right dimensions.
+        source = PROJECT / 'work/pokeemerald'
+        palette = [tuple(map(int, line.split())) for line in
+                   (source / 'graphics/battle_transitions/evil_team.pal').read_text().splitlines()[3:19]]
+        for team in ('aqua', 'magma'):
+            image = Image.open(assets / f'battle-transition-{team}.png')
+            sheet = Image.open(source / f'graphics/battle_transitions/team_{team}.png')
+            words = struct.unpack('<1024H', (source / f'graphics/battle_transitions/team_{team}.bin').read_bytes())
+            self.assertEqual(image.size, (256, 256))
+            for y in range(160):
+                for x in range(240):
+                    word = words[(y // 8) * 32 + x // 8]
+                    tile = word & 1023
+                    dx, dy = x % 8, y % 8
+                    if word & 1024:
+                        dx = 7 - dx
+                    if word & 2048:
+                        dy = 7 - dy
+                    index = sheet.getpixel((tile % (sheet.width // 8) * 8 + dx,
+                                            tile // (sheet.width // 8) * 8 + dy))
+                    self.assertEqual(image.getpixel((x, y)), (*palette[index], 255 if index else 0))
 
     def test_discovery_and_unknown_command(self):
         result = self.run_import('--list')

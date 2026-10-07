@@ -319,8 +319,28 @@
       "sha256": "5e68c04d088a0afa6cb3723eb018cea4a37fed9c48b24a8c92284cbdf8720e82"
     },
     {
+      "path": "graphics/battle_transitions/evil_team.pal",
+      "sha256": "332d398ed230476abb5f149c0ff79a49ce32963e8527b0bc73dc9909397144f1"
+    },
+    {
       "path": "graphics/battle_transitions/pokeball.png",
       "sha256": "edfa2c2187e0e94b8ad41755b07bd4ea97ec25ce223004666ac90aa05727d852"
+    },
+    {
+      "path": "graphics/battle_transitions/team_aqua.bin",
+      "sha256": "d013e73c5b633ba68c5480a4cea5d482e3d99e5421c0b868ed1afe20fbe30ff4"
+    },
+    {
+      "path": "graphics/battle_transitions/team_aqua.png",
+      "sha256": "fedd2dc93ee731fd7a5c172a0a291a0c7b97c6bca5888e687e5705f07e78c6b5"
+    },
+    {
+      "path": "graphics/battle_transitions/team_magma.bin",
+      "sha256": "c2340c5f34e2b7cb3a4c145a8ea90d8f80bdc21f66c42fb9a6dbd3f29850e747"
+    },
+    {
+      "path": "graphics/battle_transitions/team_magma.png",
+      "sha256": "0e60cf5e9e02ba379014a6407a92a2e71244084c03b22fbb5be3b4f19e33edb2"
     },
     {
       "path": "graphics/door_anims/battle_tent.png",
@@ -409,6 +429,10 @@
     {
       "path": "src/field_door.c",
       "sha256": "e2c3104fb441f8440455bc5951362b4eb20704c01f165101f00481aee97b1d27"
+    },
+    {
+      "path": "src/trig.c",
+      "sha256": "7be9fec21002228f55e8a4bf36a83903991f48ca551fa02f1271ba7c8b51d5bf"
     },
     {
       "path": "src/wallclock.c",

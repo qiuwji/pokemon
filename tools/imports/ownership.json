@@ -222,7 +222,10 @@
       "packs/emerald/generated/door-anims.js",
       "assets/tiles-*.png",
       "assets/opening-art-source.json",
-      "assets/battle-transition-pokeball.png"
+      "assets/battle-transition-pokeball.png",
+      "assets/battle-transition-aqua.png",
+      "assets/battle-transition-magma.png",
+      "packs/emerald/generated/transition-sine.js"
     ],
     "entry": "tools/imports/commands/region/import-opening-art.py",
     "category": "region"

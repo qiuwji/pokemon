@@ -201,6 +201,29 @@ animations = all_animations['general-petalburg']
 ball = Image.open(read('graphics/battle_transitions/pokeball.png'))
 session.image(paint(ball, palette('graphics/field_effects/palettes/pokeball.pal'), True),
               session.target / 'assets/battle-transition-pokeball.png')
+for team in ('aqua', 'magma'):
+    sheet = Image.open(read(f'graphics/battle_transitions/team_{team}.png'))
+    words = struct.unpack('<1024H', read(f'graphics/battle_transitions/team_{team}.bin').read_bytes())
+    colors = palette('graphics/battle_transitions/evil_team.pal')
+    screen = Image.new('RGBA', (256, 256))
+    for index, word in enumerate(words):
+        tile_id = word & 1023
+        x, y = tile_id % (sheet.width // 8) * 8, tile_id // (sheet.width // 8) * 8
+        if y + 8 > sheet.height:
+            raise ValueError(f'Team transition tile out of bounds: {team}/{tile_id}')
+        tile = paint(sheet.crop((x, y, x + 8, y + 8)), colors, True)
+        if word & 1024:
+            tile = tile.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        if word & 2048:
+            tile = tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        screen.paste(tile, (index % 32 * 8, index // 32 * 8))
+    session.image(screen, session.target / f'assets/battle-transition-{team}.png')
+sine = [round(float(v) * 256) for v in re.findall(r'Q_8_8\(([-\d.]+)\)', read('src/trig.c').read_text())[:256]]
+if len(sine) != 256:
+    raise ValueError('Missing pinned sine lookup')
+session.text(session.target / 'packs/emerald/generated/transition-sine.js',
+             generated_header('import-opening-art.py', source) +
+             'export const TRANSITION_SINE = Object.freeze(' + json.dumps(sine) + ');\n')
 def frozen_animations(records):
     return 'Object.freeze({' + ','.join(
         f'{metatile}:Object.freeze({{sound:{json.dumps(entry["sound"])},open:Object.freeze([' +
