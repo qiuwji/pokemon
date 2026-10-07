@@ -41,12 +41,13 @@ test('Resetting logical movement during a story cannot force director-owned spri
 
 test('Native cast entries bind real source identities, preserve gender/visibility, and support a new map through data alone', () => {
   const { db } = session();
-  for (const [map, definitions] of Object.entries(NATIVE_CAST)) {
+  for (const map of Object.keys(NATIVE_CAST)) {
     for (const playerGender of ['male', 'female']) {
       for (const enabled of [false, true]) {
         const state = { position: { map }, playerGender, flags: Object.fromEntries(['rescued','introDone','neighborMet','momOutside','pokedex','runningShoes','potionGift','rivalWon'].map(k => [k, enabled])), story: { rewards: [] } };
         const cast = nativeCast(state, db);
-        assert(cast.length <= definitions.length);
+        assert(cast.length <= db.maps[map].npcs.length);
+        assert.equal(new Set(bindNativeObjects(map, cast, db.maps[map].npcs).map(o => o.id)).size, cast.length);
         assert.equal(bindNativeObjects(map, cast, db.maps[map].npcs).length, cast.length);
       }
     }

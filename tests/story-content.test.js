@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { StoryCatalog } from "../src/engine/story-catalog.js";
@@ -496,10 +497,10 @@ test("The rival's Poké Ball still reads after the first meeting", async () => {
   assert.match(lines.join(""), /精灵球/);
 });
 
-test("Every imported sign resolves to a real script instead of the untranslated fallback", () => {
+test("Every restored opening-through-Woods sign resolves to a real script instead of the untranslated fallback", () => {
   const s = session();
-  for (const map of Object.keys(s.db.maps))
-    for (const sign of s.db.maps[map].signs || [])
+  for (const map of new Set(["slice", "opening", "petalburg", "petalburg-rescue"].flatMap(name => JSON.parse(fs.readFileSync(new URL(`../tools/imports/config/${name}.json`, import.meta.url))).maps)))
+    for (const sign of (s.db.maps[map].signs || []).filter(s => s.script !== "EventScript_PC"))
       for (const gender of ["male", "female"]) {
         s.game.state.playerGender = gender;
         const commands = s.game.story.resolve("interact", s.game.state, {

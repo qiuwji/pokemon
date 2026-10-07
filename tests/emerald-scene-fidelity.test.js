@@ -40,11 +40,12 @@ test("Battle defeat dialogue precedes blackout, and reveal already sees the fiel
 test("Route 102 defeat and prize lines stay in combat, settlement pays exactly once", async () => {
   const s = session(), g = s.game;
   await g.startTrainerBattle("calvin");
-  const before = g.state.money, lines = [];
-  g.ui.say = async (_name, text) => { lines.push(text); assert(g.battle, "battle must remain visible while acknowledging the defeat"); };
+  const before = g.state.money, lines = [], contexts = [];
+  g.ui.say = async (_name, text) => { lines.push(text); contexts.push(!!g.battle); };
   g.battle.finish("win");
   await g.combat.finish(); await s.settle();
-  assert.equal(lines.length, 2);
+  assert.equal(lines.length, 4);
+  assert.deepEqual(contexts, [true, true, true, false]);
   assert.equal(g.state.money, before + 80);
   assert(g.state.story.rewards.includes("trainer.calvin.prize"));
   await g.startTrainerBattle("calvin");

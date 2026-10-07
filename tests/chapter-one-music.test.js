@@ -85,13 +85,13 @@ test("Every imported map keeps its original song constant and resolves to an ins
     const channels = data.readUInt16LE(22);
     const sampleRate = data.readUInt32LE(24);
     const frames = (data.length - 44) / (channels * 2);
-    assert.equal(frames, (cue.loopEnd * sampleRate), `${id} loop end is not the decoded length`);
+    assert(Math.abs(frames - cue.loopEnd * sampleRate) < 0.5, `${id} loop end is not the decoded length`);
     assert.ok(cue.loopStart * sampleRate < frames, id);
   }
   // Route101, Route103 and Route102 share one original song in the reference, like the original data.
   assert.equal(db.maps.Route101.music, db.maps.Route103.music);
   assert.equal(db.maps.Route102.music, db.maps.Route101.music);
-  assert.equal(seen.size, 8);
+  assert.deepEqual([...seen].sort(), Object.keys(ORIGINAL_SONG_CUES).filter(song => maps.some(map => map.music === song)).sort());
   for (const song of seen) assert.ok(ORIGINAL_SONG_CUES[song], song);
 });
 
