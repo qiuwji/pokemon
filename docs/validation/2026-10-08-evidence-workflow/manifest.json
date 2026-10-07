@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "generator": "tools/evidence.py",
+  "createdAt": "2026-10-08T00:12:05+08:00",
+  "scope": "验证记录自动化与剧情开发边界",
+  "kind": "workflow",
+  "selectors": [
+    "tools/evidence.py",
+    "tools/tests/test_evidence.py",
+    "docs/development/EVIDENCE.md",
+    "docs/development/TESTING.md",
+    "docs/architecture/STORY_CONTENT.md",
+    "docs/project/STATUS.md",
+    "docs/project/CHANGELOG.md"
+  ],
+  "runs": [
+    {
+      "label": "tool-tests",
+      "mode": "run",
+      "startedAt": "2026-10-08T00:12:05+08:00",
+      "finishedAt": "2026-10-08T00:12:18+08:00",
+      "baselineCommit": "86b935e833d55c48d42b5825c922b499afafb6e8",
+      "command": [
+        "npm",
+        "run",
+        "test:tools"
+      ],
+      "exitCode": 0,
+      "log": "001-tool-tests.log",
+      "logSha256": "a5ceab92a9d86822a8441ef2488152572153684d9b180b3a5fbcde304cbc5a80",
+      "inputs": {
+        "docs/architecture/STORY_CONTENT.md": "703eab3e5be8ac94c03b2a043a1ba3bda5f0947d40383ea8efce85e515b4e538",
+        "docs/development/EVIDENCE.md": "a9ca9dc4324146a0e6417df8081aab0074a68fd271da5d3c0277fc12e547ffee",
+        "docs/development/TESTING.md": "7380588eb82cfaadbb1431c88fcf2d5882219234dfec7866f797339c4387496c",
+        "docs/project/CHANGELOG.md": "84a42ccdf7de4dcaae28994573a839681ca7fb17eb8017779c66737ebed87ab3",
+        "docs/project/STATUS.md": "a015233fcc8c48c0208c9f6ad19d52c08db33e84063ec5625d54af965ac1cece",
+        "tools/evidence.py": "c32a4ab590abcd8c3494430da588dce8b88a240a6122c11855c13ffc8f7b17e3",
+        "tools/tests/test_evidence.py": "a89a6fcb818b390f9534655950104838f7c37c47413f335fa0713eaabf8ba798"
+      },
+      "inputDigest": "27b48f364546a9e2cf64b63f3987d8e526c854dc7ecd6c6499691cf782fc096e",
+      "inputsChangedDuringRun": false,
+      "summaries": [
+        {
+          "format": "python-unittest",
+          "tests": 47,
+          "summary": "OK"
+        },
+        {
+          "format": "python-unittest",
+          "tests": 7,
+          "summary": "OK"
+        },
+        {
+          "format": "python-unittest",
+          "tests": 13,
+          "summary": "OK"
+        }
+      ]
+    },
+    {
+      "label": "quality",
+      "mode": "run",
+      "startedAt": "2026-10-08T00:12:34+08:00",
+      "finishedAt": "2026-10-08T00:12:54+08:00",
+      "baselineCommit": "86b935e833d55c48d42b5825c922b499afafb6e8",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "log": "002-quality.log",
+      "logSha256": "ad3a2319e79a73306e03bc078e78dd8843e02b5de650f09a432e77c2a3c0368b",
+      "inputs": {
+        "docs/architecture/STORY_CONTENT.md": "703eab3e5be8ac94c03b2a043a1ba3bda5f0947d40383ea8efce85e515b4e538",
+        "docs/development/EVIDENCE.md": "a9ca9dc4324146a0e6417df8081aab0074a68fd271da5d3c0277fc12e547ffee",
+        "docs/development/TESTING.md": "7380588eb82cfaadbb1431c88fcf2d5882219234dfec7866f797339c4387496c",
+        "docs/project/CHANGELOG.md": "84a42ccdf7de4dcaae28994573a839681ca7fb17eb8017779c66737ebed87ab3",
+        "docs/project/STATUS.md": "a015233fcc8c48c0208c9f6ad19d52c08db33e84063ec5625d54af965ac1cece",
+        "tools/evidence.py": "c32a4ab590abcd8c3494430da588dce8b88a240a6122c11855c13ffc8f7b17e3",
+        "tools/tests/test_evidence.py": "a89a6fcb818b390f9534655950104838f7c37c47413f335fa0713eaabf8ba798"
+      },
+      "inputDigest": "27b48f364546a9e2cf64b63f3987d8e526c854dc7ecd6c6499691cf782fc096e",
+      "inputsChangedDuringRun": false,
+      "summaries": []
+    },
+    {
+      "label": "tool-tests",
+      "mode": "run",
+      "startedAt": "2026-10-08T00:14:24+08:00",
+      "finishedAt": "2026-10-08T00:14:36+08:00",
+      "baselineCommit": "86b935e833d55c48d42b5825c922b499afafb6e8",
+      "command": [
+        "npm",
+        "run",
+        "test:tools"
+      ],
+      "exitCode": 0,
+      "log": "003-tool-tests.log",
+      "logSha256": "83308ca6543a43f433ad60498c8ba290f429f1be8f35ba623f754d4e2e687568",
+      "inputs": {
+        "docs/architecture/STORY_CONTENT.md": "703eab3e5be8ac94c03b2a043a1ba3bda5f0947d40383ea8efce85e515b4e538",
+        "docs/development/EVIDENCE.md": "a9ca9dc4324146a0e6417df8081aab0074a68fd271da5d3c0277fc12e547ffee",
+        "docs/development/TESTING.md": "7380588eb82cfaadbb1431c88fcf2d5882219234dfec7866f797339c4387496c",
+        "docs/project/CHANGELOG.md": "84a42ccdf7de4dcaae28994573a839681ca7fb17eb8017779c66737ebed87ab3",
+        "docs/project/STATUS.md": "a015233fcc8c48c0208c9f6ad19d52c08db33e84063ec5625d54af965ac1cece",
+        "tools/evidence.py": "9d99457cdfe25164a68f7fb95ea7d74707b7778ed80d032b6f7abf5a8af082c3",
+        "tools/tests/test_evidence.py": "45cef7b21dbc53234eb0bd9f724d54e4d26bd0bf9e77d195e228ab2eeeb2b2c3"
+      },
+      "inputDigest": "9299a76ae6e94a4e0c35bc5849c2dfae9fe9bfe29ef6d02ba65201ea6186289e",
+      "inputsChangedDuringRun": false,
+      "summaries": [
+        {
+          "format": "python-unittest",
+          "tests": 48,
+          "summary": "OK"
+        },
+        {
+          "format": "python-unittest",
+          "tests": 7,
+          "summary": "OK"
+        },
+        {
+          "format": "python-unittest",
+          "tests": 13,
+          "summary": "OK"
+        }
+      ]
+    },
+    {
+      "label": "quality",
+      "mode": "run",
+      "startedAt": "2026-10-08T00:16:21+08:00",
+      "finishedAt": "2026-10-08T00:16:42+08:00",
+      "baselineCommit": "86b935e833d55c48d42b5825c922b499afafb6e8",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "log": "004-quality.log",
+      "logSha256": "8c17b3f7c7a3646bdb7c8e7aed9abff2f820163bf2cb256ef5cd86fa0793ff89",
+      "inputs": {
+        "docs/architecture/STORY_CONTENT.md": "703eab3e5be8ac94c03b2a043a1ba3bda5f0947d40383ea8efce85e515b4e538",
+        "docs/development/EVIDENCE.md": "a30b4073af9755833ed6b4b801b2274f98acd5837c700230e22f6de8e9687eaf",
+        "docs/development/TESTING.md": "4455cd57fbaa020d83db35bd5f89c5342d5b458d1ac31f67b1708851ca71fe04",
+        "docs/project/CHANGELOG.md": "84a42ccdf7de4dcaae28994573a839681ca7fb17eb8017779c66737ebed87ab3",
+        "docs/project/STATUS.md": "a015233fcc8c48c0208c9f6ad19d52c08db33e84063ec5625d54af965ac1cece",
+        "tools/evidence.py": "9d99457cdfe25164a68f7fb95ea7d74707b7778ed80d032b6f7abf5a8af082c3",
+        "tools/tests/test_evidence.py": "45cef7b21dbc53234eb0bd9f724d54e4d26bd0bf9e77d195e228ab2eeeb2b2c3"
+      },
+      "inputDigest": "8f033904b718c98f8469d7205fd2ec5f607673d292a7acb62e1f5dfccec9b2f6",
+      "inputsChangedDuringRun": false,
+      "summaries": []
+    },
+    {
+      "label": "tool-tests",
+      "mode": "run",
+      "startedAt": "2026-10-08T00:17:42+08:00",
+      "finishedAt": "2026-10-08T00:17:44+08:00",
+      "baselineCommit": "86b935e833d55c48d42b5825c922b499afafb6e8",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/tests",
+        "-p",
+        "test_evidence.py",
+        "-q"
+      ],
+      "exitCode": 0,
+      "log": "005-tool-tests.log",
+      "logSha256": "17838191baaf97dc65a7b9aa6a42709de12a3083437ba50e3137764454f724e4",
+      "inputs": {
+        "docs/architecture/STORY_CONTENT.md": "703eab3e5be8ac94c03b2a043a1ba3bda5f0947d40383ea8efce85e515b4e538",
+        "docs/development/EVIDENCE.md": "a30b4073af9755833ed6b4b801b2274f98acd5837c700230e22f6de8e9687eaf",
+        "docs/development/TESTING.md": "4455cd57fbaa020d83db35bd5f89c5342d5b458d1ac31f67b1708851ca71fe04",
+        "docs/project/CHANGELOG.md": "84a42ccdf7de4dcaae28994573a839681ca7fb17eb8017779c66737ebed87ab3",
+        "docs/project/STATUS.md": "a015233fcc8c48c0208c9f6ad19d52c08db33e84063ec5625d54af965ac1cece",
+        "tools/evidence.py": "9d99457cdfe25164a68f7fb95ea7d74707b7778ed80d032b6f7abf5a8af082c3",
+        "tools/tests/test_evidence.py": "45cef7b21dbc53234eb0bd9f724d54e4d26bd0bf9e77d195e228ab2eeeb2b2c3"
+      },
+      "inputDigest": "8f033904b718c98f8469d7205fd2ec5f607673d292a7acb62e1f5dfccec9b2f6",
+      "inputsChangedDuringRun": false,
+      "summaries": [
+        {
+          "format": "python-unittest",
+          "tests": 14,
+          "summary": "OK"
+        }
+      ]
+    }
+  ],
+  "inputs": {
+    "docs/architecture/STORY_CONTENT.md": "703eab3e5be8ac94c03b2a043a1ba3bda5f0947d40383ea8efce85e515b4e538",
+    "docs/development/EVIDENCE.md": "a30b4073af9755833ed6b4b801b2274f98acd5837c700230e22f6de8e9687eaf",
+    "docs/development/TESTING.md": "4455cd57fbaa020d83db35bd5f89c5342d5b458d1ac31f67b1708851ca71fe04",
+    "docs/project/CHANGELOG.md": "84a42ccdf7de4dcaae28994573a839681ca7fb17eb8017779c66737ebed87ab3",
+    "docs/project/STATUS.md": "a015233fcc8c48c0208c9f6ad19d52c08db33e84063ec5625d54af965ac1cece",
+    "tools/evidence.py": "9d99457cdfe25164a68f7fb95ea7d74707b7778ed80d032b6f7abf5a8af082c3",
+    "tools/tests/test_evidence.py": "45cef7b21dbc53234eb0bd9f724d54e4d26bd0bf9e77d195e228ab2eeeb2b2c3"
+  },
+  "notes": [
+    "本批次只修改流程工具、测试和规范；清单中的应用层修改属于之前尚未收口的游戏修复。",
+    "未操作游戏浏览器；本记录不证明原作剧情、画面或音频完整复刻。",
+    "质量检查在当前混合工作树执行；输入哈希限定本工具与规范，不作为其他待收口游戏修复的版本验收。",
+    "完整工具组已通过；补充节省token的文档后，仅复查14个新增工具用例，未重复整组工具测试。各命令数量独立记录，不累加。"
+  ],
+  "manualVerification": "not recorded; check results do not establish visual/audio fidelity",
+  "updatedAt": "2026-10-08T00:17:44+08:00",
+  "inputDigest": "8f033904b718c98f8469d7205fd2ec5f607673d292a7acb62e1f5dfccec9b2f6",
+  "changedFiles": {
+    "application": [
+      "src/packs/emerald/application/appearance-application.js",
+      "src/packs/emerald/application/battle-application.js",
+      "src/packs/emerald/application/crop-application.js"
+    ],
+    "content": [
+      "src/content/manifest.json",
+      "src/content/references.json",
+      "src/content/stories/dialogues.json",
+      "src/content/stories/native-npcs.json",
+      "src/content/stories/native-signs.json"
+    ],
+    "docs": [
+      "docs/architecture/STORY_CONTENT.md",
+      "docs/development/EVIDENCE.md",
+      "docs/development/TESTING.md",
+      "docs/project/CHANGELOG.md",
+      "docs/project/STATUS.md",
+      "docs/regions/NATIVE_NPC_INVENTORY.json",
+      "docs/regions/evidence/flower-shop/packet.json",
+      "docs/regions/evidence/flower-shop/review.json",
+      "docs/regions/evidence/flower-shop/source.md",
+      "docs/regions/evidence/native-npc-dialogues/packet.json",
+      "docs/regions/evidence/native-npc-dialogues/review.json",
+      "docs/regions/evidence/native-npc-dialogues/source.md",
+      "docs/regions/evidence/native-signs/packet.json",
+      "docs/regions/evidence/native-signs/review.json",
+      "docs/regions/evidence/native-signs/source.md",
+      "docs/validation/2026-10-07-native-content/flower-source-review.json",
+      "docs/validation/2026-10-07-native-content/npc-source-review.json",
+      "docs/validation/2026-10-07-native-content/opening-art-check.json",
+      "docs/validation/2026-10-07-native-content/sign-source-review.json",
+      "docs/validation/2026-10-07-native-content/test-all.log",
+      "docs/validation/2026-10-07-native-content/test-tools.log",
+      "docs/validation/2026-10-08-evidence-workflow/001-tool-tests.log",
+      "docs/validation/2026-10-08-evidence-workflow/002-quality.log",
+      "docs/validation/2026-10-08-evidence-workflow/003-tool-tests.log",
+      "docs/validation/2026-10-08-evidence-workflow/004-quality.log",
+      "docs/validation/2026-10-08-evidence-workflow/005-tool-tests.log",
+      "docs/validation/2026-10-08-evidence-workflow/manifest.json"
+    ],
+    "generated": [
+      "generated/assets/battle-transition-aqua.png",
+      "generated/assets/battle-transition-magma.png",
+      "generated/assets/opening-art-source.json",
+      "generated/assets/ui/actor-BerryTreeLateStages.png",
+      "generated/assets/ui/berry-aspear-flowering.png",
+      "generated/assets/ui/berry-aspear-ripe.png",
+      "generated/assets/ui/berry-aspear-taller.png",
+      "generated/assets/ui/berry-cheri-flowering.png",
+      "generated/assets/ui/berry-cheri-ripe.png",
+      "generated/assets/ui/berry-chesto-flowering.png",
+      "generated/assets/ui/berry-chesto-ripe.png",
+      "generated/assets/ui/berry-chesto-taller.png",
+      "generated/assets/ui/berry-leppa-flowering.png",
+      "generated/assets/ui/berry-leppa-ripe.png",
+      "generated/assets/ui/berry-oran-flowering.png",
+      "generated/assets/ui/berry-oran-ripe.png",
+      "generated/assets/ui/berry-pecha-flowering.png",
+      "generated/assets/ui/berry-pecha-ripe.png",
+      "generated/assets/ui/berry-persim-flowering.png",
+      "generated/assets/ui/berry-persim-ripe.png",
+      "generated/assets/ui/berry-persim-taller.png",
+      "generated/assets/ui/berry-pinap-flowering.png",
+      "generated/assets/ui/berry-pinap-ripe.png",
+      "generated/assets/ui/berry-pinap-taller.png",
+      "generated/assets/ui/berry-rawst-flowering.png",
+      "generated/assets/ui/berry-rawst-ripe.png",
+      "generated/assets/ui/berry-rawst-taller.png",
+      "generated/assets/ui/berry-sprouted.png",
+      "generated/assets/ui/source.json",
+      "generated/packs/emerald/generated/transition-sine.js"
+    ],
+    "pack": [
+      "src/packs/emerald/appearance-definitions.js",
+      "src/packs/emerald/battle-transition-canvas.js",
+      "src/packs/emerald/battle-transitions.js",
+      "src/packs/emerald/berries.js",
+      "src/packs/emerald/extensions.js",
+      "src/packs/emerald/inventory-items.js",
+      "src/packs/emerald/native-cast-data.js",
+      "src/packs/emerald/native-cast.js",
+      "src/packs/emerald/native-object-bindings.js",
+      "src/packs/emerald/pack.js",
+      "src/packs/emerald/story.js"
+    ],
+    "story": [
+      "src/packs/emerald/story/regions/flower-shop.js",
+      "src/packs/emerald/story/regions/petalburg-rescue.js"
+    ],
+    "tests": [
+      "tests/native-dialogue-entrances.test.js",
+      "tests/native-road-content.test.js",
+      "tests/team-battle-transitions.test.js"
+    ],
+    "tools": [
+      "tools/evidence.py",
+      "tools/imports/commands/region/import-opening-art.py",
+      "tools/imports/ownership.json",
+      "tools/story/slices/native-npc-dialogues.json",
+      "tools/story/slices/native-signs.json",
+      "tools/tests/test_evidence.py",
+      "tools/tests/test_import_catalog.py",
+      "tools/ui/export-theme.py"
+    ]
+  },
+  "boundaryReview": {
+    "basis": "whole working tree against HEAD; includes pre-existing work outside this batch",
+    "layersToExplain": [
+      "application"
+    ],
+    "contentOnlyExpectation": false,
+    "note": "Cross-layer edits require a stated capability or defect; file count alone does not prove a violation"
+  },
+  "reference": {
+    "path": "work/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881"
+  },
+  "status": "recorded-checks-passed"
+}
