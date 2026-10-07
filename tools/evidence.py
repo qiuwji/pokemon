@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Record checks and changed-file boundaries without editing historical evidence."""
 import argparse
+import contextlib
 from datetime import datetime
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -29,8 +31,8 @@ def git(root, *args):
     return subprocess.check_output(['git', '-C', str(root), *args])
 
 
-def changed_paths(root):
-    tracked = git(root, 'diff', '--name-only', '-z', 'HEAD').split(b'\0')
+def changed_paths(root, baseline='HEAD'):
+    tracked = git(root, 'diff', '--name-only', '-z', baseline).split(b'\0')
     new = git(root, 'ls-files', '--others', '--exclude-standard', '-z').split(b'\0')
     return sorted({os.fsdecode(p) for p in tracked + new
                    if p and not os.fsdecode(p).endswith('/.evidence.lock')})
@@ -90,7 +92,7 @@ def summaries(text):
     result = []
     current = None
     for line in text.splitlines():
-        match = re.fullmatch(r'# (tests|suites|pass|fail|cancelled|skipped|todo) (\d+)', line)
+        match = re.fullmatch(r'(?:#|ℹ) (tests|suites|pass|fail|cancelled|skipped|todo) (\d+)', line)
         if match:
             key, count = match.groups()
             if key == 'tests':
@@ -175,6 +177,10 @@ def record_locked(root, args):
     before = snapshot(root, args.input, manifest['inputs'])
     started = now()
     baseline = git(root, 'rev-parse', 'HEAD').decode().strip()
+    if not (output / 'manifest.json').exists():
+        # Publish a truthful unverified batch before checks inspect documentation links.
+        manifest.update({'inputs': before, 'inputDigest': fingerprint(before), 'status': status(manifest)})
+        atomic_json(output / 'manifest.json', manifest)
     sequence = len(manifest['runs']) + 1
     log = output / f'{sequence:03d}-{label}.log'
     if log.exists():
@@ -240,6 +246,9 @@ def record_locked(root, args):
             manifest['notes'].append(note)
     manifest['status'] = status(manifest)
     atomic_json(output / 'manifest.json', manifest)
+    if args.action == 'run':
+        atomic_json(root / 'docs/validation/current.json',
+                    {'version': 1, 'manifest': relative(root, output / 'manifest.json')})
     print(json.dumps({'manifest': relative(root, output / 'manifest.json'), 'status': manifest['status'],
                       'exitCode': code, 'layersToExplain': crossings}, ensure_ascii=False))
     return (code if code is not None and code >= 0 else 1) if args.action == 'run' else 0
@@ -250,7 +259,11 @@ def verify(root, args):
     manifest = json.loads(file.read_text())
     if manifest.get('generator') != 'tools/evidence.py' or manifest.get('schemaVersion') != SCHEMA:
         raise ValueError('verify supports generated evidence schema 1 only')
-    current = snapshot(root, manifest['selectors'] or list(manifest['inputs']))
+    selectors = manifest['selectors']
+    if not selectors:
+        baseline = manifest['runs'][-1]['baselineCommit'] if manifest['runs'] else 'HEAD'
+        selectors = sorted(set(manifest['inputs']) | set(changed_paths(root, baseline)))
+    current = snapshot(root, selectors)
     problems = []
     if current != manifest['inputs']:
         problems.append('Recorded inputs changed, disappeared or were added to a selected directory')
@@ -273,6 +286,56 @@ def verify(root, args):
     return 1 if problems else 0
 
 
+def verify_all(root):
+    directory = root / 'docs/validation'
+    cursor = directory / 'current.json'
+    locks = list(directory.glob('*/.evidence.lock'))
+    current = None
+    if cursor.exists():
+        selection = json.loads(cursor.read_text())
+        if selection.get('version') != 1:
+            raise ValueError('Invalid current evidence selector')
+        current = root / relative(root, selection['manifest'])
+        if not current.is_relative_to(directory) or current.name != 'manifest.json':
+            raise ValueError('Current evidence must be a validation manifest')
+    # A wrapped check can run before its first manifest is written. Final recording
+    # verifies that batch after the child exits, rather than accepting an old snapshot.
+    running = current is not None and (current.parent / '.evidence.lock').exists()
+    if len(locks) == 1 and not running:
+        current, running = locks[0].parent / 'manifest.json', True
+    problems, generated, legacy, stale = [], 0, 0, 0
+    for file in sorted(directory.glob('*/manifest.json')):
+        data = json.loads(file.read_text())
+        if data.get('generator') != 'tools/evidence.py':
+            legacy += 1
+            continue
+        generated += 1
+        with contextlib.redirect_stdout(io.StringIO()) as stream:
+            verify(root, argparse.Namespace(manifest=relative(root, file)))
+        result = json.loads(stream.getvalue())
+        input_problem = 'Recorded inputs changed, disappeared or were added to a selected directory'
+        outdated = input_problem in result['problems'] or result['recordedStatus'] == 'stale'
+        stale += int(outdated)
+        issues = [issue for issue in result['problems'] if issue != input_problem]
+        if file == current and not running:
+            if outdated:
+                issues.append('Current batch is stale; record relevant checks for the final inputs')
+            if result['recordedStatus'] in ('failed', 'unverified'):
+                issues.append('Current batch has failed or unverified checks')
+        problems.extend(f'{relative(root,file)}: {issue}' for issue in issues)
+    if current is None:
+        problems.append('No current batch; select one by running npm run evidence -- run ...')
+    elif not running and not current.is_file():
+        problems.append('Current manifest is missing')
+    elif not running and json.loads(current.read_text()).get('generator') != 'tools/evidence.py':
+        problems.append('Current evidence must use the generated schema')
+    print(json.dumps({'current': relative(root,current) if current else None,
+                      'currentStatus': 'running' if running else 'invalid' if problems else 'verified',
+                      'generated': generated, 'historicalStale': stale, 'legacyUnverifiable': legacy,
+                      'problems': problems}, ensure_ascii=False))
+    return 1 if problems else 0
+
+
 def main(argv=None, root=PROJECT):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='action', required=True)
@@ -290,12 +353,22 @@ def main(argv=None, root=PROJECT):
         else:
             child.add_argument('--log', required=True)
     child = sub.add_parser('verify')
-    child.add_argument('manifest')
+    child.add_argument('manifest', nargs='?')
+    child.add_argument('--all', action='store_true', help='verify generated logs; enforce current batch freshness')
     args = parser.parse_args(argv)
     try:
         if getattr(args, 'timeout', None) is not None and args.timeout <= 0:
             raise ValueError('--timeout must be positive')
-        return verify(root.resolve(), args) if args.action == 'verify' else record(root.resolve(), args)
+        if args.action == 'verify':
+            if args.all:
+                return verify_all(root.resolve())
+            if not args.manifest:
+                raise ValueError('verify requires a manifest or --all')
+            return verify(root.resolve(), args)
+        result = record(root.resolve(), args)
+        if result == 0 and args.action == 'run':
+            return verify_all(root.resolve())
+        return result
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         print(f'evidence: {error}', file=sys.stderr)
         return 2

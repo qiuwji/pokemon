@@ -72,14 +72,14 @@ class EvidenceTests(unittest.TestCase):
     def test_new_version_does_not_inherit_other_checks_pass(self):
         self.assertEqual(self.run_check('print("first check")', ['--label', 'one']), 0)
         self.input.write_text('new version')
-        self.assertEqual(self.run_check('print("second check")', ['--label', 'two']), 0)
+        self.assertEqual(self.run_check('print("second check")', ['--label', 'two']), 1)
         self.assertEqual(self.manifest()['status'], 'stale')
         self.assertEqual(self.run_check('print("one repeated")', ['--label', 'one']), 0)
         self.assertEqual(self.manifest()['status'], 'recorded-checks-passed')
 
     def test_input_changes_during_check_make_success_stale(self):
         self.assertEqual(self.run_check('from pathlib import Path; '
-                                       'Path("src/content/story.json").write_text("changed in check")'), 0)
+                                       'Path("src/content/story.json").write_text("changed in check")'), 1)
         self.assertTrue(self.manifest()['runs'][0]['inputsChangedDuringRun'])
         self.assertEqual(self.manifest()['status'], 'stale')
 
@@ -179,6 +179,55 @@ class EvidenceTests(unittest.TestCase):
                            'Ran 7 tests in 0.3s\n\nOK\nRan 8 tests in 0.4s\n\nFAILED (failures=1)\n')
         self.assertEqual([r['tests'] for r in result], [2, 3, 7, 8])
         self.assertEqual(result[-1]['summary'], 'FAILED (failures=1)')
+
+    def test_first_run_exposes_unverified_manifest_to_documentation_check(self):
+        self.assertEqual(self.run_check('from pathlib import Path; import json; '
+                                       'p=Path("docs/validation/batch/manifest.json"); '
+                                       'assert p.is_file(); '
+                                       'assert json.loads(p.read_text())["status"] == "unverified"'), 0)
+        self.assertEqual(self.manifest()['status'], 'recorded-checks-passed')
+
+    def test_default_inputs_detect_new_changes_and_survive_committing_recorded_files(self):
+        self.options = self.options[:-2]
+        self.input.write_text('changed')
+        self.assertEqual(self.run_check('print("check")'), 0)
+        self.git('add', 'src')
+        self.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.test', 'commit', '-qm', 'recorded change')
+        self.assertEqual(self.verify(), 0)
+        added = self.root / 'src/content/new.json'
+        added.write_text('{}')
+        self.assertEqual(self.invoke(['verify', '--all']), 1)
+        self.git('add', 'src')
+        self.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.test', 'commit', '-qm', 'unchecked addition')
+        self.assertEqual(self.invoke(['verify', '--all']), 1)
+
+    def test_node_spec_reporter_counts_are_recognized_without_reading_success_lines(self):
+        result = summaries('✔ real entry\nℹ tests 2\nℹ suites 0\nℹ pass 1\nℹ fail 1\nℹ skipped 0\n')
+        self.assertEqual(result, [{'format':'node-test','tests':2,'suites':0,'pass':1,'fail':1,'skipped':0}])
+
+    def test_default_verification_enforces_current_batch_but_reports_historical_aging(self):
+        self.assertEqual(self.invoke(['verify','--all']),1,'fresh work needs a selected current batch')
+        self.run_check('print("old")')
+        self.input.write_text('next task')
+        self.assertEqual(self.run_check('print("new")',['--out','docs/validation/next']),0)
+        legacy=self.root/'docs/validation/legacy';legacy.mkdir()
+        (legacy/'manifest.json').write_text('{"status":"historical stub"}')
+        self.assertEqual(self.invoke(['verify','--all']),0)
+        (self.root/self.out/'001-focused.log').write_text('tampered historical log')
+        self.assertEqual(self.invoke(['verify','--all']),1)
+
+    def test_npm_postcheck_catches_stale_inputs_and_wrapped_check_verifies_after_finish(self):
+        tool=self.root/'tools/evidence.py';tool.parent.mkdir();tool.write_text(Path(__file__).resolve().parents[1].joinpath('evidence.py').read_text())
+        (self.root/'package.json').write_text(json.dumps({'scripts':{
+            'check':'python3 -c "print(123)"',
+            'postcheck':'python3 tools/evidence.py verify --all'}}))
+        self.run_check('print("baseline")')
+        result=subprocess.run(['npm','run','check'],cwd=self.root,capture_output=True)
+        self.assertEqual(result.returncode,0,result.stderr.decode())
+        self.input.write_text('changed')
+        self.assertNotEqual(subprocess.run(['npm','run','check'],cwd=self.root,capture_output=True).returncode,0)
+        self.assertEqual(self.invoke(['run',*self.options,'--','npm','run','check']),0)
+        self.assertEqual(self.invoke(['verify','--all']),0)
 
 
 if __name__ == '__main__':
