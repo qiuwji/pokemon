@@ -243,7 +243,7 @@ export class BattleApplication {
           trainerActor: this.trainerDefinitions[options.trainerId]?.actor,
           trainerName: this.trainerDefinitions[options.trainerId]?.name,
         }, this.db, enemies),
-        transition: openingBattleTransition({ trainer: !!options.trainer, party, opponents }),
+        transition: openingBattleTransition({ trainer: !!options.trainer, trainerActor: this.trainerDefinitions[options.trainerId]?.actor, party, opponents }),
         ...options.presentation,
         dialogue: (dialogue) => this.ui.say?.(dialogue.name, dialogue.lines),
       },

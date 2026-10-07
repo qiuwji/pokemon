@@ -9,6 +9,7 @@ import { matchesCondition } from "../../../engine/conditions.js";
 import { PartyStorageService } from "../../../engine/party-storage.js";
 import { EquipmentService } from "../../../engine/equipment.js";
 import { bindApplicationPorts } from "./ports.js";
+import { emeraldMartStock } from "../mart-stock.js";
 export const INVENTORY_PORTS = Object.freeze([
   "battle",
   "canManageParty",
@@ -106,9 +107,10 @@ export class InventoryApplication {
   }
   canBuyItem(id) {
     const item = this.itemDefinitions[id];
+    const stock = emeraldMartStock(this.state);
     return (
       !!item &&
-      item.shopStock !== false &&
+      (stock ? stock.includes(id) : item.shopStock !== false) &&
       Number.isSafeInteger(item.price) && item.price > 0 &&
       this.state.money >= item.price &&
       this.inventory.prepare(this.state.bag, [

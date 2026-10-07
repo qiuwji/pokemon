@@ -202,6 +202,26 @@
     "GraniteCave_B2F_EventScript_ItemRareCandy": {
       "itemId": "rare_candy",
       "itemName": "RARE CANDY"
+    },
+    "Route103_EventScript_ItemGuardSpec": {
+      "itemId": "guard_spec",
+      "itemName": "防守强化"
+    },
+    "Route103_EventScript_ItemPPUp": {
+      "itemId": "pp_up",
+      "itemName": "PP提升剂"
+    },
+    "Route102_EventScript_ItemPotion": {
+      "itemId": "potion",
+      "itemName": "伤药"
+    },
+    "PetalburgCity_EventScript_ItemMaxRevive": {
+      "itemId": "max_revive",
+      "itemName": "活力块"
+    },
+    "PetalburgCity_EventScript_ItemEther": {
+      "itemId": "ether",
+      "itemName": "PP单项小补剂"
     }
   },
   "trainers": {

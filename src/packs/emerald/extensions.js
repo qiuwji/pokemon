@@ -80,7 +80,7 @@ import { ITEMS } from "./items.js";
 /** Content-pack adapter validates extension content using the same domain contracts as built-ins. */
 export function createEmeraldPlugins(db, plugins, onError) {
   db = emeraldDatabase(db);
-  validateNativeCast(db);
+  validateNativeCast(db, ITEMS);
   const resources = db.resources;
   const host = new PluginHost({
     permissions: EMERALD_PLUGIN_PERMISSIONS,

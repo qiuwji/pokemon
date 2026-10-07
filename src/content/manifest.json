@@ -1299,6 +1299,21 @@
       "section": "species",
       "key": "makuhita",
       "path": "species/makuhita.json"
+    },
+    {
+      "section": "stories",
+      "key": "native-npcs",
+      "path": "stories/native-npcs.json"
+    },
+    {
+      "section": "stories",
+      "key": "native-signs",
+      "path": "stories/native-signs.json"
+    },
+    {
+      "section": "stories",
+      "key": "native-interactions",
+      "path": "stories/native-interactions.json"
     }
   ]
 }

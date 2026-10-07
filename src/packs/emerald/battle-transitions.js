@@ -1,3 +1,4 @@
+import { TRANSITION_SINE } from "../../../generated/packs/emerald/generated/transition-sine.js";
 /** Opening normal-landscape transitions, ported from battle_setup.c / battle_transition.c.
  * Pure 60 Hz sampling; no RNG, DOM or battle-rule mutation. GBA scanline masks are
  * scaled by the adapter; hardware palette blending and BG displacement are not emulated.
@@ -66,12 +67,62 @@ function sliceFrames() {
   return frames;
 }
 const SLICE = sliceFrames();
-const LENGTH = { 'pokeballs-trail': 100, 'angled-wipes': ANGLED.length, slice: SLICE.length, 'white-bars': 91 };
-export function openingBattleTransition({ trainer, party, opponents }) {
+// battle_transition.c: sAqua_Funcs/sMagma_Funcs, PatternWeave_* and SetCircularMask.
+const sin = (index, amplitude) => (TRANSITION_SINE[index & 255] * amplitude) >> 8;
+function circularMask(radius) {
+  const left = Array(160).fill(10), right = Array(160).fill(10);
+  for (let i = 0; i < 64; i++) {
+    const dx = sin(i, radius), dy = sin(i + 64, radius);
+    const l = Math.max(0, 120 - dx), r = Math.min(240, 120 + dx);
+    let top = Math.max(0, 80 - dy), bottom = Math.min(159, 80 + dy);
+    const write = y => { left[y] = l; right[y] = r; };
+    write(top); write(bottom);
+    const next = sin(i + 65, radius), nextTop = Math.max(0, 80 - next), nextBottom = Math.min(159, 80 + next);
+    while (top > nextTop) write(--top);
+    while (top < nextTop) write(++top);
+    while (bottom > nextBottom) write(--bottom);
+    while (bottom < nextBottom) write(++bottom);
+  }
+  return { left, right };
+}
+function teamWeaveFrames() {
+  const frames = [], push = (logo, base, amplitude, index, extra = {}) => frames.push({
+    team: true, logo, base,
+    offsets: Array.from({ length:160 }, (_, y) => sin(index + y * 132, amplitude)), ...extra,
+  });
+  push(0,1,0,0); push(0,1,0,0); // Init and SetGfx each consume one frame.
+  let a=0, b=16, delay=0, amplitude=64, index=0;
+  const advance = () => { index += 8; amplitude--; };
+  while (a < 16) {
+    if (!delay || !--delay) { a++; delay=2; }
+    advance(); push(a/16,b/16,amplitude,index);
+  }
+  while (b > 0) {
+    if (!delay || !--delay) { b--; delay=2; }
+    advance(); push(a/16,b/16,amplitude,index);
+  }
+  while (amplitude > 0) { advance(); push(1,0,amplitude,index); }
+  for (let i=0;i<60;i++) push(1,0,0,index);
+  let radius=160, delta=256;
+  while (radius > 0) {
+    if (delta < 1024) delta += 128;
+    radius = Math.max(0,radius-(delta >> 8));
+    push(1,0,0,index,{ radius, mask:circularMask(radius) });
+  }
+  return frames;
+}
+const TEAM_WEAVE = teamWeaveFrames();
+const TEAM_BY_ACTOR = Object.freeze({
+  AquaMemberM:'aqua', AquaMemberF:'aqua', Archie:'aqua', Matt:'aqua', Shelly:'aqua',
+  MagmaMemberM:'magma', MagmaMemberF:'magma', Maxie:'magma', Tabitha:'magma', Courtney:'magma',
+});
+const LENGTH = { 'pokeballs-trail': 100, 'angled-wipes': ANGLED.length, slice: SLICE.length, 'white-bars': 91,
+  aqua:TEAM_WEAVE.length, magma:TEAM_WEAVE.length };
+export function openingBattleTransition({ trainer, trainerActor, party, opponents }) {
   const playerLevel = party.find(m => !m.egg && m.hp > 0)?.level ?? 0,
     enemyLevel = opponents.find(m => !m.egg)?.level ?? 0,
     weaker = enemyLevel < playerLevel,
-    pattern = trainer ? (weaker ? 'pokeballs-trail' : 'angled-wipes') : (weaker ? 'slice' : 'white-bars');
+    pattern = (trainer && TEAM_BY_ACTOR[trainerActor]) || (trainer ? (weaker ? 'pokeballs-trail' : 'angled-wipes') : (weaker ? 'slice' : 'white-bars'));
   return { kind: 'emerald:' + pattern, coverMs: (INTRO_FRAMES + LENGTH[pattern]) * 1000 / FPS, revealMs: 220 };
 }
 export function sampleOpeningTransition(pattern, progress) {
@@ -82,6 +133,7 @@ export function sampleOpeningTransition(pattern, progress) {
     return { gray: (phase < 8 ? phase * 2 : (16 - phase) * 2) / 16 };
   }
   const n = frame - INTRO_FRAMES;
+  if (pattern === "aqua" || pattern === "magma") return { ...TEAM_WEAVE[Math.min(n,TEAM_WEAVE.length-1)], resource:"battle-transition-"+pattern };
   if (pattern === 'angled-wipes') return { mask: ANGLED[Math.min(n, ANGLED.length - 1)] };
   if (pattern === 'slice') return { slice: SLICE[Math.min(n, SLICE.length - 1)] };
   if (pattern === 'white-bars') return {

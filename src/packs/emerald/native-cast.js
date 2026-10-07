@@ -5,7 +5,7 @@ import SOURCE_CAST from "./native-source-data.json" with { type: "json" };
 import { TRAINERS } from "./trainers.js";
 
 const roleNames = {
-  AquaMemberF: "水舰队手下", AquaMemberM: "水舰队手下", Archie: "赤焰松",
+  AquaMemberF: "水舰队手下", AquaMemberM: "水舰队手下", Archie: "水梧桐",
   Azumarill: "玛力露丽", Beauty: "小姐", BlackBelt: "空手道王",
   Boy1: "男孩", Boy2: "男孩", Boy3: "男孩", Brawly: "藤树",
   BreakableRock: "碎岩", BugCatcher: "捕虫少年", Cameraman: "摄影师",
@@ -58,17 +58,19 @@ function sourceObjects(map, definitions, state, db) {
     const item = SOURCE_CAST.items[script];
     const trainerId = SOURCE_CAST.trainers?.[script];
     if (source.trainer_type === "TRAINER_TYPE_NORMAL" && !trainerId) return [];
-    const kind = trainerId ? "sourceTrainer" : item ? "fieldItem" : actor === "CuttableTree" ? "cutTree" : "talk";
+    const kind = script === "0x0" ? "prop" : script === "EventScript_RockSmash" ? "breakableRock" : trainerId ? "sourceTrainer" : item ? "fieldItem" : actor === "CuttableTree" ? "cutTree" : "talk";
     const receivedFlag = `sourceItem.${map}.${localId}`;
     if (item && state.flags[receivedFlag]) return [];
     const trainer = trainerId && TRAINERS[trainerId];
+    const dialogue = db.stories["native-npcs"]?.dialogues?.[script?.toLowerCase().replaceAll("_","-").replace("-eventscript-",".")];
     return [{
       sourceLocalId: localId,
       actor,
       kind,
       ...(trainerId ? { trainerId } : {}),
+      ...(dialogue ? { dialogue: `emerald:native-npcs.${script.toLowerCase().replaceAll("_","-").replace("-eventscript-",".")}` } : {}),
       name: item?.itemName || trainer?.name || roleNames[actor] || "路人",
-      text: item ? "" : trainerId ? "来吧！让我见识一下你的实力！" : defaultLine(actor),
+      text: item ? "" : trainerId ? "来吧！让我见识一下你的实力！" : dialogue?.lines[0] || defaultLine(actor),
       ...(item ? { itemId: item.itemId, itemName: item.itemName, receivedFlag } : {}),
     }];
   });
@@ -102,7 +104,7 @@ export function nativeCast(state, db) {
 }
 
 /** Validate all definitions at assembly, including currently invisible roles. */
-export function validateNativeCast(db) {
+export function validateNativeCast(db, items) {
   for (const [map, definitions] of Object.entries(NATIVE_CAST)) {
     if (!db.maps[map]) throw new Error(`Unknown native cast map: ${map}`);
     for (const d of definitions) {
@@ -116,6 +118,8 @@ export function validateNativeCast(db) {
         if (!db.actors[actor]) throw new Error(`Unknown native cast actor: ${map}/${actor}`);
       if (d.dialogueId !== undefined && !db.stories.dialogues.dialogues[d.dialogueId])
         throw new Error(`Unknown native NPC dialogue: ${d.dialogueId}`);
+      for (const item of [d.itemId, ...(d.variants || []).map(v => v.changes.itemId)].filter(Boolean))
+        if (!items[item]) throw new Error(`Unknown native NPC gift item: ${map}/${d.id}/${item}`);
     }
   }
 }

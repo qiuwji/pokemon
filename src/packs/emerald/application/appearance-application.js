@@ -1,3 +1,4 @@
+import { isSourceInvisible } from "../native-object-bindings.js";
 import {
   AppearanceRegistry,
   AppearanceSelections,
@@ -115,6 +116,9 @@ export class AppearanceApplication {
           definition.appearance.id,
           definition.appearance.data,
         );
+    }
+    if (target.kind === "object") {
+      if (isSourceInvisible(this.db,target.map,target.id)) context = { ...context,nativeInvisible:true };
     }
     const plot = target.kind === "object" && this.catalog.maps[target.map]?.elements?.find(o => o.id === target.id && o.kind === "berryPlot");
     if (plot) context = { ...context, berry: this.state.crops.trees[plot.plotId] || { stage:"empty" } };

@@ -4,10 +4,46 @@ const not = key => ({ not: flag(key) });
 const all = (...conditions) => ({ all: conditions });
 const any = (...conditions) => ({ any: conditions });
 const talk = (x, y, actor, dialogueId, extra = {}) => ({ x, y, actor, kind: "talk", dialogueId, ...extra });
+const schoolTeacherChecks = {"right":[{"type":"move","path":["right","right","down","down","left","left"]},{"type":"face","dir":"down"},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"move","path":["down"]},{"type":"face","dir":"left"},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"move","path":["right"]},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":133.33333333333334},{"type":"move","path":["up","right","up","up","left","left"]}],"left":[{"type":"move","path":["left","down","down","right"]},{"type":"face","dir":"down"},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"move","path":["down"]},{"type":"face","dir":"left"},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"move","path":["right"]},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":266.6666666666667},{"type":"wait","ms":133.33333333333334},{"type":"move","path":["up","left","left","up","up","right"]}]};
 const rivalGender = { female: { actor: "BrendanNormal" } };
 
 /** Pack-owned cast data. Conditions reuse the story language; no map-specific runtime branches. */
 export const NATIVE_CAST = readOnly({
+  RustboroCity_PokemonCenter_1F: [
+    { sourceLocalId:"LOCALID_RUSTBORO_NURSE", actor:"Nurse", kind:"heal", name:"乔伊", text:"" },
+  ],
+  SlateportCity_PokemonCenter_1F: [
+    { sourceLocalId:"LOCALID_SLATEPORT_NURSE", actor:"Nurse", kind:"heal", name:"乔伊", text:"" },
+  ],
+  DewfordTown_PokemonCenter_1F: [
+    { sourceLocalId:"LOCALID_DEWFORD_NURSE", actor:"Nurse", kind:"heal", name:"乔伊", text:"" },
+  ],
+  RustboroCity_Mart: [
+    { sourceLocalId:"LOCALID_RUSTBORO_MART_CLERK", actor:"MartEmployee", kind:"shop", name:"店员", text:"" },
+  ],
+  SlateportCity_Mart: [
+    { sourceLocalId:"LOCALID_SLATEPORT_MART_CLERK", actor:"MartEmployee", kind:"shop", name:"店员", text:"" },
+  ],
+  RustboroCity_PokemonSchool: [
+    { id:"rustboro.teacher", sourceLocalId:"6", actor:"Gentleman", kind:"nativeGift", name:"老师", text:"",
+      dialogue:"emerald:native-interactions.gift.quick-claw", itemId:"quick_claw", receivedFlag:"receivedQuickClaw",
+      repeatDialogue:"emerald:native-interactions.gift.quick-claw-after", afterGiftFacing:"down", giftPreludeByFacing:schoolTeacherChecks },
+  ],
+  RustboroCity_CuttersHouse: [
+    { id:"rustboro.cutter", sourceLocalId:"1", actor:"PokefanM", kind:"nativeGift", name:"居合斩师傅", text:"",
+      dialogue:"emerald:native-interactions.gift.cut", itemId:"hm_cut", receivedFlag:"receivedHmCut",
+      repeatDialogue:"emerald:native-interactions.gift.cut-after", afterDialogue:"emerald:native-interactions.gift.cut-after" },
+  ],
+  RustboroCity_Flat2_2F: [
+    { id:"rustboro.premier-ball", sourceLocalId:"2", actor:"NinjaBoy", kind:"nativeGift", name:"少年", text:"",
+      dialogue:"emerald:native-interactions.gift.premier", itemId:"premier_ball", receivedFlag:"rustboroPremierBall",
+      repeatDialogue:"emerald:native-interactions.gift.premier-after" },
+  ],
+  Route104_PrettyPetalFlowerShop: [
+    { id:"flower-shop.owner", sourceLocalId:"LOCALID_FLOWER_SHOP_OWNER", actor:"Woman2", kind:"flowerShopOwner", name:"花店店主", text:"", placement:{x:4,y:6} },
+    { id:"flower-shop.pail", sourceLocalId:"2", actor:"Girl3", kind:"flowerShopPail", name:"花店姐姐", text:"" },
+    { id:"flower-shop.berry", sourceLocalId:"3", actor:"Girl1", kind:"flowerShopBerry", name:"花店妹妹", text:"" },
+  ],
   LittlerootTown: [
     talk(16, 10, "Twin", "npc.talk.1", { id: "littleroot.twin", variants: [
       { when: all(not("rescued"), not("neighborMet")), changes: { movementType: "MOVEMENT_TYPE_FACE_DOWN" } },
@@ -97,7 +133,7 @@ export const NATIVE_CAST = readOnly({
       when: not("route104ItemPotion"), name: "伤药", text: "",
     },
     talk(5, 26, "Boy2", "route104.people.bullet-seed", {
-      id: "route104.boy2", kind: "route104Gift", itemId: "tm09", itemName: "招式学习器09（种子机关枪）",
+      id: "route104.boy2", kind: "route104Gift", itemId: "tm_bullet_seed", itemName: "招式学习器09（种子机关枪）",
       receivedFlag: "route104BulletSeedGift", sourceLocalId: "32",
       repeatDialogue: "emerald:dialogues.route104.people.bullet-seed-repeat",
       afterDialogue: "emerald:dialogues.route104.people.bullet-seed-repeat",

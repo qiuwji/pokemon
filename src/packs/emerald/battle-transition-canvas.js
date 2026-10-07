@@ -9,6 +9,25 @@ export function emeraldTransitionPatterns(assets) {
     ctx.fillStyle = '#000';
     if (visual.gray !== undefined) {
       ctx.fillStyle = '#5a5a5a'; ctx.globalAlpha = visual.gray; ctx.fillRect(0, 0, 240, 160);
+    } else if (visual.team) {
+      ctx.globalAlpha = 1 - visual.base;
+      ctx.fillRect(0,0,240,160);
+      const image = assets[visual.resource];
+      if (!image) throw new Error(`Missing team transition resource ${visual.resource}`);
+      ctx.globalAlpha = visual.logo;
+      // The original 32x32 BG wraps every 256 pixels; never smear a scaled emblem.
+      for (let y=0;y<160;y++) {
+        const sx = ((visual.offsets[y] % 256) + 256) % 256, width=Math.min(240,256-sx);
+        ctx.drawImage(image,sx,y,width,1,0,y,width,1);
+        if (width < 240) ctx.drawImage(image,0,y,240-width,1,width,y,240-width,1);
+      }
+      if (visual.mask) {
+        ctx.globalAlpha=1;
+        for (let y=0;y<160;y++) {
+          ctx.fillRect(0,y,visual.mask.left[y],1);
+          ctx.fillRect(visual.mask.right[y],y,240-visual.mask.right[y],1);
+        }
+      }
     } else if (visual.mask) {
       for (let y = 0; y < 160; y++) {
         ctx.fillRect(0, y, visual.mask.left[y], 1);

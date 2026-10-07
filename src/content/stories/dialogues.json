@@ -34,6 +34,14 @@
         "小遥在 103 号道路做野外调查。沿 101 号道路向北，穿过古辰镇去找她吧！"
       ]
     },
+    "npc.heal.center.welcome": {
+      "name":"{{speaker}}", "lines":["您好，欢迎来到宝可梦中心！", "我们能让疲惫的宝可梦完全恢复健康。"],
+      "bindings":{"speaker":{"param":"speaker"}}
+    },
+    "npc.heal.center.goodbye": {
+      "name":"{{speaker}}", "lines":["期待您再次光临！"],
+      "bindings":{"speaker":{"param":"speaker"}}
+    },
     "npc.heal.center.before": {
       "name": "{{speaker}}",
       "lines": [
@@ -877,7 +885,7 @@
     "route104.people.briney": {
       "name": "少女",
       "lines": [
-        "那间海边小屋是布拉利先生住的地方。",
+        "那间海边小屋是哈奇老人住的地方。",
         "他以前是个从不怕风浪的厉害水手。"
       ]
     },
@@ -1099,7 +1107,7 @@
     "route104.sign.briney": {
       "name": "告示牌",
       "lines": [
-        "布拉利先生的小屋。"
+        "哈奇老人的小屋。"
       ]
     },
     "route104.sign.petalburg": {

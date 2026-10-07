@@ -39,12 +39,12 @@ export class CropApplication {
       policy: EMERALD_CROP_POLICY,
       calculateYield: emeraldBerryYield,
     });
-    if (!this.state.flags.nativeRoute104Berries) {
-      for (const p of EMERALD_NATIVE_BERRIES) {
-        if (p.initial && this.catalog.berryPlots?.[p.id] && !this.state.crops.trees[p.id])
-          this.crops.plant(p.id, p.initial, { stage: "ripe", stopped: true });
-      }
-      this.state.flags.nativeRoute104Berries = true;
+    for (const p of EMERALD_NATIVE_BERRIES) {
+      const initialized = `nativeBerryInitialized.${p.id}`;
+      if (!this.catalog.berryPlots?.[p.id] || this.state.flags[initialized]) continue;
+      if (p.initial && !this.state.crops.trees[p.id])
+        this.crops.plant(p.id, p.initial, { stage: "ripe", stopped: true });
+      this.state.flags[initialized] = true;
     }
   }
   observeCrops() {

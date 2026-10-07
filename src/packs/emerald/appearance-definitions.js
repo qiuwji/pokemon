@@ -4,8 +4,9 @@ import { TRAINER_PICTURES, REFLECTION_PICTURES } from "../../../generated/presen
 import { objectSchema } from "../../engine/extensions/values.js";
 // field_special_scene.c resting sprite offsets; these never change grid occupancy.
 const truckBoxes = { 'truck.box.top': [3, 3], 'truck.box.left': [0, -3], 'truck.box.right': [-3, 0] };
-const berryPictures = ["empty", "planted", "sprouted", ...["oran", "cheri", "pecha", "leppa"].flatMap(kind => ["taller", "flowering", "ripe"].map(stage => `${kind}-${stage}`))];
+const berryPictures = ["empty", "planted", "sprouted", ...["oran", "cheri", "pecha", "leppa", "chesto", "rawst", "aspear", "persim", "pinap"].flatMap(kind => ["taller", "flowering", "ripe"].map(stage => `${kind}-${stage}`))];
 export function emeraldDefaultAppearance(target, context) {
+  if (context.nativeInvisible) return { appearance:"emerald-invisible", data:{} };
   if (context.berry) {
     const key = ["empty", "planted", "sprouted"].includes(context.berry.stage) ? context.berry.stage : `${context.berry.kind.replace("_berry", "")}-${context.berry.stage}`;
     if (berryPictures.includes(key)) return { appearance: "emerald-berry", data: { picture: key } };
@@ -38,6 +39,8 @@ export function emeraldAppearanceResources(db) {
     ])),
     ...Object.fromEntries(["poke","great","safari","ultra","master","net","dive","nest","repeat","timer","luxury","premier"].map(ball => ["battle-ball-" + ball, "generated/assets/ui/ball-" + ball + ".png"])),
     "battle-transition-pokeball": "generated/assets/battle-transition-pokeball.png",
+    "battle-transition-aqua": "generated/assets/battle-transition-aqua.png",
+    "battle-transition-magma": "generated/assets/battle-transition-magma.png",
     // Running Shoes are a story flag in the original (no bag icon), so the item's icon is authored here.
     "running_shoes-icon": "generated/assets/ui/items/running_shoes.png",
     ...(db.resources || {}),
@@ -90,6 +93,7 @@ export function emeraldAppearances(db) {
       ])),
     );
   return {
+    "emerald-invisible": { name:"原作隐形交互对象", defaultVariant:"default", variants:{default:{shadow:false,layers:[{kind:"image",resource:"berry-planted",opacity:0,size:{width:16,height:16}}]}} },
     "emerald-truck-box": {
       name: "搬家纸箱",
       schema: objectSchema({ box: { type: "string", enum: Object.keys(truckBoxes) } }, ["box"]),

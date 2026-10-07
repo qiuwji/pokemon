@@ -1,4 +1,5 @@
 import { not, all } from "../helpers.js";
+import { fieldGift } from "../common/gifts.js";
 import { TRAINERS, trainerRewardId } from "../../trainers.js";
 
 const text = (key) => `emerald:petalburg-rescue.${key}`;
@@ -174,29 +175,7 @@ export const REGIONS_PETALBURG_RESCUE_EVENTS = [
     trigger: "interact",
     priority: 10,
     match: ({ object }) => ["route104Gift", "woodsMiracleSeed"].includes(object?.kind),
-    build: (state, { object }) => {
-      const received = !!state.flags[object.receivedFlag];
-      if (received)
-        return object.repeatDialogue ? [{ type: "dialog", dialogue: object.repeatDialogue }] : [];
-      return [
-        { type: "dialog", dialogue: object.dialogue },
-        {
-          type: "reward",
-          id: `field-gift.${object.id}`,
-          items: { [object.itemId]: 1 },
-          onResult: {
-            ok: [
-              { type: "sound", cue: "emerald-audio:mus_obtain_item", channel: "fanfare" },
-              { type: "waitSound", channel: "fanfare" },
-              ...(object.afterDialogue ? [{ type: "dialog", dialogue: object.afterDialogue }] : []),
-              { type: "flag", key: object.receivedFlag, value: true },
-            ],
-            alreadyGranted: [{ type: "flag", key: object.receivedFlag, value: true }],
-            inventoryFull: [{ type: "dialog", name: "", lines: ["你的背包装满了，无法接收这个道具。"] }],
-          },
-        },
-      ];
-    },
+    build: (state, { object }) => fieldGift(state, object),
   },
   {
     id: "route104.trainer.interact",
@@ -226,21 +205,6 @@ export const REGIONS_PETALBURG_RESCUE_EVENTS = [
       money: TRAINERS[result.trainerId].prize * (result.prizeMultiplier || 1),
     }, { type: "dialog", dialogue: `emerald:dialogues.${result.trainerId === "ginaAndMia" ? "route104.trainers.gina-mia.after" : ["lyle", "james"].includes(result.trainerId) ? `woods.trainers.${result.trainerId}.after` : `route104.trainers.${result.trainerId}.after`}` }],
   },
-  ...[
-    ["Route104_EventScript_BrineysCottageSign", "route104.sign.briney"],
-    ["Route104_EventScript_RouteSignPetalburg", "route104.sign.petalburg"],
-    ["Route104_EventScript_RouteSignRustboro", "route104.sign.rustboro"],
-    ["Route104_EventScript_FlowerShopSign", "route104.sign.flower-shop"],
-    ["Route104_EventScript_TrainerTipsDoubleBattles", "route104.sign.double-battles"],
-    ["PetalburgWoods_EventScript_Sign1", "woods.sign.experience"],
-    ["PetalburgWoods_EventScript_Sign2", "woods.sign.pp"],
-  ].map(([script, dialogue]) => ({
-    id: `sign.${script}`,
-    trigger: "interact",
-    priority: 10,
-    selector: { kind: "sign", script },
-    build: () => [{ type: "dialog", dialogue: `emerald:dialogues.${dialogue}` }],
-  })),
   {
     id: "petalburg.scott.departure",
     trigger: "step",

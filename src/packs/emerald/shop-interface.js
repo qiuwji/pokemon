@@ -1,4 +1,5 @@
 import { itemIconURL, listNavigation } from "./ui/native-view.js";
+import { emeraldMartStock } from "./mart-stock.js";
 /** Buy list and selected description use original shop windows. Prices and purchases are domain calls. */
 export function createShopInterface(
   game,
@@ -15,7 +16,8 @@ export function createShopInterface(
 ) {
   const items = game.itemDefinitions;
   function showShop(selectedId = null) {
-    const stock = Object.entries(items).filter(
+    const nativeStock = emeraldMartStock(game.state);
+    const stock = nativeStock ? nativeStock.map(id => [id, items[id]]) : Object.entries(items).filter(
       ([, item]) => item.shopStock !== false && item.price > 0,
     );
     modal(

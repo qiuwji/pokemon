@@ -106,6 +106,10 @@ export function healingScene(object) {
   // other healers (e.g. mom) keep the simple beat.
   if (object.kind === "heal")
     return [
+      { type:"face", actor:object.id, target:"player" },
+      dialog("emerald:dialogues.npc.heal.center.welcome", { speaker:object.name }),
+      { type:"choice", name:object.name, prompt:"要让宝可梦休息一下吗？", cancel:"no", options:[
+        { id:"yes", label:"是", commands:[
       dialog("emerald:dialogues.npc.heal.center.before", {
         speaker: object.name,
       }),
@@ -116,6 +120,10 @@ export function healingScene(object) {
       dialog("emerald:dialogues.npc.heal.center.after", {
         speaker: object.name,
       }),
+        ] },
+        { id:"no", label:"否", commands:[] },
+      ] },
+      dialog("emerald:dialogues.npc.heal.center.goodbye", { speaker:object.name }),
     ];
   return [
     dialog("emerald:dialogues.scenes.6", {
