@@ -1,3 +1,4 @@
+import { battleTrainer, emeraldBattleOpening, emeraldDemonstrationPrelude, emeraldDefeatDialogue } from "../battle-presentation.js";
 import { openingBattleTransition } from "../battle-transitions.js";
 import { BATTLE_RULES } from "../../../engine/battle-rules.js";
 import { GEN3_GLOBAL_HOOKS } from "../../../engine/rules/gen3/global-rules.js";
@@ -31,6 +32,8 @@ export const BATTLE_PORTS = Object.freeze([
   "seen",
   "state",
   "story",
+  "storyCatalog",
+  "timeline",
   "trainerDefinitions",
   "transitions",
   "ui",
@@ -44,8 +47,7 @@ export class BattleApplication {
   }
   constructor(ports) {
     bindApplicationPorts(this, ports, BATTLE_PORTS);
-    // A scripted battle drives the player's seat from a fixed action queue so the scene is
-    // watched, not played; the UI suppresses the action menu while it runs.
+    // The tutorial drives ordinary menu selections while retaining the player input lock.
     this.autoBattle = false;
     this.combat = new BattleSession({
       director: this.director,
@@ -80,6 +82,8 @@ export class BattleApplication {
             this.settlementCheckpoint = null;
             this.resultRecovery = null;
           },
+          presentation: plan.presentation,
+          dialogue: (dialogue) => this.ui.say?.(dialogue.name, dialogue.lines),
           after: () => plan.after?.(),
         };
       },
@@ -226,25 +230,22 @@ export class BattleApplication {
             : this.world.map.presentation?.terrain || "grass",
         ...context?.environment,
       },
-      presentation: {
-        transition: openingBattleTransition({trainer: !!options.trainer, party, opponents}),
-        ...(options.trainer ? {
-            trainers: [
-              { actor: this.state.playerGender === "female" ? "MayNormal" : "BrendanNormal", back: true },
-              {
-                actor:
-                  this.trainerDefinitions[options.trainerId]?.actor ||
-                  (options.script === "rival" ? (this.state.playerGender === "female" ? "BrendanNormal" : "MayNormal") : "Youngster"),
-              },
-            ],
-          } : {}),
-      },
       traits: {
         abilities: this.catalog.abilities,
         heldItems: this.catalog.heldItems,
         hooks: [...GEN3_GLOBAL_HOOKS, ...this.ruleHooks],
       },
       ...options,
+      presentation: {
+        ...emeraldBattleOpening(this.state, {
+          ...options,
+          trainerActor: this.trainerDefinitions[options.trainerId]?.actor,
+          trainerName: this.trainerDefinitions[options.trainerId]?.name,
+        }, this.db, enemies[0]),
+        transition: openingBattleTransition({ trainer: !!options.trainer, party, opponents }),
+        ...options.presentation,
+        dialogue: (dialogue) => this.ui.say?.(dialogue.name, dialogue.lines),
+      },
       rules: {
         ...options.rules,
         canCapture: (battle) =>
@@ -263,14 +264,23 @@ export class BattleApplication {
   }
   /**
    * A scripted demonstration battle: the player's seat follows a fixed action queue while the
-   * menu stays hidden. Actions are submitted through the same public turn path as manual input.
+   * normal menus demonstrate the selections. Submission shares manual input settlement.
    */
   async runAutoBattle(actions) {
     this.autoBattle = true;
     try {
+      // startBattle returns through the story suspension boundary before menu input is legal.
+      for (let attempts = 0; this.busy && attempts < 64; attempts++)
+        await this.timeline.wait(16);
+      if (this.busy) throw new Error("Demonstration input remained locked");
       for (const action of actions) {
         if (!this.combat.battle || this.combat.battle.ended) break;
-        await this.combat.act(action);
+        for (const event of emeraldDemonstrationPrelude(this.combat.battle, action))
+          await this.director.play(event, { message: (text) => this.ui.drawBattleHUD(text) });
+        const submit = (selection) => this.applyAction(selection);
+        if (this.ui.demonstrateBattleAction)
+          await this.ui.demonstrateBattleAction(action, { wait: (ms) => this.timeline.wait(ms), submit });
+        else await submit(action);
       }
     } finally {
       this.autoBattle = false;
@@ -314,7 +324,8 @@ export class BattleApplication {
           db: this.db,
         })
       : [];
-    if (!commands.length && b.result === "win" && b.trainerId) {
+    const fallback = !commands.length && b.result === "win" && b.trainerId;
+    if (fallback) {
       const trainer = this.trainerDefinitions[b.trainerId];
       const amount = trainer.prize * (b.prizeMultiplier || 1);
       commands = [
@@ -325,12 +336,32 @@ export class BattleApplication {
           lines: [
             this.state.story.rewards.includes(trainerRewardId(b.trainerId))
               ? "这次挑战已经完成。"
-              : `全队获胜！获得了 ¥${amount}。`,
+              : `${trainer.name}被打败了！`,
           ],
         },
       ];
     }
+    const presentation = [];
+    const defeatId = emeraldDefeatDialogue(this.state, b);
+    if (b.result === "win" && b.trainer && (defeatId || fallback)) {
+      let defeated;
+      if (b.script === "rival") {
+        defeated = this.storyCatalog.resolveDialogue({ dialogue: defeatId }, this.state);
+      } else {
+        const first = commands.find(c => c.type === "dialog" && (fallback || c.dialogue === defeatId));
+        if (first) {
+          defeated = this.storyCatalog.resolveDialogue(first, this.state);
+          commands = commands.filter(c => c !== first);
+        }
+      }
+      const actor = this.trainerDefinitions[b.trainerId]?.actor || (b.script === "rival" ? (this.state.playerGender === "female" ? "BrendanNormal" : "MayNormal") : "Youngster");
+      if (defeated) presentation.push({ ...b.snapshot(), kind: "trainer-slide", text: "", trainers: [battleTrainer(actor)], dialogue: defeated });
+      const prize = commands.find(c => c.type === "reward" && c.money);
+      if (prize && !this.state.story.rewards.includes(prize.id))
+        presentation.push({ ...b.snapshot(), kind: "text", text: "", dialogue: { name: "", lines: [`${this.state.playerName}获得了 ¥${prize.money}！`] } });
+    }
     return {
+      presentation,
       commit: () => {
         if (committed) return;
         const reward = b.spoils?.reward || 0;

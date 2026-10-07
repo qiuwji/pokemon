@@ -121,7 +121,7 @@ export class EmeraldAdventure {
   get battle() {
     return this.combat.battle;
   }
-  /** A scripted demonstration battle runs itself; the UI shows the log instead of the menu. */
+  /** A scripted demonstration controls the visible menus and locks player submissions. */
   get autoBattle() {
     return !!this.applications.battle?.autoBattle;
   }

@@ -50,6 +50,8 @@ description: 给现有绿宝石工程添加网格地图、连接、动态对象�
 
 [装配夹具](../../tests/helpers/session.js)使用真实注册器、应用服务与命令总线，仅替代浏览器UI/等待并准备测试队伍。复制时保存为 `examples/` 下的新 `.test.js`，相对导入才正确；浏览器装配另见[作者指南](../../docs/development/AUTHORING.md)。
 
+场景NPC的固定`move.path`现可连续跨地图连接，保持scene pin/步态/两侧占位；抵达后再hide和切换剧情投影，避免边界闪现。角色定位优先当前地图；跨图后face/hide追踪同一pin。来源固定离场确实不检查地形时，显式NPC路径可声明`ignoreTerrain:true`，仅忽略地形/高度/跳崖，仍验证有效地图边界和演员占位；禁止给玩家或自动寻路使用，必须覆盖正常阻挡与失败释放。
+
 <!-- runnable-example: examples/world-story.test.js -->
 ```js
 import test from "node:test";

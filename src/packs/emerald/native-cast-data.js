@@ -26,6 +26,11 @@ export const NATIVE_CAST = readOnly({
     talk(10, 13, "EnemyZigzagoon", "npc.wildobject.9", { id: "pursuer", kind: "wildObject", species: "zigzagoon", when: not("rescued") }),
   ],
   OldaleTown: [
+    { id: "oldale.rival", sourceLocalId: "LOCALID_OLDALE_RIVAL", x: 11, y: 19,
+      actor: "MayNormal", kind: "oldaleRival", name: "小遥", text: "在这里！我们快回家吧！",
+      gender: { female: { actor: "BrendanNormal", name: "小悠", text: "我正要回爸爸的研究所，你也赶快回来吧。" } },
+      when: all(any(flag("rivalWon"), { reward: "rival.prize" }), not("oldaleRivalDone"), not("pokedex")),
+    },
     talk(16, 11, "Girl3", "npc.talk.10"),
     talk(13, 7, "MartEmployee", "npc.giftpotion.11", { id: "oldale.employee", kind: "giftPotion", variants: [{ when: not("potionGift"), changes: { placement: { x: 13, y: 14 }, movementType: "MOVEMENT_TYPE_FACE_DOWN" } }] }),
     talk(8, 9, "Maniac", "npc.talk.12", { id: "oldale.footprints", variants: [{ when: not("pokedex"), changes: { placement: { x: 1, y: 11 }, movementType: "MOVEMENT_TYPE_FACE_LEFT" } }] }),
@@ -44,9 +49,8 @@ export const NATIVE_CAST = readOnly({
     talk(25, 15, "BugCatcher", "regions.petalburg.rick", { id: "route102.rick", kind: "petalburgTrainer", trainerId: "rick", sightRange: 2 }),
     talk(8, 7, "Lass", "regions.petalburg.tiana", { id: "route102.tiana", kind: "petalburgTrainer", trainerId: "tiana", sightRange: 3 }),
     talk(19, 4, "Youngster", "regions.petalburg.allen", { id: "route102.allen", kind: "petalburgTrainer", trainerId: "allen", sightRange: 3 }),
-    // Wally walks to the grass for the catching tutorial; he has no source object here, so he
-    // is an authored runtime actor with an explicit movement mode.
-    talk(1, 6, "Wally", "regions.petalburg.watch", {
+    // The tutorial walks one scene actor across the connection; this rest pose owns the battle aftermath.
+    talk(6, 5, "Wally", "regions.petalburg.watch", {
       id: "wally.route102", kind: "petalburgWallyRoute102",
       movement: { mode: "still", dir: "right", rangeX: 0, rangeY: 0 },
       when: all(flag("wallyTutorial"), not("wallyInTown"), not("wallyCaught")),
@@ -61,9 +65,9 @@ export const NATIVE_CAST = readOnly({
     talk(12, 15, "Boy2", "regions.petalburg.gymboy", { id: "petalburg.gymboy" }),
     // Wally walks out of town with the player after Norman loans him the Zigzagoon. He is a
     // town-only and a route-only actor, gated by wallyInTown, so exactly one ever renders.
-    talk(16, 10, "Wally", "regions.petalburg.watch", {
+    talk(15, 10, "Wally", "regions.petalburg.watch", {
       id: "wally.city", kind: "petalburgWallyCity",
-      movement: { mode: "still", dir: "right", rangeX: 0, rangeY: 0 },
+      movement: { mode: "still", dir: "up", rangeX: 0, rangeY: 0 },
       when: all(flag("wallyTutorial"), flag("wallyInTown"), not("wallyCaught")),
     }),
   ],

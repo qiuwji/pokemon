@@ -162,6 +162,23 @@ export class NPCSystem {
     this.scene.hidden.delete(map + ":" + def.id);
     return n;
   }
+  /** Transfer one controlled pose across a map connection without recreating its animation. */
+  transferSceneActor(id, fromMap, toMap) {
+    if (!this.scene) throw new Error("Actor transfer requires a scene scope");
+    const sourceKey = fromMap + ":" + id, targetKey = toMap + ":" + id;
+    const n = this.scene.pins.get(sourceKey);
+    if (!n) throw new Error(`Missing controlled actor ${sourceKey}`);
+    if (this.objects(toMap).some(actor => actor.id === id))
+      throw new Error(`Actor already exists at ${targetKey}`);
+    this.scene.pins.delete(sourceKey);
+    this.states.delete(sourceKey);
+    this.scene.hidden.add(sourceKey);
+    this.scene.hidden.delete(targetKey);
+    this.scene.pins.set(targetKey, n);
+    this.states.set(targetKey, n);
+    n.map = toMap;
+    return n;
+  }
   moving(n, now = this.now) {
     return now - n.start < n.duration;
   }

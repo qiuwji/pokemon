@@ -675,7 +675,119 @@
   },
   "MayRun": {
     "w": 16,
-    "h": 32
+    "h": 32,
+    "frameCount": 9,
+    "animations": {
+      "normal": {
+        "idle": {
+          "loop": true,
+          "directions": {
+            "down": [
+              {
+                "index": 0,
+                "durationMs": 266.6666666666667
+              }
+            ],
+            "up": [
+              {
+                "index": 1,
+                "durationMs": 266.6666666666667
+              }
+            ],
+            "left": [
+              {
+                "index": 2,
+                "durationMs": 266.6666666666667
+              }
+            ],
+            "right": [
+              {
+                "index": 2,
+                "durationMs": 266.6666666666667
+              }
+            ]
+          }
+        },
+        "move": {
+          "loop": true,
+          "directions": {
+            "down": [
+              {
+                "index": 3,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 0,
+                "durationMs": 50.0
+              },
+              {
+                "index": 4,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 0,
+                "durationMs": 50.0
+              }
+            ],
+            "up": [
+              {
+                "index": 5,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 1,
+                "durationMs": 50.0
+              },
+              {
+                "index": 6,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 1,
+                "durationMs": 50.0
+              }
+            ],
+            "left": [
+              {
+                "index": 7,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              },
+              {
+                "index": 8,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              }
+            ],
+            "right": [
+              {
+                "index": 7,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              },
+              {
+                "index": 8,
+                "durationMs": 83.33333333333333
+              },
+              {
+                "index": 2,
+                "durationMs": 50.0
+              }
+            ]
+          },
+          "clock": "stride"
+        }
+      }
+    }
   },
   "MayMachBike": {
     "w": 32,

@@ -1,5 +1,17 @@
 import { dialog, battle, flag, not, all, talkEvent } from "../helpers.js";
 import { TRAINERS, trainerRewardId } from "../../trainers.js";
+const steps = (dir, count) => Array(count).fill(dir);
+const walk = (actor, path, ignoreActors = []) => ({ type: "move", actor, path, ...(ignoreActors.length ? { ignoreActors } : {}) });
+const wait = (frames) => ({ type: "wait", ms: frames * 1000 / 60 });
+const parallel = (...commands) => ({ type: "parallel", commands: commands.map(commands => ({ type: "sequence", commands })) });
+const gymExit = (dir) => {
+  const player = dir === "up" ? steps("down", 3) : dir === "down" ? ["right", ...steps("down", 5)] : dir === "left" ? steps("down", 4) : [...steps("down", 3), "right", "down"];
+  const wally = dir === "up" ? steps("down", 4) : dir === "left" ? ["down", "down", "right", "down"] : steps("down", 3);
+  return [parallel(
+    [walk("wally.gym.arrive", wally, ["player"]), { type: "face", actor: "wally.gym.arrive", dir: "up" }, wait(16), { type: "face", actor: "wally.gym.arrive", dir: "down" }],
+    [wait(dir === "up" ? 48 : 32), walk("player", player, ["wally.gym.arrive"]), wait(8)],
+  ), { type: "hide", actor: "wally.gym.arrive" }];
+};
 const text = (name) => `emerald:dialogues.regions.petalburg.${name}`;
 /** Route 102 sight trainers keep the reference post-battle line, keyed by opponent id. */
 const ROUTE102_TRAINERS = ["calvin", "rick", "tiana", "allen"];
@@ -13,7 +25,7 @@ export const REGIONS_PETALBURG_EVENTS = [
   talkEvent(
     "petalburg.norman.first",
     "petalburgNorman",
-    () => [
+    (s) => [
       { type: "face", actor: "petalburg.norman", target: "player" },
       dialog(text("norman.first")),
       // Wally enters from the gym door only now, then walks to Norman (reference addobject).
@@ -25,15 +37,17 @@ export const REGIONS_PETALBURG_EVENTS = [
           kind: "petalburgWallyGym",
           name: "小光",
           text: "",
-          x: 5,
-          y: 110,
+          x: 4,
+          y: 111,
           dir: "up",
           movement: { mode: "still", dir: "up", rangeX: 0, rangeY: 0 },
         },
       },
       { type: "sound", cue: "emerald-audio:se_door" },
-      { type: "emote", actor: "wally.gym.arrive", kind: "exclamation", ms: 450 },
-      { type: "move", actor: "wally.gym.arrive", to: { x: 5, y: 108 }, ignoreActors: ["player"] },
+      wait(16), walk("wally.gym.arrive", ["up"], ["player"]), wait(24),
+      walk("wally.gym.arrive", s.position.dir === "up" ? ["up", "right", "up", "up"] : ["up", "up"], ["player"]),
+      { type: "face", actor: "player", dir: s.position.dir === "up" ? "right" : "down" },
+      { type: "face", actor: "petalburg.norman", dir: s.position.dir === "up" ? "right" : "down" },
       { type: "face", actor: "wally.gym.arrive", target: "petalburg.norman" },
       dialog(text("wally.request")),
       dialog(text("norman.wally")),
@@ -47,12 +61,13 @@ export const REGIONS_PETALBURG_EVENTS = [
       dialog(text("wally.wow")),
       dialog(text("norman.ball")),
       dialog(text("wally.really")),
+      ...gymExit(s.position.dir),
       { type: "flag", key: "wallyInTown", value: true },
       { type: "flag", key: "wallyTutorial", value: true },
       {
         type: "scene",
         kind: "door",
-        position: { map: "PetalburgCity", x: 15, y: 10, dir: "right" },
+        position: { map: "PetalburgCity", x: 15, y: 9, dir: "down" },
       },
     ],
     all(flag("pokedex"), not("wallyTutorial")),
@@ -69,50 +84,13 @@ export const REGIONS_PETALBURG_EVENTS = [
     selector: { map: "PetalburgCity" },
     requires: all(flag("wallyTutorial"), flag("wallyInTown"), not("wallyCaught")),
     build: () => [
-      // The reference walks the player and Wally east out of town and into the Route 102 grass.
-      // The step off the town edge is a normal connection crossing (no scene transition); the
-      // town Wally is hidden as the player crosses and the route Wally takes over.
-      {
-        type: "parallel",
-        commands: [
-          {
-            type: "sequence",
-            commands: [
-              { type: "move", actor: "player", to: { x: 29, y: 16 }, ignoreActors: ["wally.city"] },
-            ],
-          },
-          {
-            type: "sequence",
-            commands: [
-              { type: "move", actor: "wally.city", to: { x: 28, y: 16 }, ignoreActors: ["player"] },
-            ],
-          },
-        ],
-      },
-      { type: "face", actor: "player", dir: "right" },
-      { type: "face", actor: "wally.city", dir: "right" },
+      // One pinned actor keeps the original lead, stride and world position across the connection.
+      parallel(
+        [wait(8), walk("player", [...steps("down", 8), ...steps("right", 20), "up", "up"], ["wally.city"]), { type: "face", actor: "player", dir: "right" }],
+        [wait(8), walk("wally.city", [...steps("down", 7), ...steps("right", 20), "up", "up", "right"], ["player"]), wait(16), { type: "face", actor: "wally.city", dir: "up" }, wait(32), { type: "face", actor: "wally.city", dir: "right" }],
+      ),
       { type: "hide", actor: "wally.city" },
       { type: "flag", key: "wallyInTown", value: false },
-      { type: "move", actor: "player", path: ["right"] },
-      {
-        type: "parallel",
-        commands: [
-          {
-            type: "sequence",
-            commands: [
-              { type: "move", actor: "player", to: { x: 6, y: 5 }, ignoreActors: ["wally.route102"] },
-            ],
-          },
-          {
-            type: "sequence",
-            commands: [
-              { type: "move", actor: "wally.route102", to: { x: 5, y: 5 }, ignoreActors: ["player"] },
-            ],
-          },
-        ],
-      },
-      { type: "face", actor: "player", dir: "up" },
-      { type: "face", actor: "wally.route102", target: "player" },
       dialog(text("watch")),
       // Reference battle_controller_wally.c drives Wally's Zigzagoon itself: attack, attack,
       // then throw the ball. The player only watches.
@@ -153,7 +131,12 @@ export const REGIONS_PETALBURG_EVENTS = [
     build: () => [
       dialog(text("dad.return")),
       dialog(text("wally.bye")),
-      { type: "flag", key: "wallyDone", value: true },
+      { type: "face", actor: "player", dir: "down" },
+      walk("wally.gym", steps("down", 3)), wait(16),
+      { type: "sound", cue: "emerald-audio:se_exit" },
+      { type: "hide", actor: "wally.gym" },
+      { type: "flag", key: "wallyDone", value: true }, wait(30),
+      { type: "face", actor: "player", dir: "up" },
       dialog(text("dad.badges")),
     ],
   },

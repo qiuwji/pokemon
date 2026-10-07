@@ -1,4 +1,4 @@
-const shade = "#101820";
+const shade = "#000";
 const fill = (ctx, x, y, w, h) =>
   ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(w), Math.ceil(h));
 export const TRANSITION_PATTERNS = Object.freeze({

@@ -110,6 +110,8 @@ NPC对白逐字、告示牌/家具查看即时显示：在内容中明确mode，
 
 [session夹具](../../tests/helpers/session.js)装配真实插件、应用服务和命令，固定时钟/存储、模拟UI取第一个选项。示例通过game.enter后game.interact触发实际对象绑定，浏览器UI由夹具立即确认；它不证明自动移动或动画观感。复制到examples/下的新测试才有正确相对导入。
 
+场景NPC的固定`move.path`现可连续跨地图连接，保持scene pin/步态/两侧占位；抵达后再hide和切换剧情投影，避免边界闪现。角色定位优先当前地图；跨图后face/hide追踪同一pin。来源固定离场确实不检查地形时，显式NPC路径可声明`ignoreTerrain:true`，仅忽略地形/高度/跳崖，仍验证有效地图边界和演员占位；禁止给玩家或自动寻路使用，必须覆盖正常阻挡与失败释放。
+
 <!-- runnable-example: examples/story-bundle.test.js -->
 ```js
 import test from "node:test";

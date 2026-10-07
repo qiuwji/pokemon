@@ -421,6 +421,7 @@ export function createUIShell(
       dialogueView.hide();
       return;
     }
+    $("dialogue").setAttribute("data-context", game.battle ? "battle" : "field");
     if (dialog.renderedIndex === dialog.index) {
       dialogueView.update();
       return;
@@ -475,6 +476,7 @@ export function createUIShell(
   root.addEventListener(
     "click",
     (event) => {
+      if (game.autoBattle) { event.preventDefault(); event.stopImmediatePropagation(); return; }
       const button = event.target.closest?.("button");
       if (event.isTrusted && button && !button.disabled)
         sound("emerald:confirm");
@@ -535,6 +537,7 @@ export function createUIShell(
     for (const release of [...modalResources]) release();
   }
   function back() {
+    if (game.autoBattle && !dialog) return;
     if (
       game.busy &&
       !dialog &&

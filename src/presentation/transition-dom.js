@@ -45,7 +45,7 @@ export class TransitionDOM {
       });
     } catch (error) {
       this.onError(error);
-      this.ctx.fillStyle = "#101820";
+      this.ctx.fillStyle = "#000";
       this.ctx.fillRect(0, 0, 320, 224);
     }
   }

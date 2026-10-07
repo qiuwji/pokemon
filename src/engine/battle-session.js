@@ -33,6 +33,7 @@ export class BattleSession {
     this.locked = true;
     try {
       const preparedBattle = this.createBattle(options);
+      this.exitTransition = options.presentation?.exitTransition;
       // Presentation can select entry audio before the covered scene swap.
       // The interactive battle is still published only at the transition midpoint.
       this.enteringBattle = preparedBattle;
@@ -44,7 +45,7 @@ export class BattleSession {
         this.director.reset(view);
         entry = {
           kind: "entry",
-          trainers: options.trainer ? options.presentation?.trainers || [] : [],
+          trainers: options.presentation?.trainers || [],
           ...view,
           text: options.trainer ? "训练家发起了挑战！" : "野生宝可梦出现了！",
           message: {
@@ -52,13 +53,31 @@ export class BattleSession {
             params: {},
           },
         };
-        this.director.stage(entry);
+        this.director.stage({ ...entry, ...options.presentation?.entryPhases?.[0] });
         this.onChange();
       }, transition);
-      await this.director.play(entry, { message: this.onMessage });
+      const phases = options.presentation?.entryPhases || [{}];
+      for (const phase of phases) {
+        const event = { ...entry, ...phase };
+        if (phase.sendBack !== undefined)
+          event.sendSeats = entry.combatants.filter(c =>
+            (entry.sides.find(s => s.id === c.sideId)?.allianceId === entry.homeAlliance) === phase.sendBack,
+          ).map(c => c.seatId);
+        await this.director.play(event, { message: this.onMessage });
+        if (phase.dialogue) await options.presentation.dialogue?.(phase.dialogue);
+      }
       for (const event of this.battle.events)
         await this.director.play(event, { message: this.onMessage });
       return true;
+    } catch (error) {
+      // Failed dialogue/presentation after the covered swap must not leave a partial battle.
+      if (this.battle) {
+        const failed = this.battle;
+        this.battle = null;
+        this.director.reset();
+        await this.onFailure(error, failed);
+      }
+      throw error;
     } finally {
       this.enteringBattle = null;
       this.locked = false;
@@ -68,13 +87,22 @@ export class BattleSession {
   /** Always return control; owners recover uncommitted domain transactions. */
   async finish() {
     const battle = this.battle;
-    let result, committed = false, failure;
+    let result, committed = false, cleared = false, failure;
     try {
       result = this.pendingResult = this.onResult(battle);
+      for (const event of result.presentation || []) {
+        await this.director.play(event, { message: this.onMessage });
+        if (event.dialogue) await result.dialogue?.(event.dialogue);
+      }
       await this.transitions.run("battle-exit", () => {
         result.commit?.();
         committed = true;
-      });
+        // Reveal the destination, not the ended battle. Keep the lock until the fade ends.
+        this.battle = null;
+        this.director.reset();
+        cleared = true;
+        this.onChange();
+      }, this.exitTransition);
     } catch (error) {
       failure = error;
       if (!committed) await this.onFailure(error, battle);
@@ -82,7 +110,7 @@ export class BattleSession {
       this.battle = null;
       this.pendingResult = null;
       this.locked = false;
-      this.director.reset();
+      if (!cleared) this.director.reset();
       this.onChange();
     }
     // A failed exit animation must not discard an already committed continuation.

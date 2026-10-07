@@ -18,10 +18,12 @@ export function createBagInterface(
     toast,
     updateSide,
     escapeHTML,
+    sound = () => {},
   },
 ) {
   const ITEMS = game.itemDefinitions;
   let pocketIndex = 0;
+  let demoSubmit = null, demoControls = null;
   function showBag(inBattle = false, selection = null, context = false) {
     const shortcut = game.registeredItemView(),
       view = game.bagView(inBattle);
@@ -103,15 +105,17 @@ export function createBagInterface(
         showBag(inBattle, rows.find(row => row.reference.index === Number(button.dataset.slotIndex)).reference, true);
     });
     const use = root.querySelector("[data-use-item]");
-    if (use) use.onclick = () => {
+    const useSelected = () => {
       const row = selected,
         id = row.item;
       if (ITEMS[id].target === "field") chooseItemAction(id);
       else if (ITEMS[id].target === "enemy") {
         closeModal();
-        void game.turn({ kind: "item", item: id, slot: row.reference });
+        return (demoSubmit || ((action) => game.turn(action)))({ kind: "item", item: id, slot: row.reference });
       } else chooseItemTarget(id, inBattle, row.reference);
     };
+    if (use) use.onclick = useSelected;
+    demoControls = { turnPocket, rows, pocket, use: useSelected };
     const cancel = root.querySelector("[data-item-cancel]");
     if (cancel) cancel.onclick = () => showBag(inBattle, selected.reference);
     root
@@ -279,5 +283,27 @@ export function createBagInterface(
     const learn = root.querySelector("[data-learn]");
     if (learn) learn.onclick = () => commit(undefined);
   }
-  return { showBag, chooseItemTarget, chooseLearningMove };
+  return {
+    showBag, chooseItemTarget, chooseLearningMove,
+    async demonstrateBagItem(action, { wait, submit }) {
+      const previousPocket = pocketIndex;
+      demoSubmit = submit;
+      try {
+        pocketIndex = 0; showBag(true);
+        await wait(102 * 1000 / 60);
+        const targetPocket = ITEMS[action.item].pocket;
+        let remaining = bagPockets(game.bagView(true).pockets).length;
+        while (demoControls.pocket !== targetPocket && remaining-- > 0) {
+          sound("emerald:confirm"); demoControls.turnPocket(1);
+        }
+        const row = demoControls.rows.find(value => value.item === action.item);
+        if (!row) throw new Error("Demonstration item unavailable");
+        await wait(102 * 1000 / 60);
+        sound("emerald:confirm"); showBag(true, row.reference, true);
+        await wait(102 * 1000 / 60);
+        sound("emerald:confirm");
+        return await demoControls.use();
+      } finally { demoSubmit = null; demoControls = null; pocketIndex = previousPocket; closeModal(); }
+    },
+  };
 }
