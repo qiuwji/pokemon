@@ -1,3 +1,6 @@
+import { BLOCKED_REASONS, MOTION_CANCEL_REASONS } from "./blocked-reasons.js";
+export type BlockedReason = typeof BLOCKED_REASONS[number];
+export type MotionCancelReason = typeof MOTION_CANCEL_REASONS[number];
 /** Public content contracts for editors and future TypeScript clients. Runtime validation is separate. */
 export type Status =
   | "toxic"
@@ -788,7 +791,8 @@ export interface PluginTransaction {
     ): Readonly<Json>;
     remove(id: string, uid: string): boolean;
   };
-  intent(value: Json): void;
+  /** Synchronous result callback runs during commit; errors roll back the entire transaction. */
+  intent(value: Json, onResult?: (result: Readonly<Json>) => Json | void): void;
   emit(type: string, payload?: Json): void;
   feedback(id: string, payload?: Json): void;
 }
@@ -951,6 +955,45 @@ export interface AudioCue {
   fadeOutMs?: number;
   maxVoices?: number;
 }
+/** Bounded decisions driven by the host clock, with scene control taking priority. */
+export interface NPCBehaviorDefinition {
+  timing?: { intervalMs: number; afterMove?: "interval" | "settled" };
+  decide(context: Readonly<NPCBehaviorContext>): NPCIntent;
+}
+export interface NPCBehaviorContext {
+  readonly config: Readonly<Record<string, Json>>;
+  readonly dir: Direction;
+  readonly now: number;
+  readonly position: Readonly<{ x: number; y: number; elevation?: number; previousElevation?: number }>;
+  readonly origin: Readonly<{ x: number; y: number }>;
+  readonly rolls: readonly number[];
+  readonly identity?: Readonly<{ uid: string; template: string }>;
+  readonly state?: Readonly<Json>;
+  readonly perception?: Readonly<Json>;
+  readonly routine?: Readonly<Json>;
+  readonly time?: Readonly<Json>;
+  readonly environment?: Readonly<Json>;
+}
+/** Transient movement facts. A session-local sequence pairs start with settle or cancellation. */
+interface MotionResultDetails {
+  readonly entity: string;
+  readonly sequence: number;
+  readonly from: Readonly<Position>;
+  readonly to: Readonly<Position>;
+  readonly direction: Direction;
+  readonly mode: string;
+  readonly startedAt: number;
+  readonly durationMs: number;
+  readonly at: number;
+  readonly jump: boolean;
+  readonly scripted: boolean;
+  readonly forced: boolean;
+}
+export type MotionResult = MotionResultDetails & (
+  | { readonly phase: "started" | "settled"; readonly reason: null }
+  | { readonly phase: "blocked"; readonly reason: BlockedReason }
+  | { readonly phase: "cancelled"; readonly reason: MotionCancelReason }
+);
 export interface NPCIntent {
   interaction?: { target: string; kind: string };
   goal?: {

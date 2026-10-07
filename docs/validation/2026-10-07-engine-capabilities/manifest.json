@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-07",
+  "status": "verified by code contracts; browser not executed",
+  "scope": "generic behavior timing, immutable grid movement results, composable actor intents and synchronous result callbacks; no follower product code or assets",
+  "gitBase": "0c22abb3fa9402a54ea5f0ed3c700842c3194acd",
+  "architecture": {
+    "engine": "bounded scheduling, detached movement results, optional transaction effects port and event batch",
+    "application": "Actor intent mapping, public motion facts, cache and lease/claim rollback",
+    "plugin": "future relationship, path memory, party binding and assets"
+  },
+  "sourceSha256": {
+    "docs/architecture/MOVEMENT.md": "1496c4738efc1c7396d8afbb6dfa38253f486a5fd4915cc5dd2beacfd572cb5b",
+    "docs/architecture/PLUGINS.md": "49f9b83dce3efa9f02739091cbcc653240b4f4c41519fdef19a508f236f09cbb",
+    "docs/engine/actors/ACTORS.md": "f373a3bcc962b5be132a41df5d9148fed8dfe7629fdbbba4b37b6a4638a8d96e",
+    "examples/actor.test.js": "c87952fbb8e8c23b4bc586b5c27a594aa959cadfe3b0f4390c3805d786985269",
+    "skills/emerald-actor-behaviors/SKILL.md": "6cde086968300380a82c816cda8716eab195dfdbfbaa351f3bd4d6812a725f8e",
+    "skills/emerald-plugin-authoring/SKILL.md": "ea816d90d300f7f3d0e9c14d986f58540628cd7b9b5a581a59fa059f46d3f3b2",
+    "src/engine/contracts.d.ts": "4b8c0e30ce2fa9427669669a38f9cad0f22c995549cc9be40276edb2fe993167",
+    "src/engine/extensions/event-bus.js": "763e784a56a130fb79da1ce0e7b1727914bee59f60707c2f013617ff7b47fbaa",
+    "src/engine/extensions/plugin-runtime.js": "144356c19023bc2ae67c3540495979b6a20ac96b2594317146a294858236db8d",
+    "src/engine/field-director.js": "c6cebf09e763238cac0650d78abe059ddb945473a26e538785a519e6a8642019",
+    "src/engine/field-session.js": "d5a37637b925d2fd61f2a25623831950338afe6c46db663839a34aefec3317ab",
+    "src/engine/motion-results.js": "5da523e31da32e792e5791e39fa3db2dc7c453ecc07c62199a8aeff49b7e1ff3",
+    "src/engine/npc-behaviors.js": "d2f89ee76d7412caf4eeefb75a45040f0bdeb1ccf8efcbe7600ae006ef21e0eb",
+    "src/engine/npcs.js": "387c5a93b144ffdd98dcbd785d3594675931a1d15c5fe689ea087f17e166bcf1",
+    "src/packs/emerald/actor-transaction-effects.js": "5bb72e6fcd0aa230339841add7098a4102ae630e25fe928a257cd5786cc03075",
+    "src/packs/emerald/application/world-application.js": "7b6a01ec49e06f9e9dc554f33ad64eef36c8aae598d11ca9cc6ed4044cb8e484",
+    "src/packs/emerald/extension-intents.js": "856cd38d8e54cff17080fc3358f0c516d00be44d1ee5dd8334aafdb6553f04fc",
+    "src/packs/emerald/extension-ports.js": "ab634144f39a1d83b19abd42d9a7c29333a11b6737c3d52b04edc797950c8caa",
+    "src/packs/emerald/public-events.js": "36ca0accc87463332195459da9b80ccc57da034ca74e3f9a43969ee459a44042",
+    "tests/actor-transactions.test.js": "0bbef951de30ecbdd0119dd622359ee7ac98df4ce26296bfa56fe86053846a49",
+    "tests/behavior-timing.test.js": "bdcaac4f16493ae12f0d3e73ad67b911259bd593480862813a8c6f61708eeaf1",
+    "tests/contracts.typecheck.ts": "c4cd6387263783390825018ea8404c2fb7c26f062b1f4d70504e63497106b11d",
+    "tests/event-batches.test.js": "1f99807b5b3b3da588015895b14c379fdad35187b720d657dd58d464dd8578aa",
+    "tests/movement-results.test.js": "c58ecd8cf43bef71b12425b5411fda459f7e8b1ad963cbc813aaf5f6a3e5b4d2"
+  },
+  "checks": [
+    {
+      "command": "node --test tests/behavior-timing.test.js tests/movement-results.test.js tests/actor-transactions.test.js tests/event-batches.test.js examples/actor.test.js",
+      "exitCode": 0,
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "log": "targeted.log"
+    },
+    {
+      "command": "npm run test:all",
+      "exitCode": 0,
+      "core": {
+        "tests": 1184,
+        "pass": 1184,
+        "fail": 0
+      },
+      "pluginExamples": {
+        "tests": 56,
+        "pass": 56,
+        "fail": 0
+      },
+      "log": "full.log"
+    },
+    {
+      "command": "npm run check",
+      "exitCode": 0,
+      "includes": [
+        "content",
+        "public contracts",
+        "modules",
+        "docs",
+        "lint",
+        "engine types"
+      ],
+      "log": "check.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "earlierRuns": [
+    {
+      "log": "full-initial.log",
+      "corePass": 1182,
+      "pluginPass": 56,
+      "status": "passed before lifecycle edge cases; superseded by final full.log"
+    },
+    {
+      "log": "full-observer.log",
+      "corePass": 1183,
+      "pluginPass": 56,
+      "status": "passed before scene-takeover fix; superseded by final full.log"
+    },
+    {
+      "log": "check-initial.log",
+      "status": "passed before scene-takeover fix; superseded by check.log"
+    }
+  ],
+  "developmentFailures": {
+    "summary": [
+      "initial custom-map test fixture lacked required tileset/border metadata",
+      "assertions used wall/Core intent rejected instead of actual boundary/Invalid friendship intent",
+      "public type test passed Readonly<Json> into mutable Json store parameter; changed test to project a boolean"
+    ],
+    "resolution": "corrected fixtures and assertions; production validation retained; final test and check logs cover corrected sources",
+    "rawInitialOutputArchived": false
+  },
+  "limitations": [
+    "No browser, Computer Use, visual or audio acceptance performed",
+    "No Pokemon follower implementation, sprite imports, engine route history or follow relationship",
+    "Motion results cover grid steps; warps and travel retain existing separate contracts; session-local sequences reset on field rebuild"
+  ],
+  "invalidatedBy": [
+    "changes to hashed source, public wiring, tests or contracts"
+  ]
+}

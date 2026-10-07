@@ -1,0 +1,30 @@
+✔ plugin actor identity and memory survive save restore (91.009916ms)
+✔ actor result callbacks compose initialization and memory; facts see only committed state and auto-save restores identity (92.081167ms)
+✔ late failure rolls back generated identity, actor state and plugin memory with no published facts or saved write (36.735833ms)
+✔ failed actor edits and removal preserve cached animation identity and temporary appearance leases (38.881042ms)
+✔ result callback failure is atomic, and actor permission and strict shapes remain enforced (60.645542ms)
+✔ async result callbacks and excessive result work roll back generated actors (31.168542ms)
+✔ failed pose queries restore every cached frame field and an in-progress motion can still finish (38.637583ms)
+✔ registered fixed timing drives continuous patrol at landing, without catch-up loops or overlapping steps (1.5905ms)
+✔ fixed timing preserves pause and scene priority and retries blocked movement at the declared interval (0.418958ms)
+✔ interval timing bounds idle polling and definitions are detached; invalid timing fails registration (0.497417ms)
+✔ public behavior registration uses timing for persistent actors and survives save restore (101.095416ms)
+✔ ambient motion facts freeze across a long pause, then settle once before the next start (0.79325ms)
+✔ static NPC collision and removal report blocked and cancellation without a false landing (0.145791ms)
+✔ batched facts stay detached and invisible until commit; rollback consumes no sequence (2.558334ms)
+✔ event batches retain nesting, capacity and listener failure boundaries (0.160459ms)
+✔ motion facts pair starts and landings across map connections and remain frozen detached snapshots (2.201458ms)
+✔ blocked attempts do not fabricate a completed step and dispose closes pending motion (0.307292ms)
+✔ movement observers cannot undo a committed movement with an exception or asynchronous result (0.237208ms)
+✔ public motion event exposes movement facts without adding player travel clocks (69.847958ms)
+✔ scripted NPC steps report the movement direction independently of a preserved facing (0.469459ms)
+✔ a scene disposed by a start observer closes the already-retained step exactly once (0.153ms)
+✔ scene takeover closes an ambient step before starting a scripted step without requiring a render tick (0.466541ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 450.034542

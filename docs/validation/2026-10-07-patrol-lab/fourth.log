@@ -1,0 +1,16 @@
+✔ installed patrol plugin loads from the real catalog and its menu creates one atomic team without duplicate actors (95.588625ms)
+✔ continuous and interval patrols visibly differ while both traverse the same legal grid and reverse at their endpoint (61.577084ms)
+✔ a player in the lane causes blocked facts and bounded retry, without overlaps or skipped route goals (55.812917ms)
+✔ menu pause freezes animation, explicit pause preserves route state, and resume uses the existing actor identity (68.88775ms)
+✔ blocked second spawn rolls back the first actor, identity sequence, saved memory and all spawn facts (45.177125ms)
+✔ auto-save restores both patrol identities, pause flags and route phase; observation records reset on scene rebuild (73.263875ms)
+✔ remove cleans both actors and observations, and repeated visits keep at most 24 transient facts without saved telemetry (72.634333ms)
+✔ the summon action refuses other maps and tampered memory; partial teams can be rebuilt through the same action (60.147958ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 656.478375

@@ -1,3 +1,4 @@
+import { BLOCKED_REASON, assertBlockedReason } from "./blocked-reasons.js";
 import {
   arrowWarpDirection,
   arrivalDirection,
@@ -89,6 +90,7 @@ export class World {
     return true;
   }
   block(reason, object) {
+    assertBlockedReason(reason);
     this.lastBlocked = { reason, ...(object ? { objectId: object.id } : {}) };
     this.onBlocked(reason, object);
     return false;
@@ -135,7 +137,7 @@ export class World {
     const sourceCell = this.cell(p.x, p.y);
     const sourceWarp = m.warps.find((w) => w.x === p.x && w.y === p.y);
     if (!ignoreWarps && sourceWarp && arrowWarpDirection(sourceCell?.behavior) === dir) {
-      return this.traverseWarp(sourceWarp) || this.block("unavailable");
+      return this.traverseWarp(sourceWarp) || this.block(BLOCKED_REASON.UNAVAILABLE);
     }
     const sourceElevation = sourceCell?.elevation;
     let cell = this.cell(x, y);
@@ -163,15 +165,15 @@ export class World {
         }
         const i = y * dest.width + x;
         if (x < 0 || y < 0 || x >= dest.width || y >= dest.height)
-          return this.block("boundary");
+          return this.block(BLOCKED_REASON.BOUNDARY);
         const targetCell = { block: dest.blocks[i], behavior: dest.behavior[i],
           collision: (dest.blocks[i] >> 10) & 3, elevation: dest.blocks[i] >> 12 };
         if (!policy.ignoreElevation && this.elevation && !this.elevation.canEnter(p.elevation, targetCell.elevation))
-          return this.block("elevation");
+          return this.block(BLOCKED_REASON.ELEVATION);
         const object = !policy.ignoreActors && preview.objects.find(n => this.occupied(dest, n, x, y));
-        if (object) return this.block("object", object);
+        if (object) return this.block(BLOCKED_REASON.OBJECT, object);
         if (!this.passage({ cell: targetCell, map: dest, mapId: id, dir, from: { ...p }, warp: null }))
-          return this.block("wall");
+          return this.block(BLOCKED_REASON.WALL);
         this.beforeMove({
           map: dest,
           cell: {
@@ -184,12 +186,12 @@ export class World {
         });
         const target = { ...p, map: id, x, y, dir };
         if (!policy.ignoreElevation) this.elevation?.advance(target, sourceElevation, dest.blocks[i] >> 12);
-        if (!this.commitEntry(target, preview)) return this.block("entry-rejected");
+        if (!this.commitEntry(target, preview)) return this.block(BLOCKED_REASON.ENTRY_REJECTED);
         this.steps++;
         this.onStep(this.cell(x, y));
         return true;
       }
-      return this.block("boundary");
+      return this.block(BLOCKED_REASON.BOUNDARY);
     }
     const jumpDir = ledgeDirection(cell.behavior);
     let jump = false;
@@ -206,7 +208,7 @@ export class World {
       warp.dest_map !== "MAP_DYNAMIC" &&
       !this.resolve(warp.dest_map)
     ) {
-      return this.block("unavailable");
+      return this.block(BLOCKED_REASON.UNAVAILABLE);
     }
     const obj = !policy.ignoreActors && this.objects(p.map).find((n) =>
       !ignoreActors.includes(n.id) && this.occupied(m, n, x, y, { reservations: n.id !== allowVacatedBy }),
@@ -227,9 +229,9 @@ export class World {
       }) ||
       oneWay === dir
     ) {
-      return this.block(obj ? "object" : !cell ? "boundary" :
-        !policy.ignoreElevation && this.elevation && !this.elevation.canEnter(p.elevation, cell.elevation) ? "elevation" :
-        oneWay === dir ? "one-way" : "wall", obj);
+      return this.block(obj ? BLOCKED_REASON.OBJECT : !cell ? BLOCKED_REASON.BOUNDARY :
+        !policy.ignoreElevation && this.elevation && !this.elevation.canEnter(p.elevation, cell.elevation) ? BLOCKED_REASON.ELEVATION :
+        oneWay === dir ? BLOCKED_REASON.ONE_WAY : BLOCKED_REASON.WALL, obj);
     }
     this.beforeMove({ map: m, cell, dir });
     p.x = x;

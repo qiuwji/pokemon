@@ -59,3 +59,8 @@ src/
 2026-10-07表现落点：`src/packs/emerald/battle-presentation.js`原生战斗坐标、入场和教学/败北内容；`src/presentation/battle-director.js`时序与纯采样；`src/presentation/reflection-canvas.js`倒影裁切；`src/packs/emerald/field-reflections.js`地形/配色策略。真实菜单演示在battle-interface/bag-interface，`tools/ui/export-theme.py`导出PNG和`generated/presentation/battle-assets.js`元数据。组合验证见`tests/emerald-scene-fidelity.test.js`。
 
 2026-10-07接续：`stories/oldale.json`与`native-cast-data.js`负责古辰镇等待对手；`field-director.js`/`npcs.js`负责通用场景演员跨图和显式NPC路径。`field-reflections.js`提供原作伸缩/定点列取样，`reflection-canvas.js`控制紧邻水面与站立旧位置清理；双主角跑步时序由petalburg/slice导入配置维护。专项入口`tests/oldale-rival.test.js`、`tests/emerald-scene-fidelity.test.js`、`tests/running-animation.test.js`。
+
+
+2026-10-07 通用能力扩展：行为节奏由 `npc-behaviors.js` 校验、`npcs.js` 调度；`motion-results.js` 生成移动结果，`field-session.js`/`field-director.js` 接入，WorldApplication 发布 `core:motion`。Actor 事务形状位于 `extension-intents.js`，应用调用位于 `extension-ports.js`；`actor-transaction-effects.js` 负责运行缓存恢复，通用 PluginRuntime 只使用 commit/rollback 端口。合同与代表例见 [ACTORS](../engine/actors/ACTORS.md)。
+
+移动结果及闭合原因：`src/engine/motion-results.js` / `blocked-reasons.js`；跟随验证产品：`src/plugins/patrol-lab/`；复刻执行工作单：`skills/emerald-story-reconstruction/references/execution-workbook.md`。

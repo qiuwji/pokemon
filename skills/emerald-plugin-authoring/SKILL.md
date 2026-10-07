@@ -51,6 +51,8 @@ description: 在现有绿宝石工程中制作或修改玩法插件、页面、�
 
 action 内只用当次 `ctx`，不缓存写端口，不 `await`，不再次 dispatch。事务外的用户操作可 `api.commands.dispatch`；查询、规则、渲染、实时会话纯回调均不得 dispatch 或修改领域状态。schema 通过也不代表拥有资格，提交点仍需按领域合同复检。
 
+Actor 生成/更新/删除通过 `ctx.intent({kind:"actors",operation,...})`，声明 actors 权限。可选同步结果回调 `ctx.intent(value,onResult)` 在提交期间获取冻结结果，写插件记忆或追加意图；不可 await/dispatch，抛错整笔回滚，仍共用128次操作限额。具体字段见 [ACTORS](../../docs/engine/actors/ACTORS.md)。
+
 多项写入走同一事务；后段失败必须恢复领域值、插件记忆和相关 RNG。事实用 `ctx.emit`，反馈用 `ctx.feedback`，成功提交后才发布。区分抛错、`{ok:false,reason}` 和“提交成功但反馈失败”；最后一种不能重试发奖或重抽随机数。
 
 持久数据变化按当前严格 `dataVersion/validateData` 合同处理，不引入历史迁移旁路。停用插件后的硬引用由宿主暂停区保护，插件自有记忆保留；需要持久依赖时验证同一存储的停用、继续游玩与重新启用。临时相机/环境/页面租约及进行中的实时会话不能当成已保存数据。

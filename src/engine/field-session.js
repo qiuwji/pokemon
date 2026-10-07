@@ -1,6 +1,8 @@
+import { BLOCKED_REASON, MOTION_CANCEL_REASON } from "./blocked-reasons.js";
 import { World, DIRECTIONS } from "./world.js";
 import { NPCSystem } from "./npcs.js";
 import { isWater } from "./terrain.js";
+import { MotionResults } from "./motion-results.js";
 
 /** Field orchestration, independent of DOM, map names and story flags. */
 export class FieldSession {
@@ -14,6 +16,8 @@ export class FieldSession {
     onStep = () => {},
     onProgress = () => {},
     onStart = () => {},
+    onMotion = () => {},
+    onMotionError = () => {},
     onMap = () => {},
     onWarp = () => {},
     onWarpStart = () => {},
@@ -43,6 +47,8 @@ export class FieldSession {
       onStep,
       onProgress,
       onStart,
+      onMotion,
+      onMotionError,
       onWarp,
       onWarpStart,
       beforeWarp,
@@ -62,6 +68,7 @@ export class FieldSession {
     this.force = null;
     this.forceCount = 0;
     this.forceVisited = new Set();
+    this.motionResults = new MotionResults({ now, onResult: r => this.onMotion(r), onError: e => this.onMotionError(e) });
     this.npcs = new NPCSystem(maps, objects, {
       behaviors: npcBehaviors,
       elevation,
@@ -71,6 +78,7 @@ export class FieldSession {
       actorStep: npcActorStep,
       onChange: npcOnChange,
       onError: npcOnError,
+      motionResults: this.motionResults,
     });
     this.world = new World(maps, position, {
       deferWarps: true,
@@ -105,9 +113,12 @@ export class FieldSession {
     this.motion.snap(position);
   }
   dispose() {
+    this.disposed = true;
+    if (this.pendingMotion) this.motionResults.finish(this.pendingMotion, MOTION_CANCEL_REASON.DISPOSED);
+    this.pendingMotion = null;
     this.npcs.clear();
     this.pending = this.pendingCell = this.movementPlan = null;
-    this.cancelForced("disposed");
+    this.cancelForced(MOTION_CANCEL_REASON.DISPOSED);
     this.doorPlan = null;
     this.warping = false;
     this.disposed = true;
@@ -273,9 +284,11 @@ export class FieldSession {
     )
       throw new Error("Invalid movement duration");
     if (scripted && !this.pending) this.cancelForced("scripted");
-    this.lastMove = { moved: false, reason: this.disposed ? "disposed" : "animation" };
-    if (this.disposed || this.busy || this.motion.moving(this.now()))
+    this.lastMove = { moved: false, reason: this.disposed ? MOTION_CANCEL_REASON.DISPOSED : BLOCKED_REASON.ANIMATION };
+    if (this.disposed || this.busy || this.motion.moving(this.now())) {
+      if (!this.disposed) this.motionResults.blocked("player", this.position, this.position, direction, BLOCKED_REASON.ANIMATION, { scripted, forced: !!forced });
       return false;
+    }
     this.stepMode = this.movement?.effective({
       running,
       scripted,
@@ -283,7 +296,9 @@ export class FieldSession {
       map: this.world.map,
     });
     if (this.movement && !this.stepMode) {
-      this.lastMove = { moved: false, reason: "movement-mode" }; return false;
+      this.lastMove = { moved: false, reason: BLOCKED_REASON.MOVEMENT_MODE };
+      this.motionResults.blocked("player", this.position, this.position, direction, BLOCKED_REASON.MOVEMENT_MODE, { scripted, forced: !!forced });
+      return false;
     }
     const from = { ...this.position };
     this.terrainPlan = null;
@@ -313,9 +328,10 @@ export class FieldSession {
     };
     if (visual.keepFacing) this.position.dir = from.dir;
     if (!result) {
-      this.lastMove = { moved: false, reason: this.terrainPlan?.reason || this.world.lastBlocked?.reason || "wall",
+      this.lastMove = { moved: false, reason: this.world.lastBlocked?.reason || BLOCKED_REASON.WALL,
         ...(this.world.lastBlocked?.objectId ? { objectId: this.world.lastBlocked.objectId } : {}) };
       this.movement?.reset();
+      this.motionResults.blocked("player", from, this.position, direction, this.lastMove.reason, { mode: this.stepMode || "walk", scripted, forced: !!forced });
       return false;
     }
     if (duration !== undefined && this.movementPlan)
@@ -354,6 +370,10 @@ export class FieldSession {
     };
     this.pending = result;
     this.scriptedStep = scripted;
+    this.motionResults.begin("player", from, this.position, {
+      mode: this.motion.mode, startedAt: this.motion.start, durationMs: this.motion.duration,
+      jump: this.motion.jump, scripted, forced: !!forced,
+    }, record => { this.pendingMotion = record; });
     this.onStart({ from, position: { ...this.position }, direction, jump: !!result.jump });
     return true;
   }
@@ -369,6 +389,9 @@ export class FieldSession {
     this.pending = null;
     const cell = this.pendingCell;
     this.pendingCell = null;
+    const motion = this.pendingMotion;
+    this.pendingMotion = null;
+    if (motion) this.motionResults.finish(motion);
     this.onProgress(cell, { scripted: !!this.scriptedStep });
     if (this.terrain)
       this.onTerrain({

@@ -6,6 +6,7 @@ import { CommandBus } from "../../engine/extensions/command-bus.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 import { createMonster } from "../../engine/model.js";
 import { grantReward } from "../../engine/story.js";
+import { beginActorEffects } from "./actor-transaction-effects.js";
 const uid = { type: "string", minLength: 1, maxLength: 128 };
 /** Narrow public application ports. Plugins receive projections and validated intents, never this facade. */
 export function attachEmeraldExtensions(game, host) {
@@ -132,6 +133,12 @@ export function attachEmeraldExtensions(game, host) {
       ready: () =>
         !game.facilityActive && !game.busy && !game.battle && !game.ui?.dialog,
       random: () => game.rng,
+      beginEffects: () => beginActorEffects({
+        npcs: game.field.npcs,
+        appearances: game.applications.appearance.selections,
+        encounters: game.applications.encounters.tickets,
+        events: host.events,
+      }),
       query,
       hasUid: (uid) => owned().some((m) => m.uid === uid),
       changed: () => {
@@ -146,6 +153,12 @@ export function attachEmeraldExtensions(game, host) {
         validateEmeraldIntent(intent, owner, game.itemDefinitions);
         const mon = owned().find((m) => m.uid === intent.uid);
         switch (intent.kind) {
+          case "actors": {
+            if (intent.operation === "spawn") return game.actors.spawn(intent.template, intent.position);
+            if (intent.operation === "remove") return game.actors.remove(intent.uid);
+            const { kind: _kind, operation: _operation, uid: actorUid, data, ...changes } = intent;
+            return game.actors.update(actorUid, { ...changes, ...(data !== undefined ? { data: JSON.parse(data) } : {}) });
+          }
           case "friendship":
             if (
               !mon ||

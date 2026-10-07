@@ -488,6 +488,8 @@ export class WorldApplication {
         },
       }),
       now: this.timeline.now,
+      onMotion: result => this.plugins?.events.emit("core:motion", result),
+      onMotionError: error => this.plugins?.onError(error),
       objects: (map) =>
         this.worldState
           .projectObjects(map)

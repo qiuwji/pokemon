@@ -1,3 +1,4 @@
+import { BLOCKED_REASON, MOTION_CANCEL_REASON } from "./blocked-reasons.js";
 import { FIELD_EMOTES } from "./presentation-cues.js";
 import { World, DIRECTIONS } from "./world.js";
 import { findRoute } from "./pathfinding.js";
@@ -68,7 +69,8 @@ export class FieldDirector {
     if (id === "player") return;
     const n = this.field.npcs.control(id, this.actor(id).map);
     const remaining = n.duration - (this.timeline.now() - n.start);
-    if (remaining > 0) await this.timeline.wait(remaining);
+    if (remaining > 0) await this.waitUntil(n.start + n.duration);
+    this.field.npcs.finishMotion(n);
   }
   objects(map, actor, allowVacatedBy = null, ignoreActors = []) {
     const objects = this.field.npcs
@@ -123,12 +125,15 @@ export class FieldDirector {
         ? { elevation: n.elevation, previousElevation: n.previousElevation }
         : {}),
     };
+    const from = { ...position };
     const world = new World(this.field.world.maps, position, {
       objects: (idMap) => this.objects(idMap, id, allowVacatedBy, ignoreActors),
       elevation: this.field.world.elevation,
       ...(ignoreTerrain ? { navigation: () => ({ ignoreEdges: true, ignoreElevation: true }), passage: () => true } : {}),
     });
     const result = world.move(dir, { ignoreWarps: true, allowVacatedBy });
+    if (!result)
+      this.field.npcs.motionResults.blocked(n._actorUid || `${map}:${id}`, from, position, dir, world.lastBlocked?.reason || BLOCKED_REASON.PASSAGE, { scripted: true });
     if (!result)
       throw new Error(`Scripted actor movement blocked: ${id}/${dir}`);
     const changedMap = position.map !== map, [dx, dy] = DIRECTIONS[dir];
@@ -149,9 +154,14 @@ export class FieldDirector {
     n.jump = !!result.jump;
     n.duration = n.jump ? 256 : running ? 96 : 160;
     n.foot = (n.foot + 1) % 2;
+    this.field.npcs.beginMotion(n, from, { ...position, dir: n.dir }, { scripted: true, direction: dir, mode: running ? "run" : "walk" });
+    let interrupted = true;
     try {
       await this.waitUntil(n.start + n.duration);
+      interrupted = false;
     } finally {
+      this.field.npcs.onChange(n.map || map, n);
+      this.field.npcs.finishMotion(n, interrupted ? MOTION_CANCEL_REASON.INTERRUPTED : null);
       n.fromX = n.toX = n.x;
       n.fromY = n.toY = n.y;
       n.duration = 0;

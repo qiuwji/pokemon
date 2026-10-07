@@ -38,6 +38,18 @@ import {
 } from "../../engine/extensions/values.js";
 import { validateReward } from "../../engine/story.js";
 const id = { type: "string", minLength: 1, maxLength: 128 };
+const actorPosition = objectSchema({
+  map: id, x: { type: "integer", minimum: 0 }, y: { type: "integer", minimum: 0 },
+  dir: { type: "string", enum: ["up", "down", "left", "right"] },
+  elevation: { type: "integer", minimum: 0, maximum: 14 },
+  previousElevation: { type: "integer", minimum: 0, maximum: 14 },
+}, ["map", "x", "y", "dir"]);
+const actorSchemas = Object.fromEntries(Object.entries({
+  spawn: objectSchema({ kind: { type: "string", enum: ["actors"] }, operation: { type: "string", enum: ["spawn"] }, template: id, position: actorPosition }, ["kind", "operation", "template", "position"]),
+  update: objectSchema({ kind: { type: "string", enum: ["actors"] }, operation: { type: "string", enum: ["update"] }, uid: id,
+    position: actorPosition, data: { type: "string", maxLength: 8192 }, pose: id, hidden: { type: "boolean" } }, ["kind", "operation", "uid"]),
+  remove: objectSchema({ kind: { type: "string", enum: ["actors"] }, operation: { type: "string", enum: ["remove"] }, uid: id }, ["kind", "operation", "uid"]),
+}).map(([operation, schema]) => [operation, validateSchema(schema)]));
 const schemas = Object.fromEntries(
   Object.entries({
     weather: objectSchema(
@@ -97,6 +109,12 @@ const schemas = Object.fromEntries(
 );
 /** Core intent shapes are pack contracts; the generic runtime only stages and commits them. */
 export function validateEmeraldIntent(intent, owner, items) {
+  if (intent.kind === "actors") {
+    const schema = actorSchemas[intent.operation];
+    if (!Object.hasOwn(actorSchemas, intent.operation)) throw new Error("Unknown actor operation");
+    validateValue(schema, intent, "intent");
+    return;
+  }
   if (intent.kind === "reward") {
     if (
       Object.keys(intent).some((k) => !["kind", "reward"].includes(k)) ||

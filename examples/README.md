@@ -23,6 +23,7 @@
 | 实时互动会话 | [interaction-bar.test.js](interaction-bar.test.js) | 注册判定条→公开开始/输入/推进→判定→奖励结算→保存重载；无需浏览器绘制 |
 | 遇敌插件 | [encounter-extension.test.js](encounter-extension.test.js) | 关闭step→查询格子→Actor与凭证→接触→真实野生战斗，不经过剧情 |
 | 外观/相机/环境插件 | [visual-extension.test.js](visual-extension.test.js) | 外观选择→可见格数租约→独立雾层→释放与重载 |
+| 跟随伙伴 | [patrol-lab.test.js](patrol-lab.test.js) | 生产目录/菜单→单人转弯跟随→插值/碰撞/暂停→跨道路/进门→保存/停用/恢复/告别 |
 | Actor | [actor.test.js](actor.test.js) | 模板→公开创建/更新→持久UID和记忆→移除 |
 | 地区剧情包 | [story-bundle.test.js](story-bundle.test.js) | 注册NPC→包绑定→公共call→逐行角色/插值→选择后果→历史保存 |
 | 原作剧情转写入门 | [story-reconstruction.test.js](story-reconstruction.test.js) | 数据剧情到达触发→选择分支/变量→奖励→重载去重 |
