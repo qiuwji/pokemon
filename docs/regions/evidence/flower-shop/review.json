@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "packetSha256": "c4a0ef74b654c94962628f8b0d97b1cc5483e14d0ac1c310cebf53dc825ea0e3",
+  "entries": [
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations",
+      "status": "out-of-scope",
+      "notes": "三徽章后的装饰品销售及其目录尚未实现，不能当作本轮已覆盖互动。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_MapScripts",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_OnTransition",
+      "status": "reviewed",
+      "notes": "已核对早期位置、介绍/拒绝、喷壶或每日树果分支；后期店主复位/装饰品仍未实现。"
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Pokemart_Plants",
+      "status": "out-of-scope",
+      "notes": "三徽章后的装饰品销售及其目录尚未实现，不能当作本轮已覆盖互动。"
+    }
+  ],
+  "translations": [
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_BerriesExplanation",
+      "original": "BERRIES grow on trees that thrive\nonly in soft, loamy soil.\n\nIf you take some BERRIES, be sure to\nplant one in the loamy soil again.\n\nA planted BERRY will soon sprout,\ngrow into a plant, flower beautifully,\nthen grow BERRIES again.\n\nI want to see the whole wide world\nfilled with beautiful flowers.\nThat's my dream.\n\nPlease help me, {PLAYER}{KUN}. Plant BERRIES\nand bring more flowers into the world.",
+      "zh": "树果树只会生长在柔软肥沃的土壤里。摘下树果后，记得再种下一颗。种下的树果会发芽、长大、开出美丽的花，然后再次结出树果。我的梦想是让全世界开满美丽的花。{PLAYER}{KUN}，请你也帮忙种树果，让世界多一些花吧！",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness",
+      "original": "Flowers bring so much happiness to\npeople, don't they?",
+      "zh": "鲜花能带给大家很多快乐，你说是不是？",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers",
+      "original": "I'm trying to be like my big sisters.\nI'm growing flowers, too!\n\nHere you go!\nIt's for you!",
+      "zh": "我也想像姐姐们一样，所以也在种花！这个送给你！",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries",
+      "original": "Your name is?\n\n{PLAYER}{KUN}.\nThat's a nice name.\n\n{PLAYER}{KUN}, would you like to learn about\nBERRIES?",
+      "zh": "你叫什么名字？……{PLAYER}{KUN}，真是个好名字。{PLAYER}{KUN}，想了解一下树果吗？",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries",
+      "original": "{PLAYER}{KUN}, would you like to learn about\nBERRIES?",
+      "zh": "{PLAYER}{KUN}，想了解一下树果吗？",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries",
+      "original": "You can plant a BERRY and grow it big,\nor you can make a POKéMON hold it.\n\nBut now they have a machine that mixes\nup different BERRIES and makes candies\nfor POKéMON.\n\nI want some candy, too.",
+      "zh": "树果可以种下长成大树，也可以让宝可梦携带。现在还有一种机器，能把不同树果混合起来，做成给宝可梦吃的糖果。我也想尝尝那种糖果！",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop",
+      "original": "Hello!\n\nThis is the PRETTY PETAL flower shop.\nSpreading flowers all over the world!",
+      "zh": "你好！这里是漂亮花瓣花店，我们希望鲜花开遍全世界！",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation",
+      "original": "While BERRY plants are growing,\nwater them with the WAILMER PAIL.\n\nOh, another thing.\n\nIf you don't pick BERRIES for a while,\nthey'll drop off onto the ground.\nBut they'll sprout again.\n\nIsn't that awesome?\nIt's like they have the will to live.",
+      "zh": "树果树生长时，可以用吼吼鲸喷壶给它浇水。还有啊，成熟的树果一直不摘就会掉在地上，不过之后还会重新发芽。它们的生命力很强呢！",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis",
+      "original": "Hello!\n\nThe more attention you give to flowers,\nthe more beautifully they bloom.\n\nYou'll like tending flowers. I'm sure\nof it. You can have this.",
+      "zh": "你好！越用心照顾花，花就会开得越美。你一定也会喜欢照顾花的，这个送给你！",
+      "reviewed": true
+    },
+    {
+      "label": "gText_PlayerWhatCanIDoForYou",
+      "original": "{PLAYER}{KUN}, welcome!\n\nWhat can I do for you?",
+      "zh": "{PLAYER}{KUN}，欢迎！有什么可以帮你的吗？",
+      "reviewed": true
+    },
+    {
+      "label": "gText_PleaseComeAgain",
+      "original": "Please come again!",
+      "zh": "请下次再来！",
+      "reviewed": true
+    },
+    {
+      "label": "gText_TooBadBagIsFull",
+      "original": "Too bad!\nThe BAG is full…",
+      "zh": "真遗憾！背包装满了……",
+      "reviewed": true
+    }
+  ],
+  "mapEntries": [
+    {
+      "id": "Route104_PrettyPetalFlowerShop:object_events:0",
+      "status": "reviewed",
+      "notes": "本轮验证早期入口与赠礼；包含装饰品销售的后期分支仍待后续专门实现。"
+    },
+    {
+      "id": "Route104_PrettyPetalFlowerShop:object_events:1",
+      "status": "reviewed",
+      "notes": "本轮验证早期入口与赠礼；包含装饰品销售的后期分支仍待后续专门实现。"
+    },
+    {
+      "id": "Route104_PrettyPetalFlowerShop:object_events:2",
+      "status": "reviewed",
+      "notes": "本轮验证早期入口与赠礼；包含装饰品销售的后期分支仍待后续专门实现。"
+    }
+  ],
+  "cFunctions": [],
+  "facts": [
+    {
+      "summary": "未见店主或未取得第三枚徽章时，OnTransition把店主永久位置置为(4,6)。见过且三徽章时为原模板(0,3)，并切入销售植物装饰分支；后者未实现。",
+      "sources": [
+        {
+          "label": "Route104_PrettyPetalFlowerShop_OnTransition",
+          "lines": [
+            6
+          ]
+        },
+        {
+          "label": "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner",
+          "lines": [
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "summary": "每日树果从最初八种中选择，包满不记领取。网页沿用每日奖励账本，用保存seed和RTC日计算可重放选择；不是原作全局LCRNG调用时序。喷壶领取事实在奖励原子提交时登记，以便后续对白中断后不重发。",
+      "sources": [
+        {
+          "label": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+          "lines": [
+            79
+          ]
+        },
+        {
+          "label": "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail",
+          "lines": [
+            71
+          ]
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "花店早期真实入口、取消与领取重入",
+      "start": "店主未见，未有第三徽章；已设时钟。",
+      "steps": [
+        "进入花店与店主互动，分别选择想/不想",
+        "与两位妹妹互动领取喷壶和树果",
+        "把对应口袋填满后互动，再腾位重试",
+        "保存读档同日互动，随后推进到次日再互动"
+      ],
+      "expected": "正确早期位置，不与玩家重叠；喷壶仅一次，树果每天一次；包满不登记奖励，同日重载不重复领取。",
+      "sources": [
+        {
+          "label": "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner",
+          "lines": [
+            17
+          ]
+        },
+        {
+          "label": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+          "lines": [
+            79
+          ]
+        }
+      ]
+    }
+  ]
+}

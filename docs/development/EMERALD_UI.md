@@ -101,3 +101,7 @@ MapNameDOM只管理提示生命周期，app按有效地图元数据调用。`ind
 用户截图指出104北侧斜纹水仍静止：原因是导入器只有General主图集动画，未读取Rustboro二级图集的windy_water（VRAM tile640–671）。现补齐该原作八帧、每8帧更新及8组错开的相位；和通用海水分别采样，不将图块属性为池塘误判成无动画。
 
 可砍树的四帧是完整→砍断过程，原作inanimate=TRUE/sAnim_StayStill只显示帧0；之前通用人物的up/left帧映射选中了砍断帧。导入器现对inanimate资源生成静止映射，CuttableTree现行声明同步；变朝向、未获徽章/未学居合斩均保持完整，合格动作才能移除，通过保存重载检查。这里没有给通用Renderer增加树名称特判。
+
+## 2026-10-08 两队专用入场与树果帧
+
+水舰队/火岩队训练家由pack身份表选择原作各自tilemap/palette，256项Q8.8正弦表和阶段时长由来源导入；总217帧，兼容取消与reducedMotion。Canvas混合色仍近似GBA效果，不宣称逐像素颜色保真。树果源图片是横排帧，修正export-theme切片并逐像素验证生长图；详见[本批范围](../regions/NATIVE_INTERACTIONS.md)。

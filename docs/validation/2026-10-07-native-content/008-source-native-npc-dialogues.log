@@ -1,0 +1,5 @@
+{
+  "sourceMatches": true,
+  "problems": [],
+  "scope": "Source extraction/review only; translation meaning, C asynchronous semantics and gameplay require separate review."
+}

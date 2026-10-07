@@ -1,0 +1,36 @@
+{
+  "maps": [
+    "DewfordTown_House1",
+    "RustboroCity",
+    "RustboroCity_CuttersHouse",
+    "RustboroCity_DevonCorp_1F",
+    "RustboroCity_DevonCorp_2F",
+    "RustboroCity_Flat2_1F",
+    "RustboroCity_Flat2_2F",
+    "RustboroCity_House3",
+    "RustboroCity_PokemonSchool"
+  ],
+  "entries": [
+    "RustboroCity_EventScript_FatMan",
+    "RustboroCity_EventScript_Boy2",
+    "RustboroCity_EventScript_Man1",
+    "RustboroCity_EventScript_LittleBoy",
+    "RustboroCity_EventScript_LittleGirl",
+    "RustboroCity_DevonCorp_1F_EventScript_Employee",
+    "RustboroCity_DevonCorp_1F_EventScript_StairGuard",
+    "RustboroCity_DevonCorp_1F_EventScript_Greeter",
+    "RustboroCity_DevonCorp_2F_EventScript_TalkToPokemonScientist",
+    "RustboroCity_DevonCorp_2F_EventScript_BallScientist",
+    "RustboroCity_DevonCorp_2F_EventScript_PokenavScientist",
+    "RustboroCity_DevonCorp_2F_EventScript_PokemonDreamsScientist",
+    "RustboroCity_DevonCorp_2F_EventScript_MatchCallScientist",
+    "RustboroCity_House3_EventScript_OldWoman",
+    "RustboroCity_House3_EventScript_Pekachu",
+    "RustboroCity_Flat2_1F_EventScript_Skitty",
+    "DewfordTown_House1_EventScript_Zigzagoon",
+    "RustboroCity_CuttersHouse_EventScript_Cutter",
+    "RustboroCity_PokemonSchool_EventScript_Teacher",
+    "RustboroCity_Flat2_2F_EventScript_NinjaBoy"
+  ],
+  "functions": []
+}

@@ -1,0 +1,2792 @@
+{
+  "version": 1,
+  "packetSha256": "d24876184778af2c0f397b4fbbbd7b7b75f6caa096821ccc4b0558dac141967c",
+  "entries": [
+    {
+      "label": "Common_EventScript_ShowPokemartSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.common.showpokemartsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Common_EventScript_ShowPokemonCenterSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.common.showpokemoncentersign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "DewfordTown_EventScript_GymSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.dewfordtown.gymsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "DewfordTown_EventScript_HallSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.dewfordtown.hallsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "DewfordTown_EventScript_TownSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.dewfordtown.townsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "InsideOfTruck_EventScript_MovingBox",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.insideoftruck.movingbox。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "LittlerootTown_EventScript_BirchsLabSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.littleroottown.birchslabsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "LittlerootTown_EventScript_TownSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.littleroottown.townsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Book",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.littleroottown-professorbirchslab.book。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.littleroottown-professorbirchslab.bookshelf。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.littleroottown-professorbirchslab.machine。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_EventScript_PC",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.littleroottown-professorbirchslab.pc。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "OldaleTown_EventScript_TownSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.oldaletown.townsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PetalburgCity_EventScript_CitySign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.petalburgcity.citysign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PetalburgCity_EventScript_GymSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.petalburgcity.gymsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PetalburgCity_EventScript_WallyHouseSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.petalburgcity.wallyhousesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PetalburgWoods_EventScript_Sign1",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.petalburgwoods.sign1。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PetalburgWoods_EventScript_Sign2",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.petalburgwoods.sign2。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PlayersHouse_2F_EventScript_GameCube",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.playershouse-2f.gamecube。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "PlayersHouse_2F_EventScript_Notebook",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.playershouse-2f.notebook。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route101_EventScript_RouteSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route101.routesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route102_EventScript_RouteSignOldale",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route102.routesignoldale。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route102_EventScript_RouteSignPetalburg",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route102.routesignpetalburg。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route103_EventScript_RouteSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route103.routesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route104_EventScript_BrineysCottageSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route104.brineyscottagesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route104_EventScript_FlowerShopSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route104.flowershopsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route104_EventScript_RouteSignPetalburg",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route104.routesignpetalburg。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route104_EventScript_RouteSignRustboro",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route104.routesignrustboro。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route104_EventScript_TrainerTipsDoubleBattles",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route104.trainertipsdoublebattles。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route116_EventScript_RouteSignRustboro",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route116.routesignrustboro。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route116_EventScript_RusturfTunnelSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route116.rusturftunnelsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route116_EventScript_TrainerTipsBToStopEvolution",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route116.trainertipsbtostopevolution。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route116_EventScript_TrainerTipsBagHasPockets",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route116.trainertipsbaghaspockets。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "Route116_EventScript_TunnelersRestHouseSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.route116.tunnelersresthousesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_EventScript_ProductsDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity-devoncorp-1f.productsdisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_EventScript_RocksMetalDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity-devoncorp-1f.rocksmetaldisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_3F_EventScript_RareRocksDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity-devoncorp-3f.rarerocksdisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_EventScript_CitySign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity.citysign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_EventScript_CuttersHouseSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity.cuttershousesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_EventScript_DevonCorpSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity.devoncorpsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_EventScript_TrainersSchoolSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity.trainersschoolsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_EventScript_TunnelSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity.tunnelsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "RustboroCity_PokemonSchool_EventScript_StudentNotebook",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.rustborocity-pokemonschool.studentnotebook。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_EventScript_BattleTentSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity.battletentsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_EventScript_CitySign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity.citysign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_EventScript_MarketSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity.marketsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_EventScript_NameRatersHouseSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity.nameratershousesign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_EventScript_OceanicMuseumSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity.oceanicmuseumsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_EventScript_PokemonFanClubSign",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity.pokemonfanclubsign。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_BeachSandDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.beachsanddisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_DepthMeasuringMachine",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.depthmeasuringmachine。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_FossilDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.fossildisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_OceanSoilDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.oceansoildisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_OceanicMinifact1",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.oceanicminifact1。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_OceanicMinifact2",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.oceanicminifact2。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_OceanicMinifact3",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.oceanicminifact3。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_WaterfallExperiment",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.waterfallexperiment。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_EventScript_WhirlpoolExperiment",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-1f.whirlpoolexperiment。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_DeepSeawaterDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.deepseawaterdisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_HoennModel",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.hoennmodel。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_PressureExperiment",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.pressureexperiment。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_SSAnneReplica",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.ssannereplica。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.sstidalreplica。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.submarinereplica。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_SubmersibleReplica",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.submersiblereplica。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_SurfaceSeawaterDisplay",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.surfaceseawaterdisplay。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample1",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.waterqualitysample1。不代表该演员的后期出现条件或整张地图已完成。"
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample2",
+      "status": "reviewed",
+      "notes": "固定来源仅含对白/结束；译文登记于 emerald:native-signs.slateportcity-oceanicmuseum-2f.waterqualitysample2。不代表该演员的后期出现条件或整张地图已完成。"
+    }
+  ],
+  "translations": [
+    {
+      "label": "DewfordTown_Text_GymSign",
+      "original": "DEWFORD TOWN POKéMON GYM\nLEADER: BRAWLY\n“A big wave in fighting!”",
+      "zh": "武斗镇宝可梦道馆\n馆主：藤树\n格斗的巨浪！",
+      "reviewed": true
+    },
+    {
+      "label": "DewfordTown_Text_HallSign",
+      "original": "DEWFORD HALL\n“Everyone's information exchange!”",
+      "zh": "武斗集会所\n大家交换信息的地方！",
+      "reviewed": true
+    },
+    {
+      "label": "DewfordTown_Text_TownSign",
+      "original": "DEWFORD TOWN\n“A tiny island in the blue sea.”",
+      "zh": "武斗镇\n蓝色大海中的小小岛屿。",
+      "reviewed": true
+    },
+    {
+      "label": "InsideOfTruck_Text_BoxPrintedWithMonLogo",
+      "original": "The box is printed with a POKéMON logo.\n\nIt's a POKéMON brand moving and\ndelivery service.",
+      "zh": "箱子上印着宝可梦标志。这是宝可梦品牌的搬家与配送服务。",
+      "reviewed": true
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_Text_BookTooHardToRead",
+      "original": "It's a book that's too hard to read.",
+      "zh": "这是一本太深奥、读不懂的书。",
+      "reviewed": true
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_Text_CrammedWithBooksOnPokemon",
+      "original": "It's crammed with books on POKéMON.",
+      "zh": "里面塞满了关于宝可梦的书。",
+      "reviewed": true
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_Text_PCUsedForResearch",
+      "original": "It's a PC used for research.\nBetter not mess around with it.",
+      "zh": "这是用于研究的电脑，还是不要乱动它为好。",
+      "reviewed": true
+    },
+    {
+      "label": "LittlerootTown_ProfessorBirchsLab_Text_SeriousLookingMachine",
+      "original": "It's a serious-looking machine.\nThe PROF must use this for research.",
+      "zh": "这台机器看起来很厉害，博士一定是用它来研究的。",
+      "reviewed": true
+    },
+    {
+      "label": "LittlerootTown_Text_ProfBirchsLab",
+      "original": "PROF. BIRCH'S POKéMON LAB",
+      "zh": "小田卷博士的宝可梦研究所",
+      "reviewed": true
+    },
+    {
+      "label": "LittlerootTown_Text_TownSign",
+      "original": "LITTLEROOT TOWN\n“A town that can't be shaded any hue.”",
+      "zh": "未白镇\n“一座连色调都无法为其增色的城镇。”",
+      "reviewed": true
+    },
+    {
+      "label": "OldaleTown_Text_TownSign",
+      "original": "OLDALE TOWN\n“Where things start off scarce.”",
+      "zh": "古辰镇\n一切从稀少开始的地方。",
+      "reviewed": true
+    },
+    {
+      "label": "PetalburgCity_Text_CitySign",
+      "original": "PETALBURG CITY\n“Where people mingle with nature.”",
+      "zh": "橙华市\n人们与自然融为一体的城市。",
+      "reviewed": true
+    },
+    {
+      "label": "PetalburgCity_Text_GymSign",
+      "original": "PETALBURG CITY POKéMON GYM\nLEADER: NORMAN\n“A man in pursuit of power!”",
+      "zh": "橙华市宝可梦道馆\n馆主：千里\n追求力量的男人！",
+      "reviewed": true
+    },
+    {
+      "label": "PetalburgCity_Text_WallyHouseSign",
+      "original": "WALLY'S HOUSE",
+      "zh": "小光的家",
+      "reviewed": true
+    },
+    {
+      "label": "PetalburgWoods_Text_TrainerTipsExperience",
+      "original": "TRAINER TIPS\n\nAny POKéMON that appears even once\nin a battle is awarded EXP Points.\n\nTo raise a weak POKéMON, put it at the\nleft of the team list.\n\nAs soon as a battle starts, switch it\nout. It will earn EXP Points without\nbeing exposed to any harm.",
+      "zh": "训练家提示\n只要在对战中出场过一次，宝可梦就能获得经验值。想培养弱小的宝可梦，就把它放在队伍最前面，开战后立刻换下。这样既能获得经验，也能避免它受到伤害。",
+      "reviewed": true
+    },
+    {
+      "label": "PetalburgWoods_Text_TrainerTipsPP",
+      "original": "TRAINER TIPS\n\nIn addition to Hit Points (HP), POKéMON\nhave Power Points (PP) that are used to\nmake moves during battle.\n\nIf a POKéMON runs out of PP, it must be\ntaken to a POKéMON CENTER.",
+      "zh": "训练家提示\n除了体力，宝可梦使用招式还需要消耗招式点数PP。如果PP用完了，请带它去宝可梦中心恢复。",
+      "reviewed": true
+    },
+    {
+      "label": "PlayersHouse_2F_Text_ItsAGameCube",
+      "original": "It's a Nintendo GameCube.\n\nA Game Boy Advance is connected to\nserve as the Controller.",
+      "zh": "这是一台任天堂GameCube，连接了一台Game Boy Advance作为控制器。",
+      "reviewed": true
+    },
+    {
+      "label": "PlayersHouse_2F_Text_Notebook",
+      "original": "{PLAYER} flipped open the notebook.\n\nADVENTURE RULE NO. 1\nOpen the MENU with START.\n\nADVENTURE RULE NO. 2\nRecord your progress with SAVE.\n\nThe remaining pages are blank…",
+      "zh": "{PLAYER}翻开了笔记本。\n冒险守则第一条：按START打开菜单。\n冒险守则第二条：使用“保存”记录进度。\n其余的页面都是空白……",
+      "reviewed": true
+    },
+    {
+      "label": "Route101_Text_RouteSign",
+      "original": "ROUTE 101\n{UP_ARROW} OLDALE TOWN",
+      "zh": "101号道路\n↑ 古辰镇",
+      "reviewed": true
+    },
+    {
+      "label": "Route102_Text_RouteSignOldale",
+      "original": "ROUTE 102\n{RIGHT_ARROW} OLDALE TOWN",
+      "zh": "102号道路\n→ 古辰镇",
+      "reviewed": true
+    },
+    {
+      "label": "Route102_Text_RouteSignPetalburg",
+      "original": "ROUTE 102\n{LEFT_ARROW} PETALBURG CITY",
+      "zh": "102号道路\n← 橙华市",
+      "reviewed": true
+    },
+    {
+      "label": "Route103_Text_RouteSign",
+      "original": "ROUTE 103\n{DOWN_ARROW} OLDALE TOWN",
+      "zh": "103号道路\n↓ 古辰镇",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_Text_MrBrineysCottage",
+      "original": "MR. BRINEY'S COTTAGE",
+      "zh": "哈奇老人的小屋",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_Text_PrettyPetalFlowShop",
+      "original": "PRETTY PETAL FLOWER SHOP",
+      "zh": "漂亮花瓣花店",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_Text_RouteSignPetalburg",
+      "original": "ROUTE 1O4\n{RIGHT_ARROW} PETALBURG CITY",
+      "zh": "104号道路\n→ 橙华市",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_Text_RouteSignRustboro",
+      "original": "ROUTE 1O4\n{UP_ARROW} RUSTBORO CITY",
+      "zh": "104号道路\n↑ 卡那兹市",
+      "reviewed": true
+    },
+    {
+      "label": "Route104_Text_TrainerTipsDoubleBattles",
+      "original": "TRAINER TIPS\n\nIn the HOENN region there are pairs\nof TRAINERS who challenge others\nfor 2-on-2 POKéMON battles called\nDOUBLE BATTLES.\n\nIn a DOUBLE BATTLE, the TRAINER must\nsend out two POKéMON, the one at the\nleft of the list and the top one.\nWatch how POKéMON are lined up.",
+      "zh": "训练家提示\n在丰缘，有两人一组的训练家会发起二对二的双打对战。双打时，队伍最前面的两只宝可梦会一起出场。请注意它们在队伍中的排列顺序。",
+      "reviewed": true
+    },
+    {
+      "label": "Route116_Text_RouteSignRustboro",
+      "original": "ROUTE 116\n{LEFT_ARROW} RUSTBORO CITY",
+      "zh": "116号道路\n← 卡那兹市",
+      "reviewed": true
+    },
+    {
+      "label": "Route116_Text_RusturfTunnelSign",
+      "original": "RUSTURF TUNNEL\n“Linking RUSTBORO and VERDANTURF\n\n“The tunnel project has been\ncanceled.”",
+      "zh": "卡绿隧道\n连接卡那兹市与绿荫镇。\n隧道工程已被取消。",
+      "reviewed": true
+    },
+    {
+      "label": "Route116_Text_TrainerTipsBToStopEvolution",
+      "original": "TRAINER TIPS\n\nIf you want to stop a POKéMON from\nevolving, press the B Button while it\nis trying to evolve.\nThe startled POKéMON will stop.\n\nThis is called an evolution cancel.",
+      "zh": "训练家提示\n宝可梦正在进化时，如果想停止进化，就按B键。被吓到的宝可梦会停止进化。这叫作取消进化。",
+      "reviewed": true
+    },
+    {
+      "label": "Route116_Text_TrainerTipsBagHasPockets",
+      "original": "TRAINER TIPS\n\nYour BAG has several POCKETS.\n\nItems you obtain are automatically\nplaced in the appropriate POCKETS.\n\nNo TRAINER can afford to be without\na BAG of their own.",
+      "zh": "训练家提示\n背包里有多个口袋，获得的道具会自动放进对应的口袋。每位训练家都少不了自己的背包。",
+      "reviewed": true
+    },
+    {
+      "label": "Route116_Text_TunnelersRestHouse",
+      "original": "TUNNELER'S REST HOUSE",
+      "zh": "隧道工人的休息小屋",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_ProductDisplay",
+      "original": "Prototypes and test products fill\nthe glass display case.\n\nThere's a panel with a description…\n\n“In addition to industrial products,\nDEVON now markets sundries and\npharmaceuticals for better lifestyles.\n\n“Recently, DEVON has begun marketing\ntools for POKéMON TRAINERS, including\nPOKé BALLS and POKéNAV systems.”",
+      "zh": "玻璃柜里摆满了原型和试验产品，旁边有说明牌。\n除了工业产品，得文现在也销售日用品和药品，让生活更加便利。最近还开始销售训练家工具，包括精灵球和宝可领航员系统。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_RocksMetalDisplay",
+      "original": "Samples of rocks and metal are\ndisplayed in the glass case.\n\nThere's a panel with some writing\non it…\n\n“DEVON CORPORATION got its start as\na producer of stones from quarries.\n\n“The company also produced iron from\nfilings in the sand.\n\n“From that humble start as a producer\nof raw materials, DEVON developed.\n\n“DEVON is now a manufacturer of a wide\nrange of industrial products.”",
+      "zh": "玻璃柜里展示着岩石与金属的样本，旁边有一块说明牌。\n得文制造股份有限公司最初开采石料，也从砂中的铁屑提炼铁。从这家朴素的原料生产商起步，得文逐渐发展为生产各类工业产品的制造商。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_3F_Text_RareRocksDisplay",
+      "original": "It's a collection of rare rocks and\nstones assembled by the PRESIDENT.",
+      "zh": "这是社长收集的稀有岩石和石头。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_PokemonSchool_Text_StudentsNotes",
+      "original": "It's this student's notebook…\n\nPOKéMON are to be caught using\nPOKé BALLS.\n\nUp to six POKéMON can accompany\na TRAINER.\n\nA TRAINER is someone who catches\nPOKéMON, raises them, and battles\nwith them.\n\nA TRAINER's mission is to defeat\nthe strong TRAINERS who await\nchallengers in POKéMON GYMS.",
+      "zh": "这是学生的笔记本……\n使用精灵球捕捉宝可梦。训练家可以带着最多六只宝可梦。训练家会捕捉、培养宝可梦，并与它们一起对战。训练家的使命，是打败在道馆里等待挑战者的强大训练家。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_CitySign",
+      "original": "RUSTBORO CITY\n\n“The city probing the integration of\nnature and science.”",
+      "zh": "卡那兹市\n探索自然与科学融合的城市。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_CuttersHouse",
+      "original": "CUTTER'S HOUSE",
+      "zh": "居合斩大师的家",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_DevonCorpSign",
+      "original": "DEVON CORPORATION\n\n“For all your living needs, we make\nit all.”",
+      "zh": "得文制造股份有限公司\n满足生活所需，制造你需要的一切。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_TrainersSchoolSign",
+      "original": "POKéMON TRAINER'S SCHOOL\n\n“We'll teach you anything about\nPOKéMON!”",
+      "zh": "宝可梦训练家学校\n关于宝可梦的一切，我们都会教你！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_TunnelNearingCompletion",
+      "original": "“Timesaving tunnel nearing\ncompletion!”\n\n…Is what it says on the sign, but\nthere's also a big “X” splashed\nacross it in red paint…",
+      "zh": "节省时间的隧道即将完工！\n……牌子上这样写着，不过上面还被红色油漆画了一个大大的叉……",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_BeachSandDisplay",
+      "original": "It's a sample of beach sand.\n\n“Stones from mountains are washed\ndown by rivers where they are\nchipped and ground down.\n\n“They are reduced to grains and end\nup as sand on beaches.”",
+      "zh": "这是海滩沙子的样本。\n山上的石头被河流冲下来，不断碰撞、磨碎，变成颗粒，最后成为海滩上的沙子。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_DepthMeasuringMachine",
+      "original": "A strange machine is rotating under\na glass dome.\n\nMaybe it's for measuring the depth\nof something…",
+      "zh": "一个奇怪的机器正在玻璃罩下旋转。也许是用来测量某种东西深度的……",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_FossilDisplay",
+      "original": "It's a fossil with wavy ridges on it.\n\n“Soil on the ocean floor gets scoured\nby the tide.\n\n“The flowing seawater marks the soil\nwith small ridges and valleys.\n\n“If this soil becomes fossilized, it is\ncalled a ripple mark.”",
+      "zh": "这是一块带着波浪状纹路的化石。\n潮汐冲刷海底的土壤，流动的海水留下细小的凸起和凹槽。这种土壤变成化石后，就叫作波痕。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_OceanSoilDisplay",
+      "original": "It's a sample of soil from the ocean\nfloor.\n\n“Over many years, the remains of\nlife-forms settle at the bottom of\nthe sea, making sedimentary layers.\n\n“By analyzing these layers, the\nancient past is revealed.”",
+      "zh": "这是海底土壤的样本。\n长年累月，生物的遗骸沉到海底，形成沉积层。分析这些地层，就能了解远古的过去。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_OceanicMinifact1",
+      "original": "“OCEANIC MINIFACT 1\nWhy is seawater blue?\n\n“Light is composed of many colors.\n\n“When light passes through water,\nmost kinds of light lose color.\n\n“However, blue light retains its\ncolor, making the sea appear blue.”",
+      "zh": "海洋小知识一：海水为什么是蓝色的？\n光由多种颜色组成。光穿过水时，大多数颜色会逐渐消失，但蓝色会保留下来，所以大海看起来是蓝色的。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_OceanicMinifact2",
+      "original": "“OCEANIC MINIFACT 2\nWhy is the sea salty?\n\n“Seawater contains dissolved salt in\nthe form of sodium and chlorine ions.\n\n“These ions leech out of rocks\nand are carried out to sea by rain.\n\n“The concentration of dissolved salt\nmakes the sea salty.”",
+      "zh": "海洋小知识二：海水为什么是咸的？\n海水中溶解着钠离子和氯离子等盐分。它们从岩石中溶出，由雨水带进大海。溶解盐分的浓度，让海水变咸。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_OceanicMinifact3",
+      "original": "“OCEANIC MINIFACT 3\nWhich is bigger? The sea or land?\n\n“The sea covers about 70% of\nthe planet, and the rest is land.\n\n“The sea is therefore more than twice\nthe size of land.”",
+      "zh": "海洋小知识三：大海和陆地哪个更大？\n大海覆盖了地球大约百分之七十的面积，其余是陆地。因此，大海的面积是陆地的两倍多。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_WaterfallExperiment",
+      "original": "A red ball is bobbing up and down\ninside a glass vessel.\n\n“This is an experiment simulating a\nWATERFALL using the ball's buoyancy.”",
+      "zh": "玻璃容器里的红色球上下浮动。\n这是一项利用小球浮力模拟瀑布的实验。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_1F_Text_WhirlpoolExperiment",
+      "original": "A blue fluid is spiraling inside\na glass vessel.\n\n“This is an experiment to create a\nWHIRLPOOL artificially using wind.”",
+      "zh": "玻璃容器里的蓝色液体正在旋转。\n这是一项利用风人工制造漩涡的实验。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_DeepSeawaterDisplay",
+      "original": "It's a display on the flow of seawater.\n\n“Near the bottom of the sea, water\nflows due to differences in such\nfactors as temperature and salinity.”",
+      "zh": "这是介绍海水流动的展板。\n海底附近，水因温度、盐度等因素的不同而流动。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_HoennModel",
+      "original": "“MODEL OF HOENN REGION”\n\nIt's a miniature diorama of the\nHOENN region.\n\nWhere is LITTLEROOT TOWN on this?",
+      "zh": "丰缘地区模型\n这是丰缘地区的缩小立体模型。未白镇在哪里呢？",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_PressureExperiment",
+      "original": "A rubber ball is expanding and\nshrinking.\n\n“In the sea, the weight of water itself\nexerts pressure.\n\n“In shallow water, the pressure is not\nvery heavy.\n\n“However, in extremely deep water,\nthe pressure can reach even tens of\nthousands of tons on a small area.”",
+      "zh": "一个橡胶球正在膨胀、收缩。\n在海里，水本身的重量会产生压力。浅水处的压力不算大，但到了极深的海底，小小的一片面积可能承受数万吨的压力。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_SSAnneReplica",
+      "original": "“S.S. ANNE\n\n“A replica of the luxury liner that\ncircles the globe.”",
+      "zh": "圣安奴号\n环游世界的豪华客轮的模型。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_SSTidalReplica",
+      "original": "“THE FERRY S.S. TIDAL\n\n“A scale replica of the ship under\nconstruction at STERN'S SHIPYARD.”",
+      "zh": "渡轮水静号\n库斯诺吉造船厂正在建造的船舶的缩小模型。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_SubmarineReplica",
+      "original": "“SUBMARINE EXPLORER 1\n\n“A replica of the high-performance\nocean floor exploration submarine.”",
+      "zh": "潜水艇探险一号\n高性能海底探测潜水艇的模型。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_SumbersibleReplica",
+      "original": "“SUBMERSIBLE POD\n\n“A replica of a compact, unmanned\npod for seafloor exploration.”",
+      "zh": "海底探测舱\n用于探索海底的小型无人探测舱的模型。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_SurfaceSeawaterDisplay",
+      "original": "It's a display on the flow of seawater.\n\n“Toward the surface, seawater flows\nas currents driven by the winds.”",
+      "zh": "这是介绍海水流动的展板。\n海面附近，海水受风推动，以洋流的形式流动。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_WaterQualitySample1",
+      "original": "“WATER QUALITY SAMPLE 1,” the\nlabel says.\n\nThe sea is all connected, but the\nwater seems to differ by region.",
+      "zh": "标签上写着：水质样本一。\n大海相互连通，但不同地区的水似乎并不一样。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_OceanicMuseum_2F_Text_WaterQualitySample2",
+      "original": "“WATER QUALITY SAMPLE 2,” the\nlabel says.\n\nDoes the saltiness of seawater differ\nby region, too?",
+      "zh": "标签上写着：水质样本二。\n海水的咸度也会因地区而不同吗？",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_Text_BattleTentSign",
+      "original": "BATTLE TENT SLATEPORT SITE\n“Find it! The ultimate POKéMON!”",
+      "zh": "对战帐篷凯那会场\n找到吧！最棒的宝可梦！",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_Text_CitySign",
+      "original": "SLATEPORT CITY\n\n“The port where people and POKéMON\ncross paths.”",
+      "zh": "凯那市\n人们与宝可梦相遇的港口。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_Text_MarketSign",
+      "original": "SLATEPORT MARKET\n“Unique items found nowhere else!”",
+      "zh": "凯那集市\n出售别处找不到的独特商品！",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_Text_NameRatersHouseSign",
+      "original": "NAME RATER'S HOUSE\n“POKéMON nicknames rated.”",
+      "zh": "姓名鉴定师的家\n鉴定宝可梦的昵称。",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_Text_OceanicMuseumSign",
+      "original": "“The endless sea sustains\nall life.”\n\nOCEANIC MUSEUM",
+      "zh": "无边的大海孕育着所有生命。\n海洋科学博物馆",
+      "reviewed": true
+    },
+    {
+      "label": "SlateportCity_Text_PokemonFanClubSign",
+      "original": "POKéMON FAN CLUB\n“Calling all fans of POKéMON!”",
+      "zh": "宝可梦同好会\n欢迎所有宝可梦爱好者！",
+      "reviewed": true
+    },
+    {
+      "label": "gText_PokemartSign",
+      "original": "“Selected items for your convenience!”\nPOKéMON MART",
+      "zh": "为你的旅途精选便利道具！\n友好商店",
+      "reviewed": true
+    },
+    {
+      "label": "gText_PokemonCenterSign",
+      "original": "“Rejuvenate your tired partners!”\nPOKéMON CENTER",
+      "zh": "让疲惫的伙伴重焕精神！\n宝可梦中心",
+      "reviewed": true
+    }
+  ],
+  "mapEntries": [
+    {
+      "id": "DewfordTown:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "DewfordTown:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "DewfordTown:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "DewfordTown:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "DewfordTown:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "DewfordTown:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "DewfordTown:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "DewfordTown:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "DewfordTown:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:object_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:object_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:object_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "InsideOfTruck:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "InsideOfTruck:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "InsideOfTruck:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "InsideOfTruck:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:coord_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown:bg_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown:bg_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_BrendansHouse_2F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_BrendansHouse_2F:object_events:14",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_BrendansHouse_2F:bg_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_BrendansHouse_2F:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_BrendansHouse_2F:bg_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_BrendansHouse_2F:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:7",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:8",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:9",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:10",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:11",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:12",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:13",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "LittlerootTown_ProfessorBirchsLab:bg_events:14",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "OldaleTown:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:coord_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "OldaleTown:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "OldaleTown:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "OldaleTown:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "OldaleTown:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "OldaleTown:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:coord_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgCity:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "PetalburgWoods:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "PetalburgWoods:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route101:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:coord_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route101:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route102:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route102:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route102:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route103:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:14",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:15",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:16",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:17",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:18",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:object_events:19",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route103:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route104:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:14",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:15",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:16",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:17",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:18",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:19",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:20",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:21",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:22",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:23",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:24",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:25",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:26",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:27",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:28",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:29",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:30",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:31",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:32",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:object_events:33",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route104:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route104:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route104:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route104:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route104:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route116:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:14",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:15",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:16",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:17",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:18",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:19",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:20",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:21",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:22",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:23",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:24",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:25",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:26",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:object_events:27",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "Route116:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route116:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route116:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route116:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "Route116:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:object_events:15",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:14",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:15",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:16",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:17",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:18",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:19",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:coord_events:20",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:bg_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:7",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:8",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity:bg_events:9",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_3F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_3F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_3F:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_3F:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_3F:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:14",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:15",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:16",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:17",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:18",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:19",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:20",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:21",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:22",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:23",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:24",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:25",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:26",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:27",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:28",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:29",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:30",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:31",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:32",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:object_events:33",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:7",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:8",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:9",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:10",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity:bg_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity:bg_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:2",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:3",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:7",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:8",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:9",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:10",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:11",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:12",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:object_events:13",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:7",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:8",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:9",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:10",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:11",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_1F:bg_events:12",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:object_events:4",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:object_events:5",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:object_events:6",
+      "status": "out-of-scope",
+      "notes": "这是地图其他剧情/对象/动态交互，不属于本次仅静态对白切片，仍列入逐区补齐清单。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:0",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:1",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:2",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:3",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:4",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:5",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:6",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:7",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:8",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:9",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:10",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:11",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:12",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:13",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:14",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:15",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:16",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:17",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:18",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:19",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    },
+    {
+      "id": "SlateportCity_OceanicMuseum_2F:bg_events:20",
+      "status": "reviewed",
+      "notes": "本切片核对这条静态对白来源及绑定；隐藏演员的剧情出现条件仍待后续切片。"
+    }
+  ],
+  "cFunctions": [],
+  "facts": [
+    {
+      "summary": "静态脚本按完整来源标签绑定，保留已有角色身份；不凭贴图类别生成通用台词，含玩家变量的正文保留占位符。",
+      "sources": [
+        {
+          "label": "Common_EventScript_ShowPokemartSign",
+          "lines": [
+            663
+          ]
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "真实地图静态对白入口及读档重入",
+      "start": "具备当前地图进入条件，站在实际登记对象的可交互邻格。",
+      "steps": [
+        "面对原对象，使用游戏互动入口",
+        "确认完整中文正文",
+        "静态路牌导出并重载后再次互动"
+      ],
+      "expected": "无“尚未转写”或源码标签占位；静态NPC读出整个来源文本。动态剧情演员显隐不在此验收范围。",
+      "sources": [
+        {
+          "label": "Common_EventScript_ShowPokemartSign",
+          "lines": [
+            663
+          ]
+        }
+      ]
+    }
+  ]
+}
