@@ -14,7 +14,7 @@ export function projectNativeCast(definitions, state, dialogues) {
     if (dialogueId === undefined) return object;
     const dialogue = dialogues[dialogueId];
     if (!dialogue) throw new Error(`Unknown native NPC dialogue: ${dialogueId}`);
-    return { ...object, name: dialogue.name, text: dialogue.lines[0], dialogue: `emerald:dialogues.${dialogueId}`, dir: "down" };
+    return { ...object, name: dialogue.name, text: dialogue.lines[0], dialogue: `emerald:dialogues.${dialogueId}`, dir: object.dir || object.movement?.dir || "down" };
   });
 }
 

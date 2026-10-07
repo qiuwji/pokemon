@@ -1,6 +1,7 @@
 import { cameraProjection, unprojectScreen } from "../engine/camera-view.js";
 import { drawEnvironmentLayers } from "../presentation/environment-layers-canvas.js";
 import { drawAppearance } from "../presentation/appearance-canvas.js";
+import { drawReflection } from "../presentation/reflection-canvas.js";
 import { WeatherDirector } from "../presentation/weather-director.js";
 import { LightingDirector, drawLighting } from "../presentation/lighting.js";
 import { sampleSpriteAnimation } from "../presentation/sprite-animation.js";
@@ -31,6 +32,10 @@ export class Renderer {
       environment = () => ({ weather: null, hour: 12 }),
       reducedMotion = () => false,
       fieldPriority = () => 2,
+      reflectionSurface = () => null,
+      reflectionResource = () => null,
+      reflectionScale = () => 1,
+      reflectionColumns = null,
       presentation = createDefaultPresentation(),
       battleBackgrounds = {},
     } = {},
@@ -51,6 +56,10 @@ export class Renderer {
       environment,
       reducedMotion,
       fieldPriority,
+      reflectionSurface,
+      reflectionResource,
+      reflectionScale,
+      reflectionColumns,
       presentation,
     });
     this.ctx = canvas.getContext("2d");
@@ -76,6 +85,7 @@ export class Renderer {
       jump,
     });
   }
+  actorImage(...args) { this.ctx.drawImage(...args); }
   actor(
     name,
     x,
@@ -116,7 +126,7 @@ export class Renderer {
     if (frame.flip) {
       c.translate(dx + def.w, dy);
       c.scale(-1, 1);
-      c.drawImage(
+      this.actorImage(
         image,
         frame.index * def.w,
         0,
@@ -128,7 +138,7 @@ export class Renderer {
         def.h,
       );
     } else
-      c.drawImage(
+      this.actorImage(
         image,
         frame.index * def.w,
         0,
@@ -343,7 +353,21 @@ export class Renderer {
       const priority = (n) =>
         this.fieldPriority(n.previousElevation ?? n.elevation ?? 0);
       all.sort((a, b) => priority(b) - priority(a) || a.py - b.py);
-      const drawActors = (actors) => {
+      const reflectiveCells = ids.flatMap(id => {
+        const m = this.mapProvider?.(id) || this.db.maps[id], o = this.graph.placements[id];
+        const cells = [],
+          minX = Math.max(0, Math.floor(this.camera.x / 16) - o.x),
+          minY = Math.max(0, Math.floor(this.camera.y / 16) - o.y),
+          maxX = Math.min(m.width, Math.ceil((this.camera.x + this.camera.width) / 16) - o.x),
+          maxY = Math.min(m.height, Math.ceil((this.camera.y + this.camera.height) / 16) - o.y);
+        for (let y = minY; y < maxY; y++)
+          for (let x = minX; x < maxX; x++) {
+            const surface = this.reflectionSurface(m.behavior[y * m.width + x]);
+            if (surface) cells.push({ x: (o.x + x) * 16 - this.camera.x, y: (o.y + y) * 16 - this.camera.y, ...surface });
+          }
+        return cells;
+      });
+      const drawActors = (actors, reflectionsOnly = false) => {
         for (const n of actors) {
           // The reference hides the player while the door closes over him.
           if (n.player && door?.hidePlayer) continue;
@@ -383,6 +407,19 @@ export class Renderer {
               right: 16,
               bottom: 16,
             };
+          if (reflectionsOnly) {
+          const current = n.player ? this.graph.point(p) : this.graph.point({ map: n.map, x: n.x, y: n.y });
+          drawReflection(this, frame, {
+            dir: n.dir, progress: n.progress ?? 1, foot: n.foot ?? 0,
+            moving: !!n.moving, freezeAnimation: !!n.freezeAnimation,
+            pose: n.pose, timeMs: n.animationTimeMs ?? now,
+          }, x, y, lift, reflectiveCells, {
+            resourceFor: this.reflectionResource, reducedMotion: this.reducedMotion(), opacity: avatar.opacity ?? 1,
+            horizontalScale: this.reflectionScale(now), columnsFor: this.reflectionColumns,
+            origins: [current].map(point => ({ x: point.x - this.camera.x, y: point.y - this.camera.y })),
+          });
+          continue;
+          }
           if (
             x + bounds.right < 0 ||
             x + bounds.left > this.camera.width ||
@@ -428,6 +465,7 @@ export class Renderer {
           c.restore();
         }
       };
+      drawActors(all, true);
       const aboveTerrain = this.movementPresentation().aboveTerrain;
       drawActors(all.filter((n) => !(n.player && aboveTerrain) && priority(n) >= 2));
       for (const id of ids) this.drawMap(id, true, now);
@@ -509,8 +547,7 @@ export class Renderer {
   battle(frame) {
     this.ctx.save();
     try {
-      // Battle layout, HUD and plugin anchors retain their 320x224 reference.
-      this.ctx.scale(this.canvas.width / 320, this.canvas.height / 224);
+      this.ctx.scale(this.canvas.width / (frame.viewport?.width || 320), this.canvas.height / (frame.viewport?.height || 224));
       drawBattle(this.ctx, this.assets, frame, this.battleBackgrounds);
     } finally { this.ctx.restore(); }
   }

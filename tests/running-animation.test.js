@@ -53,3 +53,16 @@ test("Sprite clock registration rejects unknown and non-looping stride clocks", 
   bad.animations.normal.move.loop = false;
   assert.throws(() => validateSpriteAnimations(bad), /Invalid directional/);
 });
+
+
+test("Both avatars use the same native horizontal running frames for five frames, then three rest frames", () => {
+  for (const name of ["BrendanRun", "MayRun"]) {
+    const a = db.actors[name]; validateSpriteAnimations(a);
+    for (const dir of ["left", "right"]) for (const foot of [0, 1]) {
+      const frames = Array.from({ length: 8 }, (_, frame) => sampleSpriteAnimation(a.animations, "normal", dir,
+        0, true, { progress: frame / 8, foot }));
+      assert.deepEqual(frames.map(f => f.index), [7 + foot,7 + foot,7 + foot,7 + foot,7 + foot,2,2,2]);
+      assert(frames.every(f => f.flip === (dir === "right")));
+    }
+  }
+});

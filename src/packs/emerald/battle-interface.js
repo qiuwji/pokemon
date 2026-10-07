@@ -24,11 +24,13 @@ export function createBattleInterface(
     escapeHTML,
     showParty,
     showBag,
+    demonstrateBagItem,
     sound = () => {},
   },
 ) {
   const root = doc.getElementById("battle-hud"),
     db = game.db;
+  let demoSubmit = null;
   let selected = 0,
     page = "main",
     selectedMove = null,
@@ -40,6 +42,7 @@ export function createBattleInterface(
   root.addEventListener(
     "click",
     (event) => {
+      if (game.autoBattle) { event.preventDefault(); event.stopImmediatePropagation(); return; }
       const button = event.target.closest?.("button");
       if (event.isTrusted && button && !button.disabled && !game.busy)
         sound("emerald:confirm");
@@ -74,7 +77,7 @@ export function createBattleInterface(
     return `${b.roster.alliance(id) === b.homeAlliance ? "伙伴" : `对方${side > 1 ? "阵营 " + side : ""}`} ${index}`;
   }
   function act(action) {
-    return game.turn({
+    return (demoSubmit || ((selection) => game.turn(selection)))({
       ...action,
       seat: game.battle.commandSeat,
       ...(game.battle.player ? { actor: game.battle.player.uid } : {}),
@@ -103,7 +106,13 @@ export function createBattleInterface(
       selectedAugment = augment;
       selected = 0;
       draw();
-    } else void act({ kind: "move", index, ...(augment ? { augment } : {}) });
+    } else return act({ kind: "move", index, ...(augment ? { augment } : {}) });
+  }
+  function chooseAction(kind) {
+    if (kind === "fight") { page = "moves"; selected = 0; draw(); }
+    if (kind === "party") showParty(true);
+    if (kind === "bag") showBag(true);
+    if (kind === "run") return act({ kind: "run" });
   }
   function draw(message = null) {
     for (const slot of ["battle.actions", "battle.moves", "battle.targets"])
@@ -121,7 +130,7 @@ export function createBattleInterface(
       away = frame.combatants.filter((c) => !friendly(frame, c));
     let options,
       prompt =
-        message || `${b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;
+        message || `${b.script === "wally" ? "小光" : b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;
     if (game.busy) options = "";
     else if (!(b.player?.hp > 0) || b.replacements.get(b.commandSeat)) {
       prompt = b.replacements.get(b.commandSeat)
@@ -204,19 +213,11 @@ export function createBattleInterface(
       away.map((c, i) => status(c, false, multi, i)).join("") +
       home.map((c, i) => status(c, true, multi, i)).join("") +
       plan +
-      `<div class="battle-menu" data-battle-page="${page}">${game.busy || game.autoBattle ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
+      `<div class="battle-menu" data-battle-page="${page}">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
     root.querySelectorAll("[data-action]").forEach(
       (button) =>
         (button.onclick = () => {
-          const kind = button.dataset.action;
-          if (kind === "fight") {
-            page = "moves";
-            selected = 0;
-            draw();
-          }
-          if (kind === "party") showParty(true);
-          if (kind === "bag") showBag(true);
-          if (kind === "run") void act({ kind: "run" });
+          return chooseAction(button.dataset.action);
         }),
     );
     root
@@ -315,6 +316,26 @@ export function createBattleInterface(
   return {
     draw,
     refresh,
+    async demonstrate(action, { wait, submit }) {
+      demoSubmit = submit;
+      try {
+        page = "main"; selected = 0; draw();
+        await wait(64 * 1000 / 60);
+        if (action.kind === "move") {
+          sound("emerald:confirm"); chooseAction("fight");
+          selected = action.index; draw();
+          await wait(80 * 1000 / 60);
+          sound("emerald:confirm");
+          return await pickMove(action.index);
+        }
+        if (action.kind === "item") {
+          selected = battleOptionIndex(selected, "right", 4); sound("emerald:confirm"); draw();
+          await wait(64 * 1000 / 60);
+          return await demonstrateBagItem(action, { wait, submit });
+        }
+        throw new Error("Unsupported demonstration action");
+      } finally { demoSubmit = null; }
+    },
     reset() {
       page = "main";
       selected = 0;
@@ -323,13 +344,13 @@ export function createBattleInterface(
     },
     confirm() {
       const button = buttons()[selected];
-      if (!game.busy && button) {
+      if (!game.busy && !game.autoBattle && button) {
         sound("emerald:confirm");
         button.click();
       }
     },
     navigate(dir) {
-      if (game.busy) return;
+      if (game.busy || game.autoBattle) return;
       const count = buttons().length;
       if (count) {
         selected = battleOptionIndex(selected, dir, count);
@@ -338,7 +359,7 @@ export function createBattleInterface(
       }
     },
     back() {
-      if (game.busy) return;
+      if (game.busy || game.autoBattle) return;
       if (page === "targets") {
         page = "moves";
         selected = 0;

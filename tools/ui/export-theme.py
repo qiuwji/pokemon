@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import io
 import json
+import os
 import re
 import struct
 from pathlib import Path
@@ -16,10 +17,14 @@ ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--source', type=Path, default=ROOT / 'work/pokeemerald')
 parser.add_argument('--target', type=Path, default=ROOT / 'generated/assets/ui')
+parser.add_argument('--metadata-target', type=Path, help='Default: generated/presentation, or TARGET/metadata for a custom target')
 parser.add_argument('--check', action='store_true')
 args = parser.parse_args()
 inputs = {}
+local_inputs = {}
 outputs = {}
+metadata_target = args.metadata_target or (ROOT / 'generated/presentation' if args.target.resolve() == (ROOT / 'generated/assets/ui').resolve() else args.target / 'metadata')
+metadata_key = os.path.relpath(metadata_target / 'battle-assets.js', args.target)
 
 def read(relative):
     data = (args.source / relative).read_bytes()
@@ -141,6 +146,76 @@ for gender in ['male','female']:
 add('badges.png',sprite('trainer_card/badges.png'))
 for gender, name in [('male','brendan'),('female','may')]:
     add('trainer-portrait-'+gender+'.png',sprite('trainers/front_pics/'+name+'.png',colors('trainers/palettes/'+name+'.pal')))
+# Battle pictures are separate from overworld object sheets. Back pictures retain all
+# four 64px frames; back_pic_anims.h uses 24/9/24/9/50 frames for the throw animation.
+trainer_pictures = {}
+for actor, name in [('BrendanNormal','brendan'), ('MayNormal','may'),
+                    ('Youngster','youngster'), ('BugCatcher','bug_catcher'),
+                    ('Lass','lass'), ('Norman','leader_norman'), ('Wally','wally')]:
+    for side in ['front','back']:
+        relative = 'trainers/'+side+'_pics/'+name+'.png'
+        if not (args.source/'graphics'/relative).exists():
+            continue
+        palette_path = 'trainers/palettes/'+name+'.pal'
+        image = sprite(relative, colors(palette_path) if (args.source/'graphics'/palette_path).exists() else None)
+        resource = 'battle-trainer-'+actor+'-'+side
+        add(resource+'.png', image)
+        trainer_pictures[actor+':'+side] = {
+            'resource':resource, 'width':64, 'height':64,
+            'frames':image.height//64, 'rest':3 if side == 'back' else 0,
+            'throw':[[0,24],[1,9],[2,24],[0,9],[3,50]] if side == 'back' else [],
+        }
+for terrain, folder in [('grass','tall_grass'),('long_grass','long_grass'),
+                         ('pond','pond_water'),('water','water'),('cave','cave'),
+                         ('sand','sand'),('mountain','rock'),('indoor','building'),
+                         ('underwater','underwater'),('plain','building')]:
+    add('battle-background-'+terrain+'.png',screen(
+        'battle_environment/'+folder+'/tiles.png',
+        'battle_environment/'+folder+'/map.bin',
+        colors('battle_environment/'+folder+'/palette.pal'),size=(240,112),palette_base=2))
+mon_offsets = {}
+for side in ['front','back']:
+    table = read('src/data/pokemon_graphics/'+side+'_pic_coordinates.h').decode()
+    for species, offset in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*\{[^}]*\.y_offset\s*=\s*(\d+)',table):
+        mon_offsets.setdefault(species.lower(),{})[side] = int(offset)
+table = read('src/data/pokemon_graphics/enemy_mon_elevation.h').decode()
+for species, offset in re.findall(r'\[SPECIES_(\w+)\]\s*=\s*(\d+)',table):
+    mon_offsets.setdefault(species.lower(),{})['elevation'] = int(offset)
+# Keep the source frame layout. The renderer mirrors the same frame and uses these
+# palettes, rather than applying a generic blue/transparent filter to every NPC.
+info = read('src/data/object_events/object_event_graphics_info.h').decode()
+graphics = read('src/data/object_events/object_event_graphics.h').decode()
+actor_bytes = (ROOT/'src/content/actors.json').read_bytes()
+local_inputs['src/content/actors.json'] = hashlib.sha256(actor_bytes).hexdigest()
+actors = json.loads(actor_bytes)
+reflection_pictures = {}
+aliases = {'BrendanRun':'BrendanNormal','MayRun':'MayNormal',
+           'BrendanSurf':'BrendanSurfing','MaySurf':'MaySurfing'}
+for actor in actors:
+    key = aliases.get(actor,actor)
+    match = re.search(r'gObjectEventGraphicsInfo_'+key+r'\s*=\s*\{(.*?)\};',info,re.S)
+    if not match:
+        continue
+    palette_name = re.search(r'\.paletteTag = OBJ_EVENT_PAL_TAG_(\w+)',match[1])[1].lower()
+    if palette_name == 'none':
+        slot = re.search(r'\.paletteSlot = PALSLOT_(NPC_\d)',match[1])
+        if not slot:
+            continue
+        palette_name = slot[1].lower()
+    reflection_palette = 'object_events/palettes/'+palette_name+'_reflection.pal'
+    if not (args.source/'graphics'/reflection_palette).exists():
+        continue
+    picture_key = actor.replace('Run','Running').replace('Surf','Surfing')
+    pic = re.search(r'gObjectEventPic_'+picture_key+r'\[\].*?INCGFX_U32\("graphics/([^" ]+)',graphics)
+    if not pic:
+        continue
+    resource = 'reflection-'+actor
+    add(resource+'.png',sprite(pic[1],colors(reflection_palette)))
+    reflection_pictures[actor] = resource
+outputs[metadata_key] = ('// @generated by tools/ui/export-theme.py; do not edit.\n'+
+    'export const TRAINER_PICTURES = Object.freeze('+json.dumps(trainer_pictures,sort_keys=True)+');\n'+
+    'export const MON_PICTURE_OFFSETS = Object.freeze('+json.dumps(mon_offsets,sort_keys=True)+');\n'+
+    'export const REFLECTION_PICTURES = Object.freeze('+json.dumps(reflection_pictures,sort_keys=True)+');\n').encode()
 # Forest build rule concatenates exactly 55 frame tiles and eight background tiles.
 # Tilemap banks 1/2 refer to frame/background; bank zero is the clear tile.
 frame = png('pokemon_storage/wallpapers/forest/frame.png')
@@ -187,7 +262,7 @@ outputs['item-icons.json']=(json.dumps(icon_map,sort_keys=True,indent=2)+'\n').e
 # Browser-ready lookup avoids an asynchronous asset fetch during a menu click.
 lookup = {key.replace('_',''):value for key,value in icon_map.items()}
 outputs['item-icons.js']=('// @generated by tools/ui/export-theme.py; do not edit.\nexport const ITEM_ICONS = Object.freeze('+json.dumps(lookup,sort_keys=True,indent=2)+');\n').encode()
-outputs['source.json']=(json.dumps({'source':'pret/pokeemerald','revision':'731ad5bfd6e6f265508d0efcca0ba42f9dcf5881','inputs':inputs,'outputs':{
+outputs['source.json']=(json.dumps({'source':'pret/pokeemerald','revision':'731ad5bfd6e6f265508d0efcca0ba42f9dcf5881','inputs':inputs,'localInputs':local_inputs,'outputs':{
     key:hashlib.sha256(data).hexdigest() for key,data in outputs.items()}},indent=2)+'\n').encode()
 changed=[]
 for name,data in outputs.items():

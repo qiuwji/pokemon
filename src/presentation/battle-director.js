@@ -18,6 +18,8 @@ const DURATIONS = {
   choice: 120,
   vacancy: 180,
   failed: 450,
+  "trainer-slide": 800,
+  recall: 650,
 };
 /** Seat-based animation state. It consumes snapshots and never calculates battle rules. */
 export class BattleDirector {
@@ -37,6 +39,8 @@ export class BattleDirector {
       // Pack-provided, content-agnostic opening config: { duration?, ballResource?,
       // variants?: { [environmentKey]: { x, y } } }. The director names no content.
       intro = null,
+      layout = battleLayout,
+      viewport = null,
       reducedMotion = () => false,
     } = {},
   ) {
@@ -52,6 +56,8 @@ export class BattleDirector {
       typeColors,
       resolveMessage,
       intro,
+      layout,
+      viewport,
     });
     this.reset();
   }
@@ -63,6 +69,7 @@ export class BattleDirector {
     this.caught = false;
     this.ballTarget = null;
     this.ballArt = null;
+    this.trainers = [];
   }
   get busy() {
     return this.event !== null;
@@ -76,6 +83,7 @@ export class BattleDirector {
     };
   }
   duration(event) {
+    if (event.duration) return event.duration;
     const registered = this.registry?.eventAnimation(event);
     if (registered) return registered.animation.duration;
     if (event.kind === "entry" && this.intro?.duration)
@@ -108,7 +116,18 @@ export class BattleDirector {
         }
       },
       () => {
-        if (event.kind === "faint" || event.kind === "vacancy")
+        if (event.kind === "trainer-slide")
+          this.trainers = (event.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer.back), opacity: 1 }));
+        if (event.introPhase === "slide") {
+          this.trainers = (event.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer.back), opacity: 1, frame: trainer.rest || 0 }));
+          for (const c of event.combatants)
+            if (event.trainers?.some(trainer => !!trainer.back === !!this.layout(event).get(c.seatId)?.back)) this.hidden.add(c.seatId);
+        }
+        if (event.introPhase === "send") {
+          for (const seat of event.sendSeats || []) this.hidden.delete(seat);
+          this.trainers = this.trainers.filter(trainer => !!trainer.back !== event.sendBack);
+        }
+        if (["faint", "vacancy", "recall"].includes(event.kind))
           this.hidden.add(event.targetSeat);
         if (event.kind === "ball") {
           this.ball = true;
@@ -152,6 +171,10 @@ export class BattleDirector {
       }
     }
   }
+  trainerPosition(back) {
+    return this.intro?.trainerPositions?.[back ? "home" : "away"] ||
+      { x: back ? 65 : 248, y: back ? 158 : 74 };
+  }
   sample(now = this.timeline.now()) {
     if (!this.view) return null;
     const combatants = this.view.combatants.map((c) => ({
@@ -161,7 +184,7 @@ export class BattleDirector {
         : null,
     }));
     const current = battleView({ ...this.view, combatants }),
-      layout = battleLayout(current);
+      layout = this.layout(current);
     const actors = combatants.map((c) => ({
       seatId: c.seatId,
       x: 0,
@@ -178,6 +201,8 @@ export class BattleDirector {
       combatants,
       actors,
       layout,
+      viewport: this.viewport,
+      trainers: this.trainers,
       effect: null,
       effects: [],
       ball: this.ball
@@ -187,13 +212,14 @@ export class BattleDirector {
             angle: 0,
             sealed: this.caught,
             resource: this.ballArt,
+            size: this.viewport ? 16 : 20,
           }
         : null,
     };
     if (!this.event) return result;
     const { data: e, previous, start, duration } = this.event,
       t = clamp((now - start) / duration),
-      subject = ["hurt", "heal", "faint", "switch", "form"].includes(e.kind)
+      subject = ["hurt", "heal", "faint", "switch", "form", "recall"].includes(e.kind)
         ? e.targetSeat
         : e.actorSeat;
     const actor = actors.find((a) => a.seatId === subject),
@@ -206,11 +232,62 @@ export class BattleDirector {
         if (c.monster && old && c.monster.uid === old.uid)
           c.monster.hp = Math.round(lerp(old.hp, c.monster.hp, clamp(t / 0.8)));
       }
+    if (e.introPhase === "slide" && this.reducedMotion()) {
+      result.trainers = (e.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer.back), opacity: 1, frame: trainer.rest || 0 }));
+      actors.forEach(a => { if (result.trainers.some(trainer => !!trainer.back === !!layout.get(a.seatId).back)) a.opacity = 0; });
+    }
     if (this.reducedMotion() || e.offscreen) return result;
     const registered = this.registry?.eventAnimation(e);
     // Registered replacements own cosmetics; HP interpolation and event lifecycle remain above.
     if (registered?.mode !== "replace") {
-      if (e.kind === "entry") {
+      if (e.kind === "trainer-slide") {
+        result.trainers = (e.trainers || []).map(trainer => {
+          const position = this.trainerPosition(trainer.back);
+          return { ...trainer, ...position, x: position.x + (trainer.back ? -1 : 1) * (this.viewport?.width || 320) * (1 - t), opacity: 1 };
+        });
+      } else if (e.introPhase === "slide") {
+        const width = this.viewport?.width || 320;
+        result.background = { split: true, x: Math.max(0, width - Math.floor(t * width / 2) * 2) };
+        result.trainers = (e.trainers || []).map(trainer => {
+          const position = this.trainerPosition(trainer.back);
+          return { ...trainer, ...position, x: position.x + (trainer.back ? -1 : 1) * width * (1 - t), opacity: 1, frame: trainer.rest || 0 };
+        });
+        for (const a of actors) {
+          const p = layout.get(a.seatId);
+          a.opacity = e.trainers?.some(trainer => !!trainer.back === p.back) ? 0 : 1;
+          a.x = (p.back ? -1 : 1) * width * (1 - t);
+        }
+      } else if (e.introPhase === "send") {
+        const send = new Set(e.sendSeats || []), openT = clamp((t - 0.65) / 0.35);
+        result.trainers = this.trainers.map(trainer => {
+          if (!!trainer.back !== e.sendBack) return trainer;
+          const elapsedFrames = Math.floor(t * duration * 60 / 1000);
+          let elapsed = elapsedFrames, index = trainer.rest || 0;
+          for (const [frame, frames] of trainer.throw || []) {
+            index = frame;
+            if (elapsed < frames) break;
+            elapsed -= frames;
+          }
+          return { ...trainer, frame: index, x: trainer.x - (trainer.back ? 1 : -1) * clamp((t - 0.65) / 0.35) * 96, opacity: 1 };
+        });
+        result.balls = [];
+        result.effects = [];
+        for (const a of actors) {
+          if (!send.has(a.seatId)) continue;
+          const position = layout.get(a.seatId), origin = this.trainerPosition(position.back), throwT = clamp((t - 0.2) / 0.45);
+          a.opacity = openT > 0 ? 1 : 0;
+          a.scale = openT;
+          if (t >= 0.2 && openT < 1) result.balls.push({ resource: this.intro?.ballResource,
+            x: lerp(origin.x, position.x, throwT), y: lerp(origin.y, position.y, throwT) - Math.sin(throwT * Math.PI) * 32,
+            angle: 0, size: 16, sealed: false });
+          if (openT > 0 && openT < 1) result.effects.push({ kind: "release", source: position, target: position, side: position.back ? 0 : 1, t: openT });
+        }
+        result.ball = result.balls[0] || null;
+      } else if (e.kind === "recall" && actor) {
+        actor.scale = 1 - t;
+        actor.opacity = 1 - t;
+        result.effects = [{ kind: "release", source: pose, target: pose, side: pose.back ? 0 : 1, t: 1 - t }];
+      } else if (e.kind === "entry") {
         // The pack supplies which environment scrolls and how far; the director is content-agnostic.
         const offset = this.intro?.variants?.[e.environment?.terrain] || null,
           settle = 1 - t;
@@ -421,7 +498,7 @@ export class BattleDirector {
           x: lerp(sourcePose.x, targetPose.x, flight),
           y:
             lerp(sourcePose.y, targetPose.baseline - 35, flight) -
-            Math.sin(flight * Math.PI) * 72,
+            Math.sin(flight * Math.PI) * (this.viewport ? 40 : 72),
           angle: flight * Math.PI * 4,
         };
         const target =
@@ -456,10 +533,10 @@ export class BattleDirector {
           result.ball = null;
           target.opacity = end;
           target.scale = end;
-          result.effects = [{ kind: "release", side: 1, t: end }];
+          result.effects = [{ kind: "release", source: targetPose, target: targetPose, side: 1, t: end }];
         }
         if (e.caught && end > 0)
-          result.effects = [{ kind: "stars", side: 1, t: end }];
+          result.effects = [{ kind: "stars", source: targetPose, target: targetPose, side: 1, t: end }];
       }
     }
     if (registered) {
@@ -490,6 +567,7 @@ export class BattleDirector {
           if (target) Object.assign(target, pose);
         }
     }
+    if (this.viewport && result.ball) result.ball.size = 16;
     result.view = battleView({ ...current, combatants });
     result.effect = result.effects[0] || null;
     return result;

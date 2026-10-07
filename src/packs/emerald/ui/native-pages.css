@@ -1404,3 +1404,10 @@
   max-height: none;
   overflow: visible;
 }
+
+/* Battle dialogue holds the native blue message box until confirmation. */
+.dialogue[data-context="battle"] {
+  background-color: #315a73;
+  color: #f8f8f8;
+}
+.dialogue[data-context="battle"] .continue:after { color: #f8f8f8; }

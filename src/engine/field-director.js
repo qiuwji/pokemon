@@ -50,7 +50,12 @@ export class FieldDirector {
     if (!this.active)
       throw new Error("Field choreography requires an active scene");
     if (id === "player") return this.field.position;
-    const map = this.field.position.map;
+    const localKey = this.field.position.map + ":" + id;
+    if (this.field.npcs.scene.pins.has(localKey) && !this.field.npcs.scene.hidden.has(localKey))
+      return { ...this.field.npcs.control(id, this.field.position.map), map: this.field.position.map };
+    const pins = [...this.field.npcs.scene.pins].filter(([key, n]) => n.id === id && !this.field.npcs.scene.hidden.has(key));
+    if (pins.length > 1) throw new Error(`Ambiguous scene actor ${id}`);
+    const map = pins.length ? pins[0][0].slice(0, -(id.length + 1)) : this.field.position.map;
     return { ...this.field.npcs.control(id, map), map };
   }
   async waitUntil(deadline) {
@@ -61,7 +66,7 @@ export class FieldDirector {
   }
   async ready(id) {
     if (id === "player") return;
-    const n = this.field.npcs.control(id, this.field.position.map);
+    const n = this.field.npcs.control(id, this.actor(id).map);
     const remaining = n.duration - (this.timeline.now() - n.start);
     if (remaining > 0) await this.timeline.wait(remaining);
   }
@@ -95,7 +100,7 @@ export class FieldDirector {
       },
     );
   }
-  async step(id, dir, { running = false, allowVacatedBy = null, mode, jump = false, keepFacing = false, ignoreActors = [] } = {}) {
+  async step(id, dir, { running = false, allowVacatedBy = null, mode, jump = false, keepFacing = false, ignoreActors = [], ignoreTerrain = false } = {}) {
     if (!DIRECTIONS[dir]) throw new Error(`Invalid walking direction ${dir}`);
     await this.ready(id);
     if (id === "player") {
@@ -107,7 +112,7 @@ export class FieldDirector {
       this.field.tick(this.timeline.now());
       return;
     }
-    const map = this.field.position.map;
+    const map = this.actor(id).map;
     const n = this.field.npcs.control(id, map);
     const position = {
       map,
@@ -121,18 +126,22 @@ export class FieldDirector {
     const world = new World(this.field.world.maps, position, {
       objects: (idMap) => this.objects(idMap, id, allowVacatedBy, ignoreActors),
       elevation: this.field.world.elevation,
+      ...(ignoreTerrain ? { navigation: () => ({ ignoreEdges: true, ignoreElevation: true }), passage: () => true } : {}),
     });
     const result = world.move(dir, { ignoreWarps: true, allowVacatedBy });
-    if (!result || position.map !== map)
+    if (!result)
       throw new Error(`Scripted actor movement blocked: ${id}/${dir}`);
+    const changedMap = position.map !== map, [dx, dy] = DIRECTIONS[dir];
+    if (changedMap) this.field.npcs.transferSceneActor(id, map, position.map);
+    n.crossFrom = changedMap ? { map, x: n.x, y: n.y, elevation: n.elevation } : null;
     n.fromElevation = n.elevation;
     if (this.field.world.elevation)
       Object.assign(n, {
         elevation: position.elevation,
         previousElevation: position.previousElevation,
       });
-    n.fromX = n.x;
-    n.fromY = n.y;
+    n.fromX = changedMap ? position.x - dx : n.x;
+    n.fromY = changedMap ? position.y - dy : n.y;
     n.x = n.toX = position.x;
     n.y = n.toY = position.y;
     if (!keepFacing) n.dir = dir;
@@ -158,13 +167,16 @@ export class FieldDirector {
     jump = false,
     keepFacing = false,
     ignoreActors = [],
+    ignoreTerrain = false,
   }) {
+    if (ignoreTerrain && (actor === "player" || !Array.isArray(path)))
+      throw new Error("Ignoring terrain requires an explicit NPC path");
     await this.ready(actor);
     const route = path || this.route(actor, to, allowVacatedBy, mode, ignoreActors);
     if (!Array.isArray(route))
       throw new Error("Movement needs a path or a destination");
     for (const dir of route)
-      await this.step(actor, dir, { running, allowVacatedBy, mode, jump, keepFacing, ignoreActors });
+      await this.step(actor, dir, { running, allowVacatedBy, mode, jump, keepFacing, ignoreActors, ignoreTerrain });
   }
   async approach({ actor, target = "player" }) {
     await this.ready(actor);
@@ -271,7 +283,7 @@ export class FieldDirector {
     await this.camera.follow(this.playerPoint(), this.duration(ms));
   }
   hide({ actor }) {
-    this.field.npcs.hide(actor, this.field.position.map);
+    this.field.npcs.hide(actor, this.actor(actor).map);
   }
   stage(actors = []) {
     if (!this.field.transitions.sample().covered)
@@ -384,6 +396,8 @@ export function validateFieldCommand(c, maps) {
     (!Array.isArray(c.ignoreActors) || c.ignoreActors.length > 32 ||
       c.ignoreActors.some(n => !id(n) || n === (c.actor || "player")) ||
       new Set(c.ignoreActors).size !== c.ignoreActors.length)) fail();
+  if (c.type === "move" && c.ignoreTerrain !== undefined &&
+    (typeof c.ignoreTerrain !== "boolean" || c.actor === undefined || c.actor === "player" || !Array.isArray(c.path))) fail();
   if (c.type === "move" && c.mode !== undefined && !id(c.mode)) fail();
   if (c.type === "face" && !(c.target ? id(c.target) : DIRECTIONS[c.dir]))
     fail();

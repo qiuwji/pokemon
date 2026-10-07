@@ -22,7 +22,7 @@ export function emeraldTransitionPatterns(assets) {
       ctx.globalAlpha = visual.black; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 240, 160);
     } else for (const ball of visual.balls) {
       const edge = Math.floor(ball.x / 8) * 8;
-      ctx.fillRect(ball.rightward ? 0 : edge, ball.y - 16, ball.rightward ? clamp(edge, 240) : 240 - clamp(edge, 240), 32);
+      ctx.fillRect(ball.rightward ? 0 : clamp(edge, 240), ball.y - 16, ball.rightward ? clamp(edge, 240) : 240 - clamp(edge, 240), 32);
       const image = assets['battle-transition-pokeball'];
       if (image) ctx.drawImage(image, ball.x - 16, ball.y - 16, 32, 32);
     }

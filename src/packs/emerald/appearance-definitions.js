@@ -1,5 +1,6 @@
 import { PACK } from "./pack.js";
 import { DETAIL_SPRITE_FRAMES } from "../../../generated/packs/emerald/detail-sprite-frames.js";
+import { TRAINER_PICTURES, REFLECTION_PICTURES } from "../../../generated/presentation/battle-assets.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 // field_special_scene.c resting sprite offsets; these never change grid occupancy.
 const truckBoxes = { 'truck.box.top': [3, 3], 'truck.box.left': [0, -3], 'truck.box.right': [-3, 0] };
@@ -14,6 +15,11 @@ export function emeraldDefaultAppearance(target, context) {
 /** Asset naming, default avatar modes and the original scene art are pack content, not renderer rules. */
 export function emeraldAppearanceResources(db) {
   return {
+    ...Object.fromEntries(Object.values(TRAINER_PICTURES).map(p => [p.resource, `generated/assets/ui/${p.resource}.png`])),
+    ...Object.fromEntries(Object.values(REFLECTION_PICTURES).map(id => [id, `generated/assets/ui/${id}.png`])),
+    ...Object.fromEntries(['grass','long_grass','pond','water','cave','sand','mountain','indoor','underwater','plain'].map(id => [
+      `battle-background-${id}`, `generated/assets/ui/battle-background-${id}.png`,
+    ])),
     ...Object.fromEntries(
       Object.keys(db.species).map((id) => [
         id + "-front",

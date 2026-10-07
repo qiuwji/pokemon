@@ -55,3 +55,7 @@ src/
 原生地区角色选择：`native-cast-data.js` 编写按地图索引的出现条件/性别差异，`native-cast.js` 统一投影，`native-object-bindings.js` 绑定C对象身份及源位置。不要再在nativeCast按地图逐个增加分支。当前Mod审查与尚未实施的存档解绑见[计划](../project/MOD_REVIEW_PLAN.md)。
 
 存档暂停/恢复落点为 `src/packs/emerald/save/`，通用装配器为 `src/engine/content-suspension.js`；流程见[存档合同](../engine/SAVES.md)。地图名定时提示由 `src/adapters/map-name-dom.js`拥有。
+
+2026-10-07表现落点：`src/packs/emerald/battle-presentation.js`原生战斗坐标、入场和教学/败北内容；`src/presentation/battle-director.js`时序与纯采样；`src/presentation/reflection-canvas.js`倒影裁切；`src/packs/emerald/field-reflections.js`地形/配色策略。真实菜单演示在battle-interface/bag-interface，`tools/ui/export-theme.py`导出PNG和`generated/presentation/battle-assets.js`元数据。组合验证见`tests/emerald-scene-fidelity.test.js`。
+
+2026-10-07接续：`stories/oldale.json`与`native-cast-data.js`负责古辰镇等待对手；`field-director.js`/`npcs.js`负责通用场景演员跨图和显式NPC路径。`field-reflections.js`提供原作伸缩/定点列取样，`reflection-canvas.js`控制紧邻水面与站立旧位置清理；双主角跑步时序由petalburg/slice导入配置维护。专项入口`tests/oldale-rival.test.js`、`tests/emerald-scene-fidelity.test.js`、`tests/running-animation.test.js`。

@@ -53,7 +53,8 @@ const strategyPack = manifest(
 
 test("singles: creature preference and trainer policy combine through the public battle commands", async () => {
   const s = session([strategyPack]);
-  s.mon.moves = [{ id: "tackle", pp: 20 }];
+  // Keep the diagnostic battle open: a critical Tackle could defeat the level-five opponent.
+  s.mon.moves = [{ id: "growl", pp: 40 }];
   await s.bus.execute("core.battle.start", { trainerId: "ai-demo:duelist" });
   await s.bus.execute("core.battle.action", { kind: "move", index: 0 });
   const view = await s.bus.execute("core.battle.ai-view", {});

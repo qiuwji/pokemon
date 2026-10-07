@@ -28,7 +28,7 @@ function petalburgSession() {
   const s = session();
   s.game.state.flags.pokedex = true;
   addItem(s, "pokeball", 5);
-  s.game.enter({ map: "PetalburgCity_Gym", x: 4, y: 111, dir: "up" });
+  s.game.enter({ map: "PetalburgCity_Gym", x: 4, y: 108, dir: "up" });
   return s;
 }
 

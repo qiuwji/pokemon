@@ -9,6 +9,7 @@ const slide = (x) => Object.freeze({ x, y: 0 });
 export const EMERALD_BATTLE_INTRO = Object.freeze({
   duration: 1100,
   ballResource: "battle-ball-poke",
+  trainerPositions: Object.freeze({ home: Object.freeze({ x: 80, y: 80 }), away: Object.freeze({ x: 176, y: 40 }) }),
   variants: Object.freeze({
     grass: slide(48),
     long_grass: slide(48),

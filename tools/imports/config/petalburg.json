@@ -269,6 +269,30 @@
           "move": "running"
         }
       }
+    },
+    {
+      "actor": "MayRun",
+      "directions": {
+        "down": "South",
+        "up": "North",
+        "left": "West",
+        "right": "East"
+      },
+      "sequences": {
+        "facing": "Face",
+        "running": {
+          "name": "Run",
+          "indexOffset": -9,
+          "clock": "stride"
+        }
+      },
+      "held": {},
+      "poses": {
+        "normal": {
+          "idle": "facing",
+          "move": "running"
+        }
+      }
     }
   ]
 }

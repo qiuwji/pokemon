@@ -71,3 +71,13 @@ SceneDirector统一拥有场景时钟和镜头采样，SceneDOM只消费可选dr
 ## 内嵌视觉宿主
 
 插件Canvas引用注册presentation，VisualTimeline进行纯时间采样，VisualCanvas只画冻结frame，LayoutDOM持有页面/区域/HUD作用域实例；ExtensionDOM在统一帧调用render，文档可见性事件在无后台帧时仍暂停时间。隐藏页签暂停、结束静帧、reducedMotion与失败销毁共用合同；有限feedback亦使用相同取样和schema，循环只经显式Canvas挂载。点击经宿主坐标变换→action事务，表现不决定规则。参数、作者示例与生命周期见[UI合同](../engine/presentation/UI_CONTRACT.md)。
+
+## 原生战斗阶段与水面反射（2026-10-07）
+
+BattleDirector可注入layout与viewport；缺省沿用通用320×224布局。Emerald的battle-presentation提供240×160坐标、物种偏移、原作训练家资源和entryPhases。BattleSession顺序执行入场阶段与可等待的presentation.dialogue，退场计划可先播放presentation并等待dialogue，再在覆盖提交点清空战斗画面。奖励、捕捉和货币仍由原结算所有者拥有；失败通过原checkpoint恢复，不能让演出写规则。
+
+原生教程的demonstrateBattleAction/demonstrateBagItem调用相同菜单选择、招式选择和背包使用处理；wait/submit为窄端口，提交走BattleApplication.applyAction，与手动行动共享插件事件和结算。autoBattle只锁定玩家输入，不隐藏菜单。无UI的测试端口可直接提交固定动作。
+
+Renderer注入reflectionSurface/reflectionResource/reflectionScale/reflectionColumns；reflection-canvas消费和人物相同的AppearanceFrame与运动采样，检查紧邻地形、垂直翻转并保留精灵包围框。原作48帧伸缩由包采样，actorImage窄绘制端口按定点列索引读取独立反射贴图，避免Canvas缩放抹掉微动；离开水边从移动第一帧起不再使用旧步起点。反射不拥有NPC坐标、保存、行为或随机数。地形分类/源配色均在Emerald包，通用渲染器不写地图或角色ID。
+
+场景NPC固定路径可通过地图连接连续移动；NPCSystem迁移scene pin并隐藏旧投影，FieldDirector使用目的地相对起点保持像素/步态与两侧预约。当前地图同名角色优先，避免旧场景pin污染新场景；失败移动不迁移。`ignoreTerrain`仅用于显式NPC路径，沿World有效连接/占位移动而忽略地形、跳崖与高度门槛；玩家路径和自动寻路不得使用。

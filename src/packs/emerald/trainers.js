@@ -49,12 +49,14 @@ export const TRAINERS = {
   },
   // Route 102 sight trainers: reference opponents TRAINER_CALVIN_1/RICK/TIANA/ALLEN.
   calvin: {
+    actor: "Youngster",
     name: "短裤小子",
     script: "route102.calvin",
     prize: 80,
     party: [{ species: "poochyena", level: 5 }],
   },
   rick: {
+    actor: "BugCatcher",
     name: "捕虫少年",
     script: "route102.rick",
     prize: 96,
@@ -64,6 +66,7 @@ export const TRAINERS = {
     ],
   },
   tiana: {
+    actor: "Lass",
     name: "少女",
     script: "route102.tiana",
     prize: 80,
@@ -73,6 +76,7 @@ export const TRAINERS = {
     ],
   },
   allen: {
+    actor: "Youngster",
     name: "短裤小子",
     script: "route102.allen",
     prize: 80,

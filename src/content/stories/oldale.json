@@ -76,6 +76,32 @@
         "我刚发现了一只稀有宝可梦的脚印！",
         "等我把它们画下来，好吗？"
       ]
+    },
+    "rival.male": {
+      "name": "小遥",
+      "lines": [
+        "{{who}}！在这里！我们快回家吧！"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "rival.female": {
+      "name": "小悠",
+      "lines": [
+        "我正要回爸爸的研究所。{{who}}，你也赶快回来吧。"
+      ],
+      "bindings": {
+        "who": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
     }
   },
   "scripts": {
@@ -533,6 +559,510 @@
           ]
         }
       ]
+    },
+    "rival.talk": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "oldale.rival",
+          "target": "player"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.female"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.male"
+            }
+          ]
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerFacing"
+              },
+              "op": "eq",
+              "value": "down"
+            }
+          },
+          "then": [
+            {
+              "type": "move",
+              "actor": "oldale.rival",
+              "path": [
+                "down",
+                "down",
+                "down",
+                "down",
+                "down",
+                "down"
+              ],
+              "ignoreTerrain": true
+            }
+          ],
+          "else": [
+            {
+              "type": "parallel",
+              "commands": [
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "move",
+                      "actor": "oldale.rival",
+                      "path": [
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down"
+                      ],
+                      "ignoreTerrain": true
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "ms": 200
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "down"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "oldale.rival",
+          "path": [
+            "down",
+            "down",
+            "down",
+            "down",
+            "down",
+            "down"
+          ],
+          "ignoreTerrain": true
+        },
+        {
+          "type": "hide",
+          "actor": "oldale.rival"
+        },
+        {
+          "type": "flag",
+          "key": "oldaleRivalDone",
+          "value": true
+        }
+      ]
+    },
+    "rival.approach.1": {
+      "commands": [
+        {
+          "type": "move",
+          "actor": "oldale.rival",
+          "path": [
+            "left",
+            "left"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.female"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.male"
+            }
+          ]
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerFacing"
+              },
+              "op": "eq",
+              "value": "down"
+            }
+          },
+          "then": [
+            {
+              "type": "move",
+              "actor": "oldale.rival",
+              "path": [
+                "down",
+                "down",
+                "down",
+                "down",
+                "down",
+                "down"
+              ],
+              "ignoreTerrain": true
+            }
+          ],
+          "else": [
+            {
+              "type": "parallel",
+              "commands": [
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "move",
+                      "actor": "oldale.rival",
+                      "path": [
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down"
+                      ],
+                      "ignoreTerrain": true
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "ms": 200
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "down"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "oldale.rival",
+          "path": [
+            "down",
+            "down",
+            "down",
+            "down",
+            "down",
+            "down"
+          ],
+          "ignoreTerrain": true
+        },
+        {
+          "type": "hide",
+          "actor": "oldale.rival"
+        },
+        {
+          "type": "flag",
+          "key": "oldaleRivalDone",
+          "value": true
+        }
+      ]
+    },
+    "rival.approach.2": {
+      "commands": [
+        {
+          "type": "move",
+          "actor": "oldale.rival",
+          "path": [
+            "left"
+          ]
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.female"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.male"
+            }
+          ]
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerFacing"
+              },
+              "op": "eq",
+              "value": "down"
+            }
+          },
+          "then": [
+            {
+              "type": "move",
+              "actor": "oldale.rival",
+              "path": [
+                "down",
+                "down",
+                "down",
+                "down",
+                "down",
+                "down"
+              ],
+              "ignoreTerrain": true
+            }
+          ],
+          "else": [
+            {
+              "type": "parallel",
+              "commands": [
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "move",
+                      "actor": "oldale.rival",
+                      "path": [
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down"
+                      ],
+                      "ignoreTerrain": true
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "ms": 200
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "down"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "oldale.rival",
+          "path": [
+            "down",
+            "down",
+            "down",
+            "down",
+            "down",
+            "down"
+          ],
+          "ignoreTerrain": true
+        },
+        {
+          "type": "hide",
+          "actor": "oldale.rival"
+        },
+        {
+          "type": "flag",
+          "key": "oldaleRivalDone",
+          "value": true
+        }
+      ]
+    },
+    "rival.approach.3": {
+      "commands": [
+        {
+          "type": "face",
+          "actor": "oldale.rival",
+          "dir": "left"
+        },
+        {
+          "type": "face",
+          "actor": "player",
+          "dir": "right"
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerGender"
+              },
+              "op": "eq",
+              "value": "female"
+            }
+          },
+          "then": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.female"
+            }
+          ],
+          "else": [
+            {
+              "type": "dialog",
+              "dialogue": "rival.male"
+            }
+          ]
+        },
+        {
+          "type": "if",
+          "condition": {
+            "compare": {
+              "query": {
+                "id": "playerFacing"
+              },
+              "op": "eq",
+              "value": "down"
+            }
+          },
+          "then": [
+            {
+              "type": "move",
+              "actor": "oldale.rival",
+              "path": [
+                "down",
+                "down",
+                "down",
+                "down",
+                "down",
+                "down"
+              ],
+              "ignoreTerrain": true
+            }
+          ],
+          "else": [
+            {
+              "type": "parallel",
+              "commands": [
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "move",
+                      "actor": "oldale.rival",
+                      "path": [
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down",
+                        "down"
+                      ],
+                      "ignoreTerrain": true
+                    }
+                  ]
+                },
+                {
+                  "type": "sequence",
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "ms": 200
+                    },
+                    {
+                      "type": "face",
+                      "actor": "player",
+                      "dir": "down"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "move",
+          "actor": "oldale.rival",
+          "path": [
+            "down",
+            "down",
+            "down",
+            "down",
+            "down",
+            "down"
+          ],
+          "ignoreTerrain": true
+        },
+        {
+          "type": "hide",
+          "actor": "oldale.rival"
+        },
+        {
+          "type": "flag",
+          "key": "oldaleRivalDone",
+          "value": true
+        }
+      ]
     }
   },
   "entries": {
@@ -620,6 +1150,156 @@
         }
       },
       "script": "blocked-path"
+    },
+    "rival.talk": {
+      "trigger": "interact",
+      "priority": 35,
+      "selector": {
+        "map": "OldaleTown",
+        "objectId": "oldale.rival"
+      },
+      "requires": {
+        "all": [
+          {
+            "any": [
+              {
+                "flag": "rivalWon"
+              },
+              {
+                "reward": "rival.prize"
+              }
+            ]
+          },
+          {
+            "not": {
+              "flag": "oldaleRivalDone"
+            }
+          },
+          {
+            "not": {
+              "flag": "pokedex"
+            }
+          }
+        ]
+      },
+      "script": "rival.talk"
+    },
+    "rival.approach.1": {
+      "trigger": "step",
+      "priority": 35,
+      "selector": {
+        "map": "OldaleTown"
+      },
+      "where": {
+        "map": "OldaleTown",
+        "x": 8,
+        "y": 19,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "any": [
+              {
+                "flag": "rivalWon"
+              },
+              {
+                "reward": "rival.prize"
+              }
+            ]
+          },
+          {
+            "not": {
+              "flag": "oldaleRivalDone"
+            }
+          },
+          {
+            "not": {
+              "flag": "pokedex"
+            }
+          }
+        ]
+      },
+      "script": "rival.approach.1"
+    },
+    "rival.approach.2": {
+      "trigger": "step",
+      "priority": 35,
+      "selector": {
+        "map": "OldaleTown"
+      },
+      "where": {
+        "map": "OldaleTown",
+        "x": 9,
+        "y": 19,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "any": [
+              {
+                "flag": "rivalWon"
+              },
+              {
+                "reward": "rival.prize"
+              }
+            ]
+          },
+          {
+            "not": {
+              "flag": "oldaleRivalDone"
+            }
+          },
+          {
+            "not": {
+              "flag": "pokedex"
+            }
+          }
+        ]
+      },
+      "script": "rival.approach.2"
+    },
+    "rival.approach.3": {
+      "trigger": "step",
+      "priority": 35,
+      "selector": {
+        "map": "OldaleTown"
+      },
+      "where": {
+        "map": "OldaleTown",
+        "x": 10,
+        "y": 19,
+        "width": 1,
+        "height": 1
+      },
+      "requires": {
+        "all": [
+          {
+            "any": [
+              {
+                "flag": "rivalWon"
+              },
+              {
+                "reward": "rival.prize"
+              }
+            ]
+          },
+          {
+            "not": {
+              "flag": "oldaleRivalDone"
+            }
+          },
+          {
+            "not": {
+              "flag": "pokedex"
+            }
+          }
+        ]
+      },
+      "script": "rival.approach.3"
     }
   },
   "sources": [
@@ -652,6 +1332,30 @@
       "label": "OldaleTown_EventScript_BlockedPath",
       "status": "original-verified",
       "note": "西出口(0,10)：玩家delay_8→右移一格；男子快步上→朝左保持朝向右移→警告→下、左返回。入图装配摆位，无延迟worldPatch或持续projection抢走剧情移动。"
+    },
+    {
+      "label": "OldaleTown_EventScript_Rival",
+      "map": "OldaleTown",
+      "status": "original-verified",
+      "note": "战后等待、三个坐标入口、男女对白与十二步跨 Route101 离场；完成旗标持久化。"
+    },
+    {
+      "label": "OldaleTown_EventScript_RivalTrigger1",
+      "map": "OldaleTown",
+      "status": "original-verified",
+      "note": "战后等待、三个坐标入口、男女对白与十二步跨 Route101 离场；完成旗标持久化。"
+    },
+    {
+      "label": "OldaleTown_EventScript_RivalTrigger2",
+      "map": "OldaleTown",
+      "status": "original-verified",
+      "note": "战后等待、三个坐标入口、男女对白与十二步跨 Route101 离场；完成旗标持久化。"
+    },
+    {
+      "label": "OldaleTown_EventScript_RivalTrigger3",
+      "map": "OldaleTown",
+      "status": "original-verified",
+      "note": "战后等待、三个坐标入口、男女对白与十二步跨 Route101 离场；完成旗标持久化。"
     }
   ]
 }

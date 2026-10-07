@@ -51,6 +51,7 @@ export function createEmeraldInterface(
     showMenu: () => showMenu(),
     showParty: (...args) => shell.showParty(...args),
     showBag: (...args) => shell.showBag(...args),
+    demonstrateBagItem: (...args) => bagUI.demonstrateBagItem(...args),
     showMonster: (...args) => shell.showMonster(...args),
     showPartyFieldMove: (...args) => shell.showPartyFieldMove(...args),
     showEvolutionOptions: (index) => shell.showEvolutionOptions(index),
@@ -101,6 +102,7 @@ export function createEmeraldInterface(
     presentationUI,
     {
       showMenu,
+      demonstrateBattleAction: (...args) => battleUI.demonstrate(...args),
       drawBattleHUD: (message) => battleUI.draw(message),
       refreshBattle: (frame) => battleUI.refresh(frame),
       confirmBattle: () => battleUI.confirm(),
