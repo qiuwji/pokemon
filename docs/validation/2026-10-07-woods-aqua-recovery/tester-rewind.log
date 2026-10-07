@@ -1,0 +1,19 @@
+✔ the dev tester teleports through its real interact entry (108.303125ms)
+✔ the dev tester can start a practice battle on request (50.955208ms)
+✔ the move showcase starts a single-move demo trainer (48.852708ms)
+✔ the wild showcase starts the selected species (41.429541ms)
+✔ the item reward grants through the real reward command (43.3485ms)
+✔ the dev menu action adds a party member for switch tests (41.328958ms)
+✔ every placed tester resolves its interact entry (76.1995ms)
+✔ the tester menu jumps the save to a named chapter (45.015625ms)
+✔ a chapter jump clears later-chapter flags so earlier scenes replay (44.110833ms)
+✔ chapter rewind after a real Woods victory replays the full Aqua scene on lane 26 (263.069334ms)
+✔ chapter rewind after a real Woods victory replays the full Aqua scene on lane 27 (262.3115ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1184.399916

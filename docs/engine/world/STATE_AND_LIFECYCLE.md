@@ -125,3 +125,5 @@ Actor的运行时位置初始化、高度、日程到达判定使用WorldStateSe
 ## 世界操作字段的单一声明
 
 WorldStateService的tile字段用于操作白名单、值校验与提取；object的hidden/spawn字段用于白名单、布尔校验和提交提取。validateOperations校验完整批次，prepare直接消费这份结果，不再复制外层字段清单。prepare仍检查对象存在/重复、合并后的完整对象/训练家视线；commit仍验证完整候选状态和revision。这是不同阶段的不变量，不删除防护检查。新增tile或对象顶层可提交字段先更新唯一声明与其语义校验，并证明prepare/提交/序列化后实际保留。
+
+非动画门/楼梯到达（2026-10-07）：默认地形NON_ANIMATED_DOOR到达后向南走出，合法格候选优先南邻格，不能只因室内而先选北邻格。边界、碰撞、其他warp、对象/预约仍复查；没有可用格时沿用到达回退。箭头出口仍停在本warp格并朝地图内部，下一次向外输入才离开。实际得文1F↔2F及2F↔3F循环往返、可移动和保存重载见tests/devon-stair-arrival.test.js，不写地图名称特判。

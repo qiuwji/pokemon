@@ -49,7 +49,7 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 
 坐标脚本可能就在门格上，应先让step脚本处理已落地位置再决定warp；核对正常走路、脚本移动忽略自动warp和取消/重入三种路径。演出移动必须按实际时钟等到结束，模拟异步界面/帧刷新时也应保持NPC pin身份；不能只用同步递增时钟的最终坐标测试证明无锁死。
 
-页面special必须规定打开、确认/取消、关闭及回调过期。当前clock screen返回confirmed/cancelled/viewed，提交回调由故事生命周期授权；页面和动画不直接改clock，淡入淡出不能阻断自己已授权的提交。原作时钟图块和门帧再生成见[opening-art导入](../../../docs/development/IMPORT_SCRIPTS.md)，流程为grid→opening-art；帧素材与姿态复用既有注册合同，不在引擎写地图/角色名分支。
+页面special必须规定打开、确认/取消、关闭及回调过期。当前clock screen返回confirmed/cancelled/viewed，提交回调由故事生命周期授权；页面和动画不直接改clock，淡入淡出不能阻断自己已授权的提交。原作时钟图块和门帧再生成见[opening-art导入](../../../docs/development/IMPORT_SCRIPTS.md)，流程为grid→opening-art（标准tools/import.py grid已自动串接；直接运行底层entry仍须后处理）；帧素材与姿态复用既有注册合同，不在引擎写地图/角色名分支。
 
 用户若要求自行端到端验收，就仅修代码及授权的代码测试，交付可执行的画面/听音清单并标为待用户验证，不再使用Computer Use操作其游戏。当前切片落点与已知演绎集中在[地区切片](../../../docs/regions/LITTLEROOT_OPENING.md)，实际进度仍读取STATUS。
 
@@ -75,3 +75,5 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 地区数据的落点见[代码地图](../../../docs/development/CODE_MAP.md)。Route101入场必须匹配原coord_events的(10/11,19)，玩家四步向上后朝左；演员初始化、三段完整绕圈及最终相对朝向依据原movement数组，不能用通用寻路代替。选取证据可使用tools/story/slices/route101-rescue.json，移动转换器支持walk_in_place_fast并保留原8帧等待；本次匹配依赖只读固定参考，不让核心测试依赖work目录。
 
 区分重复访问三种所有者：普通地图对象按新访问重新装配，visit覆盖过图清理，持久Actor按自身存储恢复。不能用NPC渲染缓存保存长期摆位。重复的拦路/催促事件先核对原动作是否只是face，不把原地转向写成走一格。至少验证第二次触发和中间存读档后的入口；检查目标站位与输入锁一起恢复，不通过忽略所有碰撞或删除事件解决卡住。
+
+水面须追到当前地图的primary/secondary动画回调，不能仅凭behavior“是水”或General主图集下结论；104北侧斜纹池塘使用Rustboro windy_water二级动画。静态障碍须核对graphics_info.inanimate和sAnim_StayStill，CuttableTree四帧属于居合斩过程，不能用人物朝向映射。门资源验证需覆盖当前tileset、两个绘制pass及重导入后的完整链路；旧城镇门帧测试通过不证明新增图集门已恢复。

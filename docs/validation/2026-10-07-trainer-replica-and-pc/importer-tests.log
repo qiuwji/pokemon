@@ -1,0 +1,34 @@
+127.0.0.1 - - [07/Oct/2026 20:07:51] code 404, message Not Found
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] code 404, message Not Found
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /src/../private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] code 404, message Not Found
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /src/%2e%2e/private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] code 404, message Not Found
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /src/content/ HTTP/1.1" 404 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /?control=1 HTTP/1.1" 302 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /src/index.html?control=1 HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /generated/assets/example.bin HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 20:07:51] "GET /generated/assets/example.bin HTTP/1.1" 200 -
+----------------------------------------------------------------------
+Ran 34 tests in 9.184s
+
+OK
+{
+  "script": "example",
+  "check": false,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+{
+  "script": "example",
+  "check": true,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}

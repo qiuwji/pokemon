@@ -9,3 +9,5 @@
 开场使用 [选择配置](../../tools/story/slices/littleroot-opening.json)。其他地区按地图名或完整标签定位 `work/pokeemerald/data/maps/`，复制配置选择范围；没有地区稿也能提取，不凭记忆补文本。
 
 本轮实现落点、资源再生成顺序和待用户验收的场景见[未白镇开场切片](LITTLEROOT_OPENING.md)。这不是恢复已撤下的旧稿，仍以固定原作与单项验证为准。
+
+104 号道路、亚希达拦路与橙华森林救援的当前落点及边界见[橙华森林切片](PETALBURG_WOODS.md)。

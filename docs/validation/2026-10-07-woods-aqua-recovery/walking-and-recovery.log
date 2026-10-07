@@ -1,0 +1,15 @@
+✔ Woods lane 26 follows source intermediate poses, real combat, retreat and departure (152.37525ms)
+✔ Woods lane 27 follows source intermediate poses, real combat, retreat and departure (86.903666ms)
+✔ An interrupted approach can be retried from the other lane without accumulating old actor movements (94.872625ms)
+✔ A committed victory with interrupted field dialogue resumes from the other lane after reload without rematching (86.080042ms)
+✔ An actual defeat leaves the rescue unfinished and permits a later successful challenge (87.202125ms)
+✔ Woods lane 26 approaches through visible intermediate walking frames without repositioning actors (226.831ms)
+✔ Woods lane 27 approaches through visible intermediate walking frames without repositioning actors (171.367375ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1064.0915
