@@ -1,5 +1,6 @@
 /** field_control_avatar.c: behavior-driven furniture interactions exist even without a BG event. */
 const SCRIPTS = new Map([
+  [0x83, "EventScript_PC"],
   [0x85, "EventScript_RegionMap"],
   [0x86, "EventScript_TV"],
   [0xe0, "EventScript_PictureBookShelf"],

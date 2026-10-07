@@ -42,7 +42,7 @@ import {
 import { NPCPoseRegistry } from "../../engine/npc-poses.js";
 import { ActorTemplateRegistry } from "../../engine/actor-repository.js";
 import { CropRegistry } from "../../engine/crop-growth.js";
-import { EMERALD_CROPS, validateBerryPlots } from "./berries.js";
+import { EMERALD_CROPS, EMERALD_BERRY_PLOTS, validateBerryPlots } from "./berries.js";
 import { TimeTaskRegistry } from "../../engine/world-schedule.js";
 import { CreatureFormRegistry } from "../../engine/creatures/forms.js";
 import { emeraldDatabase } from "./database.js";
@@ -102,6 +102,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
       items: ITEMS,
       inventoryPockets: GEN3_INVENTORY_POCKETS,
       crops: EMERALD_CROPS,
+      berryPlots: EMERALD_BERRY_PLOTS,
       abilities: GEN3_ABILITIES,
       heldItems: GEN3_HELD_ITEMS,
       movement: MOVEMENT_MODES,

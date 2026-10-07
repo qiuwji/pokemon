@@ -144,4 +144,7 @@ export class InventoryApplication {
       this.canManageParty() && this.partyStorage.deposit(this.state, index)
     );
   }
+  swapBox(first, second) {
+    return this.canManageParty() && this.partyStorage.swapBox(this.state, first, second);
+  }
 }

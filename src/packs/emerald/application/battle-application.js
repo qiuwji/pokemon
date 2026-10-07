@@ -3,6 +3,7 @@ import { openingBattleTransition } from "../battle-transitions.js";
 import { BATTLE_RULES } from "../../../engine/battle-rules.js";
 import { GEN3_GLOBAL_HOOKS } from "../../../engine/rules/gen3/global-rules.js";
 import { healMonster } from "../../../engine/model.js";
+import { grantReward } from "../../../engine/story.js";
 import { StateCheckpoint } from "../../../engine/state-checkpoint.js";
 import { validateMoney, settleMoney } from "../../../engine/currency.js";
 import { BattleSession } from "../../../engine/battle-session.js";
@@ -237,11 +238,11 @@ export class BattleApplication {
       },
       ...options,
       presentation: {
-        ...emeraldBattleOpening(this.state, {
+        ...emeraldBattleOpening({ ...this.state, party }, {
           ...options,
           trainerActor: this.trainerDefinitions[options.trainerId]?.actor,
           trainerName: this.trainerDefinitions[options.trainerId]?.name,
-        }, this.db, enemies[0]),
+        }, this.db, enemies),
         transition: openingBattleTransition({ trainer: !!options.trainer, party, opponents }),
         ...options.presentation,
         dialogue: (dialogue) => this.ui.say?.(dialogue.name, dialogue.lines),
@@ -344,22 +345,24 @@ export class BattleApplication {
     const presentation = [];
     const defeatId = emeraldDefeatDialogue(this.state, b);
     if (b.result === "win" && b.trainer && (defeatId || fallback)) {
-      let defeated;
-      if (b.script === "rival") {
-        defeated = this.storyCatalog.resolveDialogue({ dialogue: defeatId }, this.state);
-      } else {
-        const first = commands.find(c => c.type === "dialog" && (fallback || c.dialogue === defeatId));
-        if (first) {
-          defeated = this.storyCatalog.resolveDialogue(first, this.state);
-          commands = commands.filter(c => c !== first);
-        }
-      }
+      const defeated = defeatId
+        ? this.storyCatalog.resolveDialogue({ dialogue: defeatId }, this.state)
+        : this.storyCatalog.resolveDialogue(commands.find(c => c.type === "dialog"), this.state);
+      if (fallback) commands = commands.filter(c => c.type !== "dialog");
       const actor = this.trainerDefinitions[b.trainerId]?.actor || (b.script === "rival" ? (this.state.playerGender === "female" ? "BrendanNormal" : "MayNormal") : "Youngster");
-      if (defeated) presentation.push({ ...b.snapshot(), kind: "trainer-slide", text: "", trainers: [battleTrainer(actor)], dialogue: defeated });
+      presentation.push({ ...b.snapshot(), kind: "text", text: "", dialogue: { name: "", lines: [`${this.state.playerName}击败了${this.trainerDefinitions[b.trainerId]?.name || "劲敌"}！`] } });
+      if (defeated) presentation.push({ ...b.snapshot(), kind: "trainer-slide", text: "", duration: 48 * 1000 / 60,
+        trainers: [{ ...battleTrainer(actor, false, b.trainerId), position: { x: 208, y: 40 }, slideOffset: 96 }], dialogue: defeated });
       const prize = commands.find(c => c.type === "reward" && c.money);
       if (prize && !this.state.story.rewards.includes(prize.id))
         presentation.push({ ...b.snapshot(), kind: "text", text: "", dialogue: { name: "", lines: [`${this.state.playerName}获得了 ¥${prize.money}！`] } });
     }
+    // Money and the victory receipt commit together before post-battle field dialogue.
+    // Keep item/story rewards in their authored continuation (bag-full branches included).
+    const prizeId = b.trainerId && trainerRewardId(b.trainerId);
+    const prize = b.result === "win" && commands.find(c => c.type === "reward" && c.id === prizeId &&
+      c.money !== undefined && !c.items && !c.flags && !c.onResult);
+    if (prize) commands = commands.filter(c => c !== prize);
     return {
       presentation,
       commit: () => {
@@ -393,6 +396,7 @@ export class BattleApplication {
           this.seen(b.enemy.species, true);
         }
         settleMoney(this.state, money);
+        if (prize) grantReward(this.state, prize, { items: this.items, inventory: this.inventory });
         committed = true;
       },
       after: () => {

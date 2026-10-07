@@ -377,6 +377,10 @@ export class WorldApplication {
       this.ui.showBerryPlot(object.plotId);
       return;
     }
+    if (object.kind === "sign" && object.script === "EventScript_PC") {
+      this.ui.showPC();
+      return;
+    }
     if (object.kind === "daycare") {
       this.ui.showDaycare();
       return;

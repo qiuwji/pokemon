@@ -7,6 +7,7 @@ import { Random } from "../../../engine/model.js";
 import {
   EMERALD_CROP_POLICY,
   EMERALD_CROPS,
+  EMERALD_NATIVE_BERRIES,
   emeraldBerryYield,
 } from "../berries.js";
 import { bindApplicationPorts } from "./ports.js";
@@ -19,6 +20,8 @@ export const CROP_PORTS = Object.freeze([
   "clock",
   "plugins",
   "world",
+  "motion",
+  "cameraProjection",
   "ui",
 ]);
 /** Coordinates inventory and tree commits; growth itself never reaches a bag or application facade. */
@@ -36,6 +39,24 @@ export class CropApplication {
       policy: EMERALD_CROP_POLICY,
       calculateYield: emeraldBerryYield,
     });
+    if (!this.state.flags.nativeRoute104Berries) {
+      for (const p of EMERALD_NATIVE_BERRIES) {
+        if (p.initial && this.catalog.berryPlots?.[p.id] && !this.state.crops.trees[p.id])
+          this.crops.plant(p.id, p.initial, { stage: "ripe", stopped: true });
+      }
+      this.state.flags.nativeRoute104Berries = true;
+    }
+  }
+  observeCrops() {
+    const projection = this.cameraProjection({ width: 240, height: 160 });
+    const player = this.motion.graph.point(this.state.position);
+    for (const [id, plot] of Object.entries(this.catalog.berryPlots || {})) {
+      if (!this.state.crops.trees[id]?.stopped) continue;
+      const object = this.catalog.maps[plot.map].elements.find(o => o.id === plot.objectId);
+      const point = this.motion.graph.point({ ...object, map: plot.map });
+      if (point.zone === player.zone && point.x + 16 > projection.x && point.x < projection.x + projection.width &&
+          point.y + 16 > projection.y && point.y < projection.y + projection.height) this.crops.release(id);
+    }
   }
   cropView(id) {
     return this.crops.view(id);

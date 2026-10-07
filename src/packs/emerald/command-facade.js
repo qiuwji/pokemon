@@ -79,6 +79,9 @@ export function createEmeraldCommandFacade(
       "box.deposit",
       { uid: uidAt(game.state.party, index) },
     ],
+    swapBox: (first, second) => ["box.swap", {
+      firstUid: uidAt(game.state.box, first), secondUid: uidAt(game.state.box, second),
+    }],
     exchangeBox: (boxIndex, partyIndex) => [
       "box.exchange",
       {

@@ -10,7 +10,7 @@ const backgrounds = [
 /** Native summary pages format snapshots. Missing contest metadata remains explicit, never invented. */
 export function summaryPage(
   mon,
-  { db, items, page, escapeHTML: esc, playerName },
+  { db, items, page, escapeHTML: esc, playerName, tools: showTools = true },
 ) {
   const species = db.species[mon.species],
     name = mon.egg ? "蛋" : mon.nickname || species.name;
@@ -54,7 +54,7 @@ export function summaryPage(
       .join(
         "",
       )}</div><div class="summary-move-values" data-summary-move-values></div><div class="summary-move-info" data-summary-move-info>${page === 2 ? "请选择招式。" : "华丽大赛资料随内容导入补充。"}</div>`;
-  const tools = mon.egg
+  const tools = mon.egg || !showTools
     ? ""
     : '<details class="summary-tools"><summary>其他操作</summary><div class="native-window"><button id="growth-options">成长</button><button id="held-item">道具</button><button id="lead">首发</button><button id="use-potion">伤药</button></div></details>';
   return `<div class="summary-native" data-summary-page-index="${page}" style="background-image:url('generated/assets/ui/${mon.egg ? "summary-info-egg" : backgrounds[page]}.png')">${heading}${identity}${mon.egg ? "" : `<canvas id="detail-sprite" class="summary-sprite" width="64" height="64" role="img" aria-label="${esc(name)}"></canvas><span class="summary-status">${esc(STATUS_NAMES[mon.status] || "")}</span>`}${content}${tools}<div class="summary-extensions"><div data-extension-slot="monster.detail"></div><div data-extension-slot="monster.content"></div></div></div>`;

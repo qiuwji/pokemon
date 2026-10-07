@@ -47,7 +47,7 @@ import {
 } from "./packs/emerald/animation-profiles.js";
 import { EMERALD_BATTLE_INTRO } from "./packs/emerald/battle-intro.js";
 import { emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "./packs/emerald/battle-presentation.js";
-import { emeraldReflectionSurface, emeraldReflectionResource, emeraldReflectionScale, emeraldReflectionColumns } from "./packs/emerald/field-reflections.js";
+import { emeraldReflectionSurface, emeraldReflectionVisible, emeraldReflectionResource, emeraldReflectionScale, emeraldReflectionColumns } from "./packs/emerald/field-reflections.js";
 import { EMERALD_BATTLE_BACKGROUNDS } from "./packs/emerald/battle-backgrounds.js";
 import { emeraldTypeColor } from "./packs/emerald/battle-palette.js";
 
@@ -122,6 +122,7 @@ async function boot() {
           catalog.movement[game?.state.movement.mode]?.presentation || {},
         fieldPriority: emeraldFieldPriority,
         reflectionSurface: emeraldReflectionSurface,
+        reflectionVisible: emeraldReflectionVisible,
         reflectionResource: emeraldReflectionResource,
         reflectionScale: emeraldReflectionScale,
         reflectionColumns: emeraldReflectionColumns,

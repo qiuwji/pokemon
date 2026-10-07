@@ -60,6 +60,7 @@ const overlays = new Set([
   "menu",
   "save",
   "shop",
+  "pc",
   "surf",
   "field-action",
   "fishing",

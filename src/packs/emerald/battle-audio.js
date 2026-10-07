@@ -27,6 +27,15 @@ export function emeraldBattleCues(event, { duration, reducedMotion }) {
     return cues;
   }
   if (event.kind === "switch") return [cue("ball.open", duration * 0.5)];
+  if (event.introPhase === "slide") return [];
+  if (event.introPhase === "send" && event.sendMotion) {
+    const motion = event.sendMotion, normalDuration = event.duration || duration;
+    return (event.sendSeats || []).flatMap((seat, i) => {
+      const at = reducedMotion ? 0 : (motion.ballDelay + motion.ballTravel + i * motion.partnerDelay) * 1000 / 60 * duration / normalDuration;
+      const mon = event.combatants.find(c => c.seatId === seat)?.monster;
+      return [cue("ball.open", at), ...(mon ? [cue("cry." + mon.species, at)] : [])];
+    });
+  }
   if (event.kind === "entry" && event.trainers?.length)
     return [cue("ball.open", duration * 0.25)];
   // Growl is an attacker cry in battle_anim_scripts.s, not a generic impact sound.

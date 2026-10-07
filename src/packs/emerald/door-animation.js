@@ -1,4 +1,4 @@
-import { DOOR_ANIMATIONS } from "../../../generated/packs/emerald/generated/door-anims.js";
+import { DOOR_ANIMATIONS_BY_TILESET } from "../../../generated/packs/emerald/generated/door-anims.js";
 import { DIRECTIONS } from "../../engine/world.js";
 
 /** src/field_door.c holds each door frame for four native ticks at 60 fps. */
@@ -35,7 +35,7 @@ export class DoorDirector {
     const m = this.maps[map];
     if (!m || !Number.isInteger(x) || !Number.isInteger(y)) return null;
     if (x < 0 || y < 0 || x >= m.width || y >= m.height) return null;
-    return DOOR_ANIMATIONS[m.blocks[y * m.width + x] & 1023] || null;
+    return DOOR_ANIMATIONS_BY_TILESET[m.tileset]?.[m.blocks[y * m.width + x] & 1023] || null;
   }
   frameMs() {
     return this.reducedMotion() ? 100 : DOOR_FRAME_MS;

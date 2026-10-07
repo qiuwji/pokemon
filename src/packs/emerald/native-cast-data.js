@@ -41,6 +41,71 @@ export const NATIVE_CAST = readOnly({
     talk(10, 3, "MayNormal", "npc.rival.13", { id: "rival.route103", kind: "rival", when: not("rivalWon"), gender: rivalGender }),
     talk(20, 10, "Boy1", "npc.route103.boy"),
   ],
+  Route104: [
+    { id:"route104.boat", sourceLocalId:"LOCALID_ROUTE104_BOAT", actor:"MrBrineysBoat", kind:"prop", x:12,y:54, name:"哈奇老人的小船", text:"", when:not("brineyBoatAway") },
+    { id:"route104.briney", sourceLocalId:"LOCALID_ROUTE104_BRINEY", actor:"ExpertM", kind:"prop", x:12,y:51, name:"哈奇老人", text:"", when:flag("brineyBoarding") },
+    talk(8,19,"Woman5","route104.people.white-herb", { id:"route104.florist", sourceLocalId:"22", kind:"route104Gift", when:all(flag("prettyPetalOwnerMet"),flag("badgeDynamo")), itemId:"white_herb", itemName:"白色香草", receivedFlag:"route104WhiteHerbGift", repeatDialogue:"emerald:dialogues.route104.people.white-herb-repeat" }),
+    talk(17,50,"MayNormal","route104.people.rival", { id:"route104.rival", sourceLocalId:"LOCALID_ROUTE104_RIVAL", when:flag("route104RivalVisible"), gender:rivalGender }),
+    talk(15, 60, "BugCatcher", "route104.people.sea", { id: "route104.bug-catcher", sourceLocalId: "1" }),
+    talk(25, 49, "Girl2", "route104.people.briney", { id: "route104.girl1", sourceLocalId: "2" }),
+    talk(31, 24, "Lass", "route104.trainers.haley.intro", {
+      id: "route104.haley", kind: "route104Trainer", trainerId: "haley", sightRange: 7, sourceLocalId: "3",
+    }),
+    talk(27, 63, "Boy1", "route104.people.weaken", { id: "route104.boy1", sourceLocalId: "4" }),
+    talk(30, 50, "Woman2", "route104.people.wild-only", { id: "route104.woman", sourceLocalId: "5" }),
+    talk(28, 74, "Girl3", "route104.people.not-trainer", { id: "route104.girl2", sourceLocalId: "6" }),
+    {
+      id: "route104.item.pp-up", sourceLocalId: "21", actor: "ItemBall", kind: "fieldItem",
+      x: 39, y: 15, itemId: "pp_up", itemName: "PP提升剂", receivedFlag: "route104ItemPPUp",
+      when: not("route104ItemPPUp"), name: "PP提升剂", text: "",
+    },
+    talk(29, 8, "Fisherman", "route104.trainers.ivan.intro", {
+      id: "route104.ivan", kind: "route104Trainer", trainerId: "ivan", sourceLocalId: "9",
+    }),
+    talk(37, 8, "ExpertF", "route104.people.chesto", {
+      id: "route104.expert", kind: "route104Gift", itemId: "chesto_berry",
+      itemName: "醒睡果", receivedFlag: "route104ChestoGift", sourceLocalId: "16",
+      repeatDialogue: "emerald:dialogues.route104.people.chesto-repeat",
+      afterDialogue: "emerald:dialogues.route104.people.chesto-repeat",
+    }),
+    {
+      id: "route104.item.pokeball", sourceLocalId: "27", actor: "ItemBall", kind: "fieldItem",
+      x: 29, y: 53, itemId: "pokeball", itemName: "精灵球", receivedFlag: "route104ItemPokeBall",
+      when: not("route104ItemPokeBall"), name: "精灵球", text: "",
+    },
+    talk(27, 15, "Twin", "route104.trainers.gina.intro", {
+      id: "route104.gina", kind: "route104Trainer", trainerId: "ginaAndMia", sightRange: 1, sourceLocalId: "23",
+    }),
+    talk(28, 15, "Twin", "route104.trainers.mia.intro", {
+      id: "route104.mia", kind: "route104Trainer", trainerId: "ginaAndMia", sightRange: 1, sourceLocalId: "24",
+    }),
+    talk(21, 25, "RichBoy", "route104.trainers.winston.intro", {
+      id: "route104.winston", kind: "route104Trainer", trainerId: "winston", sightRange: 3, sourceLocalId: "25",
+    }),
+    talk(11, 44, "Woman2", "route104.trainers.cindy.intro", {
+      id: "route104.cindy", kind: "route104Trainer", trainerId: "cindy", sightRange: 3, sourceLocalId: "26",
+    }),
+    {
+      id: "route104.item.x-accuracy", sourceLocalId: "29", actor: "ItemBall", kind: "fieldItem",
+      x: 37, y: 22, itemId: "x_accuracy", itemName: "命中强化", receivedFlag: "route104ItemXAccuracy",
+      when: not("route104ItemXAccuracy"), name: "命中强化", text: "",
+    },
+    { id: "route104.cut-tree", sourceLocalId: "30", actor: "CuttableTree", kind: "cutTree", x: 35, y: 22, name: "可砍伐的树", text: "" },
+    {
+      id: "route104.item.potion", sourceLocalId: "31", actor: "ItemBall", kind: "fieldItem",
+      x: 5, y: 8, itemId: "potion", itemName: "伤药", receivedFlag: "route104ItemPotion",
+      when: not("route104ItemPotion"), name: "伤药", text: "",
+    },
+    talk(5, 26, "Boy2", "route104.people.bullet-seed", {
+      id: "route104.boy2", kind: "route104Gift", itemId: "tm09", itemName: "招式学习器09（种子机关枪）",
+      receivedFlag: "route104BulletSeedGift", sourceLocalId: "32",
+      repeatDialogue: "emerald:dialogues.route104.people.bullet-seed-repeat",
+      afterDialogue: "emerald:dialogues.route104.people.bullet-seed-repeat",
+    }),
+    talk(15, 59, "Fisherman", "route104.trainers.darian.intro", {
+      id: "route104.darian", kind: "route104Trainer", trainerId: "darian", sourceLocalId: "33",
+    }),
+  ],
   Route102: [
     talk(37, 4, "Boy1", "regions.petalburg.route102.boy", { id: "route102.boy", kind: "route102Boy" }),
     talk(18, 11, "LittleBoy", "regions.petalburg.route102.littleboy", { id: "route102.littleboy", kind: "route102LittleBoy" }),
@@ -59,7 +124,14 @@ export const NATIVE_CAST = readOnly({
   PetalburgCity: [
     // The reference hides the outdoor mom when the gym hand-off starts (FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM);
     // after that only the mom inside Wally's house remains.
-    talk(16, 18, "Woman4", "regions.petalburg.wallysmom", { id: "petalburg.wallysmom", kind: "petalburgWallysMom", when: not("wallyTutorial") }),
+    talk(16, 18, "Woman4", "regions.petalburg.wallysmom", {
+      id: "petalburg.wallysmom", kind: "petalburgWallysMom",
+      when: { not: { any: [
+        flag("wallyMomHidden"), flag("wallyTutorial"), flag("petalburgScottMet"),
+        flag("petalburgWoodsSaved"), flag("devonGoodsStolen"), flag("devonGoodsRecovered"),
+        flag("devonGoodsReturned"),
+      ] } },
+    }),
     talk(20, 10, "Gentleman", "regions.petalburg.gentleman", { id: "petalburg.gentleman", kind: "petalburgGentleman" }),
     talk(8, 22, "Boy1", "regions.petalburg.boy", { id: "petalburg.boy", kind: "petalburgBoy" }),
     talk(12, 15, "Boy2", "regions.petalburg.gymboy", { id: "petalburg.gymboy" }),
@@ -69,6 +141,61 @@ export const NATIVE_CAST = readOnly({
       id: "wally.city", kind: "petalburgWallyCity",
       movement: { mode: "still", dir: "up", rangeX: 0, rangeY: 0 },
       when: all(flag("wallyTutorial"), flag("wallyInTown"), not("wallyCaught")),
+    }),
+  ],
+  PetalburgWoods: [
+    { id: "woods.cut-tree.1", sourceLocalId: "1", actor: "CuttableTree", kind: "cutTree", x: 19, y: 10, name: "可砍伐的树", text: "" },
+    { id: "woods.cut-tree.2", sourceLocalId: "2", actor: "CuttableTree", kind: "cutTree", x: 19, y: 11, name: "可砍伐的树", text: "" },
+    {
+      id: "petalburg.woods.researcher",
+      sourceLocalId: "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+      actor: "Man2",
+      kind: "prop",
+      name: "得文公司的研究员",
+      text: "",
+      when: not("petalburgWoodsSaved"),
+    },
+    {
+      id: "petalburg.woods.aqua",
+      sourceLocalId: "LOCALID_PETALBURG_WOODS_GRUNT",
+      actor: "AquaMemberM",
+      kind: "prop",
+      name: "水舰队手下",
+      text: "",
+      when: not("petalburgWoodsSaved"),
+    },
+    {
+      id: "woods.item.great-ball", sourceLocalId: "5", actor: "ItemBall", kind: "fieldItem",
+      x: 45, y: 7, itemId: "great_ball", itemName: "超级球", receivedFlag: "woodsItemGreatBall",
+      when: not("woodsItemGreatBall"), name: "超级球", text: "",
+    },
+    {
+      id: "woods.item.x-attack", sourceLocalId: "6", actor: "ItemBall", kind: "fieldItem",
+      x: 35, y: 20, itemId: "x_attack", itemName: "力量强化", receivedFlag: "woodsItemXAttack",
+      when: not("woodsItemXAttack"), name: "力量强化", text: "",
+    },
+    {
+      id: "woods.item.ether", sourceLocalId: "7", actor: "ItemBall", kind: "fieldItem",
+      x: 4, y: 8, itemId: "ether", itemName: "PP单项小补剂", receivedFlag: "woodsItemEther",
+      when: not("woodsItemEther"), name: "PP单项小补剂", text: "",
+    },
+    talk(15, 19, "Boy2", "woods.people.tall-grass", { id: "woods.boy1", sourceLocalId: "8" }),
+    talk(7, 32, "BugCatcher", "woods.trainers.lyle.intro", {
+      id: "woods.lyle", kind: "route104Trainer", trainerId: "lyle", sightRange: 3, sourceLocalId: "9",
+    }),
+    talk(4, 14, "BugCatcher", "woods.trainers.james.intro", {
+      id: "woods.james", kind: "route104Trainer", trainerId: "james", sightRange: 3, sourceLocalId: "10",
+    }),
+    talk(30, 34, "Boy3", "woods.people.hidden-items", { id: "woods.boy2", sourceLocalId: "11" }),
+    {
+      id: "woods.item.paralyze-heal", sourceLocalId: "12", actor: "ItemBall", kind: "fieldItem",
+      x: 4, y: 26, itemId: "paralyze_heal", itemName: "解麻药", receivedFlag: "woodsItemParalyzeHeal",
+      when: not("woodsItemParalyzeHeal"), name: "解麻药", text: "",
+    },
+    talk(33, 5, "Girl2", "woods.people.miracle-seed", {
+      id: "woods.girl", kind: "woodsMiracleSeed", itemId: "miracle_seed", itemName: "奇迹种子",
+      receivedFlag: "woodsMiracleSeedGift", sourceLocalId: "13",
+      repeatDialogue: "emerald:dialogues.woods.people.miracle-seed-repeat",
     }),
   ],
   PetalburgCity_PokemonCenter_1F: [

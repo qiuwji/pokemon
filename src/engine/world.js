@@ -1,5 +1,6 @@
 import { BLOCKED_REASON, assertBlockedReason } from "./blocked-reasons.js";
 import {
+  BEHAVIOR,
   arrowWarpDirection,
   arrivalDirection,
   ledgeDirection,
@@ -100,7 +101,10 @@ export class World {
     // Exit mats are safe arrival cells; stepping outward is a separate input.
     if (arrowWarpDirection(m.behavior[index]))
       return { x: destination.x, y: destination.y };
-    const offsets = m.indoor ? [[0,-1],[0,1],[-1,0],[1,0]] : [[0,1],[0,-1],[-1,0],[1,0]];
+    // A non-animated doorway/stair exits forward after arrival (Task_ExitNonAnimDoor).
+    // An indoor passable tile above it is not the landing, even if it looks like a valid floor.
+    const forwardExit = m.behavior[index] === BEHAVIOR.NON_ANIMATED_DOOR;
+    const offsets = m.indoor && !forwardExit ? [[0,-1],[0,1],[-1,0],[1,0]] : [[0,1],[0,-1],[-1,0],[1,0]];
     for (const [dx, dy] of offsets) {
       const x = destination.x + dx, y = destination.y + dy;
       if (x < 0 || y < 0 || x >= m.width || y >= m.height) continue;

@@ -1,0 +1,243 @@
+{
+  "maps": [
+    "Route104",
+    "PetalburgWoods",
+    "Route104_MrBrineysHouse",
+    "Route104_PrettyPetalFlowerShop",
+    "RustboroCity",
+    "RustboroCity_Gym",
+    "RustboroCity_DevonCorp_1F",
+    "RustboroCity_DevonCorp_2F",
+    "RustboroCity_DevonCorp_3F",
+    "RustboroCity_PokemonCenter_1F",
+    "RustboroCity_PokemonCenter_2F",
+    "RustboroCity_Mart",
+    "RustboroCity_PokemonSchool",
+    "RustboroCity_CuttersHouse",
+    "RustboroCity_House1",
+    "RustboroCity_House2",
+    "RustboroCity_House3",
+    "RustboroCity_Flat1_1F",
+    "RustboroCity_Flat1_2F",
+    "RustboroCity_Flat2_1F",
+    "RustboroCity_Flat2_2F",
+    "RustboroCity_Flat2_3F",
+    "Route116",
+    "Route116_TunnelersRestHouse",
+    "RusturfTunnel",
+    "DewfordTown",
+    "DewfordTown_Gym",
+    "DewfordTown_PokemonCenter_1F",
+    "DewfordTown_PokemonCenter_2F",
+    "DewfordTown_House1",
+    "DewfordTown_House2",
+    "DewfordTown_Hall",
+    "GraniteCave_1F",
+    "GraniteCave_B1F",
+    "GraniteCave_B2F",
+    "GraniteCave_StevensRoom",
+    "SlateportCity",
+    "SlateportCity_OceanicMuseum_1F",
+    "SlateportCity_OceanicMuseum_2F",
+    "SlateportCity_SternsShipyard_1F",
+    "SlateportCity_SternsShipyard_2F",
+    "SlateportCity_PokemonCenter_1F",
+    "SlateportCity_PokemonCenter_2F",
+    "SlateportCity_Mart",
+    "SlateportCity_PokemonFanClub"
+  ],
+  "actors": {
+    "BUG_CATCHER": "BugCatcher",
+    "GIRL_2": "Girl2",
+    "LASS": "Lass",
+    "BOY_1": "Boy1",
+    "WOMAN_2": "Woman2",
+    "GIRL_3": "Girl3",
+    "MR_BRINEYS_BOAT": "MrBrineysBoat",
+    "EXPERT_M": "ExpertM",
+    "FISHERMAN": "Fisherman",
+    "BERRY_TREE": "BerryTree",
+    "EXPERT_F": "ExpertF",
+    "ITEM_BALL": "ItemBall",
+    "WOMAN_5": "Woman5",
+    "TWIN": "Twin",
+    "RICH_BOY": "RichBoy",
+    "YOUNGSTER": "Youngster",
+    "CUTTABLE_TREE": "CuttableTree",
+    "BOY_2": "Boy2",
+    "AQUA_MEMBER_M": "AquaMemberM",
+    "MAN_2": "Man2",
+    "BOY_3": "Boy3",
+    "WINGULL": "Wingull",
+    "GIRL_1": "Girl1",
+    "FAT_MAN": "FatMan",
+    "NINJA_BOY": "NinjaBoy",
+    "MAN_3": "Man3",
+    "LITTLE_BOY": "LittleBoy",
+    "LITTLE_GIRL": "LittleGirl",
+    "DEVON_EMPLOYEE": "DevonEmployee",
+    "MAN_4": "Man4",
+    "SCIENTIST_1": "Scientist1",
+    "ROXANNE": "Roxanne",
+    "HIKER": "Hiker",
+    "WOMAN_3": "Woman3",
+    "GENTLEMAN": "Gentleman",
+    "NURSE": "Nurse",
+    "MAN_1": "Man1",
+    "TEALA": "Teala",
+    "MYSTERY_GIFT_MAN": "MysteryEventDeliveryman",
+    "MART_EMPLOYEE": "MartEmployee",
+    "POKEFAN_F": "PokefanF",
+    "GAMEBOY_KID": "GameboyKid",
+    "SCHOOL_KID_M": "SchoolKidM",
+    "SCOTT": "Scott",
+    "POKEFAN_M": "PokefanM",
+    "CAMPER": "Camper",
+    "OLD_MAN": "OldMan",
+    "OLD_WOMAN": "OldWoman",
+    "PIKACHU": "Pikachu",
+    "SKITTY_DOLL": "SkittyDoll",
+    "TREECKO_DOLL": "TreeckoDoll",
+    "TORCHIC_DOLL": "TorchicDoll",
+    "MUDKIP_DOLL": "MudkipDoll",
+    "PIKACHU_DOLL": "PikachuDoll",
+    "SKITTY": "Skitty",
+    "WOMAN_1": "Woman1",
+    "BLACK_BELT": "BlackBelt",
+    "MANIAC": "Maniac",
+    "BREAKABLE_ROCK": "BreakableRock",
+    "BRAWLY": "Brawly",
+    "SAILOR": "Sailor",
+    "ZIGZAGOON_2": "Zigzagoon",
+    "PSYCHIC_M": "PsychicM",
+    "STEVEN": "Steven",
+    "WOMAN_4": "Woman4",
+    "AQUA_MEMBER_F": "AquaMemberF",
+    "COOK": "Cook",
+    "CAMERAMAN": "Cameraman",
+    "REPORTER_F": "ReporterF",
+    "MAN_5": "Man5",
+    "BEAUTY": "Beauty",
+    "REPORTER_M": "ReporterM",
+    "ARCHIE": "Archie",
+    "AZUMARILL": "Azumarill"
+  },
+  "items": {
+    "Route104_EventScript_ItemPPUp": {
+      "itemId": "pp_up",
+      "itemName": "PP UP"
+    },
+    "Route104_EventScript_ItemPokeBall": {
+      "itemId": "pokeball",
+      "itemName": "精灵球"
+    },
+    "Route104_EventScript_ItemXAccuracy": {
+      "itemId": "x_accuracy",
+      "itemName": "X ACCURACY"
+    },
+    "Route104_EventScript_ItemPotion": {
+      "itemId": "potion",
+      "itemName": "伤药"
+    },
+    "PetalburgWoods_EventScript_ItemGreatBall": {
+      "itemId": "great_ball",
+      "itemName": "超级球"
+    },
+    "PetalburgWoods_EventScript_ItemXAttack": {
+      "itemId": "x_attack",
+      "itemName": "X ATTACK"
+    },
+    "PetalburgWoods_EventScript_ItemEther": {
+      "itemId": "ether",
+      "itemName": "ETHER"
+    },
+    "PetalburgWoods_EventScript_ItemParalyzeHeal": {
+      "itemId": "paralyze_heal",
+      "itemName": "PARLYZ HEAL"
+    },
+    "RustboroCity_EventScript_ItemXDefend": {
+      "itemId": "x_defend",
+      "itemName": "X DEFEND"
+    },
+    "Route116_EventScript_ItemEther": {
+      "itemId": "ether",
+      "itemName": "ETHER"
+    },
+    "Route116_EventScript_ItemRepel": {
+      "itemId": "repel",
+      "itemName": "REPEL"
+    },
+    "Route116_EventScript_ItemHPUp": {
+      "itemId": "hp_up",
+      "itemName": "HP UP"
+    },
+    "Route116_EventScript_ItemXSpecial": {
+      "itemId": "x_special",
+      "itemName": "X SPECIAL"
+    },
+    "Route116_EventScript_ItemPotion": {
+      "itemId": "potion",
+      "itemName": "伤药"
+    },
+    "RusturfTunnel_EventScript_ItemPokeBall": {
+      "itemId": "pokeball",
+      "itemName": "精灵球"
+    },
+    "RusturfTunnel_EventScript_ItemMaxEther": {
+      "itemId": "max_ether",
+      "itemName": "MAX ETHER"
+    },
+    "GraniteCave_1F_EventScript_ItemEscapeRope": {
+      "itemId": "escape_rope",
+      "itemName": "ESCAPE ROPE"
+    },
+    "GraniteCave_B1F_EventScript_ItemPokeBall": {
+      "itemId": "pokeball",
+      "itemName": "精灵球"
+    },
+    "GraniteCave_B2F_EventScript_ItemRepel": {
+      "itemId": "repel",
+      "itemName": "REPEL"
+    },
+    "GraniteCave_B2F_EventScript_ItemRareCandy": {
+      "itemId": "rare_candy",
+      "itemName": "RARE CANDY"
+    }
+  },
+  "trainers": {
+    "Route104_EventScript_Haley": "haley_1",
+    "Route104_EventScript_Ivan": "ivan",
+    "Route104_EventScript_Gina": "gina_and_mia_1",
+    "Route104_EventScript_Mia": "gina_and_mia_1",
+    "Route104_EventScript_Winston": "winston_1",
+    "Route104_EventScript_Cindy": "cindy_1",
+    "Route104_EventScript_Billy": "billy",
+    "Route104_EventScript_Darian": "darian",
+    "PetalburgWoods_EventScript_Lyle": "lyle",
+    "PetalburgWoods_EventScript_James": "james_1",
+    "RustboroCity_Gym_EventScript_Roxanne": "roxanne_1",
+    "RustboroCity_Gym_EventScript_Josh": "josh",
+    "RustboroCity_Gym_EventScript_Tommy": "tommy",
+    "RustboroCity_Gym_EventScript_Marc": "marc",
+    "Route116_EventScript_Joey": "joey",
+    "Route116_EventScript_Jose": "jose",
+    "Route116_EventScript_Clark": "clark",
+    "Route116_EventScript_Janice": "janice",
+    "Route116_EventScript_Karen": "karen_1",
+    "Route116_EventScript_Jerry": "jerry_1",
+    "Route116_EventScript_Sarah": "sarah",
+    "Route116_EventScript_Dawson": "dawson",
+    "Route116_EventScript_Johnson": "johnson",
+    "Route116_EventScript_Devan": "devan",
+    "RusturfTunnel_EventScript_Grunt": "grunt_rusturf_tunnel",
+    "RusturfTunnel_EventScript_Mike": "mike_2",
+    "DewfordTown_Gym_EventScript_Brawly": "brawly_1",
+    "DewfordTown_Gym_EventScript_Takao": "takao",
+    "DewfordTown_Gym_EventScript_Jocelyn": "jocelyn",
+    "DewfordTown_Gym_EventScript_Laura": "laura",
+    "DewfordTown_Gym_EventScript_Cristian": "cristian",
+    "DewfordTown_Gym_EventScript_Lilith": "lilith",
+    "DewfordTown_Gym_EventScript_Brenden": "brenden",
+    "SlateportCity_OceanicMuseum_2F_EventScript_CaptStern": "grunt_museum_1"
+  }
+}

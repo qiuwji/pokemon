@@ -117,9 +117,9 @@ export class BattleDirector {
       },
       () => {
         if (event.kind === "trainer-slide")
-          this.trainers = (event.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer.back), opacity: 1 }));
+          this.trainers = (event.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer), opacity: 1 }));
         if (event.introPhase === "slide") {
-          this.trainers = (event.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer.back), opacity: 1, frame: trainer.rest || 0 }));
+          this.trainers = (event.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer), opacity: 1, frame: trainer.rest || 0 }));
           for (const c of event.combatants)
             if (event.trainers?.some(trainer => !!trainer.back === !!this.layout(event).get(c.seatId)?.back)) this.hidden.add(c.seatId);
         }
@@ -171,9 +171,11 @@ export class BattleDirector {
       }
     }
   }
-  trainerPosition(back) {
-    return this.intro?.trainerPositions?.[back ? "home" : "away"] ||
+  trainerPosition(trainer) {
+    const back = typeof trainer === "boolean" ? trainer : !!trainer.back;
+    const position = trainer.position || this.intro?.trainerPositions?.[back ? "home" : "away"] ||
       { x: back ? 65 : 248, y: back ? 158 : 74 };
+    return { ...position, y: position.y + (trainer.offsetY || 0) };
   }
   sample(now = this.timeline.now()) {
     if (!this.view) return null;
@@ -233,7 +235,7 @@ export class BattleDirector {
           c.monster.hp = Math.round(lerp(old.hp, c.monster.hp, clamp(t / 0.8)));
       }
     if (e.introPhase === "slide" && this.reducedMotion()) {
-      result.trainers = (e.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer.back), opacity: 1, frame: trainer.rest || 0 }));
+      result.trainers = (e.trainers || []).map(trainer => ({ ...trainer, ...this.trainerPosition(trainer), opacity: 1, frame: trainer.rest || 0 }));
       actors.forEach(a => { if (result.trainers.some(trainer => !!trainer.back === !!layout.get(a.seatId).back)) a.opacity = 0; });
     }
     if (this.reducedMotion() || e.offscreen) return result;
@@ -242,23 +244,24 @@ export class BattleDirector {
     if (registered?.mode !== "replace") {
       if (e.kind === "trainer-slide") {
         result.trainers = (e.trainers || []).map(trainer => {
-          const position = this.trainerPosition(trainer.back);
-          return { ...trainer, ...position, x: position.x + (trainer.back ? -1 : 1) * (this.viewport?.width || 320) * (1 - t), opacity: 1 };
+          const position = this.trainerPosition(trainer);
+          return { ...trainer, ...position, x: position.x + (trainer.slideOffset ?? (trainer.back ? -1 : 1) * (this.viewport?.width || 320)) * (1 - t), opacity: 1 };
         });
       } else if (e.introPhase === "slide") {
         const width = this.viewport?.width || 320;
         result.background = { split: true, x: Math.max(0, width - Math.floor(t * width / 2) * 2) };
         result.trainers = (e.trainers || []).map(trainer => {
-          const position = this.trainerPosition(trainer.back);
-          return { ...trainer, ...position, x: position.x + (trainer.back ? -1 : 1) * width * (1 - t), opacity: 1, frame: trainer.rest || 0 };
+          const position = this.trainerPosition(trainer);
+          return { ...trainer, ...position, x: position.x + (trainer.slideOffset ?? (trainer.back ? -1 : 1) * width) * (1 - t), opacity: 1, frame: trainer.rest || 0 };
         });
         for (const a of actors) {
           const p = layout.get(a.seatId);
           a.opacity = e.trainers?.some(trainer => !!trainer.back === p.back) ? 0 : 1;
-          a.x = (p.back ? -1 : 1) * width * (1 - t);
+          a.x = (p.back ? 1 : -1) * width * (1 - t);
         }
       } else if (e.introPhase === "send") {
         const send = new Set(e.sendSeats || []), openT = clamp((t - 0.65) / 0.35);
+        const motion = e.sendMotion, frames = Math.floor(t * duration * 60 / 1000);
         result.trainers = this.trainers.map(trainer => {
           if (!!trainer.back !== e.sendBack) return trainer;
           const elapsedFrames = Math.floor(t * duration * 60 / 1000);
@@ -268,13 +271,33 @@ export class BattleDirector {
             if (elapsed < frames) break;
             elapsed -= frames;
           }
-          return { ...trainer, frame: index, x: trainer.x - (trainer.back ? 1 : -1) * clamp((t - 0.65) / 0.35) * 96, opacity: 1 };
+          return motion
+            ? { ...trainer, frame: index, x: lerp(trainer.x, motion.exitX, clamp(frames / motion.trainerFrames)), opacity: frames < motion.trainerFrames ? 1 : 0 }
+            : { ...trainer, frame: index, x: trainer.x - (trainer.back ? 1 : -1) * clamp((t - 0.65) / 0.35) * 96, opacity: 1 };
         });
         result.balls = [];
         result.effects = [];
         for (const a of actors) {
           if (!send.has(a.seatId)) continue;
           const position = layout.get(a.seatId), origin = this.trainerPosition(position.back), throwT = clamp((t - 0.2) / 0.45);
+          if (motion) {
+            const index = (e.sendSeats || []).indexOf(a.seatId);
+            const localFrames = frames - motion.ballDelay;
+            const releaseAt = motion.ballTravel + index * motion.partnerDelay;
+            const emerge = clamp((localFrames - releaseAt) / motion.releaseFrames);
+            const ballEnd = { x: position.x, y: position.y + 24 };
+            const ballStart = motion.arc ? motion.ballOrigin : ballEnd;
+            const travel = clamp(localFrames / motion.ballTravel);
+            a.opacity = localFrames >= releaseAt ? 1 : 0;
+            a.scale = emerge;
+            a.y = 24 * (1 - emerge);
+            if (localFrames >= 0 && emerge < 1) result.balls.push({ resource: this.intro?.ballResource,
+              x: lerp(ballStart.x, ballEnd.x, travel), y: lerp(ballStart.y, ballEnd.y, travel) - (motion.arc ? Math.sin(travel * Math.PI) * 30 : 0),
+              angle: 0, size: 16, sealed: emerge === 0 });
+            if (emerge > 0 && emerge < 1) result.effects.push({ kind: "release", source: ballEnd, target: position,
+              side: position.back ? 0 : 1, t: emerge });
+            continue;
+          }
           a.opacity = openT > 0 ? 1 : 0;
           a.scale = openT;
           if (t >= 0.2 && openT < 1) result.balls.push({ resource: this.intro?.ballResource,

@@ -436,6 +436,7 @@ export class StoryApplication {
     const owner = (battle) => {
       const base = this.resultPlan(battle, { story: false });
       return {
+        presentation: base.presentation,
         commit: () => {
           // Validate the continuation before committing currency/custody.
           const record = structuredClone(this.state.story);

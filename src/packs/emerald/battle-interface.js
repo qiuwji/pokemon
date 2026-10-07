@@ -126,8 +126,9 @@ export function createBattleInterface(
     const frame = game.director.sample();
     if (!frame) return;
     const multi = frame.combatants.length > 2,
-      home = frame.combatants.filter((c) => friendly(frame, c)),
-      away = frame.combatants.filter((c) => !friendly(frame, c));
+      visible = c => frame.view.kind !== "entry" || frame.actors.some(a => a.seatId === c.seatId && a.opacity > 0),
+      home = frame.combatants.filter((c) => friendly(frame, c) && visible(c)),
+      away = frame.combatants.filter((c) => !friendly(frame, c) && visible(c));
     let options,
       prompt =
         message || `${b.script === "wally" ? "小光" : b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;

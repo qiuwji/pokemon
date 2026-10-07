@@ -604,6 +604,8 @@ export function registerEmeraldCommands(game, bus) {
   );
   register("box.deposit", byUid, ({ uid }) => game.depositBox(partyIndex(uid)));
   register("box.withdraw", byUid, ({ uid }) => game.withdrawBox(boxIndex(uid)));
+  register("box.swap", objectSchema({ firstUid: id, secondUid: id }, ["firstUid", "secondUid"]),
+    ({ firstUid, secondUid }) => game.swapBox(boxIndex(firstUid), boxIndex(secondUid)));
   register(
     "box.exchange",
     objectSchema({ boxUid: id, partyUid: id }, ["boxUid", "partyUid"]),

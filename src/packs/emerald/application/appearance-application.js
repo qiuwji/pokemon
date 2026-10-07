@@ -116,6 +116,8 @@ export class AppearanceApplication {
           definition.appearance.data,
         );
     }
+    const plot = target.kind === "object" && this.catalog.maps[target.map]?.elements?.find(o => o.id === target.id && o.kind === "berryPlot");
+    if (plot) context = { ...context, berry: this.state.crops.trees[plot.plotId] || { stage:"empty" } };
     if (!fallback) fallback = emeraldDefaultAppearance(target, context);
     return this.selections.resolve(target, target.kind === "player" ? { ...context, gender: this.state.playerGender } : context, fallback);
   }

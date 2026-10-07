@@ -33,6 +33,7 @@ export class Renderer {
       reducedMotion = () => false,
       fieldPriority = () => 2,
       reflectionSurface = () => null,
+      reflectionVisible = () => true,
       reflectionResource = () => null,
       reflectionScale = () => 1,
       reflectionColumns = null,
@@ -57,6 +58,7 @@ export class Renderer {
       reducedMotion,
       fieldPriority,
       reflectionSurface,
+      reflectionVisible,
       reflectionResource,
       reflectionScale,
       reflectionColumns,
@@ -171,7 +173,7 @@ export class Renderer {
     const animation = pack.animations[base];
     const index = animation
       ? animation.frames[
-          Math.floor(now / animation.ms) % animation.frames.length
+          Math.floor(Math.max(0, now - (animation.offsetMs || 0)) / animation.ms) % animation.frames.length
         ]
       : pack.lookup[base];
     if (index === undefined) return;
@@ -212,7 +214,7 @@ export class Renderer {
         now,
       );
   }
-  drawMap(id, overlay, now) {
+  drawMap(id, overlay, now, door = null) {
     const m = this.mapProvider?.(id) || this.db.maps[id],
       origin = this.graph.placements[id],
       pack = this.db.tilesets[m.tileset];
@@ -230,7 +232,9 @@ export class Renderer {
       for (let x = minX; x < maxX; x++)
         this.grid(
           pack,
-          m.appearances?.[y * m.width + x] ?? m.blocks[y * m.width + x],
+          (door?.map === id && door.x === x
+            ? (y === door.y ? door.bottom : y === door.y - 1 ? door.top : null) : null)
+            ?? m.appearances?.[y * m.width + x] ?? m.blocks[y * m.width + x],
           (origin.x + x) * 16 - this.camera.x,
           (origin.y + y) * 16 - this.camera.y,
           overlay,
@@ -321,9 +325,8 @@ export class Renderer {
             now,
           );
         }
-      for (const id of ids) this.drawMap(id, false, now);
-      // The door swap draws into the background layer, so it sits under every object.
-      if (door) this.doorTiles(door, now);
+      // A visual substitution applies to both passes; the closed map overlay cannot repaint an open door.
+      for (const id of ids) this.drawMap(id, false, now, door);
       const offsets = this.objectTransforms(now);
       const all = ids.flatMap((id) => {
         const o = this.graph.placements[id];
@@ -363,7 +366,7 @@ export class Renderer {
         for (let y = minY; y < maxY; y++)
           for (let x = minX; x < maxX; x++) {
             const surface = this.reflectionSurface(m.behavior[y * m.width + x]);
-            if (surface) cells.push({ x: (o.x + x) * 16 - this.camera.x, y: (o.y + y) * 16 - this.camera.y, ...surface });
+            if (surface) cells.push({ behavior: m.behavior[y * m.width + x], x: (o.x + x) * 16 - this.camera.x, y: (o.y + y) * 16 - this.camera.y, ...surface });
           }
         return cells;
       });
@@ -413,7 +416,10 @@ export class Renderer {
             dir: n.dir, progress: n.progress ?? 1, foot: n.foot ?? 0,
             moving: !!n.moving, freezeAnimation: !!n.freezeAnimation,
             pose: n.pose, timeMs: n.animationTimeMs ?? now,
-          }, x, y, lift, reflectiveCells, {
+          }, x, y, lift, reflectiveCells.filter(cell => this.reflectionVisible(cell, {
+              elevation: n.player ? p.elevation : n.elevation,
+              behavior: (world.maps[n.map]?.behavior || [])[((n.player ? p.y : n.y) * world.maps[n.map]?.width) + (n.player ? p.x : n.x)],
+            })), {
             resourceFor: this.reflectionResource, reducedMotion: this.reducedMotion(), opacity: avatar.opacity ?? 1,
             horizontalScale: this.reflectionScale(now), columnsFor: this.reflectionColumns,
             origins: [current].map(point => ({ x: point.x - this.camera.x, y: point.y - this.camera.y })),
@@ -468,7 +474,7 @@ export class Renderer {
       drawActors(all, true);
       const aboveTerrain = this.movementPresentation().aboveTerrain;
       drawActors(all.filter((n) => !(n.player && aboveTerrain) && priority(n) >= 2));
-      for (const id of ids) this.drawMap(id, true, now);
+      for (const id of ids) this.drawMap(id, true, now, door);
       drawActors(all.filter((n) => !(n.player && aboveTerrain) && priority(n) < 2));
       if (aboveTerrain) drawActors(all.filter(n=>n.player));
       if (action?.target.map) {
