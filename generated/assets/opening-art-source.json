@@ -3,15 +3,287 @@
   "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
   "inputs": [
     {
-      "path": "data/tilesets/secondary/petalburg/palettes/00.pal",
-      "sha256": "24590e1e383394ef157db0b3435728c3b838839ffc33d9eb984f7c98a7c2ba64"
+      "path": "data/layouts/layouts.json",
+      "sha256": "5ac58ee1072862c937f82121a931b3315ccca3b5ae807f2a28a0e273957c2e4f"
     },
     {
-      "path": "data/tilesets/secondary/petalburg/palettes/01.pal",
+      "path": "data/maps/DewfordTown/map.json",
+      "sha256": "8220ac4088ddebb37b3f6a695d42f99f7117c239a4b28cfa0931267c0f1c7f25"
+    },
+    {
+      "path": "data/maps/DewfordTown_Gym/map.json",
+      "sha256": "2bf127803b6b5a856ba848cd7f36922a89a719cdf3ddeee67855ffb41f218a80"
+    },
+    {
+      "path": "data/maps/DewfordTown_Hall/map.json",
+      "sha256": "f281adab1b1627ba21cc9aca2a64950a4c2e5a0090e036651aa2cc888f08f843"
+    },
+    {
+      "path": "data/maps/DewfordTown_House1/map.json",
+      "sha256": "a51430cafdaab54053860130ebb3d3e71d8b96228096d2fda96271ee33ab5eda"
+    },
+    {
+      "path": "data/maps/DewfordTown_House2/map.json",
+      "sha256": "1d140a157744db499a778ef157ecd6092223c9c70874152a4060ded1385262f4"
+    },
+    {
+      "path": "data/maps/DewfordTown_PokemonCenter_1F/map.json",
+      "sha256": "0efa33075bb804f3e9057057c41d9b293c4968789b0c63d8bfffe9226b67f748"
+    },
+    {
+      "path": "data/maps/DewfordTown_PokemonCenter_2F/map.json",
+      "sha256": "99126bdb8162d2b79841f1ae740cd31723510e8ce6e94714c9cd5cbdc7642671"
+    },
+    {
+      "path": "data/maps/GraniteCave_1F/map.json",
+      "sha256": "5ad0450ea4d4ae781d7df801fde9bac05087d1d6dfe468afaaaf263615a2a6c4"
+    },
+    {
+      "path": "data/maps/GraniteCave_B1F/map.json",
+      "sha256": "2e3b75f8923a3a31eb7aadb58a26f211dbb5043ae1765bf35afebb3024144b5b"
+    },
+    {
+      "path": "data/maps/GraniteCave_B2F/map.json",
+      "sha256": "afafb57b22e5c74242fc8115885f41f643df001bd59500adaff631e6518b5203"
+    },
+    {
+      "path": "data/maps/GraniteCave_StevensRoom/map.json",
+      "sha256": "1966f8fb9181e43e697e4950dd0060fd5418c5c3f6cc6ab8c1f167a631a90abe"
+    },
+    {
+      "path": "data/maps/InsideOfTruck/map.json",
+      "sha256": "53aca8b0bb6cd5fb7e5272939ee3223dbf60ab82f6f8134a696595538d75f320"
+    },
+    {
+      "path": "data/maps/LittlerootTown/map.json",
+      "sha256": "5bdd4157ca532864c0ba4bc8d0246e4b9e55c82e52b4d373d58270836ae9330f"
+    },
+    {
+      "path": "data/maps/LittlerootTown_BrendansHouse_1F/map.json",
+      "sha256": "996802b4be9237e37a4593c303b652e822ff1e1c06ae929b56792433e9f85577"
+    },
+    {
+      "path": "data/maps/LittlerootTown_BrendansHouse_2F/map.json",
+      "sha256": "252e6fabc2391bc95bedcc578c3383abbc42d329743c01e7c0aa3bd2e7724000"
+    },
+    {
+      "path": "data/maps/LittlerootTown_MaysHouse_1F/map.json",
+      "sha256": "84706e42f405d7ac07f187da58a2367cf9c094e107ad23c24bfdde6949dd9702"
+    },
+    {
+      "path": "data/maps/LittlerootTown_MaysHouse_2F/map.json",
+      "sha256": "7a950c863854fc2b6ca5e1efba9a3e0a1127850f16a04bd18d4e470219b35198"
+    },
+    {
+      "path": "data/maps/LittlerootTown_ProfessorBirchsLab/map.json",
+      "sha256": "13a03483c8fac9a7a6b169ce70bcdc389d86f652529e2b2bfb9cf29e306c5984"
+    },
+    {
+      "path": "data/maps/OldaleTown/map.json",
+      "sha256": "8521b74ceafe0a85c637205db2e9afb04746bfb1f7531ab8e71147e767e95996"
+    },
+    {
+      "path": "data/maps/OldaleTown_House1/map.json",
+      "sha256": "8e23d3a4814882811d11e864ef31b9709197509e9e0c8efbdc9d2dd959f07f7e"
+    },
+    {
+      "path": "data/maps/OldaleTown_House2/map.json",
+      "sha256": "c36274fdd63a080b4fb507ecc69efe07dcbc1bfa04a6a69e6e2a4ca26c178841"
+    },
+    {
+      "path": "data/maps/OldaleTown_Mart/map.json",
+      "sha256": "4ec9de296ba496602bb901f13a863b09deaafd2707a37304dca96b196844d01c"
+    },
+    {
+      "path": "data/maps/OldaleTown_PokemonCenter_1F/map.json",
+      "sha256": "8b75cfecca075b306839e1377f22c5ac5f329f97ae32f466346563646718190f"
+    },
+    {
+      "path": "data/maps/PetalburgCity/map.json",
+      "sha256": "0018ee193173c55b295f46a11a82dad9db0f37e7717a18261efc587c71d7d20e"
+    },
+    {
+      "path": "data/maps/PetalburgCity_Gym/map.json",
+      "sha256": "a99a35b91e701a64e70f59a988a97816f57b6b4c4c6fd1705d67cfec37fb015e"
+    },
+    {
+      "path": "data/maps/PetalburgCity_House1/map.json",
+      "sha256": "3400f4ba34074c15b94fbe24e19d023fc06d9faf028e0e375a3f29f7a846c261"
+    },
+    {
+      "path": "data/maps/PetalburgCity_House2/map.json",
+      "sha256": "38f1223c72c7932d520b767ca0f8ef23e9d89ac82e4893750d1c7cb25d913466"
+    },
+    {
+      "path": "data/maps/PetalburgCity_Mart/map.json",
+      "sha256": "53d7d09a3fd9edc58f2485a97730b26e7dd1dd4a119bba3eb9e34ceb93747cc7"
+    },
+    {
+      "path": "data/maps/PetalburgCity_PokemonCenter_1F/map.json",
+      "sha256": "710202b06face6804faa91ade3c659316cb041ea76083ef4d0521fbc1b3e81a1"
+    },
+    {
+      "path": "data/maps/PetalburgCity_WallysHouse/map.json",
+      "sha256": "1484ddbc0ba383ee0228b5e1ed4b55fc2d08acd1bc251ccf760576e06baedd33"
+    },
+    {
+      "path": "data/maps/PetalburgWoods/map.json",
+      "sha256": "31038be29e39c493a1e3cdf74a7cccaae7f9d024e55112973528813b5d24b45a"
+    },
+    {
+      "path": "data/maps/Route101/map.json",
+      "sha256": "d66cd8eeed6b6f164ed28060de85262476e016b668a6d9b26cf434efdb1d69f9"
+    },
+    {
+      "path": "data/maps/Route102/map.json",
+      "sha256": "b5dee9994c80f4983c997121d05fe408141e97a022915d3c867a541514348f50"
+    },
+    {
+      "path": "data/maps/Route103/map.json",
+      "sha256": "bd478d1cb62d54fe14f1f8d0c41e5809b208e953fba097afd2b9f1629e5d653c"
+    },
+    {
+      "path": "data/maps/Route104/map.json",
+      "sha256": "a508508e63e83ad350d6dec54ce5ddba8305e51215f477bb035d21a532994d9a"
+    },
+    {
+      "path": "data/maps/Route104_MrBrineysHouse/map.json",
+      "sha256": "a92ecd36de5be0cdd3c9cdff5b3b099e0699dd6258a31033200899fcfd78ad9e"
+    },
+    {
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/map.json",
+      "sha256": "b31bf4a12f9d1077e9580a51b1104f58d4a504e45c409fb083e14e32aa5478c0"
+    },
+    {
+      "path": "data/maps/Route116/map.json",
+      "sha256": "1b5dfe9feb2f098cd73e272510b89896c71ddecefe38e575cca71818531715f6"
+    },
+    {
+      "path": "data/maps/Route116_TunnelersRestHouse/map.json",
+      "sha256": "0b6b1d405cb03fcbce6f5af7ecf7e1be224bc4cd27e1343ed5e245418221c34b"
+    },
+    {
+      "path": "data/maps/RustboroCity/map.json",
+      "sha256": "72db80f88de45b45dec9d2e589510ebe716e32c6470852d6a9993aa0b3fc2186"
+    },
+    {
+      "path": "data/maps/RustboroCity_CuttersHouse/map.json",
+      "sha256": "c9a9f4477cd3a913bd4e5736cf17c82551c1d48d307b21294494241cf5355326"
+    },
+    {
+      "path": "data/maps/RustboroCity_DevonCorp_1F/map.json",
+      "sha256": "c6e155e276a99d63856feb211682331cfc89a409fe566f860615d2773cd5b193"
+    },
+    {
+      "path": "data/maps/RustboroCity_DevonCorp_2F/map.json",
+      "sha256": "8fccc0122798e97175808ee923a19b2be63388aa953d00e6ca8231f971486238"
+    },
+    {
+      "path": "data/maps/RustboroCity_DevonCorp_3F/map.json",
+      "sha256": "71023ec30790fb8ff43db6fadc7180fb2ffcb50ffb8ed9b0107895d0f3b93846"
+    },
+    {
+      "path": "data/maps/RustboroCity_Flat1_1F/map.json",
+      "sha256": "0a0d7593abaf0ed3c626c00a027665bfdabe254cfd2fdfa647f2f13b0149937a"
+    },
+    {
+      "path": "data/maps/RustboroCity_Flat1_2F/map.json",
+      "sha256": "fbcf072c8618e25e670f377110dea3407ec83b369750fd4fcb61b8eef4dd3b77"
+    },
+    {
+      "path": "data/maps/RustboroCity_Flat2_1F/map.json",
+      "sha256": "f786448f4f86f5d1839d108df22cc68cf3083eb25d2e191e597bb26dbb843a28"
+    },
+    {
+      "path": "data/maps/RustboroCity_Flat2_2F/map.json",
+      "sha256": "c0b2e9e8c051b4cdd58257747ccaa811daee1fbbe0a51b297ac0e3e00ea83927"
+    },
+    {
+      "path": "data/maps/RustboroCity_Flat2_3F/map.json",
+      "sha256": "4c524ab705114df4975aa2b6fc08c1741ea7ccfd6c88703b77d7990c95411547"
+    },
+    {
+      "path": "data/maps/RustboroCity_Gym/map.json",
+      "sha256": "1dab794623cf0d1eecd07abf2e4836071cd5386eb3daeb71bb6aac2f4b234fcf"
+    },
+    {
+      "path": "data/maps/RustboroCity_House1/map.json",
+      "sha256": "a6137e1d23146318699ae7d0061fbcd7de615512bdead08df26577b1f991d9b9"
+    },
+    {
+      "path": "data/maps/RustboroCity_House2/map.json",
+      "sha256": "bda1a136ccb4fea17473b4136955938b3fb5418e93a3929475007c95e88cb876"
+    },
+    {
+      "path": "data/maps/RustboroCity_House3/map.json",
+      "sha256": "ed4ddef3c3e4a719968b77cff3da317d2f4b2d0b044c89ae8b91b0e470b4ef58"
+    },
+    {
+      "path": "data/maps/RustboroCity_Mart/map.json",
+      "sha256": "aae893adb06834ab25b25323fb1316a7d3934568eac57628b8721a5bea9a7c92"
+    },
+    {
+      "path": "data/maps/RustboroCity_PokemonCenter_1F/map.json",
+      "sha256": "4a930f5c5005f281ba9ffa721a72c19fb99918e79b8dfc86d568853602b00853"
+    },
+    {
+      "path": "data/maps/RustboroCity_PokemonCenter_2F/map.json",
+      "sha256": "46a3cce2e51258f17d2fbc27490d9cf3196eed63e1219e373cdecc47dc8f77d1"
+    },
+    {
+      "path": "data/maps/RustboroCity_PokemonSchool/map.json",
+      "sha256": "d79f2803b48b51a4a9b7a079690f1cd7a71d652b285fc0acb7af2fb8ef9fe9a1"
+    },
+    {
+      "path": "data/maps/RusturfTunnel/map.json",
+      "sha256": "ade833d8a4f0809628ab2f1ab4f17506880fb6fc27ce3dda5fb1524aea366d37"
+    },
+    {
+      "path": "data/maps/SlateportCity/map.json",
+      "sha256": "09e84e6a32f1ab831eef187356c2fc3ef4ba6e196f44753d59c04eca957b38cd"
+    },
+    {
+      "path": "data/maps/SlateportCity_Mart/map.json",
+      "sha256": "2c5dc6c2d26d3fb2c8717408ec68e655b27cefb4c24388980c1c21c9de265365"
+    },
+    {
+      "path": "data/maps/SlateportCity_OceanicMuseum_1F/map.json",
+      "sha256": "9a70cc7e080012523517e2e4a125d14d1212bc6b9f663f2a9c831e3e81af6b32"
+    },
+    {
+      "path": "data/maps/SlateportCity_OceanicMuseum_2F/map.json",
+      "sha256": "e284a946fca97ba0e50e6c24457274be6d79d47365fd0b07c5e5a5cffebf2c78"
+    },
+    {
+      "path": "data/maps/SlateportCity_PokemonCenter_1F/map.json",
+      "sha256": "592dbb6d7b67aafc7a437bcee3e2c2912737f77e202cb0acc61ceb8e6f56b625"
+    },
+    {
+      "path": "data/maps/SlateportCity_PokemonCenter_2F/map.json",
+      "sha256": "d59eebb0ccd6b3dac89267f73572f44e45f3871ce02e72b1ff08310e92927ec4"
+    },
+    {
+      "path": "data/maps/SlateportCity_PokemonFanClub/map.json",
+      "sha256": "13509ac606d33a280fe30c963310f0e96fcd29a6528dd6c64b6f3504a8501d7b"
+    },
+    {
+      "path": "data/maps/SlateportCity_SternsShipyard_1F/map.json",
+      "sha256": "61f4d63154b30680492930e5e3d561246823a9c5d1aa43bee4cd1f74dc24f6b5"
+    },
+    {
+      "path": "data/maps/SlateportCity_SternsShipyard_2F/map.json",
+      "sha256": "0083c9fff848017b3209a8ed38ed0498262947f3e136f7d5cd43bfa29010e424"
+    },
+    {
+      "path": "data/tilesets/primary/general/palettes/00.pal",
+      "sha256": "e7fec32eef41a79d6d45e7f5af9dc74717a1d40ce07aa7cef37eeb7edd47f579"
+    },
+    {
+      "path": "data/tilesets/primary/general/palettes/01.pal",
       "sha256": "c17687ece4bb432d345b43b4e806ebba741553b1ed83b0f46207ce537db5d25c"
     },
     {
-      "path": "data/tilesets/secondary/petalburg/palettes/05.pal",
+      "path": "data/tilesets/primary/general/palettes/05.pal",
       "sha256": "8356b54b4d39ed880b83f39c82b61699dd720e28eb2ebc2d80a4bd360d8720e2"
     },
     {
@@ -31,12 +303,40 @@
       "sha256": "05dff2802ae119041dfd03c7685b735c7c751ee5f93f60f8828e04a2bce53548"
     },
     {
+      "path": "data/tilesets/secondary/pokemon_center/palettes/06.pal",
+      "sha256": "d7a9bb68d6fcdbe74433e40ad7f6dcee51f6c509795c7fbf1a577ad3bc382a5c"
+    },
+    {
+      "path": "data/tilesets/secondary/rustboro/palettes/10.pal",
+      "sha256": "1e52271b52240d8f82c811c976aca54e5ad3c2fa50708dd004b11d46b0b80d4c"
+    },
+    {
+      "path": "data/tilesets/secondary/rustboro/palettes/11.pal",
+      "sha256": "3794d5e8dd031eb708902ad913f3872f4d1cce0a921dfbc10119c3d2e83dda8e"
+    },
+    {
+      "path": "data/tilesets/secondary/slateport/palettes/06.pal",
+      "sha256": "5e68c04d088a0afa6cb3723eb018cea4a37fed9c48b24a8c92284cbdf8720e82"
+    },
+    {
       "path": "graphics/battle_transitions/pokeball.png",
       "sha256": "edfa2c2187e0e94b8ad41755b07bd4ea97ec25ce223004666ac90aa05727d852"
     },
     {
+      "path": "graphics/door_anims/battle_tent.png",
+      "sha256": "3c7c1352330d78a7d376d5baebc2378add0d9a2cc9808de5e2a047e1ca0c62e4"
+    },
+    {
       "path": "graphics/door_anims/birchs_lab.png",
       "sha256": "98dd6b1ebeae340109881e404a2ea08e893155890b7f203de052a646291485a7"
+    },
+    {
+      "path": "graphics/door_anims/cable_club.png",
+      "sha256": "0628c0e7b6a386b25d8521f5c3156c7d70d5d8416f4c337fa6d0b1972715b3ef"
+    },
+    {
+      "path": "graphics/door_anims/dewford.png",
+      "sha256": "70f718d3353d68ebf73415dbb09ee15a6116b19a460e6137977ce6ff8a4414ef"
     },
     {
       "path": "graphics/door_anims/general.png",
@@ -61,6 +361,18 @@
     {
       "path": "graphics/door_anims/poke_mart.png",
       "sha256": "5228893b4dcdc8363e44a3036708e31123021cec76e38ca0e25543bf0031dd88"
+    },
+    {
+      "path": "graphics/door_anims/rustboro_gray.png",
+      "sha256": "08dbb9c6efd650a78cd84132c4b257e0bbdcf2dec2ca243b4a785369a2df3995"
+    },
+    {
+      "path": "graphics/door_anims/rustboro_tan.png",
+      "sha256": "29fd4a0038000b8d4640fee91b5d2b0a00fe5fd8f58d60856f983355b0df1222"
+    },
+    {
+      "path": "graphics/door_anims/slateport.png",
+      "sha256": "63b2f9833113c56382b07df7b5645f7f6758d589db7838e753eb8caaa484cb9d"
     },
     {
       "path": "graphics/field_effects/palettes/pokeball.pal",
@@ -103,6 +415,375 @@
       "sha256": "7a1227697bce57b72a7e5a4a3cdb1af55eaa127484d5b94f01afadfb7cf5548e"
     }
   ],
+  "doorTilesets": {
+    "building-pokemon_center": {
+      "612": {
+        "sound": "sliding",
+        "open": [
+          [
+            900,
+            901
+          ],
+          [
+            902,
+            903
+          ],
+          [
+            904,
+            905
+          ]
+        ]
+      }
+    },
+    "general-dewford": {
+      "97": {
+        "sound": "sliding",
+        "open": [
+          [
+            900,
+            901
+          ],
+          [
+            902,
+            903
+          ],
+          [
+            904,
+            905
+          ]
+        ]
+      },
+      "461": {
+        "sound": "sliding",
+        "open": [
+          [
+            906,
+            907
+          ],
+          [
+            908,
+            909
+          ],
+          [
+            910,
+            911
+          ]
+        ]
+      },
+      "549": {
+        "sound": "normal",
+        "open": [
+          [
+            912,
+            913
+          ],
+          [
+            914,
+            915
+          ],
+          [
+            916,
+            917
+          ]
+        ]
+      }
+    },
+    "general-petalburg": {
+      "584": {
+        "sound": "normal",
+        "open": [
+          [
+            900,
+            901
+          ],
+          [
+            902,
+            903
+          ],
+          [
+            904,
+            905
+          ]
+        ]
+      },
+      "33": {
+        "sound": "normal",
+        "open": [
+          [
+            906,
+            907
+          ],
+          [
+            908,
+            909
+          ],
+          [
+            910,
+            911
+          ]
+        ]
+      },
+      "65": {
+        "sound": "sliding",
+        "open": [
+          [
+            912,
+            913
+          ],
+          [
+            914,
+            915
+          ],
+          [
+            916,
+            917
+          ]
+        ]
+      },
+      "97": {
+        "sound": "sliding",
+        "open": [
+          [
+            918,
+            919
+          ],
+          [
+            920,
+            921
+          ],
+          [
+            922,
+            923
+          ]
+        ]
+      },
+      "461": {
+        "sound": "sliding",
+        "open": [
+          [
+            924,
+            925
+          ],
+          [
+            926,
+            927
+          ],
+          [
+            928,
+            929
+          ]
+        ]
+      },
+      "585": {
+        "sound": "normal",
+        "open": [
+          [
+            930,
+            931
+          ],
+          [
+            932,
+            933
+          ],
+          [
+            934,
+            935
+          ]
+        ]
+      },
+      "647": {
+        "sound": "normal",
+        "open": [
+          [
+            936,
+            937
+          ],
+          [
+            938,
+            939
+          ],
+          [
+            940,
+            941
+          ]
+        ]
+      }
+    },
+    "general-rustboro": {
+      "33": {
+        "sound": "normal",
+        "open": [
+          [
+            900,
+            901
+          ],
+          [
+            902,
+            903
+          ],
+          [
+            904,
+            905
+          ]
+        ]
+      },
+      "65": {
+        "sound": "sliding",
+        "open": [
+          [
+            906,
+            907
+          ],
+          [
+            908,
+            909
+          ],
+          [
+            910,
+            911
+          ]
+        ]
+      },
+      "97": {
+        "sound": "sliding",
+        "open": [
+          [
+            912,
+            913
+          ],
+          [
+            914,
+            915
+          ],
+          [
+            916,
+            917
+          ]
+        ]
+      },
+      "461": {
+        "sound": "sliding",
+        "open": [
+          [
+            918,
+            919
+          ],
+          [
+            920,
+            921
+          ],
+          [
+            922,
+            923
+          ]
+        ]
+      },
+      "543": {
+        "sound": "normal",
+        "open": [
+          [
+            924,
+            925
+          ],
+          [
+            926,
+            927
+          ],
+          [
+            928,
+            929
+          ]
+        ]
+      },
+      "559": {
+        "sound": "normal",
+        "open": [
+          [
+            930,
+            931
+          ],
+          [
+            932,
+            933
+          ],
+          [
+            934,
+            935
+          ]
+        ]
+      }
+    },
+    "general-slateport": {
+      "65": {
+        "sound": "sliding",
+        "open": [
+          [
+            900,
+            901
+          ],
+          [
+            902,
+            903
+          ],
+          [
+            904,
+            905
+          ]
+        ]
+      },
+      "97": {
+        "sound": "sliding",
+        "open": [
+          [
+            906,
+            907
+          ],
+          [
+            908,
+            909
+          ],
+          [
+            910,
+            911
+          ]
+        ]
+      },
+      "732": {
+        "sound": "normal",
+        "open": [
+          [
+            912,
+            913
+          ],
+          [
+            914,
+            915
+          ],
+          [
+            916,
+            917
+          ]
+        ]
+      },
+      "915": {
+        "sound": "sliding",
+        "open": [
+          [
+            918,
+            919
+          ],
+          [
+            920,
+            921
+          ],
+          [
+            922,
+            923
+          ]
+        ]
+      }
+    }
+  },
   "doorMetatiles": {
     "33": [
       [

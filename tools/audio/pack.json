@@ -84,6 +84,46 @@
       "song": "MUS_GYM",
       "config": "tracks/gym.json",
       "selection": "map-music"
+    },
+    {
+      "song": "MUS_ROUTE104",
+      "config": "tracks/route104.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_PETALBURG_WOODS",
+      "config": "tracks/petalburg-woods.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_ENCOUNTER_AQUA",
+      "config": "tracks/mus-encounter-aqua.json",
+      "selection": "story"
+    },
+    {
+      "song": "MUS_RUSTBORO",
+      "config": "tracks/rustboro.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_OCEANIC_MUSEUM",
+      "config": "tracks/oceanic_museum.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_DEWFORD",
+      "config": "tracks/dewford.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_SLATEPORT",
+      "config": "tracks/slateport.json",
+      "selection": "map-music"
+    },
+    {
+      "song": "MUS_SCHOOL",
+      "config": "tracks/school.json",
+      "selection": "map-music"
     }
   ],
   "sounds": [

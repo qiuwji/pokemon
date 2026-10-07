@@ -8,9 +8,9 @@
     "hp": 40,
     "atk": 45,
     "def": 35,
-    "spe": 70,
     "spa": 65,
-    "spd": 55
+    "spd": 55,
+    "spe": 70
   },
   "catchRate": 45,
   "expYield": 65,
@@ -23,9 +23,9 @@
     "hp": 0,
     "atk": 0,
     "def": 0,
-    "spe": 1,
     "spa": 0,
-    "spd": 0
+    "spd": 0,
+    "spe": 1
   },
   "learnset": [
     {
@@ -91,5 +91,7 @@
     "double_team",
     "aerial_ace",
     "rest"
-  ]
+  ],
+  "genderless": false,
+  "unavailableLearnset": []
 }

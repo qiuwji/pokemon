@@ -1,0 +1,16 @@
+{
+  "maps": [
+    "PetalburgCity",
+    "Route104",
+    "PetalburgWoods"
+  ],
+  "entries": [
+    "PetalburgCity_EventScript_Scott0",
+    "PetalburgCity_EventScript_Scott1",
+    "PetalburgCity_EventScript_Scott2",
+    "PetalburgCity_EventScript_Scott3",
+    "PetalburgWoods_EventScript_DevonResearcherLeft",
+    "PetalburgWoods_EventScript_DevonResearcherRight"
+  ],
+  "functions": []
+}

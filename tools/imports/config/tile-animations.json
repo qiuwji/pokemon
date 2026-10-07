@@ -2,37 +2,63 @@
   "flower": {
     "start": 508,
     "count": 4,
-    "ms": 240,
+    "ms": 266.6666666666667,
     "order": [
       0,
       1,
       0,
       2
     ],
-    "semantic": "flower"
+    "semantic": "flower",
+    "offsetMs": 0.0
   },
   "water": {
     "start": 432,
     "count": 30,
-    "ms": 160,
-    "semantic": "water"
+    "ms": 266.6666666666667,
+    "semantic": "water",
+    "offsetMs": 16.666666666666668
   },
   "sand_water_edge": {
     "start": 464,
     "count": 10,
-    "ms": 160,
-    "semantic": "water"
+    "ms": 266.6666666666667,
+    "semantic": "water",
+    "offsetMs": 33.333333333333336,
+    "order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0
+    ]
   },
   "land_water_edge": {
     "start": 480,
     "count": 10,
-    "ms": 160,
-    "semantic": "water"
+    "ms": 266.6666666666667,
+    "semantic": "water",
+    "offsetMs": 50.0
   },
   "waterfall": {
     "start": 496,
     "count": 6,
-    "ms": 80,
+    "ms": 266.6666666666667,
+    "semantic": "water",
+    "offsetMs": 66.66666666666667
+  },
+  "windy_water": {
+    "tileset": "rustboro",
+    "side": 1,
+    "start": 128,
+    "count": 32,
+    "groupTiles": 4,
+    "phaseStep": -1,
+    "staggerMs": 16.666666666666668,
+    "ms": 133.33333333333334,
     "semantic": "water"
   }
 }

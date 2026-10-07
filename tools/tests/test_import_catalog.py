@@ -36,6 +36,26 @@ class ImportCatalogTests(unittest.TestCase):
             self.assertIn('--target',result.stdout)
             self.assertIn('--strict',result.stdout)
 
+    def test_grid_launcher_restores_all_door_atlases_and_repeated_import_does_not_grow_them(self):
+        assets = self.target / 'assets'
+        assets.mkdir()
+        for image in (PROJECT / 'generated/assets').glob('tiles-*.png'):
+            shutil.copy2(image, assets / image.name)
+        for _ in range(2):
+            result = self.run_import('grid', '--maps', 'Route104')
+            self.assertEqual(result.returncode, 0, result.stderr)
+            generated = self.target / 'packs/emerald/generated/door-anims.js'
+            self.assertIn('DOOR_ANIMATIONS_BY_TILESET', generated.read_text())
+            atlas = json.loads((self.target / 'content/tilesets/general-rustboro.json').read_text())
+            self.assertTrue(any(int(key) >= 900 for key in atlas['metatiles']))
+            total = atlas['atlas']['tileCount']
+            if _:
+                self.assertEqual(total, previous)
+            previous = total
+        check = self.run_import('opening-art', '--check', '--strict')
+        self.assertEqual(check.returncode, 0, check.stderr)
+        self.assertEqual(json.loads(check.stdout)['files'], [])
+
     def test_discovery_and_unknown_command(self):
         result = self.run_import('--list')
         self.assertEqual(result.returncode,0,result.stderr)

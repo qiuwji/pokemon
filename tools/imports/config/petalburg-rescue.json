@@ -1,0 +1,39 @@
+{
+  "maps": [
+    "Route104",
+    "PetalburgWoods",
+    "Route104_MrBrineysHouse",
+    "Route104_PrettyPetalFlowerShop"
+  ],
+  "species": [
+    "poochyena",
+    "magikarp"
+  ],
+  "actors": [
+    "AquaMemberM",
+    "Boy1",
+    "Boy2",
+    "Boy3",
+    "BugCatcher",
+    "CuttableTree",
+    "ExpertF",
+    "ExpertM",
+    "Fisherman",
+    "Girl1",
+    "Girl2",
+    "Girl3",
+    "ItemBall",
+    "Lass",
+    "Man2",
+    "MrBrineysBoat",
+    "RichBoy",
+    "Twin",
+    "Woman2",
+    "Woman5",
+    "Youngster",
+    "Scott"
+  ],
+  "battleBackground": "tall_grass",
+  "locale": "../locales/zh-CN.json",
+  "tileAnimations": "tile-animations.json"
+}

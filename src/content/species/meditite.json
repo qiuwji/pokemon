@@ -1,0 +1,85 @@
+{
+  "name": "玛沙那",
+  "dex": 307,
+  "types": [
+    "fighting",
+    "psychic"
+  ],
+  "stats": {
+    "hp": 30,
+    "atk": 40,
+    "def": 55,
+    "spa": 40,
+    "spd": 55,
+    "spe": 60
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 1
+  },
+  "catchRate": 180,
+  "expYield": 91,
+  "growth": "medium_fast",
+  "abilities": [
+    "pure_power"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "bide"
+    },
+    {
+      "level": 9,
+      "move": "confusion"
+    },
+    {
+      "level": 12,
+      "move": "detect"
+    },
+    {
+      "level": 28,
+      "move": "calm_mind"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 4,
+      "move": "meditate"
+    },
+    {
+      "level": 18,
+      "move": "hidden_power"
+    },
+    {
+      "level": 22,
+      "move": "mind_reader"
+    },
+    {
+      "level": 32,
+      "move": "hi_jump_kick"
+    },
+    {
+      "level": 38,
+      "move": "psych_up"
+    },
+    {
+      "level": 42,
+      "move": "reversal"
+    },
+    {
+      "level": 48,
+      "move": "recover"
+    }
+  ]
+}

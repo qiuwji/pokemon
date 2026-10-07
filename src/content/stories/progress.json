@@ -110,12 +110,47 @@
         },
         {
           "type": "flag",
+          "key": "wallyMomHidden",
+          "value": false
+        },
+        {
+          "type": "flag",
           "key": "wallyCaught",
           "value": false
         },
         {
           "type": "flag",
           "key": "wallyDone",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgScottMet",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsSaved",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsReplayRequested",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsStolen",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsRecovered",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsReturned",
           "value": false
         },
         {
@@ -233,12 +268,47 @@
         },
         {
           "type": "flag",
+          "key": "wallyMomHidden",
+          "value": false
+        },
+        {
+          "type": "flag",
           "key": "wallyCaught",
           "value": false
         },
         {
           "type": "flag",
           "key": "wallyDone",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgScottMet",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsSaved",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsReplayRequested",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsStolen",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsRecovered",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsReturned",
           "value": false
         },
         {
@@ -356,12 +426,47 @@
         },
         {
           "type": "flag",
+          "key": "wallyMomHidden",
+          "value": false
+        },
+        {
+          "type": "flag",
           "key": "wallyCaught",
           "value": false
         },
         {
           "type": "flag",
           "key": "wallyDone",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgScottMet",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsSaved",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsReplayRequested",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsStolen",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsRecovered",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsReturned",
           "value": false
         },
         {
@@ -479,6 +584,11 @@
         },
         {
           "type": "flag",
+          "key": "wallyMomHidden",
+          "value": true
+        },
+        {
+          "type": "flag",
           "key": "wallyCaught",
           "value": true
         },
@@ -486,6 +596,36 @@
           "type": "flag",
           "key": "wallyDone",
           "value": true
+        },
+        {
+          "type": "flag",
+          "key": "petalburgScottMet",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsSaved",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "petalburgWoodsReplayRequested",
+          "value": true
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsStolen",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsRecovered",
+          "value": false
+        },
+        {
+          "type": "flag",
+          "key": "devonGoodsReturned",
+          "value": false
         },
         {
           "type": "reward",

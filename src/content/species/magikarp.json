@@ -1,0 +1,52 @@
+{
+  "name": "鲤鱼王",
+  "dex": 129,
+  "types": [
+    "water"
+  ],
+  "stats": {
+    "hp": 20,
+    "atk": 10,
+    "def": 55,
+    "spa": 15,
+    "spd": 20,
+    "spe": 80
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 1
+  },
+  "catchRate": 255,
+  "expYield": 20,
+  "growth": "slow",
+  "abilities": [
+    "swift_swim"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_2",
+    "dragon"
+  ],
+  "eggCycles": 5,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "splash"
+    },
+    {
+      "level": 15,
+      "move": "tackle"
+    },
+    {
+      "level": 30,
+      "move": "flail"
+    }
+  ],
+  "unavailableLearnset": []
+}

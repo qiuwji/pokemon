@@ -705,49 +705,49 @@
     "regions.petalburg.calvin": {
       "name": "短裤小子",
       "lines": [
-        "我一直在等路过的训练家！"
+        "如果带着宝可梦，你就是正式的宝可梦训练家了！你不能拒绝我的挑战！"
       ]
     },
     "regions.petalburg.calvin.after": {
       "name": "短裤小子",
       "lines": [
-        "你的宝可梦真强……我还得再练练。"
+        "听着，你这么厉害，早该告诉我嘛！"
       ]
     },
     "regions.petalburg.rick": {
       "name": "捕虫少年",
       "lines": [
-        "我的虫宝可梦可一点都不弱！"
+        "哈哈！我们的视线对上了！我用虫宝可梦来挑战你！"
       ]
     },
     "regions.petalburg.rick.after": {
       "name": "捕虫少年",
       "lines": [
-        "我的虫宝可梦还差得远呢……"
+        "和训练家对上视线就得挑战，这是规则！"
       ]
     },
     "regions.petalburg.tiana": {
       "name": "少女",
       "lines": [
-        "我的宝可梦又可爱又强哦！"
+        "我要不断获胜，成为最棒的训练家！帮我迈出下一步吧！"
       ]
     },
     "regions.petalburg.tiana.after": {
       "name": "少女",
       "lines": [
-        "唔，我输了……你要继续加油哦。"
+        "要不断获胜，看来还得捕捉更多宝可梦。"
       ]
     },
     "regions.petalburg.allen": {
       "name": "短裤小子",
       "lines": [
-        "嘿，来一场宝可梦对战吧！"
+        "你也是刚成为训练家的吗？我们都是新手！"
       ]
     },
     "regions.petalburg.allen.after": {
       "name": "短裤小子",
       "lines": [
-        "好强啊……我会变得更强的！"
+        "我还一次都没赢过……真希望早点赢一场。"
       ]
     },
     "regions.petalburg.center.fatman": {
@@ -866,6 +866,389 @@
       "name": "女子",
       "lines": [
         "我们家小光看起来真的很开心。"
+      ]
+    },
+    "route104.people.sea": {
+      "name": "捕虫少年",
+      "lines": [
+        "海底是什么样的呢？我真想去看看。"
+      ]
+    },
+    "route104.people.briney": {
+      "name": "少女",
+      "lines": [
+        "那间海边小屋是布拉利先生住的地方。",
+        "他以前是个从不怕风浪的厉害水手。"
+      ]
+    },
+    "route104.people.weaken": {
+      "name": "少年",
+      "lines": [
+        "要投精灵球的话，先削弱野生宝可梦会更容易捕捉。",
+        "让它中毒、灼伤或睡着，也会更容易抓到哦。"
+      ]
+    },
+    "route104.people.wild-only": {
+      "name": "女性",
+      "lines": [
+        "把别人的宝可梦抢走可就是小偷了。",
+        "精灵球只能用来捕捉野生宝可梦。"
+      ]
+    },
+    "route104.people.not-trainer": {
+      "name": "少女",
+      "lines": [
+        "我不是训练家。",
+        "训练家要是四目相对，就会被要求对战。",
+        "不想打的话，就别进入对方的视线。"
+      ]
+    },
+    "route104.people.chesto": {
+      "name": "熟练女性",
+      "lines": [
+        "如果看到树果长在松软的土里，可以摘下来。",
+        "不过要记得在原处再种下一颗树果，这是礼貌。",
+        "来，我把这个分给你。"
+      ]
+    },
+    "route104.people.chesto-repeat": {
+      "name": "熟练女性",
+      "lines": [
+        "训练家经常会让宝可梦携带树果。",
+        "要不要种树果，就由你决定了。"
+      ]
+    },
+    "route104.people.bullet-seed": {
+      "name": "少年",
+      "lines": [
+        "我喜欢把种子含在嘴里，再一下子喷出去！",
+        "这个送给你，你也试试看吧！",
+        "让宝可梦学会后，就能快速发射种子攻击。"
+      ]
+    },
+    "route104.people.bullet-seed-repeat": {
+      "name": "少年",
+      "lines": [
+        "提醒你一下，招式学习器只能使用一次。",
+        "使用之后就会消失，可要仔细考虑再用哦。"
+      ]
+    },
+    "route104.trainers.haley.intro": {
+      "name": "少女 海莉",
+      "lines": [
+        "我要不要……",
+        "算了，我来和你对战！"
+      ]
+    },
+    "route104.trainers.haley.after": {
+      "name": "少女 海莉",
+      "lines": [
+        "面对选择时，如果让别人替你决定，无论结果怎样都会后悔。"
+      ]
+    },
+    "route104.trainers.ivan.intro": {
+      "name": "渔夫 伊凡",
+      "lines": [
+        "为什么要保密呢？",
+        "我可是水系宝可梦专家！",
+        "咦？你不认识我吗？"
+      ]
+    },
+    "route104.trainers.ivan.after": {
+      "name": "渔夫 伊凡",
+      "lines": [
+        "我太沉迷钓鱼，忘记还得培育宝可梦了……"
+      ]
+    },
+    "route104.trainers.billy.intro": {
+      "name": "短裤小子 比利",
+      "lines": [
+        "在沙滩上留下脚印，真有趣！"
+      ]
+    },
+    "route104.trainers.billy.after": {
+      "name": "短裤小子 比利",
+      "lines": [
+        "我想在沙滩各处留下脚印，可它们很快就消失了……"
+      ]
+    },
+    "route104.trainers.gina.intro": {
+      "name": "双胞胎姐妹 吉娜",
+      "lines": [
+        "吉娜：好，我们来和你对战吧！"
+      ]
+    },
+    "route104.trainers.gina.after": {
+      "name": "双胞胎姐妹 吉娜",
+      "lines": [
+        "吉娜：你很强！我们还得多多训练！"
+      ]
+    },
+    "route104.trainers.mia.intro": {
+      "name": "双胞胎姐妹 米娅",
+      "lines": [
+        "米娅：我们是双胞胎，所以要一起对战。"
+      ]
+    },
+    "route104.trainers.mia.after": {
+      "name": "双胞胎姐妹 米娅",
+      "lines": [
+        "米娅：我们要多训练宝可梦，变得像你一样强。"
+      ]
+    },
+    "route104.trainers.gina-mia.after": {
+      "name": "双胞胎姐妹 吉娜与米娅",
+      "lines": [
+        "你很强！我们要多训练宝可梦，变得像你一样强。"
+      ]
+    },
+    "route104.trainers.winston.intro": {
+      "name": "富家少爷 温斯顿",
+      "lines": [
+        "哦，当然接受你的挑战。",
+        "我有很多钱呢。"
+      ]
+    },
+    "route104.trainers.winston.after": {
+      "name": "富家少爷 温斯顿",
+      "lines": [
+        "有些东西金钱是买不到的，比如宝可梦……"
+      ]
+    },
+    "route104.trainers.cindy.intro": {
+      "name": "大小姐 辛迪",
+      "lines": [
+        "我们一定是命中注定会相遇。",
+        "可以和我对战吗？"
+      ]
+    },
+    "route104.trainers.cindy.after": {
+      "name": "大小姐 辛迪",
+      "lines": [
+        "“你好”是“再见”的开始。希望我们还会相遇。"
+      ]
+    },
+    "route104.trainers.darian.intro": {
+      "name": "渔夫 达里安",
+      "lines": [
+        "我钓到了一只看起来很强的宝可梦！",
+        "它有种不可思议的气质，真的很强！"
+      ]
+    },
+    "route104.trainers.darian.after": {
+      "name": "渔夫 达里安",
+      "lines": [
+        "喂，鲤鱼王，你可真配不上这个名字啊！"
+      ]
+    },
+    "woods.people.tall-grass": {
+      "name": "少年",
+      "lines": [
+        "哟，你的宝可梦还好吗？",
+        "如果宝可梦比较弱，想避开战斗的话，最好别走进高草丛。"
+      ]
+    },
+    "woods.people.hidden-items": {
+      "name": "少年",
+      "lines": [
+        "有时地上会藏着看不见的东西。",
+        "所以我走路时总会仔细检查脚下。"
+      ]
+    },
+    "woods.people.miracle-seed": {
+      "name": "少女",
+      "lines": [
+        "哦，真不错！",
+        "那是卡那兹道馆的徽章吧？",
+        "你一定是训练家。这个道具送给你吧。"
+      ]
+    },
+    "woods.people.miracle-seed-repeat": {
+      "name": "少女",
+      "lines": [
+        "这是奇迹种子。",
+        "让宝可梦携带后，草属性招式的威力会提高。",
+        "除此之外还有很多适合宝可梦携带的道具哦。"
+      ]
+    },
+    "woods.trainers.lyle.intro": {
+      "name": "捕虫少年 莱尔",
+      "lines": [
+        "我抓了好多宝可梦！",
+        "上吧，上吧！我的虫宝可梦队伍！"
+      ]
+    },
+    "woods.trainers.lyle.after": {
+      "name": "捕虫少年 莱尔",
+      "lines": [
+        "我抓了一大堆宝可梦，现在精灵球都用完了。"
+      ]
+    },
+    "woods.trainers.james.intro": {
+      "name": "捕虫少年 詹姆斯",
+      "lines": [
+        "带着虫宝可梦去学校，马上就会变得很受欢迎！"
+      ]
+    },
+    "woods.trainers.james.after": {
+      "name": "捕虫少年 詹姆斯",
+      "lines": [
+        "有一只大大的虫宝可梦，别人就会尊敬你！"
+      ]
+    },
+    "route104.sign.briney": {
+      "name": "告示牌",
+      "lines": [
+        "布拉利先生的小屋。"
+      ]
+    },
+    "route104.sign.petalburg": {
+      "name": "告示牌",
+      "lines": [
+        "104号道路\n← 橙华市"
+      ]
+    },
+    "route104.sign.rustboro": {
+      "name": "告示牌",
+      "lines": [
+        "104号道路\n↑ 卡那兹市"
+      ]
+    },
+    "route104.sign.flower-shop": {
+      "name": "告示牌",
+      "lines": [
+        "美丽花朵店"
+      ]
+    },
+    "route104.sign.double-battles": {
+      "name": "训练家提示",
+      "lines": [
+        "在丰缘地区，有些训练家会两人一组发起双打对战。",
+        "双打时，训练家要同时派出队伍前两只宝可梦。",
+        "注意两只宝可梦是怎么排列的。"
+      ]
+    },
+    "woods.sign.experience": {
+      "name": "训练家提示",
+      "lines": [
+        "只要宝可梦在战斗中出场过，就能获得经验值。",
+        "想培养弱小的宝可梦，可以先把它放在队伍首位。",
+        "战斗开始后马上换下它，也能获得经验值而不必冒险。"
+      ]
+    },
+    "woods.sign.pp": {
+      "name": "训练家提示",
+      "lines": [
+        "宝可梦除了HP（体力）外，还有使用招式时消耗的PP（技能点数）。",
+        "如果PP用完了，就必须去宝可梦中心恢复。"
+      ]
+    },
+    "regions.petalburg.calvin.defeat": {
+      "name": "短裤小子",
+      "lines": [
+        "啊，我输了……我应该多训练它们。"
+      ]
+    },
+    "regions.petalburg.rick.defeat": {
+      "name": "捕虫少年",
+      "lines": [
+        "呜！被打倒了！"
+      ]
+    },
+    "regions.petalburg.tiana.defeat": {
+      "name": "少女",
+      "lines": [
+        "结果是帮你迈出了下一步……"
+      ]
+    },
+    "regions.petalburg.allen.defeat": {
+      "name": "短裤小子",
+      "lines": [
+        "我以为能赢你，才叫住你的……"
+      ]
+    },
+    "route104.trainers.haley.defeat": {
+      "name": "少女 海莉",
+      "lines": [
+        "我不该对战的……"
+      ]
+    },
+    "route104.trainers.ivan.defeat": {
+      "name": "渔夫 伊凡",
+      "lines": [
+        "我还以为自己不算太差，看来并不是……唉。"
+      ]
+    },
+    "route104.trainers.billy.defeat": {
+      "name": "短裤小子 比利",
+      "lines": [
+        "呜哇！跑鞋里进沙子了！磨得难受！"
+      ]
+    },
+    "route104.trainers.winston.defeat": {
+      "name": "富家少爷 温斯顿",
+      "lines": [
+        "为什么我会输呢？"
+      ]
+    },
+    "route104.trainers.cindy.defeat": {
+      "name": "大小姐 辛迪",
+      "lines": [
+        "哎呀！"
+      ]
+    },
+    "route104.trainers.darian.defeat": {
+      "name": "渔夫 达里安",
+      "lines": [
+        "怎么回事……"
+      ]
+    },
+    "route104.trainers.gina.defeat": {
+      "name": "双胞胎姐妹 吉娜",
+      "lines": [
+        "吉娜：输了真让我难受！"
+      ]
+    },
+    "route104.trainers.mia.defeat": {
+      "name": "双胞胎姐妹 米娅",
+      "lines": [
+        "米娅：我们一起对战，却都输了……"
+      ]
+    },
+    "woods.trainers.lyle.defeat": {
+      "name": "捕虫少年 莱尔",
+      "lines": [
+        "我明明有这么多宝可梦，却赢不了……"
+      ]
+    },
+    "woods.trainers.james.defeat": {
+      "name": "捕虫少年 詹姆斯",
+      "lines": [
+        "输了就没法受欢迎了。"
+      ]
+    },
+    "woods.rescue.defeat": {
+      "name": "水舰队手下",
+      "lines": [
+        "开什么玩笑！你真强！"
+      ]
+    },
+    "route104.people.white-herb": {
+      "name": "花店的女孩",
+      "lines": [
+        "我在花店学到了很多东西，比如培育树果的知识。这个我用不上，你拿着吧。"
+      ]
+    },
+    "route104.people.white-herb-repeat": {
+      "name": "花店的女孩",
+      "lines": [
+        "花店也开始出售植物盆栽了。"
+      ]
+    },
+    "route104.people.rival": {
+      "name": "劲敌",
+      "lines": [
+        "培育宝可梦时，也别忘了和它们成为朋友。"
       ]
     }
   }

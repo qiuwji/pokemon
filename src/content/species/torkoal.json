@@ -1,0 +1,88 @@
+{
+  "name": "煤炭龟",
+  "dex": 324,
+  "types": [
+    "fire"
+  ],
+  "stats": {
+    "hp": 70,
+    "atk": 85,
+    "def": 140,
+    "spa": 85,
+    "spd": 70,
+    "spe": 20
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 2,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 90,
+  "expYield": 161,
+  "growth": "medium_fast",
+  "abilities": [
+    "white_smoke"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "field"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "ember"
+    },
+    {
+      "level": 17,
+      "move": "fire_spin"
+    },
+    {
+      "level": 27,
+      "move": "protect"
+    },
+    {
+      "level": 30,
+      "move": "flamethrower"
+    },
+    {
+      "level": 43,
+      "move": "flail"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 4,
+      "move": "smog"
+    },
+    {
+      "level": 7,
+      "move": "curse"
+    },
+    {
+      "level": 14,
+      "move": "smokescreen"
+    },
+    {
+      "level": 20,
+      "move": "body_slam"
+    },
+    {
+      "level": 33,
+      "move": "iron_defense"
+    },
+    {
+      "level": 40,
+      "move": "amnesia"
+    },
+    {
+      "level": 46,
+      "move": "heat_wave"
+    }
+  ]
+}

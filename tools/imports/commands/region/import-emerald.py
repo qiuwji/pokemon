@@ -15,6 +15,16 @@ def u16(p):
  b=p.read_bytes(); return list(struct.unpack('<'+'H'*(len(b)//2),b))
 layouts={x['id']:x for x in json.loads((R/'data/layouts/layouts.json').read_text())['layouts']}
 map_names=session.select('maps', [p.name for p in (R/'data/maps').iterdir() if p.is_dir()], session.profile['maps'])
+existing=session.load()
+# A selected map slice can border maps that are intentionally not part of this pack yet.
+# Keep connections to maps already present or selected, and report omitted frontier edges.
+map_names_by_source_id={}
+for path in (R/'data/maps').iterdir():
+ if not path.is_dir() or not (path/'map.json').is_file(): continue
+ source_id=json.loads((path/'map.json').read_text())['id'].replace('MAP_','')
+ map_names_by_source_id[source_id]=path.name
+available_maps=set(map_names)|set(existing['maps'])
+available_source_ids={source_id for source_id,name in map_names_by_source_id.items() if name in available_maps}
 titles=[session.locale['maps'][name] for name in map_names]; output={}
 for name,title in zip(map_names,titles):
  m=json.loads((R/f'data/maps/{name}/map.json').read_text()); lay=layouts[m['layout']]
@@ -25,7 +35,23 @@ for name,title in zip(map_names,titles):
  w,h=lay['width'],lay['height'];data=u16(R/lay['blockdata_filepath']);beh=[]
  for val in data:
   mid=val&1023;side=0 if mid<512 else 1;beh.append(attrs[side][mid if side==0 else mid-512]&255)
- output[name]={'id':name,'indoor':m['map_type']=='MAP_TYPE_INDOOR','allowRunning':bool(m['allow_running']),'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':[{**c,'map':c['map'].replace('MAP_','')} for c in (m['connections'] or [])], 'warps':[w for w in m['warp_events'] if w['dest_map']!='MAP_DYNAMIC'],'signs':[b for b in m['bg_events'] if b.get('type')=='sign'],'npcs':m['object_events'],'music':m['music']}
+ connections=[]
+ for connection in m['connections'] or []:
+  target_id=connection['map'].replace('MAP_','')
+  if target_id not in available_source_ids:
+   session.omit('connections','maps.'+name,target_id,
+                'The adjacent map is outside the selected content slice; its boundary stays closed until that map is imported.')
+   continue
+  connections.append({**connection,'map':target_id})
+ warps=[]
+ for warp in m['warp_events']:
+  if warp['dest_map']=='MAP_DYNAMIC':continue
+  if not (0<=warp['x']<w and 0<=warp['y']<h):
+   session.omit('warps','maps.'+name,warp['dest_map'],
+                'The source warp lies outside its declared layout bounds; it is not projected as a reachable tile.')
+   continue
+  warps.append(warp)
+ output[name]={'id':name,'indoor':m['map_type']=='MAP_TYPE_INDOOR','allowRunning':bool(m['allow_running']),'title':title,'width':w,'height':h,'blocks':data,'behavior':beh,'connections':connections, 'warps':warps,'signs':[b for b in m['bg_events'] if b.get('type')=='sign'],'npcs':m['object_events'],'music':m['music']}
 # Standard field objects, using the palettes declared by the engine.
 info=(R/'src/data/object_events/object_event_graphics_info.h').read_text(); gfx=(R/'src/data/object_events/object_event_graphics.h').read_text(); npcs={}
 for key in session.profile['actors']:
@@ -33,9 +59,11 @@ for key in session.profile['actors']:
  if not match:raise ValueError('Missing actor graphics definition: '+key)
  block=match[1];pt=re.search(r'paletteTag = OBJ_EVENT_PAL_TAG_(\w+)',block)[1].lower();width=int(re.search(r'\.width = (\d+)',block)[1]);height=int(re.search(r'\.height = (\d+)',block)[1]); pic=re.search(r'gObjectEventPic_'+key+r'\[\].*?INCGFX_U32\("([^"]+)',gfx)
  if not pic:raise ValueError('Missing actor picture definition: '+key)
- path=R/pic[1];p=R/f'graphics/object_events/palettes/{pt}.pal'
+ path=R/pic[1];palette_name={'sstidal':'ss_tidal'}.get(pt,pt);p=R/f'graphics/object_events/palettes/{palette_name}.pal'
  if not p.exists():raise ValueError('Missing actor palette: '+key)
  session.image(recolor(path,pal(p)),A/f'actor-{key}.png');npcs[key]={'w':width,'h':height}
+ if re.search(r'\.inanimate\s*=\s*TRUE',block):
+  npcs[key]['frames']={'facing':{d:0 for d in ('down','up','left','right')},'walk':{d:[0] for d in ('down','up','left','right')}}
 # Battle backgrounds are ordinary GBA 8x8 tilemaps.
 b=R/'graphics/battle_environment'/session.profile['battleBackground'];im=Image.open(b/'tiles.png');p=pal(b/'palette.pal'); data=u16(b/'map.bin');bg=Image.new('RGBA',(256,512))
 for i,v in enumerate(data):
@@ -66,7 +94,6 @@ for k,v in moves.items():v['name']=cnmoves.get(k,k.replace('_',' ').title())
 # Merge selected records and fields. Preserve maps outside this import and metadata
 # produced by subsequent importers (encounters, growth, movement, evolutions).
 
-existing=session.load()
 for section, records in {'maps':output,'actors':npcs,'species':species,'moves':moves}.items():
  for ident, record in records.items():
   previous=existing[section].get(ident,{})

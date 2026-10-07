@@ -211,14 +211,18 @@
   },
   "import-opening-art.py": {
     "content": [
-      "tilesets.general-petalburg.*"
+      "tilesets.*.atlas.*",
+      "tilesets.*.lookup.*",
+      "tilesets.*.metatiles.*",
+      "tilesets.*.attributes.*"
     ],
     "outputs": [
       "assets/wallclock-*.png",
       "packs/emerald/generated/wall-clock.js",
       "packs/emerald/generated/door-anims.js",
-      "assets/tiles-general-petalburg.png",
-      "assets/opening-art-source.json"
+      "assets/tiles-*.png",
+      "assets/opening-art-source.json",
+      "assets/battle-transition-pokeball.png"
     ],
     "entry": "tools/imports/commands/region/import-opening-art.py",
     "category": "region"

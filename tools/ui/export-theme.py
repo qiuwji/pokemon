@@ -149,22 +149,65 @@ for gender, name in [('male','brendan'),('female','may')]:
 # Battle pictures are separate from overworld object sheets. Back pictures retain all
 # four 64px frames; back_pic_anims.h uses 24/9/24/9/50 frames for the throw animation.
 trainer_pictures = {}
-for actor, name in [('BrendanNormal','brendan'), ('MayNormal','may'),
-                    ('Youngster','youngster'), ('BugCatcher','bug_catcher'),
-                    ('Lass','lass'), ('Norman','leader_norman'), ('Wally','wally')]:
-    for side in ['front','back']:
-        relative = 'trainers/'+side+'_pics/'+name+'.png'
-        if not (args.source/'graphics'/relative).exists():
-            continue
-        palette_path = 'trainers/palettes/'+name+'.pal'
-        image = sprite(relative, colors(palette_path) if (args.source/'graphics'/palette_path).exists() else None)
-        resource = 'battle-trainer-'+actor+'-'+side
-        add(resource+'.png', image)
-        trainer_pictures[actor+':'+side] = {
-            'resource':resource, 'width':64, 'height':64,
-            'frames':image.height//64, 'rest':3 if side == 'back' else 0,
-            'throw':[[0,24],[1,9],[2,24],[0,9],[3,50]] if side == 'back' else [],
-        }
+trainer_battle_pictures = {}
+front_table = read('src/data/trainer_graphics/front_pic_tables.h').decode()
+back_table = read('src/data/trainer_graphics/back_pic_tables.h').decode()
+trainer_table = read('src/data/trainers.h').decode()
+graphics_table = read('src/data/graphics/trainers.h').decode()
+source_trainers = (ROOT/'src/packs/emerald/native-trainers-data.json').read_bytes()
+local_inputs['src/packs/emerald/native-trainers-data.json'] = hashlib.sha256(source_trainers).hexdigest()
+aliases = {'calvin':'CALVIN_1', 'rick':'RICK', 'tiana':'TIANA', 'allen':'ALLEN',
+           'haley':'HALEY_1', 'winston':'WINSTON_1', 'cindy':'CINDY_1',
+           'ginaAndMia':'GINA_AND_MIA_1', 'james':'JAMES_1',
+           'aquaPetalburgWoods':'GRUNT_PETALBURG_WOODS'}
+aliases.update({t['id']:t['id'].upper() for t in json.loads(source_trainers)})
+for ident, symbol in aliases.items():
+    entry = re.search(r'\[TRAINER_'+symbol+r'\]\s*=\s*\{(.*?)\n    \}', trainer_table, re.S)
+    if not entry: raise ValueError('Unknown source trainer '+symbol)
+    trainer_battle_pictures[ident] = re.search(r'\.trainerPic = TRAINER_PIC_(\w+)',entry[1])[1]
+# Preserve the opening/tutorial public picture keys. Battle identities otherwise
+# use trainerPic, never the unrelated overworld object graphics ID.
+legacy = {'BrendanNormal':'BRENDAN', 'MayNormal':'MAY', 'Youngster':'YOUNGSTER',
+          'BugCatcher':'BUG_CATCHER', 'Lass':'LASS', 'Norman':'LEADER_NORMAN', 'Wally':'WALLY'}
+for picture_id in sorted(set(trainer_battle_pictures.values()) | set(legacy.values())):
+    macro = re.search(r'TRAINER_SPRITE\('+picture_id+r',\s*(\w+)',front_table)
+    relative = re.search(macro[1]+r'\[\].*?INCGFX_U32\("graphics/([^" ]+)',graphics_table)[1]
+    name = Path(relative).stem
+    image = sprite(relative)
+    size = int(re.search(r'\[TRAINER_PIC_'+picture_id+r'\]\s*=\s*\{\.size = (\d+)',front_table)[1])
+    key = next((actor for actor,pic in legacy.items() if pic == picture_id), picture_id)
+    resource = 'battle-trainer-'+key+'-front'
+    add(resource+'.png', image)
+    record = {'resource':resource, 'width':64, 'height':64, 'frames':image.height//64,
+              'rest':0, 'throw':[], 'offsetY':(8-size)*4}
+    trainer_pictures[picture_id+':front'] = record
+    if key != picture_id: trainer_pictures[key+':front'] = record
+for actor, name in [('BrendanNormal','brendan'),('MayNormal','may'),('Wally','wally')]:
+    image = sprite('trainers/back_pics/'+name+'.png',colors('trainers/palettes/'+name+'.pal'))
+    size = int(re.search(r'\[TRAINER_BACK_PIC_'+name.upper()+r'\]\s*=\s*\{\.size = (\d+)',back_table)[1])
+    resource = 'battle-trainer-'+actor+'-back'
+    add(resource+'.png',image)
+    trainer_pictures[actor+':back'] = {'resource':resource, 'width':64, 'height':64,
+        'frames':image.height//64, 'rest':3, 'offsetY':(8-size)*4,
+        'throw':[[0,24],[1,9],[2,24],[0,9],[3,50]]}
+# Berry trees use palette slots from berry_tree_graphics_tables.h, not the
+# palette embedded in the example Pecha sheet for every berry species.
+berry_table = read('src/data/object_events/berry_tree_graphics_tables.h').decode()
+for kind in ['oran','cheri','pecha','leppa']:
+    slots = re.search(r'gBerryTreePaletteSlotTable_'+kind.title()+r'\[\] = \{([^}]+)',berry_table)[1]
+    slot = int(slots.split(',')[2].strip())
+    image = sprite('object_events/pics/berry_trees/'+kind+'.png',colors('object_events/palettes/npc_'+str(slot)+'.pal'))
+    for stage, frame in [('taller',0),('flowering',2),('ripe',4)]:
+        add('berry-'+kind+'-'+stage+'.png',image.crop((0,frame*32,16,(frame+1)*32)))
+# Native berry NPC graphics declaration; the explicit berry appearance selects its
+# growth frame. Complete actor bounds also support generic appearance overrides.
+berry_actor = sprite('object_events/pics/berry_trees/pecha.png',colors('object_events/palettes/npc_4.pal'))
+atlas = Image.new('RGBA',(16,384))
+atlas.paste(berry_actor,(0,0)); atlas.paste(berry_actor,(0,192))
+add('actor-BerryTreeLateStages.png',atlas)
+for stage, relative, frame in [('planted','dirt_pile',0),('sprouted','sprout',1)]:
+    image = sprite('object_events/pics/berry_trees/'+relative+'.png',colors('object_events/palettes/npc_'+('3' if stage == 'planted' else '4')+'.pal'))
+    add('berry-'+stage+'.png',image.crop((0,frame*16,16,(frame+1)*16)))
 for terrain, folder in [('grass','tall_grass'),('long_grass','long_grass'),
                          ('pond','pond_water'),('water','water'),('cave','cave'),
                          ('sand','sand'),('mountain','rock'),('indoor','building'),
@@ -214,6 +257,7 @@ for actor in actors:
     reflection_pictures[actor] = resource
 outputs[metadata_key] = ('// @generated by tools/ui/export-theme.py; do not edit.\n'+
     'export const TRAINER_PICTURES = Object.freeze('+json.dumps(trainer_pictures,sort_keys=True)+');\n'+
+    'export const TRAINER_BATTLE_PICTURES = Object.freeze('+json.dumps(trainer_battle_pictures,sort_keys=True)+');\n'+
     'export const MON_PICTURE_OFFSETS = Object.freeze('+json.dumps(mon_offsets,sort_keys=True)+');\n'+
     'export const REFLECTION_PICTURES = Object.freeze('+json.dumps(reflection_pictures,sort_keys=True)+');\n').encode()
 # Forest build rule concatenates exactly 55 frame tiles and eight background tiles.

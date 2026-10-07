@@ -9,9 +9,9 @@
     "hp": 40,
     "atk": 30,
     "def": 30,
-    "spe": 85,
     "spa": 55,
-    "spd": 30
+    "spd": 30,
+    "spe": 85
   },
   "catchRate": 190,
   "expYield": 64,
@@ -24,9 +24,9 @@
     "hp": 0,
     "atk": 0,
     "def": 0,
-    "spe": 1,
     "spa": 0,
-    "spd": 0
+    "spd": 0,
+    "spe": 1
   },
   "learnset": [
     {
@@ -80,5 +80,7 @@
     "aerial_ace",
     "rest",
     "thief"
-  ]
+  ],
+  "genderless": false,
+  "unavailableLearnset": []
 }

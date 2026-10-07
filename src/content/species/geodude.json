@@ -1,0 +1,89 @@
+{
+  "name": "小拳石",
+  "dex": 74,
+  "types": [
+    "rock",
+    "ground"
+  ],
+  "stats": {
+    "hp": 40,
+    "atk": 80,
+    "def": 100,
+    "spa": 30,
+    "spd": 30,
+    "spe": 20
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 1,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 255,
+  "expYield": 86,
+  "growth": "medium_slow",
+  "abilities": [
+    "rock_head",
+    "sturdy"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "mineral"
+  ],
+  "eggCycles": 15,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 6,
+      "move": "mud_sport"
+    },
+    {
+      "level": 36,
+      "move": "earthquake"
+    },
+    {
+      "level": 41,
+      "move": "explosion"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "defense_curl"
+    },
+    {
+      "level": 11,
+      "move": "rock_throw"
+    },
+    {
+      "level": 16,
+      "move": "magnitude"
+    },
+    {
+      "level": 21,
+      "move": "self_destruct"
+    },
+    {
+      "level": 26,
+      "move": "rollout"
+    },
+    {
+      "level": 31,
+      "move": "rock_blast"
+    },
+    {
+      "level": 46,
+      "move": "double_edge"
+    }
+  ],
+  "heldItems": {
+    "rare": "everstone"
+  }
+}

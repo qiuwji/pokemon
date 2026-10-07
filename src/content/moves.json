@@ -1555,5 +1555,15 @@
     "type": "grass",
     "effect": "sleep",
     "name": "Spore"
+  },
+  "splash": {
+    "power": 0,
+    "accuracy": 0,
+    "pp": 40,
+    "priority": 0,
+    "chance": 0,
+    "type": "normal",
+    "effect": "splash",
+    "name": "Splash"
   }
 }

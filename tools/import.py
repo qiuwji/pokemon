@@ -18,4 +18,15 @@ if name not in commands:
     raise SystemExit('Unknown import command: ' + name + '; use --list')
 entry = root.parent / commands[name]['entry']
 sys.argv = [str(entry), *sys.argv[2:]]
-runpy.run_path(str(entry), run_name='__main__')
+result = runpy.run_path(str(entry), run_name='__main__')
+if name == 'grid':
+    import subprocess
+    args = result['args']
+    follow = [sys.executable, str(root / 'import.py'), 'opening-art', args.source]
+    if args.target is not None:
+        follow += ['--target', str(args.target)]
+    if args.check:
+        follow += ['--check']
+    if args.strict:
+        follow += ['--strict']
+    subprocess.run(follow, check=True)
