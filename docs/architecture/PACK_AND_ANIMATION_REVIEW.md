@@ -1,6 +1,6 @@
 # 内容边界与动画路径评估
 
-2026-10-08，依据当前工作树静态检查。评估结论不表示架构迁移或原作音画验收完成。
+2026-10-08，以下评估保留重构前的事实。当前收口结果见文末；静态/离线验证不表示原作音画验收完成。
 
 ## 内容包的职责
 
@@ -35,3 +35,11 @@ Scene/Travel/Growth/Door导演包含不同的提交点、失败恢复和对象�
 用户的音乐要求明确为地图间切换。已核对固定参考overworld.c的TransitionMapMusic/GetMapMusicFadeoutSpeed及m4a.c的FadeOutBody：步行换曲淡出速度8，骑车4并以4淡入；warp目标室内2、其他4，屏幕覆盖与BGM停止后才提交换图，同曲连续播放。运行时接线尚未实现，不计作完成，也不扩展战斗音乐范围。源码中的speed为16级音量每级间隔的声驱动tick；映射到浏览器时钟及听音差异需明确验证。
 
 验证记录见[本批manifest](../validation/2026-10-08-party-tray-map-music/manifest.json)。仅静态/离线证据；未操作游戏，未听音验收。
+
+## 本轮收口（功能提交之后）
+
+前序功能已先提交：原生入退场、队伍状态条、HUD和地图切曲为0290f9e，中心治疗、入场重播与选择框遮盖修复为cfaebf2。上述“尚未实现”段记录评估时状态，当前功能证据见[中心与入场修复](../validation/2026-10-08-center-and-entry-fix/manifest.json)。
+
+84个涉及宿主/UI职责的文件迁出packs：game/emerald按assembly、application、commands和presentation划分，ui/emerald拥有页面及DOM生命周期。story.js只保留事件内容，StoryEngine实例/查询移到宿主；map-music只保留政策，控制器移到宿主；布局、捕获时间和内容规则工具使用公开纯作者端口。pack不导入实现层，不保留旧路径转出口，边界测试覆盖全部内容模块。
+
+战斗统一经compileBattleClip准备、frameSequencePlayer采样、battle-frame映射；显式轨道只作为编译输入。匹配序列失败抛错，不回退；append在准备期合成。Scene/Travel/Growth/Door继续保留业务生命周期，尚未把所有跨领域演出归一；换人/捕捉等原作帧内容也仍待转写。当前回归与质量证据见[架构批次](../validation/2026-10-08-architecture-cleanup/manifest.json)。

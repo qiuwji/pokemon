@@ -16,12 +16,12 @@
 
 | 能力 | 当前证据与限制 |
 | --- | --- |
-| 持久 Actor | [ACTORS](../engine/actors/ACTORS.md)、[ActorApplication](../../src/packs/emerald/application/actor-application.js)：公开生成/更新/删除、独立 UID、行为数据与保存 |
+| 持久 Actor | [ACTORS](../engine/actors/ACTORS.md)、[ActorApplication](../../src/game/emerald/application/actor-application.js)：公开生成/更新/删除、独立 UID、行为数据与保存 |
 | 自主导航 | 现有 goal/BFS、相邻地图移动、感知和占位可复用；仅趋近目标不能表达按目标实际路线跟随；不自动穿门或使用交通 |
 | 协同移动 | 共用 NPCSystem/GridMotion 和两端预约；Actor 步进会阻挡玩家位置及 playerFrom，不能简单命令其进入玩家刚离开的格子并期待同步跟随 |
 | 外观 | [外观合同](../engine/presentation/APPEARANCE_AND_VIEW.md)：注册资源/图集/appearance，模板可引用 appearance，换外观保持 Actor 身份和碰撞 |
 | 移动事实 | `core:field-step` 当前只有 position；`core:world-visit` 有 map/revision/restoredObjects；均不等于完整的移动起终点、时序和场景交接合同 |
-| 受控操作与事务 | `core.actor.*` 与 `core.appearance.*` 已存在。当前 [extension-intents](../../src/packs/emerald/extension-intents.js) 不接受 Actor 意图；不能在插件 action 内嵌套 dispatch，假定生成 Actor、写插件记忆和改外观天然原子化 |
+| 受控操作与事务 | `core.actor.*` 与 `core.appearance.*` 已存在。当前 [extension-intents](../../src/game/emerald/commands/extension-intents.js) 不接受 Actor 意图；不能在插件 action 内嵌套 dispatch，假定生成 Actor、写插件记忆和改外观天然原子化 |
 | 素材取样 | [sprite-animation](../../src/presentation/sprite-animation.js) 当前固定 right 镜像；[sprite-contracts](../../src/engine/extensions/sprite-contracts.js) 的帧仅接受 index/durationMs，无法直接声明非镜像右向 |
 | 停用与恢复 | 现有 runtime-suspension 能暂停缺插件的 Actor 和关联外观；新增跟随关系仍须接入依赖、暂停与恢复，不可据此宣称已支持 |
 
@@ -141,7 +141,7 @@ Actor 领域唯一持有位置、身份和控制关系；插件仅保存 enabled
 | 可组合事务 | `extension-intents.js`、`extension-ports.js`、`plugin-runtime.js`；按方案调整 `event-bus.js` 或应用提交端口，必要时涉及 Actor/Appearance 应用 | 成功前不发布事实，失败恢复运行时缓存；范围中等 |
 | 方向素材合同 | `sprite-contracts.js`、`sprite-animation.js`、`contracts.d.ts`；旧 `actorFrame` 只有确需统一新描述时才改 | 独立小改动 |
 
-各工作组共享文件，不能将每行数量相加。`packs/emerald/application/` 中的改动属于当前宿主的通用能力装配；无需把应用层迁入 engine，也不能将宝可梦业务政策混入这些服务。
+各工作组共享文件，不能将每行数量相加。`game/emerald/application/` 中的改动属于当前宿主的通用能力装配；无需把应用层迁入 engine，也不能将宝可梦业务政策混入这些服务。
 
 ### 新确认的难点
 

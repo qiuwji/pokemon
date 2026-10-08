@@ -1,5 +1,5 @@
 import { nativePartySlots } from "./battle/party-summary.js";
-import { battleLayout } from "../../presentation/battle-view.js";
+import { battleLayout } from "../../engine/extensions/battle-layout.js";
 import { TRAINER_PICTURES, TRAINER_BATTLE_PICTURES, MON_PICTURE_OFFSETS } from "../../../generated/presentation/battle-assets.js";
 import { EMERALD_BATTLE_EXIT } from "./battle/exit-choreography.js";
 

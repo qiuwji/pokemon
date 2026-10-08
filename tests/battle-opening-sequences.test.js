@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { emeraldBattleLayout, emeraldBattleOpening } from "../src/packs/emerald/battle-presentation.js";
 import { nativeSendFlight } from "../src/packs/emerald/battle/opening-choreography.js";
 import { EMERALD_BATTLE_EXIT } from "../src/packs/emerald/battle/exit-choreography.js";

@@ -41,6 +41,8 @@ def changed_paths(root, baseline='HEAD'):
 def layer(path):
     for prefix, name in [
         ('src/engine/', 'engine'), ('src/adapters/', 'adapters'),
+        ('src/game/', 'application'), ('src/ui/', 'ui'),
+        ('src/presentation/', 'presentation'),
         ('src/packs/emerald/application/', 'application'),
         ('src/packs/emerald/story/', 'story'), ('src/content/', 'content'),
         ('src/packs/', 'pack'), ('generated/', 'generated'),

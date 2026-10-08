@@ -96,10 +96,10 @@ test("bundle registers an NPC, shared dialogue and choice with durable reward", 
 
 | 责任 | 查找入口 |
 | --- | --- |
-| 地区装配、预检 | `src/packs/emerald/story/runtime.js`，搜索 `createEmeraldStory` |
+| 地区装配、预检 | `src/game/emerald/assembly/story-runtime.js`，搜索 `createEmeraldStory` |
 | bundle、引用、参数与稳定程序 | `src/engine/story-catalog.js`，搜索 `registerBundle`、`Stable story node required` |
 | 条件、触发、前置 | `src/engine/story.js`，搜索 `class StoryEngine`；触发应用搜索 `story.resolve("step"` |
-| 执行、领域结果及导演生命周期 | `src/packs/emerald/application/story-application.js`，搜索 `runStory`、`onResult` |
+| 执行、领域结果及导演生命周期 | `src/game/emerald/application/story-application.js`，搜索 `runStory`、`onResult` |
 | 持久游标和战斗关联 | `src/engine/story-session.js`，搜索 `battleResult`、`validateStoryResume` |
 
 接口变化同步规格、Skill 及可执行例；`npm run check:docs`检查链接/片段，例子实际运行一次。项目代码、资源、固定参考、文档和 Skill 一起交接。

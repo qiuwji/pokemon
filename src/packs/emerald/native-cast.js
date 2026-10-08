@@ -1,4 +1,4 @@
-import { matchesCondition, validateCondition } from "../../engine/conditions.js";
+import { matchesCondition, validateCondition } from "../../engine/extensions/condition-content.js";
 import { openingObjects } from "./opening-objects.js";
 import { NATIVE_CAST } from "./native-cast-data.js";
 import SOURCE_CAST from "./native-source-data.json" with { type: "json" };

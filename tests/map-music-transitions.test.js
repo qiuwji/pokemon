@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { AudioAdapter } from "../src/adapters/audio.js";
 import { envelopeLevel } from "../src/adapters/audio-envelope.js";
-import { EmeraldMapMusic, emeraldMapMusicTransition } from "../src/packs/emerald/map-music.js";
+import { EmeraldMapMusic } from "../src/game/emerald/presentation/map-music.js";
+import { emeraldMapMusicTransition } from "../src/packs/emerald/map-music.js";
 import { session } from "./helpers/session.js";
 
 function arrange() {

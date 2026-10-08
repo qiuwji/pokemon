@@ -6,7 +6,7 @@ import { PresentationRegistry } from "../src/presentation/effect-registry.js";
 import { frameSequencePlayer } from "../src/presentation/frame-sequence.js";
 import { blendSpritePixels, createFrameSpritePainter } from "../src/presentation/frame-sprite-canvas.js";
 import { drawBattle } from "../src/presentation/battle-canvas.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { emeraldBattleLayout } from "../src/packs/emerald/battle-presentation.js";
 import { nativeHealthBar } from "../src/packs/emerald/battle/controller-animation.js";
 import { NATIVE_BATTLE_ASSETS } from "../generated/packs/emerald/battle-animation-assets.js";
@@ -111,7 +111,7 @@ test("HP waits for blink, preserves fine bar steps, and fainting clips native ro
 test("invalid and asynchronous content is isolated; selectors are deterministic and sealed", () => {
   const errors = [], registry = new PresentationRegistry({ onError: error => errors.push(error) });
   registry.sequence("bad", { kind: "move", prepare: async () => ({}) });
-  assert.equal(registry.prepareSequence(move("pound"), view, emeraldBattleLayout(view)), null);
+  assert.throws(() => registry.prepareSequence(move("pound"), view, emeraldBattleLayout(view)), /synchronous/);
   assert.equal(errors.length, 1);
   assert.throws(() => registry.sequence("duplicate", { kind: "move", prepare: () => null }));
   registry.seal();
@@ -175,4 +175,44 @@ test("the canvas consumes registered frame sprites and clipped actor poses", () 
   drawBattle(ctx, { "zigzagoon-front": image, sprite: image }, frame, {}, (_ctx, art, sprite) => spriteCalls.push({ art, sprite }));
   assert.equal(calls.find(c => c[0] === "drawImage")[5], 48);
   assert.equal(spriteCalls[0].sprite.x, 176);
+});
+
+test("explicit track content compiles once and render refreshes only read immutable frames", () => {
+  let now = 0, calls = 0;
+  const registry = new PresentationRegistry().effect("test:glow", () => {});
+  registry.battle("test:append", { kind: "form", mode: "append", animation: {
+    duration: 800, tracks: [{ effect: "test:glow", anchor: "actor", start: 0, end: 1 }],
+  } });
+  const original = registry.sampleAnimation.bind(registry);
+  registry.sampleAnimation = (...args) => { calls++; return original(...args); };
+  const director = new BattleDirector(new Timeline({ now: () => now }), { registry, layout: emeraldBattleLayout });
+  director.reset(view);
+  director.stage({ ...view, kind: "form", actorSeat: "home:0", targetSeat: "home:0" });
+  const prepared = calls;
+  assert(prepared > 1);
+  assert.throws(() => { director.event.animation.sample(0).poses[0].x = 99; });
+  director.event.start = 0;
+  for (const hz of [30, 60, 120, 144]) {
+    for (now = 0; now < 800; now += 1000 / hz) director.sample();
+    now = 400;
+    assert.equal(director.sample().effects[0].kind, "test:glow");
+    assert.equal(director.sample().actors[0].scale, 1.12, "append retains the event pose");
+  }
+  assert.equal(calls, prepared, "rendering cannot enter a second sampler");
+});
+
+test("a selected invalid frame clip fails instead of falling through to explicit tracks", async () => {
+  let calls = 0;
+  const registry = new PresentationRegistry({ onError: () => { throw new Error("reporter failed"); } })
+    .effect("test:glow", () => {});
+  registry.sequence("test:invalid", { kind: "move", prepare: () => null });
+  registry.move("pound", { duration: 500, tracks: [{ effect: "test:glow", anchor: "actor", start: 0, end: 1 }] });
+  registry.sampleAnimation = () => { calls++; throw new Error("fallback sampled"); };
+  const director = new BattleDirector(new Timeline(), { registry, layout: emeraldBattleLayout });
+  director.reset(view);
+  await assert.rejects(director.play(move("pound")), /test:invalid failed: A matched sequence/);
+  assert.equal(calls, 0);
+  assert.equal(director.busy, false);
+  assert.deepEqual(director.view.combatants, view.combatants);
+  assert.equal(registry.prepareSequence({ ...view, kind: "uncovered" }, view, emeraldBattleLayout(view)), null);
 });

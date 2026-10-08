@@ -3,9 +3,9 @@ import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
 import { buttonPage } from "./helpers/button-page.js";
 import { createMonster } from "../src/engine/model.js";
-import { createBoxInterface } from "../src/packs/emerald/box-interface.js";
-import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { createBoxInterface } from "../src/ui/emerald/box-interface.js";
+import { createEmeraldCommandFacade } from "../src/game/emerald/commands/command-facade.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 function screen(s) {
   const p=buttonPage(), messages=[], errors=[];
   const ui=createBoxInterface(createEmeraldCommandFacade(s.game,s.bus,{onError:e=>errors.push(e)}),

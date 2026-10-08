@@ -19,7 +19,7 @@ import {
   manifest,
   objectSchema,
 } from "./helpers/session.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 test("Story bundle binds an exact NPC, calls a parameterized script and persists dialogue without touching app imports", async () => {
   let exported;

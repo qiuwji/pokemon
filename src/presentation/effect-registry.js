@@ -133,9 +133,13 @@ export class PresentationRegistry {
     const context = readOnly({ event: optional(event), previous: optional(previous), layout: Object.fromEntries(layout) });
     try {
       const plan = callSync(candidates[0][1].prepare, [context]);
-      if (plan != null) return frameSequencePlayer(validateFrameSequence(plan, { event, previous, resources: this.resources, sounds: this.sounds }));
-    } catch (error) { this.onError(error); }
-    return null;
+      if (plan == null) throw new Error("A matched sequence must provide a frame plan");
+      return frameSequencePlayer(validateFrameSequence(plan, { event, previous, resources: this.resources, sounds: this.sounds }));
+    } catch (cause) {
+      const error = new Error(`Battle sequence ${candidates[0][0]} failed: ${cause.message}`, { cause });
+      try { this.onError(error); } catch { /* Reporting must preserve the compilation failure. */ }
+      throw error;
+    }
   }
   animation(move) {
     return this.moves.get(move?.id) || null;

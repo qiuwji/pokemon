@@ -19,7 +19,7 @@ import {
   MOVEMENT_MODES,
   TRAVEL_DESTINATIONS,
 } from "../src/packs/emerald/movement.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 const map = (behavior = Array(15).fill(0)) => ({
   width: 5,

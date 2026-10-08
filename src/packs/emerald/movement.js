@@ -1,5 +1,5 @@
-import { GEN3_MACH_DURATIONS } from "../../engine/rules/gen3/bike-input.js";
-import { isWater, BEHAVIOR } from "../../engine/terrain.js";
+import { GEN3_MACH_DURATIONS } from "../../engine/extensions/field-content.js";
+import { isWater, BEHAVIOR } from "../../engine/extensions/field-content.js";
 /** Emerald-specific permissions. Another game can supply a different registry to the same field session. */
 const land = ({ cell, warp }) =>
   !isWater(cell.behavior) && (cell.collision === 0 || !!warp);

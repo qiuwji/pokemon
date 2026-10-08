@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
-import { interaction, battleOutcome } from "../src/packs/emerald/story.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { interaction, battleOutcome } from "../src/game/emerald/assembly/story-queries.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 function addItem(s, item, count) {
   const plan = s.game.inventory.prepare(s.game.state.bag, [

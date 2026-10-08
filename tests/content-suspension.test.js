@@ -5,12 +5,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session, manifest } from './helpers/session.js';
 import { loadContentSync } from '../tools/content-io.mjs';
-import { createEmeraldPlugins } from '../src/packs/emerald/extensions.js';
-import { EmeraldAdventure } from '../src/packs/emerald/adventure.js';
-import { attachEmeraldExtensions } from '../src/packs/emerald/extension-ports.js';
+import { createEmeraldPlugins } from '../src/game/emerald/assembly/extensions.js';
+import { EmeraldAdventure } from '../src/game/emerald/adventure.js';
+import { attachEmeraldExtensions } from '../src/game/emerald/commands/extension-ports.js';
 import { createMonster } from '../src/engine/model.js';
 import { inventoryQuantity } from '../src/engine/inventory.js';
-import { PACK, validateSave } from '../src/packs/emerald/pack.js';
+import { PACK } from "../src/packs/emerald/pack.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 const base=loadContentSync();
 const mod=manifest('suspend-demo',api=>{
   api.content.register('items','snack',{name:'点心',price:10,contexts:['field'],target:'party',effects:[{op:'restoreHP',amount:10}],icon:'◇',description:'测试'});

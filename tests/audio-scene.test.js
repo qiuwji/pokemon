@@ -419,7 +419,7 @@ test("Scene clock validates before taking control, rejects overlaps and releases
 });
 test("UI scene facade serializes typed payload through the shared command envelope", async () => {
   const { createEmeraldCommandFacade } = await import(
-    "../src/packs/emerald/command-facade.js"
+    "../src/game/emerald/commands/command-facade.js"
   );
   let received;
   const game = createEmeraldCommandFacade(

@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { EmeraldAdventure } from '../src/packs/emerald/adventure.js';
+import { EmeraldAdventure } from '../src/game/emerald/adventure.js';
 import { Timeline, TransitionController } from '../src/engine/timeline.js';
 import { BattleDirector } from '../src/presentation/battle-director.js';
 import { GridMotion, SceneGraph } from '../src/engine/motion.js';
-import { PACK } from '../src/packs/emerald/pack.js';
+import { PACK } from "../src/packs/emerald/pack.js";
 import { CropRegistry, CropService } from '../src/engine/crop-growth.js';
 import { EMERALD_CROPS, EMERALD_CROP_POLICY, emeraldBerryYield } from '../src/packs/emerald/berries.js';
 

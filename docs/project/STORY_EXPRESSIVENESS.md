@@ -10,7 +10,7 @@
 | 状态与条件 | flag、标量变量、只读查询compare、all/any/not、if/choice | [变量](../../src/engine/story-variables.js)、语言用例及[内容用例](../../tests/story-content.test.js) |
 | 可复用内容 | bundle局部/完整引用、参数schema、typed call展开、绑定对白/多说话人 | [StoryCatalog](../../src/engine/story-catalog.js)、[实际对象入口例](../../examples/story-bundle.test.js) |
 | 演员演出 | sequence/parallel、move.path/face/approach/escort/camera、scene pin、连接跨图；预检资源冲突 | [CommandRunner](../../src/engine/commands.js)、[FieldDirector](../../src/engine/field-director.js)、[跨图剧情用例](../../tests/oldale-rival.test.js) |
-| 领域结果分支 | reward.onResult的ok/alreadyGranted/inventoryFull；所属领域原子提交 | [StoryApplication](../../src/packs/emerald/application/story-application.js)、内容用例；旧原作领取flag不与事件完成混同 |
+| 领域结果分支 | reward.onResult的ok/alreadyGranted/inventoryFull；所属领域原子提交 | [StoryApplication](../../src/game/emerald/application/story-application.js)、内容用例；旧原作领取flag不与事件完成混同 |
 | 长流程续接 | durable、稳定node、checkpoint、battle.onResult、关联战斗结果、ready游标恢复 | [StorySession](../../src/engine/story-session.js)、[持久会话用例](../../tests/story-session.test.js) |
 | 世界与表现 | worldPatch、对象覆盖、天气/领域动作、注册presentation、音乐请求；规则与播放分层 | [公开语言](../engine/story/STORY_LANGUAGE.md)、[表现用例](../../tests/story-presentation.test.js) |
 

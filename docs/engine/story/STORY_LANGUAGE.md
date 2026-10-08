@@ -77,7 +77,7 @@ api.story.register('gate', {
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |
 | heal / starter / shop | 无必需额外参数；分别调用现有治疗、选择伙伴和商店界面端口 |
 
-更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../src/packs/emerald/application/story-application.js)、[CommandRunner](../../../src/engine/commands.js)、[FieldDirector](../../../src/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
+更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../src/game/emerald/application/story-application.js)、[CommandRunner](../../../src/engine/commands.js)、[FieldDirector](../../../src/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
 
 预检全部树不等于整段剧情原子回滚；已经成功提交的奖励/世界操作不会因后续演出失败自动撤销。once控制重触发，completed与实际领取账本分开。背包满的原作专用分支需明确结果/容量政策，不能因为事件一次性就提前标记领取。当前语言还没有自动翻译C特殊函数、完整离图回调或任意设施启动命令；按实际缺口单独演进，不能在内容中伪造。
 

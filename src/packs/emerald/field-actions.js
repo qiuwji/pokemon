@@ -1,8 +1,8 @@
-import { gen3CanFish } from "../../engine/rules/gen3/fishing.js";
+import { gen3CanFish } from "../../engine/extensions/field-content.js";
 import { BIKE_ITEMS, ROD_ITEMS } from "./field-capabilities.js";
-import { GEN3_ELEVATION } from "../../engine/rules/gen3/elevation.js";
-import { DIRECTIONS } from "../../engine/world.js";
-import { isWater, BEHAVIOR } from "../../engine/terrain.js";
+import { GEN3_ELEVATION } from "../../engine/extensions/field-content.js";
+import { DIRECTIONS } from "../../engine/extensions/field-content.js";
+import { isWater, BEHAVIOR } from "../../engine/extensions/field-content.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 
 const partner = (c, move) =>

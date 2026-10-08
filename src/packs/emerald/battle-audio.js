@@ -1,7 +1,4 @@
-import {
-  CAPTURE_TIMING,
-  captureShakes,
-} from "../../presentation/timed-cues.js";
+import { CAPTURE_TIMING, captureShakes } from "../../engine/extensions/capture-timing.js";
 /** Native sample choices are pack policy. Timing follows the displayed ball phases, not rules. */
 export function emeraldBattleCues(event, { duration, reducedMotion }) {
   const cue = (id, at = 0) => ({ id: "emerald:" + id, at });

@@ -12,7 +12,7 @@ import {
   unprojectScreen,
 } from "../src/engine/camera-view.js";
 import { drawEnvironmentLayers } from "../src/presentation/environment-layers-canvas.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { Renderer } from "../src/adapters/canvas-renderer.js";
 const viewPlugin = (capture) =>
   manifest(

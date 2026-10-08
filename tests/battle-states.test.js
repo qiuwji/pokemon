@@ -7,7 +7,7 @@ import { Random, createMonster } from "../src/engine/model.js";
 import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
 import { GEN3_GLOBAL_HOOKS } from "../src/engine/rules/gen3/global-rules.js";
 import { objectSchema } from "../src/engine/extensions/values.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 const original = loadContentSync();
 const skill = (effect, power = 0, target = "self") => ({
   name: effect,

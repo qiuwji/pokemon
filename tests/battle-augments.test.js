@@ -4,7 +4,7 @@ import { session, manifest } from "./helpers/session.js";
 import { augmentFixture } from "./fixtures/extensions/augment.js";
 import { Battle } from "../src/engine/battle.js";
 import { createMonster } from "../src/engine/model.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 
 function extension(overrides = {}) {
   return manifest("augment-test", (api) => {
@@ -277,7 +277,7 @@ test("Forged internal replacement fields cannot bypass source choice or augment 
 });
 test("Battle menu adapter forwards the registered augment instead of silently using the base move", async () => {
   const { createBattleInterface } = await import(
-    "../src/packs/emerald/battle-interface.js"
+    "../src/ui/emerald/battle-interface.js"
   );
   const s = session([augmentFixture]);
   await s.bus.execute("core.battle.start", { trainerId: "youngster" });

@@ -1,4 +1,4 @@
-import { CAPTURE_TIMING, captureShakes } from "./timed-cues.js";
+import { CAPTURE_TIMING, captureShakes } from "../engine/extensions/capture-timing.js";
 const clamp = t => Math.max(0, Math.min(1, t));
 const lerp = (a, b, t) => a + (b - a) * t;
 /** Pure cosmetic sampling over detached frame state. */

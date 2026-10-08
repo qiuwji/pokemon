@@ -1,6 +1,6 @@
-import { sourceObjectId, sourceLocalId } from "../../engine/world-object-index.js";
+import { sourceObjectId, sourceLocalId } from "../../engine/extensions/source-identity.js";
 import { nativeMovement } from "./native-movement.js";
-import { GEN3_ELEVATION } from "../../engine/rules/gen3/elevation.js";
+import { GEN3_ELEVATION } from "../../engine/extensions/field-content.js";
 
 /** Gen3 source metadata stays in the pack; the generic engine index knows no movement codes. */
 export function isSourceInvisible(db, map, id) {

@@ -12,7 +12,7 @@ import { emptyWeather } from "../src/engine/weather.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { Random, createMonster } from "../src/engine/model.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { validCreatureValues } from "../src/engine/creature-contract.js";
 import { createItemService, ItemService } from "../src/engine/items.js";
 import { EffectRegistry } from "../src/engine/effects.js";

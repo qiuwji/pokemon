@@ -1,4 +1,4 @@
-import { matchesCondition } from "../../engine/conditions.js";
+import { matchesCondition } from "../../engine/extensions/condition-content.js";
 export const QUESTS = [
   { id: "clock", requires: { not: { flag: "rescued" } }, number: "00", title: "安顿新家", description: "到自己家二楼调查墙上的时钟，设定时间。", complete: { compare: { query: { id: "clockSet" }, op: "eq", value: true } } },
   { id: "tv", number: "00", title: "回到妈妈身边", description: "下楼找妈妈，看看电视里的道馆转播。", requires: { compare: { query: { id: "clockSet" }, op: "eq", value: true } }, complete: { flag: "tvWatched" } },

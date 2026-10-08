@@ -13,10 +13,10 @@ import { FieldSession } from "../src/engine/field-session.js";
 import { SceneGraph, GridMotion } from "../src/engine/motion.js";
 import { CommandRunner } from "../src/engine/commands.js";
 import { findRoute } from "../src/engine/pathfinding.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { createMonster } from "../src/engine/model.js";
-import { battleOutcome } from "../src/packs/emerald/story.js";
+import { battleOutcome } from "../src/game/emerald/assembly/story-queries.js";
 import {
   OPEN_BAG,
   RETURN_TO_CENTER,

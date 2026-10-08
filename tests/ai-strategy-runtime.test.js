@@ -3,7 +3,7 @@ import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { Random, createMonster } from "../src/engine/model.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 import { createTrainerEncounter } from "../src/engine/trainer-encounters.js";
 import { BattleStrategyRegistry } from "../src/engine/battle/strategy-registry.js";
 import { EncounterTableRegistry } from "../src/engine/encounter-tables.js";

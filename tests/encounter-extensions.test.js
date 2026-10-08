@@ -5,7 +5,7 @@ import { EncounterPolicyRegistry } from "../src/engine/encounter-policies.js";
 import { FieldContacts } from "../src/engine/field-contacts.js";
 import { GEN3_ELEVATION } from "../src/engine/rules/gen3/elevation.js";
 
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { objectSchema } from "../src/engine/extensions/values.js";
 import { encounterFixture } from "./helpers/encounter-extension-fixture.js";
 

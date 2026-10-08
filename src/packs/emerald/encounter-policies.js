@@ -1,4 +1,4 @@
-import { isWater, isGrass, hasEncounterTerrain } from "../../engine/terrain.js";
+import { isWater, isGrass, hasEncounterTerrain } from "../../engine/extensions/field-content.js";
 /** Native opening-slice eligibility; the host does not know this flag or Gen III terrain values. */
 export const EMERALD_ENCOUNTER_POLICIES = {
   "emerald-step": {

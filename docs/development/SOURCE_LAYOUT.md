@@ -9,6 +9,10 @@
 
 两棵目录各保留一份文件。生成输入保留在Git，干净检出无需原作资料、Pillow或音频渲染器就能运行游戏与Node检查；重新导入才需要相应参考及工具。业务修改看src，派生修改看generated，后者由.gitattributes标记便于review。
 
+## 手写运行时的职责位置
+
+`src/packs/emerald`只包含内容、纯政策和编排，使用`engine/extensions`公开作者能力。`src/game/emerald/assembly`构造具体引擎/表现服务，`application`按状态所有者协调用例，`commands`适配命令，`presentation`接线本作宿主生命周期。`src/ui/emerald`持有浏览器页面、DOM交互、视图与CSS。搬迁后不在旧pack位置保留转出口；改页面无需修改内容边界。依赖守卫见[architecture.test.js](../../tests/architecture.test.js)。
+
 ## 启动和引用
 
 `npm run dev`直接提供src与generated的文件，根地址跳转至src/index.html并保留查询参数。页面base定位项目根，主入口为src/app.js；模块按真实目录相对导入生成的规则和资源模块。浏览器资源URL指向generated/assets或generated/plugins，CSS依自身位置引用对应目录；字体仍从src/assets读取。子路径部署需同时提供这两棵目录，以src/index.html为页面入口。

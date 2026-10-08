@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 test("A real ledge hop emits the original sound once; animation-busy and blocked climbs stay silent", async () => {
   const s = session(), g = s.game, sounds = [];

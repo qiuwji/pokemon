@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { validateSave } from '../src/packs/emerald/save-contract.js';
+import { validateSave } from '../src/game/emerald/assembly/save-contract.js';
 import {
   DOOR_CLOSE_FRAMES,
   DOOR_FRAME_MS,
   DOOR_OPEN_FRAMES,
   DoorDirector,
   createDoorWarp,
-} from '../src/packs/emerald/door-animation.js';
+} from '../src/game/emerald/presentation/door-animation.js';
 import { DOOR_ANIMATIONS, DOOR_ANIMATIONS_BY_TILESET } from '../generated/packs/emerald/generated/door-anims.js';
 import { emeraldDoorSound } from '../src/packs/emerald/audio-library.js';
 

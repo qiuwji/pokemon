@@ -1,13 +1,13 @@
 import test from "node:test";
 import { Renderer } from "../src/adapters/canvas-renderer.js";
 import { validateFieldCommand } from "../src/engine/field-director.js";
-import { emeraldTransitionPatterns } from "../src/packs/emerald/battle-transition-canvas.js";
+import { emeraldTransitionPatterns } from "../src/game/emerald/presentation/battle-transition-canvas.js";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
 import { buttonPage } from "./helpers/button-page.js";
-import { interaction } from "../src/packs/emerald/story.js";
-import { createBattleInterface } from "../src/packs/emerald/battle-interface.js";
-import { createBagInterface } from "../src/packs/emerald/bag-interface.js";
+import { interaction } from "../src/game/emerald/assembly/story-queries.js";
+import { createBattleInterface } from "../src/ui/emerald/battle-interface.js";
+import { createBagInterface } from "../src/ui/emerald/bag-interface.js";
 import { BattleSession } from "../src/engine/battle-session.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { Timeline } from "../src/engine/timeline.js";

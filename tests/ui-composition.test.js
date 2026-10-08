@@ -1,5 +1,5 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { createEmeraldSpriteClips } from "../src/packs/emerald/sprite-clips.js";
+import { createEmeraldSpriteClips } from "../src/game/emerald/assembly/sprite-clips.js";
 import { emeraldAppearanceResources } from "../src/packs/emerald/appearance-definitions.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import {
@@ -9,8 +9,8 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createEmeraldInterface } from "../src/packs/emerald/interface.js";
-import { createUIShell } from "../src/packs/emerald/ui-shell.js";
+import { createEmeraldInterface } from "../src/ui/emerald/interface.js";
+import { createUIShell } from "../src/ui/emerald/ui-shell.js";
 import { createMonster, Random } from "../src/engine/model.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
 import { readOnly } from "../src/engine/extensions/values.js";

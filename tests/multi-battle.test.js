@@ -11,10 +11,8 @@ import assert from "node:assert/strict";
 import { Battle } from "../src/engine/battle.js";
 import { Random, createMonster } from "../src/engine/model.js";
 import { teamRoster } from "../src/engine/battle/roster.js";
-import {
-  createTrainerEncounter,
-  TRAINERS,
-} from "../src/packs/emerald/trainers.js";
+import { createTrainerEncounter } from "../src/engine/trainer-encounters.js";
+import { TRAINERS } from "../src/packs/emerald/trainers.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { Timeline } from "../src/engine/timeline.js";
 const db = loadContentSync();

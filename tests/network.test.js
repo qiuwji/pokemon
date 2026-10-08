@@ -13,10 +13,10 @@ import {
   createLoopbackTransport,
   WebSocketTransport,
 } from "../src/adapters/network-transport.js";
-import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { createEmeraldCommandFacade } from "../src/game/emerald/commands/command-facade.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";

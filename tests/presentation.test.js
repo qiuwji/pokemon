@@ -1,3 +1,4 @@
+import { emeraldBallResource } from "../src/packs/emerald/battle-ball.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import {
   createBag,
@@ -10,8 +11,7 @@ import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { emeraldBattleCues } from "../src/packs/emerald/battle-audio.js";
 import {
   createEmeraldPresentation,
-  emeraldBallResource,
-} from "../src/packs/emerald/animations.js";
+} from "../src/game/emerald/assembly/animations.js";
 import { emeraldTypeColor } from "../src/packs/emerald/battle-palette.js";
 import { EMERALD_BATTLE_INTRO } from "../src/packs/emerald/battle-intro.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
@@ -27,7 +27,7 @@ import { ITEMS } from "../src/packs/emerald/items.js";
 import { EvolutionService } from "../src/engine/growth/evolution.js";
 import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
 const db = loadContentSync();
 function manualClock() {
   let time = 0;
@@ -125,7 +125,8 @@ test("HP interpolation is visual only; a zero-HP actor remains visible until fai
   await job;
   const faint = director.play({ kind: "faint", side: 0, ...target });
   await clock.advance(325);
-  assert.equal(director.sample().actors[0].opacity, 0.5);
+  // At 325ms, the 60Hz clip holds frame 19 of its 39-frame fade.
+  assert.equal(director.sample().actors[0].opacity, 1 - 19 / 39);
   assert(director.sample().actors[0].y > 0);
   await clock.advance(325);
   await faint;

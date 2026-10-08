@@ -27,7 +27,7 @@ import { EffectRegistry } from "../src/engine/effects.js";
 import { PartyStorageService } from "../src/engine/party-storage.js";
 import { BattleRoster, duelRoster } from "../src/engine/battle/roster.js";
 import { learnPendingMove } from "../src/engine/party.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
 const db = loadContentSync();
 const rng = new Random(3947),
@@ -476,7 +476,7 @@ test("Save owns daycare and trade identities, keeps egg clocks, and rejects dupl
 
 test("A failed post-trade evolution restores both parties, identities, friendship and RNG", async () => {
   const { EmeraldAdventure } = await import(
-    "../src/packs/emerald/adventure.js"
+    "../src/game/emerald/adventure.js"
   );
   const { TransitionController } = await import("../src/engine/timeline.js");
   const { BattleDirector } = await import(

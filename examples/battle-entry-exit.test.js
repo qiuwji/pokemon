@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "../tests/helpers/session.js";
 import { audioPlugin } from "../generated/plugins/emerald-audio.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "../src/packs/emerald/battle-presentation.js";
 import { emeraldBattleSong } from "../src/packs/emerald/audio-library.js";
 

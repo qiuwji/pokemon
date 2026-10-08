@@ -5,9 +5,9 @@ import { session } from "./helpers/session.js";
 import { createMonster } from "../src/engine/model.js";
 import { TRAINERS } from "../src/packs/emerald/trainers.js";
 import { battleTrainer, emeraldBattleOpening, emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "../src/packs/emerald/battle-presentation.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 const textOf = lines => lines.map(line => typeof line === "string" ? line : line.runs.map(run => run.text).join("")).join("");
 const routeTrainers = ["calvin","rick","tiana","allen","haley","ivan","billy","ginaAndMia","winston","cindy","darian","lyle","james"];

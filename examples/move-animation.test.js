@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session } from "../tests/helpers/session.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 test("a plugin reskins one move through the public presentation registrations", () => {
   const plugin = manifest("move-skin", (api) => {
     const spark = api.presentation.effect("spark", { draw: () => {} });

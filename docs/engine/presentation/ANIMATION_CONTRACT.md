@@ -4,7 +4,7 @@
 
 `api.presentation.sequence(id, { kind, match?, priority?, prepare })` 是精灵、姿态和声音编排入口，能力版本 `presentation.battleSequences:1`。绿宝石内容使用同一边界。原作指令解释器、旧内置招式降级表与未注册招式的自动粒子选择已撤掉；当前覆盖与差异查[战斗专项](../../project/BATTLE_PRESENTATION_PLAN.md)。
 
-`prepare({event,previous,layout})` 同步消费深冻结结果快照与布局，运行于宿主只读守卫，不能派发命令或使用写端口。只返回有限展示数据或null。编译后的帧深冻结，播放不再调用prepare或轨迹回调。match支持点路径（如 `"message.id"`）；moveId匹配event.move.id/event.moveId。优先级、匹配具体程度、ASCII ID稳定排序；同选择器和优先级冲突拒绝注册；失败或null不选次优演出。
+`prepare({event,previous,layout})` 同步消费深冻结结果快照与布局，运行于宿主只读守卫，不能派发命令或使用写端口。已匹配的prepare必须返回有限展示数据。编译后的帧深冻结，播放不再调用prepare或轨迹回调。match支持点路径（如 `"message.id"`）；moveId匹配event.move.id/event.moveId。优先级、匹配具体程度、ASCII ID稳定排序；同选择器和优先级冲突拒绝注册；没有匹配时返回null；已匹配但返回null、异步或非法计划时报告并抛错，不选次优演出或其他轨道。报告回调失败不能掩盖原编译错误。
 
 返回 `{fps,frames,cues,messageAt?,holdFinal?}`：fps为1..240整数，1..3600帧且总长不超过60秒。每帧各最多64条poses/sprites/healthBars/statusBoxes，scenes至多一条（拒绝冲突）；最多256个sound cue，frame在计划内。messageAt为start（默认）或end，交接当前事件消息，不影响规则。
 
@@ -21,6 +21,12 @@ reducedMotion缩短等待、抑制运动/精灵，保留消息、HP及清理。�
 
 场景交换前，BattleSession先stage第一条完整事件；导演在stage编译并在play复用同一计划，因此揭幕期间已显示正确起始帧，准备回调不重复执行。Session的onPresented只在演出与消息交接完成后通知装配者；内容可据此切曲，不能按已经结算但尚未播放的battle.ended提前切曲。
 
+## 一次准备与统一采样
+
+`compileBattleClip`统一选择演出并输出不可变播放器。原生sequence直接使用校验后的帧；显式effect/move/battle轨道和尚未转写的有限事件投影在准备期按60Hz编成帧（含结束姿态），append也在此合成。BattleDirector.sample只读取选好的帧，调用battle-frame映射展示通道，不在绘制期重新选择或运行轨迹函数。HP通道只改变分离的展示快照；隐藏/捕获/训练家持久展示状态与消息交接仍由导演协调。reducedMotion使用静态投影及缩短等待。
+
+内容帧合同仍限制3600帧；宿主内部60Hz事件投影有独立的≤60秒界限，不扩展插件的公开字段。track是一种显式创作输入，不是第二个运行播放器。换人、捕捉等部分原作内容仍待逐族转写，不能将统一播放等同于原作视觉已完整复刻。长期天气、输入驱动场景与音频包络保留各自状态所有权，未编译为无限帧表。
+
 ## 通用转场帧与音频交接
 
 [TransitionController](../../../src/engine/timeline.js)的run时序可传fps、coverFrames、revealFrames、holdMs、settleMs。帧为`{opacity,colorOffset?}`：opacity0..1，RGB偏移三整数±255，每段1..3600帧且≤60秒；cover末帧必须为1，reveal末帧必须为0。只读校验并冻结，reducedMotion使用短淡变；提交始终在遮黑阶段，错误释放active。颜色偏移通过sRGB组件转换应用到Canvas及DOM表面，清除时恢复既有filter。原作帧数、调色值由pack的[退出编排](../../../src/packs/emerald/battle/exit-choreography.js)提供，不在控制器识别原作硬件。
@@ -36,7 +42,7 @@ AudioCue新增可选fadePreviousMs（0..10000），由将要播放的曲目决�
 1. `engine/extensions/visual-contracts.js` 是描述合同和纯数据片段工具，校验结构/引用/时序。没有导演、绘制器或浏览器依赖。
 2. `presentation/animation-timing.js` 只将标准化时间算成进度/数值参数。没有时钟读取、随机数、DOM、伤害或命中计算。
 3. `PresentationRegistry` 管理效果、招式和战斗语义事件描述，结合座位布局取样为 effects/poses。
-4. `BattleDirector` 拥有注入时钟、事件排队、默认演出与 reducedMotion。规则快照与生命周期不由插件动画决定。
+4. `compileBattleClip`在准备期编译描述；`BattleDirector`拥有注入时钟、事件交接与reducedMotion。规则快照与生命周期不由插件动画决定。
 5. 绘制适配器依旧调用注册的 effect。新增粒子/画法局部注册；新增编排写描述；新增规则在领域实现后发射语义事件。
 
 已有招式描述继续使用原字段，默认线性、无关键帧、无条件；默认导演演出保留，渐进迁移。未全量重写各导演。
@@ -93,7 +99,7 @@ api.presentation.battle("mega-entry", {
 
 kind 是领域已发射的事件。match 对事件顶层标量做字面匹配；不是可修改规则的回调。优先级更高先选，再选更具体的匹配，最后按 ASCII ID 排序。相同 kind+match 注册冲突在组装时拒绝，不会悄悄按加载顺序覆盖。未知效果引用也在注册/组装时失败。
 
-replace 取代默认事件的姿态/特效编排；append 在默认编排上增加特效/姿态。该定义拥有单次事件演出的时长（1..10000ms）。不会重新结算伤害、消费道具或替换规则快照。HP 展示插值、倒下/捕获隐藏与事件结束清理由原导演负责；reducedMotion 缩短事件并抑制运动/特效，保留规则、消息与 HP 展示。
+replace 取代默认事件的姿态/特效编排；append 在默认编排上增加特效/姿态。该定义拥有单次事件演出的时长（1..10000ms）。不会重新结算伤害、消费道具或替换规则快照。普通HP展示由编译帧表达，倒下/捕获隐藏与事件结束清理由导演负责；reducedMotion 缩短事件并抑制运动/特效，保留规则、消息与 HP 展示。
 
 新增动画本身不会创造新事件。Mega 的 form 事件已有来源，这个例子验证演出接口，不证明现代形态的 HP/类型/招式/资格全实现。Z 招式的动作替换/限次/消费需要继续补领域合同；不能以播放这个例子替代规则验收。
 

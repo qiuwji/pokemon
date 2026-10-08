@@ -3,7 +3,7 @@ import { createBag } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { PresentationRegistry } from "../src/presentation/effect-registry.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { EMERALD_TYPE_COLORS } from "../src/packs/emerald/battle-palette.js";
 import { drawBattle } from "../src/presentation/battle-canvas.js";
 import { TransitionPatterns } from "../src/presentation/transition-patterns.js";

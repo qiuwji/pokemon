@@ -29,12 +29,8 @@ import { SaveStore } from "../src/engine/save-store.js";
 import { CommandRunner } from "../src/engine/commands.js";
 import { NPCSystem } from "../src/engine/npcs.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
-import { validateSave } from "../src/packs/emerald/pack.js";
-import {
-  EMERALD_STORY,
-  interaction,
-  battleOutcome,
-} from "../src/packs/emerald/story.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
+import { EMERALD_STORY, interaction, battleOutcome } from "../src/game/emerald/assembly/story-queries.js";
 const db = loadContentSync();
 function setup(options = {}) {
   const rng = new Random(123);

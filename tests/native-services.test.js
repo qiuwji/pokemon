@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { session } from "./helpers/session.js";
 import { inventoryQuantity } from "../src/engine/inventory.js";
 import { EMERALD_MARTS, emeraldMartStock } from "../src/packs/emerald/mart-stock.js";
-import { createShopInterface } from "../src/packs/emerald/shop-interface.js";
+import { createShopInterface } from "../src/ui/emerald/shop-interface.js";
 
 test("Every imported centre nurse heals HP/status/PP through the counter; no cancels without healing, including after reload", async () => {
   for (const town of ["OldaleTown", "PetalburgCity", "RustboroCity", "DewfordTown", "SlateportCity"]) {

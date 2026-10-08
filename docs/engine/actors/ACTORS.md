@@ -98,6 +98,6 @@ actors.test.js 12 项有针对性通过证据：身份/保存/版本、坏记录
 
 通用 `ctx.intent(value,onResult?)` 可在意图成功应用时同步消费冻结结果：将生成 UID 写入 ctx.store，或追加初始化意图。回调执行于提交期间，不能 await/dispatch；所有回调与原 action 共用128次写操作限额。追加意图按队列顺序执行，后续失败、回调异常、异步返回或数据校验失败都会恢复领域状态、插件记忆及RNG。callback 收到的结果仍是待整笔成功的结果，不能直接执行外部副作用。
 
-引擎事务只认识可选 beginEffects 端口的 commit/rollback。绿宝石装配层 [actor-transaction-effects](../../../src/packs/emerald/actor-transaction-effects.js) 保存受影响的NPC缓存、场景pin、外观lease和遇敌claim；失败恢复原对象与未完成动画，成功后才发布冻结的核心事件与保存。领域结构不进入通用 PluginRuntime。
+引擎事务只认识可选 beginEffects 端口的 commit/rollback。绿宝石装配层 [actor-transaction-effects](../../../src/game/emerald/commands/actor-transaction-effects.js) 保存受影响的NPC缓存、场景pin、外观lease和遇敌claim；失败恢复原对象与未完成动画，成功后才发布冻结的核心事件与保存。领域结构不进入通用 PluginRuntime。
 
 可执行代表例见 [actor.test.js](../../../examples/actor.test.js)。专项见 [behavior-timing](../../../tests/behavior-timing.test.js)、[movement-results](../../../tests/movement-results.test.js)、[actor-transactions](../../../tests/actor-transactions.test.js) 和 [event-batches](../../../tests/event-batches.test.js)。这些能力未实现伙伴物种绑定、跟随路线/间距、穿门交接或宝可梦素材。

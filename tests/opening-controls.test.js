@@ -2,7 +2,7 @@ import { createMonster } from "../src/engine/model.js";
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BrowserInput } from '../src/adapters/browser-input.js';
-import { battleOptionIndex } from '../src/packs/emerald/battle-interface.js';
+import { battleOptionIndex } from '../src/ui/emerald/battle-interface.js';
 import { stageMessage } from '../src/engine/battle/messages.js';
 import { openingBattleTransition, sampleOpeningTransition } from '../src/packs/emerald/battle-transitions.js';
 import { session } from './helpers/session.js';

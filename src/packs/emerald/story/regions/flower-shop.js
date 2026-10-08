@@ -1,4 +1,4 @@
-import { Random } from "../../../../engine/model.js";
+import { Random } from "../../../../engine/extensions/creature-content.js";
 
 // Route104_PrettyPetalFlowerShop/scripts.inc and data/text/berries.inc.
 const say = (name, ...lines) => ({ type:"dialog",name,lines });

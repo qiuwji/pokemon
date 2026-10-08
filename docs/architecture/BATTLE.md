@@ -15,7 +15,7 @@
 | battle/state-registry.js、major-status.js、volatiles.js | 席位/联盟/战场状态、个体异常和临时状态各自生命周期 |
 | battle/action-lifecycle.js、replacement-requests.js | 蓄力/重复/硬直、延迟作用及中途替换请求 |
 | battle/checkpoint.js、events.js、outcomes.js、spoils.js | 失败恢复、快照事实、联盟结束判定及本场收益 |
-| packs/emerald/application/battle-application.js | 注册遭遇创建、战斗启动、应用结果提交及UI/保存协调 |
+| game/emerald/application/battle-application.js | 注册遭遇创建、战斗启动、应用结果提交及UI/保存协调 |
 | engine/battle-session.js、presentation/battle-* | 领域事实到播放时序，再到布局/逐帧绘制 |
 
 领域不导入DOM或内容包。应用只注入明确端口，兄弟服务由composition连接。战斗策略只读冻结观察及合法行动集合，人类/AI共用目标、资格和失败检查。

@@ -1,10 +1,5 @@
 import SOURCE_TRAINERS from "./native-trainers-data.json" with { type: "json" };
 
-export {
-  validateTrainers,
-  createTrainerTeam,
-  createTrainerEncounter,
-} from "../../engine/trainer-encounters.js";
 /** Training encounter demonstrates team mechanics without changing the original rival team. */
 export const TRAINERS = {
   ...Object.fromEntries(SOURCE_TRAINERS.map(({ id, name, script, prize, party, doubleBattle, actor }) => [id, {

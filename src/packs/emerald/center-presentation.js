@@ -1,6 +1,11 @@
 import { FrameSequenceBuilder } from "../../engine/extensions/frame-sequence-builder.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 
+const FANFARE_FRAMES = 160;
+export const CENTER_AUDIO_POLICY = Object.freeze({
+  "emerald:heal": Object.freeze({ holdMusic: true, waitMs: FANFARE_FRAMES * 1000 / 60 }),
+});
+
 export const CENTER_RESOURCES = Object.freeze({
   "field-heal-ball": "generated/assets/field-heal-ball.png",
   "field-heal-monitor": "generated/assets/field-heal-monitor.png",
@@ -11,7 +16,7 @@ export const CENTER_RESOURCES = Object.freeze({
 export function emeraldCenterSequence(party) {
   const count = Math.min(6, party.length);
   if (!count) throw new Error("Healing presentation requires a party");
-  const flash = (count - 1) * 25 + 32, end = flash + 160 + 3;
+  const flash = (count - 1) * 25 + 32, end = flash + FANFARE_FRAMES + 3;
   const builder = new FrameSequenceBuilder().track({ frames: end, sample: frame => {
     const age = frame - flash, sprites = [];
     if (age < 150) for (let i = 0; i < count && frame >= i * 25; i++) {

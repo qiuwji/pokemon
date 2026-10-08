@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { openingBattleTransition, sampleOpeningTransition } from "../src/packs/emerald/battle-transitions.js";
-import { emeraldTransitionPatterns } from "../src/packs/emerald/battle-transition-canvas.js";
+import { emeraldTransitionPatterns } from "../src/game/emerald/presentation/battle-transition-canvas.js";
 import { session } from "./helpers/session.js";
 import { createMonster } from "../src/engine/model.js";
 

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { session } from './helpers/session.js';
-import { validateSave } from '../src/packs/emerald/save-contract.js';
+import { validateSave } from '../src/game/emerald/assembly/save-contract.js';
 
 // Checked-in source evidence: core tests do not depend on the ignored C checkout.
 const source = JSON.parse(readFileSync(new URL('./fixtures/rescue-movements.json', import.meta.url)));

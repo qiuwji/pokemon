@@ -1,6 +1,6 @@
 # 绿宝石应用服务与组合入口
 
-`src/packs/emerald/adventure.js`是EmeraldAdventure组合入口，连接内容服务、UI、忙碌状态和会话重绑顺序。应用用例归各自所有者，公共端口由`application/public-ports.js`显式登记。剧情内容装配由`story/runtime.js`的`createEmeraldStory`负责：合并原生/插件目录、创建StoryCatalog与StoryEngine、检查事件区域引用；入口不再承担这段装配细节。门面规模守卫保持少于160行，不通过放宽阈值容纳新功能。
+`src/game/emerald/adventure.js`是EmeraldAdventure组合入口，连接内容服务、UI、忙碌状态和会话重绑顺序。应用用例归各自所有者，公共端口由`application/public-ports.js`显式登记。剧情内容装配由`assembly/story-runtime.js`的`createEmeraldStory`负责：合并原生/插件目录、创建StoryCatalog与StoryEngine、检查事件区域引用；入口不再承担这段装配细节。门面规模守卫保持少于160行，不通过放宽阈值容纳新功能。
 
 ## 职责与状态所有权
 
@@ -29,7 +29,7 @@
 | inspection | 将会话和地图投影成诊断视图 | 无领域规则 |
 | presentation | 校验演出资格并调用演出端口 | 无领域规则 |
 
-它们是本内容包的应用层，协调通用 `engine/` 领域服务；战斗公式、库存不变量、进化规则和碰撞规则继续由引擎负责。新增内容/插件仍使用已公开注册与命令，不直接导入这些内部服务。
+它们是`game/emerald`的应用层，协调通用 `engine/` 领域服务；战斗公式、库存不变量、进化规则和碰撞规则继续由引擎负责。新增内容/插件仍使用已公开注册与命令，不直接导入这些内部服务。
 
 ## 显式、实时的依赖端口
 

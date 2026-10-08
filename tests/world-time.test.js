@@ -14,13 +14,13 @@ import {
 } from "../src/engine/world-schedule.js";
 import { ConditionQueries } from "../src/engine/condition-queries.js";
 import { emeraldTide } from "../src/packs/emerald/time.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 const base = loadContentSync();
 function setupClock(options = {}) {
   let wall = 100000;

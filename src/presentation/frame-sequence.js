@@ -1,6 +1,7 @@
 /** Playback samples immutable data; compilation callbacks never execute in the render loop. */
 export function frameSequencePlayer(sequence) {
   return Object.freeze({
+    fps: sequence.fps,
     holdFinal: !!sequence.holdFinal,
     messageAt: sequence.messageAt || "start",
     duration: sequence.frames.length * 1000 / sequence.fps,

@@ -1,5 +1,3 @@
-import { StoryEngine } from "../../engine/story.js";
-import { QUESTS } from "./quests.js";
 import { TRAINING_EVENTS } from "./story/training.js";
 import { REGIONS_LITTLEROOT_EVENTS } from "./story/regions/littleroot.js";
 import { REGIONS_ROUTE103_EVENTS } from "./story/regions/route103.js";
@@ -23,8 +21,3 @@ export const STORY_EVENTS = [
   ...COMMON_INTERACTIONS_EVENTS,
   ...COMMON_BATTLE_RESULTS_EVENTS,
 ];
-export const EMERALD_STORY = new StoryEngine(STORY_EVENTS, QUESTS);
-export const interaction = (state, object, mapTitle) =>
-  EMERALD_STORY.resolve("interact", state, { object, mapTitle });
-export const battleOutcome = (state, battle, db) =>
-  EMERALD_STORY.resolve("battleResult", state, { battle, db });

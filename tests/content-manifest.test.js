@@ -113,7 +113,7 @@ test("Fragments cannot overwrite existing fields or succeed with an unfilled fil
 test("A missing or malformed local fragment cannot silently produce a partial pack", (t) => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "emerald-content-"));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-  fs.cpSync(new URL("./", CONTENT_MANIFEST), directory, { recursive: true });
+  fs.cpSync(new URL(".", CONTENT_MANIFEST), directory, { recursive: true });
   const url = pathToFileURL(path.join(directory, "manifest.json"));
   const target = path.join(directory, manifest.files[0].path);
   fs.writeFileSync(target, "{");

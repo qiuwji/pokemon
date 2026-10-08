@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { manifest, session } from "../tests/helpers/session.js";
 import { FrameSequenceBuilder } from "../src/engine/extensions/frame-sequence-builder.js";
 import { poseFrames } from "../src/engine/extensions/frame-tracks.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "../src/packs/emerald/battle-presentation.js";
 import { audioPlugin } from "../generated/plugins/emerald-audio.js";
 

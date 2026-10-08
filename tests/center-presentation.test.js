@@ -68,3 +68,22 @@ test("machine failure cannot heal the party and a real counter interaction can r
   assert.equal(s.mon.hp, s.mon.stats.hp);
   assert.equal(g.field.npcs.objects(g.state.position.map).find(n => n.kind === "heal").dir, "down");
 });
+
+test("field fanfare orchestration resumes music on cue or wait failure without changing ordinary sounds", async () => {
+  const { createEmeraldFieldCuePlayer } = await import("../src/game/emerald/presentation/field-audio.js");
+  for (const failure of [null, "sound", "wait"]) {
+    const calls = [];
+    const player = createEmeraldFieldCuePlayer({
+      holdMusic() { calls.push("hold"); return () => calls.push("resume"); },
+      async play(id) { calls.push(id); if (failure === "sound") throw new Error("sound"); },
+    }, { async wait(ms) { calls.push(ms); if (failure === "wait") throw new Error("wait"); } });
+    if (failure) await assert.rejects(player("emerald:heal"), new RegExp(failure));
+    else await player("emerald:heal");
+    assert.equal(calls[0], "hold");
+    assert.equal(calls.at(-1), "resume");
+    if (!failure) assert.equal(calls[2], 160 * 1000 / 60);
+  }
+  const played = [];
+  await createEmeraldFieldCuePlayer({ play: async id => played.push(id) }, {}) ("emerald:ball.shake");
+  assert.deepEqual(played, ["emerald:ball.shake"]);
+});

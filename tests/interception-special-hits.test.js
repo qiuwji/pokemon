@@ -6,8 +6,8 @@ import { MoveEffectRegistry } from "../src/engine/move-effects.js";
 import {
   BattleApplication,
   BATTLE_PORTS,
-} from "../src/packs/emerald/application/battle-application.js";
-import { liveApplicationPorts } from "../src/packs/emerald/application/ports.js";
+} from "../src/game/emerald/application/battle-application.js";
+import { liveApplicationPorts } from "../src/game/emerald/application/ports.js";
 const moves = {
   magic_coat: {},
   snatch: {},

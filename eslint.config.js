@@ -41,7 +41,11 @@ export default [
     },
   },
   {
-    files: ["src/adapters/**/*.js", "src/packs/**/*.js", "src/app.js"],
+    files: ["src/game/**/*.js"],
+    languageOptions: { globals: { console: "readonly" } },
+  },
+  {
+    files: ["src/adapters/**/*.js", "src/ui/**/*.js", "src/app.js"],
     languageOptions: { globals: globals.browser },
   },
   {

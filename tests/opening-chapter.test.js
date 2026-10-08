@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { validateSave } from '../src/packs/emerald/save-contract.js';
+import { validateSave } from '../src/game/emerald/assembly/save-contract.js';
 import { WallClockDial, clockHands } from '../src/presentation/wall-clock-dial.js';
 import { SceneDirector } from '../src/presentation/scene-director.js';
 

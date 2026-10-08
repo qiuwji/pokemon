@@ -6,7 +6,7 @@ import { Battle } from "../src/engine/battle.js";
 import { createMonster, Random } from "../src/engine/model.js";
 import { MoveEffectRegistry } from "../src/engine/move-effects.js";
 import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 const base = loadContentSync();
 const move = (effect, power = 0, type = "normal") => ({
   name: effect,

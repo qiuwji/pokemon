@@ -11,7 +11,7 @@ import {
   TextEffectRegistry,
 } from "../src/presentation/text-effects.js";
 import { DialogueDOM } from "../src/adapters/dialogue-dom.js";
-import { createUIShell } from "../src/packs/emerald/ui-shell.js";
+import { createUIShell } from "../src/ui/emerald/ui-shell.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import { session, manifest } from "./helpers/session.js";
 function clockPort() {

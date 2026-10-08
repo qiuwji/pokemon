@@ -121,7 +121,7 @@ test("detail entry renders a clickable action with persistent memory", async () 
 | 合同所有者 | 代码锚点 / 搜索词 |
 | --- | --- |
 | 注册、只读保护、事务 | [plugin-host](../../src/engine/extensions/plugin-host.js)、[plugin-runtime](../../src/engine/extensions/plugin-runtime.js)；`class PluginHost` / `class PluginRuntime` |
-| 公开类型、命令输入、权限 | [contracts](../../src/engine/contracts.d.ts)、[application-commands](../../src/packs/emerald/application-commands.js)、[extension-intents](../../src/packs/emerald/extension-intents.js)；`PluginAPI` / `registerEmeraldCommands` / `validateEmeraldIntent` |
+| 公开类型、命令输入、权限 | [contracts](../../src/engine/contracts.d.ts)、[application-commands](../../src/game/emerald/commands/application-commands.js)、[extension-intents](../../src/game/emerald/commands/extension-intents.js)；`PluginAPI` / `registerEmeraldCommands` / `validateEmeraldIntent` |
 | 布局与宿主位置 | [ui-registry](../../src/engine/extensions/ui-registry.js)；`UI_SLOTS` / `resolveLayout` |
 
 完整规则边界查 [作者指南](../../docs/development/AUTHORING.md)。设计或历史外部评审中的名字必须先找到当前注册、调用点和行为测试，才能当可用 API。

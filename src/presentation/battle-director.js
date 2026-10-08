@@ -1,8 +1,9 @@
-import { CAPTURE_TIMING, captureShakes, playTimedCues } from "./timed-cues.js";
-import { sampleBattleOpening } from "./battle-opening.js";
-import { sampleBattleActions } from "./battle-actions.js";
-import { sampleBattleCapture } from "./battle-capture.js";
-import { battleView, battleLayout } from "./battle-view.js";
+import { compileBattleClip } from "./battle-clip-compiler.js";
+import { applyBattleFrame } from "./battle-frame.js";
+import { CAPTURE_TIMING, captureShakes } from "../engine/extensions/capture-timing.js";
+import { playTimedCues } from "./timed-cues.js";
+import { battleView } from "./battle-view.js";
+import { battleLayout } from "../engine/extensions/battle-layout.js";
 const clamp = (t) => Math.max(0, Math.min(1, t));
 const lerp = (a, b, t) => a + (b - a) * t;
 const DURATIONS = {
@@ -75,8 +76,8 @@ export class BattleDirector {
     return this.event !== null;
   }
   stage(event) {
-    const data = battleView(event), registered = this.registry?.eventAnimation(data);
-    const animation = registered?.mode === "replace" ? null : this.registry?.prepareSequence(data, this.view, this.layout(data));
+    const data = battleView(event);
+    const animation = this.prepareClip(data, this.view);
     this.event = {
       data, source: event, animation,
       previous: this.view,
@@ -86,27 +87,20 @@ export class BattleDirector {
   }
   duration(event) {
     if (event.duration) return event.duration;
-    const registered = this.registry?.eventAnimation(event);
-    if (registered) return registered.animation.duration;
     if (event.kind === "entry" && this.intro?.duration)
       return this.intro.duration;
     return event.kind === "capture"
       ? CAPTURE_TIMING.settle +
           CAPTURE_TIMING.release +
           captureShakes(event) * CAPTURE_TIMING.shake
-      : event.kind === "move" && this.registry?.moves.has(event.move?.id)
-        ? this.registry.moves.get(event.move.id).duration
-        : (DURATIONS[event.kind] ?? DURATIONS.text);
+      : (DURATIONS[event.kind] ?? DURATIONS.text);
   }
   async play(event, { message = () => {} } = {}) {
     const staged = this.event?.start === Infinity && this.event.source === event ? this.event.animation : undefined;
     event = battleView(event);
     const previous = this.view || event;
-    const registered = this.registry?.eventAnimation(event);
-    const animation = staged !== undefined ? staged : registered?.mode === "replace" ? null : this.registry?.prepareSequence(event, previous, this.layout(event));
-    const fullDuration = registered?.mode === "append"
-      ? Math.max(animation?.duration || 0, this.duration(event))
-      : animation?.duration || this.duration(event);
+    const animation = staged !== undefined ? staged : this.prepareClip(event, previous);
+    const fullDuration = animation.duration;
     const duration = this.reducedMotion() ? Math.min(240, fullDuration) : fullDuration;
     const deferredMessage = event.kind === "capture" || animation?.messageAt === "end";
     this.view = event;
@@ -182,42 +176,20 @@ export class BattleDirector {
       }
     }
   }
-  applyFrame(result, sampled) {
-    const { actors, combatants } = result;
-    for (const pose of sampled.poses || []) {
-      const target = actors.find(a => a.seatId === pose.seatId);
-      if (target) Object.assign(target, pose);
-    }
-    result.sprites = sampled.sprites || [];
-    if (sampled.statusBoxes?.length) result.statusBoxes = sampled.statusBoxes;
-    const scene = sampled.scenes?.[0];
-    if (scene) {
-      result.background = { x: scene.backgroundX || 0, split: scene.split || false };
-      result.clip = scene.clip;
-      if (scene.hideTrainers) result.trainers = [];
-      if (scene.hideBall) { result.ball = null; result.balls = []; }
-    }
-    result.healthBars = sampled.healthBars || [];
-    for (const bar of result.healthBars) {
-      const mon = combatants.find(c => c.seatId === bar.seatId)?.monster;
-      if (mon) mon.hp = bar.hp;
-    }
-  }
   trainerPosition(trainer) {
     const back = typeof trainer === "boolean" ? trainer : !!trainer.back;
     const position = trainer.position || this.intro?.trainerPositions?.[back ? "home" : "away"] ||
       { x: back ? 65 : 248, y: back ? 158 : 74 };
     return { ...position, y: position.y + (trainer.offsetY || 0) };
   }
-  sample(now = this.timeline.now()) {
-    if (!this.view) return null;
-    const combatants = this.view.combatants.map((c) => ({
+  baseFrame(view, now = this.timeline.now()) {
+    const combatants = view.combatants.map((c) => ({
       ...c,
       monster: c.monster
         ? { ...c.monster, stats: { ...c.monster.stats } }
         : null,
     }));
-    const current = battleView({ ...this.view, combatants }),
+    const current = battleView({ ...view, combatants }),
       layout = this.layout(current);
     const actors = combatants.map((c) => ({
       seatId: c.seatId,
@@ -251,18 +223,26 @@ export class BattleDirector {
           }
         : null,
     };
+    return result;
+  }
+  prepareClip(event, previous) {
+    return compileBattleClip(event, previous, this.baseFrame(event, 0), this.duration(event), {
+      intro: this.intro, viewport: this.viewport, trainers: this.trainers,
+      trainerPosition: trainer => this.trainerPosition(trainer),
+      registry: this.registry, typeColors: this.typeColors, ballResource: this.ballResource,
+    });
+  }
+  sample(now = this.timeline.now()) {
+    if (!this.view) return null;
+    const result = this.baseFrame(this.view, now);
+    const { actors, combatants, layout } = result;
     if (!this.event) {
-      if (this.heldFrame) this.applyFrame(result, this.heldFrame);
+      if (this.heldFrame) applyBattleFrame(result, this.heldFrame);
       return result;
     }
     const { data: e, previous, start, duration, animation } = this.event,
-      t = clamp((now - start) / duration),
-      subject = ["hurt", "heal", "faint", "switch", "form", "recall"].includes(e.kind)
-        ? e.targetSeat
-        : e.actorSeat;
-    const actor = actors.find((a) => a.seatId === subject),
-      pose = layout.get(subject);
-    if (["hurt", "heal"].includes(e.kind) && (!animation || this.reducedMotion()))
+      t = clamp((now - start) / duration);
+    if (["hurt", "heal"].includes(e.kind) && this.reducedMotion())
       for (const c of combatants) {
         const old = previous.combatants.find(
           (p) => p.seatId === c.seatId,
@@ -275,54 +255,9 @@ export class BattleDirector {
       actors.forEach(a => { if (result.trainers.some(trainer => !!trainer.back === !!layout.get(a.seatId).back)) a.opacity = 0; });
     }
     if (this.reducedMotion() || e.offscreen) return result;
-    const registered = this.registry?.eventAnimation(e);
-    if (animation) {
-      const sampled = animation.sample(Math.max(0, now - start));
-      this.applyFrame(result, sampled);
-    }
-
-    // Registered replacements own cosmetics; HP interpolation and event lifecycle remain above.
-    if (!animation && registered?.mode !== "replace") {
-      const context = { e, previous, start, duration, now, t, subject, actor, pose };
-      const ports = {
-        intro: this.intro, viewport: this.viewport, trainers: this.trainers,
-        trainerPosition: trainer => this.trainerPosition(trainer),
-        registry: this.registry,
-        typeColors: this.typeColors, ballResource: this.ballResource,
-      };
-      sampleBattleOpening(result, context, ports) || sampleBattleActions(result, context, ports) || sampleBattleCapture(result, context, ports);
-    }
-
-    if (registered) {
-      const sampled = this.registry.sampleAnimation(
-        registered.animation,
-        e,
-        layout,
-        t,
-      );
-      result.effects =
-        registered.mode === "append"
-          ? [...result.effects, ...sampled.effects]
-          : sampled.effects;
-      for (const pose of sampled.poses) {
-        const target = actors.find((a) => a.seatId === pose.seatId);
-        if (target) Object.assign(target, pose);
-      }
-    } else if (!animation && e.kind === "move" && this.registry) {
-      const definition = this.registry.moves.get(e.move?.id);
-      if (definition?.poses)
-        for (const pose of this.registry.sampleAnimation(
-          definition,
-          e,
-          layout,
-          t,
-        ).poses) {
-          const target = actors.find((a) => a.seatId === pose.seatId);
-          if (target) Object.assign(target, pose);
-        }
-    }
+    if (animation) applyBattleFrame(result, animation.sample(Math.max(0, now - start)));
     if (this.viewport && result.ball) result.ball.size = 16;
-    result.view = battleView({ ...current, combatants });
+    result.view = battleView({ ...result.view, combatants });
     result.effect = result.effects[0] || null;
     return result;
   }

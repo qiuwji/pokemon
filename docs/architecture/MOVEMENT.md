@@ -12,7 +12,7 @@
 - `presentation/travel-director.js`：起飞、遮幕、降落，不计算权限或目的地。只有全屏遮幕完全覆盖时调用地图提交；失败则在原位置降落并释放输入锁。
 - `adapters/canvas-renderer.js`：角色帧表、锚点、坐骑独立图层、飞行采样。地图依然由 8×8 原始图块组成 16×16 网格。
 - `packs/emerald/movement.js`：步行/跑步/音速自行车/越野自行车/冲浪定义、目前两个飞行落点。
-- `packs/emerald/movement-interface.js`：旅行菜单和岸边冲浪确认，只请求 Adventure 的操作接口。
+- `ui/emerald/movement-interface.js`：旅行菜单和岸边冲浪确认，只请求 Adventure 的操作接口。
 
 ## 可玩范围与规则边界
 

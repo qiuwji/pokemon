@@ -1,5 +1,5 @@
 import { objectSchema } from "../../engine/extensions/values.js";
-import { BEHAVIOR as B } from "../../engine/terrain.js";
+import { BEHAVIOR as B } from "../../engine/extensions/field-content.js";
 const metatile = { type: "integer", minimum: 0, maximum: 1023 };
 const frames = (n) => (n * 1000) / 60;
 const phases = (names) =>

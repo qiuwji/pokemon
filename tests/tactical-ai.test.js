@@ -12,7 +12,7 @@ import assert from "node:assert/strict";
 import { Battle } from "../src/engine/battle.js";
 import { createMonster, Random } from "../src/engine/model.js";
 import { BattleStrategyRegistry } from "../src/engine/battle/strategy-registry.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 import { analyzeCandidate } from "../src/engine/battle/analysis.js";
 const base = loadContentSync();
 function fixture(definitions = {}) {

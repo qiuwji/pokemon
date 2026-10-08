@@ -2,25 +2,13 @@
 
 规则层负责结果，表现层消费 detached 快照，宿主负责 Canvas、DOM 与音频。演出不调用伤害、捕捉或游戏随机数；其时钟独立于规则。
 
-## 战斗效果与招式脚本
+## 有限战斗片段
 
-`PresentationRegistry` 在启动时注册 effect 绘制函数和 move 脚本，随后封闭。脚本包含 duration、可选 lunge、tracks，每个轨道声明 effect、anchor（actor / targets / field）、start / end 和 JSON 参数。注册时检查效果引用、时间范围和数量。未知效果明确报错，绘制故障隔离且恢复 Canvas 状态。
+内容使用公开`presentation.sequence`和FrameSequenceBuilder给出有限、纯展示帧。具体注册器、图元画师与资源装配归`game/emerald/assembly/animations.js`，原作时序与资源政策归`packs/emerald/battle`。`compileBattleClip`只在事件准备时选择、编译和合成；`frameSequencePlayer`读取不可变数据；`BattleDirector`协调快照、对白、音效和结束后的展示状态；Canvas/DOM绘制器只消费帧。
 
-`BattleDirector` 解释脚本、逐目标生成视觉数据，并输出精灵姿态。`battle-canvas` 只按注册表绘制，没有逐效果扩展的 if-else。绿宝石包 animations.js 定义 44 个脚本（当前 87 招式中匹配 25 个），其余保留通用回退；新增逐招式脚本不修改规则或 renderer。示例：
+显式effect/move/battle描述仍是公开作者输入，在准备时编为帧；渲染循环不运行第二套取样分支。匹配序列的编译失败直接抛错，没有匹配才表示未覆盖。旧内置招式表和按属性选择通用特效已移除，未覆盖招式没有替代效果。7招、血条/倒下及普通入场/退出已有原生编排，剩余覆盖与差异见[战斗专项](../project/BATTLE_PRESENTATION_PLAN.md)。统一播放器不代表全部原作内容已经完成。
 
-```js
-registry.effect('custom:trail', drawTrail);
-registry.move('water_gun', {
-  duration: 900,
-  tracks: [{effect:'custom:trail', anchor:'targets', start:0, end:1}]
-});
-```
-
-插件对应 API 为 `api.presentation.effect(localId, {draw})`、`api.presentation.move(localId, {moveId, animation})`。脚本可覆盖一个基础招式；多个插件覆盖同一招式拒绝启动，避免依赖加载顺序决定结果。插件绘制回调不能通过查询或命令修改游戏。
-
-领域事件增加实际能力变化 delta、每次命中的 moveId / moveType / hit，以及逐目标 successful，避免双打中一个目标命中、另一个未命中却都显示撞击。快照带有效天气、地形及精简临时状态，数组和能力等级复制后与领域对象分离。
-
-支持 17 种属性颜色，持续雨/晴/沙尘/冰雹、中毒/灼伤/麻痹/睡眠/冰冻表现、能力升降箭头、连击逐次反馈、保护盾、训练家入场。替身/反射壁/光墙已有表现数据槽；对应规则仍需单独注册，不能靠画盾实现领域效果。背景按 terrain 选择专属资源，缺少专属资源时使用格子绘制的地形色板。
+注册、选择、严格快照/资源/声音合同、追加/替换及外部作者示例见[动画合同](../engine/presentation/ANIMATION_CONTRACT.md)。领域事件仍只提供已经确定的命中、逐目标成功和HP事实，演出不计算规则或消耗游戏随机数。
 
 ## 野外与转场
 
@@ -42,13 +30,11 @@ environment-canvas 仅分发注册天气画师；WeatherDirector 按注入时钟
 
 `AudioAdapter` 只播放注册的真实资源文件，支持解码缓存、采样循环区间、music/sound/master 通道、淡入淡出、静音/后台续播与销毁。插件 audio 注册、sound 提出自有声音请求；规则/未提交事务不能播放。页面使用具名 sound(id)，音频不改变领域结果。完整合同与实际资源来源见 [AUDIO.md](../engine/presentation/AUDIO.md)。
 
-合成提示音和示范旋律已删除。现有 7 个参考 WAV 供临时 UI/战斗采样映射及初始精灵鸣叫，原作 BGM/SE 编曲尚未导入，不用缺失资源宣称音频保真。地图显式指定 music/battleMusic；未配置时安静。
+原作BGM/SE由固定参考导出，地图显式指定music/battleMusic；来源与覆盖见音频合同。地图切曲政策在内容，运行控制在game/emerald/presentation，解码、淡变和保留播放位置由AudioAdapter负责。未进行本轮听音验收。
 
 ## 验证与边界
 
-初次表现扩展检查点（0.13）的312项全量测试、内容检查通过。当时新增检查覆盖脚本错误、插件覆盖、逐席位效果、17 属性色、持续视觉、转场完全遮盖、NPC 意图碰撞与错误隔离、音乐循环销毁、场景重入与 UI 编码。浏览器验证详情互动、徽章演出与音乐开关。
-
-当前仍使用程序化像素效果，不是原作几百招式逐帧资源的完整复刻。完整图鉴世界、原作 BGM、特殊设施玩法和各地精细背景属于后续内容工作；当前支持/禁用状态以注册器和语义审计为准，不用早期14项禁用清单描述现在。
+当前离线验证见[架构整理证据](../validation/2026-10-08-architecture-cleanup/manifest.json)。检查包含内容依赖方向、UI命令边界、单次准备、不同刷新率只读取帧、失败禁止回退和完整核心/插件回归。其他导演仍拥有各自提交点与恢复生命周期，不合为超级导演；持续天气和音频包络保留独立时钟。原作换人/捕捉等有限事件投影仍有近似，浏览器逐帧和听音验收未完成。
 
 外观图层、二维视口/投影和独立环境叠层的注册、生命周期及当前边界集中见[外观与视图](../engine/presentation/APPEARANCE_AND_VIEW.md)。
 

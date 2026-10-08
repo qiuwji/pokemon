@@ -99,8 +99,8 @@ test("first plugin uses registered content and public reward transaction", async
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
 | [package.json](../../package.json) | `rg -n "emerald-web-engine" src generated tests docs package.json` |
-| [src/packs/emerald/extensions.js](../../src/packs/emerald/extensions.js) | `rg -n "createEmeraldPlugins" src generated tests docs package.json` |
-| [src/packs/emerald/extension-ports.js](../../src/packs/emerald/extension-ports.js) | `rg -n "attachEmeraldExtensions" src generated tests docs package.json` |
+| [src/game/emerald/assembly/extensions.js](../../src/game/emerald/assembly/extensions.js) | `rg -n "createEmeraldPlugins" src generated tests docs package.json` |
+| [src/game/emerald/commands/extension-ports.js](../../src/game/emerald/commands/extension-ports.js) | `rg -n "attachEmeraldExtensions" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 

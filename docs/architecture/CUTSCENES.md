@@ -13,7 +13,7 @@
 | `src/engine/camera.js` | 跟随 / 聚焦 / 平滑回归，使用世界坐标，不修改人物位置 |
 | `src/engine/npcs.js` | NPC 演出作用域、源格/目标格占用、演出中停用自主行动 |
 | `src/presentation/field-canvas.js` | 10种语义气泡的像素绘制 |
-| `src/packs/emerald/application/story-application.js` | 指令处理器、预检/资源声明、剧情控制释放与战斗交接 |
+| `src/game/emerald/application/story-application.js` | 指令处理器、预检/资源声明、剧情控制释放与战斗交接 |
 
 引擎不读取博士、未白镇、绿宝石进度或网页元素。角色用稳定 ID 引用，例如 `birch`，移动后 ID 不变。同一角色在不同地图由地图与 ID 共同定位。
 

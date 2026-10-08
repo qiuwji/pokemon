@@ -34,8 +34,8 @@ src/content/manifest.json              # 同一装配清单，stories是可选�
   stories/clock.json                   # 原作墙钟交互绑定
   stories/dialogues.json               # 现有序章/训练家/NPC本地化文本
 
-src/packs/emerald/story.js             # 本作事件装配，不放地区实现
-  story/runtime.js                    # 目录/事件引擎装配及地区引用预检
+src/game/emerald/assembly/story-runtime.js # 目录/事件引擎装配及地区引用预检
+src/packs/emerald/story.js             # 本作事件内容，不创建引擎实例
   story/regions/*.js                   # 尚需状态构建的现有序章切片
   story/common/*.js                    # 治疗、普通交互和战后桥接
   story/training.js                    # 项目训练场业务

@@ -3,7 +3,7 @@ import {
   validateBridgeDeviceContent,
 } from "./bridge-mechanisms.js";
 import { objectSchema } from "../../engine/extensions/values.js";
-import { BEHAVIOR } from "../../engine/terrain.js";
+import { BEHAVIOR } from "../../engine/extensions/field-content.js";
 const metatile = { type: "integer", minimum: 0, maximum: 1023 };
 const destination = objectSchema(
   {

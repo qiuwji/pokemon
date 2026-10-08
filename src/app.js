@@ -1,9 +1,11 @@
-import { EmeraldMapMusic } from "./packs/emerald/map-music.js";
+import { createEmeraldFieldCuePlayer } from "./game/emerald/presentation/field-audio.js";
+import { emeraldBallResource } from "./packs/emerald/battle-ball.js";
+import { EmeraldMapMusic } from "./game/emerald/presentation/map-music.js";
 import { FrameSequenceDOM } from "./adapters/frame-sequence-dom.js";
 import { MapNameDOM } from "./adapters/map-name-dom.js";
 import { emeraldBattleCues } from "./packs/emerald/battle-audio.js";
 import { PixelDisplay } from "./adapters/pixel-display.js";
-import { emeraldTransitionPatterns } from "./packs/emerald/battle-transition-canvas.js";
+import { emeraldTransitionPatterns } from "./game/emerald/presentation/battle-transition-canvas.js";
 import { loadContent } from "./adapters/content-loader.js";
 import { loadPluginCatalog } from "./adapters/plugin-loader.js";
 import { createPluginManager } from "./adapters/plugin-manager-dom.js";
@@ -22,11 +24,11 @@ import { SceneDirector } from "./presentation/scene-director.js";
 import { SceneDOM } from "./adapters/scene-dom.js";
 import { InteractionDOM } from "./adapters/interaction-dom.js";
 import { createEmeraldSceneDefinitions } from "./packs/emerald/presentation-scenes.js";
-import { createEmeraldCommandFacade } from "./packs/emerald/command-facade.js";
-import { createEmeraldPlugins } from "./packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "./packs/emerald/extension-ports.js";
+import { createEmeraldCommandFacade } from "./game/emerald/commands/command-facade.js";
+import { createEmeraldPlugins } from "./game/emerald/assembly/extensions.js";
+import { attachEmeraldExtensions } from "./game/emerald/commands/extension-ports.js";
 import { PACK } from "./packs/emerald/pack.js";
-import { assertPackContent } from "./packs/emerald/content.js";
+import { assertPackContent } from "./game/emerald/assembly/content.js";
 import { Renderer, loadAssets } from "./adapters/canvas-renderer.js";
 import { BrowserInput } from "./adapters/browser-input.js";
 import { registerGameTools } from "./adapters/browser-tools.js";
@@ -36,12 +38,11 @@ import { Timeline, TransitionController } from "./engine/timeline.js";
 import { CameraRig } from "./engine/camera.js";
 import { BattleDirector } from "./presentation/battle-director.js";
 import { TransitionDOM } from "./presentation/transition-dom.js";
-import { EmeraldAdventure } from "./packs/emerald/adventure.js";
-import { createEmeraldInterface } from "./packs/emerald/interface.js";
+import { EmeraldAdventure } from "./game/emerald/adventure.js";
+import { createEmeraldInterface } from "./ui/emerald/interface.js";
 import {
   createEmeraldPresentation,
-  emeraldBallResource,
-} from "./packs/emerald/animations.js";
+} from "./game/emerald/assembly/animations.js";
 import { EMERALD_BATTLE_INTRO } from "./packs/emerald/battle-intro.js";
 import { emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "./packs/emerald/battle-presentation.js";
 import { emeraldReflectionSurface, emeraldReflectionVisible, emeraldReflectionResource, emeraldReflectionScale, emeraldReflectionColumns } from "./packs/emerald/field-reflections.js";
@@ -264,12 +265,7 @@ async function boot() {
     const ui = createEmeraldInterface(game, {
       sound: (id) => audio.play(emeraldDoorSound(id, audio.cues)),
       playFieldSequence: sequence => fieldSequence.play(sequence, { resources: db.resources, sounds: audio.cues,
-        onCue: async id => {
-          if (id !== "emerald:heal") { await audio.play(id); return; }
-          const release = audio.holdMusic();
-          try { await audio.play(id); await timeline.wait(160 * 1000 / 60); }
-          finally { release(); }
-        },
+        onCue: createEmeraldFieldCuePlayer(audio, timeline),
       }),
       extensionAssets: assets,
       audioSettings: {

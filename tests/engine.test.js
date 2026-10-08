@@ -24,7 +24,8 @@ import {
 } from "../src/engine/model.js";
 import { Battle } from "../src/engine/battle.js";
 import { World, SaveStore } from "../src/engine/world.js";
-import { objectsFor, validateSave } from "../src/packs/emerald/pack.js";
+import { objectsFor } from "../src/packs/emerald/pack.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 const db = loadContentSync();
 const state = () => ({
   weather: emptyWeather(),
