@@ -1,5 +1,5 @@
 import { loadContentSync } from "../tools/content-io.mjs";
-import { createEmeraldSpriteClips } from "../src/packs/emerald/sprite-clips.js";
+import { createEmeraldSpriteClips } from "../src/game/emerald/assembly/sprite-clips.js";
 import { emeraldAppearanceResources } from "../src/packs/emerald/appearance-definitions.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import {
@@ -9,8 +9,8 @@ import {
 } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createEmeraldInterface } from "../src/packs/emerald/interface.js";
-import { createUIShell } from "../src/packs/emerald/ui-shell.js";
+import { createEmeraldInterface } from "../src/ui/emerald/interface.js";
+import { createUIShell } from "../src/ui/emerald/ui-shell.js";
 import { createMonster, Random } from "../src/engine/model.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
 import { readOnly } from "../src/engine/extensions/values.js";
@@ -372,6 +372,8 @@ function menuEventPort(doc) {
     descriptor = Object.getOwnPropertyDescriptor(root, "innerHTML");
   let nodes = [];
   const matches = (node, selector) => {
+    selector = selector.split(" ").at(-1);
+    if (selector.includes(":focus") && doc.activeElement !== node) return false;
     const tag = selector.match(/^[a-z]+/)?.[0];
     if (tag && node.tagName !== tag.toUpperCase()) return false;
     const attribute = selector.match(/\[([^=\]]+)(?:="([^"]*)")?\]/);
@@ -402,18 +404,20 @@ function menuEventPort(doc) {
             ] = m[2];
         }
         node.disabled = node.attrs.has("disabled");
-        node.focus = () => (doc.activeElement = node);
+        node.setAttribute = (key, value) => node.attrs.set(key, String(value));
+        node.focus = () => { doc.activeElement = node; node.onfocus?.(); };
       };
       populate(backdrop, first);
       nodes.push(backdrop);
-      for (const m of html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)) {
+      for (const m of html.matchAll(/<(button|span|div)\b([^>]*)>/g)) {
+        if (m[2].includes('class="modal-backdrop"')) continue;
         const node = {
-          tagName: "BUTTON",
+          tagName: m[1].toUpperCase(),
           attrs: new Map(),
           dataset: {},
-          textContent: m[2],
+          textContent: "",
         };
-        populate(node, m[1]);
+        populate(node, m[2]);
         node.click = () => {
           if (node.disabled) return;
           node.onclick?.();
@@ -440,6 +444,48 @@ test("Settings navigation survives click bubbling and Travel opens its own modal
   assert.equal(ui.modalType, "movement");
   assert.match(root.innerHTML, /data-modal-page="movement"/);
   assert(!root.querySelector("div[data-page]"));
+});
+test("Start menu remembers focus, map viewing consumes no command, and native arrows select map cells", () => {
+  const { ui, doc, game, calls } = fixture(), root = menuEventPort(doc);
+  game.state = readOnly({ ...game.state, position: { map: "LittlerootTown", x: 5, y: 5 },
+    flags: { ...game.state.flags, pokenavReceived: true } });
+  const before = JSON.stringify(game.state);
+  ui.showMenu();
+  const navigation = root.querySelector('button[data-page="map"]');
+  navigation.focus(); navigation.click();
+  assert.equal(ui.modalType, "region-map");
+  assert.equal(root.querySelector("[data-region-name]").textContent, "未白镇");
+  ui.navigateMenu("up");
+  assert.equal(root.querySelector("[data-region-name]").textContent, "101 号道路");
+  ui.confirm();
+  assert.equal(JSON.stringify(game.state), before);
+  assert(!calls.includes("save"));
+  ui.back();
+  assert.equal(ui.modalType, "menu");
+  assert.equal(doc.activeElement.dataset.page, "map");
+  ui.navigateMenu("up");
+  assert.equal(doc.activeElement.dataset.page, "bag");
+});
+
+test("Fly map rejects unavailable cells and submits an eligible destination through the existing field command", async () => {
+  const { ui, doc, game, calls } = fixture(), root = menuEventPort(doc);
+  game.state = readOnly({ ...game.state, position: { map: "LittlerootTown", x: 5, y: 5 } });
+  game.partyFieldMoveOptions = () => [{ move: "fly", route: "fly", ok: true }];
+  game.travel.list = () => [{ id: "home", name: "未白镇", ok: false,
+    position: { map: "LittlerootTown", x: 5, y: 5 } },
+  { id: "oldale-destination", name: "古辰镇", ok: true, position: { map: "OldaleTown", x: 5, y: 5 } }];
+  game.usePartyFieldMove = async (...args) => { calls.push(args); return { ok: true }; };
+  await ui.showPartyFieldMove(game.state.party[0].uid, "fly");
+  assert.equal(ui.modalType, "region-map");
+  ui.confirm();
+  assert(!calls.some(Array.isArray));
+  ui.navigateMenu("up"); ui.navigateMenu("up");
+  assert.equal(root.querySelector("[data-region-name]").textContent, "古辰镇");
+  ui.confirm();
+  await Promise.resolve();
+  assert.deepEqual(calls.find(Array.isArray), [game.state.party[0].uid, "fly", "oldale-destination"]);
+  assert.equal(ui.modalType, null);
+  assert(calls.includes("save"));
 });
 test("Selecting a party member opens native actions before Summary and preserves the party/list plugin region", () => {
   const { ui, doc, game } = fixture(),

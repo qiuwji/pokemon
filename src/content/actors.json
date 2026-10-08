@@ -1011,5 +1011,203 @@
   "Wally": {
     "w": 16,
     "h": 32
+  },
+  "AquaMemberM": {
+    "w": 16,
+    "h": 32
+  },
+  "Boy3": {
+    "w": 16,
+    "h": 32
+  },
+  "CuttableTree": {
+    "w": 16,
+    "h": 16,
+    "frames": {
+      "facing": {
+        "down": 0,
+        "up": 0,
+        "left": 0,
+        "right": 0
+      },
+      "walk": {
+        "down": [
+          0
+        ],
+        "up": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ]
+      }
+    }
+  },
+  "ExpertF": {
+    "w": 16,
+    "h": 32
+  },
+  "Fisherman": {
+    "w": 16,
+    "h": 32
+  },
+  "Girl2": {
+    "w": 16,
+    "h": 32
+  },
+  "MrBrineysBoat": {
+    "w": 32,
+    "h": 32
+  },
+  "RichBoy": {
+    "w": 16,
+    "h": 32
+  },
+  "AquaMemberF": {
+    "w": 16,
+    "h": 32
+  },
+  "Archie": {
+    "w": 16,
+    "h": 32
+  },
+  "Azumarill": {
+    "w": 16,
+    "h": 16
+  },
+  "Beauty": {
+    "w": 16,
+    "h": 32
+  },
+  "BlackBelt": {
+    "w": 16,
+    "h": 32
+  },
+  "Brawly": {
+    "w": 16,
+    "h": 32
+  },
+  "BreakableRock": {
+    "w": 16,
+    "h": 16
+  },
+  "Cameraman": {
+    "w": 16,
+    "h": 32
+  },
+  "Camper": {
+    "w": 16,
+    "h": 32
+  },
+  "Cook": {
+    "w": 16,
+    "h": 32
+  },
+  "DevonEmployee": {
+    "w": 16,
+    "h": 32
+  },
+  "GameboyKid": {
+    "w": 16,
+    "h": 32
+  },
+  "Hiker": {
+    "w": 16,
+    "h": 32
+  },
+  "Man5": {
+    "w": 16,
+    "h": 32
+  },
+  "MudkipDoll": {
+    "w": 16,
+    "h": 16
+  },
+  "MysteryEventDeliveryman": {
+    "w": 16,
+    "h": 32
+  },
+  "OldMan": {
+    "w": 16,
+    "h": 32
+  },
+  "OldWoman": {
+    "w": 16,
+    "h": 32
+  },
+  "Pikachu": {
+    "w": 16,
+    "h": 16
+  },
+  "PikachuDoll": {
+    "w": 16,
+    "h": 16
+  },
+  "PsychicM": {
+    "w": 16,
+    "h": 32
+  },
+  "ReporterF": {
+    "w": 16,
+    "h": 32
+  },
+  "ReporterM": {
+    "w": 16,
+    "h": 32
+  },
+  "Roxanne": {
+    "w": 16,
+    "h": 32
+  },
+  "SSTidal": {
+    "w": 96,
+    "h": 40
+  },
+  "Sailor": {
+    "w": 16,
+    "h": 32
+  },
+  "Skitty": {
+    "w": 16,
+    "h": 16
+  },
+  "SkittyDoll": {
+    "w": 16,
+    "h": 16
+  },
+  "Steven": {
+    "w": 16,
+    "h": 32
+  },
+  "SubmarineShadow": {
+    "w": 88,
+    "h": 32
+  },
+  "Teala": {
+    "w": 16,
+    "h": 32
+  },
+  "TorchicDoll": {
+    "w": 16,
+    "h": 16
+  },
+  "TreeckoDoll": {
+    "w": 16,
+    "h": 16
+  },
+  "Wingull": {
+    "w": 16,
+    "h": 16
+  },
+  "Woman3": {
+    "w": 16,
+    "h": 32
+  },
+  "Zigzagoon": {
+    "w": 16,
+    "h": 16
   }
 }

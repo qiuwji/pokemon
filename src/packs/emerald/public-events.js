@@ -34,6 +34,7 @@ export const EMERALD_PUBLIC_EVENTS = Object.freeze([
   "core:field-effect-changed",
   "core:field-step",
   "core:interaction-completed",
+  "core:motion",
   "core:item-registration",
   "core:object-moved",
   "core:terrain-motion",

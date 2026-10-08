@@ -2,7 +2,7 @@ import { createMonster } from "../src/engine/model.js";
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BrowserInput } from '../src/adapters/browser-input.js';
-import { battleOptionIndex } from '../src/packs/emerald/battle-interface.js';
+import { battleOptionIndex } from '../src/ui/emerald/battle-interface.js';
 import { stageMessage } from '../src/engine/battle/messages.js';
 import { openingBattleTransition, sampleOpeningTransition } from '../src/packs/emerald/battle-transitions.js';
 import { session } from './helpers/session.js';
@@ -37,7 +37,7 @@ test('Normal-landscape transition selection follows opponent vs usable party lev
   assert.equal(openingBattleTransition({trainer:true,party,opponents}).kind,'emerald:angled-wipes');
   assert.equal(openingBattleTransition({trainer:false,party,opponents}).kind,'emerald:white-bars');
   for(const pattern of ['pokeballs-trail','angled-wipes','slice','white-bars']) {
-    assert.deepEqual(sampleOpeningTransition(pattern,0),{gray:0});
+    assert.deepEqual(sampleOpeningTransition(pattern,0),{gray:2/16});
     assert.deepEqual(sampleOpeningTransition(pattern,0.6),sampleOpeningTransition(pattern,0.6));
     const last=sampleOpeningTransition(pattern,1);
     if(last.mask) assert(last.mask.left.every((x,i)=>x===last.mask.right[i]));

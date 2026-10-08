@@ -6,13 +6,13 @@ import {
   FieldActionRegistry,
   FieldActionService,
 } from "../src/engine/field-actions.js";
-import { FishingSession } from "../src/engine/fishing.js";
-import { gen3FishingRules } from "../src/engine/rules/gen3/fishing.js";
+import { FishingSession } from "../src/game/emerald/domain/fishing-session.js";
+import { gen3FishingRules } from "../src/packs/emerald/fishing.js";
 import { FieldActionDirector } from "../src/presentation/field-action-director.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import { createMonster } from "../src/engine/model.js";
@@ -21,8 +21,8 @@ import { EncounterService } from "../src/engine/encounters.js";
 import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
 import { GEN3_HELD_ITEMS } from "../src/engine/rules/gen3/held-items.js";
 import { Random } from "../src/engine/model.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 import { drawFieldAction } from "../src/presentation/field-action-canvas.js";
 
 const base = loadContentSync();
@@ -589,11 +589,15 @@ test("The public fishing command accepts concurrent reel input, launches one enc
   s.game.ui.showFishing = () => {};
   s.game.ui.updateFishing = () => {};
   s.game.ui.closeFishing = () => closed++;
+  const facts = [];
+  s.host.events.on("core:field-action", (event) => facts.push(event.payload));
   const result = await s.bus.execute("core.field.action", {
     id: "fishing",
     input: JSON.stringify({ rod: "old" }),
   });
   assert.equal(result.fishing, "caught");
+  assert.equal(result.outcome, "caught");
+  assert.equal(facts.at(-1).outcome, "caught");
   assert.equal(encounters.length, 1);
   assert.equal(encounters[0].species, "zigzagoon");
   assert.equal(closed, 1);
@@ -613,6 +617,7 @@ test("Public fishing can cancel without generating a monster, and map requiremen
   s.game.ui.showFishing = () => s.game.reelFishing({ cancel: true });
   const result = await s.game.performFieldAction("fishing", { rod: "old" });
   assert.equal(result.fishing, "cancelled");
+  assert.equal(result.outcome, "cancelled");
   assert.notEqual(
     s.game.rng.seed,
     seed,

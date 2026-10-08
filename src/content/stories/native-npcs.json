@@ -1,0 +1,2456 @@
+{
+  "id": "emerald:native-npcs",
+  "version": 1,
+  "dialogues": {
+    "dewfordtown.woman": {
+      "name": "女性",
+      "lines": [
+        "武斗镇是个小小的岛屿社区。只要一样东西在这里流行起来，大家很快都会跟风。"
+      ]
+    },
+    "dewfordtown-house1.man": {
+      "name": "男子",
+      "lines": [
+        "在这样的小岛上，与宝可梦和家人和谐相处，这样的生活很有滋味。"
+      ]
+    },
+    "dewfordtown-house1.woman": {
+      "name": "女性",
+      "lines": [
+        "嫁给这里的丈夫时，我离开了大港口凯那市。在这个小岛上，日子过得很慢，不过被美丽的大海包围，也是一种幸福。"
+      ]
+    },
+    "dewfordtown-house2.boy": {
+      "name": "男孩",
+      "lines": [
+        "哇，你特意渡海来武斗镇？难道你也是听说藤树才来的？他太帅了……大家都崇拜他。"
+      ]
+    },
+    "dewfordtown-pokemoncenter-1f.man": {
+      "name": "男子",
+      "lines": [
+        "宝可梦就算倒下、不能对战，还是可以使用通过秘传学习机学会的招式。"
+      ]
+    },
+    "dewfordtown-pokemoncenter-1f.pokefanf": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "镇子边上有个石洞。据说在那里能找到稀有的石头。"
+      ]
+    },
+    "insideoftruck.movingbox": {
+      "name": "旁白",
+      "lines": [
+        "箱子上印着宝可梦的标志。这是宝可梦品牌的搬家与配送服务。"
+      ]
+    },
+    "littleroottown.boy": {
+      "name": "男孩",
+      "lines": [
+        "小田卷博士总是在研究所里埋头研究，有时又突然跑到野外调查。他到底什么时候才待在家里呢？"
+      ]
+    },
+    "littleroottown.fatman": {
+      "name": "男子",
+      "lines": [
+        "用PC就能把道具和宝可梦收放起来。",
+        "科学的力量真是伟大！"
+      ]
+    },
+    "oldaletown.girl": {
+      "name": "女孩",
+      "lines": [
+        "我想休息一下，所以先保存冒险记录。"
+      ]
+    },
+    "oldaletown-house1.woman": {
+      "name": "女性",
+      "lines": [
+        "对战开始时，队伍名单最左边的宝可梦会先出场。伙伴多了以后，试着调整队伍的顺序吧，这可能让你占据优势。"
+      ]
+    },
+    "oldaletown-house2.man": {
+      "name": "男学生",
+      "lines": [
+        "同行的宝可梦变强之后，你就能去更远的地方了。"
+      ]
+    },
+    "oldaletown-house2.woman": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "宝可梦通过对战，逐渐提升等级，也会越来越强。"
+      ]
+    },
+    "oldaletown-mart.boy": {
+      "name": "男孩",
+      "lines": [
+        "宝可梦受伤、失去体力并倒下后，就不能继续对战了。在它倒下之前，用伤药恢复体力吧。"
+      ]
+    },
+    "oldaletown-pokemoncenter-1f.boy": {
+      "name": "男孩",
+      "lines": [
+        "宝可梦中心真棒！服务可以随便使用，而且全都免费。完全不用担心！"
+      ]
+    },
+    "oldaletown-pokemoncenter-1f.gentleman": {
+      "name": "绅士",
+      "lines": [
+        "角落里的电脑，所有宝可梦训练家都可以使用。当然，你也可以用。"
+      ]
+    },
+    "petalburgcity.gentleman": {
+      "name": "绅士",
+      "lines": [
+        "假设队伍里已经有六只宝可梦，再捉到一只会怎么样？它会通过电脑连接，自动传送到存储盒里。"
+      ]
+    },
+    "petalburgcity.gymboy": {
+      "name": "男孩",
+      "lines": [
+        "你好！你是刚出发的训练家吗？知道训练家来到新城镇后，首先会做什么吗？他们会先看看这里是什么样的道馆。"
+      ]
+    },
+    "petalburgcity.wallysmom": {
+      "name": "女性",
+      "lines": [
+        "我们家小光跑到哪里去了？我们很快就要出发去绿荫镇了……"
+      ]
+    },
+    "petalburgcity-house1.man": {
+      "name": "专家",
+      "lines": [
+        "旅行真是美妙！年轻时，我走遍了大海和群山！"
+      ]
+    },
+    "petalburgcity-house1.woman": {
+      "name": "女孩",
+      "lines": [
+        "唉……真想和宝可梦一起冒险啊。穿过潮湿的草丛，爬上崎岖的山峰，渡过汹涌的大海，在黑暗的洞穴里漫游……偶尔也会有点想家。旅行一定很精彩！"
+      ]
+    },
+    "petalburgcity-house2.schoolkid": {
+      "name": "男学生",
+      "lines": [
+        "我和千里对战过一次，呼，他实在太强了。怎么说呢……总觉得他整个人都是为宝可梦而活的。"
+      ]
+    },
+    "petalburgcity-house2.woman": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "千里是我们镇上新来的道馆馆主。他好像把住在很远地方的家人也接过来了。"
+      ]
+    },
+    "petalburgcity-mart.boy": {
+      "name": "男孩",
+      "lines": [
+        "你用过除虫喷雾吗？它能让野生宝可梦避开你，赶路时很有用。"
+      ]
+    },
+    "petalburgcity-mart.man": {
+      "name": "男子",
+      "lines": [
+        "带上解毒药了吗？带着中毒的宝可梦走路，它的体力会一直减少，直到倒下。准备些解毒药吧。"
+      ]
+    },
+    "petalburgcity-mart.woman": {
+      "name": "女性",
+      "lines": [
+        "宝可梦现在就算很弱，以后也会变强。最重要的是爱！要爱你的宝可梦！"
+      ]
+    },
+    "petalburgcity-pokemoncenter-1f.fatman": {
+      "name": "男子",
+      "lines": [
+        "电脑上的宝可梦存储系统……发明它的人一定是个科学奇才！"
+      ]
+    },
+    "petalburgcity-pokemoncenter-1f.youngster": {
+      "name": "短裤小子",
+      "lines": [
+        "我的宝可梦吃了橙橙果，体力就恢复了！"
+      ]
+    },
+    "petalburgwoods.boy1": {
+      "name": "男孩",
+      "lines": [
+        "喂！你的宝可梦还好吗？如果它们很虚弱，想避开对战，就不要进入高高的草丛。"
+      ]
+    },
+    "petalburgwoods.boy2": {
+      "name": "男孩",
+      "lines": [
+        "有时候，地面上明明有东西，你却看不见。所以我走路时，总会仔细检查脚下。"
+      ]
+    },
+    "route101.boy": {
+      "name": "男孩",
+      "lines": [
+        "野生宝可梦会从高高的草丛里跳出来。想捕捉宝可梦，就得进草丛找找。"
+      ]
+    },
+    "route101.youngster": {
+      "name": "短裤小子",
+      "lines": [
+        "宝可梦累了，就带它去宝可梦中心吧。附近的古辰镇就有一间。"
+      ]
+    },
+    "route102.boy": {
+      "name": "男孩",
+      "lines": [
+        "我要捕捉好多好多宝可梦！"
+      ]
+    },
+    "route102.littleboy": {
+      "name": "男孩",
+      "lines": [
+        "我……个子不高，一进草丛就被淹没了。草都钻进鼻子里……啊、啊、啊……阿嚏！"
+      ]
+    },
+    "route103.boy": {
+      "name": "男孩",
+      "lines": [
+        "我的宝可梦累坏了……早知道该带上伤药……"
+      ]
+    },
+    "route103.man": {
+      "name": "男子",
+      "lines": [
+        "从这里渡海，就能抄近路到古辰镇。呵呵，很方便吧？"
+      ]
+    },
+    "route104.boy1": {
+      "name": "男孩",
+      "lines": [
+        "扔精灵球之前，先削弱野生宝可梦吧。让它中毒、灼伤或者睡着，也能让捕捉更容易。"
+      ]
+    },
+    "route104.bugcatcher": {
+      "name": "捕虫少年",
+      "lines": [
+        "大海啊……海底到底是什么样子的呢？"
+      ]
+    },
+    "route104.girl1": {
+      "name": "女孩",
+      "lines": [
+        "海边的小屋是哈奇老人的家。他以前是个了不起的水手，再大的风浪也吓不倒他。"
+      ]
+    },
+    "route104.girl2": {
+      "name": "女孩",
+      "lines": [
+        "不，我不是训练家。不过训练家一旦目光相遇，就代表要对战。要是不想对战，记得避开他们的视线。"
+      ]
+    },
+    "route104.woman": {
+      "name": "女性",
+      "lines": [
+        "抢别人宝可梦的就是小偷！精灵球只能对野生宝可梦使用。"
+      ]
+    },
+    "route116-tunnelersresthouse.tunneler1": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "那边的卡绿隧道，原本有一大群工人用最新的机器开凿。但后来只能停工了，因为这会影响附近的野生宝可梦。所以我们现在只能闲在这里，无事可做。"
+      ]
+    },
+    "route116-tunnelersresthouse.tunneler2": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "有个人独自朝绿荫镇的方向挖隧道，急着把道路打通。他说不用机器，一点一点地挖，就不会惊扰宝可梦，也不会破坏自然环境。不知道他挖通了没有。"
+      ]
+    },
+    "rustborocity-cuttershouse.lass": {
+      "name": "少女",
+      "lines": [
+        "扩建卡那兹市时，我爸爸帮过忙。他让宝可梦使用居合斩，砍掉树木来清理土地。"
+      ]
+    },
+    "rustborocity.boy1": {
+      "name": "男孩",
+      "lines": [
+        "你知道吗？就算身边没有其他训练家，也能进行二对二的双打。队伍里有两只以上的宝可梦，同时被两名训练家看见，他们就会一起挑战你。一个人打败两名训练家，是不是很酷？"
+      ]
+    },
+    "rustborocity.devonemployee2": {
+      "name": "得文公司的职员",
+      "lines": [
+        "哦？你是谁？这一带以前没见过你。你是刚转到宝可梦训练家学校的吗？"
+      ]
+    },
+    "rustborocity.man2": {
+      "name": "男子",
+      "lines": [
+        "从别人那里交换来的宝可梦成长得很快。不过，没有相应的道馆徽章，它可能不会听你的话……"
+      ]
+    },
+    "rustborocity.ninjaboy": {
+      "name": "忍者少年",
+      "lines": [
+        "宝可梦训练家学校！来这里上学，就能轻松捉到稀有的宝可梦吗？"
+      ]
+    },
+    "rustborocity.twin": {
+      "name": "双胞胎",
+      "lines": [
+        "哇，你也带着宝可梦！等我长大了，也要和宝可梦一起去各个地方。"
+      ]
+    },
+    "rustborocity.woman": {
+      "name": "女性",
+      "lines": [
+        "我挑战了道馆馆主，可是……用我的火属性宝可梦，很难取胜。火属性对岩石属性不太有利……"
+      ]
+    },
+    "rustborocity-flat1-1f.man": {
+      "name": "男子",
+      "lines": [
+        "每只宝可梦都有一种可以使用的特殊能力。"
+      ]
+    },
+    "rustborocity-flat1-1f.woman": {
+      "name": "女性",
+      "lines": [
+        "宝可梦真是奇妙的生物。"
+      ]
+    },
+    "rustborocity-flat1-2f.pokedoll": {
+      "name": "皮卡丘玩偶",
+      "lines": [
+        "这是一个宝可梦毛绒玩偶！"
+      ]
+    },
+    "rustborocity-flat1-2f.waldasmom": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "唉，每天都好难啊……什么事情难？还用问吗？当然是每天都要想该做什么饭啊。天天安排不同的饭菜，真的不容易。"
+      ]
+    },
+    "rustborocity-flat2-1f.oldwoman": {
+      "name": "老妇人",
+      "lines": [
+        "这栋楼里住着得文公司的员工。"
+      ]
+    },
+    "rustborocity-flat2-2f.oldman": {
+      "name": "老人",
+      "lines": [
+        "很久以前，得文还只是一家小得不能再小的公司。"
+      ]
+    },
+    "rustborocity-flat2-3f.devonemployee": {
+      "name": "得文公司的职员",
+      "lines": [
+        "得文公司的社长喜欢收集稀有的石头。"
+      ]
+    },
+    "rustborocity-flat2-3f.woman": {
+      "name": "女性",
+      "lines": [
+        "听说社长的儿子也喜欢收集稀有的石头。"
+      ]
+    },
+    "rustborocity-house1.hiker": {
+      "name": "登山客",
+      "lines": [
+        "不同的地方有不同的宝可梦，也有不同的人。我觉得很有趣，所以四处旅行。"
+      ]
+    },
+    "rustborocity-house2.littlegirl": {
+      "name": "女孩",
+      "lines": [
+        "道馆馆主杜娟懂得很多宝可梦知识，而且也很强！"
+      ]
+    },
+    "rustborocity-house2.pokefanf": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "训练家学校很不错。在那里好好学习，说不定也能成为道馆馆主。"
+      ]
+    },
+    "rustborocity-house3.oldman": {
+      "name": "老人",
+      "lines": [
+        "我会给自己的宝可梦起最适合它的昵称！这是我表达……独创性的方式，对，就是独创性！"
+      ]
+    },
+    "rustborocity-mart.boy": {
+      "name": "男孩",
+      "lines": [
+        "我的宝可梦进化了，体力也增加了。我应该给它买好伤药，而不是普通伤药。"
+      ]
+    },
+    "rustborocity-mart.bugcatcher": {
+      "name": "捕虫少年",
+      "lines": [
+        "我要买一条离洞绳，免得在洞穴里迷路。只要使用它，就能回到洞口。"
+      ]
+    },
+    "rustborocity-mart.pokefanf": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "我要买些解麻药和解毒药，以防在橙华森林遇到蘑蘑菇。"
+      ]
+    },
+    "rustborocity-pokemoncenter-1f.boy": {
+      "name": "男孩",
+      "lines": [
+        "宝可梦和人一样，也有雄性和雌性。不过好像没人说得清它们之间到底有什么差别。"
+      ]
+    },
+    "rustborocity-pokemoncenter-1f.girl": {
+      "name": "女孩",
+      "lines": [
+        "隔壁的叔叔给了我一张秘传学习机！我用它教宝可梦居合斩，可以砍倒细小的树木。"
+      ]
+    },
+    "rustborocity-pokemoncenter-1f.man": {
+      "name": "男子",
+      "lines": [
+        "我的宝可梦是天真性格，朋友的则是爽朗性格。宝可梦竟然还有不同的性格，真有意思！"
+      ]
+    },
+    "rustborocity-pokemonschool.gameboykid1": {
+      "name": "游戏少年",
+      "lines": [
+        "我正在和朋友交换宝可梦。"
+      ]
+    },
+    "rustborocity-pokemonschool.gameboykid2": {
+      "name": "游戏少年",
+      "lines": [
+        "我一直想要一只橡实果，现在终于要得到了！"
+      ]
+    },
+    "rustborocity-pokemonschool.lass": {
+      "name": "少女",
+      "lines": [
+        "有些招式会让宝可梦混乱，你知道吧？混乱的宝可梦有时会不由自主地攻击自己。不过只要离开对战，它就会恢复正常。"
+      ]
+    },
+    "rustborocity-pokemonschool.richboy": {
+      "name": "富家少爷",
+      "lines": [
+        "宝可梦可以携带道具，可是它们不知道怎么使用伤药、解毒药之类的人造道具。"
+      ]
+    },
+    "rustborocity-pokemonschool.schoolkidm": {
+      "name": "男学生",
+      "lines": [
+        "携带树果的宝可梦会自己恢复……宝可梦可以携带的道具种类好多……唉，做笔记真不容易。"
+      ]
+    },
+    "slateportcity.aquagrunt10": {
+      "name": "水舰队手下",
+      "lines": [
+        "哼……排队真无聊，早知道该把Game Boy Advance带来了……哼……"
+      ]
+    },
+    "slateportcity.gabby": {
+      "name": "女记者",
+      "lines": [
+        "采访员：原来如此，原来如此。你有过一段非常宝贵的经历啊……"
+      ]
+    },
+    "slateportcity.man2": {
+      "name": "男子",
+      "lines": [
+        "凯那市最近建了一座对战帐篷。道馆很有趣，不过对战帐篷也有它独特的乐趣。去找些强大的宝可梦，试试对战帐篷吧！"
+      ]
+    },
+    "slateportcity.man3": {
+      "name": "男子",
+      "lines": [
+        "灯塔的光能照到几十英里之外。不知道会不会把海里的宝可梦吓一跳。"
+      ]
+    },
+    "slateportcity.pokefanf": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "每次来这里，我都会兴奋得买太多东西。"
+      ]
+    },
+    "slateportcity.sailor1": {
+      "name": "水手",
+      "lines": [
+        "大海真是辽阔啊……这片大海会不会是宝可梦流下的泪水形成的呢？"
+      ]
+    },
+    "slateportcity.sailor2": {
+      "name": "水手",
+      "lines": [
+        "你知道老旧到不能航行的船会怎样处理吗？人们会把它们沉到海里，让它们成为宝可梦的栖息地。"
+      ]
+    },
+    "slateportcity.ty": {
+      "name": "摄影师",
+      "lines": [
+        "摄影师：好了，库斯诺吉船长，对着镜头笑一个！"
+      ]
+    },
+    "slateportcity.woman2": {
+      "name": "女性",
+      "lines": [
+        "从别人那里交换来的宝可梦，你不能更改它的昵称。那个名字里包含着原训练家对它的爱。"
+      ]
+    },
+    "slateportcity-mart.blackbelt": {
+      "name": "空手道王",
+      "lines": [
+        "集市上有不少有趣的商品，不过有些道具只能在友好商店买到。"
+      ]
+    },
+    "slateportcity-mart.man": {
+      "name": "男子",
+      "lines": [
+        "超级球比精灵球更容易捉到宝可梦。有了它，应该就能捉到那只难找的宝可梦了……"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.entranceattendant": {
+      "name": "小姐",
+      "lines": [
+        "请慢慢参观。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt1": {
+      "name": "水舰队手下",
+      "lines": [
+        "我们水舰队是为了大家的利益而存在的！"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt2": {
+      "name": "水舰队手下",
+      "lines": [
+        "有人让我们来这里集合，所以我们就来了，可是……最关键的老大还没到。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt3": {
+      "name": "水舰队手下",
+      "lines": [
+        "把这里的东西偷走，我是不是就能发财了？"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt4": {
+      "name": "水舰队手下",
+      "lines": [
+        "在这里学到的知识，可以用来干坏事……"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt5": {
+      "name": "水舰队手下",
+      "lines": [
+        "要不是我们的手下在卡那兹市把事情搞砸，也不用跑到这里来！"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt6": {
+      "name": "水舰队手下",
+      "lines": [
+        "我身上没有50块钱，所以花了好长时间，才绕过接待员混进来。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron1": {
+      "name": "女性",
+      "lines": [
+        "我想学习海洋知识，把它用到宝可梦对战中。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron2": {
+      "name": "怪兽狂",
+      "lines": [
+        "一看见大海，我就开心得不得了！对我来说，库斯诺吉船长是最值得学习的榜样！"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron3": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "大海无边无际，深不可测……一定还有很多我们不了解的宝可梦。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron4": {
+      "name": "女孩",
+      "lines": [
+        "我想要一只海里的宝可梦。抱着它，应该会感觉凉凉的，很舒服。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.museumpatron1": {
+      "name": "老人",
+      "lines": [
+        "我在这里看见了船的模型，让我想起武斗镇附近的弃船……"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.museumpatron2": {
+      "name": "宝可梦粉丝",
+      "lines": [
+        "不许在博物馆里乱跑！"
+      ]
+    },
+    "slateportcity-pokemoncenter-1f.sailor": {
+      "name": "水手",
+      "lines": [
+        "想听个对战建议吗？我觉得应该均衡地培养不同种类的宝可梦，只让一只变强可不行。万一碰上属性不利的对手，它可能一点胜算都没有。"
+      ]
+    },
+    "slateportcity-pokemoncenter-1f.woman": {
+      "name": "女性",
+      "lines": [
+        "我会和朋友交换宝可梦。如果换来的宝可梦还带着道具，我就会加倍开心！"
+      ]
+    },
+    "slateportcity-pokemonfanclub.man": {
+      "name": "男子",
+      "lines": [
+        "总让宝可梦在对战中倒下，它会因此感到不满，慢慢不再信任训练家。也就是说，它就不会那么喜欢你了。"
+      ]
+    },
+    "slateportcity-pokemonfanclub.twin": {
+      "name": "双胞胎",
+      "lines": [
+        "宝可梦喜欢我们给它使用道具吗？我给我的宝可梦用蛋白药时，它看起来特别开心。"
+      ]
+    },
+    "slateportcity-sternsshipyard-1f.briney": {
+      "name": "专家",
+      "lines": [
+        "哈奇老人：啊，{{playerName}}！好久不见！自从遇见你，这个老水手又精神起来了！所以我决定帮助造船师建一艘渡轮，毕竟渡轮能载很多人。不过，那位造船师真的很有本事。有他的技术，加上我的经验，我们一定能造出一艘好船！"
+      ],
+      "bindings": {
+        "playerName": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "slateportcity-sternsshipyard-1f.scientist1": {
+      "name": "研究员",
+      "lines": [
+        "季节、天气、月亮在天空中的位置……这些条件会让大海展现出不同的表情。没错，大海就像有生命一样！"
+      ]
+    },
+    "slateportcity-sternsshipyard-1f.scientist2": {
+      "name": "研究员",
+      "lines": [
+        "我很容易晕船，所以就留在这里帮忙。"
+      ]
+    },
+    "slateportcity-sternsshipyard-2f.scientist1": {
+      "name": "研究员",
+      "lines": [
+        "设计一艘大船，感觉更像是在建一栋大楼，而不是制造交通工具。"
+      ]
+    },
+    "slateportcity-sternsshipyard-2f.scientist2": {
+      "name": "研究员",
+      "lines": [
+        "你不觉得很奇妙吗？那么重的铁造出来的船，竟然能浮在水面上。它能浮起来，是因为一个叫浮力的原理。"
+      ]
+    }
+  },
+  "scripts": {
+    "dewfordtown.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown.woman"
+        }
+      ]
+    },
+    "dewfordtown-house1.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown-house1.man"
+        }
+      ]
+    },
+    "dewfordtown-house1.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown-house1.woman"
+        }
+      ]
+    },
+    "dewfordtown-house2.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown-house2.boy"
+        }
+      ]
+    },
+    "dewfordtown-pokemoncenter-1f.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown-pokemoncenter-1f.man"
+        }
+      ]
+    },
+    "dewfordtown-pokemoncenter-1f.pokefanf": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown-pokemoncenter-1f.pokefanf"
+        }
+      ]
+    },
+    "insideoftruck.movingbox": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "insideoftruck.movingbox"
+        }
+      ]
+    },
+    "littleroottown.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.boy"
+        }
+      ]
+    },
+    "littleroottown.fatman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.fatman"
+        }
+      ]
+    },
+    "oldaletown.girl": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.girl"
+        }
+      ]
+    },
+    "oldaletown-house1.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown-house1.woman"
+        }
+      ]
+    },
+    "oldaletown-house2.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown-house2.man"
+        }
+      ]
+    },
+    "oldaletown-house2.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown-house2.woman"
+        }
+      ]
+    },
+    "oldaletown-mart.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown-mart.boy"
+        }
+      ]
+    },
+    "oldaletown-pokemoncenter-1f.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown-pokemoncenter-1f.boy"
+        }
+      ]
+    },
+    "oldaletown-pokemoncenter-1f.gentleman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown-pokemoncenter-1f.gentleman"
+        }
+      ]
+    },
+    "petalburgcity.gentleman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.gentleman"
+        }
+      ]
+    },
+    "petalburgcity.gymboy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.gymboy"
+        }
+      ]
+    },
+    "petalburgcity.wallysmom": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.wallysmom"
+        }
+      ]
+    },
+    "petalburgcity-house1.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-house1.man"
+        }
+      ]
+    },
+    "petalburgcity-house1.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-house1.woman"
+        }
+      ]
+    },
+    "petalburgcity-house2.schoolkid": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-house2.schoolkid"
+        }
+      ]
+    },
+    "petalburgcity-house2.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-house2.woman"
+        }
+      ]
+    },
+    "petalburgcity-mart.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-mart.boy"
+        }
+      ]
+    },
+    "petalburgcity-mart.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-mart.man"
+        }
+      ]
+    },
+    "petalburgcity-mart.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-mart.woman"
+        }
+      ]
+    },
+    "petalburgcity-pokemoncenter-1f.fatman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-pokemoncenter-1f.fatman"
+        }
+      ]
+    },
+    "petalburgcity-pokemoncenter-1f.youngster": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity-pokemoncenter-1f.youngster"
+        }
+      ]
+    },
+    "petalburgwoods.boy1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgwoods.boy1"
+        }
+      ]
+    },
+    "petalburgwoods.boy2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgwoods.boy2"
+        }
+      ]
+    },
+    "route101.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route101.boy"
+        }
+      ]
+    },
+    "route101.youngster": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route101.youngster"
+        }
+      ]
+    },
+    "route102.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route102.boy"
+        }
+      ]
+    },
+    "route102.littleboy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route102.littleboy"
+        }
+      ]
+    },
+    "route103.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route103.boy"
+        }
+      ]
+    },
+    "route103.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route103.man"
+        }
+      ]
+    },
+    "route104.boy1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.boy1"
+        }
+      ]
+    },
+    "route104.bugcatcher": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.bugcatcher"
+        }
+      ]
+    },
+    "route104.girl1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.girl1"
+        }
+      ]
+    },
+    "route104.girl2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.girl2"
+        }
+      ]
+    },
+    "route104.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.woman"
+        }
+      ]
+    },
+    "route116-tunnelersresthouse.tunneler1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116-tunnelersresthouse.tunneler1"
+        }
+      ]
+    },
+    "route116-tunnelersresthouse.tunneler2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116-tunnelersresthouse.tunneler2"
+        }
+      ]
+    },
+    "rustborocity-cuttershouse.lass": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-cuttershouse.lass"
+        }
+      ]
+    },
+    "rustborocity.boy1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.boy1"
+        }
+      ]
+    },
+    "rustborocity.devonemployee2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.devonemployee2"
+        }
+      ]
+    },
+    "rustborocity.man2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.man2"
+        }
+      ]
+    },
+    "rustborocity.ninjaboy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.ninjaboy"
+        }
+      ]
+    },
+    "rustborocity.twin": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.twin"
+        }
+      ]
+    },
+    "rustborocity.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.woman"
+        }
+      ]
+    },
+    "rustborocity-flat1-1f.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat1-1f.man"
+        }
+      ]
+    },
+    "rustborocity-flat1-1f.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat1-1f.woman"
+        }
+      ]
+    },
+    "rustborocity-flat1-2f.pokedoll": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat1-2f.pokedoll"
+        }
+      ]
+    },
+    "rustborocity-flat1-2f.waldasmom": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat1-2f.waldasmom"
+        }
+      ]
+    },
+    "rustborocity-flat2-1f.oldwoman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat2-1f.oldwoman"
+        }
+      ]
+    },
+    "rustborocity-flat2-2f.oldman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat2-2f.oldman"
+        }
+      ]
+    },
+    "rustborocity-flat2-3f.devonemployee": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat2-3f.devonemployee"
+        }
+      ]
+    },
+    "rustborocity-flat2-3f.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-flat2-3f.woman"
+        }
+      ]
+    },
+    "rustborocity-house1.hiker": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-house1.hiker"
+        }
+      ]
+    },
+    "rustborocity-house2.littlegirl": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-house2.littlegirl"
+        }
+      ]
+    },
+    "rustborocity-house2.pokefanf": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-house2.pokefanf"
+        }
+      ]
+    },
+    "rustborocity-house3.oldman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-house3.oldman"
+        }
+      ]
+    },
+    "rustborocity-mart.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-mart.boy"
+        }
+      ]
+    },
+    "rustborocity-mart.bugcatcher": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-mart.bugcatcher"
+        }
+      ]
+    },
+    "rustborocity-mart.pokefanf": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-mart.pokefanf"
+        }
+      ]
+    },
+    "rustborocity-pokemoncenter-1f.boy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemoncenter-1f.boy"
+        }
+      ]
+    },
+    "rustborocity-pokemoncenter-1f.girl": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemoncenter-1f.girl"
+        }
+      ]
+    },
+    "rustborocity-pokemoncenter-1f.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemoncenter-1f.man"
+        }
+      ]
+    },
+    "rustborocity-pokemonschool.gameboykid1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemonschool.gameboykid1"
+        }
+      ]
+    },
+    "rustborocity-pokemonschool.gameboykid2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemonschool.gameboykid2"
+        }
+      ]
+    },
+    "rustborocity-pokemonschool.lass": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemonschool.lass"
+        }
+      ]
+    },
+    "rustborocity-pokemonschool.richboy": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemonschool.richboy"
+        }
+      ]
+    },
+    "rustborocity-pokemonschool.schoolkidm": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemonschool.schoolkidm"
+        }
+      ]
+    },
+    "slateportcity.aquagrunt10": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.aquagrunt10"
+        }
+      ]
+    },
+    "slateportcity.gabby": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.gabby"
+        }
+      ]
+    },
+    "slateportcity.man2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.man2"
+        }
+      ]
+    },
+    "slateportcity.man3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.man3"
+        }
+      ]
+    },
+    "slateportcity.pokefanf": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.pokefanf"
+        }
+      ]
+    },
+    "slateportcity.sailor1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.sailor1"
+        }
+      ]
+    },
+    "slateportcity.sailor2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.sailor2"
+        }
+      ]
+    },
+    "slateportcity.ty": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.ty"
+        }
+      ]
+    },
+    "slateportcity.woman2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.woman2"
+        }
+      ]
+    },
+    "slateportcity-mart.blackbelt": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-mart.blackbelt"
+        }
+      ]
+    },
+    "slateportcity-mart.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-mart.man"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.entranceattendant": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.entranceattendant"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumgrunt1"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumgrunt2"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumgrunt3"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt4": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumgrunt4"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt5": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumgrunt5"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt6": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumgrunt6"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumpatron1"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumpatron2"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumpatron3"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron4": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.museumpatron4"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.museumpatron1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.museumpatron1"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.museumpatron2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.museumpatron2"
+        }
+      ]
+    },
+    "slateportcity-pokemoncenter-1f.sailor": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-pokemoncenter-1f.sailor"
+        }
+      ]
+    },
+    "slateportcity-pokemoncenter-1f.woman": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-pokemoncenter-1f.woman"
+        }
+      ]
+    },
+    "slateportcity-pokemonfanclub.man": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-pokemonfanclub.man"
+        }
+      ]
+    },
+    "slateportcity-pokemonfanclub.twin": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-pokemonfanclub.twin"
+        }
+      ]
+    },
+    "slateportcity-sternsshipyard-1f.briney": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-sternsshipyard-1f.briney"
+        }
+      ]
+    },
+    "slateportcity-sternsshipyard-1f.scientist1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-sternsshipyard-1f.scientist1"
+        }
+      ]
+    },
+    "slateportcity-sternsshipyard-1f.scientist2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-sternsshipyard-1f.scientist2"
+        }
+      ]
+    },
+    "slateportcity-sternsshipyard-2f.scientist1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-sternsshipyard-2f.scientist1"
+        }
+      ]
+    },
+    "slateportcity-sternsshipyard-2f.scientist2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-sternsshipyard-2f.scientist2"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "dewfordtown.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "DewfordTown_EventScript_Woman"
+      },
+      "script": "dewfordtown.woman"
+    },
+    "dewfordtown-house1.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "DewfordTown_House1_EventScript_Man"
+      },
+      "script": "dewfordtown-house1.man"
+    },
+    "dewfordtown-house1.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "DewfordTown_House1_EventScript_Woman"
+      },
+      "script": "dewfordtown-house1.woman"
+    },
+    "dewfordtown-house2.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "DewfordTown_House2_EventScript_Boy"
+      },
+      "script": "dewfordtown-house2.boy"
+    },
+    "dewfordtown-pokemoncenter-1f.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "DewfordTown_PokemonCenter_1F_EventScript_Man"
+      },
+      "script": "dewfordtown-pokemoncenter-1f.man"
+    },
+    "dewfordtown-pokemoncenter-1f.pokefanf": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "DewfordTown_PokemonCenter_1F_EventScript_PokefanF"
+      },
+      "script": "dewfordtown-pokemoncenter-1f.pokefanf"
+    },
+    "insideoftruck.movingbox": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "InsideOfTruck_EventScript_MovingBox"
+      },
+      "script": "insideoftruck.movingbox"
+    },
+    "littleroottown.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "LittlerootTown_EventScript_Boy"
+      },
+      "script": "littleroottown.boy"
+    },
+    "littleroottown.fatman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "LittlerootTown_EventScript_FatMan"
+      },
+      "script": "littleroottown.fatman"
+    },
+    "oldaletown.girl": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_EventScript_Girl"
+      },
+      "script": "oldaletown.girl"
+    },
+    "oldaletown-house1.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_House1_EventScript_Woman"
+      },
+      "script": "oldaletown-house1.woman"
+    },
+    "oldaletown-house2.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_House2_EventScript_Man"
+      },
+      "script": "oldaletown-house2.man"
+    },
+    "oldaletown-house2.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_House2_EventScript_Woman"
+      },
+      "script": "oldaletown-house2.woman"
+    },
+    "oldaletown-mart.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_Mart_EventScript_Boy"
+      },
+      "script": "oldaletown-mart.boy"
+    },
+    "oldaletown-pokemoncenter-1f.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_PokemonCenter_1F_EventScript_Boy"
+      },
+      "script": "oldaletown-pokemoncenter-1f.boy"
+    },
+    "oldaletown-pokemoncenter-1f.gentleman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "OldaleTown_PokemonCenter_1F_EventScript_Gentleman"
+      },
+      "script": "oldaletown-pokemoncenter-1f.gentleman"
+    },
+    "petalburgcity.gentleman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_EventScript_Gentleman"
+      },
+      "script": "petalburgcity.gentleman"
+    },
+    "petalburgcity.gymboy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_EventScript_GymBoy"
+      },
+      "script": "petalburgcity.gymboy"
+    },
+    "petalburgcity.wallysmom": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_EventScript_WallysMom"
+      },
+      "script": "petalburgcity.wallysmom"
+    },
+    "petalburgcity-house1.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_House1_EventScript_Man"
+      },
+      "script": "petalburgcity-house1.man"
+    },
+    "petalburgcity-house1.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_House1_EventScript_Woman"
+      },
+      "script": "petalburgcity-house1.woman"
+    },
+    "petalburgcity-house2.schoolkid": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_House2_EventScript_SchoolKid"
+      },
+      "script": "petalburgcity-house2.schoolkid"
+    },
+    "petalburgcity-house2.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_House2_EventScript_Woman"
+      },
+      "script": "petalburgcity-house2.woman"
+    },
+    "petalburgcity-mart.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_Mart_EventScript_Boy"
+      },
+      "script": "petalburgcity-mart.boy"
+    },
+    "petalburgcity-mart.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_Mart_EventScript_Man"
+      },
+      "script": "petalburgcity-mart.man"
+    },
+    "petalburgcity-mart.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_Mart_EventScript_Woman"
+      },
+      "script": "petalburgcity-mart.woman"
+    },
+    "petalburgcity-pokemoncenter-1f.fatman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_PokemonCenter_1F_EventScript_FatMan"
+      },
+      "script": "petalburgcity-pokemoncenter-1f.fatman"
+    },
+    "petalburgcity-pokemoncenter-1f.youngster": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgCity_PokemonCenter_1F_EventScript_Youngster"
+      },
+      "script": "petalburgcity-pokemoncenter-1f.youngster"
+    },
+    "petalburgwoods.boy1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgWoods_EventScript_Boy1"
+      },
+      "script": "petalburgwoods.boy1"
+    },
+    "petalburgwoods.boy2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "PetalburgWoods_EventScript_Boy2"
+      },
+      "script": "petalburgwoods.boy2"
+    },
+    "route101.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route101_EventScript_Boy"
+      },
+      "script": "route101.boy"
+    },
+    "route101.youngster": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route101_EventScript_Youngster"
+      },
+      "script": "route101.youngster"
+    },
+    "route102.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route102_EventScript_Boy"
+      },
+      "script": "route102.boy"
+    },
+    "route102.littleboy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route102_EventScript_LittleBoy"
+      },
+      "script": "route102.littleboy"
+    },
+    "route103.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route103_EventScript_Boy"
+      },
+      "script": "route103.boy"
+    },
+    "route103.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route103_EventScript_Man"
+      },
+      "script": "route103.man"
+    },
+    "route104.boy1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route104_EventScript_Boy1"
+      },
+      "script": "route104.boy1"
+    },
+    "route104.bugcatcher": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route104_EventScript_BugCatcher"
+      },
+      "script": "route104.bugcatcher"
+    },
+    "route104.girl1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route104_EventScript_Girl1"
+      },
+      "script": "route104.girl1"
+    },
+    "route104.girl2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route104_EventScript_Girl2"
+      },
+      "script": "route104.girl2"
+    },
+    "route104.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route104_EventScript_Woman"
+      },
+      "script": "route104.woman"
+    },
+    "route116-tunnelersresthouse.tunneler1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route116_TunnelersRestHouse_EventScript_Tunneler1"
+      },
+      "script": "route116-tunnelersresthouse.tunneler1"
+    },
+    "route116-tunnelersresthouse.tunneler2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "Route116_TunnelersRestHouse_EventScript_Tunneler2"
+      },
+      "script": "route116-tunnelersresthouse.tunneler2"
+    },
+    "rustborocity-cuttershouse.lass": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_CuttersHouse_EventScript_Lass"
+      },
+      "script": "rustborocity-cuttershouse.lass"
+    },
+    "rustborocity.boy1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_EventScript_Boy1"
+      },
+      "script": "rustborocity.boy1"
+    },
+    "rustborocity.devonemployee2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_EventScript_DevonEmployee2"
+      },
+      "script": "rustborocity.devonemployee2"
+    },
+    "rustborocity.man2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_EventScript_Man2"
+      },
+      "script": "rustborocity.man2"
+    },
+    "rustborocity.ninjaboy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_EventScript_NinjaBoy"
+      },
+      "script": "rustborocity.ninjaboy"
+    },
+    "rustborocity.twin": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_EventScript_Twin"
+      },
+      "script": "rustborocity.twin"
+    },
+    "rustborocity.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_EventScript_Woman"
+      },
+      "script": "rustborocity.woman"
+    },
+    "rustborocity-flat1-1f.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat1_1F_EventScript_Man"
+      },
+      "script": "rustborocity-flat1-1f.man"
+    },
+    "rustborocity-flat1-1f.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat1_1F_EventScript_Woman"
+      },
+      "script": "rustborocity-flat1-1f.woman"
+    },
+    "rustborocity-flat1-2f.pokedoll": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat1_2F_EventScript_PokeDoll"
+      },
+      "script": "rustborocity-flat1-2f.pokedoll"
+    },
+    "rustborocity-flat1-2f.waldasmom": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat1_2F_EventScript_WaldasMom"
+      },
+      "script": "rustborocity-flat1-2f.waldasmom"
+    },
+    "rustborocity-flat2-1f.oldwoman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat2_1F_EventScript_OldWoman"
+      },
+      "script": "rustborocity-flat2-1f.oldwoman"
+    },
+    "rustborocity-flat2-2f.oldman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat2_2F_EventScript_OldMan"
+      },
+      "script": "rustborocity-flat2-2f.oldman"
+    },
+    "rustborocity-flat2-3f.devonemployee": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat2_3F_EventScript_DevonEmployee"
+      },
+      "script": "rustborocity-flat2-3f.devonemployee"
+    },
+    "rustborocity-flat2-3f.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Flat2_3F_EventScript_Woman"
+      },
+      "script": "rustborocity-flat2-3f.woman"
+    },
+    "rustborocity-house1.hiker": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_House1_EventScript_Hiker"
+      },
+      "script": "rustborocity-house1.hiker"
+    },
+    "rustborocity-house2.littlegirl": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_House2_EventScript_LittleGirl"
+      },
+      "script": "rustborocity-house2.littlegirl"
+    },
+    "rustborocity-house2.pokefanf": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_House2_EventScript_PokefanF"
+      },
+      "script": "rustborocity-house2.pokefanf"
+    },
+    "rustborocity-house3.oldman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_House3_EventScript_OldMan"
+      },
+      "script": "rustborocity-house3.oldman"
+    },
+    "rustborocity-mart.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Mart_EventScript_Boy"
+      },
+      "script": "rustborocity-mart.boy"
+    },
+    "rustborocity-mart.bugcatcher": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Mart_EventScript_BugCatcher"
+      },
+      "script": "rustborocity-mart.bugcatcher"
+    },
+    "rustborocity-mart.pokefanf": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_Mart_EventScript_PokefanF"
+      },
+      "script": "rustborocity-mart.pokefanf"
+    },
+    "rustborocity-pokemoncenter-1f.boy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonCenter_1F_EventScript_Boy"
+      },
+      "script": "rustborocity-pokemoncenter-1f.boy"
+    },
+    "rustborocity-pokemoncenter-1f.girl": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonCenter_1F_EventScript_Girl"
+      },
+      "script": "rustborocity-pokemoncenter-1f.girl"
+    },
+    "rustborocity-pokemoncenter-1f.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonCenter_1F_EventScript_Man"
+      },
+      "script": "rustborocity-pokemoncenter-1f.man"
+    },
+    "rustborocity-pokemonschool.gameboykid1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonSchool_EventScript_GameboyKid1"
+      },
+      "script": "rustborocity-pokemonschool.gameboykid1"
+    },
+    "rustborocity-pokemonschool.gameboykid2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonSchool_EventScript_GameboyKid2"
+      },
+      "script": "rustborocity-pokemonschool.gameboykid2"
+    },
+    "rustborocity-pokemonschool.lass": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonSchool_EventScript_Lass"
+      },
+      "script": "rustborocity-pokemonschool.lass"
+    },
+    "rustborocity-pokemonschool.richboy": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonSchool_EventScript_RichBoy"
+      },
+      "script": "rustborocity-pokemonschool.richboy"
+    },
+    "rustborocity-pokemonschool.schoolkidm": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "RustboroCity_PokemonSchool_EventScript_SchoolKidM"
+      },
+      "script": "rustborocity-pokemonschool.schoolkidm"
+    },
+    "slateportcity.aquagrunt10": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_AquaGrunt10"
+      },
+      "script": "slateportcity.aquagrunt10"
+    },
+    "slateportcity.gabby": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Gabby"
+      },
+      "script": "slateportcity.gabby"
+    },
+    "slateportcity.man2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Man2"
+      },
+      "script": "slateportcity.man2"
+    },
+    "slateportcity.man3": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Man3"
+      },
+      "script": "slateportcity.man3"
+    },
+    "slateportcity.pokefanf": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_PokefanF"
+      },
+      "script": "slateportcity.pokefanf"
+    },
+    "slateportcity.sailor1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Sailor1"
+      },
+      "script": "slateportcity.sailor1"
+    },
+    "slateportcity.sailor2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Sailor2"
+      },
+      "script": "slateportcity.sailor2"
+    },
+    "slateportcity.ty": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Ty"
+      },
+      "script": "slateportcity.ty"
+    },
+    "slateportcity.woman2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_EventScript_Woman2"
+      },
+      "script": "slateportcity.woman2"
+    },
+    "slateportcity-mart.blackbelt": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_Mart_EventScript_BlackBelt"
+      },
+      "script": "slateportcity-mart.blackbelt"
+    },
+    "slateportcity-mart.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_Mart_EventScript_Man"
+      },
+      "script": "slateportcity-mart.man"
+    },
+    "slateportcity-oceanicmuseum-1f.entranceattendant": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_EntranceAttendant"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.entranceattendant"
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumGrunt1"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumgrunt1"
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumGrunt2"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumgrunt2"
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt3": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumGrunt3"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumgrunt3"
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt4": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumGrunt4"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumgrunt4"
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt5": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumGrunt5"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumgrunt5"
+    },
+    "slateportcity-oceanicmuseum-1f.museumgrunt6": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumGrunt6"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumgrunt6"
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumPatron1"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumpatron1"
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumPatron2"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumpatron2"
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron3": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumPatron3"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumpatron3"
+    },
+    "slateportcity-oceanicmuseum-1f.museumpatron4": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_MuseumPatron4"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.museumpatron4"
+    },
+    "slateportcity-oceanicmuseum-2f.museumpatron1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_MuseumPatron1"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.museumpatron1"
+    },
+    "slateportcity-oceanicmuseum-2f.museumpatron2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_MuseumPatron2"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.museumpatron2"
+    },
+    "slateportcity-pokemoncenter-1f.sailor": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_PokemonCenter_1F_EventScript_Sailor"
+      },
+      "script": "slateportcity-pokemoncenter-1f.sailor"
+    },
+    "slateportcity-pokemoncenter-1f.woman": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_PokemonCenter_1F_EventScript_Woman"
+      },
+      "script": "slateportcity-pokemoncenter-1f.woman"
+    },
+    "slateportcity-pokemonfanclub.man": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_PokemonFanClub_EventScript_Man"
+      },
+      "script": "slateportcity-pokemonfanclub.man"
+    },
+    "slateportcity-pokemonfanclub.twin": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_PokemonFanClub_EventScript_Twin"
+      },
+      "script": "slateportcity-pokemonfanclub.twin"
+    },
+    "slateportcity-sternsshipyard-1f.briney": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_SternsShipyard_1F_EventScript_Briney"
+      },
+      "script": "slateportcity-sternsshipyard-1f.briney"
+    },
+    "slateportcity-sternsshipyard-1f.scientist1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_SternsShipyard_1F_EventScript_Scientist1"
+      },
+      "script": "slateportcity-sternsshipyard-1f.scientist1"
+    },
+    "slateportcity-sternsshipyard-1f.scientist2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_SternsShipyard_1F_EventScript_Scientist2"
+      },
+      "script": "slateportcity-sternsshipyard-1f.scientist2"
+    },
+    "slateportcity-sternsshipyard-2f.scientist1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_SternsShipyard_2F_EventScript_Scientist1"
+      },
+      "script": "slateportcity-sternsshipyard-2f.scientist1"
+    },
+    "slateportcity-sternsshipyard-2f.scientist2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "talk",
+        "script": "SlateportCity_SternsShipyard_2F_EventScript_Scientist2"
+      },
+      "script": "slateportcity-sternsshipyard-2f.scientist2"
+    }
+  }
+}

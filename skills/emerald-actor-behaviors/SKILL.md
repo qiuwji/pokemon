@@ -17,7 +17,7 @@ description: 为现有绿宝石Actor框架编写NPC自主行为、日程、感�
 
 ## 实际模板和行为合同
 
-通过actorTemplates、npcBehaviors、npcPoses注册模板、同步decide行为和姿态。行为context的identity/state/perception/time/environment冻结；状态受模板schema校验。move/goal/pose/state/interaction意图由已有Actor运行端口验证后提交。
+通过actorTemplates、npcBehaviors、npcPoses注册模板、同步decide行为和姿态。可声明 timing.intervalMs（16–60000 整数毫秒）与 afterMove:"settled"，由宿主调度连续决定；阻挡或闲置仍按 intervalMs 重试，剧情控制和暂停优先。行为context的identity/state/perception/time/environment冻结；状态受模板schema校验。move/goal/pose/state/interaction意图由已有Actor运行端口验证后提交。
 
 看[actors.test.js](../../tests/actors.test.js)的公开spawn、自主跨相邻地图、goal接近玩家、邻接互动与保存；这是当前可运行代表例。角色身份是core:actor.N，不是地图静态对象map:id；命令/脚本/NPC投影引用同一个仓储，禁止另造对象覆盖。
 
@@ -51,29 +51,35 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session, objectSchema } from "../tests/helpers/session.js";
 test("plugin actor identity and memory survive save restore", async () => {
-  const plugin = manifest("actor-demo", api => {
-    api.content.register("npcBehaviors", "idle", { decide: () => ({ pose: "still" }) });
+  let api;
+  const plugin = manifest("actor-demo", value => {
+    api = value;
+    api.content.register("npcBehaviors", "idle", { timing: { intervalMs: 100 }, decide: () => ({ move: false, pose: "still" }) });
     api.content.register("actorTemplates", "guide", {
       name: "向导", actor: "ProfBirch", behavior: "actor-demo:idle",
-      schema: objectSchema({ visits: { type: "integer", minimum: 0 } }, ["visits"]),
-      initialState: { visits: 0 },
+      schema: objectSchema({ visits: { type: "integer", minimum: 0 } }, ["visits"]), initialState: { visits: 0 },
     });
-  });
+    api.actions.register("create", { schema: objectSchema(), run(ctx) {
+      ctx.intent({ kind: "actors", operation: "spawn", template: "actor-demo:guide", position: { map: "LittlerootTown", x: 8, y: 10, dir: "down" } }, result => {
+        ctx.store.set("guide", result.actor.uid);
+        ctx.intent({ kind: "actors", operation: "update", uid: result.actor.uid, data: JSON.stringify({ visits: 1 }) });
+      });
+    } });
+  }, ["actors"]);
   const { game, bus } = session([plugin]);
-  const result = await bus.execute("core.actor.spawn", {
-    template: "actor-demo:guide", position: { map: "LittlerootTown", x: 8, y: 10, dir: "down" },
-  });
-  assert.equal(result.ok, true);
-  const uid = result.actor.uid;
-  assert((await bus.execute("core.actor.update", { uid, data: JSON.stringify({ visits: 1 }) })).ok);
+  await api.commands.dispatch("actor-demo:create");
+  const uid = api.store.get("guide");
   game.loadDocument(game.exportDocument());
+  assert.equal(api.store.get("guide"), uid);
   assert.equal(game.actors.view(uid).data.visits, 1);
   assert.equal(await bus.execute("core.actor.remove", { uid }), true);
   assert.equal(Object.hasOwn(game.actors.list(), uid), false);
 });
 ```
 
-此例证明注册/身份/记忆/保存/移除。日程、跨图步行与离屏政策使用[actor-schedules.test.js](../../tests/actor-schedules.test.js)的完整生产链路，不把上面的短身份示例当日程证明。
+此例证明注册/行为节奏声明/事务生成与记忆/保存/移除。Actor 事务及移动结果合同见 ACTORS；core:motion 不保存路线历史或跟随关系。日程、跨图步行与离屏政策使用[actor-schedules.test.js](../../tests/actor-schedules.test.js)的完整生产链路，不把上面的短身份示例当日程证明。
+
+生产插件消费例：[跟随伙伴](../../src/plugins/patrol-lab/README.md)及[产品用例](../../examples/patrol-lab.test.js)，使用公开timing/core:motion/Actor事务；跟随路线、换图与暂停政策留插件，移动规则由宿主执行。
 
 ## 常见错误与排查
 
@@ -96,7 +102,7 @@ test("plugin actor identity and memory survive save restore", async () => {
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
 | [src/engine/actor-repository.js](../../src/engine/actor-repository.js) | `rg -n "class ActorTemplateRegistry" src generated tests docs package.json` |
-| [src/packs/emerald/application/actor-application.js](../../src/packs/emerald/application/actor-application.js) | `rg -n "class ActorApplication" src generated tests docs package.json` |
+| [src/game/emerald/application/actor-application.js](../../src/game/emerald/application/actor-application.js) | `rg -n "class ActorApplication" src generated tests docs package.json` |
 | [tests/actors.test.js](../../tests/actors.test.js) | `rg -n "Public spawn" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

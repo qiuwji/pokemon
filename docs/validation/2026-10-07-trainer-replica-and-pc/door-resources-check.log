@@ -1,0 +1,7 @@
+{
+  "script": "import-opening-art.py",
+  "check": true,
+  "files": [],
+  "contentChanges": [],
+  "omissions": []
+}

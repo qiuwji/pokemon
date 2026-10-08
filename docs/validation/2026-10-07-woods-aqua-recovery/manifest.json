@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-07",
+  "status": "automated verification passed; browser visual/audio verification not performed",
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true,
+    "script": "data/maps/PetalburgWoods/scripts.inc",
+    "labels": [
+      "DevonResearcherLeft",
+      "DevonResearcherRight",
+      "DevonResearcherPostBattle",
+      "DevonResearcherFinish",
+      "AquaBackOff",
+      "DevonResearcherFleeToPlayerLeft",
+      "DevonResearcherFleeToPlayerRight",
+      "WatchResearcherLeave"
+    ]
+  },
+  "reportedReproduction": "Complete the Woods rescue, choose Wally-done via the developer tester, then approach the rescue again: battle skipped and employee repositioned",
+  "rootCause": "Progress presets cleared petalburgWoodsSaved but retained trainer.aquaPetalburgWoods.prize; the rescue.resume predicate therefore selected a committed-victory continuation instead of replaying the encounter. Repositioning via spawn/stage in the previous recovery patch made this incorrect branch visibly jump actors.",
+  "behavior": [
+    "Four early progress presets explicitly request a full rescue replay; request survives save/load and is cleared upon a newly confirmed victory so subsequent failed field dialogue resumes",
+    "Original intro paths and directions execute before a real Aqua challenge on both lanes; no spawn/stage repositioning of existing actors",
+    "Researcher walking is sampled every 16ms, includes between-cell positions and has no consecutive-frame displacement greater than 4px; field input stays locked",
+    "Historical prize and Great Ball rewards remain deduplicated; testing replay never grants a second payment or item",
+    "Normal committed-victory continuation, interrupted intro retries and genuine losses remain independently verified"
+  ],
+  "verification": {
+    "core": {
+      "command": "npm run test:core via npm run test:all",
+      "passed": 1218,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "all-tests.log"
+    },
+    "plugins": {
+      "command": "npm run test:plugins via npm run test:all",
+      "passed": 66,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "all-tests.log"
+    },
+    "quality": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "log": "quality-check.log"
+    },
+    "focusedCore": {
+      "command": "node --test tests/petalburg-woods-choreography.test.js",
+      "passed": 7,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "walking-and-recovery.log"
+    },
+    "tester": {
+      "command": "node --test examples/dev-scenarios.test.js",
+      "passed": 11,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "tester-rewind.log",
+      "note": "Focused log precedes moving replay-request clear from rescue end to its confirmed-win entry; final plugin suite verifies final implementation"
+    },
+    "diffWhitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "browser": {
+      "performed": false,
+      "reason": "User instruction: do not operate game through Computer Use"
+    },
+    "manualVisualAudio": "Not performed; continuous actor projection is verified through the real frame loop and controlled timeline, not browser screenshots or listening"
+  },
+  "compatibility": {
+    "saveSchemaChanged": false,
+    "newPackFlag": "petalburgWoodsReplayRequested",
+    "existingBrokenRewind": "Refresh and reselect the same developer chapter once; no new adventure or deletion of rewards required",
+    "engineSpecificBranchesAdded": false
+  },
+  "scope": "Current rescue/preset fix and preceding verified working-tree map/render/storage work are committed in separate data, runtime, tests and handoff batches; later imported maps do not establish completed later mainline.",
+  "limits": [
+    "Original scene movement order, cell positions and waits are checked; not a claim of complete pixel/frame/audio equivalence",
+    "Interrupted-scene walk-back recovery is a web-specific recovery policy, not an original-game branch",
+    "The four developer presets request Woods replay; this is not a generic arbitrary rollback of inventory, money or all later story ledgers"
+  ],
+  "sha256": {
+    "src/content/stories/progress.json": "0ff023b4be31372ee82071e8ed70f4f017db497a7bf821331bcd9a24f74df688",
+    "src/packs/emerald/story/regions/petalburg-rescue.js": "c067fec5da5d34dcf27228245bb3baf0c6c6874b6373d9403a2e271c72a474ae",
+    "tests/petalburg-woods-choreography.test.js": "c75b316049e2bee8d2357dd9b6d8f75e58ec4c7bf9ff4a65d54b041ca22d2f8d",
+    "examples/dev-scenarios.test.js": "b6fde1b7a32f42e52eeaf7a7051d6d5dc86774d8411972d45409af00f5d5cf70",
+    "tests/trainer-replica-regressions.test.js": "37a9044ed98432efaff49e69b20cbce90ded88ab0aa9ffce45d63d614ae85e7a"
+  },
+  "logSha256": {
+    "all-tests.log": "367de43cf520ae8d6e180340df275615bef1eea2ec85661a669410778ac0c10a",
+    "quality-check.log": "45a760e462342ac3cc783e21b0492178f318d290e750020fe3fe03093c7c6d85",
+    "walking-and-recovery.log": "beb0df73b4eb073dfdcbf676ff0252ec3a87771eef14fb0bdce4fa5d8383feab",
+    "tester-rewind.log": "9e0dd47152520fbdd2f937a8304d54c2b22517656f5c8451de3a8491afd478f5"
+  },
+  "commits": [
+    {
+      "batch": "resources",
+      "revision": "d7fc45277af21608dc3fc2332d3a3e41564ce839"
+    },
+    {
+      "batch": "runtime",
+      "revision": "3f85f0d9085c3a8cf7665bb218ddcec9fdd018ec"
+    },
+    {
+      "batch": "tests",
+      "revision": "6685f89672fa1acfa7ce897d2bf6a9912e451351"
+    }
+  ],
+  "documentationCommit": "This manifest and logs are saved in the fourth documentation batch; resolve its revision with git log."
+}

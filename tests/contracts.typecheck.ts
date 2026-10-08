@@ -14,6 +14,9 @@ import type {
   LearningMethodDefinition,
   InventoryView,
   InventoryFailure,
+  NPCBehaviorDefinition,
+  MotionResult,
+  PluginTransaction,
 } from "../src/engine/contracts.js";
 const animation: MoveAnimation = {
   duration: 800,
@@ -154,6 +157,23 @@ const plugin: PluginManifest = {
       },
     });
     const effect = api.presentation.effect("trail", { draw: () => {} });
+    api.presentation.sequence("native", {
+      kind: "move", match: { moveId: "pound" },
+      prepare({ event, layout }) {
+        const seatId = event.actorSeat || event.combatants[0].seatId;
+        // @ts-expect-error Preparation consumes a frozen rule snapshot.
+        event.combatants[0].monster.hp = 20;
+        // @ts-expect-error Content cannot move the actual battlefield layout.
+        layout[seatId].x = 100;
+        return { fps: 60, frames: [{ poses: [{ seatId, x: 4, tint: { color: [248, 176, 240], amount: 16 } }],
+          scenes: [{ hideTrainers: true, clip: { x: 0, y: 80, width: 240, height: 1 } }],
+          statusBoxes: [{ seatId, x: 115, y: 0, opacity: 1 }] }], cues: [] };
+      },
+    });
+    api.presentation.sequence("invalid-frame", { kind: "move", prepare: () => ({ fps: 60, cues: [], frames: [
+      // @ts-expect-error Frames cannot issue domain actions.
+      { action: { kind: "move", index: 0 } },
+    ] }) });
     api.presentation.move("water", {
       moveId: "water_gun",
       animation: {
@@ -512,3 +532,48 @@ const wrongJSONFacility: import("../src/engine/extensions/facility-content.js").
   parameters: { trainers: ["trainer"], money: 20 },
 };
 void wrongJSONFacility;
+
+const timedBehavior: NPCBehaviorDefinition = {
+  timing: { intervalMs: 100, afterMove: "settled" },
+  decide: context => ({ move: true, dir: context.dir, pose: "walk" }),
+};
+const invalidTiming: NPCBehaviorDefinition = {
+  // @ts-expect-error Following is plugin policy, not an engine timing mode.
+  timing: { intervalMs: 100, afterMove: "follow" },
+  decide: () => ({ move: false, pose: "still" }),
+};
+const asyncBehavior: NPCBehaviorDefinition = {
+  // @ts-expect-error Behavior decisions cannot own an asynchronous clock.
+  decide: async () => ({ move: false, pose: "still" }),
+};
+declare const transaction: PluginTransaction;
+transaction.intent({ kind: "actors", operation: "remove", uid: "core:actor.1" }, result => { transaction.store.set("removed", result === true); });
+// @ts-expect-error Intent result callbacks are synchronous transaction work.
+transaction.intent({ kind: "actors" }, async () => {});
+declare const motionFact: MotionResult;
+// @ts-expect-error A motion result cannot be rewritten by its consumer.
+motionFact.to.x = 1;
+void [timedBehavior, invalidTiming, asyncBehavior];
+
+function blockedCause(fact: MotionResult): string {
+  if (fact.phase !== "blocked") return "not-blocked";
+  const reason = fact.reason;
+  switch (reason) {
+    case "boundary": case "wall": case "object": case "elevation": case "one-way":
+    case "entry-rejected": case "unavailable": case "animation": case "movement-mode":
+    case "passage": case "range-or-boundary": case "terrain": case "occupied": return reason;
+    default: { const exhaustive: never = reason; return exhaustive; }
+  }
+}
+if (motionFact.phase === "blocked") {
+  switch (motionFact.reason) {
+    // @ts-expect-error Typos and unsupported causes cannot match blocked motion.
+    case "watr": break;
+    // @ts-expect-error Water is terrain/passage, not a separate blocked cause.
+    case "water": break;
+  }
+  // @ts-expect-error Cancellation causes are excluded after narrowing to blocked.
+  const cancellation: import("../src/engine/contracts.js").MotionCancelReason = motionFact.reason;
+  void cancellation;
+}
+void blockedCause;

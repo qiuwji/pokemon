@@ -1,5 +1,21 @@
 # 原作界面与游戏外插件面板
 
+## 2026-10-08 · Start菜单与共享地区地图
+
+Start按start_menu.c的正常菜单次序及解锁条件生成，窗口按menu.c的(22,1)、7图块宽与16像素行距定位，保留上次选择。PokeNav解锁后直接打开地图；此前可从设置→扩展功能→地图查看，避免给原作Start增加一行。此处只实现地区地图入口，并不宣称完整PokeNav设备菜单、通信和缩放均已复刻。
+
+[公开游标](../../src/engine/extensions/region-map.js)只处理内容网格和有界选择；[原作区域数据](../../src/packs/emerald/region-map.js)负责地图投影/名称，UI负责原作素材、箭头导航与点击。普通查看不执行命令或保存；地图的destinations/markers/onSelect参数可复用选点及覆盖标记，不在地图组件写飞空或寻呼机规则。队伍飞空与扩展旅行都使用同一页面，落点由TravelService.list返回的只读position提供，实际能力/访问/占位仍在飞行命令执行时复查。退回后保持原页面。
+
+[导出器](../../tools/ui/export-region-map.py)读取固定region_map.c、28×15布局、区域定义和地图绑定，导出原游标及男女位置图，记录输入/输出hash；运行python3 tools/ui/export-region-map.py --check进行只读比较。小游标每20个原作帧换图。飞空底部提示与区域名窗口沿用来源位置；中文字体、地图进出转场/缩放、可飞城市图标闪烁、海上船/秘密基地/动态洞穴定位尚未完整实现。现有室内地图使用所属区域锚点，未保存原作escapeWarp室外细分坐标。未来增加寻呼机标记不意味着本次已实现寻呼机业务。实际画面和触控未验收。
+
+## 2026-10-08 · 连续开战帧与退出
+
+用户截图中的等级越框、名字贴边与菜单排列已按统一逻辑单位修正：血框坐标由来源主精灵中心减去64×32原点，标题内名字/性别与等级分区，固定48像素HP条及底部文本/按钮行距。battle-interface共用标题生成，native-pages集中负责安全内边距、框体及游标留白，内核不识别具体UI布局。皮肤和中文字体仍沿用现有资源，需用户实玩核对，不能视作逐像素1:1验收。
+
+普通本地入场改为公开帧编排：地图遇敌转场直接接已stage的窗口起始帧，原入场前景和512像素背景分别移动；训练家投球图集、减速旋转段、开合球图、来源粒子/调色、展开后cry和血框滑入分阶段。第二球释放延后26帧（来源`data[0]++ > 24`），玩家第二血框延后20帧。HUD位移按240×160逻辑坐标缩放，窗口裁剪同时作用Canvas与DOM。导演清理时释放血框姿态及窗口。
+
+战败两页对白在战斗画面确认，胜利训练家返回与奖金对白完成后才退出；通用转场帧提供逐级颜色扣减和覆盖，遮黑后提交结算、清导演、揭开地图。五类胜利曲在已播放faint/结果阶段切换。已验证代码时序/完整生产战斗与失败释放，尚缺物种姿态/两帧切图、闪光/特殊球/cry模式、BG与OBJ交替调色的半帧相位及文本速度/控制符；实际画面/听音仍未验收。当前实现和[本批证据](../validation/2026-10-08-battle-entry-exit/manifest.json)优先于下方历史近似轨迹说明。
+
 ## 2026-10-06 · 截图问题修正
 
 详情的front.png可以带黑色VRAM预留槽，不能按高度当作动画。`tools/import.py detail-sprites`读取anim_front.png和normal.pal，生成独立`*-detail.png`、帧元数据与输入哈希；静态降级只取首帧。原生详情播放一次后返回首姿态，插件仍可定义循环。工具验证覆盖真实土狼犬双帧的前景/透明背景、预演和重复生成无差异。
@@ -12,11 +28,11 @@ Start的遮罩透明，但菜单窗口明确保留原作窗口图和填充；队
 
 ## 代码放哪
 
-- `src/packs/emerald/ui/emerald-theme.css`：外层画面、窗口、Start与六席队伍的基础样式。
-- `src/packs/emerald/ui/native-pages.css`：独立页面的240×160坐标、原作背景层与文字窗口；在基础主题之后加载。
-- `src/packs/emerald/ui/native-view.js` / `summary-view.js` / `flight-view.js`：纯显示数据和导航，不能写领域状态。
-- `src/packs/emerald/ui-shell.js`：为modal标注data-modal-page和data-gender，不依靠内容猜页面类别。
-- `src/packs/emerald/interface.js`：装配页面；Start按进度显示原作纵向菜单，图鉴和队伍未解锁时不出现；设置页承载已支持的文字速度、声音和窗口边框，扩展功能承载工程入口。菜单项仍通过原页面工厂执行。
+- `src/ui/emerald/ui/emerald-theme.css`：外层画面、窗口、Start与六席队伍的基础样式。
+- `src/ui/emerald/ui/native-pages.css`：独立页面的240×160坐标、原作背景层与文字窗口；在基础主题之后加载。
+- `src/ui/emerald/ui/native-view.js` / `summary-view.js` / `region-map-interface.js`：纯显示数据和导航，不能写领域状态。
+- `src/ui/emerald/ui-shell.js`：为modal标注data-modal-page和data-gender，不依靠内容猜页面类别。
+- `src/ui/emerald/interface.js`：装配页面；Start按进度显示原作纵向菜单，图鉴和队伍未解锁时不出现；设置页承载已支持的文字速度、声音和窗口边框，扩展功能承载工程入口。菜单项仍通过原页面工厂执行。
 - `src/adapters/plugin-manager-dom.js`：游戏外dialog。只写下次启动配置，不操作核心状态；BrowserInput在面板开启时屏蔽游戏按键/触控/道具快捷。
 - `src/adapters/plugin-settings.js` / `plugin-loader.js`：配置存取、启动动作与catalog装配；具体优先级见[内容管线](CONTENT_PIPELINE.md)。
 
@@ -44,15 +60,15 @@ python3 tools/ui/export-theme.py
 | 队伍 / 能力 | party-interface、summary-view / party_menu.c、pokemon_summary_screen.c | 六席；详情sprite中心(40,64)，No. y16、名字y96、物种y112；招式类型x88、名称x120、PP x192 |
 | 背包 / 使用目标 | bag-interface / item_menu.c、item_menu_icons.c | 精灵包中心(68,66)，物品图标中心(24,88)；items/balls/machines/berries/key顺序；左右换袋、上下选物 |
 | 图鉴 | dex-interface / pokedex.c | 预览中心(96,80)；见过/捕获计数与列表；未见物种不展示sprite |
-| 电脑 | box-interface / pokemon_storage_system.c | 每页6×5；图标中心(100+24列,44+24行)；取出/满队交换走现有命令 |
+| 电脑 | box-interface / pokemon_storage_system.c | 实际精灵中心PC入口；每页6×5；存取/满队交换/资料/盒内排序走UID命令，6/200容量保持 |
 | 训练家 | trainer-interface / trainer_card.c | 名字(24,41)、金钱(24,65)、图鉴(24,81)、时间(24,97)、肖像(153,40)、徽章y120 |
 | 商店 / 保存 | shop-interface、save-interface / shop.c、save.c | 商店保留地图透底；保存上方统计+底部提示+是/否；导入/导出/重开折叠为工程工具 |
 | 初始精灵 | starter-interface / starter_choose.c | 三球中心(60,64)/(120,88)/(180,64)，手指及三帧球；预览后二次确认 |
-| 时钟 / 飞空目的地 | time-interface、movement-interface / wallclock.c、region_map.c | 原作表盘+确认；已到访目的地叠到地区图，插件目的地保留列表回退 |
+| 时钟 / 飞空目的地 | time-interface、movement-interface / wallclock.c、region_map.c | 原作表盘+确认；普通地图与飞空共用地区图、游标和选点，权限由travel服务判定 |
 | 战斗 | battle-interface、BattleDirector / battle_interface.c、pokeball.c | 四方向2×2菜单；PP/属性右栏；投球、摇晃、释放按目标席位定位 |
 | 工程与插件页 | 对应*-interface、ExtensionDOM | 原作窗口/配色；仍为自研功能，不伪造原作页面 |
 
-**当前边界**：实际页面布局、中文字体、长文换行、触摸与听音仍待用户端到端验收。训练家卡背面完整成绩、PC全操作、物品丢弃/数量选择、未导入华丽大赛招式元数据等仍没有原作完整业务；设置没有伪装已支持战斗风格/立体声/按键模式。并非全作所有界面逐像素完成。
+**当前边界**：实际页面布局、中文字体、长文换行、触摸与听音仍待用户端到端验收。训练家卡背面完整成绩、PC放生/永久盒槽/14盒420容量/名称壁纸、物品丢弃/数量选择、未导入华丽大赛招式元数据等仍没有原作完整业务；设置没有伪装已支持战斗风格/立体声/按键模式。并非全作所有界面逐像素完成。
 
 保存与运行权限的核心测试不应导入可选产品插件；产品专项放examples。变更字段与验证记录更新STATUS和对应合同，避免把CSS通过检查写成视觉还原完成。
 
@@ -85,3 +101,32 @@ BattleDirector消费已经提交的快照，捕捉结果消息留到完整摇晃
 ## 地图名提示策略
 
 MapNameDOM只管理提示生命周期，app按有效地图元数据调用。`indoor:true`不弹名称，室外默认显示，可通过`showMapName:false`关闭；进入室内立即取消上一个室外提示的定时器并隐藏。位置标题和AI观察仍保留地图名称。
+
+## 2026-10-07 训练家、PC与水面校正
+
+训练家图片按 `src/data/trainers.h` 的 trainerPic 与原作前后图坐标表导出，不把16×32行走图放大充当战斗图。大小姐、富家少爷、渔夫、双胞胎、水舰队等获得真实64×64前图，原有男女主角/小光后图保留。单打训练家进场为玩家从右、对手从左（±240），按2像素/帧滑动；胜利对手从右侧96像素回到(208,40)，叠加图片原作尺寸偏移。入场训练家各自离开，敌方精灵球在精灵落点下24像素释放；第二席延迟25帧，不提前显示血框。派出名字读取实际战斗队伍，包括借用教学队伍。
+
+原作 `battle_scripts_1.s` 的击败提示→训练家回场败北台词→奖金→退场顺序由结算演出执行，退场后单独运行区域战后对白。13名早期普通训练家与森林水舰队有各自败北对白；通用来源训练家的其余对白仍属后续转写范围。当前玩家球轨迹仍是连续曲线近似，未完整移植原作8.8定点减速段、所有精灵出球/落地帧与粒子，不能据源码坐标测试声称全动画逐帧复刻完成。
+
+面对精灵中心PC图块（MB_PC=0x83）向上互动进入“宝可梦电脑”；存入选队伍，取出选盒中个体，满队可交换，点击只选择、再明确动作，查看资料不显示队伍专用操作；盒内移动选择两个已占用位置，可跨页交换，取消不改个体。界面以UID提交已有领域命令，成功后保存；不可存走最后可战斗成员，满容量或旧选择失效明确拒绝。原存档格式及6人/200只容量不变；没有完成原作14盒420永久格、空槽移动、盒名/壁纸、放生及持有物整理。
+
+原作General动画每16个60Hz帧更新；花/水/砂岸/瀑布/陆岸依次错开0–4帧。砂岸采用0,1,2,3,4,5,6,0帧序；图块自身没有动画时保持静态，不按“是水”统一套动画；104北侧斜纹池塘另用Rustboro二级图集的windy_water专用动画，每8帧更新一次，8组图块分别错开0–7个更新帧并按相位倒移。桥下反射MB=0x2b与桥面高度3分别判断：104桥面角色不反射，岸边和桥下低水层仍反射。门动画属于图集后处理，标准tools/import.py grid入口已自动执行opening-art（直接运行底层import-grid仍须后处理）；本轮改为按每张地图的原始primary/secondary布局导出门配色和专属门帧，door-anims按tileset索引；grid标准入口自动执行opening-art，预检无待写文件及遗漏。两个地形绘制pass均替换开启状态，不再重新绘制原始关闭叠层。
+
+本轮仅通过正常生产装配的无浏览器命令/DOM/画布采样、存档及资源来源检查；实际画面、键鼠/触摸、听音由用户验收。详见[验证记录](../validation/2026-10-07-trainer-replica-and-pc/manifest.json)。
+
+用户截图指出104北侧斜纹水仍静止：原因是导入器只有General主图集动画，未读取Rustboro二级图集的windy_water（VRAM tile640–671）。现补齐该原作八帧、每8帧更新及8组错开的相位；和通用海水分别采样，不将图块属性为池塘误判成无动画。
+
+可砍树的四帧是完整→砍断过程，原作inanimate=TRUE/sAnim_StayStill只显示帧0；之前通用人物的up/left帧映射选中了砍断帧。导入器现对inanimate资源生成静止映射，CuttableTree现行声明同步；变朝向、未获徽章/未学居合斩均保持完整，合格动作才能移除，通过保存重载检查。这里没有给通用Renderer增加树名称特判。
+
+## 2026-10-08 两队专用入场与树果帧
+
+水舰队/火岩队训练家由pack身份表选择原作各自tilemap/palette，256项Q8.8正弦表和阶段时长由来源导入；总217帧，兼容取消与reducedMotion。Canvas混合色仍近似GBA效果，不宣称逐像素颜色保真。树果源图片是横排帧，修正export-theme切片并逐像素验证生长图；详见[本批范围](../regions/NATIVE_INTERACTIONS.md)。
+
+
+## 新游戏博士介绍（2026-10-09）
+
+正常新游戏的InsideOfTruck地图入口先执行new-game屏幕，再运行原作搬家车脚本。来源为main_menu.c的Task_NewGameBirchSpeech系列、pokeball.c的独立展示出球、pokemon.c的Lotad前动画及naming_screen.c。216帧等待、176帧渐显、80帧等待；性别预览16帧退场与16帧滑入；平台8帧延后、调色步进；命名前后16帧淡出入；48帧缩小并向下每帧0.75px，随后白化、黑屏交接。原作图集通过tools/ui/export-new-game.py生成，Lotad使用anim_front.png而不是静态front.png。
+
+用户明确要求起名不遵循原作键盘：采用直接自由输入，16字存档上限，支持系统输入法与Enter确认；正在输入法组词时不提交，空白/超长名字不提交，提供返回修改角色按钮。名字确认选择否/B返回性别与起名流程；输入稿仅在UI内存中，最终身份经story-screen-ports交给configurePlayer，屏幕失败不提交。FrameSceneDOM仅持有画布与FrameClipDirector，不读写存档或解释原C任务；正文pause事件由DialogueDOM消费预编译停顿位置，只触发一次，跳过文字也会触发，并且关闭后旧帧不会复活。
+
+未进行浏览器或听音验收；中文译文/断页、默认预设名字、GBA硬件混色和实际输入体验不以端口测试宣称精确等价。标题电影/标题页与原存档选择另一个切片处理。

@@ -1,0 +1,781 @@
+{
+  "version": 1,
+  "packetSha256": "e8f0ac399b725ac8f0297688ec8d01976e45711e0a0a3d85bee5bd8943fc1844",
+  "entries": [
+    {
+      "label": "DewfordTown_House1_EventScript_Zigzagoon",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_CuttersHouse_EventScript_Cutter",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_EventScript_Employee",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_EventScript_Greeter",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_EventScript_StairGuard",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_EventScript_BallScientist",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_EventScript_MatchCallScientist",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_EventScript_PokemonDreamsScientist",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_EventScript_PokenavScientist",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_EventScript_TalkToPokemonScientist",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_EventScript_Boy2",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_EventScript_FatMan",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_EventScript_LittleBoy",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_EventScript_LittleGirl",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_EventScript_Man1",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_Flat2_1F_EventScript_Skitty",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_Flat2_2F_EventScript_NinjaBoy",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_House3_EventScript_OldWoman",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_House3_EventScript_Pekachu",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    },
+    {
+      "label": "RustboroCity_PokemonSchool_EventScript_Teacher",
+      "status": "reviewed",
+      "notes": "已核对本切片普通/条件对白、三个赠礼及教师两侧检查学生路径。科研NPC的化石状态回调不在本切片，后续主线事实不由本互动假造。"
+    }
+  ],
+  "translations": [
+    {
+      "label": "DewfordTown_House1_Text_Zigzagoon",
+      "original": "ZIGZAGOON: Guguuh!",
+      "zh": "蛇纹熊：咕咕！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_CuttersHouse_Text_ExplainCut",
+      "original": "That HIDDEN MACHINE, or HM for\nshort, is CUT.\n\nAn HM move is one that can be used\nby POKéMON outside of battle.\n\nAny POKéMON that's learned CUT can\nchop down thin trees if the TRAINER\nhas earned the STONE BADGE.\n\nAnd, unlike a TM, an HM can be used\nmore than once.",
+      "zh": "这台秘传学习器记载的是居合斩。\n秘传招式能在战斗之外使用。获得岩石徽章后，学会居合斩的宝可梦就能砍掉细树。\n与招式学习器不同，秘传学习器可以反复使用。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_CuttersHouse_Text_YouCanPutThisHMToGoodUse",
+      "original": "That determined expression…\nThat limber way you move…\nAnd your well-trained POKéMON…\n\nYou're obviously a skilled TRAINER!\n\nNo, wait, don't say a word.\nI can tell just by looking at you.\n\nI'm sure that you can put this\nHIDDEN MACHINE to good use.\n\nNo need to be modest or shy.\nGo on, take it!",
+      "zh": "坚定的神情，灵活的动作，还有训练有素的宝可梦……\n你显然是个出色的训练家！先别说话，我一眼就看出来了。\n我相信你能好好利用这台秘传学习器。别客气，收下吧！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_HowCouldWeGetRobbed",
+      "original": "It's beyond stupid.\nHow could we get robbed?",
+      "zh": "真是太蠢了！我们怎么会被抢劫呢？",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_OnlyAuthorizedPeopleEnter",
+      "original": "I'm sorry, only authorized people\nare allowed to enter here.",
+      "zh": "抱歉，只有经过许可的人才能进入这里。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_RobberWasntVeryBright",
+      "original": "That stolen parcel…\n\nWell, sure it's important, but it's not\nanything that anyone can use.\n\nIn my estimation, that robber must not\nhave been very bright.",
+      "zh": "那个被偷的包裹……虽然很重要，但不是谁都能用的东西。\n依我看，那个强盗一定不太聪明。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_SoundsLikeStolenGoodsRecovered",
+      "original": "It sounds like they've recovered\nthe ripped-off DEVON GOODS.",
+      "zh": "听说被抢走的得文物品已经找回来了。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_StaffGotRobbed",
+      "original": "One of our research staff stupidly\ngot robbed of an important parcel.",
+      "zh": "我们的一位研究员傻乎乎地被抢走了一个重要包裹。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_ThoseShoesAreOurProduct",
+      "original": "Hey, those RUNNING SHOES!\nThey're one of our products!\n\nIt makes me happy when I see someone\nusing something we made.",
+      "zh": "嘿，那双跑步鞋！那是我们的产品！\n看到有人使用我们制造的东西，我就很高兴。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_WelcomeToDevonCorp",
+      "original": "Hello and welcome to the DEVON\nCORPORATION.\n\nWe're proud producers of items and\nmedicine that enhance your life.",
+      "zh": "你好，欢迎来到得文公司。\n我们为能生产改善生活的道具和药品而自豪。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_1F_Text_YoureAlwaysWelcomeHere",
+      "original": "Hi, there!\nYou're always welcome here!",
+      "zh": "你好！这里随时欢迎你！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_DevelopNewPokenavFeature",
+      "original": "I'm trying to develop a new feature\nfor the POKéNAV…\n\nBut it's not going well.",
+      "zh": "我正在尝试开发宝可领航员的新功能……\n但进展不太顺利。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_DevelopingNewBalls",
+      "original": "I'm developing new kinds of\nPOKé BALLS…\n\nBut I haven't made much headway…",
+      "zh": "我正在开发新型精灵球……\n但还没有什么进展……",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_DeviceForTalkingToPokemon",
+      "original": "We're developing a device for talking\nwith POKéMON.\n\nBut we haven't had much success…",
+      "zh": "我们正在开发能和宝可梦说话的装置。\n不过，还没有取得什么成果……",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_DeviceToVisualizePokemonDreams",
+      "original": "I'm trying to develop a device that\nvisually reproduces the dreams of\nPOKéMON…\n\nBut it's not going well.",
+      "zh": "我正在尝试开发能把宝可梦的梦显示出来的装置……\n但进展不太顺利。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_IMadePokenav",
+      "original": "I made the POKéNAV!\n\nAs an engineer, I feel blessed to have\nmade something so great!",
+      "zh": "宝可领航员是我开发的！\n作为工程师，能造出这么棒的东西，我感到非常幸运！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_WeFinallyMadeNewBalls",
+      "original": "We finally made new kinds of\nPOKé BALLS!\n\nThe REPEAT BALL makes it easier to\ncatch POKéMON you've caught before.\n\nThe TIMER BALL gets better at catching\nPOKéMON the longer a battle runs.\n\nBoth are proudly developed by\nthe DEVON CORPORATION.\n\nPlease give them a try!",
+      "zh": "我们终于造出了新型精灵球！\n重复球能更容易捕捉以前捉到过的宝可梦。\n战斗持续得越久，计时球就越容易捕捉宝可梦。\n两种球都是得文公司的得意之作，请试试看！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_WhatToWorkOnNext",
+      "original": "Well, now what shall I work on\ndeveloping next?\n\nOur company allows us to make our\ninspirations into reality.\n\nOne couldn't ask for a better\nenvironment as an engineer.",
+      "zh": "接下来开发什么好呢？\n公司允许我们把灵感变成现实。对工程师来说，这是再好不过的环境了。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_DevonCorp_2F_Text_WowThatsAPokenav",
+      "original": "Oh, wow!\nThat's a POKéNAV!\n\nIt came about as a result of our\nPRESIDENT's desire to learn about\nthe feelings of POKéMON.\n\nWould you like me to describe its\nfeatures in detail?\n\nNo, no. I think you'll find out just by\ntrying the POKéNAV out.",
+      "zh": "哦，哇！那是宝可领航员！\n它源于社长想了解宝可梦心情的愿望。\n要我详细介绍功能吗？不，不用。你自己用一用就会明白了。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Flat2_1F_Text_Skitty",
+      "original": "SKITTY: Gyaaaah!",
+      "zh": "向尾喵：喵啊！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Flat2_2F_Text_GoingToWorkAtDevonToo",
+      "original": "My daddy's working at the CORPORATION.\n\nWhen I grow up, I'm going to work for\nDEVON, too.",
+      "zh": "我爸爸在得文公司工作。\n等我长大了，也要去得文公司工作！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Flat2_2F_Text_MyDaddyMadeThisYouCanHaveIt",
+      "original": "My daddy's working at the CORPORATION.\n\nMy daddy made this!\nBut I can't use it, so you can have it.",
+      "zh": "我爸爸在得文公司工作。\n这个是爸爸做的！我用不上，就送给你吧。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_House3_Text_NamingPikachuPekachu",
+      "original": "But giving the name PEKACHU to\na PIKACHU? It seems pointless.\n\nI suppose it is good to use a name\nthat's easy to understand, but…",
+      "zh": "给皮卡丘取名叫“皮卡啾”？好像没什么意义。\n虽说容易理解的名字也不错，不过……",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_House3_Text_Pekachu",
+      "original": "PEKACHU: Peka!",
+      "zh": "皮卡啾：皮卡！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_PokemonSchool_Text_ExplainQuickClaw",
+      "original": "A POKéMON holding the QUICK CLAW will\noccasionally speed up and get to move\nbefore its opponent.\n\nThere are many other items that are\nmeant to be held by POKéMON.\n\nJust those alone will give you many\ntopics to study!",
+      "zh": "携带先制之爪的宝可梦，有时能加快动作，比对手先出招。\n还有许多供宝可梦携带的道具，光这些就足够研究很久了！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_PokemonSchool_Text_StudentsWhoDontStudyGetQuickClaw",
+      "original": "Students who don't study get a little\ntaste of my QUICK CLAW.\n\nWhether or not you are a good student \nwill be evident from the way you use\nthis item.",
+      "zh": "不好好学习的学生，可要尝尝我的先制之爪！\n你会如何使用这件道具，就能看出你是不是个好学生。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_HaveYouChallengedGym",
+      "original": "Have you taken the POKéMON GYM\nchallenge?\n\nWhen you get that shiny GYM BADGE\nin hand, I guess TRAINERS begin to\nrealize what is required of them.",
+      "zh": "你挑战过宝可梦道馆吗？\n当闪亮的道馆徽章握在手中时，训练家才开始明白自己肩上的责任吧。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_HeyThatsRustborosGymBadge",
+      "original": "Hey, that's RUSTBORO's GYM BADGE!\n\nOut of all the POKéMON GYM BADGES,\nRUSTBORO's is the coolest, I'd say.",
+      "zh": "咦，那是卡那兹道馆的徽章！\n要我说，所有道馆徽章里，卡那兹的徽章最酷！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_MrBrineyLovesPeeko",
+      "original": "The old sailor MR. BRINEY lives in\na cottage by the sea.\n\nHe said he was going shopping in\nSLATEPORT for his pet, PEEKO.\n\nThat old sea dog, he must really love\nthat PEEKO.",
+      "zh": "老水手哈奇爷爷住在海边的小屋里。\n他说要去凯那市给他的皮皮买东西。那位老船长一定很疼爱皮皮！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_MrBrineyWalksInTheTunnel",
+      "original": "The old sailor MR. BRINEY lives in\na cottage by the sea.\n\nHe goes for walks in the tunnel every\nso often.",
+      "zh": "老水手哈奇爷爷住在海边的小屋里。\n他时不时会去隧道散步。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_PokemonCanChangeLookFromExp",
+      "original": "If a POKéMON gains experience in\nbattles, it can sometimes change in\nthe way it looks.",
+      "zh": "宝可梦在战斗中获得经验，有时外貌也会改变。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_PokemonChangeShape",
+      "original": "A POKéMON changes shape?\nIf one did that, I would be shocked!",
+      "zh": "宝可梦会改变模样？要是发生这种事，我一定会大吃一惊！",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_SneakyLookingManWentAroundCorner",
+      "original": "Hm? A sneaky-looking man?\n\nCome to think of it, yes, a shady-\nlooking guy went around the corner.",
+      "zh": "嗯？一个鬼鬼祟祟的人？\n这么说来，确实有个可疑的家伙拐过了街角。",
+      "reviewed": true
+    },
+    {
+      "label": "RustboroCity_Text_WeShortenItToDevon",
+      "original": "The DEVON CORPORATION…\nWe all just shorten it to DEVON.\n\nThat company makes all sorts of\nconvenient products.",
+      "zh": "得文制造股份有限公司……我们都简称它为得文公司。\n那家公司制造各种方便的产品。",
+      "reviewed": true
+    },
+    {
+      "label": "gText_TooBadBagIsFull",
+      "original": "Too bad!\nThe BAG is full…",
+      "zh": "你的背包装满了，无法接收这个道具。",
+      "reviewed": true
+    }
+  ],
+  "mapEntries": [
+    {
+      "id": "DewfordTown_House1:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "DewfordTown_House1:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "DewfordTown_House1:object_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:3",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:4",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:5",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:6",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:7",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:8",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:10",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:11",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:12",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:13",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:object_events:15",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:3",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:4",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:5",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:6",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:7",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:8",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:9",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:10",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:11",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:12",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:13",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:14",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:15",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:16",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:17",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:18",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:19",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:coord_events:20",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:3",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:4",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:5",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:6",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:7",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:8",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity:bg_events:9",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_CuttersHouse:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_CuttersHouse:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:object_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:bg_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_1F:bg_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_2F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_2F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_2F:object_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_2F:object_events:3",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_2F:object_events:4",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_DevonCorp_2F:object_events:5",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_Flat2_1F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_Flat2_1F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_Flat2_2F:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_Flat2_2F:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_House3:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_House3:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_House3:object_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:3",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:4",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:5",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:object_events:6",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:0",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:1",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:2",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:3",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    },
+    {
+      "id": "RustboroCity_PokemonSchool:bg_events:4",
+      "status": "out-of-scope",
+      "notes": "地图其余入口另有切片；导入NPC台词不代表该区域全部主线、化石、交换、通信或设施已实现。"
+    }
+  ],
+  "cFunctions": [],
+  "facts": [
+    {
+      "sources": [
+        {
+          "label": "RustboroCity_DevonCorp_2F_EventScript_BallScientist",
+          "path": "data/maps/RustboroCity_DevonCorp_2F/scripts.inc",
+          "line": 21,
+          "sha256": "4f16f46c13a7908e219551dccfb2096648ae748ce5853ebaa6a538a36c79ce66",
+          "lines": [
+            21
+          ]
+        }
+      ],
+      "summary": "FLAG_MET_DEVON_EMPLOYEE对应116道路会面，与森林救援/归还包裹独立。"
+    },
+    {
+      "sources": [
+        {
+          "label": "RustboroCity_CuttersHouse_EventScript_Cutter",
+          "path": "data/maps/RustboroCity_CuttersHouse/scripts.inc",
+          "line": 4,
+          "sha256": "c39468b3bf364526c279248bb5121725b59b2fcd1425ad9db502d2b19e10f0f7",
+          "lines": [
+            4
+          ]
+        }
+      ],
+      "summary": "居合斩HM可重复使用；野外砍树另外要求岩石徽章。满包采用网页实际到账后才标领取的恢复政策。"
+    }
+  ],
+  "scenarios": [
+    {
+      "sources": [
+        {
+          "label": "RustboroCity_PokemonSchool_EventScript_Teacher",
+          "path": "data/maps/RustboroCity_PokemonSchool/scripts.inc",
+          "line": 77,
+          "sha256": "5e82dd84ad5423b3a1fc15a96644e4b7fbbd4b414179085cfdf6f2360a4f1774",
+          "lines": [
+            77
+          ]
+        }
+      ],
+      "summary": "从左右入口执行来源全部逐格路径与等待，回到5,3后发先制之爪；另测满包、重入与保存。步态/原机逐帧观感未验收。"
+    },
+    {
+      "sources": [
+        {
+          "label": "RustboroCity_Flat2_2F_EventScript_NinjaBoy",
+          "path": "data/maps/RustboroCity_Flat2_2F/scripts.inc",
+          "line": 8,
+          "sha256": "4e789e3858ac8898319b470f19091361c6cd4b731ef16d2ac84f6310e55a5e56",
+          "lines": [
+            8
+          ]
+        }
+      ],
+      "summary": "普通赠礼、收到后说明以及容量失败重试；原子到账/旗标/奖励账本分离。"
+    }
+  ]
+}

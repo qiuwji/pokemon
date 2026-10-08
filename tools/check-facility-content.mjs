@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { loadContentSync } from "./content-io.mjs";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 import { createFacilityContent } from "../src/plugins/facility-content/index.js";
 const input = process.argv[2] || new URL("../src/plugins/facility-content/content.json", import.meta.url);
 try {

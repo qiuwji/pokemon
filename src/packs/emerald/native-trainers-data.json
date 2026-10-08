@@ -1,0 +1,552 @@
+[
+  {
+    "party": [
+      {
+        "species": "zigzagoon",
+        "level": 5
+      },
+      {
+        "species": "seedot",
+        "level": 7
+      }
+    ],
+    "id": "billy",
+    "script": "Route104_EventScript_Billy",
+    "actor": "Youngster",
+    "name": "短裤小子",
+    "prize": 112,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "machop",
+        "level": 13
+      }
+    ],
+    "id": "brenden",
+    "script": "DewfordTown_Gym_EventScript_Brenden",
+    "actor": "Sailor",
+    "name": "水手",
+    "prize": 416,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 10
+      }
+    ],
+    "id": "josh",
+    "script": "RustboroCity_Gym_EventScript_Josh",
+    "actor": "Youngster",
+    "name": "短裤小子",
+    "prize": 160,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 8
+      }
+    ],
+    "id": "clark",
+    "script": "Route116_EventScript_Clark",
+    "actor": "Hiker",
+    "name": "登山客",
+    "prize": 320,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "lotad",
+        "level": 6
+      },
+      {
+        "species": "shroomish",
+        "level": 6
+      }
+    ],
+    "id": "haley_1",
+    "script": "Route104_EventScript_Haley",
+    "actor": "Lass",
+    "name": "少女",
+    "prize": 96,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 16
+      },
+      {
+        "species": "geodude",
+        "level": 16
+      },
+      {
+        "species": "machop",
+        "level": 16
+      }
+    ],
+    "id": "mike_2",
+    "script": "RusturfTunnel_EventScript_Mike",
+    "actor": "Hiker",
+    "name": "登山客",
+    "prize": 640,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "zigzagoon",
+        "level": 7
+      }
+    ],
+    "id": "winston_1",
+    "script": "Route104_EventScript_Winston",
+    "actor": "RichBoy",
+    "name": "富家少爷",
+    "prize": 1400,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "carvanha",
+        "level": 15
+      }
+    ],
+    "id": "grunt_museum_1",
+    "script": "SlateportCity_OceanicMuseum_2F_EventScript_CaptStern",
+    "actor": "Scientist1",
+    "name": "水舰队手下",
+    "prize": 300,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "meditite",
+        "level": 13
+      }
+    ],
+    "id": "lilith",
+    "script": "DewfordTown_Gym_EventScript_Lilith",
+    "actor": "Girl3",
+    "name": "格斗少女",
+    "prize": 312,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 8
+      },
+      {
+        "species": "geodude",
+        "level": 8
+      }
+    ],
+    "id": "tommy",
+    "script": "RustboroCity_Gym_EventScript_Tommy",
+    "actor": "Youngster",
+    "name": "短裤小子",
+    "prize": 128,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "meditite",
+        "level": 13
+      }
+    ],
+    "id": "laura",
+    "script": "DewfordTown_Gym_EventScript_Laura",
+    "actor": "Girl3",
+    "name": "格斗少女",
+    "prize": 312,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "machop",
+        "level": 16
+      },
+      {
+        "species": "meditite",
+        "level": 16
+      },
+      {
+        "species": "makuhita",
+        "level": 19
+      }
+    ],
+    "id": "brawly_1",
+    "script": "DewfordTown_Gym_EventScript_Brawly",
+    "actor": "Brawly",
+    "name": "道馆馆主",
+    "prize": 1900,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "ralts",
+        "level": 9
+      }
+    ],
+    "id": "jerry_1",
+    "script": "Route116_EventScript_Jerry",
+    "actor": "SchoolKidM",
+    "name": "学生",
+    "prize": 180,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "magikarp",
+        "level": 5
+      },
+      {
+        "species": "magikarp",
+        "level": 6
+      },
+      {
+        "species": "magikarp",
+        "level": 7
+      }
+    ],
+    "id": "ivan",
+    "script": "Route104_EventScript_Ivan",
+    "actor": "Fisherman",
+    "name": "渔夫",
+    "prize": 280,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "shroomish",
+        "level": 8
+      },
+      {
+        "species": "lotad",
+        "level": 8
+      }
+    ],
+    "id": "johnson",
+    "script": "Route116_EventScript_Johnson",
+    "actor": "Youngster",
+    "name": "短裤小子",
+    "prize": 128,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "nincada",
+        "level": 6
+      },
+      {
+        "species": "nincada",
+        "level": 6
+      }
+    ],
+    "id": "james_1",
+    "script": "PetalburgWoods_EventScript_James",
+    "actor": "BugCatcher",
+    "name": "捕虫少年",
+    "prize": 96,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 8
+      },
+      {
+        "species": "geodude",
+        "level": 8
+      }
+    ],
+    "id": "devan",
+    "script": "Route116_EventScript_Devan",
+    "actor": "Hiker",
+    "name": "登山客",
+    "prize": 320,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "zigzagoon",
+        "level": 8
+      },
+      {
+        "species": "poochyena",
+        "level": 8
+      }
+    ],
+    "id": "dawson",
+    "script": "Route116_EventScript_Dawson",
+    "actor": "Boy2",
+    "name": "富家少爷",
+    "prize": 1600,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 8
+      },
+      {
+        "species": "geodude",
+        "level": 8
+      }
+    ],
+    "id": "marc",
+    "script": "RustboroCity_Gym_EventScript_Marc",
+    "actor": "Hiker",
+    "name": "登山客",
+    "prize": 320,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "zigzagoon",
+        "level": 7
+      }
+    ],
+    "id": "cindy_1",
+    "script": "Route104_EventScript_Cindy",
+    "actor": "Woman2",
+    "name": "Woman",
+    "prize": 1400,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "poochyena",
+        "level": 11
+      }
+    ],
+    "id": "grunt_rusturf_tunnel",
+    "script": "RusturfTunnel_EventScript_Grunt",
+    "actor": "AquaMemberM",
+    "name": "水舰队手下",
+    "prize": 220,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "wurmple",
+        "level": 8
+      },
+      {
+        "species": "nincada",
+        "level": 8
+      }
+    ],
+    "id": "jose",
+    "script": "Route116_EventScript_Jose",
+    "actor": "BugCatcher",
+    "name": "捕虫少年",
+    "prize": 128,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "seedot",
+        "level": 6
+      },
+      {
+        "species": "lotad",
+        "level": 6
+      }
+    ],
+    "id": "gina_and_mia_1",
+    "script": "Route104_EventScript_Mia",
+    "actor": "Twin",
+    "name": "Twin",
+    "prize": 72,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "magikarp",
+        "level": 9
+      }
+    ],
+    "id": "darian",
+    "script": "Route104_EventScript_Darian",
+    "actor": "Fisherman",
+    "name": "渔夫",
+    "prize": 360,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "machop",
+        "level": 9
+      }
+    ],
+    "id": "joey",
+    "script": "Route116_EventScript_Joey",
+    "actor": "Youngster",
+    "name": "短裤小子",
+    "prize": 144,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "lotad",
+        "level": 8
+      },
+      {
+        "species": "zigzagoon",
+        "level": 8
+      }
+    ],
+    "id": "sarah",
+    "script": "Route116_EventScript_Sarah",
+    "actor": "Woman2",
+    "name": "Woman",
+    "prize": 1600,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "shroomish",
+        "level": 9
+      }
+    ],
+    "id": "karen_1",
+    "script": "Route116_EventScript_Karen",
+    "actor": "Girl3",
+    "name": "学生",
+    "prize": 180,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "meditite",
+        "level": 13
+      }
+    ],
+    "id": "jocelyn",
+    "script": "DewfordTown_Gym_EventScript_Jocelyn",
+    "actor": "Girl3",
+    "name": "格斗少女",
+    "prize": 312,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "machop",
+        "level": 13
+      }
+    ],
+    "id": "takao",
+    "script": "DewfordTown_Gym_EventScript_Takao",
+    "actor": "BlackBelt",
+    "name": "空手道王",
+    "prize": 416,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "makuhita",
+        "level": 13
+      }
+    ],
+    "id": "cristian",
+    "script": "DewfordTown_Gym_EventScript_Cristian",
+    "actor": "BlackBelt",
+    "name": "空手道王",
+    "prize": 416,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "marill",
+        "level": 9
+      }
+    ],
+    "id": "janice",
+    "script": "Route116_EventScript_Janice",
+    "actor": "Lass",
+    "name": "少女",
+    "prize": 144,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "wurmple",
+        "level": 3
+      },
+      {
+        "species": "wurmple",
+        "level": 3
+      },
+      {
+        "species": "wurmple",
+        "level": 3
+      },
+      {
+        "species": "wurmple",
+        "level": 3
+      }
+    ],
+    "id": "lyle",
+    "script": "PetalburgWoods_EventScript_Lyle",
+    "actor": "BugCatcher",
+    "name": "捕虫少年",
+    "prize": 48,
+    "doubleBattle": false
+  },
+  {
+    "party": [
+      {
+        "species": "geodude",
+        "level": 12
+      },
+      {
+        "species": "geodude",
+        "level": 12
+      },
+      {
+        "species": "nosepass",
+        "level": 15
+      }
+    ],
+    "id": "roxanne_1",
+    "script": "RustboroCity_Gym_EventScript_Roxanne",
+    "actor": "Roxanne",
+    "name": "道馆馆主",
+    "prize": 1500,
+    "doubleBattle": false
+  }
+]

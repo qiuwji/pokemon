@@ -1,15 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { session } from './helpers/session.js';
-import { validateSave } from '../src/packs/emerald/save-contract.js';
+import { validateSave } from '../src/game/emerald/assembly/save-contract.js';
 import {
   DOOR_CLOSE_FRAMES,
   DOOR_FRAME_MS,
   DOOR_OPEN_FRAMES,
   DoorDirector,
   createDoorWarp,
-} from '../src/packs/emerald/door-animation.js';
-import { DOOR_ANIMATIONS } from '../generated/packs/emerald/generated/door-anims.js';
+} from '../src/game/emerald/presentation/door-animation.js';
+import { DOOR_ANIMATIONS, DOOR_ANIMATIONS_BY_TILESET } from '../generated/packs/emerald/generated/door-anims.js';
 import { emeraldDoorSound } from '../src/packs/emerald/audio-library.js';
 
 const pose = (p) => [p.x, p.y, p.dir];
@@ -254,4 +254,41 @@ test('A sliding door and a swinging door resolve to their own cue, and a closed 
   assert.equal(warp.enter({ map: 'LittlerootTown', direction: 'up', door: { x: 10, y: 10 } }), null);
   assert.equal(sounds.length, 1);
   valid(s);
+});
+
+test('Every animated source doorway resolves to frames in its own current atlas, including the later Rustboro atlas', () => {
+  const { db } = session(), director = new DoorDirector({ timeline: { now: () => 0 }, maps: db.maps }), covered = new Set();
+  for (const [id,map] of Object.entries(db.maps)) {
+    for(let i=0;i<map.blocks.length;i++) {
+      if(![0x69,0x8d].includes(map.behavior[i]))continue;
+      const data = director.door({ map:id,x:i%map.width,y:Math.floor(i/map.width) });
+      assert(data, `${id} door ${map.blocks[i]&1023} lacks its own atlas`);
+      assert.equal(data,DOOR_ANIMATIONS_BY_TILESET[map.tileset][map.blocks[i]&1023]);
+      const pack=db.tilesets[map.tileset];
+      for(const pair of data.open)for(const frame of pair) {
+        assert(pack.metatiles[frame],`${id} frame ${frame} missing`);
+        for(const tile of pack.metatiles[frame]) {
+          const index=pack.lookup[tile&~3072];
+          assert(Number.isInteger(index)&&index<pack.atlas.tileCount,`${id} door pixel outside atlas`);
+        }
+      }
+      covered.add(id);
+    }
+  }
+  for(const id of ['LittlerootTown','OldaleTown','PetalburgCity','RustboroCity'])assert(covered.has(id),id);
+  assert.equal(director.door({map:"Route104",x:5,y:18}),null,"the original flower shop entrance is a non-animated door");
+});
+
+test('An active door substitutes both terrain passes instead of letting the closed overlay cover it', async () => {
+  const { Renderer }=await import('../src/adapters/canvas-renderer.js');
+  const { db }=session(), renderer=Object.create(Renderer.prototype), calls=[];
+  const graph={placements:{LittlerootTown:{x:0,y:0}}};
+  Object.assign(renderer,{db,graph,camera:{x:14*16,y:7*16,width:16,height:32},grid:(_pack,id,_x,_y,overlay)=>calls.push([id&1023,overlay])});
+  const frame={map:'LittlerootTown',x:14,y:8,top:900,bottom:901};
+  renderer.drawMap('LittlerootTown',false,0,frame);
+  renderer.drawMap('LittlerootTown',true,0,frame);
+  assert.deepEqual(calls,[[900,false],[901,false],[900,true],[901,true]]);
+  calls.length=0;
+  renderer.drawMap('LittlerootTown',false,0,{...frame,top:null,bottom:null});
+  assert.equal(calls[1][0],584,'closed restores the native door');
 });

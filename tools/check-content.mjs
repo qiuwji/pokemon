@@ -1,8 +1,8 @@
-import { createEmeraldStory } from "../src/packs/emerald/story/runtime.js";
+import { createEmeraldStory } from "../src/game/emerald/assembly/story-runtime.js";
 import { assertContentAssets } from "./check-content-assets.mjs";
 import { loadContentSync } from "./content-io.mjs";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { assertPackContent } from "../src/packs/emerald/content.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { assertPackContent } from "../src/game/emerald/assembly/content.js";
 import { MOVE_EFFECTS } from "../src/engine/move-effects.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
 import { STORY_EVENTS } from "../src/packs/emerald/story.js";

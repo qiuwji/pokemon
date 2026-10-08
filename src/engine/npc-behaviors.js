@@ -53,9 +53,22 @@ export class NPCBehaviorRegistry {
     this.definitions = new Map(
       Object.entries({ ...NPC_BEHAVIORS, ...definitions }),
     );
-    for (const [id, definition] of this.definitions)
+    for (const [id, definition] of this.definitions) {
       if (typeof (definition.decide || definition) !== "function")
         throw new Error(`Invalid NPC behavior ${id}`);
+      if (definition.timing !== undefined) {
+        const t = definition.timing;
+        if (!t || Array.isArray(t) ||
+          Object.keys(t).some(k => !["intervalMs", "afterMove"].includes(k)) ||
+          !Number.isInteger(t.intervalMs) || t.intervalMs < 16 || t.intervalMs > 60000 ||
+          (t.afterMove !== undefined && !["interval", "settled"].includes(t.afterMove)))
+          throw new Error(`Invalid NPC behavior timing ${id}`);
+        this.definitions.set(id, { ...definition, decide: definition.decide || definition, timing: readOnly(t) });
+      }
+    }
+  }
+  timing(mode) {
+    return this.definitions.get(mode)?.timing || null;
   }
   decide(mode, context) {
     const definition = this.definitions.get(mode);

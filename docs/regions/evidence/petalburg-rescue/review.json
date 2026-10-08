@@ -1,0 +1,503 @@
+{
+  "version": 1,
+  "packetSha256": "33a27e9719f8d498194754a90445c790b6d9333b2e1a6c5599b1d795a8e0a237",
+  "entries": [
+    {
+      "label": "PetalburgCity_EventScript_Scott0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "label": "PetalburgCity_EventScript_Scott1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "label": "PetalburgCity_EventScript_Scott2",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "label": "PetalburgCity_EventScript_Scott3",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "label": "PetalburgWoods_EventScript_DevonResearcherLeft",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "label": "PetalburgWoods_EventScript_DevonResearcherRight",
+      "status": "pending",
+      "notes": ""
+    }
+  ],
+  "translations": [
+    {
+      "label": "PetalburgCity_Text_AreYouATrainer",
+      "original": "Excuse me!\n\nLet me guess, from the way you're\ndressed, are you a POKéMON TRAINER?",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgCity_Text_ImLookingForTalentedTrainers",
+      "original": "I'm roaming the land in search of\ntalented TRAINERS.\n\nI'm sorry to have taken your time.",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgCity_Text_WellMaybeNot",
+      "original": "… … … … … …\n\nWell, maybe not.\nYour clothes aren't all that dirty.\n\nYou're either a rookie TRAINER,\nor maybe you're just an ordinary kid.",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_HandOverThosePapers",
+      "original": "You! DEVON RESEARCHER!\n\nHand over those papers!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_HaveYouSeenShroomish",
+      "original": "Hello, have you seen any POKéMON\ncalled SHROOMISH around here?\n\nI really love that POKéMON.",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_ICantBeWastingTime",
+      "original": "Uh-oh! It's a crisis!\nI can't be wasting time!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_IWasGoingToAmbushYou",
+      "original": "I was going to ambush you, but you\nhad to dawdle in PETALBURG WOODS\nforever, didn't you?\n\nI got sick of waiting, so here I am!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_NoOneCrossesTeamAqua",
+      "original": "Hunh? What do you think you're doing?\nWhat, you're going to protect him?\n\nNo one who crosses TEAM AQUA\ngets any mercy, not even a kid!\n\nCome on and battle me!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_NotAOneToBeFound",
+      "original": "Hmmm…\nNot a one to be found…",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro",
+      "original": "Didn't that TEAM AQUA thug say\nthey were after something in\nRUSTBORO, too?",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_ThatWasAwfullyClose",
+      "original": "Whew…\nThat was awfully close!\n\nThanks to you, he didn't rob me of\nthese important papers.\n\nI know, I'll give you a GREAT BALL as\nmy thanks!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_YouHaveToHelpMe",
+      "original": "Aiyeeeh!\n\nYou're a POKéMON TRAINER, aren't you?\nYou've got to help me, please!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_YoureKiddingMe",
+      "original": "You're kidding me! You're tough!",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_YoureLoadedWithItems",
+      "original": "You're loaded with items.\nI can't give you this GREAT BALL.",
+      "zh": "",
+      "reviewed": false
+    },
+    {
+      "label": "PetalburgWoods_Text_YouveGotSomeNerve",
+      "original": "Grrr… You've got some nerve\nmeddling with TEAM AQUA!\nCome on and battle me again!\n\nI wish I could say that, but I'm out of\nPOKéMON…\n\nAnd, hey, we of TEAM AQUA are also\nafter something in RUSTBORO.\n\nI'll let you go today!",
+      "zh": "",
+      "reviewed": false
+    }
+  ],
+  "mapEntries": [
+    {
+      "id": "PetalburgCity:object_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:object_events:2",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:object_events:3",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:object_events:5",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:object_events:6",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:object_events:7",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:2",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:3",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:4",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:5",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:6",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:coord_events:7",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:2",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:3",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:4",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:5",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgCity:bg_events:6",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:4",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:5",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:6",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:7",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:8",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:9",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:10",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:11",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:object_events:12",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:coord_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:coord_events:1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:bg_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "PetalburgWoods:bg_events:5",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:2",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:3",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:4",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:5",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:8",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:9",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:10",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:11",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:12",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:13",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:14",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:15",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:16",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:17",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:18",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:19",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:20",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:21",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:22",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:23",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:24",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:25",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:26",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:27",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:28",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:29",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:30",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:31",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:32",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:object_events:33",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:coord_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:bg_events:0",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:bg_events:1",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:bg_events:2",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:bg_events:3",
+      "status": "pending",
+      "notes": ""
+    },
+    {
+      "id": "Route104:bg_events:4",
+      "status": "pending",
+      "notes": ""
+    }
+  ],
+  "cFunctions": [],
+  "facts": [],
+  "scenarios": []
+}

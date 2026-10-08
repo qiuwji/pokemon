@@ -45,11 +45,14 @@ description: 在现有绿宝石工程中制作或修改玩法插件、页面、�
 | 用户操作或领域写入 | `api.actions.register(id,{schema,run})` + `ctx.intent` | 同步事务，权限与意图合同由宿主校验 |
 | 插件持久记忆 | `ctx.store`、已注册 `ctx.states` | 不复制核心队伍/库存；状态按 UID 与生命周期管理 |
 | 页面与动画 | `api.ui` / `api.presentation` | 只展示已提交事实，不重算规则或取游戏 RNG |
+| 战斗精灵/姿态与声音编排 | `api.presentation.sequence` + FrameSequenceBuilder | prepare同步、深冻结，在只读守卫下编译一次；播放仅消费数据。scenes控制裁剪/背景，statusBoxes控制框位移，sprites支持旋转/tint；转场帧保持黑屏提交所有权，fadePreviousMs允许新曲直接替换旧曲。见[公开例](../../examples/battle-sequence.test.js)、[完整生产战斗例](../../examples/battle-entry-exit.test.js)与[演出合同](../../docs/engine/presentation/ANIMATION_CONTRACT.md) |
 | 持续小游戏 | `api.interactions.register` | 宿主驱动时钟、语义输入、帧数据与完成事务 |
 
 所有对象 schema 明确 `additionalProperties:false`，数值/字符串/数组给业务边界；这是项目的 [DataSchema 子集](../../src/engine/extensions/values.js)，不支持任意 JSON Schema 关键字。
 
 action 内只用当次 `ctx`，不缓存写端口，不 `await`，不再次 dispatch。事务外的用户操作可 `api.commands.dispatch`；查询、规则、渲染、实时会话纯回调均不得 dispatch 或修改领域状态。schema 通过也不代表拥有资格，提交点仍需按领域合同复检。
+
+Actor 生成/更新/删除通过 `ctx.intent({kind:"actors",operation,...})`，声明 actors 权限。可选同步结果回调 `ctx.intent(value,onResult)` 在提交期间获取冻结结果，写插件记忆或追加意图；不可 await/dispatch，抛错整笔回滚，仍共用128次操作限额。具体字段见 [ACTORS](../../docs/engine/actors/ACTORS.md)。
 
 多项写入走同一事务；后段失败必须恢复领域值、插件记忆和相关 RNG。事实用 `ctx.emit`，反馈用 `ctx.feedback`，成功提交后才发布。区分抛错、`{ok:false,reason}` 和“提交成功但反馈失败”；最后一种不能重试发奖或重抽随机数。
 
@@ -118,7 +121,11 @@ test("detail entry renders a clickable action with persistent memory", async () 
 | 合同所有者 | 代码锚点 / 搜索词 |
 | --- | --- |
 | 注册、只读保护、事务 | [plugin-host](../../src/engine/extensions/plugin-host.js)、[plugin-runtime](../../src/engine/extensions/plugin-runtime.js)；`class PluginHost` / `class PluginRuntime` |
-| 公开类型、命令输入、权限 | [contracts](../../src/engine/contracts.d.ts)、[application-commands](../../src/packs/emerald/application-commands.js)、[extension-intents](../../src/packs/emerald/extension-intents.js)；`PluginAPI` / `registerEmeraldCommands` / `validateEmeraldIntent` |
+| 公开类型、命令输入、权限 | [contracts](../../src/engine/contracts.d.ts)、[application-commands](../../src/game/emerald/commands/application-commands.js)、[extension-intents](../../src/game/emerald/commands/extension-intents.js)；`PluginAPI` / `registerEmeraldCommands` / `validateEmeraldIntent` |
 | 布局与宿主位置 | [ui-registry](../../src/engine/extensions/ui-registry.js)；`UI_SLOTS` / `resolveLayout` |
 
 完整规则边界查 [作者指南](../../docs/development/AUTHORING.md)。设计或历史外部评审中的名字必须先找到当前注册、调用点和行为测试，才能当可用 API。
+
+## 地区地图复用
+
+[公开网格游标](../../src/engine/extensions/region-map.js)接收内容提供的width/height/cells，只负责有界选择；宿主showRegionMap提供destinations、markers和onSelect，不替代travel或野外能力的命令权限。原作区域投影留pack，DOM留UI；普通查看不得修改持久状态。入口、来源与尚未复刻的地图细节见[界面规格](../../docs/development/EMERALD_UI.md)。

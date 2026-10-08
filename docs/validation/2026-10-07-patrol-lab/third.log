@@ -1,0 +1,377 @@
+✔ installed patrol plugin loads from the real catalog and its menu creates one atomic team without duplicate actors (96.260208ms)
+✔ continuous and interval patrols visibly differ while both traverse the same legal grid and reverse at their endpoint (63.725208ms)
+✖ a player in the lane causes blocked facts and bounded retry, without overlaps or skipped route goals (53.384042ms)
+✔ menu pause freezes animation, explicit pause preserves route state, and resume uses the existing actor identity (66.563166ms)
+✔ blocked second spawn rolls back the first actor, identity sequence, saved memory and all spawn facts (46.260083ms)
+✖ auto-save restores both patrol identities, pause flags and route phase; observation records reset on scene rebuild (61.040458ms)
+✖ remove cleans both actors and observations, and repeated visits keep at most 24 transient facts without saved telemetry (60.764208ms)
+✔ the summon action refuses other maps and tampered memory; partial teams can be rebuilt through the same action (57.410584ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 5
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 624.516375
+
+✖ failing tests:
+
+test at examples/patrol-lab.test.js:72:1
+✖ a player in the lane causes blocked facts and bounded retry, without overlaps or skipped route goals (53.384042ms)
+  AssertionError [ERR_ASSERTION]: the player source tile remains reserved while moving
+  
+  7 !== 6
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:88:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 7,
+    expected: 6,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at examples/patrol-lab.test.js:131:1
+✖ auto-save restores both patrol identities, pause flags and route phase; observation records reset on scene rebuild (61.040458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     at: 100,
+  +     direction: 'right',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 6,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'started',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 1,
+  +     startedAt: 100,
+  +     to: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 7,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 260,
+  +     direction: 'right',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 6,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'settled',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 1,
+  +     startedAt: 100,
+  +     to: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 7,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 260,
+  +     direction: 'right',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 7,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'started',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 2,
+  +     startedAt: 260,
+  +     to: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 420,
+  +     direction: 'right',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 7,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'settled',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 2,
+  +     startedAt: 260,
+  +     to: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 420,
+  +     direction: 'right',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'started',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 3,
+  +     startedAt: 420,
+  +     to: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 9,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 580,
+  +     direction: 'right',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'settled',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 3,
+  +     startedAt: 420,
+  +     to: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 9,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 580,
+  +     direction: 'left',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 9,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'started',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 4,
+  +     startedAt: 580,
+  +     to: {
+  +       dir: 'left',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 740,
+  +     direction: 'left',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'right',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 9,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'settled',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 4,
+  +     startedAt: 580,
+  +     to: {
+  +       dir: 'left',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 740,
+  +     direction: 'left',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'left',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'started',
+  +     reason: null,
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 5,
+  +     startedAt: 740,
+  +     to: {
+  +       dir: 'left',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 7,
+  +       y: 10
+  +     }
+  +   },
+  +   {
+  +     at: 740,
+  +     direction: 'left',
+  +     durationMs: 160,
+  +     entity: 'core:actor.1',
+  +     forced: false,
+  +     from: {
+  +       dir: 'left',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 8,
+  +       y: 10
+  +     },
+  +     jump: false,
+  +     mode: 'walk',
+  +     phase: 'cancelled',
+  +     reason: 'disposed',
+  +     role: '连续巡逻员',
+  +     scripted: false,
+  +     sequence: 5,
+  +     startedAt: 740,
+  +     to: {
+  +       dir: 'left',
+  +       elevation: 3,
+  +       map: 'LittlerootTown',
+  +       previousElevation: 3,
+  +       x: 7,
+  +       y: 10
+  +     }
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:144:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { role: '连续巡逻员', entity: 'core:actor.1', sequence: 1, from: [Object], to: [Object], direction: 'right', mode: 'walk', startedAt: 100, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'started', reason: null, at: 100 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 1, from: [Object], to: [Object], direction: 'right', mode: 'walk', startedAt: 100, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'settled', reason: null, at: 260 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 2, from: [Object], to: [Object], direction: 'right', mode: 'walk', startedAt: 260, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'started', reason: null, at: 260 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 2, from: [Object], to: [Object], direction: 'right', mode: 'walk', startedAt: 260, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'settled', reason: null, at: 420 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 3, from: [Object], to: [Object], direction: 'right', mode: 'walk', startedAt: 420, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'started', reason: null, at: 420 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 3, from: [Object], to: [Object], direction: 'right', mode: 'walk', startedAt: 420, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'settled', reason: null, at: 580 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 4, from: [Object], to: [Object], direction: 'left', mode: 'walk', startedAt: 580, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'started', reason: null, at: 580 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 4, from: [Object], to: [Object], direction: 'left', mode: 'walk', startedAt: 580, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'settled', reason: null, at: 740 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 5, from: [Object], to: [Object], direction: 'left', mode: 'walk', startedAt: 740, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'started', reason: null, at: 740 }, { role: '连续巡逻员', entity: 'core:actor.1', sequence: 5, from: [Object], to: [Object], direction: 'left', mode: 'walk', startedAt: 740, durationMs: 160, jump: false, scripted: false, forced: false, phase: 'cancelled', reason: 'disposed', at: 740 } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at examples/patrol-lab.test.js:152:1
+✖ remove cleans both actors and observations, and repeated visits keep at most 24 transient facts without saved telemetry (60.764208ms)
+  Error: Unknown actor core:actor.1
+      at ActorRepository.record (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/actor-repository.js:172:19)
+      at ActorRepository.view (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/actor-repository.js:223:36)
+      at Object.view (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/packs/emerald/application/actor-application.js:47:38)
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:162:43
+      at Array.every (<anonymous>)
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:162:15)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

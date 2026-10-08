@@ -1,5 +1,5 @@
 import { inventoryCounts } from "../inventory.js";
-import { qualified, freeze, readOnly } from "./values.js";
+import { qualified, freeze, readOnly, callSync } from "./values.js";
 export const CONTENT_KINDS = Object.freeze([
   "species",
   "moves",
@@ -52,7 +52,10 @@ export const CONTENT_KINDS = Object.freeze([
 ]);
 /** Startup registration is staged; failed plugin setup cannot leak partial definitions. */
 export class ExtensionCatalog {
-  constructor(base) {
+  constructor(base, { stateReferences = () => [] } = {}) {
+    if (typeof stateReferences !== "function")
+      throw new Error("Invalid state reference provider");
+    this.stateReferences = stateReferences;
     this.base = base;
     this.entries = new Map();
     this.owners = new Map();
@@ -130,7 +133,12 @@ export class ExtensionCatalog {
     return this.compiled;
   }
   dependencies(state) {
+    const references = callSync(this.stateReferences, [readOnly(state)]);
+    if (!Array.isArray(references) || references.length > 8192 ||
+        references.some((id) => typeof id !== "string" || !id || id.length > 128))
+      throw new Error("Invalid content state references");
     const used = [
+      ...references,
       state.position?.map,
       ...Object.values(state.appearances?.records || {}).flatMap((r) => [
         r.appearance,
@@ -190,10 +198,6 @@ export class ExtensionCatalog {
         ];
       }),
       ...Object.keys(state.fieldEffects?.records || {}),
-      ...Object.entries(state.crops?.trees || {}).flatMap(([id, tree]) => [
-        id,
-        tree.kind,
-      ]),
       ...Object.values(state.schedule?.tasks || {}).map(
         (task) => task.definition,
       ),

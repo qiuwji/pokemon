@@ -11,7 +11,7 @@ import { MOVEMENT_MODES } from "../src/packs/emerald/movement.js";
 import {
   MovementApplication,
   MOVEMENT_PORTS,
-} from "../src/packs/emerald/application/movement-application.js";
+} from "../src/game/emerald/application/movement-application.js";
 import { FieldSession } from "../src/engine/field-session.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import {

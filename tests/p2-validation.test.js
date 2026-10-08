@@ -4,10 +4,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { Battle } from "../src/engine/battle.js";
 import { Random, createMonster } from "../src/engine/model.js";
-import {
-  createTrainerEncounter,
-  TRAINERS,
-} from "../src/packs/emerald/trainers.js";
+import { createTrainerEncounter } from "../src/engine/trainer-encounters.js";
+import { TRAINERS } from "../src/packs/emerald/trainers.js";
 const db = loadContentSync();
 function config() {
   const rng = new Random(1);

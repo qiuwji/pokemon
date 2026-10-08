@@ -17,13 +17,13 @@ test("Default AI observer exposes compact live state and commands; observation d
   assert(Object.isFrozen(q.party[0]));
 });
 
-test("Actual catalog defaults to AI control and the original BGM packs; the test fixture requires an explicit test environment", async () => {
+test("Actual catalog exposes the companion menu alongside AI control and the original BGM packs; the test fixture requires an explicit test environment", async () => {
   const fs = await import("node:fs");
   const options = { url: new URL("../src/plugins/catalog.json", import.meta.url), content: loadContentSync(),
     readJSON: url => JSON.parse(fs.readFileSync(url)) };
   // The consolidated original-sound pack is content, not an opt-in experiment: the reference plays music.
   const defaults = (await loadPluginCatalog(options)).map(p => p.id);
-  assert.deepEqual(defaults.sort(), ["ai-control", "emerald-audio"]);
+  assert.deepEqual(defaults.sort(), ["ai-control", "emerald-audio", "patrol-lab"]);
   await assert.rejects(loadPluginCatalog({ ...options, parameters: new URLSearchParams("test-harness=1") }), /test environment/);
   assert.ok((await loadPluginCatalog({ ...options, environment: "test", parameters: new URLSearchParams("test-harness=1") })).map(p => p.id).includes("test-harness"));
 });

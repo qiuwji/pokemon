@@ -1,0 +1,6147 @@
+{
+  "version": 1,
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "selection": {
+    "maps": [
+      "PetalburgCity",
+      "PetalburgWoods",
+      "Route104"
+    ],
+    "entries": [
+      "PetalburgCity_EventScript_Scott0",
+      "PetalburgCity_EventScript_Scott1",
+      "PetalburgCity_EventScript_Scott2",
+      "PetalburgCity_EventScript_Scott3",
+      "PetalburgWoods_EventScript_DevonResearcherLeft",
+      "PetalburgWoods_EventScript_DevonResearcherRight"
+    ],
+    "functions": []
+  },
+  "maps": {
+    "PetalburgCity": {
+      "path": "data/maps/PetalburgCity/map.json",
+      "sha256": "0018ee193173c55b295f46a11a82dad9db0f37e7717a18261efc587c71d7d20e",
+      "data": {
+        "id": "MAP_PETALBURG_CITY",
+        "name": "PetalburgCity",
+        "layout": "LAYOUT_PETALBURG_CITY",
+        "music": "MUS_PETALBURG",
+        "region_map_section": "MAPSEC_PETALBURG_CITY",
+        "requires_flash": false,
+        "weather": "WEATHER_SUNNY",
+        "map_type": "MAP_TYPE_CITY",
+        "allow_cycling": true,
+        "allow_escaping": false,
+        "allow_running": true,
+        "show_map_name": true,
+        "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+        "connections": [
+          {
+            "map": "MAP_ROUTE104",
+            "offset": -50,
+            "direction": "left"
+          },
+          {
+            "map": "MAP_ROUTE102",
+            "offset": 10,
+            "direction": "right"
+          }
+        ],
+        "object_events": [
+          {
+            "graphics_id": "OBJ_EVENT_GFX_WOMAN_4",
+            "x": 16,
+            "y": 18,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgCity_EventScript_WallysMom",
+            "flag": "FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM"
+          },
+          {
+            "local_id": "LOCALID_PETALBURG_WALLY",
+            "graphics_id": "OBJ_EVENT_GFX_WALLY",
+            "x": 15,
+            "y": 10,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_UP",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_PETALBURG_CITY_WALLY"
+          },
+          {
+            "local_id": "LOCALID_PETALBURG_BOY",
+            "graphics_id": "OBJ_EVENT_GFX_BOY_1",
+            "x": 8,
+            "y": 22,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgCity_EventScript_Boy",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_GENTLEMAN",
+            "x": 20,
+            "y": 10,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_UP_AND_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgCity_EventScript_Gentleman",
+            "flag": "0"
+          },
+          {
+            "local_id": "LOCALID_PETALBURG_WALLYS_DAD",
+            "graphics_id": "OBJ_EVENT_GFX_POKEFAN_M",
+            "x": 15,
+            "y": 10,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_UP",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_PETALBURG_CITY_WALLYS_DAD"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 19,
+            "y": 2,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgCity_EventScript_ItemMaxRevive",
+            "flag": "FLAG_ITEM_PETALBURG_CITY_MAX_REVIVE"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 3,
+            "y": 28,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgCity_EventScript_ItemEther",
+            "flag": "FLAG_ITEM_PETALBURG_CITY_ETHER"
+          },
+          {
+            "local_id": "LOCALID_GYM_BOY",
+            "graphics_id": "OBJ_EVENT_GFX_BOY_2",
+            "x": 12,
+            "y": 15,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgCity_EventScript_GymBoy",
+            "flag": "0"
+          },
+          {
+            "local_id": "LOCALID_PETALBURG_SCOTT",
+            "graphics_id": "OBJ_EVENT_GFX_SCOTT",
+            "x": 13,
+            "y": 12,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_PETALBURG_CITY_SCOTT"
+          }
+        ],
+        "warp_events": [
+          {
+            "x": 10,
+            "y": 19,
+            "elevation": 0,
+            "dest_map": "MAP_PETALBURG_CITY_HOUSE1",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 7,
+            "y": 5,
+            "elevation": 0,
+            "dest_map": "MAP_PETALBURG_CITY_WALLYS_HOUSE",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 15,
+            "y": 8,
+            "elevation": 0,
+            "dest_map": "MAP_PETALBURG_CITY_GYM",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 20,
+            "y": 16,
+            "elevation": 0,
+            "dest_map": "MAP_PETALBURG_CITY_POKEMON_CENTER_1F",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 20,
+            "y": 24,
+            "elevation": 0,
+            "dest_map": "MAP_PETALBURG_CITY_HOUSE2",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 25,
+            "y": 12,
+            "elevation": 0,
+            "dest_map": "MAP_PETALBURG_CITY_MART",
+            "dest_warp_id": "0"
+          }
+        ],
+        "coord_events": [
+          {
+            "type": "trigger",
+            "x": 8,
+            "y": 10,
+            "elevation": 3,
+            "var": "VAR_PETALBURG_CITY_STATE",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_ShowGymToPlayer0"
+          },
+          {
+            "type": "trigger",
+            "x": 8,
+            "y": 11,
+            "elevation": 3,
+            "var": "VAR_PETALBURG_CITY_STATE",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_ShowGymToPlayer1"
+          },
+          {
+            "type": "trigger",
+            "x": 8,
+            "y": 12,
+            "elevation": 3,
+            "var": "VAR_PETALBURG_CITY_STATE",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_ShowGymToPlayer2"
+          },
+          {
+            "type": "trigger",
+            "x": 8,
+            "y": 13,
+            "elevation": 3,
+            "var": "VAR_PETALBURG_CITY_STATE",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_ShowGymToPlayer3"
+          },
+          {
+            "type": "trigger",
+            "x": 4,
+            "y": 10,
+            "elevation": 3,
+            "var": "VAR_SCOTT_PETALBURG_ENCOUNTER",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_Scott0"
+          },
+          {
+            "type": "trigger",
+            "x": 4,
+            "y": 11,
+            "elevation": 3,
+            "var": "VAR_SCOTT_PETALBURG_ENCOUNTER",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_Scott1"
+          },
+          {
+            "type": "trigger",
+            "x": 4,
+            "y": 12,
+            "elevation": 3,
+            "var": "VAR_SCOTT_PETALBURG_ENCOUNTER",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_Scott2"
+          },
+          {
+            "type": "trigger",
+            "x": 4,
+            "y": 13,
+            "elevation": 3,
+            "var": "VAR_SCOTT_PETALBURG_ENCOUNTER",
+            "var_value": "0",
+            "script": "PetalburgCity_EventScript_Scott3"
+          }
+        ],
+        "bg_events": [
+          {
+            "type": "sign",
+            "x": 17,
+            "y": 10,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "PetalburgCity_EventScript_GymSign"
+          },
+          {
+            "type": "sign",
+            "x": 26,
+            "y": 12,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
+            "script": "Common_EventScript_ShowPokemartSign"
+          },
+          {
+            "type": "sign",
+            "x": 21,
+            "y": 16,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
+            "script": "Common_EventScript_ShowPokemonCenterSign"
+          },
+          {
+            "type": "sign",
+            "x": 17,
+            "y": 16,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "PetalburgCity_EventScript_CitySign"
+          },
+          {
+            "type": "sign",
+            "x": 22,
+            "y": 16,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
+            "script": "Common_EventScript_ShowPokemonCenterSign"
+          },
+          {
+            "type": "sign",
+            "x": 27,
+            "y": 12,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
+            "script": "Common_EventScript_ShowPokemartSign"
+          },
+          {
+            "type": "sign",
+            "x": 8,
+            "y": 9,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "PetalburgCity_EventScript_WallyHouseSign"
+          },
+          {
+            "type": "hidden_item",
+            "x": 11,
+            "y": 29,
+            "elevation": 3,
+            "item": "ITEM_RARE_CANDY",
+            "flag": "FLAG_HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY"
+          }
+        ]
+      }
+    },
+    "PetalburgWoods": {
+      "path": "data/maps/PetalburgWoods/map.json",
+      "sha256": "31038be29e39c493a1e3cdf74a7cccaae7f9d024e55112973528813b5d24b45a",
+      "data": {
+        "id": "MAP_PETALBURG_WOODS",
+        "name": "PetalburgWoods",
+        "layout": "LAYOUT_PETALBURG_WOODS",
+        "music": "MUS_PETALBURG_WOODS",
+        "region_map_section": "MAPSEC_PETALBURG_WOODS",
+        "requires_flash": false,
+        "weather": "WEATHER_SHADE",
+        "map_type": "MAP_TYPE_ROUTE",
+        "allow_cycling": true,
+        "allow_escaping": false,
+        "allow_running": true,
+        "show_map_name": true,
+        "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+        "connections": null,
+        "object_events": [
+          {
+            "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
+            "x": 19,
+            "y": 10,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "EventScript_CutTree",
+            "flag": "FLAG_TEMP_11"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
+            "x": 19,
+            "y": 11,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "EventScript_CutTree",
+            "flag": "FLAG_TEMP_12"
+          },
+          {
+            "local_id": "LOCALID_PETALBURG_WOODS_GRUNT",
+            "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
+            "x": 26,
+            "y": 17,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_PETALBURG_WOODS_AQUA_GRUNT"
+          },
+          {
+            "local_id": "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "graphics_id": "OBJ_EVENT_GFX_MAN_2",
+            "x": 26,
+            "y": 20,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_PETALBURG_WOODS_DEVON_EMPLOYEE"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 45,
+            "y": 7,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_ItemGreatBall",
+            "flag": "FLAG_ITEM_PETALBURG_WOODS_GREAT_BALL"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 35,
+            "y": 20,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_ItemXAttack",
+            "flag": "FLAG_ITEM_PETALBURG_WOODS_X_ATTACK"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 4,
+            "y": 8,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_ItemEther",
+            "flag": "FLAG_ITEM_PETALBURG_WOODS_ETHER"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BOY_2",
+            "x": 15,
+            "y": 19,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_UP_AND_DOWN",
+            "movement_range_x": 1,
+            "movement_range_y": 2,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_Boy1",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
+            "x": 7,
+            "y": 32,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN_LEFT_AND_RIGHT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "3",
+            "script": "PetalburgWoods_EventScript_Lyle",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
+            "x": 4,
+            "y": 14,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN_UP_AND_RIGHT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "3",
+            "script": "PetalburgWoods_EventScript_James",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BOY_3",
+            "x": 30,
+            "y": 34,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+            "movement_range_x": 2,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_Boy2",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 4,
+            "y": 26,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_ItemParalyzeHeal",
+            "flag": "FLAG_ITEM_PETALBURG_WOODS_PARALYZE_HEAL"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_GIRL_2",
+            "x": 33,
+            "y": 5,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "PetalburgWoods_EventScript_Girl",
+            "flag": "0"
+          }
+        ],
+        "warp_events": [
+          {
+            "x": 14,
+            "y": 5,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "2"
+          },
+          {
+            "x": 15,
+            "y": 5,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "3"
+          },
+          {
+            "x": 16,
+            "y": 38,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "4"
+          },
+          {
+            "x": 17,
+            "y": 38,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "5"
+          },
+          {
+            "x": 36,
+            "y": 38,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "6"
+          },
+          {
+            "x": 37,
+            "y": 38,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "7"
+          }
+        ],
+        "coord_events": [
+          {
+            "type": "trigger",
+            "x": 26,
+            "y": 23,
+            "elevation": 3,
+            "var": "VAR_PETALBURG_WOODS_STATE",
+            "var_value": "0",
+            "script": "PetalburgWoods_EventScript_DevonResearcherLeft"
+          },
+          {
+            "type": "trigger",
+            "x": 27,
+            "y": 23,
+            "elevation": 3,
+            "var": "VAR_PETALBURG_WOODS_STATE",
+            "var_value": "0",
+            "script": "PetalburgWoods_EventScript_DevonResearcherRight"
+          }
+        ],
+        "bg_events": [
+          {
+            "type": "sign",
+            "x": 14,
+            "y": 32,
+            "elevation": 3,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "PetalburgWoods_EventScript_Sign1"
+          },
+          {
+            "type": "hidden_item",
+            "x": 39,
+            "y": 35,
+            "elevation": 3,
+            "item": "ITEM_POTION",
+            "flag": "FLAG_HIDDEN_ITEM_PETALBURG_WOODS_POTION"
+          },
+          {
+            "type": "hidden_item",
+            "x": 26,
+            "y": 6,
+            "elevation": 3,
+            "item": "ITEM_TINY_MUSHROOM",
+            "flag": "FLAG_HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_1"
+          },
+          {
+            "type": "hidden_item",
+            "x": 40,
+            "y": 29,
+            "elevation": 3,
+            "item": "ITEM_TINY_MUSHROOM",
+            "flag": "FLAG_HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_2"
+          },
+          {
+            "type": "hidden_item",
+            "x": 4,
+            "y": 19,
+            "elevation": 3,
+            "item": "ITEM_POKE_BALL",
+            "flag": "FLAG_HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL"
+          },
+          {
+            "type": "sign",
+            "x": 11,
+            "y": 8,
+            "elevation": 3,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "PetalburgWoods_EventScript_Sign2"
+          }
+        ]
+      }
+    },
+    "Route104": {
+      "path": "data/maps/Route104/map.json",
+      "sha256": "a508508e63e83ad350d6dec54ce5ddba8305e51215f477bb035d21a532994d9a",
+      "data": {
+        "id": "MAP_ROUTE104",
+        "name": "Route104",
+        "layout": "LAYOUT_ROUTE104",
+        "music": "MUS_ROUTE104",
+        "region_map_section": "MAPSEC_ROUTE_104",
+        "requires_flash": false,
+        "weather": "WEATHER_SUNNY",
+        "map_type": "MAP_TYPE_ROUTE",
+        "allow_cycling": true,
+        "allow_escaping": false,
+        "allow_running": true,
+        "show_map_name": true,
+        "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+        "connections": [
+          {
+            "map": "MAP_RUSTBORO_CITY",
+            "offset": 0,
+            "direction": "up"
+          },
+          {
+            "map": "MAP_ROUTE105",
+            "offset": 0,
+            "direction": "down"
+          },
+          {
+            "map": "MAP_PETALBURG_CITY",
+            "offset": 50,
+            "direction": "right"
+          }
+        ],
+        "object_events": [
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
+            "x": 15,
+            "y": 60,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_BugCatcher",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_GIRL_2",
+            "x": 25,
+            "y": 49,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Girl1",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_LASS",
+            "x": 31,
+            "y": 24,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "7",
+            "script": "Route104_EventScript_Haley",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BOY_1",
+            "x": 27,
+            "y": 63,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_UP_AND_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Boy1",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_WOMAN_2",
+            "x": 30,
+            "y": 50,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Woman",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
+            "x": 28,
+            "y": 74,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_UP",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Girl2",
+            "flag": "0"
+          },
+          {
+            "local_id": "LOCALID_ROUTE104_BOAT",
+            "graphics_id": "OBJ_EVENT_GFX_MR_BRINEYS_BOAT",
+            "x": 12,
+            "y": 54,
+            "elevation": 1,
+            "movement_type": "MOVEMENT_TYPE_FACE_UP",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_ROUTE_104_MR_BRINEY_BOAT"
+          },
+          {
+            "local_id": "LOCALID_ROUTE104_BRINEY",
+            "graphics_id": "OBJ_EVENT_GFX_EXPERT_M",
+            "x": 12,
+            "y": 51,
+            "elevation": 4,
+            "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "0x0",
+            "flag": "FLAG_HIDE_ROUTE_104_MR_BRINEY"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_FISHERMAN",
+            "x": 29,
+            "y": 8,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Ivan",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 34,
+            "y": 6,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_CHERI_1",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 35,
+            "y": 6,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_SOIL_2",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 36,
+            "y": 6,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_LEPPA",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 22,
+            "y": 41,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_ORAN_2",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 23,
+            "y": 41,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_SOIL_3",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 24,
+            "y": 41,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_PECHA",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_EXPERT_F",
+            "x": 37,
+            "y": 8,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_ExpertF",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 3,
+            "y": 22,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_SOIL_1",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 3,
+            "y": 23,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_ORAN_1",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 3,
+            "y": 24,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_SOIL_4",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+            "x": 3,
+            "y": 25,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_104_CHERI_2",
+            "script": "BerryTreeScript",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 39,
+            "y": 15,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_ItemPPUp",
+            "flag": "FLAG_ITEM_ROUTE_104_PP_UP"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_WOMAN_5",
+            "x": 8,
+            "y": 19,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT",
+            "movement_range_x": 1,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_WhiteHerbFlorist",
+            "flag": "FLAG_HIDE_ROUTE_104_WHITE_HERB_FLORIST"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_TWIN",
+            "x": 27,
+            "y": 15,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "1",
+            "script": "Route104_EventScript_Gina",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_TWIN",
+            "x": 28,
+            "y": 15,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "1",
+            "script": "Route104_EventScript_Mia",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_RICH_BOY",
+            "x": 21,
+            "y": 25,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_ROTATE_COUNTERCLOCKWISE",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "3",
+            "script": "Route104_EventScript_Winston",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_WOMAN_2",
+            "x": 11,
+            "y": 44,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_UP_AND_RIGHT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "3",
+            "script": "Route104_EventScript_Cindy",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 29,
+            "y": 53,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_ItemPokeBall",
+            "flag": "FLAG_ITEM_ROUTE_104_POKE_BALL"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER",
+            "x": 18,
+            "y": 67,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_RIGHT_UP_LEFT",
+            "movement_range_x": 5,
+            "movement_range_y": 6,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "2",
+            "script": "Route104_EventScript_Billy",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 37,
+            "y": 22,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_ItemXAccuracy",
+            "flag": "FLAG_ITEM_ROUTE_104_X_ACCURACY"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
+            "x": 35,
+            "y": 22,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "EventScript_CutTree",
+            "flag": "FLAG_TEMP_11"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+            "x": 5,
+            "y": 8,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_ItemPotion",
+            "flag": "FLAG_ITEM_ROUTE_104_POTION"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_BOY_2",
+            "x": 5,
+            "y": 26,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Boy2",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_FISHERMAN",
+            "x": 15,
+            "y": 59,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NORMAL",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Darian",
+            "flag": "0"
+          },
+          {
+            "local_id": "LOCALID_ROUTE104_RIVAL",
+            "graphics_id": "OBJ_EVENT_GFX_VAR_0",
+            "x": 17,
+            "y": 50,
+            "elevation": 0,
+            "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+            "movement_range_x": 1,
+            "movement_range_y": 1,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_EventScript_Rival",
+            "flag": "FLAG_HIDE_ROUTE_104_RIVAL"
+          }
+        ],
+        "warp_events": [
+          {
+            "x": 17,
+            "y": 50,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104_MR_BRINEYS_HOUSE",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 5,
+            "y": 18,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 10,
+            "y": 30,
+            "elevation": 3,
+            "dest_map": "MAP_PETALBURG_WOODS",
+            "dest_warp_id": "0"
+          },
+          {
+            "x": 11,
+            "y": 30,
+            "elevation": 3,
+            "dest_map": "MAP_PETALBURG_WOODS",
+            "dest_warp_id": "1"
+          },
+          {
+            "x": 10,
+            "y": 38,
+            "elevation": 3,
+            "dest_map": "MAP_PETALBURG_WOODS",
+            "dest_warp_id": "2"
+          },
+          {
+            "x": 11,
+            "y": 38,
+            "elevation": 3,
+            "dest_map": "MAP_PETALBURG_WOODS",
+            "dest_warp_id": "3"
+          },
+          {
+            "x": 32,
+            "y": 42,
+            "elevation": 3,
+            "dest_map": "MAP_PETALBURG_WOODS",
+            "dest_warp_id": "4"
+          },
+          {
+            "x": 33,
+            "y": 42,
+            "elevation": 3,
+            "dest_map": "MAP_PETALBURG_WOODS",
+            "dest_warp_id": "5"
+          }
+        ],
+        "coord_events": [
+          {
+            "type": "trigger",
+            "x": 17,
+            "y": 51,
+            "elevation": 3,
+            "var": "VAR_ROUTE104_STATE",
+            "var_value": "1",
+            "script": "Route104_EventScript_RivalTrigger"
+          }
+        ],
+        "bg_events": [
+          {
+            "type": "sign",
+            "x": 20,
+            "y": 50,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "Route104_EventScript_BrineysCottageSign"
+          },
+          {
+            "type": "sign",
+            "x": 27,
+            "y": 66,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "Route104_EventScript_RouteSignPetalburg"
+          },
+          {
+            "type": "sign",
+            "x": 23,
+            "y": 5,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "Route104_EventScript_RouteSignRustboro"
+          },
+          {
+            "type": "sign",
+            "x": 7,
+            "y": 20,
+            "elevation": 0,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "Route104_EventScript_FlowerShopSign"
+          },
+          {
+            "type": "sign",
+            "x": 17,
+            "y": 23,
+            "elevation": 3,
+            "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+            "script": "Route104_EventScript_TrainerTipsDoubleBattles"
+          },
+          {
+            "type": "hidden_item",
+            "x": 7,
+            "y": 6,
+            "elevation": 3,
+            "item": "ITEM_SUPER_POTION",
+            "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_SUPER_POTION"
+          },
+          {
+            "type": "hidden_item",
+            "x": 3,
+            "y": 9,
+            "elevation": 3,
+            "item": "ITEM_POKE_BALL",
+            "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_POKE_BALL"
+          },
+          {
+            "type": "hidden_item",
+            "x": 14,
+            "y": 55,
+            "elevation": 3,
+            "item": "ITEM_POTION",
+            "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_POTION"
+          },
+          {
+            "type": "hidden_item",
+            "x": 16,
+            "y": 72,
+            "elevation": 3,
+            "item": "ITEM_ANTIDOTE",
+            "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_ANTIDOTE"
+          },
+          {
+            "type": "hidden_item",
+            "x": 16,
+            "y": 64,
+            "elevation": 3,
+            "item": "ITEM_HEART_SCALE",
+            "flag": "FLAG_HIDDEN_ITEM_ROUTE_104_HEART_SCALE"
+          }
+        ]
+      }
+    }
+  },
+  "entryInventory": [
+    {
+      "id": "PetalburgCity:object_events:0",
+      "map": "PetalburgCity",
+      "kind": "object_events",
+      "index": 0,
+      "script": "PetalburgCity_EventScript_WallysMom",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:object_events:2",
+      "map": "PetalburgCity",
+      "kind": "object_events",
+      "index": 2,
+      "script": "PetalburgCity_EventScript_Boy",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:object_events:3",
+      "map": "PetalburgCity",
+      "kind": "object_events",
+      "index": 3,
+      "script": "PetalburgCity_EventScript_Gentleman",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:object_events:5",
+      "map": "PetalburgCity",
+      "kind": "object_events",
+      "index": 5,
+      "script": "PetalburgCity_EventScript_ItemMaxRevive",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:object_events:6",
+      "map": "PetalburgCity",
+      "kind": "object_events",
+      "index": 6,
+      "script": "PetalburgCity_EventScript_ItemEther",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:object_events:7",
+      "map": "PetalburgCity",
+      "kind": "object_events",
+      "index": 7,
+      "script": "PetalburgCity_EventScript_GymBoy",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:0",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 0,
+      "script": "PetalburgCity_EventScript_ShowGymToPlayer0",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:1",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 1,
+      "script": "PetalburgCity_EventScript_ShowGymToPlayer1",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:2",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 2,
+      "script": "PetalburgCity_EventScript_ShowGymToPlayer2",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:3",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 3,
+      "script": "PetalburgCity_EventScript_ShowGymToPlayer3",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:4",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 4,
+      "script": "PetalburgCity_EventScript_Scott0",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:5",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 5,
+      "script": "PetalburgCity_EventScript_Scott1",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:6",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 6,
+      "script": "PetalburgCity_EventScript_Scott2",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:coord_events:7",
+      "map": "PetalburgCity",
+      "kind": "coord_events",
+      "index": 7,
+      "script": "PetalburgCity_EventScript_Scott3",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:0",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 0,
+      "script": "PetalburgCity_EventScript_GymSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:1",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 1,
+      "script": "Common_EventScript_ShowPokemartSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:2",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 2,
+      "script": "Common_EventScript_ShowPokemonCenterSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:3",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 3,
+      "script": "PetalburgCity_EventScript_CitySign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:4",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 4,
+      "script": "Common_EventScript_ShowPokemonCenterSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:5",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 5,
+      "script": "Common_EventScript_ShowPokemartSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgCity:bg_events:6",
+      "map": "PetalburgCity",
+      "kind": "bg_events",
+      "index": 6,
+      "script": "PetalburgCity_EventScript_WallyHouseSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:0",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 0,
+      "script": "EventScript_CutTree",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:1",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 1,
+      "script": "EventScript_CutTree",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:4",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 4,
+      "script": "PetalburgWoods_EventScript_ItemGreatBall",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:5",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 5,
+      "script": "PetalburgWoods_EventScript_ItemXAttack",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:6",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 6,
+      "script": "PetalburgWoods_EventScript_ItemEther",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:7",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 7,
+      "script": "PetalburgWoods_EventScript_Boy1",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:8",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 8,
+      "script": "PetalburgWoods_EventScript_Lyle",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:9",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 9,
+      "script": "PetalburgWoods_EventScript_James",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:10",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 10,
+      "script": "PetalburgWoods_EventScript_Boy2",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:11",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 11,
+      "script": "PetalburgWoods_EventScript_ItemParalyzeHeal",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:object_events:12",
+      "map": "PetalburgWoods",
+      "kind": "object_events",
+      "index": 12,
+      "script": "PetalburgWoods_EventScript_Girl",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:coord_events:0",
+      "map": "PetalburgWoods",
+      "kind": "coord_events",
+      "index": 0,
+      "script": "PetalburgWoods_EventScript_DevonResearcherLeft",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:coord_events:1",
+      "map": "PetalburgWoods",
+      "kind": "coord_events",
+      "index": 1,
+      "script": "PetalburgWoods_EventScript_DevonResearcherRight",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:bg_events:0",
+      "map": "PetalburgWoods",
+      "kind": "bg_events",
+      "index": 0,
+      "script": "PetalburgWoods_EventScript_Sign1",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "PetalburgWoods:bg_events:5",
+      "map": "PetalburgWoods",
+      "kind": "bg_events",
+      "index": 5,
+      "script": "PetalburgWoods_EventScript_Sign2",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:0",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 0,
+      "script": "Route104_EventScript_BugCatcher",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:1",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 1,
+      "script": "Route104_EventScript_Girl1",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:2",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 2,
+      "script": "Route104_EventScript_Haley",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:3",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 3,
+      "script": "Route104_EventScript_Boy1",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:4",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 4,
+      "script": "Route104_EventScript_Woman",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:5",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 5,
+      "script": "Route104_EventScript_Girl2",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:8",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 8,
+      "script": "Route104_EventScript_Ivan",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:9",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 9,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:10",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 10,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:11",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 11,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:12",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 12,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:13",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 13,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:14",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 14,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:15",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 15,
+      "script": "Route104_EventScript_ExpertF",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:16",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 16,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:17",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 17,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:18",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 18,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:19",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 19,
+      "script": "BerryTreeScript",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:20",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 20,
+      "script": "Route104_EventScript_ItemPPUp",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:21",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 21,
+      "script": "Route104_EventScript_WhiteHerbFlorist",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:22",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 22,
+      "script": "Route104_EventScript_Gina",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:23",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 23,
+      "script": "Route104_EventScript_Mia",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:24",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 24,
+      "script": "Route104_EventScript_Winston",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:25",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 25,
+      "script": "Route104_EventScript_Cindy",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:26",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 26,
+      "script": "Route104_EventScript_ItemPokeBall",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:27",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 27,
+      "script": "Route104_EventScript_Billy",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:28",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 28,
+      "script": "Route104_EventScript_ItemXAccuracy",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:29",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 29,
+      "script": "EventScript_CutTree",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:30",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 30,
+      "script": "Route104_EventScript_ItemPotion",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:31",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 31,
+      "script": "Route104_EventScript_Boy2",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:32",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 32,
+      "script": "Route104_EventScript_Darian",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:object_events:33",
+      "map": "Route104",
+      "kind": "object_events",
+      "index": 33,
+      "script": "Route104_EventScript_Rival",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:coord_events:0",
+      "map": "Route104",
+      "kind": "coord_events",
+      "index": 0,
+      "script": "Route104_EventScript_RivalTrigger",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:bg_events:0",
+      "map": "Route104",
+      "kind": "bg_events",
+      "index": 0,
+      "script": "Route104_EventScript_BrineysCottageSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:bg_events:1",
+      "map": "Route104",
+      "kind": "bg_events",
+      "index": 1,
+      "script": "Route104_EventScript_RouteSignPetalburg",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:bg_events:2",
+      "map": "Route104",
+      "kind": "bg_events",
+      "index": 2,
+      "script": "Route104_EventScript_RouteSignRustboro",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:bg_events:3",
+      "map": "Route104",
+      "kind": "bg_events",
+      "index": 3,
+      "script": "Route104_EventScript_FlowerShopSign",
+      "included": false,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104:bg_events:4",
+      "map": "Route104",
+      "kind": "bg_events",
+      "index": 4,
+      "script": "Route104_EventScript_TrainerTipsDoubleBattles",
+      "included": false,
+      "sourceAvailable": true
+    }
+  ],
+  "roots": [
+    "PetalburgCity_EventScript_Scott0",
+    "PetalburgCity_EventScript_Scott1",
+    "PetalburgCity_EventScript_Scott2",
+    "PetalburgCity_EventScript_Scott3",
+    "PetalburgWoods_EventScript_DevonResearcherLeft",
+    "PetalburgWoods_EventScript_DevonResearcherRight"
+  ],
+  "blocks": {
+    "Common_Movement_Delay48": {
+      "label": "Common_Movement_Delay48",
+      "kind": "movement",
+      "path": "data/scripts/movement.inc",
+      "line": 9,
+      "endLine": 14,
+      "sha256": "2f2e0a1b1dbe06471d75d86c6dc4eb62a1fb7a022f3cadd301ffe3db14371e30",
+      "raw": "Common_Movement_Delay48:\n\tdelay_16\n\tdelay_16\n\tdelay_16\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 10,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 11,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 12,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 13,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "Common_Movement_ExclamationMark": {
+      "label": "Common_Movement_ExclamationMark",
+      "kind": "movement",
+      "path": "data/scripts/movement.inc",
+      "line": 5,
+      "endLine": 8,
+      "sha256": "ed117b24837038a74b9a58cf9e344e382bb3978048b12fe056ee8bdc536a6873",
+      "raw": "Common_Movement_ExclamationMark:\n\temote_exclamation_mark\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 6,
+          "op": "emote_exclamation_mark",
+          "args": [],
+          "raw": "\temote_exclamation_mark"
+        },
+        {
+          "line": 7,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "Common_Movement_WalkInPlaceFasterDown": {
+      "label": "Common_Movement_WalkInPlaceFasterDown",
+      "kind": "movement",
+      "path": "data/scripts/movement.inc",
+      "line": 39,
+      "endLine": 42,
+      "sha256": "dc710a76327722587934027c27867bea1f8ab4e6f872d5942a6e045b4dadd9ba",
+      "raw": "Common_Movement_WalkInPlaceFasterDown:\n\twalk_in_place_faster_down\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 40,
+          "op": "walk_in_place_faster_down",
+          "args": [],
+          "raw": "\twalk_in_place_faster_down"
+        },
+        {
+          "line": 41,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "Common_Movement_WalkInPlaceFasterLeft": {
+      "label": "Common_Movement_WalkInPlaceFasterLeft",
+      "kind": "movement",
+      "path": "data/scripts/movement.inc",
+      "line": 27,
+      "endLine": 30,
+      "sha256": "553ed9a4637102c976cf05b491238fce869ee1b553f354043ecef1272e3aacf1",
+      "raw": "Common_Movement_WalkInPlaceFasterLeft:\n\twalk_in_place_faster_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 28,
+          "op": "walk_in_place_faster_left",
+          "args": [],
+          "raw": "\twalk_in_place_faster_left"
+        },
+        {
+          "line": 29,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "Common_Movement_WalkInPlaceFasterRight": {
+      "label": "Common_Movement_WalkInPlaceFasterRight",
+      "kind": "movement",
+      "path": "data/scripts/movement.inc",
+      "line": 35,
+      "endLine": 38,
+      "sha256": "9aeaa9670d464cddc55bc471ce43e4047e0e0e73ecb793b4bff492a94e42d641",
+      "raw": "Common_Movement_WalkInPlaceFasterRight:\n\twalk_in_place_faster_right\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 36,
+          "op": "walk_in_place_faster_right",
+          "args": [],
+          "raw": "\twalk_in_place_faster_right"
+        },
+        {
+          "line": 37,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "Common_Movement_WalkInPlaceFasterUp": {
+      "label": "Common_Movement_WalkInPlaceFasterUp",
+      "kind": "movement",
+      "path": "data/scripts/movement.inc",
+      "line": 31,
+      "endLine": 34,
+      "sha256": "3a7d3dcff77ca9bcbe619f1495ab097e13432e5e94654e4a65d2bdefc25473cd",
+      "raw": "Common_Movement_WalkInPlaceFasterUp:\n\twalk_in_place_faster_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 32,
+          "op": "walk_in_place_faster_up",
+          "args": [],
+          "raw": "\twalk_in_place_faster_up"
+        },
+        {
+          "line": 33,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_EventScript_Scott": {
+      "label": "PetalburgCity_EventScript_Scott",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 518,
+      "endLine": 544,
+      "sha256": "cba5e011887f48aebabd2d49c568220370f5f779c68eb1e45d10f81bab72de04",
+      "raw": "PetalburgCity_EventScript_Scott::\n\tapplywaitmovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottStartWalkLeft\n\tplayse SE_PIN\n\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_ExclamationMark\n\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_Delay48\n\tapplywaitmovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottApproachPlayer\n\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterRight\n\tsetvar VAR_SCOTT_STATE, 1\n\tmsgbox PetalburgCity_Text_AreYouATrainer, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_WalkInPlaceFasterRight\n\tdelay 30\n\tmsgbox PetalburgCity_Text_WellMaybeNot, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_WalkInPlaceFasterLeft\n\tdelay 30\n\tmsgbox PetalburgCity_Text_ImLookingForTalentedTrainers, MSGBOX_DEFAULT\n\tclosemessage\n\tcall_if_eq VAR_0x8008, 0, PetalburgCity_EventScript_ScottExit0\n\tcall_if_eq VAR_0x8008, 1, PetalburgCity_EventScript_ScottExit1\n\tcall_if_eq VAR_0x8008, 2, PetalburgCity_EventScript_ScottExit2\n\tcall_if_eq VAR_0x8008, 3, PetalburgCity_EventScript_ScottExit3\n\tsetvar VAR_SCOTT_PETALBURG_ENCOUNTER, 1\n\tremoveobject LOCALID_PETALBURG_SCOTT\n\treleaseall\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 519,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "PetalburgCity_Movement_ScottStartWalkLeft"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottStartWalkLeft"
+        },
+        {
+          "line": 520,
+          "op": "playse",
+          "args": [
+            "SE_PIN"
+          ],
+          "raw": "\tplayse SE_PIN"
+        },
+        {
+          "line": 521,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "Common_Movement_ExclamationMark"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_ExclamationMark"
+        },
+        {
+          "line": 522,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "Common_Movement_Delay48"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_Delay48"
+        },
+        {
+          "line": 523,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "PetalburgCity_Movement_ScottApproachPlayer"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottApproachPlayer"
+        },
+        {
+          "line": 524,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "Common_Movement_WalkInPlaceFasterRight"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterRight"
+        },
+        {
+          "line": 525,
+          "op": "setvar",
+          "args": [
+            "VAR_SCOTT_STATE",
+            "1"
+          ],
+          "raw": "\tsetvar VAR_SCOTT_STATE, 1"
+        },
+        {
+          "line": 526,
+          "op": "msgbox",
+          "args": [
+            "PetalburgCity_Text_AreYouATrainer",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgCity_Text_AreYouATrainer, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 527,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 528,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "Common_Movement_WalkInPlaceFasterRight"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_WalkInPlaceFasterRight"
+        },
+        {
+          "line": 529,
+          "op": "delay",
+          "args": [
+            "30"
+          ],
+          "raw": "\tdelay 30"
+        },
+        {
+          "line": 530,
+          "op": "msgbox",
+          "args": [
+            "PetalburgCity_Text_WellMaybeNot",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgCity_Text_WellMaybeNot, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 531,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 532,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "Common_Movement_WalkInPlaceFasterLeft"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_SCOTT, Common_Movement_WalkInPlaceFasterLeft"
+        },
+        {
+          "line": 533,
+          "op": "delay",
+          "args": [
+            "30"
+          ],
+          "raw": "\tdelay 30"
+        },
+        {
+          "line": 534,
+          "op": "msgbox",
+          "args": [
+            "PetalburgCity_Text_ImLookingForTalentedTrainers",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgCity_Text_ImLookingForTalentedTrainers, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 535,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 536,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_0x8008",
+            "0",
+            "PetalburgCity_EventScript_ScottExit0"
+          ],
+          "raw": "\tcall_if_eq VAR_0x8008, 0, PetalburgCity_EventScript_ScottExit0"
+        },
+        {
+          "line": 537,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_0x8008",
+            "1",
+            "PetalburgCity_EventScript_ScottExit1"
+          ],
+          "raw": "\tcall_if_eq VAR_0x8008, 1, PetalburgCity_EventScript_ScottExit1"
+        },
+        {
+          "line": 538,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_0x8008",
+            "2",
+            "PetalburgCity_EventScript_ScottExit2"
+          ],
+          "raw": "\tcall_if_eq VAR_0x8008, 2, PetalburgCity_EventScript_ScottExit2"
+        },
+        {
+          "line": 539,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_0x8008",
+            "3",
+            "PetalburgCity_EventScript_ScottExit3"
+          ],
+          "raw": "\tcall_if_eq VAR_0x8008, 3, PetalburgCity_EventScript_ScottExit3"
+        },
+        {
+          "line": 540,
+          "op": "setvar",
+          "args": [
+            "VAR_SCOTT_PETALBURG_ENCOUNTER",
+            "1"
+          ],
+          "raw": "\tsetvar VAR_SCOTT_PETALBURG_ENCOUNTER, 1"
+        },
+        {
+          "line": 541,
+          "op": "removeobject",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT"
+          ],
+          "raw": "\tremoveobject LOCALID_PETALBURG_SCOTT"
+        },
+        {
+          "line": 542,
+          "op": "releaseall",
+          "args": [],
+          "raw": "\treleaseall"
+        },
+        {
+          "line": 543,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_Movement_ScottStartWalkLeft",
+          "line": 519,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_ExclamationMark",
+          "line": 521,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_Delay48",
+          "line": 522,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Movement_ScottApproachPlayer",
+          "line": 523,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterRight",
+          "line": 524,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Text_AreYouATrainer",
+          "line": 526,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterRight",
+          "line": 528,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Text_WellMaybeNot",
+          "line": 530,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterLeft",
+          "line": 532,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Text_ImLookingForTalentedTrainers",
+          "line": 534,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_EventScript_ScottExit0",
+          "line": 536,
+          "op": "call_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_EventScript_ScottExit1",
+          "line": 537,
+          "op": "call_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_EventScript_ScottExit2",
+          "line": 538,
+          "op": "call_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_EventScript_ScottExit3",
+          "line": 539,
+          "op": "call_if_eq",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_Scott0": {
+      "label": "PetalburgCity_EventScript_Scott0",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 486,
+      "endLine": 493,
+      "sha256": "ea82e4ca19a526da9f9a6baedea67e88dfba70bf456db1ce1665805fbfa4f97c",
+      "raw": "PetalburgCity_EventScript_Scott0::\n\tlockall\n\taddobject LOCALID_PETALBURG_SCOTT\n\tsetvar VAR_0x8008, 0\n\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 10\n\tgoto PetalburgCity_EventScript_Scott\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 487,
+          "op": "lockall",
+          "args": [],
+          "raw": "\tlockall"
+        },
+        {
+          "line": 488,
+          "op": "addobject",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT"
+          ],
+          "raw": "\taddobject LOCALID_PETALBURG_SCOTT"
+        },
+        {
+          "line": 489,
+          "op": "setvar",
+          "args": [
+            "VAR_0x8008",
+            "0"
+          ],
+          "raw": "\tsetvar VAR_0x8008, 0"
+        },
+        {
+          "line": 490,
+          "op": "setobjectxy",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "13",
+            "10"
+          ],
+          "raw": "\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 10"
+        },
+        {
+          "line": 491,
+          "op": "goto",
+          "args": [
+            "PetalburgCity_EventScript_Scott"
+          ],
+          "raw": "\tgoto PetalburgCity_EventScript_Scott"
+        },
+        {
+          "line": 492,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_EventScript_Scott",
+          "line": 491,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_Scott1": {
+      "label": "PetalburgCity_EventScript_Scott1",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 494,
+      "endLine": 501,
+      "sha256": "54f351b8191fb733f9def06315f178945d72203ae47a0bcc4edb64e37663d1ff",
+      "raw": "PetalburgCity_EventScript_Scott1::\n\tlockall\n\taddobject LOCALID_PETALBURG_SCOTT\n\tsetvar VAR_0x8008, 1\n\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 11\n\tgoto PetalburgCity_EventScript_Scott\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 495,
+          "op": "lockall",
+          "args": [],
+          "raw": "\tlockall"
+        },
+        {
+          "line": 496,
+          "op": "addobject",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT"
+          ],
+          "raw": "\taddobject LOCALID_PETALBURG_SCOTT"
+        },
+        {
+          "line": 497,
+          "op": "setvar",
+          "args": [
+            "VAR_0x8008",
+            "1"
+          ],
+          "raw": "\tsetvar VAR_0x8008, 1"
+        },
+        {
+          "line": 498,
+          "op": "setobjectxy",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "13",
+            "11"
+          ],
+          "raw": "\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 11"
+        },
+        {
+          "line": 499,
+          "op": "goto",
+          "args": [
+            "PetalburgCity_EventScript_Scott"
+          ],
+          "raw": "\tgoto PetalburgCity_EventScript_Scott"
+        },
+        {
+          "line": 500,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_EventScript_Scott",
+          "line": 499,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_Scott2": {
+      "label": "PetalburgCity_EventScript_Scott2",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 502,
+      "endLine": 509,
+      "sha256": "8265ee7d62cb00fd2b9a0720b66f74478b1d82853d09f46853fc3d781fdc6657",
+      "raw": "PetalburgCity_EventScript_Scott2::\n\tlockall\n\taddobject LOCALID_PETALBURG_SCOTT\n\tsetvar VAR_0x8008, 2\n\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 12\n\tgoto PetalburgCity_EventScript_Scott\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 503,
+          "op": "lockall",
+          "args": [],
+          "raw": "\tlockall"
+        },
+        {
+          "line": 504,
+          "op": "addobject",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT"
+          ],
+          "raw": "\taddobject LOCALID_PETALBURG_SCOTT"
+        },
+        {
+          "line": 505,
+          "op": "setvar",
+          "args": [
+            "VAR_0x8008",
+            "2"
+          ],
+          "raw": "\tsetvar VAR_0x8008, 2"
+        },
+        {
+          "line": 506,
+          "op": "setobjectxy",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "13",
+            "12"
+          ],
+          "raw": "\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 12"
+        },
+        {
+          "line": 507,
+          "op": "goto",
+          "args": [
+            "PetalburgCity_EventScript_Scott"
+          ],
+          "raw": "\tgoto PetalburgCity_EventScript_Scott"
+        },
+        {
+          "line": 508,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_EventScript_Scott",
+          "line": 507,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_Scott3": {
+      "label": "PetalburgCity_EventScript_Scott3",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 510,
+      "endLine": 517,
+      "sha256": "053c23bdb88a6d8b39cd71785895c974862301ab7cef8c3a8a9d8d2f11134e58",
+      "raw": "PetalburgCity_EventScript_Scott3::\n\tlockall\n\taddobject LOCALID_PETALBURG_SCOTT\n\tsetvar VAR_0x8008, 3\n\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 13\n\tgoto PetalburgCity_EventScript_Scott\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 511,
+          "op": "lockall",
+          "args": [],
+          "raw": "\tlockall"
+        },
+        {
+          "line": 512,
+          "op": "addobject",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT"
+          ],
+          "raw": "\taddobject LOCALID_PETALBURG_SCOTT"
+        },
+        {
+          "line": 513,
+          "op": "setvar",
+          "args": [
+            "VAR_0x8008",
+            "3"
+          ],
+          "raw": "\tsetvar VAR_0x8008, 3"
+        },
+        {
+          "line": 514,
+          "op": "setobjectxy",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "13",
+            "13"
+          ],
+          "raw": "\tsetobjectxy LOCALID_PETALBURG_SCOTT, 13, 13"
+        },
+        {
+          "line": 515,
+          "op": "goto",
+          "args": [
+            "PetalburgCity_EventScript_Scott"
+          ],
+          "raw": "\tgoto PetalburgCity_EventScript_Scott"
+        },
+        {
+          "line": 516,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_EventScript_Scott",
+          "line": 515,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_ScottExit0": {
+      "label": "PetalburgCity_EventScript_ScottExit0",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 545,
+      "endLine": 550,
+      "sha256": "1e730019ac8986e0d2f494c7c9c44fa56b5cc8b303b217d4f5357c821f1e83aa",
+      "raw": "PetalburgCity_EventScript_ScottExit0::\n\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit0\n\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit0\n\twaitmovement 0\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 546,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "PetalburgCity_Movement_PlayerWatchScottExit0"
+          ],
+          "raw": "\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit0"
+        },
+        {
+          "line": 547,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "PetalburgCity_Movement_ScottExit0"
+          ],
+          "raw": "\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit0"
+        },
+        {
+          "line": 548,
+          "op": "waitmovement",
+          "args": [
+            "0"
+          ],
+          "raw": "\twaitmovement 0"
+        },
+        {
+          "line": 549,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_Movement_PlayerWatchScottExit0",
+          "line": 546,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Movement_ScottExit0",
+          "line": 547,
+          "op": "applymovement",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_ScottExit1": {
+      "label": "PetalburgCity_EventScript_ScottExit1",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 551,
+      "endLine": 556,
+      "sha256": "a18792bb8fea2a9a2e0592d0d3e9461f91016b83560de425ae6f5bfdbb59a9c3",
+      "raw": "PetalburgCity_EventScript_ScottExit1::\n\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit1\n\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit1\n\twaitmovement 0\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 552,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "PetalburgCity_Movement_PlayerWatchScottExit1"
+          ],
+          "raw": "\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit1"
+        },
+        {
+          "line": 553,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "PetalburgCity_Movement_ScottExit1"
+          ],
+          "raw": "\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit1"
+        },
+        {
+          "line": 554,
+          "op": "waitmovement",
+          "args": [
+            "0"
+          ],
+          "raw": "\twaitmovement 0"
+        },
+        {
+          "line": 555,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_Movement_PlayerWatchScottExit1",
+          "line": 552,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Movement_ScottExit1",
+          "line": 553,
+          "op": "applymovement",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_ScottExit2": {
+      "label": "PetalburgCity_EventScript_ScottExit2",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 557,
+      "endLine": 562,
+      "sha256": "0ba9c47c32716358edd6e62002f79476e79b60a02e0080f58b183e0f0f62a447",
+      "raw": "PetalburgCity_EventScript_ScottExit2::\n\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit2\n\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit2\n\twaitmovement 0\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 558,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "PetalburgCity_Movement_PlayerWatchScottExit2"
+          ],
+          "raw": "\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit2"
+        },
+        {
+          "line": 559,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "PetalburgCity_Movement_ScottExit2"
+          ],
+          "raw": "\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit2"
+        },
+        {
+          "line": 560,
+          "op": "waitmovement",
+          "args": [
+            "0"
+          ],
+          "raw": "\twaitmovement 0"
+        },
+        {
+          "line": 561,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_Movement_PlayerWatchScottExit2",
+          "line": 558,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Movement_ScottExit2",
+          "line": 559,
+          "op": "applymovement",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_EventScript_ScottExit3": {
+      "label": "PetalburgCity_EventScript_ScottExit3",
+      "kind": "script",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 563,
+      "endLine": 568,
+      "sha256": "f2f777cba3080d790e66e607c0f0cbf04c201675c12e0ee972ec8efb2dda443e",
+      "raw": "PetalburgCity_EventScript_ScottExit3::\n\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit3\n\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit3\n\twaitmovement 0\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 564,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "PetalburgCity_Movement_PlayerWatchScottExit3"
+          ],
+          "raw": "\tapplymovement LOCALID_PLAYER, PetalburgCity_Movement_PlayerWatchScottExit3"
+        },
+        {
+          "line": 565,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PETALBURG_SCOTT",
+            "PetalburgCity_Movement_ScottExit3"
+          ],
+          "raw": "\tapplymovement LOCALID_PETALBURG_SCOTT, PetalburgCity_Movement_ScottExit3"
+        },
+        {
+          "line": 566,
+          "op": "waitmovement",
+          "args": [
+            "0"
+          ],
+          "raw": "\twaitmovement 0"
+        },
+        {
+          "line": 567,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgCity_Movement_PlayerWatchScottExit3",
+          "line": 564,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgCity_Movement_ScottExit3",
+          "line": 565,
+          "op": "applymovement",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgCity_Movement_PlayerWatchScottExit0": {
+      "label": "PetalburgCity_Movement_PlayerWatchScottExit0",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 599,
+      "endLine": 607,
+      "sha256": "7c9444f02da4e351a2ca7d8463f0b25294a98936fe0a3734127128e910039da7",
+      "raw": "PetalburgCity_Movement_PlayerWatchScottExit0:\n\tdelay_16\n\twalk_in_place_faster_down\n\tdelay_16\n\tdelay_16\n\tdelay_8\n\twalk_in_place_faster_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 600,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 601,
+          "op": "walk_in_place_faster_down",
+          "args": [],
+          "raw": "\twalk_in_place_faster_down"
+        },
+        {
+          "line": 602,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 603,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 604,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 605,
+          "op": "walk_in_place_faster_left",
+          "args": [],
+          "raw": "\twalk_in_place_faster_left"
+        },
+        {
+          "line": 606,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_PlayerWatchScottExit1": {
+      "label": "PetalburgCity_Movement_PlayerWatchScottExit1",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 623,
+      "endLine": 630,
+      "sha256": "33f6b355ce104819552e8538fdb5ed8c3dd643989808cf73269b80bbd6ece3bd",
+      "raw": "PetalburgCity_Movement_PlayerWatchScottExit1:\n\tdelay_16\n\twalk_in_place_faster_down\n\tdelay_16\n\tdelay_8\n\twalk_in_place_faster_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 624,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 625,
+          "op": "walk_in_place_faster_down",
+          "args": [],
+          "raw": "\twalk_in_place_faster_down"
+        },
+        {
+          "line": 626,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 627,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 628,
+          "op": "walk_in_place_faster_left",
+          "args": [],
+          "raw": "\twalk_in_place_faster_left"
+        },
+        {
+          "line": 629,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_PlayerWatchScottExit2": {
+      "label": "PetalburgCity_Movement_PlayerWatchScottExit2",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 646,
+      "endLine": 653,
+      "sha256": "57f04c758391d3e8e106621568c2dc39a8da67d157547d6c708ac4a988b585b5",
+      "raw": "PetalburgCity_Movement_PlayerWatchScottExit2:\n\tdelay_16\n\twalk_in_place_faster_down\n\tdelay_16\n\tdelay_8\n\twalk_in_place_faster_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 647,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 648,
+          "op": "walk_in_place_faster_down",
+          "args": [],
+          "raw": "\twalk_in_place_faster_down"
+        },
+        {
+          "line": 649,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 650,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 651,
+          "op": "walk_in_place_faster_left",
+          "args": [],
+          "raw": "\twalk_in_place_faster_left"
+        },
+        {
+          "line": 652,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_PlayerWatchScottExit3": {
+      "label": "PetalburgCity_Movement_PlayerWatchScottExit3",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 669,
+      "endLine": 676,
+      "sha256": "8381b3b3ae7d4e012fa4b1108b42866464a3bf146dc840bb3c4e7be0814b9920",
+      "raw": "PetalburgCity_Movement_PlayerWatchScottExit3:\n\tdelay_16\n\twalk_in_place_faster_up\n\tdelay_16\n\tdelay_8\n\twalk_in_place_faster_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 670,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 671,
+          "op": "walk_in_place_faster_up",
+          "args": [],
+          "raw": "\twalk_in_place_faster_up"
+        },
+        {
+          "line": 672,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 673,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 674,
+          "op": "walk_in_place_faster_left",
+          "args": [],
+          "raw": "\twalk_in_place_faster_left"
+        },
+        {
+          "line": 675,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_ScottApproachPlayer": {
+      "label": "PetalburgCity_Movement_ScottApproachPlayer",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 576,
+      "endLine": 582,
+      "sha256": "f9fff27d452c48c73e3081d435fc8599d3fcb55ee070808955a742f8269b3d47",
+      "raw": "PetalburgCity_Movement_ScottApproachPlayer:\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 577,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 578,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 579,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 580,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 581,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_ScottExit0": {
+      "label": "PetalburgCity_Movement_ScottExit0",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 583,
+      "endLine": 598,
+      "sha256": "4a91ff445d098621a0deee7ac1f3908888ba90a1a2ccaab3e0c0447d4e5a1325",
+      "raw": "PetalburgCity_Movement_ScottExit0:\n\twalk_down\n\twalk_down\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 584,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 585,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 586,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 587,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 588,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 589,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 590,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 591,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 592,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 593,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 594,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 595,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 596,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 597,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_ScottExit1": {
+      "label": "PetalburgCity_Movement_ScottExit1",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 608,
+      "endLine": 622,
+      "sha256": "d4b8bf97be2886c20b3a026660ea0781bc39467fe7b5a82b7db9d96afa716881",
+      "raw": "PetalburgCity_Movement_ScottExit1:\n\twalk_down\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 609,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 610,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 611,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 612,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 613,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 614,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 615,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 616,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 617,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 618,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 619,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 620,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 621,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_ScottExit2": {
+      "label": "PetalburgCity_Movement_ScottExit2",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 631,
+      "endLine": 645,
+      "sha256": "88b9c633642ffc8c55b06af6c56983fa1de5f003a508900827b23e76a480a996",
+      "raw": "PetalburgCity_Movement_ScottExit2:\n\twalk_down\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 632,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 633,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 634,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 635,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 636,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 637,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 638,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 639,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 640,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 641,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 642,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 643,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 644,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_ScottExit3": {
+      "label": "PetalburgCity_Movement_ScottExit3",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 654,
+      "endLine": 668,
+      "sha256": "c7c72673629ff8c47f6771feb42827486acb2988ef36452fecbb770bd5fbbd57",
+      "raw": "PetalburgCity_Movement_ScottExit3:\n\twalk_up\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 655,
+          "op": "walk_up",
+          "args": [],
+          "raw": "\twalk_up"
+        },
+        {
+          "line": 656,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 657,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 658,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 659,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 660,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 661,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 662,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 663,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 664,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 665,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 666,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 667,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Movement_ScottStartWalkLeft": {
+      "label": "PetalburgCity_Movement_ScottStartWalkLeft",
+      "kind": "movement",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 569,
+      "endLine": 575,
+      "sha256": "bd8f1d5a41ddb44205ac806d63a8c2b7fbd47444c2aa1aa8d8c50d8803a66ac0",
+      "raw": "PetalburgCity_Movement_ScottStartWalkLeft:\n\twalk_left\n\twalk_left\n\twalk_left\n\twalk_left\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 570,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 571,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 572,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 573,
+          "op": "walk_left",
+          "args": [],
+          "raw": "\twalk_left"
+        },
+        {
+          "line": 574,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgCity_Text_AreYouATrainer": {
+      "label": "PetalburgCity_Text_AreYouATrainer",
+      "kind": "text",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 726,
+      "endLine": 730,
+      "sha256": "45607b272614fdcb58b17a1bff1146d0f212a4bc6b73ead34641cdde5d839367",
+      "raw": "PetalburgCity_Text_AreYouATrainer:\n\t.string \"Excuse me!\\p\"\n\t.string \"Let me guess, from the way you're\\n\"\n\t.string \"dressed, are you a POKéMON TRAINER?$\"\n\n",
+      "instructions": [
+        {
+          "line": 727,
+          "op": ".string",
+          "args": [
+            "\"Excuse me!\\p\""
+          ],
+          "raw": "\t.string \"Excuse me!\\p\""
+        },
+        {
+          "line": 728,
+          "op": ".string",
+          "args": [
+            "\"Let me guess, from the way you're\\n\""
+          ],
+          "raw": "\t.string \"Let me guess, from the way you're\\n\""
+        },
+        {
+          "line": 729,
+          "op": ".string",
+          "args": [
+            "\"dressed, are you a POKéMON TRAINER?$\""
+          ],
+          "raw": "\t.string \"dressed, are you a POKéMON TRAINER?$\""
+        }
+      ],
+      "encodedText": "Excuse me!\\pLet me guess, from the way you're\\ndressed, are you a POKéMON TRAINER?$",
+      "text": "Excuse me!\n\nLet me guess, from the way you're\ndressed, are you a POKéMON TRAINER?",
+      "references": []
+    },
+    "PetalburgCity_Text_ImLookingForTalentedTrainers": {
+      "label": "PetalburgCity_Text_ImLookingForTalentedTrainers",
+      "kind": "text",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 738,
+      "endLine": 741,
+      "sha256": "d73b35f5e26e7015eb5aa05976dc46dd8f424349103680ee0c3b00ef98e78174",
+      "raw": "PetalburgCity_Text_ImLookingForTalentedTrainers:\n\t.string \"I'm roaming the land in search of\\n\"\n\t.string \"talented TRAINERS.\\p\"\n\t.string \"I'm sorry to have taken your time.$\"\n",
+      "instructions": [
+        {
+          "line": 739,
+          "op": ".string",
+          "args": [
+            "\"I'm roaming the land in search of\\n\""
+          ],
+          "raw": "\t.string \"I'm roaming the land in search of\\n\""
+        },
+        {
+          "line": 740,
+          "op": ".string",
+          "args": [
+            "\"talented TRAINERS.\\p\""
+          ],
+          "raw": "\t.string \"talented TRAINERS.\\p\""
+        },
+        {
+          "line": 741,
+          "op": ".string",
+          "args": [
+            "\"I'm sorry to have taken your time.$\""
+          ],
+          "raw": "\t.string \"I'm sorry to have taken your time.$\""
+        }
+      ],
+      "encodedText": "I'm roaming the land in search of\\ntalented TRAINERS.\\pI'm sorry to have taken your time.$",
+      "text": "I'm roaming the land in search of\ntalented TRAINERS.\n\nI'm sorry to have taken your time.",
+      "references": []
+    },
+    "PetalburgCity_Text_WellMaybeNot": {
+      "label": "PetalburgCity_Text_WellMaybeNot",
+      "kind": "text",
+      "path": "data/maps/PetalburgCity/scripts.inc",
+      "line": 731,
+      "endLine": 737,
+      "sha256": "5ddea1f52bccb20b9ef0f5da4ce8132494f115523d50fb80995d119756e0a1b5",
+      "raw": "PetalburgCity_Text_WellMaybeNot:\n\t.string \"… … … … … …\\p\"\n\t.string \"Well, maybe not.\\n\"\n\t.string \"Your clothes aren't all that dirty.\\p\"\n\t.string \"You're either a rookie TRAINER,\\n\"\n\t.string \"or maybe you're just an ordinary kid.$\"\n\n",
+      "instructions": [
+        {
+          "line": 732,
+          "op": ".string",
+          "args": [
+            "\"… … … … … …\\p\""
+          ],
+          "raw": "\t.string \"… … … … … …\\p\""
+        },
+        {
+          "line": 733,
+          "op": ".string",
+          "args": [
+            "\"Well, maybe not.\\n\""
+          ],
+          "raw": "\t.string \"Well, maybe not.\\n\""
+        },
+        {
+          "line": 734,
+          "op": ".string",
+          "args": [
+            "\"Your clothes aren't all that dirty.\\p\""
+          ],
+          "raw": "\t.string \"Your clothes aren't all that dirty.\\p\""
+        },
+        {
+          "line": 735,
+          "op": ".string",
+          "args": [
+            "\"You're either a rookie TRAINER,\\n\""
+          ],
+          "raw": "\t.string \"You're either a rookie TRAINER,\\n\""
+        },
+        {
+          "line": 736,
+          "op": ".string",
+          "args": [
+            "\"or maybe you're just an ordinary kid.$\""
+          ],
+          "raw": "\t.string \"or maybe you're just an ordinary kid.$\""
+        }
+      ],
+      "encodedText": "… … … … … …\\pWell, maybe not.\\nYour clothes aren't all that dirty.\\pYou're either a rookie TRAINER,\\nor maybe you're just an ordinary kid.$",
+      "text": "… … … … … …\n\nWell, maybe not.\nYour clothes aren't all that dirty.\n\nYou're either a rookie TRAINER,\nor maybe you're just an ordinary kid.",
+      "references": []
+    },
+    "PetalburgWoods_EventScript_BagFull": {
+      "label": "PetalburgWoods_EventScript_BagFull",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 78,
+      "endLine": 82,
+      "sha256": "57c72260e8bda3bb69687466dd0c9693fd97790a2bef9962e7f48cba4c22712a",
+      "raw": "PetalburgWoods_EventScript_BagFull::\n\tmsgbox PetalburgWoods_Text_YoureLoadedWithItems, MSGBOX_DEFAULT\n\tgoto PetalburgWoods_EventScript_DevonResearcherFinish\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 79,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_YoureLoadedWithItems",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_YoureLoadedWithItems, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 80,
+          "op": "goto",
+          "args": [
+            "PetalburgWoods_EventScript_DevonResearcherFinish"
+          ],
+          "raw": "\tgoto PetalburgWoods_EventScript_DevonResearcherFinish"
+        },
+        {
+          "line": 81,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgWoods_Text_YoureLoadedWithItems",
+          "line": 79,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_DevonResearcherFinish",
+          "line": 80,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgWoods_EventScript_DevonResearcherFinish": {
+      "label": "PetalburgWoods_EventScript_DevonResearcherFinish",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 83,
+      "endLine": 89,
+      "sha256": "ddaf617d967c57d65d71804f13bba632e1d6e5f292b70d077a901dbec1103fc5",
+      "raw": "PetalburgWoods_EventScript_DevonResearcherFinish::\n\tmsgbox PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro, MSGBOX_DEFAULT\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherStartExit\n\tmsgbox PetalburgWoods_Text_ICantBeWastingTime, MSGBOX_DEFAULT\n\tclosemessage\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 84,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 85,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherStartExit"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherStartExit"
+        },
+        {
+          "line": 86,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_ICantBeWastingTime",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_ICantBeWastingTime, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 87,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 88,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro",
+          "line": 84,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherStartExit",
+          "line": 85,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_ICantBeWastingTime",
+          "line": 86,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgWoods_EventScript_DevonResearcherIntro": {
+      "label": "PetalburgWoods_EventScript_DevonResearcherIntro",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 60,
+      "endLine": 65,
+      "sha256": "ee4d051766e0180f578ede88e27b93128ccd7a2d452d3b52eef64216318f0c79",
+      "raw": "PetalburgWoods_EventScript_DevonResearcherIntro::\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherLookAround\n\tmsgbox PetalburgWoods_Text_NotAOneToBeFound, MSGBOX_DEFAULT\n\tclosemessage\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 61,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherLookAround"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherLookAround"
+        },
+        {
+          "line": 62,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_NotAOneToBeFound",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_NotAOneToBeFound, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 63,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 64,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherLookAround",
+          "line": 61,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_NotAOneToBeFound",
+          "line": 62,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgWoods_EventScript_DevonResearcherLeft": {
+      "label": "PetalburgWoods_EventScript_DevonResearcherLeft",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 4,
+      "endLine": 31,
+      "sha256": "6059561634fced8dc729a69d0305e50b8c0f9d96e56a4802285089a33e25afc4",
+      "raw": "PetalburgWoods_EventScript_DevonResearcherLeft::\n\tlockall\n\tcall PetalburgWoods_EventScript_DevonResearcherIntro\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft\n\tmsgbox PetalburgWoods_Text_HaveYouSeenShroomish, MSGBOX_DEFAULT\n\tclosemessage\n\tplaybgm MUS_ENCOUNTER_AQUA, FALSE\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaEntrance\n\tmsgbox PetalburgWoods_Text_IWasGoingToAmbushYou, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaApproachResearcherLeft\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, Common_Movement_WalkInPlaceFasterUp\n\tmsgbox PetalburgWoods_Text_HandOverThosePapers, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft\n\tmsgbox PetalburgWoods_Text_YouHaveToHelpMe, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaApproachPlayer\n\tmsgbox PetalburgWoods_Text_NoOneCrossesTeamAqua, MSGBOX_DEFAULT\n\ttrainerbattle_no_intro TRAINER_GRUNT_PETALBURG_WOODS, PetalburgWoods_Text_YoureKiddingMe\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaBackOff\n\tcall PetalburgWoods_EventScript_DevonResearcherPostBattle\n\tapplymovement LOCALID_PLAYER, PetalburgWoods_Movement_WatchResearcherLeave\n\tapplymovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherExitLeft\n\twaitmovement 0\n\tgoto PetalburgWoods_EventScript_RemoveDevonResearcher\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 5,
+          "op": "lockall",
+          "args": [],
+          "raw": "\tlockall"
+        },
+        {
+          "line": 6,
+          "op": "call",
+          "args": [
+            "PetalburgWoods_EventScript_DevonResearcherIntro"
+          ],
+          "raw": "\tcall PetalburgWoods_EventScript_DevonResearcherIntro"
+        },
+        {
+          "line": 7,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft"
+        },
+        {
+          "line": 8,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_HaveYouSeenShroomish",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_HaveYouSeenShroomish, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 9,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 10,
+          "op": "playbgm",
+          "args": [
+            "MUS_ENCOUNTER_AQUA",
+            "FALSE"
+          ],
+          "raw": "\tplaybgm MUS_ENCOUNTER_AQUA, FALSE"
+        },
+        {
+          "line": 11,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaEntrance"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaEntrance"
+        },
+        {
+          "line": 12,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_IWasGoingToAmbushYou",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_IWasGoingToAmbushYou, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 13,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 14,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaApproachResearcherLeft"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaApproachResearcherLeft"
+        },
+        {
+          "line": 15,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "Common_Movement_WalkInPlaceFasterUp"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, Common_Movement_WalkInPlaceFasterUp"
+        },
+        {
+          "line": 16,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_HandOverThosePapers",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_HandOverThosePapers, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 17,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 18,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft"
+        },
+        {
+          "line": 19,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_YouHaveToHelpMe",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_YouHaveToHelpMe, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 20,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 21,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaApproachPlayer"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaApproachPlayer"
+        },
+        {
+          "line": 22,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_NoOneCrossesTeamAqua",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_NoOneCrossesTeamAqua, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 23,
+          "op": "trainerbattle_no_intro",
+          "args": [
+            "TRAINER_GRUNT_PETALBURG_WOODS",
+            "PetalburgWoods_Text_YoureKiddingMe"
+          ],
+          "raw": "\ttrainerbattle_no_intro TRAINER_GRUNT_PETALBURG_WOODS, PetalburgWoods_Text_YoureKiddingMe"
+        },
+        {
+          "line": 24,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaBackOff"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaBackOff"
+        },
+        {
+          "line": 25,
+          "op": "call",
+          "args": [
+            "PetalburgWoods_EventScript_DevonResearcherPostBattle"
+          ],
+          "raw": "\tcall PetalburgWoods_EventScript_DevonResearcherPostBattle"
+        },
+        {
+          "line": 26,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "PetalburgWoods_Movement_WatchResearcherLeave"
+          ],
+          "raw": "\tapplymovement LOCALID_PLAYER, PetalburgWoods_Movement_WatchResearcherLeave"
+        },
+        {
+          "line": 27,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherExitLeft"
+          ],
+          "raw": "\tapplymovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherExitLeft"
+        },
+        {
+          "line": 28,
+          "op": "waitmovement",
+          "args": [
+            "0"
+          ],
+          "raw": "\twaitmovement 0"
+        },
+        {
+          "line": 29,
+          "op": "goto",
+          "args": [
+            "PetalburgWoods_EventScript_RemoveDevonResearcher"
+          ],
+          "raw": "\tgoto PetalburgWoods_EventScript_RemoveDevonResearcher"
+        },
+        {
+          "line": 30,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgWoods_EventScript_DevonResearcherIntro",
+          "line": 6,
+          "op": "call",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft",
+          "line": 7,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_HaveYouSeenShroomish",
+          "line": 8,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaEntrance",
+          "line": 11,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_IWasGoingToAmbushYou",
+          "line": 12,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaApproachResearcherLeft",
+          "line": 14,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterUp",
+          "line": 15,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_HandOverThosePapers",
+          "line": 16,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft",
+          "line": 18,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_YouHaveToHelpMe",
+          "line": 19,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaApproachPlayer",
+          "line": 21,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_NoOneCrossesTeamAqua",
+          "line": 22,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_YoureKiddingMe",
+          "line": 23,
+          "op": "trainerbattle_no_intro",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaBackOff",
+          "line": 24,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_DevonResearcherPostBattle",
+          "line": 25,
+          "op": "call",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_WatchResearcherLeave",
+          "line": 26,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherExitLeft",
+          "line": 27,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_RemoveDevonResearcher",
+          "line": 29,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgWoods_EventScript_DevonResearcherPostBattle": {
+      "label": "PetalburgWoods_EventScript_DevonResearcherPostBattle",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 66,
+      "endLine": 77,
+      "sha256": "39d420a7990841f1dcae9cab2fea94e74ceaa0d5033d0f220f79dcfc7ef56854",
+      "raw": "PetalburgWoods_EventScript_DevonResearcherPostBattle::\n\tmsgbox PetalburgWoods_Text_YouveGotSomeNerve, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaRunAway\n\tremoveobject LOCALID_PETALBURG_WOODS_GRUNT\n\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown\n\tmsgbox PetalburgWoods_Text_ThatWasAwfullyClose, MSGBOX_DEFAULT\n\tgiveitem ITEM_GREAT_BALL\n\tgoto_if_eq VAR_RESULT, FALSE, PetalburgWoods_EventScript_BagFull\n\tgoto PetalburgWoods_EventScript_DevonResearcherFinish\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 67,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_YouveGotSomeNerve",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_YouveGotSomeNerve, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 68,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 69,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaRunAway"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaRunAway"
+        },
+        {
+          "line": 70,
+          "op": "removeobject",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT"
+          ],
+          "raw": "\tremoveobject LOCALID_PETALBURG_WOODS_GRUNT"
+        },
+        {
+          "line": 71,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "Common_Movement_WalkInPlaceFasterDown"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown"
+        },
+        {
+          "line": 72,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_ThatWasAwfullyClose",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_ThatWasAwfullyClose, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 73,
+          "op": "giveitem",
+          "args": [
+            "ITEM_GREAT_BALL"
+          ],
+          "raw": "\tgiveitem ITEM_GREAT_BALL"
+        },
+        {
+          "line": 74,
+          "op": "goto_if_eq",
+          "args": [
+            "VAR_RESULT",
+            "FALSE",
+            "PetalburgWoods_EventScript_BagFull"
+          ],
+          "raw": "\tgoto_if_eq VAR_RESULT, FALSE, PetalburgWoods_EventScript_BagFull"
+        },
+        {
+          "line": 75,
+          "op": "goto",
+          "args": [
+            "PetalburgWoods_EventScript_DevonResearcherFinish"
+          ],
+          "raw": "\tgoto PetalburgWoods_EventScript_DevonResearcherFinish"
+        },
+        {
+          "line": 76,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgWoods_Text_YouveGotSomeNerve",
+          "line": 67,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaRunAway",
+          "line": 69,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterDown",
+          "line": 71,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_ThatWasAwfullyClose",
+          "line": 72,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_BagFull",
+          "line": 74,
+          "op": "goto_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_DevonResearcherFinish",
+          "line": 75,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgWoods_EventScript_DevonResearcherRight": {
+      "label": "PetalburgWoods_EventScript_DevonResearcherRight",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 32,
+      "endLine": 59,
+      "sha256": "87b53bae68397861f8f023bfa48cdcff8dc88e505114fc65073f30752601130d",
+      "raw": "PetalburgWoods_EventScript_DevonResearcherRight::\n\tlockall\n\tcall PetalburgWoods_EventScript_DevonResearcherIntro\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherApproachPlayerRight\n\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterLeft\n\tmsgbox PetalburgWoods_Text_HaveYouSeenShroomish, MSGBOX_DEFAULT\n\tclosemessage\n\tplaybgm MUS_ENCOUNTER_AQUA, FALSE\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaEntrance\n\tmsgbox PetalburgWoods_Text_IWasGoingToAmbushYou, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaApproachResearcherRight\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, Common_Movement_WalkInPlaceFasterUp\n\tmsgbox PetalburgWoods_Text_HandOverThosePapers, MSGBOX_DEFAULT\n\tclosemessage\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight\n\tmsgbox PetalburgWoods_Text_YouHaveToHelpMe, MSGBOX_DEFAULT\n\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterUp\n\tmsgbox PetalburgWoods_Text_NoOneCrossesTeamAqua, MSGBOX_DEFAULT\n\ttrainerbattle_no_intro TRAINER_GRUNT_PETALBURG_WOODS, PetalburgWoods_Text_YoureKiddingMe\n\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaBackOff\n\tcall PetalburgWoods_EventScript_DevonResearcherPostBattle\n\tapplymovement LOCALID_PLAYER, PetalburgWoods_Movement_WatchResearcherLeave\n\tapplymovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherExitRight\n\twaitmovement 0\n\tgoto PetalburgWoods_EventScript_RemoveDevonResearcher\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 33,
+          "op": "lockall",
+          "args": [],
+          "raw": "\tlockall"
+        },
+        {
+          "line": 34,
+          "op": "call",
+          "args": [
+            "PetalburgWoods_EventScript_DevonResearcherIntro"
+          ],
+          "raw": "\tcall PetalburgWoods_EventScript_DevonResearcherIntro"
+        },
+        {
+          "line": 35,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherApproachPlayerRight"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherApproachPlayerRight"
+        },
+        {
+          "line": 36,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "Common_Movement_WalkInPlaceFasterLeft"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterLeft"
+        },
+        {
+          "line": 37,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_HaveYouSeenShroomish",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_HaveYouSeenShroomish, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 38,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 39,
+          "op": "playbgm",
+          "args": [
+            "MUS_ENCOUNTER_AQUA",
+            "FALSE"
+          ],
+          "raw": "\tplaybgm MUS_ENCOUNTER_AQUA, FALSE"
+        },
+        {
+          "line": 40,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaEntrance"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaEntrance"
+        },
+        {
+          "line": 41,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_IWasGoingToAmbushYou",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_IWasGoingToAmbushYou, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 42,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 43,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaApproachResearcherRight"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaApproachResearcherRight"
+        },
+        {
+          "line": 44,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "Common_Movement_WalkInPlaceFasterUp"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, Common_Movement_WalkInPlaceFasterUp"
+        },
+        {
+          "line": 45,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_HandOverThosePapers",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_HandOverThosePapers, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 46,
+          "op": "closemessage",
+          "args": [],
+          "raw": "\tclosemessage"
+        },
+        {
+          "line": 47,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight"
+        },
+        {
+          "line": 48,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_YouHaveToHelpMe",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_YouHaveToHelpMe, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 49,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "Common_Movement_WalkInPlaceFasterUp"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterUp"
+        },
+        {
+          "line": 50,
+          "op": "msgbox",
+          "args": [
+            "PetalburgWoods_Text_NoOneCrossesTeamAqua",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox PetalburgWoods_Text_NoOneCrossesTeamAqua, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 51,
+          "op": "trainerbattle_no_intro",
+          "args": [
+            "TRAINER_GRUNT_PETALBURG_WOODS",
+            "PetalburgWoods_Text_YoureKiddingMe"
+          ],
+          "raw": "\ttrainerbattle_no_intro TRAINER_GRUNT_PETALBURG_WOODS, PetalburgWoods_Text_YoureKiddingMe"
+        },
+        {
+          "line": 52,
+          "op": "applywaitmovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_GRUNT",
+            "PetalburgWoods_Movement_AquaBackOff"
+          ],
+          "raw": "\tapplywaitmovement LOCALID_PETALBURG_WOODS_GRUNT, PetalburgWoods_Movement_AquaBackOff"
+        },
+        {
+          "line": 53,
+          "op": "call",
+          "args": [
+            "PetalburgWoods_EventScript_DevonResearcherPostBattle"
+          ],
+          "raw": "\tcall PetalburgWoods_EventScript_DevonResearcherPostBattle"
+        },
+        {
+          "line": 54,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PLAYER",
+            "PetalburgWoods_Movement_WatchResearcherLeave"
+          ],
+          "raw": "\tapplymovement LOCALID_PLAYER, PetalburgWoods_Movement_WatchResearcherLeave"
+        },
+        {
+          "line": 55,
+          "op": "applymovement",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE",
+            "PetalburgWoods_Movement_DevonResearcherExitRight"
+          ],
+          "raw": "\tapplymovement LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE, PetalburgWoods_Movement_DevonResearcherExitRight"
+        },
+        {
+          "line": 56,
+          "op": "waitmovement",
+          "args": [
+            "0"
+          ],
+          "raw": "\twaitmovement 0"
+        },
+        {
+          "line": 57,
+          "op": "goto",
+          "args": [
+            "PetalburgWoods_EventScript_RemoveDevonResearcher"
+          ],
+          "raw": "\tgoto PetalburgWoods_EventScript_RemoveDevonResearcher"
+        },
+        {
+          "line": 58,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "PetalburgWoods_EventScript_DevonResearcherIntro",
+          "line": 34,
+          "op": "call",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherApproachPlayerRight",
+          "line": 35,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterLeft",
+          "line": 36,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_HaveYouSeenShroomish",
+          "line": 37,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaEntrance",
+          "line": 40,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_IWasGoingToAmbushYou",
+          "line": 41,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaApproachResearcherRight",
+          "line": 43,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterUp",
+          "line": 44,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_HandOverThosePapers",
+          "line": 45,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight",
+          "line": 47,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_YouHaveToHelpMe",
+          "line": 48,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Common_Movement_WalkInPlaceFasterUp",
+          "line": 49,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_NoOneCrossesTeamAqua",
+          "line": 50,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Text_YoureKiddingMe",
+          "line": 51,
+          "op": "trainerbattle_no_intro",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_AquaBackOff",
+          "line": 52,
+          "op": "applywaitmovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_DevonResearcherPostBattle",
+          "line": 53,
+          "op": "call",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_WatchResearcherLeave",
+          "line": 54,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_Movement_DevonResearcherExitRight",
+          "line": 55,
+          "op": "applymovement",
+          "resolved": true
+        },
+        {
+          "target": "PetalburgWoods_EventScript_RemoveDevonResearcher",
+          "line": 57,
+          "op": "goto",
+          "resolved": true
+        }
+      ]
+    },
+    "PetalburgWoods_EventScript_RemoveDevonResearcher": {
+      "label": "PetalburgWoods_EventScript_RemoveDevonResearcher",
+      "kind": "script",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 90,
+      "endLine": 95,
+      "sha256": "b3f465f5b83ded134f817d306bfcdc61fedabd771dbdb47f19ada764b99f9ee1",
+      "raw": "PetalburgWoods_EventScript_RemoveDevonResearcher::\n\tremoveobject LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE\n\tsetvar VAR_PETALBURG_WOODS_STATE, 1\n\treleaseall\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 91,
+          "op": "removeobject",
+          "args": [
+            "LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE"
+          ],
+          "raw": "\tremoveobject LOCALID_PETALBURG_WOODS_DEVON_EMPLOYEE"
+        },
+        {
+          "line": 92,
+          "op": "setvar",
+          "args": [
+            "VAR_PETALBURG_WOODS_STATE",
+            "1"
+          ],
+          "raw": "\tsetvar VAR_PETALBURG_WOODS_STATE, 1"
+        },
+        {
+          "line": 93,
+          "op": "releaseall",
+          "args": [],
+          "raw": "\treleaseall"
+        },
+        {
+          "line": 94,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_AquaApproachPlayer": {
+      "label": "PetalburgWoods_Movement_AquaApproachPlayer",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 217,
+      "endLine": 220,
+      "sha256": "03734fd2fa3934b5452556e9dfd84be663b31def2f2ee12d3322a61a532a91e9",
+      "raw": "PetalburgWoods_Movement_AquaApproachPlayer:\n\twalk_down\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 218,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 219,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_AquaApproachResearcherLeft": {
+      "label": "PetalburgWoods_Movement_AquaApproachResearcherLeft",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 183,
+      "endLine": 187,
+      "sha256": "ca68705af895e84609a431779057ef07b57e1bbded9f03b30f097a7a529358c1",
+      "raw": "PetalburgWoods_Movement_AquaApproachResearcherLeft:\n\twalk_fast_down\n\twalk_fast_down\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 184,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 185,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 186,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_AquaApproachResearcherRight": {
+      "label": "PetalburgWoods_Movement_AquaApproachResearcherRight",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 204,
+      "endLine": 209,
+      "sha256": "796ba6783f4f6486357d3e764650243f5e8451d472ef16b4d80d505a16a87c14",
+      "raw": "PetalburgWoods_Movement_AquaApproachResearcherRight:\n\twalk_fast_down\n\twalk_fast_down\n\twalk_fast_down\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 205,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 206,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 207,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 208,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_AquaBackOff": {
+      "label": "PetalburgWoods_Movement_AquaBackOff",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 188,
+      "endLine": 193,
+      "sha256": "49c4dc73597fb8ad019234f9d65c8d00306d36e2defc55004d4d040164fed232",
+      "raw": "PetalburgWoods_Movement_AquaBackOff:\n\tlock_facing_direction\n\twalk_up\n\tunlock_facing_direction\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 189,
+          "op": "lock_facing_direction",
+          "args": [],
+          "raw": "\tlock_facing_direction"
+        },
+        {
+          "line": 190,
+          "op": "walk_up",
+          "args": [],
+          "raw": "\twalk_up"
+        },
+        {
+          "line": 191,
+          "op": "unlock_facing_direction",
+          "args": [],
+          "raw": "\tunlock_facing_direction"
+        },
+        {
+          "line": 192,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_AquaEntrance": {
+      "label": "PetalburgWoods_Movement_AquaEntrance",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 210,
+      "endLine": 216,
+      "sha256": "95fdeda9ac691f4262af3578d659688aa502b25f3161a24d7e6871878a12f8f8",
+      "raw": "PetalburgWoods_Movement_AquaEntrance:\n\twalk_down\n\twalk_down\n\tdelay_16\n\tdelay_16\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 211,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 212,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 213,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 214,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 215,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_AquaRunAway": {
+      "label": "PetalburgWoods_Movement_AquaRunAway",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 194,
+      "endLine": 203,
+      "sha256": "8a54d6ad88e8bb1f9cc872a912cc741cac5612da1ac1181b12d6c94b4a4abb12",
+      "raw": "PetalburgWoods_Movement_AquaRunAway:\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\tdelay_16\n\tdelay_16\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 195,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 196,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 197,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 198,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 199,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 200,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 201,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 202,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft": {
+      "label": "PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 126,
+      "endLine": 132,
+      "sha256": "9fc588bf617abd49d55c5427d00b0f73eee0cadf6e2c2a52a54ea179354e1a42",
+      "raw": "PetalburgWoods_Movement_DevonResearcherApproachPlayerLeft:\n\tdelay_16\n\tface_player\n\twalk_down\n\twalk_down\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 127,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 128,
+          "op": "face_player",
+          "args": [],
+          "raw": "\tface_player"
+        },
+        {
+          "line": 129,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 130,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 131,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherApproachPlayerRight": {
+      "label": "PetalburgWoods_Movement_DevonResearcherApproachPlayerRight",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 133,
+      "endLine": 141,
+      "sha256": "4ae79a6946c9142d330507e30424852e4164a735f78aeb7fb87d29ffd26e385c",
+      "raw": "PetalburgWoods_Movement_DevonResearcherApproachPlayerRight:\n\tdelay_16\n\tface_player\n\twalk_down\n\twalk_down\n\twalk_down\n\twalk_in_place_faster_right\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 134,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 135,
+          "op": "face_player",
+          "args": [],
+          "raw": "\tface_player"
+        },
+        {
+          "line": 136,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 137,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 138,
+          "op": "walk_down",
+          "args": [],
+          "raw": "\twalk_down"
+        },
+        {
+          "line": 139,
+          "op": "walk_in_place_faster_right",
+          "args": [],
+          "raw": "\twalk_in_place_faster_right"
+        },
+        {
+          "line": 140,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherExitLeft": {
+      "label": "PetalburgWoods_Movement_DevonResearcherExitLeft",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 115,
+      "endLine": 125,
+      "sha256": "8017576ddb632b916b16324f26f3c6038e533bb24b315109682674cba17e1bfb",
+      "raw": "PetalburgWoods_Movement_DevonResearcherExitLeft:\n\twalk_fast_right\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 116,
+          "op": "walk_fast_right",
+          "args": [],
+          "raw": "\twalk_fast_right"
+        },
+        {
+          "line": 117,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 118,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 119,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 120,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 121,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 122,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 123,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 124,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherExitRight": {
+      "label": "PetalburgWoods_Movement_DevonResearcherExitRight",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 142,
+      "endLine": 152,
+      "sha256": "ffc1b386e3ee2d011b50b39413f94878cbca11a47892c118a02e34d06df55090",
+      "raw": "PetalburgWoods_Movement_DevonResearcherExitRight:\n\twalk_fast_left\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\twalk_fast_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 143,
+          "op": "walk_fast_left",
+          "args": [],
+          "raw": "\twalk_fast_left"
+        },
+        {
+          "line": 144,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 145,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 146,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 147,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 148,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 149,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 150,
+          "op": "walk_fast_up",
+          "args": [],
+          "raw": "\twalk_fast_up"
+        },
+        {
+          "line": 151,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft": {
+      "label": "PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 159,
+      "endLine": 166,
+      "sha256": "8f3eb2e7f98ff38fcf2d885c65914f9f653e998dcb5e46164e09144f3d018ac1",
+      "raw": "PetalburgWoods_Movement_DevonResearcherFleeToPlayerLeft:\n\twalk_fast_right\n\twalk_fast_down\n\twalk_fast_down\n\twalk_fast_left\n\twalk_in_place_faster_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 160,
+          "op": "walk_fast_right",
+          "args": [],
+          "raw": "\twalk_fast_right"
+        },
+        {
+          "line": 161,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 162,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 163,
+          "op": "walk_fast_left",
+          "args": [],
+          "raw": "\twalk_fast_left"
+        },
+        {
+          "line": 164,
+          "op": "walk_in_place_faster_up",
+          "args": [],
+          "raw": "\twalk_in_place_faster_up"
+        },
+        {
+          "line": 165,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight": {
+      "label": "PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 167,
+      "endLine": 172,
+      "sha256": "2b5f3f489134d4ee3683c468f8fe5726897152a152a236e2e6b0d93bee745eb2",
+      "raw": "PetalburgWoods_Movement_DevonResearcherFleeToPlayerRight:\n\twalk_fast_down\n\twalk_fast_right\n\twalk_in_place_faster_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 168,
+          "op": "walk_fast_down",
+          "args": [],
+          "raw": "\twalk_fast_down"
+        },
+        {
+          "line": 169,
+          "op": "walk_fast_right",
+          "args": [],
+          "raw": "\twalk_fast_right"
+        },
+        {
+          "line": 170,
+          "op": "walk_in_place_faster_up",
+          "args": [],
+          "raw": "\twalk_in_place_faster_up"
+        },
+        {
+          "line": 171,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherLookAround": {
+      "label": "PetalburgWoods_Movement_DevonResearcherLookAround",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 96,
+      "endLine": 114,
+      "sha256": "f0e893cf2eec2e766279691939df1e3fff016e5c232f4d43e903686ef5947c90",
+      "raw": "PetalburgWoods_Movement_DevonResearcherLookAround:\n\tface_up\n\tdelay_16\n\tdelay_4\n\tface_right\n\tdelay_16\n\tdelay_8\n\tface_left\n\tdelay_16\n\tdelay_8\n\tface_down\n\tdelay_16\n\tface_right\n\tdelay_16\n\tdelay_8\n\tface_up\n\tdelay_16\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 97,
+          "op": "face_up",
+          "args": [],
+          "raw": "\tface_up"
+        },
+        {
+          "line": 98,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 99,
+          "op": "delay_4",
+          "args": [],
+          "raw": "\tdelay_4"
+        },
+        {
+          "line": 100,
+          "op": "face_right",
+          "args": [],
+          "raw": "\tface_right"
+        },
+        {
+          "line": 101,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 102,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 103,
+          "op": "face_left",
+          "args": [],
+          "raw": "\tface_left"
+        },
+        {
+          "line": 104,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 105,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 106,
+          "op": "face_down",
+          "args": [],
+          "raw": "\tface_down"
+        },
+        {
+          "line": 107,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 108,
+          "op": "face_right",
+          "args": [],
+          "raw": "\tface_right"
+        },
+        {
+          "line": 109,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 110,
+          "op": "delay_8",
+          "args": [],
+          "raw": "\tdelay_8"
+        },
+        {
+          "line": 111,
+          "op": "face_up",
+          "args": [],
+          "raw": "\tface_up"
+        },
+        {
+          "line": 112,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 113,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_DevonResearcherStartExit": {
+      "label": "PetalburgWoods_Movement_DevonResearcherStartExit",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 173,
+      "endLine": 182,
+      "sha256": "6233764cfb5c86110378af39e82e3b4a5bfef341e9be5ea6aedfda57e8d6be6e",
+      "raw": "PetalburgWoods_Movement_DevonResearcherStartExit:\n\twalk_in_place_faster_down\n\tdelay_16\n\tdelay_16\n\tdelay_16\n\tdelay_16\n\tdelay_16\n\tface_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 174,
+          "op": "walk_in_place_faster_down",
+          "args": [],
+          "raw": "\twalk_in_place_faster_down"
+        },
+        {
+          "line": 175,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 176,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 177,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 178,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 179,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 180,
+          "op": "face_up",
+          "args": [],
+          "raw": "\tface_up"
+        },
+        {
+          "line": 181,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Movement_WatchResearcherLeave": {
+      "label": "PetalburgWoods_Movement_WatchResearcherLeave",
+      "kind": "movement",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 153,
+      "endLine": 158,
+      "sha256": "51936cfae79cd0b580aebc30dd6cc3480ae686c783c416fa8027838700898012",
+      "raw": "PetalburgWoods_Movement_WatchResearcherLeave:\n\tdelay_16\n\tdelay_16\n\twalk_in_place_faster_up\n\tstep_end\n\n",
+      "instructions": [
+        {
+          "line": 154,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 155,
+          "op": "delay_16",
+          "args": [],
+          "raw": "\tdelay_16"
+        },
+        {
+          "line": 156,
+          "op": "walk_in_place_faster_up",
+          "args": [],
+          "raw": "\twalk_in_place_faster_up"
+        },
+        {
+          "line": 157,
+          "op": "step_end",
+          "args": [],
+          "raw": "\tstep_end"
+        }
+      ],
+      "references": []
+    },
+    "PetalburgWoods_Text_HandOverThosePapers": {
+      "label": "PetalburgWoods_Text_HandOverThosePapers",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 314,
+      "endLine": 317,
+      "sha256": "99d145fcfeabc9c66a2911912032ec6ce6ef0cfab023fc100007b099fd5d4b8f",
+      "raw": "PetalburgWoods_Text_HandOverThosePapers:\n\t.string \"You! DEVON RESEARCHER!\\p\"\n\t.string \"Hand over those papers!$\"\n\n",
+      "instructions": [
+        {
+          "line": 315,
+          "op": ".string",
+          "args": [
+            "\"You! DEVON RESEARCHER!\\p\""
+          ],
+          "raw": "\t.string \"You! DEVON RESEARCHER!\\p\""
+        },
+        {
+          "line": 316,
+          "op": ".string",
+          "args": [
+            "\"Hand over those papers!$\""
+          ],
+          "raw": "\t.string \"Hand over those papers!$\""
+        }
+      ],
+      "encodedText": "You! DEVON RESEARCHER!\\pHand over those papers!$",
+      "text": "You! DEVON RESEARCHER!\n\nHand over those papers!",
+      "references": []
+    },
+    "PetalburgWoods_Text_HaveYouSeenShroomish": {
+      "label": "PetalburgWoods_Text_HaveYouSeenShroomish",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 303,
+      "endLine": 307,
+      "sha256": "0726af244d02bc7214209a477750af7051af1e343ff0af514048b79ff4fe928d",
+      "raw": "PetalburgWoods_Text_HaveYouSeenShroomish:\n\t.string \"Hello, have you seen any POKéMON\\n\"\n\t.string \"called SHROOMISH around here?\\p\"\n\t.string \"I really love that POKéMON.$\"\n\n",
+      "instructions": [
+        {
+          "line": 304,
+          "op": ".string",
+          "args": [
+            "\"Hello, have you seen any POKéMON\\n\""
+          ],
+          "raw": "\t.string \"Hello, have you seen any POKéMON\\n\""
+        },
+        {
+          "line": 305,
+          "op": ".string",
+          "args": [
+            "\"called SHROOMISH around here?\\p\""
+          ],
+          "raw": "\t.string \"called SHROOMISH around here?\\p\""
+        },
+        {
+          "line": 306,
+          "op": ".string",
+          "args": [
+            "\"I really love that POKéMON.$\""
+          ],
+          "raw": "\t.string \"I really love that POKéMON.$\""
+        }
+      ],
+      "encodedText": "Hello, have you seen any POKéMON\\ncalled SHROOMISH around here?\\pI really love that POKéMON.$",
+      "text": "Hello, have you seen any POKéMON\ncalled SHROOMISH around here?\n\nI really love that POKéMON.",
+      "references": []
+    },
+    "PetalburgWoods_Text_ICantBeWastingTime": {
+      "label": "PetalburgWoods_Text_ICantBeWastingTime",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 356,
+      "endLine": 359,
+      "sha256": "af9e146cacc1422c070a2ddf4f78c03ae602d957b7cb082cd989c29cd78c80bd",
+      "raw": "PetalburgWoods_Text_ICantBeWastingTime:\n\t.string \"Uh-oh! It's a crisis!\\n\"\n\t.string \"I can't be wasting time!$\"\n\n",
+      "instructions": [
+        {
+          "line": 357,
+          "op": ".string",
+          "args": [
+            "\"Uh-oh! It's a crisis!\\n\""
+          ],
+          "raw": "\t.string \"Uh-oh! It's a crisis!\\n\""
+        },
+        {
+          "line": 358,
+          "op": ".string",
+          "args": [
+            "\"I can't be wasting time!$\""
+          ],
+          "raw": "\t.string \"I can't be wasting time!$\""
+        }
+      ],
+      "encodedText": "Uh-oh! It's a crisis!\\nI can't be wasting time!$",
+      "text": "Uh-oh! It's a crisis!\nI can't be wasting time!",
+      "references": []
+    },
+    "PetalburgWoods_Text_IWasGoingToAmbushYou": {
+      "label": "PetalburgWoods_Text_IWasGoingToAmbushYou",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 308,
+      "endLine": 313,
+      "sha256": "380af45f42fdc14879a6288f3c5774686eb213c5fb0515b67a2889cae9cd77af",
+      "raw": "PetalburgWoods_Text_IWasGoingToAmbushYou:\n\t.string \"I was going to ambush you, but you\\n\"\n\t.string \"had to dawdle in PETALBURG WOODS\\l\"\n\t.string \"forever, didn't you?\\p\"\n\t.string \"I got sick of waiting, so here I am!$\"\n\n",
+      "instructions": [
+        {
+          "line": 309,
+          "op": ".string",
+          "args": [
+            "\"I was going to ambush you, but you\\n\""
+          ],
+          "raw": "\t.string \"I was going to ambush you, but you\\n\""
+        },
+        {
+          "line": 310,
+          "op": ".string",
+          "args": [
+            "\"had to dawdle in PETALBURG WOODS\\l\""
+          ],
+          "raw": "\t.string \"had to dawdle in PETALBURG WOODS\\l\""
+        },
+        {
+          "line": 311,
+          "op": ".string",
+          "args": [
+            "\"forever, didn't you?\\p\""
+          ],
+          "raw": "\t.string \"forever, didn't you?\\p\""
+        },
+        {
+          "line": 312,
+          "op": ".string",
+          "args": [
+            "\"I got sick of waiting, so here I am!$\""
+          ],
+          "raw": "\t.string \"I got sick of waiting, so here I am!$\""
+        }
+      ],
+      "encodedText": "I was going to ambush you, but you\\nhad to dawdle in PETALBURG WOODS\\lforever, didn't you?\\pI got sick of waiting, so here I am!$",
+      "text": "I was going to ambush you, but you\nhad to dawdle in PETALBURG WOODS\nforever, didn't you?\n\nI got sick of waiting, so here I am!",
+      "references": []
+    },
+    "PetalburgWoods_Text_NoOneCrossesTeamAqua": {
+      "label": "PetalburgWoods_Text_NoOneCrossesTeamAqua",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 323,
+      "endLine": 329,
+      "sha256": "ffe89bf3159de188ba401eb6e435cf610c1b53903a35621c8d2986eaacf6d29f",
+      "raw": "PetalburgWoods_Text_NoOneCrossesTeamAqua:\n\t.string \"Hunh? What do you think you're doing?\\n\"\n\t.string \"What, you're going to protect him?\\p\"\n\t.string \"No one who crosses TEAM AQUA\\n\"\n\t.string \"gets any mercy, not even a kid!\\p\"\n\t.string \"Come on and battle me!$\"\n\n",
+      "instructions": [
+        {
+          "line": 324,
+          "op": ".string",
+          "args": [
+            "\"Hunh? What do you think you're doing?\\n\""
+          ],
+          "raw": "\t.string \"Hunh? What do you think you're doing?\\n\""
+        },
+        {
+          "line": 325,
+          "op": ".string",
+          "args": [
+            "\"What, you're going to protect him?\\p\""
+          ],
+          "raw": "\t.string \"What, you're going to protect him?\\p\""
+        },
+        {
+          "line": 326,
+          "op": ".string",
+          "args": [
+            "\"No one who crosses TEAM AQUA\\n\""
+          ],
+          "raw": "\t.string \"No one who crosses TEAM AQUA\\n\""
+        },
+        {
+          "line": 327,
+          "op": ".string",
+          "args": [
+            "\"gets any mercy, not even a kid!\\p\""
+          ],
+          "raw": "\t.string \"gets any mercy, not even a kid!\\p\""
+        },
+        {
+          "line": 328,
+          "op": ".string",
+          "args": [
+            "\"Come on and battle me!$\""
+          ],
+          "raw": "\t.string \"Come on and battle me!$\""
+        }
+      ],
+      "encodedText": "Hunh? What do you think you're doing?\\nWhat, you're going to protect him?\\pNo one who crosses TEAM AQUA\\ngets any mercy, not even a kid!\\pCome on and battle me!$",
+      "text": "Hunh? What do you think you're doing?\nWhat, you're going to protect him?\n\nNo one who crosses TEAM AQUA\ngets any mercy, not even a kid!\n\nCome on and battle me!",
+      "references": []
+    },
+    "PetalburgWoods_Text_NotAOneToBeFound": {
+      "label": "PetalburgWoods_Text_NotAOneToBeFound",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 299,
+      "endLine": 302,
+      "sha256": "b11dec8773572d230d364ef6ab41450cf2a0d71509c66ca22f8c9dec45983606",
+      "raw": "PetalburgWoods_Text_NotAOneToBeFound:\n\t.string \"Hmmm…\\n\"\n\t.string \"Not a one to be found…$\"\n\n",
+      "instructions": [
+        {
+          "line": 300,
+          "op": ".string",
+          "args": [
+            "\"Hmmm…\\n\""
+          ],
+          "raw": "\t.string \"Hmmm…\\n\""
+        },
+        {
+          "line": 301,
+          "op": ".string",
+          "args": [
+            "\"Not a one to be found…$\""
+          ],
+          "raw": "\t.string \"Not a one to be found…$\""
+        }
+      ],
+      "encodedText": "Hmmm…\\nNot a one to be found…$",
+      "text": "Hmmm…\nNot a one to be found…",
+      "references": []
+    },
+    "PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro": {
+      "label": "PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 351,
+      "endLine": 355,
+      "sha256": "ec3e2244b6a9fb3c1dd0a496f6845bcb7c49ef6755dfd2d266821e99e07b5874",
+      "raw": "PetalburgWoods_Text_TeamAquaAfterSomethingInRustboro:\n\t.string \"Didn't that TEAM AQUA thug say\\n\"\n\t.string \"they were after something in\\l\"\n\t.string \"RUSTBORO, too?$\"\n\n",
+      "instructions": [
+        {
+          "line": 352,
+          "op": ".string",
+          "args": [
+            "\"Didn't that TEAM AQUA thug say\\n\""
+          ],
+          "raw": "\t.string \"Didn't that TEAM AQUA thug say\\n\""
+        },
+        {
+          "line": 353,
+          "op": ".string",
+          "args": [
+            "\"they were after something in\\l\""
+          ],
+          "raw": "\t.string \"they were after something in\\l\""
+        },
+        {
+          "line": 354,
+          "op": ".string",
+          "args": [
+            "\"RUSTBORO, too?$\""
+          ],
+          "raw": "\t.string \"RUSTBORO, too?$\""
+        }
+      ],
+      "encodedText": "Didn't that TEAM AQUA thug say\\nthey were after something in\\lRUSTBORO, too?$",
+      "text": "Didn't that TEAM AQUA thug say\nthey were after something in\nRUSTBORO, too?",
+      "references": []
+    },
+    "PetalburgWoods_Text_ThatWasAwfullyClose": {
+      "label": "PetalburgWoods_Text_ThatWasAwfullyClose",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 343,
+      "endLine": 350,
+      "sha256": "ab559791b2bcec8c4aeebe1da1cf95c3c4eb51b84ee44ed606b0ef10fef7fa00",
+      "raw": "PetalburgWoods_Text_ThatWasAwfullyClose:\n\t.string \"Whew…\\n\"\n\t.string \"That was awfully close!\\p\"\n\t.string \"Thanks to you, he didn't rob me of\\n\"\n\t.string \"these important papers.\\p\"\n\t.string \"I know, I'll give you a GREAT BALL as\\n\"\n\t.string \"my thanks!$\"\n\n",
+      "instructions": [
+        {
+          "line": 344,
+          "op": ".string",
+          "args": [
+            "\"Whew…\\n\""
+          ],
+          "raw": "\t.string \"Whew…\\n\""
+        },
+        {
+          "line": 345,
+          "op": ".string",
+          "args": [
+            "\"That was awfully close!\\p\""
+          ],
+          "raw": "\t.string \"That was awfully close!\\p\""
+        },
+        {
+          "line": 346,
+          "op": ".string",
+          "args": [
+            "\"Thanks to you, he didn't rob me of\\n\""
+          ],
+          "raw": "\t.string \"Thanks to you, he didn't rob me of\\n\""
+        },
+        {
+          "line": 347,
+          "op": ".string",
+          "args": [
+            "\"these important papers.\\p\""
+          ],
+          "raw": "\t.string \"these important papers.\\p\""
+        },
+        {
+          "line": 348,
+          "op": ".string",
+          "args": [
+            "\"I know, I'll give you a GREAT BALL as\\n\""
+          ],
+          "raw": "\t.string \"I know, I'll give you a GREAT BALL as\\n\""
+        },
+        {
+          "line": 349,
+          "op": ".string",
+          "args": [
+            "\"my thanks!$\""
+          ],
+          "raw": "\t.string \"my thanks!$\""
+        }
+      ],
+      "encodedText": "Whew…\\nThat was awfully close!\\pThanks to you, he didn't rob me of\\nthese important papers.\\pI know, I'll give you a GREAT BALL as\\nmy thanks!$",
+      "text": "Whew…\nThat was awfully close!\n\nThanks to you, he didn't rob me of\nthese important papers.\n\nI know, I'll give you a GREAT BALL as\nmy thanks!",
+      "references": []
+    },
+    "PetalburgWoods_Text_YouHaveToHelpMe": {
+      "label": "PetalburgWoods_Text_YouHaveToHelpMe",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 318,
+      "endLine": 322,
+      "sha256": "4885d357043ca1ad662a93c172cb5c2cfb2ab6212d9651a9e26a262c00d8dfe2",
+      "raw": "PetalburgWoods_Text_YouHaveToHelpMe:\n\t.string \"Aiyeeeh!\\p\"\n\t.string \"You're a POKéMON TRAINER, aren't you?\\n\"\n\t.string \"You've got to help me, please!$\"\n\n",
+      "instructions": [
+        {
+          "line": 319,
+          "op": ".string",
+          "args": [
+            "\"Aiyeeeh!\\p\""
+          ],
+          "raw": "\t.string \"Aiyeeeh!\\p\""
+        },
+        {
+          "line": 320,
+          "op": ".string",
+          "args": [
+            "\"You're a POKéMON TRAINER, aren't you?\\n\""
+          ],
+          "raw": "\t.string \"You're a POKéMON TRAINER, aren't you?\\n\""
+        },
+        {
+          "line": 321,
+          "op": ".string",
+          "args": [
+            "\"You've got to help me, please!$\""
+          ],
+          "raw": "\t.string \"You've got to help me, please!$\""
+        }
+      ],
+      "encodedText": "Aiyeeeh!\\pYou're a POKéMON TRAINER, aren't you?\\nYou've got to help me, please!$",
+      "text": "Aiyeeeh!\n\nYou're a POKéMON TRAINER, aren't you?\nYou've got to help me, please!",
+      "references": []
+    },
+    "PetalburgWoods_Text_YoureKiddingMe": {
+      "label": "PetalburgWoods_Text_YoureKiddingMe",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 330,
+      "endLine": 332,
+      "sha256": "693bd600be2a13f90c0f4e33424c9e038b4a20b5322e423ec72083c5b0e29fba",
+      "raw": "PetalburgWoods_Text_YoureKiddingMe:\n\t.string \"You're kidding me! You're tough!$\"\n\n",
+      "instructions": [
+        {
+          "line": 331,
+          "op": ".string",
+          "args": [
+            "\"You're kidding me! You're tough!$\""
+          ],
+          "raw": "\t.string \"You're kidding me! You're tough!$\""
+        }
+      ],
+      "encodedText": "You're kidding me! You're tough!$",
+      "text": "You're kidding me! You're tough!",
+      "references": []
+    },
+    "PetalburgWoods_Text_YoureLoadedWithItems": {
+      "label": "PetalburgWoods_Text_YoureLoadedWithItems",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 360,
+      "endLine": 363,
+      "sha256": "c7c973584801224dd139897645d54adc81aa662e740cba7ae5bb2d16bde1acfc",
+      "raw": "PetalburgWoods_Text_YoureLoadedWithItems:\n\t.string \"You're loaded with items.\\n\"\n\t.string \"I can't give you this GREAT BALL.$\"\n\n",
+      "instructions": [
+        {
+          "line": 361,
+          "op": ".string",
+          "args": [
+            "\"You're loaded with items.\\n\""
+          ],
+          "raw": "\t.string \"You're loaded with items.\\n\""
+        },
+        {
+          "line": 362,
+          "op": ".string",
+          "args": [
+            "\"I can't give you this GREAT BALL.$\""
+          ],
+          "raw": "\t.string \"I can't give you this GREAT BALL.$\""
+        }
+      ],
+      "encodedText": "You're loaded with items.\\nI can't give you this GREAT BALL.$",
+      "text": "You're loaded with items.\nI can't give you this GREAT BALL.",
+      "references": []
+    },
+    "PetalburgWoods_Text_YouveGotSomeNerve": {
+      "label": "PetalburgWoods_Text_YouveGotSomeNerve",
+      "kind": "text",
+      "path": "data/maps/PetalburgWoods/scripts.inc",
+      "line": 333,
+      "endLine": 342,
+      "sha256": "f4c00503acdb0dd2152dfb26c445f7523adcf0bbeff92b282d4f3bc0b387ab5d",
+      "raw": "PetalburgWoods_Text_YouveGotSomeNerve:\n\t.string \"Grrr… You've got some nerve\\n\"\n\t.string \"meddling with TEAM AQUA!\\l\"\n\t.string \"Come on and battle me again!\\p\"\n\t.string \"I wish I could say that, but I'm out of\\n\"\n\t.string \"POKéMON…\\p\"\n\t.string \"And, hey, we of TEAM AQUA are also\\n\"\n\t.string \"after something in RUSTBORO.\\p\"\n\t.string \"I'll let you go today!$\"\n\n",
+      "instructions": [
+        {
+          "line": 334,
+          "op": ".string",
+          "args": [
+            "\"Grrr… You've got some nerve\\n\""
+          ],
+          "raw": "\t.string \"Grrr… You've got some nerve\\n\""
+        },
+        {
+          "line": 335,
+          "op": ".string",
+          "args": [
+            "\"meddling with TEAM AQUA!\\l\""
+          ],
+          "raw": "\t.string \"meddling with TEAM AQUA!\\l\""
+        },
+        {
+          "line": 336,
+          "op": ".string",
+          "args": [
+            "\"Come on and battle me again!\\p\""
+          ],
+          "raw": "\t.string \"Come on and battle me again!\\p\""
+        },
+        {
+          "line": 337,
+          "op": ".string",
+          "args": [
+            "\"I wish I could say that, but I'm out of\\n\""
+          ],
+          "raw": "\t.string \"I wish I could say that, but I'm out of\\n\""
+        },
+        {
+          "line": 338,
+          "op": ".string",
+          "args": [
+            "\"POKéMON…\\p\""
+          ],
+          "raw": "\t.string \"POKéMON…\\p\""
+        },
+        {
+          "line": 339,
+          "op": ".string",
+          "args": [
+            "\"And, hey, we of TEAM AQUA are also\\n\""
+          ],
+          "raw": "\t.string \"And, hey, we of TEAM AQUA are also\\n\""
+        },
+        {
+          "line": 340,
+          "op": ".string",
+          "args": [
+            "\"after something in RUSTBORO.\\p\""
+          ],
+          "raw": "\t.string \"after something in RUSTBORO.\\p\""
+        },
+        {
+          "line": 341,
+          "op": ".string",
+          "args": [
+            "\"I'll let you go today!$\""
+          ],
+          "raw": "\t.string \"I'll let you go today!$\""
+        }
+      ],
+      "encodedText": "Grrr… You've got some nerve\\nmeddling with TEAM AQUA!\\lCome on and battle me again!\\pI wish I could say that, but I'm out of\\nPOKéMON…\\pAnd, hey, we of TEAM AQUA are also\\nafter something in RUSTBORO.\\pI'll let you go today!$",
+      "text": "Grrr… You've got some nerve\nmeddling with TEAM AQUA!\nCome on and battle me again!\n\nI wish I could say that, but I'm out of\nPOKéMON…\n\nAnd, hey, we of TEAM AQUA are also\nafter something in RUSTBORO.\n\nI'll let you go today!",
+      "references": []
+    }
+  },
+  "specials": {},
+  "cFunctions": {},
+  "macros": {
+    "addobject": {
+      "path": "asm/macros/event.inc",
+      "line": 668,
+      "endLine": 677,
+      "sha256": "36bd203d25ca5a17b8db20aa5eceeb074d9b49c896b4a968b6c87ef4fc00b194",
+      "raw": "\t.macro addobject localId:req, map\n\t\t.ifb \\map\n\t\t\t.byte SCR_OP_ADDOBJECT\n\t\t\t.2byte \\localId\n\t\t.else\n\t\t\t.byte SCR_OP_ADDOBJECTAT\n\t\t\t.2byte \\localId\n\t\t\tmap \\map\n\t\t.endif\n\t.endm"
+    },
+    "applymovement": {
+      "path": "asm/macros/event.inc",
+      "line": 622,
+      "endLine": 634,
+      "sha256": "1cf2438e2bb0e91c9b7c0ecf06d0d5700c93b0588c586230f99ff52e508ddc7d",
+      "raw": "\t.macro applymovement localId:req, movements:req, map\n\t\t.ifb \\map\n\t\t\t.byte SCR_OP_APPLYMOVEMENT\n\t\t\t.2byte \\localId\n\t\t\t.4byte \\movements\n\t\t.else\n\t\t\t@ Really only useful if the object has followed from one map to another (e.g. Wally during the catching event).\n\t\t\t.byte SCR_OP_APPLYMOVEMENTAT\n\t\t\t.2byte \\localId\n\t\t\t.4byte \\movements\n\t\t\tmap \\map\n\t\t.endif\n\t.endm"
+    },
+    "applywaitmovement": {
+      "path": "asm/macros/event.inc",
+      "line": 1999,
+      "endLine": 2002,
+      "sha256": "d96bd878f96f2e046490e30f30cad16266f670f8e14655d7a2ff5e9fc19884d9",
+      "raw": "\t.macro applywaitmovement localId:req, movements:req, map\n\tapplymovement \\localId, \\movements, \\map\n\twaitmovement\n\t.endm"
+    },
+    "call": {
+      "path": "asm/macros/event.inc",
+      "line": 30,
+      "endLine": 33,
+      "sha256": "dcf524736c0145675873ecb75cde5e0722b45c400398ac82070508f4a4f03013",
+      "raw": "\t.macro call destination:req\n\t.byte SCR_OP_CALL\n\t.4byte \\destination\n\t.endm"
+    },
+    "call_if_eq": {
+      "path": "asm/macros/event.inc",
+      "line": 1858,
+      "endLine": 1860,
+      "sha256": "115fa026b03da1168d18ff8372cfb61028d0c520c9bc576daadf300b205b76d0",
+      "raw": "\t.macro call_if_eq a:req, b, c\n\ttrycompare call_if, EQUAL, \\a, \\b, \\c\n\t.endm"
+    },
+    "closemessage": {
+      "path": "asm/macros/event.inc",
+      "line": 898,
+      "endLine": 900,
+      "sha256": "d6a4768fbb60e11633cb0413ae10f88d65746125f1d0b081dd361795741f3d59",
+      "raw": "\t.macro closemessage\n\t.byte SCR_OP_CLOSEMESSAGE\n\t.endm"
+    },
+    "delay": {
+      "path": "asm/macros/event.inc",
+      "line": 316,
+      "endLine": 319,
+      "sha256": "6f599dc11f6595e56ccd236b657112a90293938a91a6d8fa2a65366b2fd1c678",
+      "raw": "\t.macro delay frames:req\n\t.byte SCR_OP_DELAY\n\t.2byte \\frames\n\t.endm"
+    },
+    "end": {
+      "path": "asm/macros/event.inc",
+      "line": 20,
+      "endLine": 22,
+      "sha256": "acbc6016bc696a1df6c90fde197c5b006f061b7478642ddc2220a7e5b76ee2f5",
+      "raw": "\t.macro end\n\t.byte SCR_OP_END\n\t.endm"
+    },
+    "giveitem": {
+      "path": "asm/macros/event.inc",
+      "line": 1947,
+      "endLine": 1951,
+      "sha256": "5ba9f6498f01bf47243ad5f0a626046cdc3d88eb78104fac47b0dfa64c5cccb2",
+      "raw": "\t.macro giveitem item:req, amount=1\n\tsetorcopyvar VAR_0x8000, \\item\n\tsetorcopyvar VAR_0x8001, \\amount\n\tcallstd STD_OBTAIN_ITEM\n\t.endm"
+    },
+    "goto": {
+      "path": "asm/macros/event.inc",
+      "line": 36,
+      "endLine": 39,
+      "sha256": "f9f2613ff72836bcadfe10708310dce6363d820f07fe3366022c3405376a98a7",
+      "raw": "\t.macro goto destination:req\n\t.byte SCR_OP_GOTO\n\t.4byte \\destination\n\t.endm"
+    },
+    "goto_if_eq": {
+      "path": "asm/macros/event.inc",
+      "line": 1824,
+      "endLine": 1826,
+      "sha256": "90dda67dd71d22bebf374b6a2474676ea656d98eb95aaaa47b8cfeb4ec818bae",
+      "raw": "\t.macro goto_if_eq a:req, b, c\n\ttrycompare goto_if, EQUAL, \\a, \\b, \\c\n\t.endm"
+    },
+    "lockall": {
+      "path": "asm/macros/event.inc",
+      "line": 903,
+      "endLine": 905,
+      "sha256": "f2008a75b566cbae228acaeacfda01412a936461dfde0cfdc2ba134683802cc6",
+      "raw": "\t.macro lockall\n\t.byte SCR_OP_LOCKALL\n\t.endm"
+    },
+    "msgbox": {
+      "path": "asm/macros/event.inc",
+      "line": 1938,
+      "endLine": 1941,
+      "sha256": "29ebbbbe73345fec87dfe875a83f1b67c9871afaa6a5c8498cfb9877399e973a",
+      "raw": "\t.macro msgbox text:req, type=MSGBOX_DEFAULT\n\tloadword 0, \\text\n\tcallstd \\type\n\t.endm"
+    },
+    "playbgm": {
+      "path": "asm/macros/event.inc",
+      "line": 381,
+      "endLine": 385,
+      "sha256": "6edc45ef8eec04fcc9a35273e6fc51fa9aa62d9c26822c6a37110b751b20c774",
+      "raw": "\t.macro playbgm song:req, save_song:req\n\t.byte SCR_OP_PLAYBGM\n\t.2byte \\song\n\t.byte \\save_song\n\t.endm"
+    },
+    "playse": {
+      "path": "asm/macros/event.inc",
+      "line": 358,
+      "endLine": 361,
+      "sha256": "0534510cb78710fd4c28599f558579d9f410415e8e6d247fef60a32c3b0b5bb5",
+      "raw": "\t.macro playse song:req\n\t.byte SCR_OP_PLAYSE\n\t.2byte \\song\n\t.endm"
+    },
+    "releaseall": {
+      "path": "asm/macros/event.inc",
+      "line": 913,
+      "endLine": 915,
+      "sha256": "5035494c421f6b7f0fe87b76003cdad07f39d8b008e9cf9accde280558fc613b",
+      "raw": "\t.macro releaseall\n\t.byte SCR_OP_RELEASEALL\n\t.endm"
+    },
+    "removeobject": {
+      "path": "asm/macros/event.inc",
+      "line": 654,
+      "endLine": 663,
+      "sha256": "f69507e4aae1b65460dfc2ad97ffe8dc48a156822e0077a789c55d4bc7a3a6a8",
+      "raw": "\t.macro removeobject localId:req, map\n\t\t.ifb \\map\n\t\t\t.byte SCR_OP_REMOVEOBJECT\n\t\t\t.2byte \\localId\n\t\t.else\n\t\t\t.byte SCR_OP_REMOVEOBJECTAT\n\t\t\t.2byte \\localId\n\t\t\tmap \\map\n\t\t.endif\n\t.endm"
+    },
+    "return": {
+      "path": "asm/macros/event.inc",
+      "line": 25,
+      "endLine": 27,
+      "sha256": "15f317c94a34aa1c3cc1188a48c117482749fa2381ccce39c442f9b16d9c26bf",
+      "raw": "\t.macro return\n\t.byte SCR_OP_RETURN\n\t.endm"
+    },
+    "setobjectxy": {
+      "path": "asm/macros/event.inc",
+      "line": 680,
+      "endLine": 685,
+      "sha256": "27a08c811357dcfe4c5a0cfccec843aec494076bbf6852de2abd9932a0dc9098",
+      "raw": "\t.macro setobjectxy localId:req, x:req, y:req\n\t.byte SCR_OP_SETOBJECTXY\n\t.2byte \\localId\n\t.2byte \\x\n\t.2byte \\y\n\t.endm"
+    },
+    "setvar": {
+      "path": "asm/macros/event.inc",
+      "line": 153,
+      "endLine": 160,
+      "sha256": "7e5dde98df24dfc1f63cac84a9f97b6ea5a26b7ef050170d378f1b4a62e94fba",
+      "raw": "\t.macro setvar destination:req, value:req, warn=TRUE\n\t.if \\warn && ((\\value >= VARS_START && \\value <= VARS_END) || (\\value >= SPECIAL_VARS_START && \\value <= SPECIAL_VARS_END))\n\t.warning \"setvar with a value that might be a VAR_ constant; did you mean copyvar instead?\"\n\t.endif\n\t.byte SCR_OP_SETVAR\n\t.2byte \\destination\n\t.2byte \\value\n\t.endm"
+    },
+    "trainerbattle_no_intro": {
+      "path": "asm/macros/event.inc",
+      "line": 821,
+      "endLine": 823,
+      "sha256": "c3893bf0b926ea80a4f0697eeffacb540859189e1cd04115a237f36ca432cb0c",
+      "raw": "\t.macro trainerbattle_no_intro trainer:req, lose_text:req\n\ttrainerbattle TRAINER_BATTLE_SINGLE_NO_INTRO_TEXT, \\trainer, LOCALID_NONE, \\lose_text\n\t.endm"
+    },
+    "waitmovement": {
+      "path": "asm/macros/event.inc",
+      "line": 640,
+      "endLine": 649,
+      "sha256": "dea4d86ffebdcd52f6517d94b25149bc04d8015d95c662bc4bd3ad0279f46957",
+      "raw": "\t.macro waitmovement localId=LOCALID_NONE, map\n\t\t.ifb \\map\n\t\t\t.byte SCR_OP_WAITMOVEMENT\n\t\t\t.2byte \\localId\n\t\t.else\n\t\t\t.byte SCR_OP_WAITMOVEMENTAT\n\t\t\t.2byte \\localId\n\t\t\tmap \\map\n\t\t.endif\n\t.endm"
+    }
+  },
+  "inputs": {
+    "asm/macros/event.inc": "e08811cb8989f54e0d68659b3022b3b57dad281c4565e011e0da02ef852c023c",
+    "data/maps/PetalburgCity/map.json": "0018ee193173c55b295f46a11a82dad9db0f37e7717a18261efc587c71d7d20e",
+    "data/maps/PetalburgCity/scripts.inc": "ed77dad581c779f22f7bcf0ea0dea565f1efcd188c2cc889cfffb1f9600913c8",
+    "data/maps/PetalburgWoods/map.json": "31038be29e39c493a1e3cdf74a7cccaae7f9d024e55112973528813b5d24b45a",
+    "data/maps/PetalburgWoods/scripts.inc": "90434183cd91da5829a4b7d4c9023b7ad2c33b17db101ab01e07574845532968",
+    "data/maps/Route104/map.json": "a508508e63e83ad350d6dec54ce5ddba8305e51215f477bb035d21a532994d9a",
+    "data/scripts/movement.inc": "0d78c1ff325b75cdb7c1189449e5bdf1d3ea9ab875cceae4981e9a6aaf734757"
+  },
+  "unresolved": []
+}

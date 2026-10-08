@@ -14,7 +14,7 @@ import { PresentationRegistry } from "../src/presentation/effect-registry.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { Timeline } from "../src/engine/timeline.js";
 import { PluginHost } from "../src/engine/extensions/plugin-host.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 
 const track = { effect: "glow", anchor: "targets", start: 0, end: 1 };
 const frames = [

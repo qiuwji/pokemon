@@ -17,8 +17,9 @@ import { Random, createMonster } from "../src/engine/model.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { Timeline } from "../src/engine/timeline.js";
 import { BattleSession } from "../src/engine/battle-session.js";
-import { TRAINERS, createTrainerTeam } from "../src/packs/emerald/trainers.js";
-import { battleOutcome } from "../src/packs/emerald/story.js";
+import { TRAINERS } from "../src/packs/emerald/trainers.js";
+import { createTrainerTeam } from "../src/engine/trainer-encounters.js";
+import { battleOutcome } from "../src/game/emerald/assembly/story-queries.js";
 import {
   emptyStoryProgress,
   grantReward,
@@ -421,7 +422,7 @@ test("Invalid battle construction precedes transition, and failed exit releases 
 
 test("Save validation rejects missing or duplicated creature identities and missing story ledger", async () => {
   const { validateSave } = await import(
-    "../src/packs/emerald/save-contract.js"
+    "../src/game/emerald/assembly/save-contract.js"
   );
   const { party } = setup();
   const state = {

@@ -17,12 +17,12 @@ import { createItemService } from "../src/engine/items.js";
 import { objectSchema } from "../src/engine/extensions/values.js";
 import { Battle } from "../src/engine/battle.js";
 import { createMonster } from "../src/engine/model.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
-import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
-import { createBagInterface } from "../src/packs/emerald/bag-interface.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
+import { createEmeraldCommandFacade } from "../src/game/emerald/commands/command-facade.js";
+import { createBagInterface } from "../src/ui/emerald/bag-interface.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
@@ -444,7 +444,7 @@ test("Plugin content composes a new key item with a registered field action and 
 });
 
 test("Gen III fishing distinguishes shore elevations, surfable water and bridge edges without consuming RNG", async () => {
-  const { gen3CanFish } = await import("../src/engine/rules/gen3/fishing.js");
+  const { gen3CanFish } = await import("../src/packs/emerald/fishing.js");
   const shore = {
     mode: "walk",
     underwater: false,

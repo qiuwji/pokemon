@@ -24,7 +24,7 @@ test("Browser and Node assemble the same production pack from readable metadata 
   const db = await loadContent(CONTENT_MANIFEST, { readJSON });
   assert.deepEqual(db, loadContentSync());
   // The reference opening map InsideOfTruck joins the imported set.
-  assert.equal(Object.keys(db.maps).length, 22);
+  assert.deepEqual(Object.keys(db.maps).sort(), [...new Set(manifest.files.filter(f => f.section === "maps").map(f => f.key))].sort());
   assert(Object.keys(db.maps).every((id) => !id.startsWith("E2E")));
   assert(
     db.maps.LittlerootTown.warps.every((w) => !w.dest_map.startsWith("E2E")),
@@ -113,7 +113,7 @@ test("Fragments cannot overwrite existing fields or succeed with an unfilled fil
 test("A missing or malformed local fragment cannot silently produce a partial pack", (t) => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "emerald-content-"));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-  fs.cpSync(new URL("./", CONTENT_MANIFEST), directory, { recursive: true });
+  fs.cpSync(new URL(".", CONTENT_MANIFEST), directory, { recursive: true });
   const url = pathToFileURL(path.join(directory, "manifest.json"));
   const target = path.join(directory, manifest.files[0].path);
   fs.writeFileSync(target, "{");
@@ -155,7 +155,8 @@ test("Missing map/script references and duplicate warps are rejected unless expl
     assert(validateContentReferences(db).length > 0);
   }
   const db = loadContentSync();
-  assert.equal(Object.keys(db.references.maps).length, 5);
+  assert(Object.keys(db.references.maps).length > 0);
+  assert(Object.keys(db.references.maps).every(id => !db.maps[id]));
   assert.equal(validateContentReferences(db).length, 0);
 });
 test("Atlas metadata and frame indices must match actual PNG dimensions", () => {

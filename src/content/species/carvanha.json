@@ -1,0 +1,81 @@
+{
+  "name": "利牙鱼",
+  "dex": 318,
+  "types": [
+    "water",
+    "dark"
+  ],
+  "stats": {
+    "hp": 45,
+    "atk": 90,
+    "def": 20,
+    "spa": 65,
+    "spd": 20,
+    "spe": 65
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 1,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 225,
+  "expYield": 88,
+  "growth": "slow",
+  "abilities": [
+    "rough_skin"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "water_2"
+  ],
+  "eggCycles": 20,
+  "friendship": 35,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "leer"
+    },
+    {
+      "level": 1,
+      "move": "bite"
+    },
+    {
+      "level": 13,
+      "move": "focus_energy"
+    },
+    {
+      "level": 16,
+      "move": "scary_face"
+    },
+    {
+      "level": 22,
+      "move": "crunch"
+    },
+    {
+      "level": 28,
+      "move": "screech"
+    },
+    {
+      "level": 31,
+      "move": "take_down"
+    },
+    {
+      "level": 37,
+      "move": "swagger"
+    },
+    {
+      "level": 43,
+      "move": "agility"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 7,
+      "move": "rage"
+    }
+  ]
+}

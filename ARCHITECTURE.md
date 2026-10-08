@@ -10,6 +10,8 @@
 
 开场业务按地区bundle拆在content/stories：车内、未白镇、玩家家、邻居家、跑步鞋各自维护条件与命令；opening-objects只声明条件演员和原生local ID。性别/身份、时钟提交和声音等待分别由所属应用服务协调。FieldSession在已落地的门格先允许坐标剧情接管，再执行warp；NPC场景pin在控制期保持对象引用，FieldDirector按注入时钟等待移动截止点。原作门动画是visit视觉metatile，不改通行与传送；表盘是纯取样，UI只提交已确认的时间。具体合同见[剧情语言](docs/engine/story/STORY_LANGUAGE.md)，来源和验收边界见[开场切片](docs/regions/LITTLEROOT_OPENING.md)。
 
+作物生命周期与钓鱼会话归`game/emerald/domain`，树果与钓鱼政策归`packs/emerald`；应用层协调库存、遇敌与保存。engine只提供时间、野外行动事务、内容注册和通用存档依赖收集端口，不读取作物状态或解释钓鱼结果。注册种类、遭遇渠道与存档字段保持兼容。
+
 ## 层次与依赖方向
 
 ```text
@@ -32,21 +34,28 @@ src/
     save-store.js                当前版本存储、原文保护，无迁移链
     contracts.d.ts               公开类型合同
   presentation/                  快照/语义事件 → 纯取样与演出帧
-    battle-director.js           战斗导演及注册的事件演出
-    effect-registry.js           可注册效果与招式脚本
+    battle-director.js           语义事件、消息和展示状态的交接
+    battle-clip-compiler.js      有限片段准备，输出不可变帧
+    frame-sequence.js           统一帧播放器
+    effect-registry.js           启动注册、选择及严格编译边界
     scene-director.js            场景时钟和状态
     *-canvas.js                  消费演出帧的 Canvas 绘制器
   adapters/                      浏览器输入、Canvas/DOM、存储与真实资源音频
-  packs/emerald/                 原作规则配置、剧情、地图业务与页面
-    adventure.js                 内容配置、应用装配、生命周期和忙碌聚合
-    application/composition.js   25 个应用服务的有限依赖装配
-    application/public-ports.js  当前宿主 API 的显式字段/方法所有权表
-    application/*-application.js 按领域拥有会话、协调用例
-    extensions.js                通用插件合同的本作校验/默认注册
-    interface.js / ui-shell.js   页面装配与共用交互基础设施
-    *-interface.js               独立页面，只查询和提交命令
-    ui/*-view.js                 原作页面纯格式化/坐标政策；native-pages.css显示
-    battle-audio.js              语义快照到音效时间点，不参与规则
+  packs/emerald/                 原作内容、规则政策、资源声明与有限帧编排
+    battle/                      原作阶段/招式内容，使用公开编排能力
+    story/                       地区事件、条件、原生角色与剧情描述
+    battle-audio.js / map-music.js 语义快照到声音政策，不构造播放器
+  game/emerald/                  本作宿主集成，消费内容并注入内核能力
+    adventure.js                 生命周期和忙碌聚合的薄门面
+    assembly/                    规则/演出/保存/剧情服务的具体装配
+    application/                 用例协调、有限依赖端口和状态所有者
+    domain/                      本作玩法服务：作物生命周期、钓鱼会话
+    commands/                    校验命令的适配及事务接线
+    presentation/                门/战斗转场/地图音乐的本作宿主接线
+  ui/emerald/                    原作浏览器页面和共用交互基础设施
+    interface.js / ui-shell.js   页面装配与DOM生命周期
+    *-interface.js               页面控制者，只查询和提交命令
+    ui/                          视图、原作布局与CSS
   content/manifest.json          分类数据装配清单；地图属性/网格分离
   fixtures/                      显式测试环境的独立地图，不进入正式清单
   plugins/catalog.json           受信任插件装配配置，不在app逐个接线
@@ -65,11 +74,11 @@ flowchart TD
   Directors --> Adapters[Canvas / DOM / 真实资源 Audio]
 ```
 
-`engine/` 不导入 `packs/`、`presentation/`、`adapters/`；表现层不重新计算伤害、命中或捕捉，不调用游戏随机数。具体规则注入领域服务，视觉注入注册表，跨应用调用通过组合入口提供的有限端口。架构测试检查依赖方向、模块引用和所有 UI 页面写状态的边界。
+`engine/` 不导入 `packs/`、`presentation/`、`adapters/`；表现层不重新计算伤害、命中或捕捉，不调用游戏随机数。具体规则注入领域服务，视觉注入注册表，跨应用调用通过组合入口提供的有限端口。内容包只能导入其他内容和`engine/extensions/`公开创作能力，不导入具体服务、表现实现或DOM适配器。服务构造归`game/emerald/assembly`，浏览器UI归`ui/emerald`；没有在原pack位置保留转出口。公开创作模块只提供纯政策/描述工具，不将注册器或宿主服务整体转出。架构测试检查这些依赖方向、模块引用和所有 UI 页面写状态的边界。
 
 ## 应用服务与状态所有权
 
-`adventure.js` 是组合入口；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md)。
+`game/emerald/adventure.js` 是组合入口；逐方法转发已移出，不能在入口增加新用例。`public-ports.js` 冻结列出每个公开方法/字段的所属服务，没有旧版本回退或自动暴露实例全部方法。方法保留服务接收者，调用时读取当前实例；UI 命令代理继续将操作路由到同一个 CommandBus。详见 [docs/architecture/APPLICATION.md](docs/architecture/APPLICATION.md)。
 
 - SaveApplication 唯一持有持久 state、RNG 和保存保护；公共 state 读取同一对象。
 - 其他服务各自拥有领域会话：世界、战斗、成长、时间、树果、Actor、机关、移动和野外行动。服务不导入兄弟服务，不收到完整 game 引用。

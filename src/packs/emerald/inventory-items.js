@@ -1,5 +1,10 @@
 import { ITEM_METADATA } from "../../../generated/engine/rules/gen3/item-metadata.js";
 const names = {
+  wailmer_pail: "吼吼鲸喷壶",
+  paralyze_heal: "解麻药", awakening: "解眠药", escape_rope: "离洞绳", repel: "除虫喷雾",
+  x_speed: "速度强化", x_attack: "攻击强化", x_defend: "防御强化",
+  orange_mail: "橙色邮件", harbor_mail: "港口邮件", timer_ball: "计时球", repeat_ball: "重复球",
+  pinap_berry: "凰梨果",
   berry_juice: "树果汁",
   cheri_berry: "樱子果",
   chesto_berry: "零余果",

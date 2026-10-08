@@ -8,9 +8,9 @@
     "hp": 28,
     "atk": 25,
     "def": 25,
-    "spe": 40,
     "spa": 45,
-    "spd": 35
+    "spd": 35,
+    "spe": 40
   },
   "catchRate": 235,
   "expYield": 70,
@@ -24,9 +24,9 @@
     "hp": 0,
     "atk": 0,
     "def": 0,
-    "spe": 0,
     "spa": 1,
-    "spd": 0
+    "spd": 0,
+    "spe": 0
   },
   "learnset": [
     {
@@ -86,5 +86,7 @@
     "double_team",
     "rest",
     "thief"
-  ]
+  ],
+  "genderless": false,
+  "unavailableLearnset": []
 }

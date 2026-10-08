@@ -60,7 +60,7 @@ result 是具体命令的 JSON 结果，示例中的文字不构成稳定协议�
 | 战斗 | core.battle.action | kind/index/item/seat/actor/target/slot；battle；多席位行动用同一规则入口 |
 | 队伍 | core.party.lead | uid；setLead |
 | 道具 | core.item.use / equip / buy | uid/item/slot，装备可 remove:true；useItem/equip/buyItem |
-| 盒子 | core.box.deposit / withdraw / exchange | uid 或 boxUid/partyUid；storage |
+| 盒子 | core.box.deposit / withdraw / exchange / swap | uid、boxUid/partyUid 或 firstUid/secondUid；storage |
 | 育成 | core.daycare.deposit / withdraw / collect | uid 或空对象；daycare |
 | 交换 | core.trade.prepare / exchange | 空对象或 uid/partnerUid；trade |
 | 移动 | core.movement.mode / surf / fly / equipment | mode、destination 或空对象；movement |
@@ -100,3 +100,5 @@ AI产品的操作例和字段以[插件指南](../../src/plugins/ai-control/READ
 CommandDefinition.query用于声明纯同步读命令；core.query、控制查询及插件queries已标记。网络头可携带observe/observeInput（查询ID/JSON字符串）。网关在动作前验证查询资格和输入，执行后取状态；动作已经提交后观察失败只附observationError，不能把它报告为需重试的动作失败。请求指纹包含观察选项，去重复用整个结果。
 
 开发HTTP桥使用Condition在poll和result查询上最多等待25000ms，入队、结果到达、关闭和重连立即通知，等待释放互斥锁。在途poll有连接租期，不能被旧5秒短轮询活性检查误判；浏览器用AbortController取消poll。CLI使用同一结果长轮询，不固定sleep等待。传输和网关不读取领域状态或重算规则。
+
+`core.box.swap`交换两个已占用盒内位置，输入firstUid/secondUid；调用时按UID重新定位，不使用旧页面索引，失效/相同个体及战斗等不可管理队伍状态拒绝。沿用现有存储容量与个体结构；命令经storage权限后提交并保存，不支持创建永久空槽。

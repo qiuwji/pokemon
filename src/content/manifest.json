@@ -463,6 +463,11 @@
     },
     {
       "section": "stories",
+      "path": "stories/petalburg-rescue.json",
+      "key": "petalburg-rescue"
+    },
+    {
+      "section": "stories",
       "path": "stories/clock.json",
       "key": "clock"
     },
@@ -676,6 +681,639 @@
       "section": "species",
       "key": "shroomish",
       "path": "species/shroomish.json"
+    },
+    {
+      "section": "maps",
+      "key": "Route104",
+      "path": "maps/Route104/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route104",
+      "path": "maps/Route104/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgWoods",
+      "path": "maps/PetalburgWoods/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "PetalburgWoods",
+      "path": "maps/PetalburgWoods/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "Route104_MrBrineysHouse",
+      "path": "maps/Route104_MrBrineysHouse/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route104_MrBrineysHouse",
+      "path": "maps/Route104_MrBrineysHouse/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "Route104_PrettyPetalFlowerShop",
+      "path": "maps/Route104_PrettyPetalFlowerShop/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route104_PrettyPetalFlowerShop",
+      "path": "maps/Route104_PrettyPetalFlowerShop/map.json"
+    },
+    {
+      "section": "tilesets",
+      "key": "general-rustboro",
+      "path": "tilesets/general-rustboro.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "building-pretty_petal_flower_shop",
+      "path": "tilesets/building-pretty_petal_flower_shop.json",
+      "generated": true
+    },
+    {
+      "section": "species",
+      "key": "magikarp",
+      "path": "species/magikarp.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_House2",
+      "path": "maps/RustboroCity_House2/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_House2",
+      "path": "maps/RustboroCity_House2/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_OceanicMuseum_2F",
+      "path": "maps/SlateportCity_OceanicMuseum_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_OceanicMuseum_2F",
+      "path": "maps/SlateportCity_OceanicMuseum_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_House1",
+      "path": "maps/DewfordTown_House1/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_House1",
+      "path": "maps/DewfordTown_House1/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_PokemonCenter_2F",
+      "path": "maps/RustboroCity_PokemonCenter_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_PokemonCenter_2F",
+      "path": "maps/RustboroCity_PokemonCenter_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_1F",
+      "path": "maps/GraniteCave_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_1F",
+      "path": "maps/GraniteCave_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_PokemonFanClub",
+      "path": "maps/SlateportCity_PokemonFanClub/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_PokemonFanClub",
+      "path": "maps/SlateportCity_PokemonFanClub/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat2_1F",
+      "path": "maps/RustboroCity_Flat2_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat2_1F",
+      "path": "maps/RustboroCity_Flat2_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_SternsShipyard_1F",
+      "path": "maps/SlateportCity_SternsShipyard_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_SternsShipyard_1F",
+      "path": "maps/SlateportCity_SternsShipyard_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_DevonCorp_1F",
+      "path": "maps/RustboroCity_DevonCorp_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_DevonCorp_1F",
+      "path": "maps/RustboroCity_DevonCorp_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_DevonCorp_3F",
+      "path": "maps/RustboroCity_DevonCorp_3F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_DevonCorp_3F",
+      "path": "maps/RustboroCity_DevonCorp_3F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_PokemonCenter_1F",
+      "path": "maps/SlateportCity_PokemonCenter_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_PokemonCenter_1F",
+      "path": "maps/SlateportCity_PokemonCenter_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown",
+      "path": "maps/DewfordTown/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown",
+      "path": "maps/DewfordTown/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_SternsShipyard_2F",
+      "path": "maps/SlateportCity_SternsShipyard_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_SternsShipyard_2F",
+      "path": "maps/SlateportCity_SternsShipyard_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_PokemonSchool",
+      "path": "maps/RustboroCity_PokemonSchool/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_PokemonSchool",
+      "path": "maps/RustboroCity_PokemonSchool/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_House1",
+      "path": "maps/RustboroCity_House1/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_House1",
+      "path": "maps/RustboroCity_House1/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity",
+      "path": "maps/SlateportCity/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity",
+      "path": "maps/SlateportCity/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_DevonCorp_2F",
+      "path": "maps/RustboroCity_DevonCorp_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_DevonCorp_2F",
+      "path": "maps/RustboroCity_DevonCorp_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat2_2F",
+      "path": "maps/RustboroCity_Flat2_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat2_2F",
+      "path": "maps/RustboroCity_Flat2_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_CuttersHouse",
+      "path": "maps/RustboroCity_CuttersHouse/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_CuttersHouse",
+      "path": "maps/RustboroCity_CuttersHouse/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity",
+      "path": "maps/RustboroCity/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity",
+      "path": "maps/RustboroCity/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_StevensRoom",
+      "path": "maps/GraniteCave_StevensRoom/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_StevensRoom",
+      "path": "maps/GraniteCave_StevensRoom/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_PokemonCenter_2F",
+      "path": "maps/SlateportCity_PokemonCenter_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_PokemonCenter_2F",
+      "path": "maps/SlateportCity_PokemonCenter_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat1_2F",
+      "path": "maps/RustboroCity_Flat1_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat1_2F",
+      "path": "maps/RustboroCity_Flat1_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_House3",
+      "path": "maps/RustboroCity_House3/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_House3",
+      "path": "maps/RustboroCity_House3/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_PokemonCenter_1F",
+      "path": "maps/RustboroCity_PokemonCenter_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_PokemonCenter_1F",
+      "path": "maps/RustboroCity_PokemonCenter_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Mart",
+      "path": "maps/RustboroCity_Mart/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Mart",
+      "path": "maps/RustboroCity_Mart/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat1_1F",
+      "path": "maps/RustboroCity_Flat1_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat1_1F",
+      "path": "maps/RustboroCity_Flat1_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_B1F",
+      "path": "maps/GraniteCave_B1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_B1F",
+      "path": "maps/GraniteCave_B1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_B2F",
+      "path": "maps/GraniteCave_B2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "GraniteCave_B2F",
+      "path": "maps/GraniteCave_B2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_PokemonCenter_1F",
+      "path": "maps/DewfordTown_PokemonCenter_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_PokemonCenter_1F",
+      "path": "maps/DewfordTown_PokemonCenter_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_Gym",
+      "path": "maps/DewfordTown_Gym/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_Gym",
+      "path": "maps/DewfordTown_Gym/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Gym",
+      "path": "maps/RustboroCity_Gym/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Gym",
+      "path": "maps/RustboroCity_Gym/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_PokemonCenter_2F",
+      "path": "maps/DewfordTown_PokemonCenter_2F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_PokemonCenter_2F",
+      "path": "maps/DewfordTown_PokemonCenter_2F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "Route116",
+      "path": "maps/Route116/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route116",
+      "path": "maps/Route116/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_House2",
+      "path": "maps/DewfordTown_House2/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_House2",
+      "path": "maps/DewfordTown_House2/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_Mart",
+      "path": "maps/SlateportCity_Mart/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_Mart",
+      "path": "maps/SlateportCity_Mart/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_Hall",
+      "path": "maps/DewfordTown_Hall/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "DewfordTown_Hall",
+      "path": "maps/DewfordTown_Hall/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "Route116_TunnelersRestHouse",
+      "path": "maps/Route116_TunnelersRestHouse/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "Route116_TunnelersRestHouse",
+      "path": "maps/Route116_TunnelersRestHouse/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_OceanicMuseum_1F",
+      "path": "maps/SlateportCity_OceanicMuseum_1F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "SlateportCity_OceanicMuseum_1F",
+      "path": "maps/SlateportCity_OceanicMuseum_1F/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RusturfTunnel",
+      "path": "maps/RusturfTunnel/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RusturfTunnel",
+      "path": "maps/RusturfTunnel/map.json"
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat2_3F",
+      "path": "maps/RustboroCity_Flat2_3F/grid.json",
+      "generated": true
+    },
+    {
+      "section": "maps",
+      "key": "RustboroCity_Flat2_3F",
+      "path": "maps/RustboroCity_Flat2_3F/map.json"
+    },
+    {
+      "section": "tilesets",
+      "key": "building-pokemon_fan_club",
+      "path": "tilesets/building-pokemon_fan_club.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "building-dewford_gym",
+      "path": "tilesets/building-dewford_gym.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "general-rusturf_tunnel",
+      "path": "tilesets/general-rusturf_tunnel.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "building-facility",
+      "path": "tilesets/building-facility.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "building-rustboro_gym",
+      "path": "tilesets/building-rustboro_gym.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "general-slateport",
+      "path": "tilesets/general-slateport.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "general-facility",
+      "path": "tilesets/general-facility.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "building-pokemon_school",
+      "path": "tilesets/building-pokemon_school.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "building-oceanic_museum",
+      "path": "tilesets/building-oceanic_museum.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "general-cave",
+      "path": "tilesets/general-cave.json",
+      "generated": true
+    },
+    {
+      "section": "tilesets",
+      "key": "general-dewford",
+      "path": "tilesets/general-dewford.json",
+      "generated": true
+    },
+    {
+      "section": "species",
+      "key": "torkoal",
+      "path": "species/torkoal.json"
+    },
+    {
+      "section": "species",
+      "key": "nosepass",
+      "path": "species/nosepass.json"
+    },
+    {
+      "section": "species",
+      "key": "geodude",
+      "path": "species/geodude.json"
+    },
+    {
+      "section": "species",
+      "key": "meditite",
+      "path": "species/meditite.json"
+    },
+    {
+      "section": "species",
+      "key": "slugma",
+      "path": "species/slugma.json"
+    },
+    {
+      "section": "species",
+      "key": "carvanha",
+      "path": "species/carvanha.json"
+    },
+    {
+      "section": "species",
+      "key": "machop",
+      "path": "species/machop.json"
+    },
+    {
+      "section": "species",
+      "key": "makuhita",
+      "path": "species/makuhita.json"
+    },
+    {
+      "section": "stories",
+      "key": "native-npcs",
+      "path": "stories/native-npcs.json"
+    },
+    {
+      "section": "stories",
+      "key": "native-signs",
+      "path": "stories/native-signs.json"
+    },
+    {
+      "section": "stories",
+      "key": "native-interactions",
+      "path": "stories/native-interactions.json"
     }
   ]
 }

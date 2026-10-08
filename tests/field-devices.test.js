@@ -12,13 +12,13 @@ import { objectSchema } from "../src/engine/extensions/values.js";
 
 import { EMERALD_FIELD_ACTIONS } from "../src/packs/emerald/field-actions.js";
 import { BEHAVIOR as B } from "../src/engine/terrain.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { FieldActionDirector } from "../src/presentation/field-action-director.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
 import { createMonster } from "../src/engine/model.js";
 const base = loadContentSync();
 const destination = { map: "Landing", x: 1, y: 1, dir: "down" };

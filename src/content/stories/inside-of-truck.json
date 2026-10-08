@@ -32,33 +32,15 @@
           },
           "then": [
             {
-              "type": "choice",
-              "name": "冒险开始",
-              "prompt": "选择你的角色。",
-              "options": [
-                {
-                  "id": "male",
-                  "label": "小悠",
-                  "commands": [
-                    {
-                      "type": "identity",
-                      "gender": "male",
-                      "name": "小悠"
-                    }
-                  ]
-                },
-                {
-                  "id": "female",
-                  "label": "小遥",
-                  "commands": [
-                    {
-                      "type": "identity",
-                      "gender": "female",
-                      "name": "小遥"
-                    }
-                  ]
-                }
-              ]
+              "type": "music",
+              "cue": "MUS_ROUTE122"
+            },
+            {
+              "type": "screen",
+              "id": "new-game"
+            },
+            {
+              "type": "music"
             }
           ],
           "else": []
@@ -279,6 +261,12 @@
     }
   },
   "sources": [
+    {
+      "label": "Task_NewGameBirchSpeech_Init / CB2_NewGameBirchSpeech_ReturnFromNamingScreen",
+      "map": "InsideOfTruck",
+      "status": "original-verified",
+      "note": "新游戏先进入独立博士介绍页面，性别/起名/确认拒绝仅更新临时草稿；原作帧序/素材驱动演出，缩小与黑屏交接成功后由应用提交身份，再执行搬家车脚本。汉化断页和视觉听音尚待用户验收。"
+    },
     {
       "label": "InsideOfTruck_EventScript_SetIntroFlagsMale",
       "map": "InsideOfTruck",

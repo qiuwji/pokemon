@@ -96,6 +96,7 @@ export class PluginRuntime {
       intents = [],
       events = [],
       feedback = [];
+    let effects;
     const manifest = this.manifests.get(owner);
     let operations = 0;
     const token = Symbol();
@@ -154,13 +155,15 @@ export class PluginRuntime {
           return !!removed;
         },
       }),
-      intent: (intent) => {
+      intent: (intent, onResult) => {
         bounded();
+        if (onResult !== undefined && typeof onResult !== "function")
+          throw new Error("Intent result callback must be synchronous");
         const value = jsonValue(intent);
         if (!manifest.permissions.includes(value.kind))
           throw new Error(`Undeclared core permission ${value.kind}`);
         this.ports.validateIntent?.(value, owner);
-        intents.push(value);
+        intents.push({ value, onResult });
       },
       emit: (type, payload = {}) => {
         bounded();
@@ -181,6 +184,7 @@ export class PluginRuntime {
     this.active = true;
     let result;
     try {
+      effects = this.ports.beginEffects?.();
       result = callSync(handler, [ctx, readOnly(input)], this.onError);
       if (result?.then)
         throw new Error("Transaction handlers must be synchronous");
@@ -188,19 +192,23 @@ export class PluginRuntime {
       if (manifest.validateData)
         this.evaluate(manifest.validateData, readOnly(draft.data));
       this.ports.state().extensions[owner] = draft;
-      for (const intent of intents) {
-        const applied = this.ports.applyIntent(intent, owner);
+      for (const { value, onResult } of intents) {
+        const applied = this.ports.applyIntent(value, owner);
         if (applied === false || applied?.ok === false)
           throw new Error(applied?.reason || "Core intent rejected");
+        if (onResult) callSync(onResult, [readOnly(applied === undefined ? null : applied)], this.onError);
       }
+      this.stateService.validate(draft, owner);
+      if (manifest.validateData) this.evaluate(manifest.validateData, readOnly(draft.data));
       result = result === undefined ? { ok: true } : jsonValue(result);
     } catch (error) {
-      checkpoint.restore();
+      try { checkpoint.restore(); } finally { effects?.rollback(); }
       throw error;
     } finally {
       this.active = false;
     }
     // Facts and effects become visible only after the whole transaction succeeds.
+    try { effects?.commit(); } catch (error) { this.onError(error); }
     for (const [type, payload] of events) this.events.emit(type, payload);
     for (const [id, payload] of feedback) {
       try {

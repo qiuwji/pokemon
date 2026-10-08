@@ -18,7 +18,7 @@ export class TravelDirector {
       carrier: true,
     };
   }
-  async fly(commit) {
+  async fly(commit, { prepare = null } = {}) {
     if (this.busy || this.transitions.busy) return false;
     const duration = this.reducedMotion() ? 100 : 720;
     const phase = (name) =>
@@ -31,7 +31,7 @@ export class TravelDirector {
         phase("arrive");
         // Land during the reveal, followed by a short settling motion.
         this.active.start = this.timeline.now() + 96;
-      });
+      }, { prepare });
       if (changed) await this.timeline.wait(Math.max(0, duration - 220));
       return changed;
     } catch (error) {

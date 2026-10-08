@@ -31,7 +31,7 @@
 5. 查询快照只读；完整个体UID随精灵而保持，不能用席位/队伍数组下标替代。插件保存自有记忆，已有队伍/背包/位置仍由原领域所有者保存。
 6. 页签、HUD及表现根据已提交事实更新。等待动画不能改变命中、伤害或奖励结果。真实UI可用性和资源音频需另做浏览器观察。
 
-公开命令/schema实际在[application-commands.js](../../src/packs/emerald/application-commands.js)，权限/意图在[extension-intents.js](../../src/packs/emerald/extension-intents.js)，注册面在[plugin-host.js](../../src/engine/extensions/plugin-host.js)。文件移动时搜索`registerEmeraldCommands`、`validateEmeraldIntent`、`class PluginHost`。网络沿同一命令协议，不提供任意脚本注入，也不因此承诺联机同步。
+公开命令/schema实际在[application-commands.js](../../src/game/emerald/commands/application-commands.js)，权限/意图在[extension-intents.js](../../src/game/emerald/commands/extension-intents.js)，注册面在[plugin-host.js](../../src/engine/extensions/plugin-host.js)。文件移动时搜索`registerEmeraldCommands`、`validateEmeraldIntent`、`class PluginHost`。网络沿同一命令协议，不提供任意脚本注入，也不因此承诺联机同步。
 
 ## 写法与代码质量
 

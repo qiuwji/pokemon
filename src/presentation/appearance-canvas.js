@@ -9,7 +9,7 @@ const PAINTERS = Object.freeze({
       p.progress,
       p.foot,
       p.moving && !p.freezeAnimation,
-      { pose: p.pose, timeMs: p.timeMs },
+      { pose: p.pose, timeMs: p.timeMs, frame: p.frame },
     ),
   image: (renderer, layer, _p, x, y) => {
     const image = renderer.assets[layer.resource];

@@ -1,9 +1,15 @@
 import { dialog, talkEvent } from "../helpers.js";
 import { healingScene } from "./scenes.js";
+import { fieldGift } from "./gifts.js";
 export const COMMON_INTERACTIONS_EVENTS = [
-  talkEvent("shop.open", "shop", () => [{ type: "shop" }]),
+  talkEvent("gift.receive", "nativeGift", (state, { object }) => fieldGift(state, object)),
+  talkEvent("shop.open", "shop", (_s, { object }) => [
+    { type:"face", actor:object.id, target:"player" },
+    dialog("emerald:dialogues.npc.shop.20"),
+    { type: "shop" },
+  ]),
   ...["heal", "healMom"].map((kind) =>
-    talkEvent("healing." + kind, kind, (s, { object }) => healingScene(object)),
+    talkEvent("healing." + kind, kind, (s, { object }) => healingScene(object, s.position.map)),
   ),
   ...["talk", "rescue"].map((kind) =>
     talkEvent("talk." + kind, kind, (_s, { object }) => [

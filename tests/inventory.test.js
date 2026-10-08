@@ -5,7 +5,7 @@ import { InventoryRegistry } from "../src/engine/inventory-registry.js";
 import { InventoryService, emptyInventory } from "../src/engine/inventory.js";
 import { GEN3_INVENTORY_POCKETS } from "../src/engine/rules/gen3/inventory.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 
 const definitions = {
   ordinary: {

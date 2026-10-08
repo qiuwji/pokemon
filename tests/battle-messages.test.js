@@ -6,7 +6,7 @@ import {
   battleMessage,
   BATTLE_MESSAGE_IDS,
 } from "../src/packs/emerald/battle-messages.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 
 test("Battle messages resolve from stable ids and format placeholders", () => {
   assert.equal(battleMessage("trainer-challenge"), "训练家发起了挑战！");

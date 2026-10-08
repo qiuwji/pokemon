@@ -2,7 +2,7 @@ import {
   calculateStats,
   experienceAt,
   healMonster,
-} from "../../engine/model.js";
+} from "../../engine/extensions/creature-content.js";
 import { battleSequence } from "../../engine/extensions/facility-templates/battle-sequence.js";
 export const EMERALD_FACILITY_ACTIVITIES = {
   "core:battle-sequence": battleSequence({ trainers: ["youngster", "youngster"], money: 240, item: "potion" }),

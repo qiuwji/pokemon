@@ -71,3 +71,9 @@ generated/plugins/emerald-audio.js                               # 一个插件�
 检查真实PCM、loop在资源范围、试听插件注册和内容选曲、安装预演不写及重复安装；受影响测试用audio-scene和插件装配例。正常游戏开启声音后的听感与固定原作对照仍必须人工听音记录，不能用音频时长或DOM代替。Skill入口见[音乐指南](../../skills/emerald-story-reconstruction/references/music-import.md)。
 
 音乐淡入淡出在 `pack.json.musicFades` 统一配置，由bundle-audio写入合并包（当前1500/1200ms）。修改该策略后重新合并即可，无需重渲染WAV；不要仅编辑生成的插件。SE不继承音乐渐变。
+
+战斗首片的SE按原作歌曲身份装入统一包，tools/audio/tracks/se-m-*.json保留来源voicegroup、音量及polyphony；帧编排调度播放。当前覆盖与未完成的cry模式/声像对照见[战斗专项](../../docs/project/BATTLE_PRESENTATION_PLAN.md)，不以WAV来源或时长代替听音验收。
+
+普通战斗结束已装入五类原胜利曲（wild/trainer/gym_leader/league/aqua_magma）；逐曲`musicFades`覆盖全包默认渐变，battle/victory曲`fadeInMs:0,fadePreviousMs:0`用于直接切曲。`fadePreviousMs`控制新曲成功解码之后旧曲的退出时长，解码失败不打断旧曲。选曲由已经播放的faint或结果演出阶段决定，不按提前结算的ended标志。音频淡出、混音/声像和cry模式与原机对照仍待人工听音。
+
+地图切换由`src/packs/emerald/map-music.js`覆盖全包默认cue渐变，按来源区分步行、骑车及warp，无需重渲染地图WAV。SE_BALL_TRAY_ENTER/BALL/EXIT已按midi.cfg装入统一包，随公开帧序列发声；声像与原机听感仍待用户验收。

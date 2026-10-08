@@ -1,0 +1,93 @@
+{
+  "name": "幕下力士",
+  "dex": 296,
+  "types": [
+    "fighting"
+  ],
+  "stats": {
+    "hp": 72,
+    "atk": 60,
+    "def": 30,
+    "spa": 20,
+    "spd": 30,
+    "spe": 25
+  },
+  "evYield": {
+    "hp": 1,
+    "atk": 0,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 180,
+  "expYield": 87,
+  "growth": "fluctuating",
+  "abilities": [
+    "thick_fat",
+    "guts"
+  ],
+  "femaleRatio": 0.25,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "focus_energy"
+    },
+    {
+      "level": 4,
+      "move": "sand_attack"
+    },
+    {
+      "level": 37,
+      "move": "belly_drum"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 10,
+      "move": "arm_thrust"
+    },
+    {
+      "level": 13,
+      "move": "vital_throw"
+    },
+    {
+      "level": 19,
+      "move": "fake_out"
+    },
+    {
+      "level": 22,
+      "move": "whirlwind"
+    },
+    {
+      "level": 28,
+      "move": "knock_off"
+    },
+    {
+      "level": 31,
+      "move": "smelling_salt"
+    },
+    {
+      "level": 40,
+      "move": "endure"
+    },
+    {
+      "level": 46,
+      "move": "seismic_toss"
+    },
+    {
+      "level": 49,
+      "move": "reversal"
+    }
+  ]
+}

@@ -22,3 +22,8 @@ export function emeraldReflectionColumns(width, scale) {
   const inverse = Math.trunc(256 / scale), center = width / 2;
   return Array.from({ length: width }, (_, column) => Math.floor(center + (column - center) * inverse / 256));
 }
+
+/** MB_REFLECTION_UNDER_BRIDGE is water under the deck (elevation 3), not a reflective deck. */
+export function emeraldReflectionVisible(surface, actor) {
+  return !((surface.behavior === 0x2b || actor.behavior === 0x2b) && actor.elevation >= 3);
+}

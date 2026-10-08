@@ -20,7 +20,7 @@ import {
   drawLighting,
 } from "../src/presentation/lighting.js";
 import { validateContent } from "../src/engine/content.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { planObjectMotion } from "../src/engine/object-motion.js";
 import { setQuantity, inventoryQuantity } from "./helpers/inventory-fixture.js";
 const base = loadContentSync();

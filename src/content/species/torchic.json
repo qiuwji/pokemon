@@ -8,9 +8,9 @@
     "hp": 45,
     "atk": 60,
     "def": 40,
-    "spe": 45,
     "spa": 70,
-    "spd": 50
+    "spd": 50,
+    "spe": 45
   },
   "catchRate": 45,
   "expYield": 65,
@@ -23,9 +23,9 @@
     "hp": 0,
     "atk": 0,
     "def": 0,
-    "spe": 0,
     "spa": 1,
-    "spd": 0
+    "spd": 0,
+    "spe": 0
   },
   "learnset": [
     {
@@ -88,5 +88,7 @@
     "flamethrower",
     "aerial_ace",
     "rest"
-  ]
+  ],
+  "genderless": false,
+  "unavailableLearnset": []
 }

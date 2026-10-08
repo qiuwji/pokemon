@@ -1,0 +1,130 @@
+✖ installed patrol plugin loads from the real catalog and its menu creates one atomic team without duplicate actors (84.676334ms)
+✖ continuous and interval patrols visibly differ while both traverse the same legal grid and reverse at their endpoint (46.63925ms)
+✖ a player in the lane causes blocked facts and bounded retry, without overlaps or skipped route goals (42.738333ms)
+✖ menu pause freezes animation, explicit pause preserves route state, and resume uses the existing actor identity (40.238083ms)
+✖ blocked second spawn rolls back the first actor, identity sequence, saved memory and all spawn facts (54.644ms)
+✖ auto-save restores both patrol identities, pause flags and route phase; observation records reset on scene rebuild (41.129041ms)
+✖ remove cleans both actors and observations, and repeated visits keep at most 24 transient facts without saved telemetry (52.12075ms)
+✖ the summon action refuses other maps and tampered memory; partial teams can be rebuilt through the same action (88.451958ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 0
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 567.763542
+
+✖ failing tests:
+
+test at examples/patrol-lab.test.js:24:1
+✖ installed patrol plugin loads from the real catalog and its menu creates one atomic team without duplicate actors (84.676334ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)
+
+test at examples/patrol-lab.test.js:42:1
+✖ continuous and interval patrols visibly differ while both traverse the same legal grid and reverse at their endpoint (46.63925ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)
+
+test at examples/patrol-lab.test.js:72:1
+✖ a player in the lane causes blocked facts and bounded retry, without overlaps or skipped route goals (42.738333ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)
+
+test at examples/patrol-lab.test.js:93:1
+✖ menu pause freezes animation, explicit pause preserves route state, and resume uses the existing actor identity (40.238083ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)
+
+test at examples/patrol-lab.test.js:115:1
+✖ blocked second spawn rolls back the first actor, identity sequence, saved memory and all spawn facts (54.644ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)
+
+test at examples/patrol-lab.test.js:131:1
+✖ auto-save restores both patrol identities, pause flags and route phase; observation records reset on scene rebuild (41.129041ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at Object.intent (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-runtime.js:162:23)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/plugins/patrol-lab/index.js:82:15)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at PluginRuntime.transaction (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-runtime.js:188:16)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:521:19)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.execute (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:88:22)
+
+test at examples/patrol-lab.test.js:152:1
+✖ remove cleans both actors and observations, and repeated visits keep at most 24 transient facts without saved telemetry (52.12075ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)
+
+test at examples/patrol-lab.test.js:169:1
+✖ the summon action refuses other maps and tampered memory; partial teams can be rebuilt through the same action (88.451958ms)
+  Error: Expected finite JSON data
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:16:13)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at visit (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:21:7)
+      at jsonValue (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:25:3)
+      at readOnly (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:38:10)
+      at run (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/plugin-host.js:540:25)
+      at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+      at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+      at report (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:9:27)

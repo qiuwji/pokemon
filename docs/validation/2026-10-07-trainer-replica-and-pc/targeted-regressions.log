@@ -1,0 +1,29 @@
+✔ Imported door frames cover exactly the reference door metatiles this content uses (1.192042ms)
+✔ Door frame timing and order follow sDoorOpenAnimFrames and sDoorCloseAnimFrames (0.057791ms)
+✔ The director walks the painted frames and never touches saved world state (124.940209ms)
+✔ The hidden latch outlives the closing animation and is released on arrival (59.004875ms)
+✔ A coordinate script that takes the step puts the door back instead of leaving it open (64.4345ms)
+✔ Stepping into a door opens it before the player walks, and the arrival is the mat cell (66.028375ms)
+✔ Leaving a house closes the door behind the player without hiding him (55.827709ms)
+✔ The sliding door cue resolves to the installed render and falls back when absent (0.12275ms)
+✔ A sliding door and a swinging door resolve to their own cue, and a closed route does not animate (44.472708ms)
+✔ Every animated source doorway resolves to frames in its own current atlas, including the later Rustboro atlas (40.499625ms)
+✔ An active door substitutes both terrain passes instead of letting the closed overlay cover it (40.568625ms)
+✔ Route104 bridge deck suppresses reflections while nearby banks and water keep them (133.571375ms)
+✔ Native water, shores and waterfalls sample imported animation frames instead of painting all water alike (53.236333ms)
+✔ The Route104 diagonal pond in the screenshot has Rustboro's staggered eight-frame water (51.133958ms)
+✔ All opening, Route104 and Woods trainer wins commit once and separate defeat from field dialogue (1170.074167ms)
+✔ Cindy is defeated through real map interaction and move commands; talking after reload never rematches (79.979417ms)
+✔ Trainer images use the original trainerPic rather than the overworld woman/boy graphics (0.390458ms)
+✔ Source slide directions, defeat return position and staged ball release are sampled between endpoints (42.997833ms)
+✔ Every Route104 source slot is accounted for, with later story NPCs conditional and collected items never resurrected (67.793334ms)
+✔ Route104 ripe berries are visible, harvested via domain commands and stay empty after reload (48.917791ms)
+✔ Cuttable trees always show intact frame zero until a qualified Cut removes the obstacle (65.831959ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1648.379625

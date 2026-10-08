@@ -20,7 +20,7 @@ description: 在现有绿宝石工程中新增或演进HM、关键道具及野�
 
 - 读[FIELD_ACTIONS](../../docs/engine/field/FIELD_ACTIONS.md)及[ITEM_ACTIONS](../../docs/engine/items/FIELD_ITEMS.md)：`fieldActions`注册allowed/target/plan，`items.actions`只绑定入口，不复制资格和行为。
 - 涉及库存/消耗读[INVENTORY](../../docs/engine/items/INVENTORY.md)，涉及临时世界变化读[访问生命周期](../../docs/engine/world/STATE_AND_LIFECYCLE.md)，涉及高度读[FIELD_ELEVATION](../../docs/engine/field/FIELD_ELEVATION.md)。
-- 实际业务定义：[field-actions.js](../../src/packs/emerald/field-actions.js)。引擎合同：[FieldActionRegistry/Service](../../src/engine/field-actions.js)。协调者：[FieldActionApplication](../../src/packs/emerald/application/field-action-application.js)，仅框架任务改它。
+- 实际业务定义：[field-actions.js](../../src/packs/emerald/field-actions.js)。引擎合同：[FieldActionRegistry/Service](../../src/engine/field-actions.js)。协调者：[FieldActionApplication](../../src/game/emerald/application/field-action-application.js)，仅框架任务改它。
 - 代表例：[field-actions.test.js](../../tests/field-actions.test.js)中的Cut公共命令、content-only插件、动画期间变化、重进入图与剧情借用场景。
 
 ## 添加一个行动
@@ -95,7 +95,7 @@ test("plugin field plan commits through the public command", async () => {
 | 优先文件 | 兜底搜索词 |
 | --- | --- |
 | [src/engine/field-actions.js](../../src/engine/field-actions.js) | `rg -n "class FieldActionRegistry" src generated tests docs package.json` |
-| [src/packs/emerald/application/field-action-application.js](../../src/packs/emerald/application/field-action-application.js) | `rg -n "prepareOperation" src generated tests docs package.json` |
+| [src/game/emerald/application/field-action-application.js](../../src/game/emerald/application/field-action-application.js) | `rg -n "prepareOperation" src generated tests docs package.json` |
 | [tests/field-actions.test.js](../../tests/field-actions.test.js) | `rg -n "content-only" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。

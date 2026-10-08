@@ -1,6 +1,6 @@
 # 战斗扩展与宿主驱动实时会话
 
-只读本次涉及的部分。公开类型从 [contracts](../../../src/engine/contracts.d.ts) 查起，公开命令从 [application-commands](../../../src/packs/emerald/application-commands.js) 查起；设计中的字段不能替代这两个入口。
+只读本次涉及的部分。公开类型从 [contracts](../../../src/engine/contracts.d.ts) 查起，公开命令从 [application-commands](../../../src/game/emerald/commands/application-commands.js) 查起；设计中的字段不能替代这两个入口。
 
 ## 战斗：先选择能力
 
@@ -54,7 +54,7 @@ await api.commands.dispatch("core.battle.action", {
 
 公开 `core.interaction.start {definition,source?,parameters?}` 的 parameters 也是 JSON 字符串，只在宿主空闲时启动。**若发起方正处于 fieldAction/剧情/设施流程，不能在 action 事务里 dispatch start 解决 busy 锁。**
 
-当前 fieldAction 可以返回计划操作 `{kind:"interaction",id,parameters?,source?}`；这里 parameters 是内部 JSON 对象，见 [野外合同](../../../docs/engine/field/FIELD_ACTIONS.md) 与 [计划适配器](../../../src/packs/emerald/application/field-action-application.js)。这条路径由宿主提交时启动，无需插件接触 InteractionApplication。是否需要设施专用接续，按该领域实际适配器核实。
+当前 fieldAction 可以返回计划操作 `{kind:"interaction",id,parameters?,source?}`；这里 parameters 是内部 JSON 对象，见 [野外合同](../../../docs/engine/field/FIELD_ACTIONS.md) 与 [计划适配器](../../../src/game/emerald/application/field-action-application.js)。这条路径由宿主提交时启动，无需插件接触 InteractionApplication。是否需要设施专用接续，按该领域实际适配器核实。
 
 确认键入口使用 `triggers:["interact"]`、可用空输入的 schema、正确 target 与 plan；不要设 `menu:false`，也不要抢走对象/水面/阻挡的原生交互。直接 dispatch start 的测试不能代替这个入口。
 

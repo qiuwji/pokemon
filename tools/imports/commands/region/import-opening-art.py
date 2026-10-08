@@ -84,9 +84,7 @@ DOOR_BEHAVIORS = (0x69, 0x8D)
 # Published before this importer covered every door; story content already references them,
 # so 584 keeps the 900-905 block and everything else is appended after it.
 PINNED_DOORS = (584,)
-DOOR_PALETTE_SOURCES = {
-    'general-petalburg': 'data/tilesets/secondary/petalburg/palettes',
-}
+layouts = {record['id']: record for record in json.loads(read('data/layouts/layouts.json').read_text())['layouts']}
 
 
 def snake_case(name):
@@ -118,22 +116,22 @@ def native_door_table():
 
 
 def content_doors(table):
-    """Metatiles this content both walks through and the reference can animate."""
+    """Separate atlases by tileset: the same door metatile uses each map's palette."""
     found = {}
     for ident, record in data['maps'].items():
         tileset = record.get('tileset')
         blocks, behavior = record.get('blocks'), record.get('behavior')
         if not blocks or not behavior:
             continue
+        header = json.loads(read(f'data/maps/{ident}/map.json').read_text())
+        layout = layouts[header['layout']]
+        directories = [f'data/tilesets/{kind}/{snake_case(layout[key].replace("gTileset_", ""))}/palettes'
+                       for kind, key in [('primary', 'primary_tileset'), ('secondary', 'secondary_tileset')]]
         for index, value in enumerate(blocks):
             metatile = value & 1023
             if behavior[index] not in DOOR_BEHAVIORS or metatile not in table:
                 continue
-            if tileset not in DOOR_PALETTE_SOURCES:
-                session.omit('door', ident, table[metatile]['label'],
-                             'No palette source for tileset ' + str(tileset))
-                continue
-            found.setdefault(metatile, {'tileset': tileset, 'maps': set()})['maps'].add(ident)
+            found.setdefault(tileset, {}).setdefault(metatile, {'tileset': tileset, 'directories': directories})
     return found
 
 
@@ -150,72 +148,97 @@ def door_plan(table, found):
 
 
 table = native_door_table()
-doors = content_doors(table)
-order = door_plan(table, doors)
-if not order:
-    raise ValueError('Content uses no door the reference can animate')
-pack = data['tilesets']['general-petalburg']
-image = Image.open(session.target / 'assets/tiles-general-petalburg.png').convert('RGBA')
-count = DOOR_TILES * len(order)
-# A raw tile number is 10 bits; the palette nibble above it is free here, so the whole door
-# block lives under one unused palette slot instead of overflowing into the flip bits.
-previous = sorted(int(key) for key in pack['lookup'] if int(key) >> 12 == DOOR_TILE_PALETTE)
-if previous:
-    # On repeat import, replace our appended tiles instead of growing the atlas.
-    start = pack['lookup'][str(previous[0])]
-    if pack['atlas']['tileCount'] != start + len(previous):
-        raise ValueError('Door atlas has additional downstream tiles; re-import grid before opening-art')
-    for key in previous:
-        del pack['lookup'][str(key)]
-else:
-    start = pack['atlas']['tileCount']
-total = start + count
-atlas = Image.new('RGBA', (image.width, math.ceil(total / pack['columns']) * 8))
-atlas.paste(image.crop((0, 0, atlas.width, min(image.height, atlas.height))))
-animations = {}
-for metatile in order:
-    plan = doors[metatile]
-    directory = DOOR_PALETTE_SOURCES[plan['tileset']]
-    palettes = {slot: palette(f'{directory}/{slot:02d}.pal') for slot in sorted(set(plan['palettes']))}
-    art = Image.open(read(f"graphics/door_anims/{plan['graphic']}.png"))
-    frames = []
-    for frame in range(DOOR_FRAMES):
-        tiles = []
-        for i in range(8):
-            key = (DOOR_TILE_PALETTE << 12) | (plan['offset'] + frame * 8 + i)
-            index = start + plan['offset'] + frame * 8 + i
-            tile = art.crop((i % 2 * 8, frame * 32 + i // 2 * 8,
-                             i % 2 * 8 + 8, frame * 32 + i // 2 * 8 + 8))
-            atlas.paste(paint(tile, palettes[plan['palettes'][i]], True),
-                        (index % pack['columns'] * 8, index // pack['columns'] * 8))
-            pack['lookup'][str(key)] = index
-            tiles.append(key)
-        frames.append([])
-        for half in range(2):
-            ident = str(plan['base'] + frame * 2 + half)
-            pack['metatiles'][ident] = tiles[half * 4:half * 4 + 4] + [0, 0, 0, 0]
-            pack['attributes'][ident] = 0
-            frames[-1].append(plan['base'] + frame * 2 + half)
-    animations[metatile] = {'sound': plan['sound'], 'open': frames}
-pack['atlas'] = {'width': atlas.width, 'height': atlas.height, 'tileCount': total}
-session.image(atlas, session.target / 'assets/tiles-general-petalburg.png')
+door_sets = content_doors(table)
+all_animations = {}
+for tileset, doors in sorted(door_sets.items()):
+    order = door_plan(table, doors)
+    pack = data['tilesets'][tileset]
+    image = Image.open(session.target / f'assets/tiles-{tileset}.png').convert('RGBA')
+    count = DOOR_TILES * len(order)
+    # A raw tile number is 10 bits; the palette nibble above it is free here, so the whole door
+    # block lives under one unused palette slot instead of overflowing into the flip bits.
+    previous = sorted(int(key) for key in pack['lookup'] if int(key) >> 12 == DOOR_TILE_PALETTE)
+    if previous:
+        # On repeat import, replace our appended tiles instead of growing the atlas.
+        start = pack['lookup'][str(previous[0])]
+        if pack['atlas']['tileCount'] != start + len(previous):
+            raise ValueError('Door atlas has additional downstream tiles; re-import grid before opening-art')
+        for key in previous:
+            del pack['lookup'][str(key)]
+    else:
+        start = pack['atlas']['tileCount']
+    total = start + count
+    atlas = Image.new('RGBA', (image.width, math.ceil(total / pack['columns']) * 8))
+    atlas.paste(image.crop((0, 0, atlas.width, min(image.height, atlas.height))))
+    animations = {}
+    for metatile in order:
+        plan = doors[metatile]
+        palettes = {slot: palette(f"{plan['directories'][0 if slot < 6 else 1]}/{slot:02d}.pal") for slot in sorted(set(plan['palettes']))}
+        art = Image.open(read(f"graphics/door_anims/{plan['graphic']}.png"))
+        frames = []
+        for frame in range(DOOR_FRAMES):
+            tiles = []
+            for i in range(8):
+                key = (DOOR_TILE_PALETTE << 12) | (plan['offset'] + frame * 8 + i)
+                index = start + plan['offset'] + frame * 8 + i
+                tile = art.crop((i % 2 * 8, frame * 32 + i // 2 * 8,
+                                 i % 2 * 8 + 8, frame * 32 + i // 2 * 8 + 8))
+                atlas.paste(paint(tile, palettes[plan['palettes'][i]], True),
+                            (index % pack['columns'] * 8, index // pack['columns'] * 8))
+                pack['lookup'][str(key)] = index
+                tiles.append(key)
+            frames.append([])
+            for half in range(2):
+                ident = str(plan['base'] + frame * 2 + half)
+                pack['metatiles'][ident] = tiles[half * 4:half * 4 + 4] + [0, 0, 0, 0]
+                pack['attributes'][ident] = 0
+                frames[-1].append(plan['base'] + frame * 2 + half)
+        animations[metatile] = {'sound': plan['sound'], 'open': frames}
+    pack['atlas'] = {'width': atlas.width, 'height': atlas.height, 'tileCount': total}
+    session.image(atlas, session.target / f'assets/tiles-{tileset}.png')
+    all_animations[tileset] = animations
+animations = all_animations['general-petalburg']
 ball = Image.open(read('graphics/battle_transitions/pokeball.png'))
 session.image(paint(ball, palette('graphics/field_effects/palettes/pokeball.pal'), True),
               session.target / 'assets/battle-transition-pokeball.png')
+for team in ('aqua', 'magma'):
+    sheet = Image.open(read(f'graphics/battle_transitions/team_{team}.png'))
+    words = struct.unpack('<1024H', read(f'graphics/battle_transitions/team_{team}.bin').read_bytes())
+    colors = palette('graphics/battle_transitions/evil_team.pal')
+    screen = Image.new('RGBA', (256, 256))
+    for index, word in enumerate(words):
+        tile_id = word & 1023
+        x, y = tile_id % (sheet.width // 8) * 8, tile_id // (sheet.width // 8) * 8
+        if y + 8 > sheet.height:
+            raise ValueError(f'Team transition tile out of bounds: {team}/{tile_id}')
+        tile = paint(sheet.crop((x, y, x + 8, y + 8)), colors, True)
+        if word & 1024:
+            tile = tile.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        if word & 2048:
+            tile = tile.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        screen.paste(tile, (index % 32 * 8, index // 32 * 8))
+    session.image(screen, session.target / f'assets/battle-transition-{team}.png')
+sine = [round(float(v) * 256) for v in re.findall(r'Q_8_8\(([-\d.]+)\)', read('src/trig.c').read_text())[:256]]
+if len(sine) != 256:
+    raise ValueError('Missing pinned sine lookup')
+session.text(session.target / 'packs/emerald/generated/transition-sine.js',
+             generated_header('import-opening-art.py', source) +
+             'export const TRANSITION_SINE = Object.freeze(' + json.dumps(sine) + ');\n')
+def frozen_animations(records):
+    return 'Object.freeze({' + ','.join(
+        f'{metatile}:Object.freeze({{sound:{json.dumps(entry["sound"])},open:Object.freeze([' +
+        ','.join('Object.freeze([' + ','.join(str(v) for v in pair) + '])' for pair in entry['open']) +
+        '])})' for metatile, entry in sorted(records.items())) + '})'
+
 session.text(session.target / 'packs/emerald/generated/door-anims.js',
              generated_header('import-opening-art.py', source) +
-             'export const DOOR_ANIMATIONS = Object.freeze({' +
-             ','.join(
-                 f'{metatile}:Object.freeze({{sound:{json.dumps(animations[metatile]["sound"])},'
-                 f'open:Object.freeze([' +
-                 ','.join('Object.freeze([' + ','.join(str(v) for v in pair) + '])'
-                          for pair in animations[metatile]['open']) +
-                 '])})'
-                 for metatile in sorted(animations)) +
-             '});\n')
+             'export const DOOR_ANIMATIONS_BY_TILESET = Object.freeze({' +
+             ','.join(json.dumps(key) + ':' + frozen_animations(records) for key, records in sorted(all_animations.items())) +
+             '});\nexport const DOOR_ANIMATIONS = DOOR_ANIMATIONS_BY_TILESET["general-petalburg"];\n')
 session.text(session.target / 'assets/opening-art-source.json', json.dumps({
     'generator': 'tools/import.py opening-art', 'revision': source_revision(source),
     'inputs': sorted({x['path']: x for x in inputs}.values(), key=lambda x: x['path']),
+    'doorTilesets': all_animations,
     'doorMetatiles': {str(metatile): [pair for pair in animations[metatile]['open']]
                       for metatile in sorted(animations)},
 }, indent=2) + '\n')

@@ -1,0 +1,81 @@
+{
+  "name": "朝北鼻",
+  "dex": 299,
+  "types": [
+    "rock"
+  ],
+  "stats": {
+    "hp": 30,
+    "atk": 45,
+    "def": 135,
+    "spa": 45,
+    "spd": 90,
+    "spe": 30
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 1,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 255,
+  "expYield": 108,
+  "growth": "medium_fast",
+  "abilities": [
+    "sturdy",
+    "magnet_pull"
+  ],
+  "femaleRatio": 0.5,
+  "genderless": false,
+  "eggGroups": [
+    "mineral"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 7,
+      "move": "harden"
+    },
+    {
+      "level": 37,
+      "move": "rest"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 13,
+      "move": "rock_throw"
+    },
+    {
+      "level": 16,
+      "move": "block"
+    },
+    {
+      "level": 22,
+      "move": "thunder_wave"
+    },
+    {
+      "level": 28,
+      "move": "rock_slide"
+    },
+    {
+      "level": 31,
+      "move": "sandstorm"
+    },
+    {
+      "level": 43,
+      "move": "zap_cannon"
+    },
+    {
+      "level": 46,
+      "move": "lock_on"
+    }
+  ]
+}

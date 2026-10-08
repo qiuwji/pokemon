@@ -1,7 +1,9 @@
+import { BLOCKED_REASON, MOTION_CANCEL_REASON } from "./blocked-reasons.js";
 import { callSync } from "./extensions/values.js";
 import { NPCBehaviorRegistry } from "./npc-behaviors.js";
 import { isWater, ledgeDirection } from "./terrain.js";
 import { DIRECTIONS } from "./world.js";
+import { MotionResults } from "./motion-results.js";
 // Ambient NPC simulation has its own random stream, so walking never changes battle RNG.
 export class NPCSystem {
   constructor(
@@ -17,6 +19,7 @@ export class NPCSystem {
       onIntent = () => {},
       actorStep = null,
       onChange = () => {},
+      motionResults = null,
     } = {},
   ) {
     Object.assign(this, {
@@ -34,6 +37,7 @@ export class NPCSystem {
     });
     this.states = new Map();
     this.now = 0;
+    this.motionResults = motionResults || new MotionResults({ now: () => this.now });
     this.activeMap = null;
     this.scene = null;
   }
@@ -45,6 +49,7 @@ export class NPCSystem {
     if (pinned) return pinned;
     let n = this.states.get(key);
     if (!n || n._worldVersion !== def._worldVersion) {
+      this.finishMotion(n, MOTION_CANCEL_REASON.REPLACED);
       n = {
         ...def,
         originX: def.x,
@@ -56,7 +61,7 @@ export class NPCSystem {
         start: 0,
         duration: 0,
         foot: 0,
-        next: this.now + 500 + this.random() * 2000,
+        next: this.now + this.decisionDelay(def.movement?.mode || "still", true),
       };
       this.elevation?.initialize(n, this.maps[map]);
       this.states.set(key, n);
@@ -80,8 +85,10 @@ export class NPCSystem {
         key.startsWith(map + ":") &&
         !live.has(key.slice(map.length + 1)) &&
         !this.scene?.pins.has(key)
-      )
+      ) {
+        this.finishMotion(this.states.get(key), MOTION_CANCEL_REASON.REMOVED);
         this.states.delete(key);
+      }
     if (this.scene) {
       for (const [key, n] of this.scene.pins)
         if (key.startsWith(map + ":")) objects.set(n.id, n);
@@ -92,15 +99,31 @@ export class NPCSystem {
   }
   invalidate(map, id) {
     const key = map + ":" + id;
+    this.finishMotion(this.states.get(key), MOTION_CANCEL_REASON.INVALIDATED);
     this.states.delete(key);
     this.scene?.pins.delete(key);
     this.scene?.hidden.delete(key);
   }
   clear() {
+    for (const n of this.states.values()) this.finishMotion(n, MOTION_CANCEL_REASON.DISPOSED);
     this.states.clear();
     this.scene = null;
     this.activeMap = null;
     this.now = 0;
+  }
+  decisionDelay(mode, initial = false) {
+    return this.behaviors.timing(mode)?.intervalMs ??
+      (initial ? 500 + this.random() * 2000 : 800 + this.random() * 1700);
+  }
+  beginMotion(n, from, to, details = {}) {
+    this.motionResults.begin(n._actorUid || `${from.map}:${n.id}`, from, to,
+      { startedAt: n.start, durationMs: n.duration, jump: !!n.jump, ...details }, record => { n.pendingMotion = record; });
+  }
+  finishMotion(n, reason = null) {
+    if (!n?.pendingMotion) return;
+    const record = n.pendingMotion;
+    n.pendingMotion = null;
+    this.motionResults.finish(record, reason);
   }
   beginScene() {
     if (this.scene) throw new Error("NPC scene scope is already active");
@@ -109,10 +132,11 @@ export class NPCSystem {
   endScene() {
     if (this.scene)
       for (const n of this.scene.pins.values()) {
+        this.finishMotion(n, this.moving(n) ? MOTION_CANCEL_REASON.SCENE_RELEASED : null);
         n.fromX = n.toX = n.x;
         n.fromY = n.toY = n.y;
         n.duration = 0;
-        n.next = this.now + 1600;
+        n.next = this.now + (this.behaviors.timing(n.movement?.mode || "still")?.intervalMs ?? 1600);
         this.onChange(n.map, n);
       }
     this.scene = null;
@@ -131,6 +155,7 @@ export class NPCSystem {
   stage(map, def) {
     if (!this.scene) throw new Error("Staging actors requires a scene scope");
     const base = this.objects(map).find((n) => n.id === def.id);
+    this.finishMotion(base, MOTION_CANCEL_REASON.STAGED);
     const n = {
       ...base,
       ...def,
@@ -258,11 +283,12 @@ export class NPCSystem {
   face(id, map, direction) {
     const n = this.objects(map).find((n) => n.id === id);
     if (n) {
+      this.finishMotion(n, MOTION_CANCEL_REASON.FACED);
       n.dir = direction;
       n.fromX = n.toX = n.x;
       n.fromY = n.toY = n.y;
       n.duration = 0;
-      n.next = this.now + 1600;
+      n.next = this.now + (this.behaviors.timing(n.movement?.mode || "still")?.intervalMs ?? 1600);
       this.onChange(map, n);
     }
   }
@@ -271,7 +297,7 @@ export class NPCSystem {
     player,
     { paused = false, maps = [player.map], playerFrom = null } = {},
   ) {
-    const delta = this.now ? Math.max(0, now - this.now) : 0;
+    const delta = Math.max(0, now - this.now);
     this.now = now;
     this.activeMap = player.map;
     for (const map of maps) {
@@ -279,15 +305,19 @@ export class NPCSystem {
         m = this.maps[map];
       for (const n of npcs) {
         // Scripted tracks advance on the timeline while ambient simulation is paused.
-        if (this.scene?.pins.has(map + ":" + n.id)) continue;
+        if (this.scene?.pins.has(map + ":" + n.id)) {
+          if (n.pendingMotion && !this.moving(n, now)) this.finishMotion(n);
+          continue;
+        }
         if (paused) {
-          if (this.moving(n, now)) n.start += delta;
+          if (this.moving(n, now - delta)) n.start += delta;
           n.next += delta;
           continue;
         }
+        if (n.pendingMotion && !this.moving(n, now)) this.finishMotion(n);
         const config = n.movement || { mode: "still" };
         if (this.moving(n, now) || now < n.next) continue;
-        n.next = now + 800 + this.random() * 1700;
+        n.next = now + this.decisionDelay(config.mode);
         let intent;
         try {
           intent = this.behaviors.decide(config.mode, {
@@ -316,6 +346,7 @@ export class NPCSystem {
         }
         n.pose = intent.pose;
         const dir = intent.dir || n.dir;
+        const from = { map, x: n.x, y: n.y, dir: n.dir, elevation: n.elevation, previousElevation: n.previousElevation };
         n.dir = dir;
         if (!intent.move) {
           this.onChange(map, n, intent);
@@ -325,6 +356,7 @@ export class NPCSystem {
           const next = this.actorStep(map, n, dir, playerFrom);
           if (!next) {
             this.onChange(map, n, intent);
+            this.motionResults.blocked(n._actorUid, from, { ...from, dir }, dir, BLOCKED_REASON.PASSAGE);
             continue;
           }
           const [dx, dy] = DIRECTIONS[dir],
@@ -352,16 +384,20 @@ export class NPCSystem {
           n.start = now;
           n.duration = intent.duration || 256;
           n.foot = (n.foot + 1) % 2;
+          if (this.behaviors.timing(config.mode)?.afterMove === "settled")
+            n.next = now + n.duration;
           if (changedMap) {
             this.states.delete(map + ":" + n.id);
             this.states.set(next.map + ":" + n.id, n);
           }
           this.onChange(next.map, n, intent);
+          this.beginMotion(n, from, { ...next, dir });
           continue;
         }
         const [dx, dy] = DIRECTIONS[dir],
           x = n.x + dx,
           y = n.y + dy;
+        const blocked = reason => this.motionResults.blocked(`${map}:${n.id}`, from, { ...from, x, y, dir }, dir, reason);
         const rangeX = config.rangeX ?? 1,
           rangeY = config.rangeY ?? 1;
         if (
@@ -371,8 +407,10 @@ export class NPCSystem {
           y < 0 ||
           x >= m.width ||
           y >= m.height
-        )
+        ) {
+          blocked(BLOCKED_REASON.RANGE_OR_BOUNDARY);
           continue;
+        }
         const i = y * m.width + x;
         if (
           ((m.blocks[i] >> 10) & 3) !== 0 ||
@@ -381,8 +419,10 @@ export class NPCSystem {
           isWater(m.behavior[i]) ||
           ledgeDirection(m.behavior[i]) ||
           m.warps.some((w) => w.x === x && w.y === y)
-        )
+        ) {
+          blocked(BLOCKED_REASON.TERRAIN);
           continue;
+        }
         if (
           npcs.some(
             (other) =>
@@ -398,8 +438,10 @@ export class NPCSystem {
                     )),
               ),
           )
-        )
+        ) {
+          blocked(BLOCKED_REASON.OCCUPIED);
           continue;
+        }
         if (
           map === player.map &&
           ((player.x === x &&
@@ -417,8 +459,10 @@ export class NPCSystem {
                   n.elevation,
                   this.elevation.level(playerFrom, m),
                 ))))
-        )
+        ) {
+          blocked(BLOCKED_REASON.OCCUPIED);
           continue;
+        }
         n.fromElevation = n.elevation;
         this.elevation?.advance(
           n,
@@ -432,6 +476,9 @@ export class NPCSystem {
         n.start = now;
         n.duration = intent.duration || 256;
         n.foot = (n.foot + 1) % 2;
+        if (this.behaviors.timing(config.mode)?.afterMove === "settled")
+          n.next = now + n.duration;
+        this.beginMotion(n, from, { map, x: n.x, y: n.y, dir, elevation: n.elevation, previousElevation: n.previousElevation });
       }
     }
   }

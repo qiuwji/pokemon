@@ -363,7 +363,7 @@ export class MoveExecutor {
       c.substituteHit ||= !!impact.substituteHit;
       b.phase = "damage";
       c.emit(
-        `${result.critical ? "击中了要害！ " : ""}${result.type === 0 ? "没有效果。" : result.type > 1 ? "效果拔群！" : result.type < 1 ? "效果不太好…" : "攻击命中了！"}`,
+        "",
         "hurt",
         {
           message: {
@@ -377,6 +377,12 @@ export class MoveExecutor {
           ...(c.hitPlans?.[i] ? { memberUid: c.hitPlans[i].memberUid } : {}),
         },
       );
+      // Health settles first; the reference then announces critical/effectiveness separately.
+      if (result.critical) c.emit("击中了要害！", "text", { message: { id: "critical-hit", params: {} } });
+      if (result.type !== 1) {
+        const id = result.type === 0 ? "no-effect" : result.type > 1 ? "super-effective" : "not-very-effective";
+        c.emit(result.type === 0 ? "没有效果。" : result.type > 1 ? "效果拔群！" : "效果不太好…", "text", { message: { id, params: {} } });
+      }
       b.traits?.run("after-hit", { ...c, amount, hit: i + 1 });
       if (c.move.contact && !impact.substituteHit)
         b.traits?.run("contact", { ...c, amount, hit: i + 1 });

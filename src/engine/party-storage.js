@@ -60,4 +60,10 @@ export class PartyStorageService {
     state.box.push(state.party.splice(index, 1)[0]);
     return true;
   }
+  swapBox(state, first, second) {
+    if (!Number.isInteger(first) || !Number.isInteger(second) ||
+        first === second || !state.box[first] || !state.box[second]) return false;
+    [state.box[first], state.box[second]] = [state.box[second], state.box[first]];
+    return true;
+  }
 }

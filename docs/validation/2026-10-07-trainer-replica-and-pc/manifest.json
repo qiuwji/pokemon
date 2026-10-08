@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-07",
+  "status": "automated verification passed; manual visual/audio verification not performed",
+  "reference": {
+    "repository": "pret/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "readOnly": true
+  },
+  "verification": {
+    "core": {
+      "command": "npm run test:core (via npm run test:all)",
+      "passed": 1211,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "all-tests.log"
+    },
+    "plugins": {
+      "command": "npm run test:plugins (via npm run test:all)",
+      "passed": 64,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "all-tests.log"
+    },
+    "importers": {
+      "command": "python3 -m unittest discover -s tools/tests -q",
+      "passed": 34,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "importer-tests.log"
+    },
+    "audioTools": {
+      "command": "python3 tools/audio/test_tools.py",
+      "passed": 7,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "audio-tool-tests.log"
+    },
+    "storyTools": {
+      "command": "python3 tools/story/test_reference.py",
+      "passed": 13,
+      "failed": 0,
+      "exitCode": 0,
+      "log": "story-tool-tests.log"
+    },
+    "quality": {
+      "command": "npm run check",
+      "exitCode": 0,
+      "log": "quality-check.log"
+    },
+    "doorResources": {
+      "command": "python3 tools/import.py opening-art --check --strict",
+      "exitCode": 0,
+      "pendingFiles": 0,
+      "omissions": 0,
+      "log": "door-resources-check.log"
+    },
+    "themeResources": {
+      "exitCode": 0,
+      "pendingFiles": 0,
+      "log": "theme-resources-check.log",
+      "command": "python3 tools/ui/export-theme.py --check"
+    },
+    "targetedRegressions": {
+      "passed": 21,
+      "failed": 0,
+      "log": "targeted-regressions.log"
+    },
+    "devonStairs": {
+      "passed": 2,
+      "failed": 0,
+      "log": "devon-stairs.log"
+    },
+    "diffWhitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "browser": {
+      "performed": false,
+      "reason": "User instruction: do not operate the game through Computer Use"
+    },
+    "manualVisualAudio": "Not performed; user supplied before screenshots and reports"
+  },
+  "sourceAnchors": [
+    "src/field_screen_effect.c: Task_ExitNonAnimDoor",
+    "src/overworld.c: GetAdjustedInitialDirection",
+    "data/maps/RustboroCity_DevonCorp_1F/map.json",
+    "data/maps/RustboroCity_DevonCorp_2F/map.json",
+    "src/tileset_anims.c: General and Rustboro animation callbacks",
+    "src/door.c: door animation frames",
+    "src/data/object_events/object_event_graphics_info.h: CuttableTree inanimate flag",
+    "src/data/trainers.h: trainerPic"
+  ],
+  "verifiedBehavior": [
+    "Devon 1F/2F arrivals at (14,2), down-facing, elevation 3; repeated traversal, movement and reload; 2F/3F arrivals at (2,2)",
+    "Trainer victory ledger persists, source fallback cannot steal region reward flow, Lady Cindy does not rematch after save/load",
+    "Native trainer picture selection, intro positions, per-seat send-out timing, defeat dialogue and prize before field post-dialogue",
+    "Actual Center PC entry, UID-based deposit/withdraw/exchange/summary and cross-page reorder; full storage, stale selection and last usable party checks",
+    "Route104 source inventory, berries/soil, persistent harvest, reserved hidden authored actors",
+    "Actual renderer uses animated General and Rustboro windy-water frames; bridge height suppresses reflection while water plane preserves it",
+    "CuttableTree is intact in all facings until qualified Cut; save/load retains removal",
+    "Map-specific native door atlas frames replace both terrain passes; grid importer restores art without atlas growth on repeated runs"
+  ],
+  "scope": "Opening through Route104 and PetalburgWoods trainer/NPC regressions; Center PC; water/bridge/cut-tree/door restoration; Devon stair landing. Existing later map imports retained, not a claim of completed later mainline.",
+  "limits": [
+    "Player ball trajectory and emergence scaling remain approximations; no claim of all battle animation frames matching GBA",
+    "PC retains existing six-party / 200-storage save schema; original 14 boxes / 420 positions, wallpapers, release and item organization are pending",
+    "Later source NPC condition slots exist but some natural mainline triggers remain untranslated",
+    "Devon landing/direction corrected; full original non-animated exit walk presentation not implemented here",
+    "Grid and opening-art generation are sequential writes, not an atomic transaction; failed postprocess must not be shipped"
+  ],
+  "sha256": {
+    "src/engine/world.js": "4d3f950df49d52ee5f020f291d9800b0307738a3668207f13786274634545757",
+    "src/presentation/battle-director.js": "c2188c37b1279fee00e0f936289da2c7bd55982950261a4d21a7db65d814ffab",
+    "tools/import.py": "56c32c7e3a1aeacd021c895362bbf52c67a1add2c4fa9537e6b7e3273c0faa1d",
+    "tools/ui/export-theme.py": "8eb133ba2e59bdd5b6b51f885d4346609b5cadf486444c4dcf5ac4e66c571dcb",
+    "tools/imports/config/tile-animations.json": "b9b096b547c3f7721c842458a2c21bfea7585cbeddb2f67bec479e814ee5d42d",
+    "tests/devon-stair-arrival.test.js": "4a2f210093fec4c09e6a1d171b6e6bb2bd893c9d7a0f9c15308b772933dae41e",
+    "tests/trainer-replica-regressions.test.js": "2ef569748028693ca879f226afae8a69ae48f703c100baf8415d430e0b209f1c",
+    "tests/pc-storage-interface.test.js": "5a5cc87a870e553941ef737726e55a8d7a229c21977e5b2cf2cd578fd4658c0f",
+    "tests/emerald-water-surfaces.test.js": "70557dd37f2614e76d412085846eedc19905de7b461ac6e3ec1638bc3dd29787",
+    "tests/door-animation.test.js": "7271c3d6d2b4d8c80df1b06a5e60903720ff14db1a7f957355890fc4a588bfb7",
+    "src/packs/emerald/application/battle-application.js": "0ca290f5b18ad0f97c5d41540101221a387e5e0f54fc4f1376e6d9210119b818",
+    "src/packs/emerald/battle-presentation.js": "31859338a793041411929817ec8361a45f9dee2a8e5625bb5076e2681ff0bec7",
+    "src/packs/emerald/box-interface.js": "b371caeca6d38876d92ebbe586f0cc1d61a223fe43ac1a93ebb8dc205771beec",
+    "src/packs/emerald/field-reflections.js": "576efab71d55886b88f2014f734c294e54ba4a5f7cf61ee27ea08aee02eef11a",
+    "tools/imports/commands/region/import-emerald.py": "b37ab5da639418fb8d575f725a5f0c04d889b02e116b33156e8148cac6eba2f1",
+    "tools/imports/commands/region/import-grid.py": "72f79ef4fed92a42749c97a73dd97b47a05f463b32307d07d4e0b6872454eaa4",
+    "tools/imports/commands/region/import-opening-art.py": "45812d327423f19320de80f961156ab160e056eb3647942c66eb91bd350c535a",
+    "src/adapters/canvas-renderer.js": "84b22f224ac90106333d3d9cabec652f4aae5ea79a067baedb0d1cfa851aaf02"
+  },
+  "logSha256": {
+    "all-tests.log": "38256686d0c5429bc45beb10763475c9f45dea67dd5f3decd04fa842fe00b0ce",
+    "quality-check.log": "53b78b60170d3c3383c512f3c2ec9fd8f05cc16b50efa7da4dec8afe378d1a39",
+    "door-resources-check.log": "bb8a78fd19763b7ec1748098741ec0fcea1de5b5ba50894f2a726231d5353d7f",
+    "theme-resources-check.log": "02e2371f3a5e33923f1d9377b4d44ea3486707777f826034f5b8dbb5a569e863",
+    "importer-tests.log": "256e5075b110fff0fd7e43db7db0e9f272e2618e69b89b8527dd674971edb40b",
+    "audio-tool-tests.log": "593089b461409d37fd72aac0cf61f7a443914b216ca5a1deef285deab922c559",
+    "story-tool-tests.log": "cfef1f5b80e1a9d170c891dfa640d34de72aef8260a01aa35e5372c31253b436",
+    "targeted-regressions.log": "5e4efeaa4a72639d6dc4367fdc853003261b0c14703c8d207653aa4259d026db",
+    "devon-stairs.log": "429ce524737729fd70325cb939a3c571b671b2d6d4f742d9456f2c5d68aaaf77"
+  }
+}

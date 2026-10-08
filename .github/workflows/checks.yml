@@ -1,30 +1,82 @@
-name: Project checks
-on: [push, pull_request]
+name: Check and publish Pages
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Read-only original reference for documentation links
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: pret/pokeemerald
           ref: 731ad5bfd6e6f265508d0efcca0ba42f9dcf5881
           path: work/pokeemerald
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - run: python -m pip install -r tools/requirements.txt
       - run: npm ci
-      - run: npm run check
+      - name: Quality and current-checkout evidence
+        run: python tools/evidence.py run --scope "CI checkout" --kind workflow --out docs/validation/ci --input . --label quality --timeout 600 -- npm run check
       - name: Core contracts and coverage
-        run: npm run test:coverage
+        run: python tools/evidence.py run --scope "CI checkout" --kind workflow --out docs/validation/ci --input . --label core --timeout 600 -- npm run test:coverage
       - name: Plugin examples and installed catalog
-        run: npm run test:plugins
+        run: python tools/evidence.py run --scope "CI checkout" --kind workflow --out docs/validation/ci --input . --label plugins --timeout 600 -- npm run test:plugins
+      - name: Tool and packaging contracts
+        run: python tools/evidence.py run --scope "CI checkout" --kind workflow --out docs/validation/ci --input . --label tools --timeout 600 -- npm run test:tools
+      - name: Save validation logs
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/validation/ci
+          if-no-files-found: warn
+          retention-days: 14
+  publish:
+    needs: verify
+    if: >-
+      github.event_name != 'pull_request' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Package runtime only
+        run: python tools/package-pages.py --output "$RUNNER_TEMP/emerald-pages"
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/emerald-pages
+      - name: Publish checked commit
+        id: deployment
+        uses: actions/deploy-pages@v4

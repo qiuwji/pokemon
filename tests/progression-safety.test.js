@@ -3,16 +3,16 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
 import { createMonster, Random } from "../src/engine/model.js";
-import { interaction, battleOutcome } from "../src/packs/emerald/story.js";
+import { interaction, battleOutcome } from "../src/game/emerald/assembly/story-queries.js";
 import { objectsFor } from "../src/packs/emerald/pack.js";
-import { assertPackContent } from "../src/packs/emerald/content.js";
+import { assertPackContent } from "../src/game/emerald/assembly/content.js";
 import { TRAINERS, trainerRewardId } from "../src/packs/emerald/trainers.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import {
   TriggersApplication,
   TRIGGERS_PORTS,
-} from "../src/packs/emerald/application/triggers-application.js";
-import { liveApplicationPorts } from "../src/packs/emerald/application/ports.js";
+} from "../src/game/emerald/application/triggers-application.js";
+import { liveApplicationPorts } from "../src/game/emerald/application/ports.js";
 
 function fill(s, partyCount, boxCount) {
   while (s.game.state.party.length < partyCount)

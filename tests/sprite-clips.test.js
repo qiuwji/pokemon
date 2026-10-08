@@ -8,8 +8,8 @@ import {
 } from "../src/presentation/sprite-clips.js";
 import { SpriteCanvas } from "../src/adapters/sprite-canvas.js";
 import { DETAIL_SPRITE_FRAMES } from "../generated/packs/emerald/detail-sprite-frames.js";
-import { createUIShell } from "../src/packs/emerald/ui-shell.js";
-import { createPartyInterface } from "../src/packs/emerald/party-interface.js";
+import { createUIShell } from "../src/ui/emerald/ui-shell.js";
+import { createPartyInterface } from "../src/ui/emerald/party-interface.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import { manifest, session } from "./helpers/session.js";
 const clip = () =>

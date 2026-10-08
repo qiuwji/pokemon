@@ -190,7 +190,7 @@ export class FieldActionService {
       readOnly({
         id: plan.id,
         target: plan.target,
-        outcome: result.fishing || null,
+        outcome: result.outcome ?? null,
       }),
     );
     return result;

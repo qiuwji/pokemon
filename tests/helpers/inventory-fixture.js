@@ -1,4 +1,4 @@
-import { createEmeraldInventory } from "../../src/packs/emerald/inventory.js";
+import { createEmeraldInventory } from "../../src/game/emerald/assembly/inventory.js";
 import { ITEMS } from "../../src/packs/emerald/items.js";
 import { inventoryQuantity } from "../../src/engine/inventory.js";
 export { inventoryQuantity };

@@ -4,7 +4,7 @@ import { manifest, session } from "../tests/helpers/session.js";
 import { createBag } from "../tests/helpers/inventory-fixture.js";
 import { loadContentSync } from "../tools/content-io.mjs";
 import { createMonster, Random } from "../src/engine/model.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 import { BattleStrategyRegistry } from "../src/engine/battle/strategy-registry.js";
 import { Battle } from "../src/engine/battle.js";
 import { objectSchema } from "../src/engine/extensions/values.js";

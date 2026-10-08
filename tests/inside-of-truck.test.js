@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 /** The host flushes queued map-enter stories once per frame; headless must do it explicitly. */
 async function flush(s, predicate) {

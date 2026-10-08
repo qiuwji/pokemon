@@ -30,6 +30,14 @@
       "enabled": false
     },
     {
+      "id": "patrol-lab",
+      "name": "跟随伙伴",
+      "description": "叫来一位少年，沿玩家路线跟随。主菜单可叫来、等候、继续或告别；移动与碰撞复用引擎。",
+      "module": "./patrol-lab/index.js",
+      "export": "patrolLab",
+      "enabled": true
+    },
+    {
       "id": "facility-content",
       "name": "设施内容示例",
       "description": "加载华丽大赛、游戏厅及开拓区的示例内容。",

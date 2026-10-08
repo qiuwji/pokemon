@@ -1,0 +1,1640 @@
+{
+  "id": "emerald:native-signs",
+  "version": 1,
+  "dialogues": {
+    "dewfordtown.townsign": {
+      "name": "告示牌",
+      "lines": [
+        "武斗镇",
+        "蓝色大海中的小小岛屿。"
+      ]
+    },
+    "dewfordtown.gymsign": {
+      "name": "告示牌",
+      "lines": [
+        "武斗镇宝可梦道馆",
+        "馆主：藤树",
+        "格斗的巨浪！"
+      ]
+    },
+    "common.showpokemoncentersign": {
+      "name": "告示牌",
+      "lines": [
+        "让疲惫的伙伴重焕精神！",
+        "宝可梦中心"
+      ]
+    },
+    "dewfordtown.hallsign": {
+      "name": "告示牌",
+      "lines": [
+        "武斗集会所",
+        "大家交换信息的地方！"
+      ]
+    },
+    "insideoftruck.movingbox": {
+      "name": "告示牌",
+      "lines": [
+        "箱子上印着宝可梦标志。这是宝可梦品牌的搬家与配送服务。"
+      ]
+    },
+    "littleroottown.townsign": {
+      "name": "告示牌",
+      "lines": [
+        "未白镇",
+        "“一座连色调都无法为其增色的城镇。”"
+      ]
+    },
+    "littleroottown.birchslabsign": {
+      "name": "告示牌",
+      "lines": [
+        "小田卷博士的宝可梦研究所"
+      ]
+    },
+    "playershouse-2f.notebook": {
+      "name": "告示牌",
+      "lines": [
+        "{{playerName}}翻开了笔记本。",
+        "冒险守则第一条：按START打开菜单。",
+        "冒险守则第二条：使用“保存”记录进度。",
+        "其余的页面都是空白……"
+      ],
+      "bindings": {
+        "playerName": {
+          "query": {
+            "id": "playerName"
+          }
+        }
+      }
+    },
+    "playershouse-2f.gamecube": {
+      "name": "告示牌",
+      "lines": [
+        "这是一台任天堂GameCube，连接了一台Game Boy Advance作为控制器。"
+      ]
+    },
+    "littleroottown-professorbirchslab.machine": {
+      "name": "告示牌",
+      "lines": [
+        "这台机器看起来很厉害，博士一定是用它来研究的。"
+      ]
+    },
+    "littleroottown-professorbirchslab.book": {
+      "name": "告示牌",
+      "lines": [
+        "这是一本太深奥、读不懂的书。"
+      ]
+    },
+    "littleroottown-professorbirchslab.bookshelf": {
+      "name": "告示牌",
+      "lines": [
+        "里面塞满了关于宝可梦的书。"
+      ]
+    },
+    "littleroottown-professorbirchslab.pc": {
+      "name": "告示牌",
+      "lines": [
+        "这是用于研究的电脑，还是不要乱动它为好。"
+      ]
+    },
+    "oldaletown.townsign": {
+      "name": "告示牌",
+      "lines": [
+        "古辰镇",
+        "一切从稀少开始的地方。"
+      ]
+    },
+    "common.showpokemartsign": {
+      "name": "告示牌",
+      "lines": [
+        "为你的旅途精选便利道具！",
+        "友好商店"
+      ]
+    },
+    "petalburgcity.gymsign": {
+      "name": "告示牌",
+      "lines": [
+        "橙华市宝可梦道馆",
+        "馆主：千里",
+        "追求力量的男人！"
+      ]
+    },
+    "petalburgcity.citysign": {
+      "name": "告示牌",
+      "lines": [
+        "橙华市",
+        "人们与自然融为一体的城市。"
+      ]
+    },
+    "petalburgcity.wallyhousesign": {
+      "name": "告示牌",
+      "lines": [
+        "小光的家"
+      ]
+    },
+    "petalburgwoods.sign1": {
+      "name": "告示牌",
+      "lines": [
+        "训练家提示",
+        "只要在对战中出场过一次，宝可梦就能获得经验值。想培养弱小的宝可梦，就把它放在队伍最前面，开战后立刻换下。这样既能获得经验，也能避免它受到伤害。"
+      ]
+    },
+    "petalburgwoods.sign2": {
+      "name": "告示牌",
+      "lines": [
+        "训练家提示",
+        "除了体力，宝可梦使用招式还需要消耗招式点数PP。如果PP用完了，请带它去宝可梦中心恢复。"
+      ]
+    },
+    "route101.routesign": {
+      "name": "告示牌",
+      "lines": [
+        "101号道路",
+        "↑ 古辰镇"
+      ]
+    },
+    "route102.routesignpetalburg": {
+      "name": "告示牌",
+      "lines": [
+        "102号道路",
+        "← 橙华市"
+      ]
+    },
+    "route102.routesignoldale": {
+      "name": "告示牌",
+      "lines": [
+        "102号道路",
+        "→ 古辰镇"
+      ]
+    },
+    "route103.routesign": {
+      "name": "告示牌",
+      "lines": [
+        "103号道路",
+        "↓ 古辰镇"
+      ]
+    },
+    "route104.brineyscottagesign": {
+      "name": "告示牌",
+      "lines": [
+        "哈奇老人的小屋"
+      ]
+    },
+    "route104.routesignpetalburg": {
+      "name": "告示牌",
+      "lines": [
+        "104号道路",
+        "→ 橙华市"
+      ]
+    },
+    "route104.routesignrustboro": {
+      "name": "告示牌",
+      "lines": [
+        "104号道路",
+        "↑ 卡那兹市"
+      ]
+    },
+    "route104.flowershopsign": {
+      "name": "告示牌",
+      "lines": [
+        "漂亮花瓣花店"
+      ]
+    },
+    "route104.trainertipsdoublebattles": {
+      "name": "告示牌",
+      "lines": [
+        "训练家提示",
+        "在丰缘，有两人一组的训练家会发起二对二的双打对战。双打时，队伍最前面的两只宝可梦会一起出场。请注意它们在队伍中的排列顺序。"
+      ]
+    },
+    "route116.routesignrustboro": {
+      "name": "告示牌",
+      "lines": [
+        "116号道路",
+        "← 卡那兹市"
+      ]
+    },
+    "route116.rusturftunnelsign": {
+      "name": "告示牌",
+      "lines": [
+        "卡绿隧道",
+        "连接卡那兹市与绿荫镇。",
+        "隧道工程已被取消。"
+      ]
+    },
+    "route116.tunnelersresthousesign": {
+      "name": "告示牌",
+      "lines": [
+        "隧道工人的休息小屋"
+      ]
+    },
+    "route116.trainertipsbtostopevolution": {
+      "name": "告示牌",
+      "lines": [
+        "训练家提示",
+        "宝可梦正在进化时，如果想停止进化，就按B键。被吓到的宝可梦会停止进化。这叫作取消进化。"
+      ]
+    },
+    "route116.trainertipsbaghaspockets": {
+      "name": "告示牌",
+      "lines": [
+        "训练家提示",
+        "背包里有多个口袋，获得的道具会自动放进对应的口袋。每位训练家都少不了自己的背包。"
+      ]
+    },
+    "rustborocity.trainersschoolsign": {
+      "name": "告示牌",
+      "lines": [
+        "宝可梦训练家学校",
+        "关于宝可梦的一切，我们都会教你！"
+      ]
+    },
+    "rustborocity.citysign": {
+      "name": "告示牌",
+      "lines": [
+        "卡那兹市",
+        "探索自然与科学融合的城市。"
+      ]
+    },
+    "rustborocity.devoncorpsign": {
+      "name": "告示牌",
+      "lines": [
+        "得文制造股份有限公司",
+        "满足生活所需，制造你需要的一切。"
+      ]
+    },
+    "rustborocity.tunnelsign": {
+      "name": "告示牌",
+      "lines": [
+        "节省时间的隧道即将完工！",
+        "……牌子上这样写着，不过上面还被红色油漆画了一个大大的叉……"
+      ]
+    },
+    "rustborocity.cuttershousesign": {
+      "name": "告示牌",
+      "lines": [
+        "居合斩大师的家"
+      ]
+    },
+    "rustborocity-devoncorp-1f.productsdisplay": {
+      "name": "告示牌",
+      "lines": [
+        "玻璃柜里摆满了原型和试验产品，旁边有说明牌。",
+        "除了工业产品，得文现在也销售日用品和药品，让生活更加便利。最近还开始销售训练家工具，包括精灵球和宝可领航员系统。"
+      ]
+    },
+    "rustborocity-devoncorp-1f.rocksmetaldisplay": {
+      "name": "告示牌",
+      "lines": [
+        "玻璃柜里展示着岩石与金属的样本，旁边有一块说明牌。",
+        "得文制造股份有限公司最初开采石料，也从砂中的铁屑提炼铁。从这家朴素的原料生产商起步，得文逐渐发展为生产各类工业产品的制造商。"
+      ]
+    },
+    "rustborocity-devoncorp-3f.rarerocksdisplay": {
+      "name": "告示牌",
+      "lines": [
+        "这是社长收集的稀有岩石和石头。"
+      ]
+    },
+    "rustborocity-pokemonschool.studentnotebook": {
+      "name": "告示牌",
+      "lines": [
+        "这是学生的笔记本……",
+        "使用精灵球捕捉宝可梦。训练家可以带着最多六只宝可梦。训练家会捕捉、培养宝可梦，并与它们一起对战。训练家的使命，是打败在道馆里等待挑战者的强大训练家。"
+      ]
+    },
+    "slateportcity.nameratershousesign": {
+      "name": "告示牌",
+      "lines": [
+        "姓名鉴定师的家",
+        "鉴定宝可梦的昵称。"
+      ]
+    },
+    "slateportcity.marketsign": {
+      "name": "告示牌",
+      "lines": [
+        "凯那集市",
+        "出售别处找不到的独特商品！"
+      ]
+    },
+    "slateportcity.oceanicmuseumsign": {
+      "name": "告示牌",
+      "lines": [
+        "无边的大海孕育着所有生命。",
+        "海洋科学博物馆"
+      ]
+    },
+    "slateportcity.citysign": {
+      "name": "告示牌",
+      "lines": [
+        "凯那市",
+        "人们与宝可梦相遇的港口。"
+      ]
+    },
+    "slateportcity.pokemonfanclubsign": {
+      "name": "告示牌",
+      "lines": [
+        "宝可梦同好会",
+        "欢迎所有宝可梦爱好者！"
+      ]
+    },
+    "slateportcity.battletentsign": {
+      "name": "告示牌",
+      "lines": [
+        "对战帐篷凯那会场",
+        "找到吧！最棒的宝可梦！"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.whirlpoolexperiment": {
+      "name": "告示牌",
+      "lines": [
+        "玻璃容器里的蓝色液体正在旋转。",
+        "这是一项利用风人工制造漩涡的实验。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.waterfallexperiment": {
+      "name": "告示牌",
+      "lines": [
+        "玻璃容器里的红色球上下浮动。",
+        "这是一项利用小球浮力模拟瀑布的实验。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceansoildisplay": {
+      "name": "告示牌",
+      "lines": [
+        "这是海底土壤的样本。",
+        "长年累月，生物的遗骸沉到海底，形成沉积层。分析这些地层，就能了解远古的过去。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.beachsanddisplay": {
+      "name": "告示牌",
+      "lines": [
+        "这是海滩沙子的样本。",
+        "山上的石头被河流冲下来，不断碰撞、磨碎，变成颗粒，最后成为海滩上的沙子。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact1": {
+      "name": "告示牌",
+      "lines": [
+        "海洋小知识一：海水为什么是蓝色的？",
+        "光由多种颜色组成。光穿过水时，大多数颜色会逐渐消失，但蓝色会保留下来，所以大海看起来是蓝色的。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact2": {
+      "name": "告示牌",
+      "lines": [
+        "海洋小知识二：海水为什么是咸的？",
+        "海水中溶解着钠离子和氯离子等盐分。它们从岩石中溶出，由雨水带进大海。溶解盐分的浓度，让海水变咸。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact3": {
+      "name": "告示牌",
+      "lines": [
+        "海洋小知识三：大海和陆地哪个更大？",
+        "大海覆盖了地球大约百分之七十的面积，其余是陆地。因此，大海的面积是陆地的两倍多。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.fossildisplay": {
+      "name": "告示牌",
+      "lines": [
+        "这是一块带着波浪状纹路的化石。",
+        "潮汐冲刷海底的土壤，流动的海水留下细小的凸起和凹槽。这种土壤变成化石后，就叫作波痕。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.depthmeasuringmachine": {
+      "name": "告示牌",
+      "lines": [
+        "一个奇怪的机器正在玻璃罩下旋转。也许是用来测量某种东西深度的……"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.waterqualitysample1": {
+      "name": "告示牌",
+      "lines": [
+        "标签上写着：水质样本一。",
+        "大海相互连通，但不同地区的水似乎并不一样。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.waterqualitysample2": {
+      "name": "告示牌",
+      "lines": [
+        "标签上写着：水质样本二。",
+        "海水的咸度也会因地区而不同吗？"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.submersiblereplica": {
+      "name": "告示牌",
+      "lines": [
+        "海底探测舱",
+        "用于探索海底的小型无人探测舱的模型。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.submarinereplica": {
+      "name": "告示牌",
+      "lines": [
+        "潜水艇探险一号",
+        "高性能海底探测潜水艇的模型。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.sstidalreplica": {
+      "name": "告示牌",
+      "lines": [
+        "渡轮水静号",
+        "库斯诺吉造船厂正在建造的船舶的缩小模型。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.ssannereplica": {
+      "name": "告示牌",
+      "lines": [
+        "圣安奴号",
+        "环游世界的豪华客轮的模型。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.surfaceseawaterdisplay": {
+      "name": "告示牌",
+      "lines": [
+        "这是介绍海水流动的展板。",
+        "海面附近，海水受风推动，以洋流的形式流动。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.deepseawaterdisplay": {
+      "name": "告示牌",
+      "lines": [
+        "这是介绍海水流动的展板。",
+        "海底附近，水因温度、盐度等因素的不同而流动。"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.hoennmodel": {
+      "name": "告示牌",
+      "lines": [
+        "丰缘地区模型",
+        "这是丰缘地区的缩小立体模型。未白镇在哪里呢？"
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.pressureexperiment": {
+      "name": "告示牌",
+      "lines": [
+        "一个橡胶球正在膨胀、收缩。",
+        "在海里，水本身的重量会产生压力。浅水处的压力不算大，但到了极深的海底，小小的一片面积可能承受数万吨的压力。"
+      ]
+    }
+  },
+  "scripts": {
+    "dewfordtown.townsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown.townsign"
+        }
+      ]
+    },
+    "dewfordtown.gymsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown.gymsign"
+        }
+      ]
+    },
+    "common.showpokemoncentersign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "common.showpokemoncentersign"
+        }
+      ]
+    },
+    "dewfordtown.hallsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "dewfordtown.hallsign"
+        }
+      ]
+    },
+    "insideoftruck.movingbox": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "insideoftruck.movingbox"
+        }
+      ]
+    },
+    "littleroottown.townsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.townsign"
+        }
+      ]
+    },
+    "littleroottown.birchslabsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown.birchslabsign"
+        }
+      ]
+    },
+    "playershouse-2f.notebook": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "playershouse-2f.notebook"
+        }
+      ]
+    },
+    "playershouse-2f.gamecube": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "playershouse-2f.gamecube"
+        }
+      ]
+    },
+    "littleroottown-professorbirchslab.machine": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown-professorbirchslab.machine"
+        }
+      ]
+    },
+    "littleroottown-professorbirchslab.book": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown-professorbirchslab.book"
+        }
+      ]
+    },
+    "littleroottown-professorbirchslab.bookshelf": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown-professorbirchslab.bookshelf"
+        }
+      ]
+    },
+    "littleroottown-professorbirchslab.pc": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "littleroottown-professorbirchslab.pc"
+        }
+      ]
+    },
+    "oldaletown.townsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "oldaletown.townsign"
+        }
+      ]
+    },
+    "common.showpokemartsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "common.showpokemartsign"
+        }
+      ]
+    },
+    "petalburgcity.gymsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.gymsign"
+        }
+      ]
+    },
+    "petalburgcity.citysign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.citysign"
+        }
+      ]
+    },
+    "petalburgcity.wallyhousesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgcity.wallyhousesign"
+        }
+      ]
+    },
+    "petalburgwoods.sign1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgwoods.sign1"
+        }
+      ]
+    },
+    "petalburgwoods.sign2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "petalburgwoods.sign2"
+        }
+      ]
+    },
+    "route101.routesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route101.routesign"
+        }
+      ]
+    },
+    "route102.routesignpetalburg": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route102.routesignpetalburg"
+        }
+      ]
+    },
+    "route102.routesignoldale": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route102.routesignoldale"
+        }
+      ]
+    },
+    "route103.routesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route103.routesign"
+        }
+      ]
+    },
+    "route104.brineyscottagesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.brineyscottagesign"
+        }
+      ]
+    },
+    "route104.routesignpetalburg": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.routesignpetalburg"
+        }
+      ]
+    },
+    "route104.routesignrustboro": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.routesignrustboro"
+        }
+      ]
+    },
+    "route104.flowershopsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.flowershopsign"
+        }
+      ]
+    },
+    "route104.trainertipsdoublebattles": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route104.trainertipsdoublebattles"
+        }
+      ]
+    },
+    "route116.routesignrustboro": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116.routesignrustboro"
+        }
+      ]
+    },
+    "route116.rusturftunnelsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116.rusturftunnelsign"
+        }
+      ]
+    },
+    "route116.tunnelersresthousesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116.tunnelersresthousesign"
+        }
+      ]
+    },
+    "route116.trainertipsbtostopevolution": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116.trainertipsbtostopevolution"
+        }
+      ]
+    },
+    "route116.trainertipsbaghaspockets": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "route116.trainertipsbaghaspockets"
+        }
+      ]
+    },
+    "rustborocity.trainersschoolsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.trainersschoolsign"
+        }
+      ]
+    },
+    "rustborocity.citysign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.citysign"
+        }
+      ]
+    },
+    "rustborocity.devoncorpsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.devoncorpsign"
+        }
+      ]
+    },
+    "rustborocity.tunnelsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.tunnelsign"
+        }
+      ]
+    },
+    "rustborocity.cuttershousesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity.cuttershousesign"
+        }
+      ]
+    },
+    "rustborocity-devoncorp-1f.productsdisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-devoncorp-1f.productsdisplay"
+        }
+      ]
+    },
+    "rustborocity-devoncorp-1f.rocksmetaldisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-devoncorp-1f.rocksmetaldisplay"
+        }
+      ]
+    },
+    "rustborocity-devoncorp-3f.rarerocksdisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-devoncorp-3f.rarerocksdisplay"
+        }
+      ]
+    },
+    "rustborocity-pokemonschool.studentnotebook": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "rustborocity-pokemonschool.studentnotebook"
+        }
+      ]
+    },
+    "slateportcity.nameratershousesign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.nameratershousesign"
+        }
+      ]
+    },
+    "slateportcity.marketsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.marketsign"
+        }
+      ]
+    },
+    "slateportcity.oceanicmuseumsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.oceanicmuseumsign"
+        }
+      ]
+    },
+    "slateportcity.citysign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.citysign"
+        }
+      ]
+    },
+    "slateportcity.pokemonfanclubsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.pokemonfanclubsign"
+        }
+      ]
+    },
+    "slateportcity.battletentsign": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity.battletentsign"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.whirlpoolexperiment": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.whirlpoolexperiment"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.waterfallexperiment": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.waterfallexperiment"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceansoildisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.oceansoildisplay"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.beachsanddisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.beachsanddisplay"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.oceanicminifact1"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.oceanicminifact2"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact3": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.oceanicminifact3"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.fossildisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.fossildisplay"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-1f.depthmeasuringmachine": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-1f.depthmeasuringmachine"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.waterqualitysample1": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.waterqualitysample1"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.waterqualitysample2": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.waterqualitysample2"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.submersiblereplica": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.submersiblereplica"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.submarinereplica": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.submarinereplica"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.sstidalreplica": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.sstidalreplica"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.ssannereplica": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.ssannereplica"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.surfaceseawaterdisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.surfaceseawaterdisplay"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.deepseawaterdisplay": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.deepseawaterdisplay"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.hoennmodel": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.hoennmodel"
+        }
+      ]
+    },
+    "slateportcity-oceanicmuseum-2f.pressureexperiment": {
+      "commands": [
+        {
+          "type": "dialog",
+          "dialogue": "slateportcity-oceanicmuseum-2f.pressureexperiment"
+        }
+      ]
+    }
+  },
+  "entries": {
+    "dewfordtown.townsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "DewfordTown_EventScript_TownSign"
+      },
+      "script": "dewfordtown.townsign"
+    },
+    "dewfordtown.gymsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "DewfordTown_EventScript_GymSign"
+      },
+      "script": "dewfordtown.gymsign"
+    },
+    "common.showpokemoncentersign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Common_EventScript_ShowPokemonCenterSign"
+      },
+      "script": "common.showpokemoncentersign"
+    },
+    "dewfordtown.hallsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "DewfordTown_EventScript_HallSign"
+      },
+      "script": "dewfordtown.hallsign"
+    },
+    "insideoftruck.movingbox": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "InsideOfTruck_EventScript_MovingBox"
+      },
+      "script": "insideoftruck.movingbox"
+    },
+    "littleroottown.townsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "LittlerootTown_EventScript_TownSign"
+      },
+      "script": "littleroottown.townsign"
+    },
+    "littleroottown.birchslabsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "LittlerootTown_EventScript_BirchsLabSign"
+      },
+      "script": "littleroottown.birchslabsign"
+    },
+    "playershouse-2f.notebook": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PlayersHouse_2F_EventScript_Notebook"
+      },
+      "script": "playershouse-2f.notebook"
+    },
+    "playershouse-2f.gamecube": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PlayersHouse_2F_EventScript_GameCube"
+      },
+      "script": "playershouse-2f.gamecube"
+    },
+    "littleroottown-professorbirchslab.machine": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Machine"
+      },
+      "script": "littleroottown-professorbirchslab.machine"
+    },
+    "littleroottown-professorbirchslab.book": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Book"
+      },
+      "script": "littleroottown-professorbirchslab.book"
+    },
+    "littleroottown-professorbirchslab.bookshelf": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_Bookshelf"
+      },
+      "script": "littleroottown-professorbirchslab.bookshelf"
+    },
+    "littleroottown-professorbirchslab.pc": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "LittlerootTown_ProfessorBirchsLab_EventScript_PC"
+      },
+      "script": "littleroottown-professorbirchslab.pc"
+    },
+    "oldaletown.townsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "OldaleTown_EventScript_TownSign"
+      },
+      "script": "oldaletown.townsign"
+    },
+    "common.showpokemartsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Common_EventScript_ShowPokemartSign"
+      },
+      "script": "common.showpokemartsign"
+    },
+    "petalburgcity.gymsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PetalburgCity_EventScript_GymSign"
+      },
+      "script": "petalburgcity.gymsign"
+    },
+    "petalburgcity.citysign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PetalburgCity_EventScript_CitySign"
+      },
+      "script": "petalburgcity.citysign"
+    },
+    "petalburgcity.wallyhousesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PetalburgCity_EventScript_WallyHouseSign"
+      },
+      "script": "petalburgcity.wallyhousesign"
+    },
+    "petalburgwoods.sign1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PetalburgWoods_EventScript_Sign1"
+      },
+      "script": "petalburgwoods.sign1"
+    },
+    "petalburgwoods.sign2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "PetalburgWoods_EventScript_Sign2"
+      },
+      "script": "petalburgwoods.sign2"
+    },
+    "route101.routesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route101_EventScript_RouteSign"
+      },
+      "script": "route101.routesign"
+    },
+    "route102.routesignpetalburg": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route102_EventScript_RouteSignPetalburg"
+      },
+      "script": "route102.routesignpetalburg"
+    },
+    "route102.routesignoldale": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route102_EventScript_RouteSignOldale"
+      },
+      "script": "route102.routesignoldale"
+    },
+    "route103.routesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route103_EventScript_RouteSign"
+      },
+      "script": "route103.routesign"
+    },
+    "route104.brineyscottagesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route104_EventScript_BrineysCottageSign"
+      },
+      "script": "route104.brineyscottagesign"
+    },
+    "route104.routesignpetalburg": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route104_EventScript_RouteSignPetalburg"
+      },
+      "script": "route104.routesignpetalburg"
+    },
+    "route104.routesignrustboro": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route104_EventScript_RouteSignRustboro"
+      },
+      "script": "route104.routesignrustboro"
+    },
+    "route104.flowershopsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route104_EventScript_FlowerShopSign"
+      },
+      "script": "route104.flowershopsign"
+    },
+    "route104.trainertipsdoublebattles": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route104_EventScript_TrainerTipsDoubleBattles"
+      },
+      "script": "route104.trainertipsdoublebattles"
+    },
+    "route116.routesignrustboro": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route116_EventScript_RouteSignRustboro"
+      },
+      "script": "route116.routesignrustboro"
+    },
+    "route116.rusturftunnelsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route116_EventScript_RusturfTunnelSign"
+      },
+      "script": "route116.rusturftunnelsign"
+    },
+    "route116.tunnelersresthousesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route116_EventScript_TunnelersRestHouseSign"
+      },
+      "script": "route116.tunnelersresthousesign"
+    },
+    "route116.trainertipsbtostopevolution": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route116_EventScript_TrainerTipsBToStopEvolution"
+      },
+      "script": "route116.trainertipsbtostopevolution"
+    },
+    "route116.trainertipsbaghaspockets": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "Route116_EventScript_TrainerTipsBagHasPockets"
+      },
+      "script": "route116.trainertipsbaghaspockets"
+    },
+    "rustborocity.trainersschoolsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_EventScript_TrainersSchoolSign"
+      },
+      "script": "rustborocity.trainersschoolsign"
+    },
+    "rustborocity.citysign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_EventScript_CitySign"
+      },
+      "script": "rustborocity.citysign"
+    },
+    "rustborocity.devoncorpsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_EventScript_DevonCorpSign"
+      },
+      "script": "rustborocity.devoncorpsign"
+    },
+    "rustborocity.tunnelsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_EventScript_TunnelSign"
+      },
+      "script": "rustborocity.tunnelsign"
+    },
+    "rustborocity.cuttershousesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_EventScript_CuttersHouseSign"
+      },
+      "script": "rustborocity.cuttershousesign"
+    },
+    "rustborocity-devoncorp-1f.productsdisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_DevonCorp_1F_EventScript_ProductsDisplay"
+      },
+      "script": "rustborocity-devoncorp-1f.productsdisplay"
+    },
+    "rustborocity-devoncorp-1f.rocksmetaldisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_DevonCorp_1F_EventScript_RocksMetalDisplay"
+      },
+      "script": "rustborocity-devoncorp-1f.rocksmetaldisplay"
+    },
+    "rustborocity-devoncorp-3f.rarerocksdisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_DevonCorp_3F_EventScript_RareRocksDisplay"
+      },
+      "script": "rustborocity-devoncorp-3f.rarerocksdisplay"
+    },
+    "rustborocity-pokemonschool.studentnotebook": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "RustboroCity_PokemonSchool_EventScript_StudentNotebook"
+      },
+      "script": "rustborocity-pokemonschool.studentnotebook"
+    },
+    "slateportcity.nameratershousesign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_EventScript_NameRatersHouseSign"
+      },
+      "script": "slateportcity.nameratershousesign"
+    },
+    "slateportcity.marketsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_EventScript_MarketSign"
+      },
+      "script": "slateportcity.marketsign"
+    },
+    "slateportcity.oceanicmuseumsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_EventScript_OceanicMuseumSign"
+      },
+      "script": "slateportcity.oceanicmuseumsign"
+    },
+    "slateportcity.citysign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_EventScript_CitySign"
+      },
+      "script": "slateportcity.citysign"
+    },
+    "slateportcity.pokemonfanclubsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_EventScript_PokemonFanClubSign"
+      },
+      "script": "slateportcity.pokemonfanclubsign"
+    },
+    "slateportcity.battletentsign": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_EventScript_BattleTentSign"
+      },
+      "script": "slateportcity.battletentsign"
+    },
+    "slateportcity-oceanicmuseum-1f.whirlpoolexperiment": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_WhirlpoolExperiment"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.whirlpoolexperiment"
+    },
+    "slateportcity-oceanicmuseum-1f.waterfallexperiment": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_WaterfallExperiment"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.waterfallexperiment"
+    },
+    "slateportcity-oceanicmuseum-1f.oceansoildisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_OceanSoilDisplay"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.oceansoildisplay"
+    },
+    "slateportcity-oceanicmuseum-1f.beachsanddisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_BeachSandDisplay"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.beachsanddisplay"
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_OceanicMinifact1"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.oceanicminifact1"
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_OceanicMinifact2"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.oceanicminifact2"
+    },
+    "slateportcity-oceanicmuseum-1f.oceanicminifact3": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_OceanicMinifact3"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.oceanicminifact3"
+    },
+    "slateportcity-oceanicmuseum-1f.fossildisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_FossilDisplay"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.fossildisplay"
+    },
+    "slateportcity-oceanicmuseum-1f.depthmeasuringmachine": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_1F_EventScript_DepthMeasuringMachine"
+      },
+      "script": "slateportcity-oceanicmuseum-1f.depthmeasuringmachine"
+    },
+    "slateportcity-oceanicmuseum-2f.waterqualitysample1": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample1"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.waterqualitysample1"
+    },
+    "slateportcity-oceanicmuseum-2f.waterqualitysample2": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_WaterQualitySample2"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.waterqualitysample2"
+    },
+    "slateportcity-oceanicmuseum-2f.submersiblereplica": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_SubmersibleReplica"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.submersiblereplica"
+    },
+    "slateportcity-oceanicmuseum-2f.submarinereplica": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_SubmarineReplica"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.submarinereplica"
+    },
+    "slateportcity-oceanicmuseum-2f.sstidalreplica": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_SSTidalReplica"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.sstidalreplica"
+    },
+    "slateportcity-oceanicmuseum-2f.ssannereplica": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_SSAnneReplica"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.ssannereplica"
+    },
+    "slateportcity-oceanicmuseum-2f.surfaceseawaterdisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_SurfaceSeawaterDisplay"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.surfaceseawaterdisplay"
+    },
+    "slateportcity-oceanicmuseum-2f.deepseawaterdisplay": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_DeepSeawaterDisplay"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.deepseawaterdisplay"
+    },
+    "slateportcity-oceanicmuseum-2f.hoennmodel": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_HoennModel"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.hoennmodel"
+    },
+    "slateportcity-oceanicmuseum-2f.pressureexperiment": {
+      "trigger": "interact",
+      "priority": 5,
+      "selector": {
+        "kind": "sign",
+        "script": "SlateportCity_OceanicMuseum_2F_EventScript_PressureExperiment"
+      },
+      "script": "slateportcity-oceanicmuseum-2f.pressureexperiment"
+    }
+  }
+}

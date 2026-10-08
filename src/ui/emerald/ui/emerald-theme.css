@@ -1,0 +1,771 @@
+/* Emerald presentation adapter. Native assets are exported by tools/ui/export-theme.py.
+ * Page identity comes from the shell; no content-dependent :has(.menu-grid) navigation styling.
+ * Coordinates, commands, focus and plugin controls remain owned by the existing page adapters. */
+:root {
+  --ink: #424242;
+  --paper: #f8f8f8;
+  --muted: #737373;
+  --line: #42425a;
+}
+body {
+  background: #202830;
+  background-image: none;
+  line-height: 1.45;
+}
+.app-shell {
+  max-width: 1020px;
+  padding: 16px;
+}
+.topbar {
+  background: transparent;
+  color: #f8f8f8;
+  border: 0;
+  box-shadow: none;
+  padding: 0 0 12px;
+  margin-bottom: 0;
+}
+.brand-emblem,
+.brand-overline,
+.brand h1 span,
+.edition {
+  display: none;
+}
+.brand h1 {
+  font-size: 20px;
+  text-shadow: none;
+}
+.top-actions {
+  gap: 8px;
+}
+.topbar button {
+  color: var(--ink);
+  font-size: 12px;
+  padding: 6px 10px;
+}
+main {
+  display: block;
+}
+main > aside,
+.field-note,
+footer {
+  display: none;
+}
+.location-bar {
+  padding: 6px 0;
+  background: transparent;
+  border: 0;
+  color: #deded6;
+  font-size: 12px;
+}
+.location-bar .tiny-label,
+.location-divider {
+  display: none;
+}
+.screen-frame {
+  padding: 0;
+  border: 0;
+  background: #000;
+  box-shadow: none;
+}
+.screen {
+  aspect-ratio: 3 / 2;
+  border: 0;
+  background: #000;
+}
+.frame-bottom {
+  color: #d6d6d6;
+  background: #202830;
+  border: 0;
+  padding: 6px 0;
+  font-size: 11px;
+}
+.frame-bottom > span:first-child {
+  display: none;
+}
+.control-strip {
+  color: #bdbdb5;
+  padding: 6px 0;
+}
+.control-strip kbd {
+  background: #424a52;
+  border: 0;
+  color: #fff;
+}
+.control-strip button {
+  color: #ddd;
+}
+#extension-hud {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  pointer-events: none;
+  z-index: 8;
+}
+/* Native frame 1 has fixed eight-pixel corners; all windows share the original palette. */
+.dialogue,
+.modal,
+.launch-panel {
+  border: solid transparent;
+  border-width: 3.333cqw;
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
+    8 fill / 3.333cqw / 0 stretch;
+  background: #f8f8f8;
+  box-shadow: none;
+  color: #424242;
+}
+.dialogue {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 30%;
+  padding: 0.7% 1.3% 2%;
+  font-size: 3.333cqw;
+  line-height: 1.55;
+}
+.dialogue strong {
+  font-size: 2.5cqw;
+  color: #737373;
+  margin-bottom: 0.2%;
+}
+.continue {
+  color: #d64a4a;
+  font-size: 2.5cqw;
+}
+.modal-backdrop,
+.modal-backdrop:has(.menu-grid) {
+  padding: 0;
+  display: block;
+  background: #739c73;
+}
+.modal,
+.modal:has(.menu-grid) {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  padding: 1%;
+  font-size: 3.333cqw;
+  animation: none;
+  box-shadow: none;
+}
+.modal-header,
+.modal:has(.menu-grid) .modal-header {
+  border: 0;
+  background: #526b7b;
+  color: #fff;
+  padding: 1% 2%;
+  margin-bottom: 2%;
+}
+.modal-header h2,
+.modal:has(.menu-grid) .modal-header h2 {
+  font-size: 3.333cqw;
+  font-weight: 400;
+}
+.modal-header button,
+.modal:has(.menu-grid) .modal-header button {
+  width: 5cqw;
+  height: 5cqw;
+  color: #fff;
+  font-size: 3.333cqw;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.modal p {
+  font-size: 3.333cqw;
+  line-height: 1.5;
+}
+.modal button {
+  font-size: 3.333cqw;
+}
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1%;
+}
+.menu-tile {
+  padding: 2% 3% 2% 12%;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.menu-tile small {
+  display: block;
+  font-size: 2.5cqw;
+}
+.menu-tile:focus,
+.menu-tile:hover:not(:disabled) {
+  background: transparent;
+}
+.modal-footer {
+  font-size: 2.5cqw;
+}
+/* Only Start uses a small window over the field. Full-page selectors never inherit that layout. */
+.modal-backdrop[data-modal-page="menu"] {
+  background: transparent;
+  display: flex;
+  padding: 2%;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+[data-modal-page="menu"] .modal {
+  width: 42%;
+  height: auto;
+  padding: 1% 0;
+}
+[data-modal-page="menu"] .modal-header {
+  display: none;
+}
+.start-menu {
+  display: flex;
+  flex-direction: column;
+}
+.start-menu .menu-tile {
+  padding: 5% 4% 5% 14%;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.menu-tile:before {
+  font-size: 2.5cqw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* Party: native green background and blue selection panels, lead card on the left. */
+[data-modal-page="party"] .modal {
+  background: #739c73 url("../../../../generated/assets/ui/party-background.png") center /
+    100% 100%;
+}
+.modal .mon-heading {
+  font-size: 3.333cqw;
+}
+.modal .mon-heading span,
+.modal .hp-value {
+  font-size: 2.5cqw;
+}
+.modal .hp-track {
+  height: 1.667cqw;
+  border: 1px solid #424242;
+  background: #525252;
+}
+.hp-track i {
+  box-shadow: inset 0 -1px #218c52;
+}
+/* Battle keeps the native two-by-two cursor and original cream/teal message palette. */
+.battle-menu {
+  height: 30%;
+  padding: 2% 3%;
+  gap: 1%;
+  background: #f8f8f8;
+  border: 0;
+  box-shadow: none;
+}
+.battle-message {
+  width: 47%;
+  padding: 2%;
+  color: #fff;
+  background: #315a73;
+  border: 2px solid #849cad;
+  font-size: 3.333cqw;
+  line-height: 1.5;
+}
+.battle-options {
+  padding: 2% 0 2% 2%;
+  border: 2px solid #52526b;
+  background: #f8f8f8;
+  gap: 0;
+}
+.battle-options button {
+  font-size: 3.333cqw;
+  line-height: 1.2;
+}
+.battle-options button small {
+  font-size: 2.5cqw;
+  color: #737373;
+}
+.battle-options button.selected:before {
+  color: #424242;
+  font-size: 2.5cqw;
+}
+.battle-options button:hover {
+  background: transparent;
+}
+.battle-status {
+  background: #ffffde;
+  border: 2px solid #424242;
+  padding: 1% 2%;
+  box-shadow: 2px 2px #738473;
+  border-radius: 0;
+  width: 44%;
+}
+.battle-status.enemy {
+  top: 7%;
+  left: 3%;
+}
+.battle-status.player {
+  top: 46%;
+  right: 3%;
+}
+.battle-status .mon-heading {
+  font-size: 3.333cqw;
+}
+.battle-status .mon-heading span,
+.battle-status .hp-value {
+  font-size: 2.5cqw;
+}
+.battle-status .hp-track {
+  height: 1.5cqw;
+}
+/* The browser's plugin manager uses the same window family, outside the game viewport. */
+.launch-panel {
+  width: min(560px, 94vw);
+  max-height: 85vh;
+  overflow: auto;
+  padding: 18px;
+  font: 14px/1.5 var(--font);
+  border-width: 16px;
+  border-image-width: 16px;
+}
+.launch-panel::backdrop {
+  background: #101820c0;
+}
+.launch-panel header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.launch-panel h2 {
+  font-size: 18px;
+  font-weight: 400;
+}
+.launch-panel p {
+  margin: 12px 0;
+}
+.plugin-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #bdcec6;
+}
+.plugin-row strong,
+.plugin-row small {
+  display: block;
+}
+.plugin-row small {
+  color: #6b7373;
+  font-size: 12px;
+}
+.plugin-row input {
+  width: 18px;
+  height: 18px;
+  accent-color: #399c73;
+}
+.launch-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.launch-panel button {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+@media (max-width: 520px) {
+  .app-shell {
+    padding: 6px;
+  }
+  .brand h1 {
+    font-size: 16px;
+  }
+  .top-actions {
+    gap: 4px;
+  }
+  .topbar button {
+    padding: 4px 6px;
+  }
+}
+/* Party windows follow native single layout: (8,24) 80×56 and (96,8+24n) 144×24.
+   cqw measures against the 240px logical viewport; the icons crop frame 0 of native 32×64 sheets. */
+[data-modal-page="party"] .modal {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-image: none;
+  overflow: hidden;
+}
+[data-modal-page="party"] .modal-header {
+  display: none;
+}
+[data-native-party] {
+  display: block;
+}
+.native-party-card {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent url("../../../../generated/assets/ui/party-slot-wide.png") center /
+    100% 100%;
+  width: 60%;
+  height: 15%;
+  left: 40%;
+  text-align: left;
+  color: #f8f8f8;
+  text-shadow: 1px 1px #525252;
+  font-weight: 400;
+  line-height: 1;
+  border-radius: 0;
+}
+.native-party-card.slot-0 {
+  left: 3.333333%;
+  top: 15%;
+  width: 33.333333%;
+  height: 35%;
+  background-image: url("../../../../generated/assets/ui/party-slot-main.png");
+}
+.native-party-card.slot-1 {
+  top: 5%;
+}
+.native-party-card.slot-2 {
+  top: 20%;
+}
+.native-party-card.slot-3 {
+  top: 35%;
+}
+.native-party-card.slot-4 {
+  top: 50%;
+}
+.native-party-card.slot-5 {
+  top: 65%;
+}
+.native-party-card:focus,
+.native-party-card.active {
+  outline: none;
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-selected.png");
+}
+.native-party-card.slot-0:focus,
+.native-party-card.slot-0.active {
+  background-image: url("../../../../generated/assets/ui/party-slot-main-selected.png");
+}
+.native-party-card.egg {
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-no-hp.png");
+}
+.native-party-card.egg:focus,
+.native-party-card.egg.active {
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-no-hp-selected.png");
+}
+.native-party-card.slot-0.egg {
+  background-image: url("../../../../generated/assets/ui/party-slot-main-no-hp.png");
+}
+.native-party-card.slot-0.egg:focus,
+.native-party-card.slot-0.egg.active {
+  background-image: url("../../../../generated/assets/ui/party-slot-main-no-hp-selected.png");
+}
+.native-party-card.empty {
+  background-image: url("../../../../generated/assets/ui/party-slot-wide-empty.png");
+}
+.party-icon {
+  position: absolute;
+  width: 13.333cqw;
+  height: 13.333cqw;
+  left: -3.333cqw;
+  top: -2.5cqw;
+  overflow: hidden;
+}
+.party-icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  image-rendering: pixelated;
+}
+.slot-0 .party-icon {
+  top: 0;
+}
+.party-name,
+.party-level,
+.party-gender,
+.party-hp,
+.party-status {
+  position: absolute;
+  font-size: 3.333cqw;
+  white-space: nowrap;
+}
+.party-name {
+  left: 9.167cqw;
+  top: 1.25cqw;
+}
+.party-level {
+  left: 12.5cqw;
+  top: 5cqw;
+}
+.party-gender {
+  left: 25.833cqw;
+  top: 5cqw;
+}
+.party-hp {
+  right: 1.25cqw;
+  top: 5cqw;
+}
+.native-party-card .hp-track {
+  position: absolute;
+  left: 36.667cqw;
+  top: 4.167cqw;
+  width: 20cqw;
+  height: 1.25cqw;
+  margin: 0;
+  border: 0;
+  background: #525252;
+}
+.slot-0 .party-name {
+  left: 10cqw;
+  top: 4.583cqw;
+}
+.slot-0 .party-level {
+  left: 13.333cqw;
+  top: 8.333cqw;
+}
+.slot-0 .party-gender {
+  left: 26.667cqw;
+  top: 8.333cqw;
+}
+.slot-0 .hp-track {
+  left: 10cqw;
+  top: 14.583cqw;
+}
+.slot-0 .party-hp {
+  right: 1.667cqw;
+  top: 16.667cqw;
+}
+.party-status {
+  left: 15cqw;
+  bottom: 0;
+  color: #ffe684;
+  font-size: 2.5cqw;
+}
+.party-prompt {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 76.667%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  padding: 2% 3%;
+  color: #424242;
+  background: #f8f8f8;
+  font-size: 3.333cqw;
+  border: 3.333cqw solid transparent;
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
+    8 fill / 3.333cqw;
+}
+.party-cancel {
+  position: absolute;
+  left: 83.333%;
+  top: 87.5%;
+  width: 16.667%;
+  height: 10%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f8f8f8;
+  text-shadow: 1px 1px #525252;
+  box-shadow: none;
+}
+.party-cancel:focus {
+  outline: 0;
+  color: #ffe684;
+}
+.party-action-menu {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  min-width: 38%;
+  max-height: 100%;
+  overflow: auto;
+  padding: 2% 1%;
+  background: #f8f8f8;
+  border: 3.333cqw solid transparent;
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png"))
+    8 fill / 3.333cqw;
+}
+.party-action-menu button {
+  display: block;
+  width: 100%;
+  padding: 3% 2% 3% 12%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #424242;
+  text-align: left;
+  line-height: 1.2;
+  font-weight: 400;
+  position: relative;
+}
+.party-action-menu button.field-move {
+  color: #216bce;
+}
+.party-action-menu button:focus {
+  outline: 0;
+}
+.party-action-menu button:focus:before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+}
+.native-party-card:focus .party-icon img,
+.native-party-card.active .party-icon img {
+  animation: party-icon-frame 500ms step-end infinite;
+}
+@keyframes party-icon-frame {
+  0%,
+  49.999% {
+    transform: translateY(0);
+  }
+  50%,
+  100% {
+    transform: translateY(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .native-party-card .party-icon img {
+    animation: none !important;
+  }
+}
+.item-acquired {
+  position: fixed;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 18px;
+  background: rgba(16, 24, 32, 0.92);
+  border: 2px solid #f8f8e8;
+  border-radius: 6px;
+  color: #f8f8e8;
+  pointer-events: none;
+  animation: item-acquired-in 0.18s ease-out;
+}
+.item-acquired-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.item-acquired-icon {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+}
+.item-acquired-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.item-acquired-text strong {
+  font-size: 14px;
+}
+.item-acquired-text span {
+  font-size: 12px;
+  opacity: 0.8;
+}
+@keyframes item-acquired-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .item-acquired {
+    animation: none;
+  }
+}
+.heal-machine {
+  position: fixed;
+  left: 6%;
+  top: 20%;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  animation: heal-fade 0.2s ease-out;
+}
+.heal-slots {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(16, 24, 32, 0.85);
+  border: 2px solid #f8f8e8;
+  border-radius: 4px;
+}
+.heal-slot {
+  width: 26px;
+  height: 26px;
+  border: 2px solid #6a7a8a;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.heal-slot.filled {
+  border-color: #f8f8e8;
+}
+.heal-ball {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+  animation: heal-ball-in 0.45s ease-out both;
+}
+.heal-title {
+  color: #101820;
+  background: #f8f8e8;
+  border: 2px solid #101820;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  align-self: flex-start;
+}
+@keyframes heal-ball-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes heal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heal-machine,
+  .heal-ball {
+    animation: none;
+  }
+}
+.field-sequence {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 46;
+  pointer-events: none;
+  image-rendering: pixelated;
+}

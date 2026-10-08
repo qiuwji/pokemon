@@ -2,17 +2,17 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { CropRegistry, CropService } from "../src/engine/crop-growth.js";
+import { CropRegistry, CropService } from "../src/game/emerald/domain/crop-growth.js";
 import {
   EMERALD_CROP_POLICY,
   EMERALD_CROPS,
   emeraldBerryYield,
 } from "../src/packs/emerald/berries.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
@@ -225,7 +225,7 @@ function gameFixture() {
     bus,
     ...compiled,
     tick(minutes) {
-      wall += minutes * 60000;
+      wall += minutes * 60000 / 60;
       frame += 1000;
       game.tick(frame, [game.state.position.map]);
     },

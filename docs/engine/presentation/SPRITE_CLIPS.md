@@ -37,7 +37,7 @@ api.presentation.sprite('hello', {
 
 `tools/import-detail-sprites.py`读取当前content物种及已有PNG头，生成 `generated/packs/emerald/detail-sprite-frames.js`。命令：`python3 tools/import-detail-sprites.py`；可从任意工作目录执行。脚本不编辑只读C参考或图片。生成结果描述已有64px纵向帧图；当前58种里3种多帧，其余为单帧。
 
-`packs/emerald/sprite-clips.js`声明默认125ms帧时长、多帧循环，单帧静态。**此时序是项目演示政策，未复刻原作每种精灵的动画脚本。** 原作图集之外的新尺寸/独立资源使用插件显式片段，不扩展通用播放器中的物种分支；新增原生物种素材后重跑导入并检查生成差异。图集来源沿用项目现有资源记录。
+`packs/emerald/sprite-clip-content.js`声明默认125ms帧时长，多帧入场播放一次后回到首帧，单帧静态。**此时序是项目演示政策，未复刻原作每种精灵的动画脚本。** 原作图集之外的新尺寸/独立资源使用插件显式片段，不扩展通用播放器中的物种分支；新增原生物种素材后重跑导入并检查生成差异。图集来源沿用项目现有资源记录。
 
 ## 验证与接手
 

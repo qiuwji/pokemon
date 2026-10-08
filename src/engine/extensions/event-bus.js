@@ -20,12 +20,38 @@ export class EventBus {
       if (!list.size) this.listeners.delete(type);
     };
   }
+  /** Trusted transaction boundary: facts are detached now and delivered only on commit. */
+  beginBatch() {
+    if (this.batch) throw new Error("Nested event batches are forbidden");
+    const pending = [];
+    this.batch = pending;
+    const close = () => {
+      if (this.batch !== pending) throw new Error("Expired event batch");
+      this.batch = null;
+    };
+    return {
+      rollback: close,
+      commit: () => {
+        close();
+        for (const event of pending)
+          this.queue.push(readOnly({ ...event, sequence: ++this.sequence }));
+        this.deliver();
+      },
+    };
+  }
   emit(type, payload = {}) {
     if (typeof type !== "string" || !type)
       throw new Error("Invalid event type");
-    if (this.queue.length >= this.limit)
+    if (this.queue.length + (this.batch?.length || 0) >= this.limit)
       throw new Error("Event queue limit exceeded");
+    if (this.batch) {
+      this.batch.push(readOnly({ type, payload }));
+      return;
+    }
     this.queue.push(readOnly({ type, payload, sequence: ++this.sequence }));
+    this.deliver();
+  }
+  deliver() {
     if (this.delivering) return;
     this.delivering = true;
     let delivered = 0;

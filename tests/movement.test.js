@@ -19,7 +19,7 @@ import {
   MOVEMENT_MODES,
   TRAVEL_DESTINATIONS,
 } from "../src/packs/emerald/movement.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 const map = (behavior = Array(15).fill(0)) => ({
   width: 5,
@@ -250,6 +250,8 @@ function travelSetup() {
 
 test("Flight validates visit, capability, indoor origin and live landing occupancy without moving the trainer", () => {
   const s = travelSetup();
+  assert.equal(s.service.list()[0].position.map, "town");
+  assert(Object.isFrozen(s.service.list()[0].position));
   s.context.visited = [];
   assert.equal(s.service.prepare("town").ok, false);
   s.context.visited = ["town"];

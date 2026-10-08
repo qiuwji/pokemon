@@ -73,11 +73,11 @@ api.story.register('gate', {
 | cameraTo / cameraFollow | cameraTo取actor或position:{map,x,y}，ms可选；cameraFollow回到玩家 |
 | teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位，并可用coverMs/holdMs/revealMs（0–60000）控制遮黑/保持/淡入时长（如战败白屏保持）；真正需要传送时使用，不代替行走 |
 | wait | ms必填，有限且0–60000 |
-| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头/objects纯对象像素偏移回调，等待场景结束；不写规则 |
+| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头/objects纯对象像素偏移回调，等待场景结束；objects可返回有界frame图片索引(0–4095)，退出即清除，不写规则 |
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |
 | heal / starter / shop | 无必需额外参数；分别调用现有治疗、选择伙伴和商店界面端口 |
 
-更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../src/packs/emerald/application/story-application.js)、[CommandRunner](../../../src/engine/commands.js)、[FieldDirector](../../../src/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
+更低层的captureMonster/lossPenalty是现有战后领域桥接，不作为一般剧情作者任意写精灵/扣钱的捷径。完整处理入口见[StoryApplication](../../../src/game/emerald/application/story-application.js)、[CommandRunner](../../../src/engine/commands.js)、[FieldDirector](../../../src/engine/field-director.js)；文件更名时搜索`class StoryApplication`、`validateFieldCommand`、`Unknown story command`。
 
 预检全部树不等于整段剧情原子回滚；已经成功提交的奖励/世界操作不会因后续演出失败自动撤销。once控制重触发，completed与实际领取账本分开。背包满的原作专用分支需明确结果/容量政策，不能因为事件一次性就提前标记领取。当前语言还没有自动翻译C特殊函数、完整离图回调或任意设施启动命令；按实际缺口单独演进，不能在内容中伪造。
 
@@ -122,3 +122,6 @@ choice另支持default选项ID、timeoutMs（1–60000，必须配default）；o
 坐标脚本与门格重合时，落地后先允许step剧情接管warp。脚本步行本身不触发自动warp，跨图仍使用显式scene。场景pin维持同一个演员直到释放；定义刷新不得在演出中替换正在移动的对象。状态投影仍是实时声明：同一段可见演出中的中间状态应保持一致摆位，不把C的OnTransition摆位误转成每次flag变化都重置。
 
 调钟提交仅由当前等待中的页面回调授权；关闭页面后回调失效。公用core.time.start仍拒绝剧情忙态。时钟页面拥有淡入淡出，可信提交检查真实在途移动及战斗，不把自己的遮盖动画当成非法移动。
+
+
+绿宝石应用还接收`screen`的`id:"new-game"`：只在未配置身份的新游戏入口调用，等待博士介绍/命名UI结束后提交身份。它属于绿宝石应用屏幕接线，不是引擎或插件绕过权限写身份的公共命令。

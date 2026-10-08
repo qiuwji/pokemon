@@ -11,8 +11,8 @@
 | 工作流 / 脚本 | 读取 → 写入 | 参数 / 前置依赖 | 预演 |
 | --- | --- | --- | --- |
 | 区域 `import-emerald.py` | maps/layouts、物种/招式/属性表、对象和精灵图 → 选定地图/物种/招式/actor字段及PNG | 可选source、--maps/--species/--profile；现有包。区域/中文名来自slice及locale | 是 |
-| 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | 可选source、--maps/--profile；先地图导入，动画区间从配置读取 | 是 |
-| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、src/wallclock.c偏移表、`field_door.c`门帧图组与`metatile_labels.h` → 男女时钟资源、生成的wall-clock.js、生成的door-anims.js、门metatile 900起及来源哈希 | source/--target/--strict；先grid；重新生成图集后重跑，重复运行不累加派生帧 | 是 |
+| 区域 `import-grid.py` | tilesets/layouts/图块动画 → 网格边框、图集定义、PNG、跑步actor | 可选source、--maps/--profile；先地图导入，动画区间从配置读取；标准grid入口自动门后处理 | 是 |
+| 区域 `import-opening-art.py` | wallclock PNG/调色板/tilemap、src/wallclock.c偏移表、`field_door.c`门帧图组与`metatile_labels.h` → 男女时钟资源、生成的wall-clock.js、生成的door-anims.js、门metatile 900起及来源哈希 | source/--target/--strict；先grid；标准grid入口自动执行，底层grid重生成后须重跑，重复运行不累加派生帧 | 是 |
 | 区域 `import-encounters.py` | wild_encounters.json陆地表 → 地图陆地遭遇字段 | 可选source、--maps；所需物种先导入，校验槽位数，不再写进化 | 是 |
 | 区域 `import-water-encounters.py` | 同上水上表 → 地图水上遭遇字段 | 可选source、--maps；所需水上物种先导入，校验槽位数 | 是 |
 | 区域 `import-weather.py` | 所有地图header/坐标事件 → rules/gen3/map-weather.js | 可选source；原作地图header不能为空，不依赖可玩地图数量 | 是 |
@@ -32,7 +32,7 @@
 | 音频 `import-audio.py` | direct_sound_samples WAV → audio资源及来源记录 | 可选source、--profile；不是整部原作BGM转换器，记录实际参考修订 | 是 |
 | 剧情 `import-script-text.py` | 各地图scripts.inc的`.string` → 原作对白label参考JSON | 可选source、--maps、--out（相对路径落在--target内）；只读抽取，不写游戏内容，供逐字转写对照 | 否 |
 
-新地图分两步导入：`emerald` 写入地图数据并标记 `pendingGrid`，`grid` 补图集与 border 后清除该标记。标记是显式的未完成态，不放宽 tileset/border 校验。指向 `MAP_DYNAMIC` 的 warp 在运行时才设定，导入器按遗漏报告并交给剧情接管。
+新地图分两步导入：`emerald` 写入地图数据并标记 `pendingGrid`，`grid` 补图集与 border 后清除该标记。标记是显式的未完成态，不放宽 tileset/border 校验。指向 `MAP_DYNAMIC` 的 warp 在运行时才设定，导入器按遗漏报告并交给剧情接管。地图切片可先只导入当前路径所需的地图；指向未随切片导入地图的连接会作为 `connections` 遗漏报告，边界保持关闭，后续导入邻图后再恢复。
 
 表中21个入口都支持`--target /另一份/pack`；所有内容入口共用ImportSession，不是只跳过最后一次JSON写入。`import-script-text.py`只抽取原作文本供人工转写对照，不写内容清单，因此没有内容归属。资源写入也必须暂存后提交。独立生成器无需内容清单；内容读写器需要已有清单。可选source从脚本位置定位参考，不依赖当前工作目录。
 
@@ -107,3 +107,11 @@ python3 tools/fixtures/generate.py --scenes E2ETestField
 只写generated/fixtures/world.json。terrain表记录水/冰/岩壁的视觉来源；泥坡、凸坡、横/竖轨道另以原图集行为属性和渲染截图确认。水动画区间与grid导入共读tile-animations.json，花动画不算水。自动检查只能证明索引/动画/行为合同；外观另做图片观察，不把生成成功当视觉还原。安装图像工具依赖用`python3 -m pip install -r tools/requirements.txt`。干净副本无work/的生成与第二次无差异预演由Python可携带性测试覆盖。
 
 剧情工具入口为`tools/story/extract.py extract/verify/movement`；movement子命令连接`tools/story/movement.py`，先回校验固定来源再输出命令。参数及支持范围见[提取流程](STORY_EXTRACTION.md)，不写游戏数据。opening-art同时导出原作转场精灵球，固定透明色与调色板，纳入opening-art-source.json来源清单。门帧不再写死是哪几扇：脚本按`field_door.c`的图组和`metatile_labels.h`，只为本内容实际走到的门格追加派生metatile，`door-anims.js`是运行时唯一门表，未列入的门不播放；重新运行按图集尾部的自有门图块整体替换，不累加。
+
+### 地图、水面与门资源的连续生产（2026-10-07）
+
+标准 `tools/import.py grid` 入口现在自动调用 `opening-art` 后处理，传递同一只读source、target、check与strict；分别列出网格和门资源报告。底层entry仍只拥有grid字段，直接执行底层脚本时仍须后处理。网格更新及门后处理是两个提交阶段；后处理失败整个入口返回失败，须修复并重跑，不可把前一阶段产物当完成包。
+
+门色从各地图原始layout中primary/secondary palette获取，分别追加到该地图图集；`door-anims.js`导出按tileset索引，避免新图集拿旧图集帧。重新导入不累计追加门帧。General主图集与Rustboro二级windy_water动画从同一配置读取；后者是104北侧斜纹池塘（8组×4图块，八帧，8帧更新和错开相位），不可只导入通用海水后声称所有池塘已动态。
+
+静态障碍从原作graphics_info的inanimate属性导入帧0映射，不将cuttable_tree的动作帧1–3当up/left人物朝向。专项测试同时覆盖图集后处理的真实标准入口、重复生产、全部动画门帧、静止树及截图池塘。

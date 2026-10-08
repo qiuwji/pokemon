@@ -10,7 +10,7 @@ manifest 包含 `id / apiVersion / version / dataVersion / permissions / depende
 
 版本是合同而非发布编号：`apiVersion`仅在公开合同不兼容时变更，新增兼容能力不要求所有插件锁步升级。本开发工程明确不兼容历史存档；`dataVersion`不匹配拒绝加载原文，不迁移、不静默跳过插件或丢弃其数据。改变数据结构时使用当前版本的新存档；正式发布前如需兼容，另行设计迁移合同。
 
-核心引擎不导入绿宝石、浏览器或表现模块。插件宿主只接收 state/query/random/applyIntent/present/changed 端口；项目内的宽应用门面仍是可信装配层的有意取舍。插件 API 不暴露该门面。
+核心引擎不导入绿宝石、浏览器或表现模块。插件宿主只接收 state/query/random/applyIntent/present/changed 和可选 beginEffects 端口；项目内的宽应用门面仍是可信装配层的有意取舍。插件 API 不暴露该门面。
 
 ## 14 项能力及入口
 
@@ -117,3 +117,10 @@ const plugin = {
 ## 已有世界查询与修改
 
 使用`core.world.objects`取得稳定对象ID和capabilities，不用观察坐标拼ID。普通NPC/sign的dialogue绑定、按ID对白预览、patch的feedback、地块appearance/revision及存档依赖见[统一世界合同](../engine/world/STATE_AND_LIFECYCLE.md)。raw NPC资料未自动变成Actor；not-instantiated不可修改。持续Actor走actor命令，商店/治疗等领域交互不允许对白字段覆盖。接口已通过全量核心/插件测试，实际浏览器验收范围见STATUS；无撤销、所有权仲裁、跨批事务和跨图集修改承诺。
+
+
+## 同步意图结果与核心事实提交
+
+`ctx.intent(value,onResult?)` 在提交期间同步执行结果回调，传入冻结 JSON；回调可写插件草稿或追加意图，受原事务的128次操作限制，禁止异步和嵌套dispatch。草稿在回调之后再次校验。任一意图或回调失败一起恢复领域值、插件数据与RNG。结果回调不是提交成功通知；外部反馈使用ctx.feedback，事实使用ctx.emit。
+
+可信应用装配可通过 beginEffects 返回 commit/rollback，补齐保存快照覆盖不到的运行缓存。引擎不读取NPC/外观/遇敌服务内部结构。绿宝石实现由 actor-transaction-effects 持有这些缓存，并调用 EventBus.beginBatch：生成时即复制冻结核心事实，整笔失败丢弃，成功后统一排队发布，序号在成功时分配。既有不提供该端口的宿主仍可使用原事务。Actor意图形状与公开代表例见 [ACTORS](../engine/actors/ACTORS.md)。

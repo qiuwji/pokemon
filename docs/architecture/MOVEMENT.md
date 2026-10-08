@@ -12,7 +12,7 @@
 - `presentation/travel-director.js`：起飞、遮幕、降落，不计算权限或目的地。只有全屏遮幕完全覆盖时调用地图提交；失败则在原位置降落并释放输入锁。
 - `adapters/canvas-renderer.js`：角色帧表、锚点、坐骑独立图层、飞行采样。地图依然由 8×8 原始图块组成 16×16 网格。
 - `packs/emerald/movement.js`：步行/跑步/音速自行车/越野自行车/冲浪定义、目前两个飞行落点。
-- `packs/emerald/movement-interface.js`：旅行菜单和岸边冲浪确认，只请求 Adventure 的操作接口。
+- `ui/emerald/movement-interface.js`：旅行菜单和岸边冲浪确认，只请求 Adventure 的操作接口。
 
 ## 可玩范围与规则边界
 
@@ -31,3 +31,14 @@
 本地开发改用 `tools/serve.py`，禁用资源缓存，避免重载时混用新旧 ES 模块；此设置只服务开发。
 
 当前物品/资格/钓鱼/地图许可/存档证据见docs/engine/items/FIELD_ITEMS.md 与 docs/project/VALIDATION.md；新版真实浏览器在 E 回归，历史截图不证明已删除的旁路或新增道具页面。
+
+
+## 通用移动结果
+
+FieldSession 与 NPCSystem 共享 [MotionResults](../../src/engine/motion-results.js)，FieldDirector 复用同一报告器。引擎只生成冻结 start/settle/blocked/cancelled 结果；WorldApplication 在应用层映射为 `core:motion`，事件传输及订阅属于宿主。实体、时钟和取消规则见 [ACTORS](../engine/actors/ACTORS.md)。没有路线历史、追随关系或宝可梦判断；跟随插件决定如何消费事实，通行与预约仍由既有World/NPCSystem执行。
+
+## 移动原因词表
+
+[blocked-reasons.js](../../src/engine/blocked-reasons.js)是阻挡与生命周期取消原因的唯一声明；冻结常量供调用处引用，列表供World/MotionResults校验。包括World的7种、玩家前置2种、passage兜底及静态NPC的3种阻挡原因，不混入disposed等取消原因。未声明值在分配序号/发布前抛错。
+
+MotionResult按phase区分：started/settled的reason为null，blocked为BlockedReason，cancelled为MotionCancelReason。类型通过JSDoc const字面量推导自运行时数组；合同检查启用allowJs，原因模块另纳入checkJs。无需重复抄联合类型。switch可拒绝拼错分支，但默认不会报告所有遗漏，消费者要在default使用never检查；[类型用例](../../tests/contracts.typecheck.ts)展示写法。

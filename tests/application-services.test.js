@@ -5,16 +5,16 @@ import path from "node:path";
 import {
   bindApplicationPorts,
   liveApplicationPorts,
-} from "../src/packs/emerald/application/ports.js";
+} from "../src/game/emerald/application/ports.js";
 import {
   PartyApplication,
   PARTY_PORTS,
-} from "../src/packs/emerald/application/party-application.js";
+} from "../src/game/emerald/application/party-application.js";
 import {
   exposeApplicationPorts,
   APPLICATION_FIELDS,
   APPLICATION_METHODS,
-} from "../src/packs/emerald/application/public-ports.js";
+} from "../src/game/emerald/application/public-ports.js";
 test("Application dependencies are explicit, live across state replacement, and cannot be overwritten or broadened", () => {
   let state = { seen: [], caught: [] };
   const ports = liveApplicationPorts(
@@ -70,7 +70,7 @@ test("Application fields forward to one owning service, including the explicitly
   assert.equal(owner.state, state);
 });
 test("Adventure remains a composition facade; application services cannot import it or reach sibling services", () => {
-  const base = new URL("../src/packs/emerald/", import.meta.url),
+  const base = new URL("../src/game/emerald/", import.meta.url),
     source = fs.readFileSync(new URL("adventure.js", base), "utf8");
   assert(
     source.split("\n").length < 160,

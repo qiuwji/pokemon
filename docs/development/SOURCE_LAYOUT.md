@@ -1,6 +1,6 @@
 # 源码与生成资源直接运行
 
-2026-10-06按用户要求取消复制构建。工程只有两类运行输入，不生成dist，没有build/prebuild命令，也没有合并后的部署树。
+2026-10-06按用户要求取消复制构建。工程只有两类运行输入，不生成dist，没有build/prebuild命令，也没有合并后的部署树。GitHub Pages仅在运行器临时目录打包同样的src/generated，不写回仓库；见[发布说明](GITHUB_PAGES.md)。
 
 | 目录 | 内容 | 如何修改 |
 | --- | --- | --- |
@@ -8,6 +8,10 @@
 | `generated/` | grid/tileset JSON、生成规则模块、PNG、音频、来源清单、测试地图 | 修改工具/配置，再预演及重新生成 |
 
 两棵目录各保留一份文件。生成输入保留在Git，干净检出无需原作资料、Pillow或音频渲染器就能运行游戏与Node检查；重新导入才需要相应参考及工具。业务修改看src，派生修改看generated，后者由.gitattributes标记便于review。
+
+## 手写运行时的职责位置
+
+`src/packs/emerald`只包含内容、纯政策和编排，使用`engine/extensions`公开作者能力。`src/game/emerald/assembly`构造具体引擎/表现服务，`application`按状态所有者协调用例，`commands`适配命令，`presentation`接线本作宿主生命周期。`src/ui/emerald`持有浏览器页面、DOM交互、视图与CSS。搬迁后不在旧pack位置保留转出口；改页面无需修改内容边界。依赖守卫见[architecture.test.js](../../tests/architecture.test.js)。
 
 ## 启动和引用
 

@@ -13,16 +13,16 @@ import {
   validateValue,
 } from "../src/engine/extensions/values.js";
 import { validateLayout } from "../src/engine/extensions/ui-registry.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
 import { interactionFixture } from "./fixtures/extensions/interaction.js";
 import { createWorldFixture } from "./fixtures/extensions/world.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import { Random, createMonster } from "../src/engine/model.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 import { Battle } from "../src/engine/battle.js";
 import { GEN3_GLOBAL_HOOKS } from "../src/engine/rules/gen3/global-rules.js";
 const base = loadContentSync();

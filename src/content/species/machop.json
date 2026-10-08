@@ -1,0 +1,88 @@
+{
+  "name": "腕力",
+  "dex": 66,
+  "types": [
+    "fighting"
+  ],
+  "stats": {
+    "hp": 70,
+    "atk": 80,
+    "def": 50,
+    "spa": 35,
+    "spd": 35,
+    "spe": 35
+  },
+  "evYield": {
+    "hp": 0,
+    "atk": 1,
+    "def": 0,
+    "spa": 0,
+    "spd": 0,
+    "spe": 0
+  },
+  "catchRate": 180,
+  "expYield": 88,
+  "growth": "medium_slow",
+  "abilities": [
+    "guts"
+  ],
+  "femaleRatio": 0.25,
+  "genderless": false,
+  "eggGroups": [
+    "human_like"
+  ],
+  "eggCycles": 20,
+  "friendship": 70,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "leer"
+    },
+    {
+      "level": 7,
+      "move": "focus_energy"
+    },
+    {
+      "level": 22,
+      "move": "foresight"
+    },
+    {
+      "level": 43,
+      "move": "scary_face"
+    }
+  ],
+  "unavailableLearnset": [
+    {
+      "level": 1,
+      "move": "low_kick"
+    },
+    {
+      "level": 13,
+      "move": "karate_chop"
+    },
+    {
+      "level": 19,
+      "move": "seismic_toss"
+    },
+    {
+      "level": 25,
+      "move": "revenge"
+    },
+    {
+      "level": 31,
+      "move": "vital_throw"
+    },
+    {
+      "level": 37,
+      "move": "submission"
+    },
+    {
+      "level": 40,
+      "move": "cross_chop"
+    },
+    {
+      "level": 49,
+      "move": "dynamic_punch"
+    }
+  ]
+}

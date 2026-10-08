@@ -5,13 +5,13 @@ import crypto from "node:crypto";
 import { loadContentSync } from "../tools/content-io.mjs";
 import { MACHINES } from "../generated/engine/rules/gen3/machine-learning.js";
 import { createMonster, Random } from "../src/engine/model.js";
-import { summaryPage } from "../src/packs/emerald/ui/summary-view.js";
+import { summaryPage } from "../src/ui/emerald/ui/summary-view.js";
 import {
   bagPockets,
   bagPicture,
   itemIconURL,
   listNavigation,
-} from "../src/packs/emerald/ui/native-view.js";
+} from "../src/ui/emerald/ui/native-view.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
 import { session } from "./helpers/session.js";
 import { readOnly } from "../src/engine/extensions/values.js";

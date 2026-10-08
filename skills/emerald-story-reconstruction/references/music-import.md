@@ -149,3 +149,5 @@ const music = api.presentation.audio("littleroot", {
 | 短曲结束BGM不恢复 | fanfare恢复/等待政策未转写，不能全部当作普通setMusic |
 
 完成后同步STATUS、资源来源/验收记录及音频规格。接口变动同步Skill与作者例；文档修改只跑check:docs，代码/工具/资源改动查相应专项，阶段收口再全量回归，复用未变领域证据。
+
+地图切换现在使用有界MusicTransition选项与fadeMusic完成通知；转场prepare租约在遮黑后等待ready、finally释放。目的地/骑车判断留在内容政策，播放层不认识地图；同曲不断播，不以全包交叉淡化替代原作切图。

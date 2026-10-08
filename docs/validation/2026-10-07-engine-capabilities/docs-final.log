@@ -1,0 +1,5 @@
+
+> emerald-web-engine@0.37.0 check:docs
+> node tools/check-docs.mjs
+
+Documentation: 97 Markdown files, 1090 local links, 12 synchronized examples valid

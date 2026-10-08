@@ -1,0 +1,118 @@
+{
+  "status": "complete",
+  "date": "2026-10-07",
+  "baseCommit": "0c22abb3fa9402a54ea5f0ed3c700842c3194acd",
+  "scope": [
+    "single human companion plugin",
+    "closed blocked/cancelled motion reasons and TypeScript narrowing",
+    "story orchestration assessment",
+    "story reconstruction skill workflow"
+  ],
+  "validation": [
+    {
+      "command": "npm run test:all",
+      "exitCode": 0,
+      "corePassed": 1186,
+      "pluginPassed": 64,
+      "log": "tests.log"
+    },
+    {
+      "command": "node --test tests/movement-results.test.js tests/story-language.test.js tests/story-content.test.js tests/story-session.test.js tests/oldale-rival.test.js examples/story-bundle.test.js examples/patrol-lab.test.js",
+      "exitCode": 0,
+      "passed": 59,
+      "companionCases": 8,
+      "log": "targeted.log"
+    },
+    {
+      "command": "npm run check",
+      "exitCode": 0,
+      "log": "check.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "docs-final.log"
+    },
+    {
+      "command": "skill-creator/scripts/quick_validate.py skills/emerald-story-reconstruction",
+      "exitCode": 0,
+      "log": "skill-validation.log",
+      "environment": "PyYAML temporarily supplied outside repository; no project dependency added"
+    }
+  ],
+  "saveIssue": {
+    "status": "user confirmed recovery; not reproduced",
+    "manualProbes": "Production test-harness and dev-scenarios: interact/reward/travel, disabled document import and startup from actual save storage succeeded. No save-contract changes.",
+    "rootCause": "unconfirmed; user suspects global storage"
+  },
+  "skillReview": {
+    "referenceCommit": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+    "referenceSlice": "data/maps/OldaleTown/scripts.inc: MartEmployee, directional movement, VAR_RESULT and FLAG_TEMP_1",
+    "method": "source/implementation walkthrough and existing real-entry tests; no independent model evaluation"
+  },
+  "limits": [
+    "No browser or Computer Use game operation",
+    "Human visual/audio/input acceptance pending",
+    "Pokemon sprites, party/species binding and special travel remain future plugin work"
+  ],
+  "historicalNotes": [
+    "Two-person patrol logs superseded by final companion.",
+    "check-initial.log retained: missing manifest links before manifest creation; final checks pass."
+  ],
+  "sourceSha256": {
+    "DEVELOPMENT_LOG.md": "82e00aada8fa0757171e99af5be98d2923475bd6a317dcb4a2d6274cd419c0f5",
+    "docs/architecture/MOVEMENT.md": "4b152ee525c2fc09adacd3fe4a0c03af6e2b4d511513e2abe8f11f0217f6d13a",
+    "docs/architecture/PLUGINS.md": "49f9b83dce3efa9f02739091cbcc653240b4f4c41519fdef19a508f236f09cbb",
+    "docs/development/CODE_MAP.md": "e4e605f94810ad37ed633b3e2deb2c0a27946fb3fff9270e7df71b4f3b6c5b0f",
+    "docs/engine/actors/ACTORS.md": "975015ae182e50c9fc7f5c97d9f3765114f90a08645389dde5fc2b7030be620e",
+    "docs/project/CHANGELOG.md": "204845235c00a9cde4e8b2e170eb66d7e8c672f0861a18b189a453512d1b0e38",
+    "docs/project/FOLLOWER_PLUGIN_PLAN.md": "10658bc6e5e640d4bc2f447d4603cace80dd6cb3da0169fb425da95f26158618",
+    "docs/project/SCOPE.md": "09a7310d5f68f610bc4019d530c102a5ed4344047136e6df606de4aa16bacb1c",
+    "docs/project/STATUS.md": "7b150e980c7a87c6ea347a6b6a83bca8f9cd53789f1967b43c922f9b60c60a2b",
+    "docs/project/STORY_EXPRESSIVENESS.md": "ac36337656f4d5a68293546d8146732e9827ec4a81111d490b3d0533b6dc2dfe",
+    "docs/project/VALIDATION.md": "c47c87c79e489a7f8077b8ad0194df8f5bf0bd3a26da9d413a17b00dc1fbb918",
+    "examples/README.md": "7f9929377fd3f2705fc8e9c94c81682a331cd32d9fc7b3d5d2717d5fce12cb14",
+    "examples/actor.test.js": "c87952fbb8e8c23b4bc586b5c27a594aa959cadfe3b0f4390c3805d786985269",
+    "examples/automation.test.js": "f1f2c7c614a4490d4bdef8150b9026328d6cfa42c11a284528d73ccccb4326bc",
+    "examples/facility-content.test.js": "afbaf8db34fdaaa451ccb03e9327429b15b8dc4e9e44fb54f067088095f86c3b",
+    "examples/patrol-lab.test.js": "cb8b9a0f14bad541ef1bf0b93537d2c4d9a0e2a1623e68b205e834753a4d38e6",
+    "package.json": "67feb376c0aa3650fa6589e16399ace459eef938fd66c465cf22a2550839429b",
+    "skills/emerald-actor-behaviors/SKILL.md": "68d92a1ffe70e0901d8f30032a1823c6f7bc2fce3659f6971d87799ebb921235",
+    "skills/emerald-plugin-authoring/SKILL.md": "ea816d90d300f7f3d0e9c14d986f58540628cd7b9b5a581a59fa059f46d3f3b2",
+    "skills/emerald-story-reconstruction/SKILL.md": "79bb41e548d243906f0663e7d336a9cfe3eb3a921ce1009129028139ab1510e2",
+    "skills/emerald-story-reconstruction/references/execution-workbook.md": "9370c055c67d0c68e7b4a6f57f1cd395fe40f9bbddccc65c015831ba52e33959",
+    "skills/emerald-story-reconstruction/references/scene-fidelity.md": "5d94d5228a3c17142a499053b25a8d7f1a2010cc9337a459215b889ae9d00eae",
+    "src/engine/blocked-reasons.js": "f6208fe825a10cbfe3e0daac2f7e34e1379e1488e2eb923b66cce55fc4304886",
+    "src/engine/contracts.d.ts": "7225af2679571e202ca525c9ef9d36b497beb810d1c136664c875591001f5502",
+    "src/engine/extensions/event-bus.js": "763e784a56a130fb79da1ce0e7b1727914bee59f60707c2f013617ff7b47fbaa",
+    "src/engine/extensions/plugin-runtime.js": "144356c19023bc2ae67c3540495979b6a20ac96b2594317146a294858236db8d",
+    "src/engine/field-director.js": "9ccafcfe266c9a208d38a3c65bb08595abb4d835c1071b7a044478a716fb2600",
+    "src/engine/field-session.js": "d28b371ead29f101f526b9036f24c7847e7361c12124fdf7ca7d582d20c4ae9b",
+    "src/engine/motion-results.js": "ebba39ed21c3c0af0a7c49b39849dc7275ef8692543fc43a05dea767cc2401f5",
+    "src/engine/npc-behaviors.js": "d2f89ee76d7412caf4eeefb75a45040f0bdeb1ccf8efcbe7600ae006ef21e0eb",
+    "src/engine/npcs.js": "7c3fe70550b4c773a795d06b088e36a18260edfe8789a6b02042bfa127e24a4f",
+    "src/engine/world.js": "4bf179b94ee6b036a1c520f884b9079a002daef6bcc7dad354e4a4734583677d",
+    "src/packs/emerald/actor-transaction-effects.js": "5bb72e6fcd0aa230339841add7098a4102ae630e25fe928a257cd5786cc03075",
+    "src/packs/emerald/application/world-application.js": "7b6a01ec49e06f9e9dc554f33ad64eef36c8aae598d11ca9cc6ed4044cb8e484",
+    "src/packs/emerald/extension-intents.js": "856cd38d8e54cff17080fc3358f0c516d00be44d1ee5dd8334aafdb6553f04fc",
+    "src/packs/emerald/extension-ports.js": "ab634144f39a1d83b19abd42d9a7c29333a11b6737c3d52b04edc797950c8caa",
+    "src/packs/emerald/public-events.js": "36ca0accc87463332195459da9b80ccc57da034ca74e3f9a43969ee459a44042",
+    "src/plugins/catalog.json": "ab42f8bbdb1a2454fd4062b5785148f4114814210ee4520e2cad957a20948fa7",
+    "src/plugins/patrol-lab/README.md": "3d813839c9149974da98cabacb6f2bed2a62dea79b78983494bccc9d77309a52",
+    "src/plugins/patrol-lab/index.js": "858dc5ef9cd76c41570989bebe2dd1dcef7b08d350b1438fa9dee352995d6122",
+    "tests/actor-transactions.test.js": "0bbef951de30ecbdd0119dd622359ee7ac98df4ce26296bfa56fe86053846a49",
+    "tests/behavior-timing.test.js": "bdcaac4f16493ae12f0d3e73ad67b911259bd593480862813a8c6f61708eeaf1",
+    "tests/contracts.typecheck.ts": "bdd77dd400600ee8ee3ff7e9068b41eaf31ceb25b1f47894e97efe0c0d044923",
+    "tests/event-batches.test.js": "1f99807b5b3b3da588015895b14c379fdad35187b720d657dd58d464dd8578aa",
+    "tests/movement-results.test.js": "17f62a3f4eb6046a68508a305d351163810584331e9ea545b979d4688195390c",
+    "tsconfig.engine.json": "69ca16cc45bf9390a0f6426bdbbe87d3b46b7ba1a7166ec53e2ac4a34e26b8ef"
+  },
+  "logSha256": {
+    "docs-final.log": "4cf62887aa6a2033366a2aae1ab194c8a5165d6d40bef9fe1fc416632c9afaa4",
+    "skill-validation.log": "db349825903d66adffea3ecf1bd8e1803043e8a71cf1a051235dabc5371f5bb0",
+    "targeted.log": "4c3046b2e8d1af94b7f0d218619d15a8d98fdb109fa4b1798236914285f363f6",
+    "check-initial.log": "8dda0826f0cac5ffe9753fb77506cd342e36a56517b7911025bbd11d471be011",
+    "tests.log": "45c9df6cf4969a5c56ca75028cda37ff4a955e7367b8a36391153e36a65e36b5",
+    "check.log": "3a626eb4909fb613d2c1c73284240d2afd7bfd4b59b11027e6054357e0507de2"
+  }
+}

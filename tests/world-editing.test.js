@@ -7,7 +7,7 @@ import { nextActorDirection } from "../src/engine/actor-navigation.js";
 import { BEHAVIOR } from "../src/engine/terrain.js";
 import { ExtensionCatalog } from "../src/engine/extensions/catalog.js";
 import { loadContentSync } from "../tools/content-io.mjs";
-import { assertPackContent } from "../src/packs/emerald/content.js";
+import { assertPackContent } from "../src/game/emerald/assembly/content.js";
 import { objectsFor } from "../src/packs/emerald/pack.js";
 
 test("Browser startup validates the native pack and each source NPC has a stable identity", () => {

@@ -61,6 +61,6 @@ python3 tools/control.py --scenario tools/scenarios/test-harness.json
 
 `api.queries.register(localId,{schema,network?,read(view,input)})`注册纯同步读接口，返回命名空间命令ID。它可在忙碌时并发执行，view只有冻结query/store/states；返回值也冻结，不进入事务、不触发保存、不消费RNG。回调中dispatch被拒绝；Promise返回拒绝。写入继续用actions/intent，不能给动作加concurrent绕过锁。
 
-领域观察来自[control-ports.js](../../src/packs/emerald/control-ports.js)及现有extension-ports，DOM语义端口在[control-dom.js](../../src/adapters/control-dom.js)，传输在[polling-transport.js](../../src/adapters/polling-transport.js)，本机桥在[control_relay.py](../../tools/control_relay.py)。没有把这些机制塞入adventure或产品插件。UI输入插件权限是uiControl，AI插件只读无写权限；外部网络入口按原network白名单操作。网络等待某个异步领域命令时，只有已声明concurrent的瞬时查询/UI输入可绕过等待；普通修改仍有序。结果按id/sequence关联，完成顺序可能不同于接受顺序。
+领域观察来自[control-ports.js](../../src/game/emerald/commands/control-ports.js)及现有extension-ports，DOM语义端口在[control-dom.js](../../src/adapters/control-dom.js)，传输在[polling-transport.js](../../src/adapters/polling-transport.js)，本机桥在[control_relay.py](../../tools/control_relay.py)。没有把这些机制塞入adventure或产品插件。UI输入插件权限是uiControl，AI插件只读无写权限；外部网络入口按原network白名单操作。网络等待某个异步领域命令时，只有已声明concurrent的瞬时查询/UI输入可绕过等待；普通修改仍有序。结果按id/sequence关联，完成顺序可能不同于接受顺序。
 
 测试仍分开：`npm test`验证纯查询、UI合同、传输及核心；`npm run test:plugins`验证[automation.test.js](../../examples/automation.test.js)产品插件与装配；`npm run test:all`阶段回归。测试插件不是测试框架替代品；浏览器/动画/音频与原作还原仍分别验收。C转写流程见[复刻Skill](../../skills/emerald-story-reconstruction/SKILL.md)。

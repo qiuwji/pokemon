@@ -76,9 +76,8 @@ export const NATURES = [
 ];
 export { ITEMS } from "./items.js";
 export { questFor } from "./quests.js";
-export { validateSave } from "./save-contract.js";
 // Assembly only: gameplay roles and native binding are separate responsibilities.
 export function objectsFor(state, db) {
   const map = state.position.map;
-  return bindNativeObjects(map, nativeCast(state, db), db.maps[map].npcs);
+  return bindNativeObjects(map, nativeCast(state, db), db.maps[map].npcs, db.maps[map]);
 }

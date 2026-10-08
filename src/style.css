@@ -1171,17 +1171,6 @@ button {
   visibility: visible;
 }
 
-/* Team progress uses the event snapshot, so defeated members follow animation timing. */
-.enemy-team {
-  position: absolute;
-  top: 30%;
-  left: 3%;
-  padding: 3px 6px;
-  color: #24383a;
-  background: #f8f8dc;
-  border: 2px solid #6a7b83;
-  font-size: clamp(12px, 1.8vw, 16px);
-}
 .battle-status.multi {
   width: 40%;
   font-size: 2.75cqw;

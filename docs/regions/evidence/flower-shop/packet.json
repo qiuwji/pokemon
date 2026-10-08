@@ -1,0 +1,1794 @@
+{
+  "version": 1,
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "selection": {
+    "maps": [
+      "Route104_PrettyPetalFlowerShop"
+    ],
+    "entries": [],
+    "functions": []
+  },
+  "maps": {
+    "Route104_PrettyPetalFlowerShop": {
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/map.json",
+      "sha256": "b31bf4a12f9d1077e9580a51b1104f58d4a504e45c409fb083e14e32aa5478c0",
+      "data": {
+        "id": "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
+        "name": "Route104_PrettyPetalFlowerShop",
+        "layout": "LAYOUT_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
+        "music": "MUS_PETALBURG",
+        "region_map_section": "MAPSEC_ROUTE_104",
+        "requires_flash": false,
+        "weather": "WEATHER_NONE",
+        "map_type": "MAP_TYPE_INDOOR",
+        "allow_cycling": false,
+        "allow_escaping": false,
+        "allow_running": false,
+        "show_map_name": false,
+        "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+        "connections": null,
+        "object_events": [
+          {
+            "local_id": "LOCALID_FLOWER_SHOP_OWNER",
+            "graphics_id": "OBJ_EVENT_GFX_WOMAN_2",
+            "x": 0,
+            "y": 3,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+            "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
+            "x": 7,
+            "y": 3,
+            "elevation": 3,
+            "movement_type": "MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT",
+            "movement_range_x": 1,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl",
+            "flag": "0"
+          },
+          {
+            "graphics_id": "OBJ_EVENT_GFX_GIRL_1",
+            "x": 11,
+            "y": 6,
+            "elevation": 4,
+            "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+            "movement_range_x": 2,
+            "movement_range_y": 2,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+            "flag": "0"
+          }
+        ],
+        "warp_events": [
+          {
+            "x": 2,
+            "y": 8,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "1"
+          },
+          {
+            "x": 3,
+            "y": 8,
+            "elevation": 0,
+            "dest_map": "MAP_ROUTE104",
+            "dest_warp_id": "1"
+          }
+        ],
+        "coord_events": [],
+        "bg_events": []
+      }
+    }
+  },
+  "entryInventory": [
+    {
+      "id": "Route104_PrettyPetalFlowerShop:object_events:0",
+      "map": "Route104_PrettyPetalFlowerShop",
+      "kind": "object_events",
+      "index": 0,
+      "script": "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104_PrettyPetalFlowerShop:object_events:1",
+      "map": "Route104_PrettyPetalFlowerShop",
+      "kind": "object_events",
+      "index": 1,
+      "script": "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl",
+      "included": true,
+      "sourceAvailable": true
+    },
+    {
+      "id": "Route104_PrettyPetalFlowerShop:object_events:2",
+      "map": "Route104_PrettyPetalFlowerShop",
+      "kind": "object_events",
+      "index": 2,
+      "script": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+      "included": true,
+      "sourceAvailable": true
+    }
+  ],
+  "roots": [
+    "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet",
+    "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry",
+    "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries",
+    "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries",
+    "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail",
+    "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner",
+    "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+    "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations",
+    "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner",
+    "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl",
+    "Route104_PrettyPetalFlowerShop_MapScripts",
+    "Route104_PrettyPetalFlowerShop_OnTransition",
+    "Route104_PrettyPetalFlowerShop_Pokemart_Plants"
+  ],
+  "blocks": {
+    "Common_EventScript_ShowBagIsFull": {
+      "label": "Common_EventScript_ShowBagIsFull",
+      "kind": "script",
+      "path": "data/event_scripts.s",
+      "line": 696,
+      "endLine": 700,
+      "sha256": "99ab96b552bd8585c97aeb817963f38f13ee8bce4d8b0d11b7fdeff3b3b14450",
+      "raw": "Common_EventScript_ShowBagIsFull::\n\tmsgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT\n\trelease\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 697,
+          "op": "msgbox",
+          "args": [
+            "gText_TooBadBagIsFull",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 698,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 699,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "gText_TooBadBagIsFull",
+          "line": 697,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 29,
+      "endLine": 35,
+      "sha256": "5ca4eb15c63ede7c8a9ce00c796c566c74ffb69b6623ce623651e75106bd8e92",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet::\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries, MSGBOX_YESNO\n\tcall_if_eq VAR_RESULT, YES, Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries\n\tcall_if_eq VAR_RESULT, NO, Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries\n\trelease\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 30,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries",
+            "MSGBOX_YESNO"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries, MSGBOX_YESNO"
+        },
+        {
+          "line": 31,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_RESULT",
+            "YES",
+            "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries"
+          ],
+          "raw": "\tcall_if_eq VAR_RESULT, YES, Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries"
+        },
+        {
+          "line": 32,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_RESULT",
+            "NO",
+            "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries"
+          ],
+          "raw": "\tcall_if_eq VAR_RESULT, NO, Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries"
+        },
+        {
+          "line": 33,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 34,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries",
+          "line": 30,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries",
+          "line": 31,
+          "op": "call_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries",
+          "line": 32,
+          "op": "call_if_eq",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 93,
+      "endLine": 96,
+      "sha256": "5d681d4a2de1619096e8667505348cfbd199fe9a58c0fccaeed89587bbb3a0cb",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry::\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries, MSGBOX_DEFAULT\n\trelease\n\tend\n",
+      "instructions": [
+        {
+          "line": 94,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 95,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 96,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries",
+          "line": 94,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 40,
+      "endLine": 43,
+      "sha256": "e0a2e2d7eed528836ec4e2938fba0b84bbb9743162b917c546d6741190a25a57",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries::\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness, MSGBOX_DEFAULT\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 41,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 42,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness",
+          "line": 41,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 36,
+      "endLine": 39,
+      "sha256": "d7026564b512b15d12f9e1db8571e1b7e6e1c617def67ef1cf715bd9338d66f1",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries::\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_BerriesExplanation, MSGBOX_DEFAULT\n\treturn\n\n",
+      "instructions": [
+        {
+          "line": 37,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_BerriesExplanation",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_BerriesExplanation, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 38,
+          "op": "return",
+          "args": [],
+          "raw": "\treturn"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_BerriesExplanation",
+          "line": 37,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 70,
+      "endLine": 77,
+      "sha256": "eadf54d98cc1bdbf23d3cb000cb9fac03957821e2c8f82b6ed63534c5b641f74",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail::\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis, MSGBOX_DEFAULT\n\tgiveitem ITEM_WAILMER_PAIL\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation, MSGBOX_DEFAULT\n\tsetflag FLAG_RECEIVED_WAILMER_PAIL\n\trelease\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 71,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 72,
+          "op": "giveitem",
+          "args": [
+            "ITEM_WAILMER_PAIL"
+          ],
+          "raw": "\tgiveitem ITEM_WAILMER_PAIL"
+        },
+        {
+          "line": 73,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 74,
+          "op": "setflag",
+          "args": [
+            "FLAG_RECEIVED_WAILMER_PAIL"
+          ],
+          "raw": "\tsetflag FLAG_RECEIVED_WAILMER_PAIL"
+        },
+        {
+          "line": 75,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 76,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis",
+          "line": 71,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation",
+          "line": 73,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 12,
+      "endLine": 15,
+      "sha256": "7c006b3952cf26abc4cf936fc8305cc2f291f04194fa6dd50aacb8c8d33cae1d",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner::\n\tsetobjectxyperm LOCALID_FLOWER_SHOP_OWNER, 4, 6\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 13,
+          "op": "setobjectxyperm",
+          "args": [
+            "LOCALID_FLOWER_SHOP_OWNER",
+            "4",
+            "6"
+          ],
+          "raw": "\tsetobjectxyperm LOCALID_FLOWER_SHOP_OWNER, 4, 6"
+        },
+        {
+          "line": 14,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 78,
+      "endLine": 92,
+      "sha256": "a5caccc1e66e8b9a24ded90ea934a5a0023f5346d446bfcf9585c72ac80f9d31",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_RandomBerryGirl::\n\tlock\n\tfaceplayer\n\tdotimebasedevents\n\tgoto_if_set FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY, Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers, MSGBOX_DEFAULT\n\trandom 8\n\taddvar VAR_RESULT, FIRST_BERRY_INDEX\n\tgiveitem VAR_RESULT\n\tgoto_if_eq VAR_RESULT, 0, Common_EventScript_ShowBagIsFull\n\tsetflag FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries, MSGBOX_DEFAULT\n\trelease\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 79,
+          "op": "lock",
+          "args": [],
+          "raw": "\tlock"
+        },
+        {
+          "line": 80,
+          "op": "faceplayer",
+          "args": [],
+          "raw": "\tfaceplayer"
+        },
+        {
+          "line": 81,
+          "op": "dotimebasedevents",
+          "args": [],
+          "raw": "\tdotimebasedevents"
+        },
+        {
+          "line": 82,
+          "op": "goto_if_set",
+          "args": [
+            "FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY",
+            "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry"
+          ],
+          "raw": "\tgoto_if_set FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY, Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry"
+        },
+        {
+          "line": 83,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 84,
+          "op": "random",
+          "args": [
+            "8"
+          ],
+          "raw": "\trandom 8"
+        },
+        {
+          "line": 85,
+          "op": "addvar",
+          "args": [
+            "VAR_RESULT",
+            "FIRST_BERRY_INDEX"
+          ],
+          "raw": "\taddvar VAR_RESULT, FIRST_BERRY_INDEX"
+        },
+        {
+          "line": 86,
+          "op": "giveitem",
+          "args": [
+            "VAR_RESULT"
+          ],
+          "raw": "\tgiveitem VAR_RESULT"
+        },
+        {
+          "line": 87,
+          "op": "goto_if_eq",
+          "args": [
+            "VAR_RESULT",
+            "0",
+            "Common_EventScript_ShowBagIsFull"
+          ],
+          "raw": "\tgoto_if_eq VAR_RESULT, 0, Common_EventScript_ShowBagIsFull"
+        },
+        {
+          "line": 88,
+          "op": "setflag",
+          "args": [
+            "FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY"
+          ],
+          "raw": "\tsetflag FLAG_DAILY_FLOWER_SHOP_RECEIVED_BERRY"
+        },
+        {
+          "line": 89,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 90,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 91,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyReceivedBerry",
+          "line": 82,
+          "op": "goto_if_set",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers",
+          "line": 83,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Common_EventScript_ShowBagIsFull",
+          "line": 87,
+          "op": "goto_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries",
+          "line": 89,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 44,
+      "endLine": 52,
+      "sha256": "a97a7224626c87fd4c5ec6216527fae4b3b62214e48fcb66cfdfa9cd50659aa6",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations::\n\tmessage gText_PlayerWhatCanIDoForYou\n\twaitmessage\n\tpokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_Plants\n\tmsgbox gText_PleaseComeAgain, MSGBOX_DEFAULT\n\trelease\n\tend\n\n\t.align 2\n",
+      "instructions": [
+        {
+          "line": 45,
+          "op": "message",
+          "args": [
+            "gText_PlayerWhatCanIDoForYou"
+          ],
+          "raw": "\tmessage gText_PlayerWhatCanIDoForYou"
+        },
+        {
+          "line": 46,
+          "op": "waitmessage",
+          "args": [],
+          "raw": "\twaitmessage"
+        },
+        {
+          "line": 47,
+          "op": "pokemartdecoration2",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Pokemart_Plants"
+          ],
+          "raw": "\tpokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_Plants"
+        },
+        {
+          "line": 48,
+          "op": "msgbox",
+          "args": [
+            "gText_PleaseComeAgain",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox gText_PleaseComeAgain, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 49,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 50,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        },
+        {
+          "line": 52,
+          "op": ".align",
+          "args": [
+            "2"
+          ],
+          "raw": "\t.align 2"
+        }
+      ],
+      "references": [
+        {
+          "target": "gText_PlayerWhatCanIDoForYou",
+          "line": 45,
+          "op": "message",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Pokemart_Plants",
+          "line": 47,
+          "op": "pokemartdecoration2",
+          "resolved": true
+        },
+        {
+          "target": "gText_PleaseComeAgain",
+          "line": 48,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 16,
+      "endLine": 28,
+      "sha256": "b8000d11936d1a2141d892ef79b63de5d26118508b5dc1e9cf01449e58c5f997",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_ShopOwner::\n\tlock\n\tfaceplayer\n\tgoto_if_set FLAG_TEMP_1, Route104_PrettyPetalFlowerShop_EventScript_SellDecorations\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop, MSGBOX_DEFAULT\n\tgoto_if_set FLAG_MET_PRETTY_PETAL_SHOP_OWNER, Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet\n\tsetflag FLAG_MET_PRETTY_PETAL_SHOP_OWNER\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries, MSGBOX_YESNO\n\tcall_if_eq VAR_RESULT, YES, Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries\n\tcall_if_eq VAR_RESULT, NO, Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries\n\trelease\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 17,
+          "op": "lock",
+          "args": [],
+          "raw": "\tlock"
+        },
+        {
+          "line": 18,
+          "op": "faceplayer",
+          "args": [],
+          "raw": "\tfaceplayer"
+        },
+        {
+          "line": 19,
+          "op": "goto_if_set",
+          "args": [
+            "FLAG_TEMP_1",
+            "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations"
+          ],
+          "raw": "\tgoto_if_set FLAG_TEMP_1, Route104_PrettyPetalFlowerShop_EventScript_SellDecorations"
+        },
+        {
+          "line": 20,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 21,
+          "op": "goto_if_set",
+          "args": [
+            "FLAG_MET_PRETTY_PETAL_SHOP_OWNER",
+            "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet"
+          ],
+          "raw": "\tgoto_if_set FLAG_MET_PRETTY_PETAL_SHOP_OWNER, Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet"
+        },
+        {
+          "line": 22,
+          "op": "setflag",
+          "args": [
+            "FLAG_MET_PRETTY_PETAL_SHOP_OWNER"
+          ],
+          "raw": "\tsetflag FLAG_MET_PRETTY_PETAL_SHOP_OWNER"
+        },
+        {
+          "line": 23,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries",
+            "MSGBOX_YESNO"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries, MSGBOX_YESNO"
+        },
+        {
+          "line": 24,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_RESULT",
+            "YES",
+            "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries"
+          ],
+          "raw": "\tcall_if_eq VAR_RESULT, YES, Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries"
+        },
+        {
+          "line": 25,
+          "op": "call_if_eq",
+          "args": [
+            "VAR_RESULT",
+            "NO",
+            "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries"
+          ],
+          "raw": "\tcall_if_eq VAR_RESULT, NO, Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries"
+        },
+        {
+          "line": 26,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 27,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_SellDecorations",
+          "line": 19,
+          "op": "goto_if_set",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop",
+          "line": 20,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_AlreadyMet",
+          "line": 21,
+          "op": "goto_if_set",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries",
+          "line": 23,
+          "op": "msgbox",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_ExplainBerries",
+          "line": 24,
+          "op": "call_if_eq",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries",
+          "line": 25,
+          "op": "call_if_eq",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl": {
+      "label": "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 62,
+      "endLine": 69,
+      "sha256": "49aefe756259609676941c984aca50dae908a6cf057e8ef93b807618135cd93b",
+      "raw": "Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl::\n\tlock\n\tfaceplayer\n\tgoto_if_unset FLAG_RECEIVED_WAILMER_PAIL, Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail\n\tmsgbox Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation, MSGBOX_DEFAULT\n\trelease\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 63,
+          "op": "lock",
+          "args": [],
+          "raw": "\tlock"
+        },
+        {
+          "line": 64,
+          "op": "faceplayer",
+          "args": [],
+          "raw": "\tfaceplayer"
+        },
+        {
+          "line": 65,
+          "op": "goto_if_unset",
+          "args": [
+            "FLAG_RECEIVED_WAILMER_PAIL",
+            "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail"
+          ],
+          "raw": "\tgoto_if_unset FLAG_RECEIVED_WAILMER_PAIL, Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail"
+        },
+        {
+          "line": 66,
+          "op": "msgbox",
+          "args": [
+            "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation",
+            "MSGBOX_DEFAULT"
+          ],
+          "raw": "\tmsgbox Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation, MSGBOX_DEFAULT"
+        },
+        {
+          "line": 67,
+          "op": "release",
+          "args": [],
+          "raw": "\trelease"
+        },
+        {
+          "line": 68,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_GiveWailmerPail",
+          "line": 65,
+          "op": "goto_if_unset",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation",
+          "line": 66,
+          "op": "msgbox",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_MapScripts": {
+      "label": "Route104_PrettyPetalFlowerShop_MapScripts",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 1,
+      "endLine": 4,
+      "sha256": "507ba3d44ab388a8ab5ff2ef08012bf3b9f38206fd988381bf1bba5770689961",
+      "raw": "Route104_PrettyPetalFlowerShop_MapScripts::\n\tmap_script MAP_SCRIPT_ON_TRANSITION, Route104_PrettyPetalFlowerShop_OnTransition\n\t.byte 0\n\n",
+      "instructions": [
+        {
+          "line": 2,
+          "op": "map_script",
+          "args": [
+            "MAP_SCRIPT_ON_TRANSITION",
+            "Route104_PrettyPetalFlowerShop_OnTransition"
+          ],
+          "raw": "\tmap_script MAP_SCRIPT_ON_TRANSITION, Route104_PrettyPetalFlowerShop_OnTransition"
+        },
+        {
+          "line": 3,
+          "op": ".byte",
+          "args": [
+            "0"
+          ],
+          "raw": "\t.byte 0"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_OnTransition",
+          "line": 2,
+          "op": "map_script",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_OnTransition": {
+      "label": "Route104_PrettyPetalFlowerShop_OnTransition",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 5,
+      "endLine": 11,
+      "sha256": "ba076ff43d79b4b68b91e7c1515b8101f983db889ed39a015b51337990f9b063",
+      "raw": "Route104_PrettyPetalFlowerShop_OnTransition:\n\tsetflag FLAG_LANDMARK_FLOWER_SHOP\n\tgoto_if_unset FLAG_MET_PRETTY_PETAL_SHOP_OWNER, Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner\n\tgoto_if_unset FLAG_BADGE03_GET, Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner\n\tsetflag FLAG_TEMP_1\n\tend\n\n",
+      "instructions": [
+        {
+          "line": 6,
+          "op": "setflag",
+          "args": [
+            "FLAG_LANDMARK_FLOWER_SHOP"
+          ],
+          "raw": "\tsetflag FLAG_LANDMARK_FLOWER_SHOP"
+        },
+        {
+          "line": 7,
+          "op": "goto_if_unset",
+          "args": [
+            "FLAG_MET_PRETTY_PETAL_SHOP_OWNER",
+            "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner"
+          ],
+          "raw": "\tgoto_if_unset FLAG_MET_PRETTY_PETAL_SHOP_OWNER, Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner"
+        },
+        {
+          "line": 8,
+          "op": "goto_if_unset",
+          "args": [
+            "FLAG_BADGE03_GET",
+            "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner"
+          ],
+          "raw": "\tgoto_if_unset FLAG_BADGE03_GET, Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner"
+        },
+        {
+          "line": 9,
+          "op": "setflag",
+          "args": [
+            "FLAG_TEMP_1"
+          ],
+          "raw": "\tsetflag FLAG_TEMP_1"
+        },
+        {
+          "line": 10,
+          "op": "end",
+          "args": [],
+          "raw": "\tend"
+        }
+      ],
+      "references": [
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner",
+          "line": 7,
+          "op": "goto_if_unset",
+          "resolved": true
+        },
+        {
+          "target": "Route104_PrettyPetalFlowerShop_EventScript_MoveShopOwner",
+          "line": 8,
+          "op": "goto_if_unset",
+          "resolved": true
+        }
+      ]
+    },
+    "Route104_PrettyPetalFlowerShop_Pokemart_Plants": {
+      "label": "Route104_PrettyPetalFlowerShop_Pokemart_Plants",
+      "kind": "script",
+      "path": "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc",
+      "line": 53,
+      "endLine": 61,
+      "sha256": "d339b219f0ad3451d4aaef36f05204007bc4ca21d045030c36636f9dfee03e55",
+      "raw": "Route104_PrettyPetalFlowerShop_Pokemart_Plants:\n\t.2byte DECOR_RED_PLANT\n\t.2byte DECOR_TROPICAL_PLANT\n\t.2byte DECOR_PRETTY_FLOWERS\n\t.2byte DECOR_COLORFUL_PLANT\n\t.2byte DECOR_BIG_PLANT\n\t.2byte DECOR_GORGEOUS_PLANT\n\tpokemartlistend\n\n",
+      "instructions": [
+        {
+          "line": 54,
+          "op": ".2byte",
+          "args": [
+            "DECOR_RED_PLANT"
+          ],
+          "raw": "\t.2byte DECOR_RED_PLANT"
+        },
+        {
+          "line": 55,
+          "op": ".2byte",
+          "args": [
+            "DECOR_TROPICAL_PLANT"
+          ],
+          "raw": "\t.2byte DECOR_TROPICAL_PLANT"
+        },
+        {
+          "line": 56,
+          "op": ".2byte",
+          "args": [
+            "DECOR_PRETTY_FLOWERS"
+          ],
+          "raw": "\t.2byte DECOR_PRETTY_FLOWERS"
+        },
+        {
+          "line": 57,
+          "op": ".2byte",
+          "args": [
+            "DECOR_COLORFUL_PLANT"
+          ],
+          "raw": "\t.2byte DECOR_COLORFUL_PLANT"
+        },
+        {
+          "line": 58,
+          "op": ".2byte",
+          "args": [
+            "DECOR_BIG_PLANT"
+          ],
+          "raw": "\t.2byte DECOR_BIG_PLANT"
+        },
+        {
+          "line": 59,
+          "op": ".2byte",
+          "args": [
+            "DECOR_GORGEOUS_PLANT"
+          ],
+          "raw": "\t.2byte DECOR_GORGEOUS_PLANT"
+        },
+        {
+          "line": 60,
+          "op": "pokemartlistend",
+          "args": [],
+          "raw": "\tpokemartlistend"
+        }
+      ],
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_BerriesExplanation": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_BerriesExplanation",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 153,
+      "endLine": 166,
+      "sha256": "e98a13327d425851599186f15794c6695d22c7c7c9ace004a0bddf5c7fdd3f3f",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_BerriesExplanation:\n\t.string \"BERRIES grow on trees that thrive\\n\"\n\t.string \"only in soft, loamy soil.\\p\"\n\t.string \"If you take some BERRIES, be sure to\\n\"\n\t.string \"plant one in the loamy soil again.\\p\"\n\t.string \"A planted BERRY will soon sprout,\\n\"\n\t.string \"grow into a plant, flower beautifully,\\l\"\n\t.string \"then grow BERRIES again.\\p\"\n\t.string \"I want to see the whole wide world\\n\"\n\t.string \"filled with beautiful flowers.\\l\"\n\t.string \"That's my dream.\\p\"\n\t.string \"Please help me, {PLAYER}{KUN}. Plant BERRIES\\n\"\n\t.string \"and bring more flowers into the world.$\"\n\n",
+      "instructions": [
+        {
+          "line": 154,
+          "op": ".string",
+          "args": [
+            "\"BERRIES grow on trees that thrive\\n\""
+          ],
+          "raw": "\t.string \"BERRIES grow on trees that thrive\\n\""
+        },
+        {
+          "line": 155,
+          "op": ".string",
+          "args": [
+            "\"only in soft, loamy soil.\\p\""
+          ],
+          "raw": "\t.string \"only in soft, loamy soil.\\p\""
+        },
+        {
+          "line": 156,
+          "op": ".string",
+          "args": [
+            "\"If you take some BERRIES, be sure to\\n\""
+          ],
+          "raw": "\t.string \"If you take some BERRIES, be sure to\\n\""
+        },
+        {
+          "line": 157,
+          "op": ".string",
+          "args": [
+            "\"plant one in the loamy soil again.\\p\""
+          ],
+          "raw": "\t.string \"plant one in the loamy soil again.\\p\""
+        },
+        {
+          "line": 158,
+          "op": ".string",
+          "args": [
+            "\"A planted BERRY will soon sprout,\\n\""
+          ],
+          "raw": "\t.string \"A planted BERRY will soon sprout,\\n\""
+        },
+        {
+          "line": 159,
+          "op": ".string",
+          "args": [
+            "\"grow into a plant, flower beautifully,\\l\""
+          ],
+          "raw": "\t.string \"grow into a plant, flower beautifully,\\l\""
+        },
+        {
+          "line": 160,
+          "op": ".string",
+          "args": [
+            "\"then grow BERRIES again.\\p\""
+          ],
+          "raw": "\t.string \"then grow BERRIES again.\\p\""
+        },
+        {
+          "line": 161,
+          "op": ".string",
+          "args": [
+            "\"I want to see the whole wide world\\n\""
+          ],
+          "raw": "\t.string \"I want to see the whole wide world\\n\""
+        },
+        {
+          "line": 162,
+          "op": ".string",
+          "args": [
+            "\"filled with beautiful flowers.\\l\""
+          ],
+          "raw": "\t.string \"filled with beautiful flowers.\\l\""
+        },
+        {
+          "line": 163,
+          "op": ".string",
+          "args": [
+            "\"That's my dream.\\p\""
+          ],
+          "raw": "\t.string \"That's my dream.\\p\""
+        },
+        {
+          "line": 164,
+          "op": ".string",
+          "args": [
+            "\"Please help me, {PLAYER}{KUN}. Plant BERRIES\\n\""
+          ],
+          "raw": "\t.string \"Please help me, {PLAYER}{KUN}. Plant BERRIES\\n\""
+        },
+        {
+          "line": 165,
+          "op": ".string",
+          "args": [
+            "\"and bring more flowers into the world.$\""
+          ],
+          "raw": "\t.string \"and bring more flowers into the world.$\""
+        }
+      ],
+      "encodedText": "BERRIES grow on trees that thrive\\nonly in soft, loamy soil.\\pIf you take some BERRIES, be sure to\\nplant one in the loamy soil again.\\pA planted BERRY will soon sprout,\\ngrow into a plant, flower beautifully,\\lthen grow BERRIES again.\\pI want to see the whole wide world\\nfilled with beautiful flowers.\\lThat's my dream.\\pPlease help me, {PLAYER}{KUN}. Plant BERRIES\\nand bring more flowers into the world.$",
+      "text": "BERRIES grow on trees that thrive\nonly in soft, loamy soil.\n\nIf you take some BERRIES, be sure to\nplant one in the loamy soil again.\n\nA planted BERRY will soon sprout,\ngrow into a plant, flower beautifully,\nthen grow BERRIES again.\n\nI want to see the whole wide world\nfilled with beautiful flowers.\nThat's my dream.\n\nPlease help me, {PLAYER}{KUN}. Plant BERRIES\nand bring more flowers into the world.",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 167,
+      "endLine": 170,
+      "sha256": "85ac08821cb29765b9ce1f9bcdf1eb9587e1ffe835716a0351789216748b9b09",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness:\n\t.string \"Flowers bring so much happiness to\\n\"\n\t.string \"people, don't they?$\"\n\n",
+      "instructions": [
+        {
+          "line": 168,
+          "op": ".string",
+          "args": [
+            "\"Flowers bring so much happiness to\\n\""
+          ],
+          "raw": "\t.string \"Flowers bring so much happiness to\\n\""
+        },
+        {
+          "line": 169,
+          "op": ".string",
+          "args": [
+            "\"people, don't they?$\""
+          ],
+          "raw": "\t.string \"people, don't they?$\""
+        }
+      ],
+      "encodedText": "Flowers bring so much happiness to\\npeople, don't they?$",
+      "text": "Flowers bring so much happiness to\npeople, don't they?",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 188,
+      "endLine": 193,
+      "sha256": "9d984e7db005cb0c49700e101adc4fa057b9f527e79bb2d2fd7ecca09519d03a",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_ImGrowingFlowers:\n\t.string \"I'm trying to be like my big sisters.\\n\"\n\t.string \"I'm growing flowers, too!\\p\"\n\t.string \"Here you go!\\n\"\n\t.string \"It's for you!$\"\n\n",
+      "instructions": [
+        {
+          "line": 189,
+          "op": ".string",
+          "args": [
+            "\"I'm trying to be like my big sisters.\\n\""
+          ],
+          "raw": "\t.string \"I'm trying to be like my big sisters.\\n\""
+        },
+        {
+          "line": 190,
+          "op": ".string",
+          "args": [
+            "\"I'm growing flowers, too!\\p\""
+          ],
+          "raw": "\t.string \"I'm growing flowers, too!\\p\""
+        },
+        {
+          "line": 191,
+          "op": ".string",
+          "args": [
+            "\"Here you go!\\n\""
+          ],
+          "raw": "\t.string \"Here you go!\\n\""
+        },
+        {
+          "line": 192,
+          "op": ".string",
+          "args": [
+            "\"It's for you!$\""
+          ],
+          "raw": "\t.string \"It's for you!$\""
+        }
+      ],
+      "encodedText": "I'm trying to be like my big sisters.\\nI'm growing flowers, too!\\pHere you go!\\nIt's for you!$",
+      "text": "I'm trying to be like my big sisters.\nI'm growing flowers, too!\n\nHere you go!\nIt's for you!",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 146,
+      "endLine": 152,
+      "sha256": "d6716378caedf30036afd267dbf350a4aa430183654808e64dc3d2f760b79fe8",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_IntroLearnAboutBerries:\n\t.string \"Your name is?\\p\"\n\t.string \"{PLAYER}{KUN}.\\n\"\n\t.string \"That's a nice name.\\p\"\n\t.string \"{PLAYER}{KUN}, would you like to learn about\\n\"\n\t.string \"BERRIES?$\"\n\n",
+      "instructions": [
+        {
+          "line": 147,
+          "op": ".string",
+          "args": [
+            "\"Your name is?\\p\""
+          ],
+          "raw": "\t.string \"Your name is?\\p\""
+        },
+        {
+          "line": 148,
+          "op": ".string",
+          "args": [
+            "\"{PLAYER}{KUN}.\\n\""
+          ],
+          "raw": "\t.string \"{PLAYER}{KUN}.\\n\""
+        },
+        {
+          "line": 149,
+          "op": ".string",
+          "args": [
+            "\"That's a nice name.\\p\""
+          ],
+          "raw": "\t.string \"That's a nice name.\\p\""
+        },
+        {
+          "line": 150,
+          "op": ".string",
+          "args": [
+            "\"{PLAYER}{KUN}, would you like to learn about\\n\""
+          ],
+          "raw": "\t.string \"{PLAYER}{KUN}, would you like to learn about\\n\""
+        },
+        {
+          "line": 151,
+          "op": ".string",
+          "args": [
+            "\"BERRIES?$\""
+          ],
+          "raw": "\t.string \"BERRIES?$\""
+        }
+      ],
+      "encodedText": "Your name is?\\p{PLAYER}{KUN}.\\nThat's a nice name.\\p{PLAYER}{KUN}, would you like to learn about\\nBERRIES?$",
+      "text": "Your name is?\n\n{PLAYER}{KUN}.\nThat's a nice name.\n\n{PLAYER}{KUN}, would you like to learn about\nBERRIES?",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 142,
+      "endLine": 145,
+      "sha256": "0387371998fbcfa384dbf7772c1f2fb76c41e519730d6d732b16845e90073aa9",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_LearnAboutBerries:\n\t.string \"{PLAYER}{KUN}, would you like to learn about\\n\"\n\t.string \"BERRIES?$\"\n\n",
+      "instructions": [
+        {
+          "line": 143,
+          "op": ".string",
+          "args": [
+            "\"{PLAYER}{KUN}, would you like to learn about\\n\""
+          ],
+          "raw": "\t.string \"{PLAYER}{KUN}, would you like to learn about\\n\""
+        },
+        {
+          "line": 144,
+          "op": ".string",
+          "args": [
+            "\"BERRIES?$\""
+          ],
+          "raw": "\t.string \"BERRIES?$\""
+        }
+      ],
+      "encodedText": "{PLAYER}{KUN}, would you like to learn about\\nBERRIES?$",
+      "text": "{PLAYER}{KUN}, would you like to learn about\nBERRIES?",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 194,
+      "endLine": 201,
+      "sha256": "140a446d377b987a3205f8961a6f059e29c261f833e489a1284030894df849c9",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_MachineMixesBerries:\n\t.string \"You can plant a BERRY and grow it big,\\n\"\n\t.string \"or you can make a POKéMON hold it.\\p\"\n\t.string \"But now they have a machine that mixes\\n\"\n\t.string \"up different BERRIES and makes candies\\l\"\n\t.string \"for POKéMON.\\p\"\n\t.string \"I want some candy, too.$\"\n\n",
+      "instructions": [
+        {
+          "line": 195,
+          "op": ".string",
+          "args": [
+            "\"You can plant a BERRY and grow it big,\\n\""
+          ],
+          "raw": "\t.string \"You can plant a BERRY and grow it big,\\n\""
+        },
+        {
+          "line": 196,
+          "op": ".string",
+          "args": [
+            "\"or you can make a POKéMON hold it.\\p\""
+          ],
+          "raw": "\t.string \"or you can make a POKéMON hold it.\\p\""
+        },
+        {
+          "line": 197,
+          "op": ".string",
+          "args": [
+            "\"But now they have a machine that mixes\\n\""
+          ],
+          "raw": "\t.string \"But now they have a machine that mixes\\n\""
+        },
+        {
+          "line": 198,
+          "op": ".string",
+          "args": [
+            "\"up different BERRIES and makes candies\\l\""
+          ],
+          "raw": "\t.string \"up different BERRIES and makes candies\\l\""
+        },
+        {
+          "line": 199,
+          "op": ".string",
+          "args": [
+            "\"for POKéMON.\\p\""
+          ],
+          "raw": "\t.string \"for POKéMON.\\p\""
+        },
+        {
+          "line": 200,
+          "op": ".string",
+          "args": [
+            "\"I want some candy, too.$\""
+          ],
+          "raw": "\t.string \"I want some candy, too.$\""
+        }
+      ],
+      "encodedText": "You can plant a BERRY and grow it big,\\nor you can make a POKéMON hold it.\\pBut now they have a machine that mixes\\nup different BERRIES and makes candies\\lfor POKéMON.\\pI want some candy, too.$",
+      "text": "You can plant a BERRY and grow it big,\nor you can make a POKéMON hold it.\n\nBut now they have a machine that mixes\nup different BERRIES and makes candies\nfor POKéMON.\n\nI want some candy, too.",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 137,
+      "endLine": 141,
+      "sha256": "c09d7490680ea4949c438fa8e4e23287ea7e7ba9739dd69242f52eab4fa67929",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_ThisIsPrettyPetalFlowerShop:\n\t.string \"Hello!\\p\"\n\t.string \"This is the PRETTY PETAL flower shop.\\n\"\n\t.string \"Spreading flowers all over the world!$\"\n\n",
+      "instructions": [
+        {
+          "line": 138,
+          "op": ".string",
+          "args": [
+            "\"Hello!\\p\""
+          ],
+          "raw": "\t.string \"Hello!\\p\""
+        },
+        {
+          "line": 139,
+          "op": ".string",
+          "args": [
+            "\"This is the PRETTY PETAL flower shop.\\n\""
+          ],
+          "raw": "\t.string \"This is the PRETTY PETAL flower shop.\\n\""
+        },
+        {
+          "line": 140,
+          "op": ".string",
+          "args": [
+            "\"Spreading flowers all over the world!$\""
+          ],
+          "raw": "\t.string \"Spreading flowers all over the world!$\""
+        }
+      ],
+      "encodedText": "Hello!\\pThis is the PRETTY PETAL flower shop.\\nSpreading flowers all over the world!$",
+      "text": "Hello!\n\nThis is the PRETTY PETAL flower shop.\nSpreading flowers all over the world!",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 178,
+      "endLine": 187,
+      "sha256": "4ddf494208ab98380d9c43436afc49cf92616c935d3b90efc115042276d2032c",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_WailmerPailExplanation:\n\t.string \"While BERRY plants are growing,\\n\"\n\t.string \"water them with the WAILMER PAIL.\\p\"\n\t.string \"Oh, another thing.\\p\"\n\t.string \"If you don't pick BERRIES for a while,\\n\"\n\t.string \"they'll drop off onto the ground.\\l\"\n\t.string \"But they'll sprout again.\\p\"\n\t.string \"Isn't that awesome?\\n\"\n\t.string \"It's like they have the will to live.$\"\n\n",
+      "instructions": [
+        {
+          "line": 179,
+          "op": ".string",
+          "args": [
+            "\"While BERRY plants are growing,\\n\""
+          ],
+          "raw": "\t.string \"While BERRY plants are growing,\\n\""
+        },
+        {
+          "line": 180,
+          "op": ".string",
+          "args": [
+            "\"water them with the WAILMER PAIL.\\p\""
+          ],
+          "raw": "\t.string \"water them with the WAILMER PAIL.\\p\""
+        },
+        {
+          "line": 181,
+          "op": ".string",
+          "args": [
+            "\"Oh, another thing.\\p\""
+          ],
+          "raw": "\t.string \"Oh, another thing.\\p\""
+        },
+        {
+          "line": 182,
+          "op": ".string",
+          "args": [
+            "\"If you don't pick BERRIES for a while,\\n\""
+          ],
+          "raw": "\t.string \"If you don't pick BERRIES for a while,\\n\""
+        },
+        {
+          "line": 183,
+          "op": ".string",
+          "args": [
+            "\"they'll drop off onto the ground.\\l\""
+          ],
+          "raw": "\t.string \"they'll drop off onto the ground.\\l\""
+        },
+        {
+          "line": 184,
+          "op": ".string",
+          "args": [
+            "\"But they'll sprout again.\\p\""
+          ],
+          "raw": "\t.string \"But they'll sprout again.\\p\""
+        },
+        {
+          "line": 185,
+          "op": ".string",
+          "args": [
+            "\"Isn't that awesome?\\n\""
+          ],
+          "raw": "\t.string \"Isn't that awesome?\\n\""
+        },
+        {
+          "line": 186,
+          "op": ".string",
+          "args": [
+            "\"It's like they have the will to live.$\""
+          ],
+          "raw": "\t.string \"It's like they have the will to live.$\""
+        }
+      ],
+      "encodedText": "While BERRY plants are growing,\\nwater them with the WAILMER PAIL.\\pOh, another thing.\\pIf you don't pick BERRIES for a while,\\nthey'll drop off onto the ground.\\lBut they'll sprout again.\\pIsn't that awesome?\\nIt's like they have the will to live.$",
+      "text": "While BERRY plants are growing,\nwater them with the WAILMER PAIL.\n\nOh, another thing.\n\nIf you don't pick BERRIES for a while,\nthey'll drop off onto the ground.\nBut they'll sprout again.\n\nIsn't that awesome?\nIt's like they have the will to live.",
+      "references": []
+    },
+    "Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis": {
+      "label": "Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis",
+      "kind": "text",
+      "path": "data/text/berries.inc",
+      "line": 171,
+      "endLine": 177,
+      "sha256": "78733c75430e0884ed1ff1ece93b9704b43442f2c334c5798176f6e6163ed1ae",
+      "raw": "Route104_PrettyPetalFlowerShop_Text_YouCanHaveThis:\n\t.string \"Hello!\\p\"\n\t.string \"The more attention you give to flowers,\\n\"\n\t.string \"the more beautifully they bloom.\\p\"\n\t.string \"You'll like tending flowers. I'm sure\\n\"\n\t.string \"of it. You can have this.$\"\n\n",
+      "instructions": [
+        {
+          "line": 172,
+          "op": ".string",
+          "args": [
+            "\"Hello!\\p\""
+          ],
+          "raw": "\t.string \"Hello!\\p\""
+        },
+        {
+          "line": 173,
+          "op": ".string",
+          "args": [
+            "\"The more attention you give to flowers,\\n\""
+          ],
+          "raw": "\t.string \"The more attention you give to flowers,\\n\""
+        },
+        {
+          "line": 174,
+          "op": ".string",
+          "args": [
+            "\"the more beautifully they bloom.\\p\""
+          ],
+          "raw": "\t.string \"the more beautifully they bloom.\\p\""
+        },
+        {
+          "line": 175,
+          "op": ".string",
+          "args": [
+            "\"You'll like tending flowers. I'm sure\\n\""
+          ],
+          "raw": "\t.string \"You'll like tending flowers. I'm sure\\n\""
+        },
+        {
+          "line": 176,
+          "op": ".string",
+          "args": [
+            "\"of it. You can have this.$\""
+          ],
+          "raw": "\t.string \"of it. You can have this.$\""
+        }
+      ],
+      "encodedText": "Hello!\\pThe more attention you give to flowers,\\nthe more beautifully they bloom.\\pYou'll like tending flowers. I'm sure\\nof it. You can have this.$",
+      "text": "Hello!\n\nThe more attention you give to flowers,\nthe more beautifully they bloom.\n\nYou'll like tending flowers. I'm sure\nof it. You can have this.",
+      "references": []
+    },
+    "gText_PlayerWhatCanIDoForYou": {
+      "label": "gText_PlayerWhatCanIDoForYou",
+      "kind": "text",
+      "path": "data/text/mart_clerk.inc",
+      "line": 8,
+      "endLine": 10,
+      "sha256": "e5f08834d3b1ec79d8049b9bc23aeae863c56506057954786debf04af37bd70f",
+      "raw": "gText_PlayerWhatCanIDoForYou::\n\t.string \"{PLAYER}{KUN}, welcome!\\p\"\n\t.string \"What can I do for you?$\"\n",
+      "instructions": [
+        {
+          "line": 9,
+          "op": ".string",
+          "args": [
+            "\"{PLAYER}{KUN}, welcome!\\p\""
+          ],
+          "raw": "\t.string \"{PLAYER}{KUN}, welcome!\\p\""
+        },
+        {
+          "line": 10,
+          "op": ".string",
+          "args": [
+            "\"What can I do for you?$\""
+          ],
+          "raw": "\t.string \"What can I do for you?$\""
+        }
+      ],
+      "encodedText": "{PLAYER}{KUN}, welcome!\\pWhat can I do for you?$",
+      "text": "{PLAYER}{KUN}, welcome!\n\nWhat can I do for you?",
+      "references": []
+    },
+    "gText_PleaseComeAgain": {
+      "label": "gText_PleaseComeAgain",
+      "kind": "text",
+      "path": "data/text/mart_clerk.inc",
+      "line": 5,
+      "endLine": 7,
+      "sha256": "fe1de7dabd55bee9265f5a0c7a40f29bacf44004a1487279d6aa32b842c901aa",
+      "raw": "gText_PleaseComeAgain::\n\t.string \"Please come again!$\"\n\n",
+      "instructions": [
+        {
+          "line": 6,
+          "op": ".string",
+          "args": [
+            "\"Please come again!$\""
+          ],
+          "raw": "\t.string \"Please come again!$\""
+        }
+      ],
+      "encodedText": "Please come again!$",
+      "text": "Please come again!",
+      "references": []
+    },
+    "gText_TooBadBagIsFull": {
+      "label": "gText_TooBadBagIsFull",
+      "kind": "text",
+      "path": "data/text/obtain_item.inc",
+      "line": 14,
+      "endLine": 17,
+      "sha256": "9e6e7490c48e78972689967a9e3f698eeef741b2ac1d03a76c72dd2e67d06592",
+      "raw": "gText_TooBadBagIsFull::\n\t.string \"Too bad!\\n\"\n\t.string \"The BAG is full…$\"\n\n",
+      "instructions": [
+        {
+          "line": 15,
+          "op": ".string",
+          "args": [
+            "\"Too bad!\\n\""
+          ],
+          "raw": "\t.string \"Too bad!\\n\""
+        },
+        {
+          "line": 16,
+          "op": ".string",
+          "args": [
+            "\"The BAG is full…$\""
+          ],
+          "raw": "\t.string \"The BAG is full…$\""
+        }
+      ],
+      "encodedText": "Too bad!\\nThe BAG is full…$",
+      "text": "Too bad!\nThe BAG is full…",
+      "references": []
+    }
+  },
+  "specials": {},
+  "cFunctions": {},
+  "macros": {
+    "addvar": {
+      "path": "asm/macros/event.inc",
+      "line": 163,
+      "endLine": 167,
+      "sha256": "fa8bfaabd3f959f0e5c1de5d1d6379b1aba5f1073df8f39489dd94bb46011db4",
+      "raw": "\t.macro addvar destination:req, value:req\n\t.byte SCR_OP_ADDVAR\n\t.2byte \\destination\n\t.2byte \\value\n\t.endm"
+    },
+    "call_if_eq": {
+      "path": "asm/macros/event.inc",
+      "line": 1858,
+      "endLine": 1860,
+      "sha256": "115fa026b03da1168d18ff8372cfb61028d0c520c9bc576daadf300b205b76d0",
+      "raw": "\t.macro call_if_eq a:req, b, c\n\ttrycompare call_if, EQUAL, \\a, \\b, \\c\n\t.endm"
+    },
+    "dotimebasedevents": {
+      "path": "asm/macros/event.inc",
+      "line": 348,
+      "endLine": 350,
+      "sha256": "967129a676d40135d5c7a30be79a7c514458632ee82ef43f1dc768a892485171",
+      "raw": "\t.macro dotimebasedevents\n\t.byte SCR_OP_DOTIMEBASEDEVENTS\n\t.endm"
+    },
+    "end": {
+      "path": "asm/macros/event.inc",
+      "line": 20,
+      "endLine": 22,
+      "sha256": "acbc6016bc696a1df6c90fde197c5b006f061b7478642ddc2220a7e5b76ee2f5",
+      "raw": "\t.macro end\n\t.byte SCR_OP_END\n\t.endm"
+    },
+    "faceplayer": {
+      "path": "asm/macros/event.inc",
+      "line": 718,
+      "endLine": 720,
+      "sha256": "842f597693be0be88a0ef2a269b6e5a49f4e2d899c993dfe9ba9ad882de29de5",
+      "raw": "\t.macro faceplayer\n\t.byte SCR_OP_FACEPLAYER\n\t.endm"
+    },
+    "giveitem": {
+      "path": "asm/macros/event.inc",
+      "line": 1947,
+      "endLine": 1951,
+      "sha256": "5ba9f6498f01bf47243ad5f0a626046cdc3d88eb78104fac47b0dfa64c5cccb2",
+      "raw": "\t.macro giveitem item:req, amount=1\n\tsetorcopyvar VAR_0x8000, \\item\n\tsetorcopyvar VAR_0x8001, \\amount\n\tcallstd STD_OBTAIN_ITEM\n\t.endm"
+    },
+    "goto_if_eq": {
+      "path": "asm/macros/event.inc",
+      "line": 1824,
+      "endLine": 1826,
+      "sha256": "90dda67dd71d22bebf374b6a2474676ea656d98eb95aaaa47b8cfeb4ec818bae",
+      "raw": "\t.macro goto_if_eq a:req, b, c\n\ttrycompare goto_if, EQUAL, \\a, \\b, \\c\n\t.endm"
+    },
+    "goto_if_set": {
+      "path": "asm/macros/event.inc",
+      "line": 1795,
+      "endLine": 1798,
+      "sha256": "c4a1e8a16691ae26bfe28ede5ff6eb6b040852bd6a6af322c19286bca75dd882",
+      "raw": "\t.macro goto_if_set flag:req, dest:req\n\tcheckflag \\flag\n\tgoto_if TRUE, \\dest\n\t.endm"
+    },
+    "goto_if_unset": {
+      "path": "asm/macros/event.inc",
+      "line": 1790,
+      "endLine": 1793,
+      "sha256": "3254867651c94cb9ef9dbb6d51f3f3a5db68f1c0a16d92d594af7cd64292f39e",
+      "raw": "\t.macro goto_if_unset flag:req, dest:req\n\tcheckflag \\flag\n\tgoto_if FALSE, \\dest\n\t.endm"
+    },
+    "lock": {
+      "path": "asm/macros/event.inc",
+      "line": 908,
+      "endLine": 910,
+      "sha256": "c6e87701ea8fea1bbef2df0c513eb80492f40b14338d5211a09059a155642194",
+      "raw": "\t.macro lock\n\t.byte SCR_OP_LOCK\n\t.endm"
+    },
+    "map_script": {
+      "path": "asm/macros/map.inc",
+      "line": 14,
+      "endLine": 17,
+      "sha256": "d2d32a6cb860185c4fb97bd37628e4e251c1a0de304d3bed80b70a4db45d66e7",
+      "raw": "\t.macro map_script type:req, script:req\n\t.byte \\type\n\t.4byte \\script\n\t.endm"
+    },
+    "message": {
+      "path": "asm/macros/event.inc",
+      "line": 892,
+      "endLine": 895,
+      "sha256": "5f21f8ff2f80f66fdf5a3bf2ff1cdf93cb5ce16dd6076558739228085d65f258",
+      "raw": "\t.macro message text:req\n\t.byte SCR_OP_MESSAGE\n\t.4byte \\text\n\t.endm"
+    },
+    "msgbox": {
+      "path": "asm/macros/event.inc",
+      "line": 1938,
+      "endLine": 1941,
+      "sha256": "29ebbbbe73345fec87dfe875a83f1b67c9871afaa6a5c8498cfb9877399e973a",
+      "raw": "\t.macro msgbox text:req, type=MSGBOX_DEFAULT\n\tloadword 0, \\text\n\tcallstd \\type\n\t.endm"
+    },
+    "pokemartdecoration2": {
+      "path": "asm/macros/event.inc",
+      "line": 1172,
+      "endLine": 1175,
+      "sha256": "42cf864d8b2681853eab9c526b1bc80aabe12b7c7b2222cac9be3879ec582d40",
+      "raw": "\t.macro pokemartdecoration2 products:req\n\t.byte SCR_OP_POKEMARTDECORATION2\n\t.4byte \\products\n\t.endm"
+    },
+    "pokemartlistend": {
+      "path": "asm/macros/event.inc",
+      "line": 1158,
+      "endLine": 1162,
+      "sha256": "87e893a8b75c947ef790ae0c83e00cb4f3eefc75cb2f811479df1fbc7e7e4e1c",
+      "raw": "\t.macro pokemartlistend\n\t.2byte ITEM_NONE\n\trelease\n\tend\n\t.endm"
+    },
+    "random": {
+      "path": "asm/macros/event.inc",
+      "line": 1213,
+      "endLine": 1216,
+      "sha256": "8d93920f7647a22310e10ded0a6b537e7106773b6167ffae9f415c43cd0c5193",
+      "raw": "\t.macro random limit:req\n\t.byte SCR_OP_RANDOM\n\t.2byte \\limit\n\t.endm"
+    },
+    "release": {
+      "path": "asm/macros/event.inc",
+      "line": 918,
+      "endLine": 920,
+      "sha256": "a77a6a9a840a386194ebf35b50f3d896b5bee15631d60f368345f7966738b56b",
+      "raw": "\t.macro release\n\t.byte SCR_OP_RELEASE\n\t.endm"
+    },
+    "return": {
+      "path": "asm/macros/event.inc",
+      "line": 25,
+      "endLine": 27,
+      "sha256": "15f317c94a34aa1c3cc1188a48c117482749fa2381ccce39c442f9b16d9c26bf",
+      "raw": "\t.macro return\n\t.byte SCR_OP_RETURN\n\t.endm"
+    },
+    "setflag": {
+      "path": "asm/macros/event.inc",
+      "line": 322,
+      "endLine": 325,
+      "sha256": "8a3aed5dfdbb32be4503a33727f6b452fcc5efe822f4876ee3f9c241d07b7849",
+      "raw": "\t.macro setflag flag:req\n\t.byte SCR_OP_SETFLAG\n\t.2byte \\flag\n\t.endm"
+    },
+    "setobjectxyperm": {
+      "path": "asm/macros/event.inc",
+      "line": 862,
+      "endLine": 867,
+      "sha256": "3edab2b50620024260c464c30bcb73a886d7397502107d9fda0ac8604bc57e42",
+      "raw": "\t.macro setobjectxyperm localId:req, x:req, y:req\n\t.byte SCR_OP_SETOBJECTXYPERM\n\t.2byte \\localId\n\t.2byte \\x\n\t.2byte \\y\n\t.endm"
+    },
+    "waitmessage": {
+      "path": "asm/macros/event.inc",
+      "line": 885,
+      "endLine": 887,
+      "sha256": "658fad61f5ea7768642baf2df01bdfe75394df828220957b3dc20237baf99a6d",
+      "raw": "\t.macro waitmessage\n\t.byte SCR_OP_WAITMESSAGE\n\t.endm"
+    }
+  },
+  "inputs": {
+    "asm/macros/event.inc": "e08811cb8989f54e0d68659b3022b3b57dad281c4565e011e0da02ef852c023c",
+    "asm/macros/map.inc": "ed246d1235d25f9edbde17f57580896b5853eedf8c83c26f650d754aa24e38a5",
+    "data/event_scripts.s": "0abcadf9b4dd0858593c303891fb4ba31fae0f99ea27669127fb2dc4cdc6de2c",
+    "data/maps/Route104_PrettyPetalFlowerShop/map.json": "b31bf4a12f9d1077e9580a51b1104f58d4a504e45c409fb083e14e32aa5478c0",
+    "data/maps/Route104_PrettyPetalFlowerShop/scripts.inc": "5f0c5812dfd0c64ad35fb4e45887298baa1645757bc8bc1e1418635e9332d753",
+    "data/text/berries.inc": "ab658367448f6eb033e7b6e6a08b3f268989f51addbc158f5e9561c1be4cd205",
+    "data/text/mart_clerk.inc": "ccf5038cb57ce1ce66483ea423e1788ee04186fa07c796ebe58ca3b9a998cab1",
+    "data/text/obtain_item.inc": "44ea40b206dc1de42e019449a6407f532b5d11527adc4f480aa6d19bde266357"
+  },
+  "unresolved": []
+}

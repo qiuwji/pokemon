@@ -26,13 +26,16 @@ for name in session.select('maps', db['maps']):
   if names[0]=='general':
    for kind,animation in session.configuration('tileAnimations').items():
     start,count,ms=animation['start'],animation['count'],animation['ms']
-    if not start<=idx<start+count or side!=0:continue
-    files=sorted((dirs[0]/f'anim/{kind}').glob('*.png'),key=lambda p:int(p.stem));frames=[]
+    if not start<=idx<start+count or side!=animation.get('side',0) or names[side]!=animation.get('tileset','general'):continue
+    files=sorted((dirs[side]/f'anim/{kind}').glob('*.png'),key=lambda p:int(p.stem));frames=[]
     for file in files:
-     anim=Image.open(file);n=idx-start;x=n%(anim.width//8)*8;y=n//(anim.width//8)*8;frames.append(append(painted(anim.crop((x,y,x+8,y+8)),pals[pi])))
+     anim=Image.open(file);n=(idx-start)%animation.get('groupTiles',count);x=n%(anim.width//8)*8;y=n//(anim.width//8)*8;frames.append(append(painted(anim.crop((x,y,x+8,y+8)),pals[pi])))
     if not frames:raise ValueError('Missing tile animation: '+kind)
     if 'order' in animation:frames=[frames[n] for n in animation['order']]
-    animations[v]={'frames':frames,'ms':ms}
+    group=(idx-start)//animation.get('groupTiles',count)
+    phase=group*animation.get('phaseStep',0)
+    frames=[frames[(i+phase)%len(frames)] for i in range(len(frames))]
+    animations[v]={'frames':frames,'ms':ms,'offsetMs':animation.get('offsetMs',0)+group*animation.get('staggerMs',0)}
  width=256;height=math.ceil(len(tiles)/32)*8;atlas=Image.new('RGBA',(width,height))
  for i,tile in enumerate(tiles):atlas.alpha_composite(tile,(i%32*8,i//32*8))
  session.image(atlas,A/f'tiles-{key}.png');packs[key]={'tileSize':8,'gridSize':16,'columns':32,'atlas':{'width':width,'height':height,'tileCount':len(tiles)},'lookup':lookup,'metatiles':meta,'attributes':attrs,'animations':animations,'background':list(pals[0][0])};print(key,len(tiles),'8x8 tiles',len(meta),'metatiles')

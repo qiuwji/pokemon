@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { session } from "./helpers/session.js";
-import { interaction, battleOutcome } from "../src/packs/emerald/story.js";
-import { validateSave } from "../src/packs/emerald/save-contract.js";
+import { interaction, battleOutcome } from "../src/game/emerald/assembly/story-queries.js";
+import { validateSave } from "../src/game/emerald/assembly/save-contract.js";
 
 function addItem(s, item, count) {
   const plan = s.game.inventory.prepare(s.game.state.bag, [
@@ -113,8 +113,8 @@ test("Defeating a Route 102 sight trainer shows the defeat line and pays the pri
   const flat = (lines) =>
     lines.flatMap((l) => (typeof l === "string" ? [l] : l.runs.map((r) => r.text)));
   assert(
-    s.dialogs.some((d) => flat(d.lines).join("").includes("再练练")),
-    "the trainer's defeat line plays after the battle",
+    s.dialogs.some((d) => flat(d.lines).join("").includes("早该告诉我")),
+    "the trainer's separate field dialogue plays after the battle",
   );
   assert.equal(s.game.state.money, before + 80, "the prize is paid");
   assert(s.game.state.story.rewards.includes("trainer.calvin.prize"));
@@ -162,6 +162,14 @@ test("Wally's outdoor mom steps out once the gym hand-off starts", () => {
   const after = session();
   after.game.state.flags.wallyTutorial = true;
   assert.equal(moms(after).length, 0, "she is gone once Wally leaves with the player");
+  const laterSlice = session();
+  laterSlice.game.state.flags.wallyMomHidden = true;
+  assert.equal(moms(laterSlice).length, 0, "later chapter flags cannot respawn her outside");
+  for (const milestone of ["petalburgScottMet", "petalburgWoodsSaved", "devonGoodsStolen", "devonGoodsRecovered", "devonGoodsReturned"]) {
+    const progressed = session();
+    progressed.game.state.flags[milestone] = true;
+    assert.equal(moms(progressed).length, 0, `${milestone} keeps her hidden after leaving town`);
+  }
 });
 
 test("Only one Wally is active across town and Route 102", () => {

@@ -1,8 +1,8 @@
 import { validateAudioCue } from "../../engine/extensions/audio-contracts.js";
 /**
  * UI and battle cues now carry the original sound identity rendered from the reference MIDI.
- * Attack and hit sounds stay absent on purpose: the original plays a per-move sound effect, so
- * a generic hit sample would be a substitute rather than a restoration.
+ * Authored frame choreography schedules installed per-move and effectiveness sounds.
+ * An unmapped move has no generic substitute sound.
  */
 export const EMERALD_AUDIO_CUES = {
   confirm: {
@@ -63,7 +63,7 @@ export const EMERALD_AUDIO_CUES = {
   },
   heal: {
     kind: "sound",
-    source: "generated/assets/audio/emerald-audio/sounds/se_exp.wav",
+    source: "generated/assets/audio/emerald-audio/sounds/mus_heal.wav",
     volume: 0.5,
     loop: false,
     maxVoices: 2,
@@ -103,6 +103,9 @@ export const EMERALD_AUDIO_CUES = {
     loop: false,
     maxVoices: 1,
   },
+  "cry.lotad": { kind: "sound", source: "generated/assets/audio/cry-lotad.wav", volume: 0.4, loop: false, maxVoices: 1 },
+  "cry.groudon": { kind: "sound", source: "generated/assets/audio/cry-groudon.wav", volume: 0.4, loop: false, maxVoices: 1 },
+  "cry.kyogre": { kind: "sound", source: "generated/assets/audio/cry-kyogre.wav", volume: 0.48, loop: false, maxVoices: 1 },
 };
 export function createEmeraldAudio(host) {
   const result = new Map(
@@ -121,9 +124,20 @@ export function createEmeraldAudio(host) {
 export const ORIGINAL_SONG_CUES = Object.freeze({
   MUS_LITTLEROOT: "emerald-audio:mus_littleroot",
   MUS_ROUTE101: "emerald-audio:mus_route101",
+  MUS_ROUTE122: "emerald-audio:mus_route122",
+  MUS_INTRO: "emerald-audio:mus_intro",
+  MUS_INTRO_BATTLE: "emerald-audio:mus_intro_battle",
+  MUS_TITLE: "emerald-audio:mus_title",
   MUS_HELP: "emerald-audio:mus_help",
   MUS_OLDALE: "emerald-audio:mus_oldale",
+  MUS_RUSTBORO: "emerald-audio:mus_rustboro",
+  MUS_OCEANIC_MUSEUM: "emerald-audio:mus_oceanic_museum",
+  MUS_DEWFORD: "emerald-audio:mus_dewford",
+  MUS_SLATEPORT: "emerald-audio:mus_slateport",
+  MUS_SCHOOL: "emerald-audio:mus_school",
   MUS_PETALBURG: "emerald-audio:mus_petalburg",
+  MUS_ROUTE104: "emerald-audio:mus_route104",
+  MUS_PETALBURG_WOODS: "emerald-audio:mus_petalburg_woods",
   MUS_GYM: "emerald-audio:mus_gym",
   MUS_BIRCH_LAB: "emerald-audio:mus_birch_lab",
   MUS_POKE_CENTER: "emerald-audio:mus_poke_center",
@@ -131,6 +145,8 @@ export const ORIGINAL_SONG_CUES = Object.freeze({
   MUS_VS_WILD: "emerald-audio:mus_vs_wild",
   MUS_VS_TRAINER: "emerald-audio:mus_vs_trainer",
   MUS_VS_RIVAL: "emerald-audio:mus_vs_rival",
+  ...Object.fromEntries(["WILD", "TRAINER", "GYM_LEADER", "LEAGUE", "AQUA_MAGMA"].map(kind =>
+    ["MUS_VICTORY_" + kind, "emerald-audio:mus_victory_" + kind.toLowerCase()])),
 });
 /**
  * Battle music follows the original GetBattleBGM policy: a rival script plays the rival
@@ -138,6 +154,14 @@ export const ORIGINAL_SONG_CUES = Object.freeze({
  */
 export function emeraldBattleSong(battle) {
   if (!battle) return null;
+  if (battle.presentationPhase === "victory") {
+    if (!battle.trainer) return "MUS_VICTORY_WILD";
+    const actor = battle.trainerActor || "";
+    if (/^(Aqua|Magma|Archie|Maxie|Matt|Shelly|Tabitha|Courtney)/.test(actor)) return "MUS_VICTORY_AQUA_MAGMA";
+    if (["Sidney", "Phoebe", "Glacia", "Drake", "Wallace"].includes(actor)) return "MUS_VICTORY_LEAGUE";
+    if (["Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate", "Liza", "Juan"].includes(actor)) return "MUS_VICTORY_GYM_LEADER";
+    return "MUS_VICTORY_TRAINER";
+  }
   if (battle.script === "rival") return "MUS_VS_RIVAL";
   return battle.trainer ? "MUS_VS_TRAINER" : "MUS_VS_WILD";
 }
@@ -146,6 +170,7 @@ export function emeraldMusic(
   { battle, map, battleSong, storyMusic, flags = {} },
   cues,
 ) {
+  if (!battle && storyMusic === false) return null;
   const id = battle
     ? battleSong || map.battleMusic || emeraldBattleSong(battle)
     : storyMusic ||
@@ -159,8 +184,8 @@ export function emeraldMusic(
 
 /**
  * Battle cues keep the original mapping where the reference has one: level up plays the
- * level fanfare and recovery plays the exp sound. Move and hurt stay unmapped until the
- * per-move sound effect table is imported; the original plays a different sound per move.
+ * level fanfare and recovery plays the exp sound. Move and hurt use their frame-plan cues;
+ * this event-level table adds no second attack or hit sound.
  */
 export const EMERALD_BATTLE_AUDIO = Object.freeze({
   move: null,

@@ -1,0 +1,34 @@
+✔ catalog and normal menu summon exactly one companion beside the player through an atomic actor intent (93.718083ms)
+✔ the companion follows completed player steps through turns, keeps one tile separation and uses real interpolated animation (88.009625ms)
+✔ blocking the next breadcrumb makes the companion wait without crossing actors and resume when the tile is vacated (49.725542ms)
+✔ menu pause freezes autonomous animation and explicit waiting/continue retain the same companion (80.046792ms)
+✖ a door-style map visit rejoins at a legal neighboring tile without changing identity (38.5845ms)
+✔ actual saved storage restores a waiting companion; removal persists and observation buffers are not serialized (100.976083ms)
+✔ disabling the companion plugin permits continued native play and re-enabling restores its actor and memory (111.842292ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 704.695417
+
+✖ failing tests:
+
+test at examples/patrol-lab.test.js:112:1
+✖ a door-style map visit rejoins at a legal neighboring tile without changing identity (38.5845ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  12 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/examples/patrol-lab.test.js:122:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 12,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

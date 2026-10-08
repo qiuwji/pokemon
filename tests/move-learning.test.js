@@ -20,11 +20,11 @@ import {
   MACHINE_SOURCE,
 } from "../generated/engine/rules/gen3/machine-learning.js";
 import { ITEMS } from "../src/packs/emerald/items.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
-import { EmeraldAdventure } from "../src/packs/emerald/adventure.js";
-import { attachEmeraldExtensions } from "../src/packs/emerald/extension-ports.js";
-import { createEmeraldCommandFacade } from "../src/packs/emerald/command-facade.js";
-import { createBagInterface } from "../src/packs/emerald/bag-interface.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
+import { EmeraldAdventure } from "../src/game/emerald/adventure.js";
+import { attachEmeraldExtensions } from "../src/game/emerald/commands/extension-ports.js";
+import { createEmeraldCommandFacade } from "../src/game/emerald/commands/command-facade.js";
+import { createBagInterface } from "../src/ui/emerald/bag-interface.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { GridMotion, SceneGraph } from "../src/engine/motion.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";

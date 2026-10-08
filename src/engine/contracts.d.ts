@@ -1,3 +1,6 @@
+import { BLOCKED_REASONS, MOTION_CANCEL_REASONS } from "./blocked-reasons.js";
+export type BlockedReason = typeof BLOCKED_REASONS[number];
+export type MotionCancelReason = typeof MOTION_CANCEL_REASONS[number];
 /** Public content contracts for editors and future TypeScript clients. Runtime validation is separate. */
 export type Status =
   | "toxic"
@@ -788,7 +791,8 @@ export interface PluginTransaction {
     ): Readonly<Json>;
     remove(id: string, uid: string): boolean;
   };
-  intent(value: Json): void;
+  /** Synchronous result callback runs during commit; errors roll back the entire transaction. */
+  intent(value: Json, onResult?: (result: Readonly<Json>) => Json | void): void;
   emit(type: string, payload?: Json): void;
   feedback(id: string, payload?: Json): void;
 }
@@ -940,6 +944,40 @@ export interface BattleAnimationDefinition {
   mode?: "replace" | "append";
   animation: MoveAnimation;
 }
+export interface BattleSequenceFrame {
+  poses?: readonly { seatId: string; x?: number; y?: number; scale?: number; opacity?: number; flash?: boolean; cropBottom?: number; tint?: SpriteTint }[];
+  sprites?: readonly { resource: string; width: number; height: number; x: number; y: number; tileFrame?: number;
+    scaleX?: number; scaleY?: number; flipX?: boolean; flipY?: boolean; alpha?: readonly [number, number] | null;
+    rotation?: number; opacity?: number; tint?: SpriteTint }[];
+  healthBars?: readonly { seatId: string; hp: number; fraction: number }[];
+  scenes?: readonly { backgroundX?: number; split?: boolean; hideTrainers?: boolean; hideBall?: boolean;
+    clip?: { x: number; y: number; width: number; height: number } }[];
+  statusBoxes?: readonly { seatId: string; x: number; y: number; opacity: number }[];
+}
+export interface SpriteTint { color: readonly [number, number, number]; amount: number }
+export interface BattleFrameSequence {
+  messageAt?: "start" | "end";
+  holdFinal?: boolean;
+  fps: number;
+  frames: readonly BattleSequenceFrame[];
+  cues: readonly { id: string; frame: number }[];
+}
+export interface BattleSequenceDefinition {
+  kind: string;
+  match?: Record<string, string | number | boolean | null>;
+  priority?: number;
+  prepare(context: Readonly<{
+    event: DeepReadonly<BattleEvent & { move?: { id: string; successful?: boolean; power?: number; type?: string } }>;
+    previous: DeepReadonly<BattleSnapshot> | null;
+    layout: Readonly<Record<string, Readonly<{ x: number; y: number; back?: boolean; [key: string]: Json | undefined }>>>;
+  }>): BattleFrameSequence | null;
+}
+export interface MusicTransitionOptions {
+  mode: "after-fade" | "crossfade";
+  fadeOutMs?: number;
+  fadeInMs?: number;
+  steps?: number;
+}
 export interface AudioCue {
   kind: "music" | "sound";
   volume: number;
@@ -949,8 +987,48 @@ export interface AudioCue {
   loopEnd?: number;
   fadeInMs?: number;
   fadeOutMs?: number;
+  fadePreviousMs?: number;
   maxVoices?: number;
 }
+/** Bounded decisions driven by the host clock, with scene control taking priority. */
+export interface NPCBehaviorDefinition {
+  timing?: { intervalMs: number; afterMove?: "interval" | "settled" };
+  decide(context: Readonly<NPCBehaviorContext>): NPCIntent;
+}
+export interface NPCBehaviorContext {
+  readonly config: Readonly<Record<string, Json>>;
+  readonly dir: Direction;
+  readonly now: number;
+  readonly position: Readonly<{ x: number; y: number; elevation?: number; previousElevation?: number }>;
+  readonly origin: Readonly<{ x: number; y: number }>;
+  readonly rolls: readonly number[];
+  readonly identity?: Readonly<{ uid: string; template: string }>;
+  readonly state?: Readonly<Json>;
+  readonly perception?: Readonly<Json>;
+  readonly routine?: Readonly<Json>;
+  readonly time?: Readonly<Json>;
+  readonly environment?: Readonly<Json>;
+}
+/** Transient movement facts. A session-local sequence pairs start with settle or cancellation. */
+interface MotionResultDetails {
+  readonly entity: string;
+  readonly sequence: number;
+  readonly from: Readonly<Position>;
+  readonly to: Readonly<Position>;
+  readonly direction: Direction;
+  readonly mode: string;
+  readonly startedAt: number;
+  readonly durationMs: number;
+  readonly at: number;
+  readonly jump: boolean;
+  readonly scripted: boolean;
+  readonly forced: boolean;
+}
+export type MotionResult = MotionResultDetails & (
+  | { readonly phase: "started" | "settled"; readonly reason: null }
+  | { readonly phase: "blocked"; readonly reason: BlockedReason }
+  | { readonly phase: "cancelled"; readonly reason: MotionCancelReason }
+);
 export interface NPCIntent {
   interaction?: { target: string; kind: string };
   goal?: {
@@ -1180,6 +1258,7 @@ export interface PluginAPI {
       definition: { draw: (context: unknown, frame: Readonly<Json>) => void },
     ): string;
     battle(id: string, definition: BattleAnimationDefinition): string;
+    sequence(id: string, definition: BattleSequenceDefinition): string;
     move(
       id: string,
       definition: { moveId: string; animation: MoveAnimation },
@@ -1190,7 +1269,7 @@ export interface PluginAPI {
         duration: number;
         schema: DataSchema;
         sound?: string;
-        objects?: (frame: Readonly<SceneFrame>) => readonly { map: string; id: string; x: number; y: number }[];
+        objects?: (frame: Readonly<SceneFrame>) => readonly { map: string; id: string; x: number; y: number; frame?: number }[];
         field?: (frame: Readonly<SceneFrame>) => {
           x?: number;
           y?: number;

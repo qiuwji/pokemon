@@ -34,17 +34,27 @@ src/content/manifest.json              # 同一装配清单，stories是可选�
   stories/clock.json                   # 原作墙钟交互绑定
   stories/dialogues.json               # 现有序章/训练家/NPC本地化文本
 
-src/packs/emerald/story.js             # 本作事件装配，不放地区实现
-  story/runtime.js                    # 目录/事件引擎装配及地区引用预检
+src/game/emerald/assembly/story-runtime.js # 目录/事件引擎装配及地区引用预检
+src/packs/emerald/story.js             # 本作事件内容，不创建引擎实例
   story/regions/*.js                   # 尚需状态构建的现有序章切片
   story/common/*.js                    # 治疗、普通交互和战后桥接
   story/training.js                    # 项目训练场业务
-  animation-profiles.js                # 招式表现内容，另有所有者
+  battle/move-choreography.js          # 招式表现内容，另有所有者
 ```
 
 新地区优先在content/stories下编写bundle，并在同一manifest登记；增长后可以拆脚本、对白及来源文件，不要求每个小地区产生五个文件。插件通过api.story.registerBundle登记同样的数据，不在app.js逐地区导入。原作资料位于只读work/pokeemerald；来源记录放项目内容/文档，不写回参考。
 
 对象身份使用objectId或map+localId；完整原C label也可以做selector.script。坐标描述空间，不代替角色身份。原作NPC投影保留sourceLocalId/script；项目练习员明确自己是原创。引用未转写脚本必须保留references中的pending分类，近似文案与项目演绎不能标成原作已还原。
+
+## 内容、能力与缺陷分别提交
+
+已有合同能表达的地区剧情，修改内容定义、来源角色绑定/数据、必要装配和针对性测试；不为单个NPC、地图或剧情阶段新增应用服务分支。条件、固定路径、等待、奖励、失败重入属于实际剧情内容，不能只导对白，也不能因减少文件数省掉结果和保存验证。
+
+确实缺能力时，先列“原作行为 → 现合同缺口 → 能力所有者 → 通用输入/结果 → 验收例”，独立提交能力扩展，再提交使用它的内容。引擎负责通用调度、占位、事务、存储和执行合同；Emerald内容包负责原作规则、地图、角色和剧情政策；应用层负责领域接线；适配器负责宿主绘制/输入。地图名、人物名、剧情flag不进入通用引擎。已有Gen3规则位置不能仅因为历史代码在engine中就当作正确边界，新改动仍要核查所有者。
+
+复刻时发现既有缺陷可修，修复单独说明触发、根因、影响范围与验证，不能混写成“新剧情必须改引擎”。新增PC操作、通用渲染修复与地区剧情是不同功能链，按功能分批；生成文件随所属功能提交，不按目录机械拆开导致中间版本缺资源。跨层修改是需要解释的信号，不仅凭文件数量定性。
+
+[验证记录工具](../development/EVIDENCE.md)自动列出整个工作树的跨层改动，作者明确其中哪些属于本批次、哪些已存在。每批保留一段范围/边界说明和必要来源审阅，运行命令/日志/hash只生成一次；不为每个小剧情另外创建全套重复流程文件。
 
 ## 已可用的组合
 

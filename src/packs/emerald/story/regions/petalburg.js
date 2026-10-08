@@ -64,6 +64,10 @@ export const REGIONS_PETALBURG_EVENTS = [
       ...gymExit(s.position.dir),
       { type: "flag", key: "wallyInTown", value: true },
       { type: "flag", key: "wallyTutorial", value: true },
+      // The source sets FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM as Wally leaves the gym.
+      // Keep the hide fact separate so chapter presets can reset the tutorial stage
+      // without accidentally respawning her outside in later story slices.
+      { type: "flag", key: "wallyMomHidden", value: true },
       {
         type: "scene",
         kind: "door",

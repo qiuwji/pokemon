@@ -1,4 +1,4 @@
-import { BEHAVIOR } from "../../engine/terrain.js";
+import { BEHAVIOR } from "../../engine/extensions/field-content.js";
 const walk = {
   [BEHAVIOR.WALK_EAST]: "right",
   [BEHAVIOR.WALK_WEST]: "left",

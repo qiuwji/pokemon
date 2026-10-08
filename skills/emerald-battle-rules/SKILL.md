@@ -34,6 +34,10 @@ description: 演进现有绿宝石战斗规则、招式效果、状态、训练�
 
 ## 验收与交接
 
+战斗演出使用公开 `api.presentation.sequence` 与[帧编排合同](../../docs/engine/presentation/ANIMATION_CONTRACT.md)，参考[真实外部演出例](../../examples/battle-sequence.test.js)。内核只编译、校验和播放有界帧，原作时序、资源、轨迹和消息政策由内容编写。不构建原作指令解释器，不用通用粒子填补未覆盖招式。来源导出和总表审计见[战斗专项](../../docs/project/BATTLE_PRESENTATION_PLAN.md)；编排标记、素材来源、合同通过都不能当作逐帧/听音已验收。
+
+入场可组合scenes的窗口/背景、sprites的图集/旋转/tint和statusBoxes位移；第一事件在遮黑时准备并在播放复用。退场用通用转场帧声明覆盖/颜色，不从动画回调提交奖励。曲目切换使用演出完成通知与AudioCue.fadePreviousMs。完整生产入口、结算/重入/失败验证见[battle-entry-exit.test.js](../../examples/battle-entry-exit.test.js)。物种姿态、特殊球及特殊战斗分支尚须按专项缺口逐项转写。
+
 以一个真实新效果/状态/策略完成公开战斗。验证合法/非法选择、涉及的阶段次序、目标/来源离场、回合期限、失败回滚与PP/RNG；只查影响范围。更新审计对应条目、STATUS和证据，不写“354招式全部完成”之类无法由当前证明支持的结论。
 
 ## 两层策略（训练家 + 个体）
@@ -133,3 +137,5 @@ test("registered move effect runs in a real trainer turn", async () => {
 | [src/engine/rules/attachments.js](../../src/engine/rules/attachments.js) | `rg -n "AttachedRules" src generated tests docs package.json` |
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
+
+入场队伍条用公开sprites与holdFinal保持对白期末帧；并行对白由会话交接，不能另建HUD计时器。地图间音乐遵循地图政策与转场资源租约，音频包默认渐变不等于原作切图时序。

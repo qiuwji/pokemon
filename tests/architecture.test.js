@@ -29,6 +29,8 @@ test("Engine dependency direction is enforced: no DOM, Canvas, pack or presentat
       imports.every(
         (x) =>
           !x.includes("packs/") &&
+          !x.includes("game/") &&
+          !x.includes("ui/") &&
           !x.includes("game-pack") &&
           !x.includes("adapters/") &&
           !x.includes("presentation/"),
@@ -37,6 +39,14 @@ test("Engine dependency direction is enforced: no DOM, Canvas, pack or presentat
     );
   }
 });
+test("Crop and fishing gameplay stay outside the reusable engine", () => {
+  for (const file of modules(new URL("engine/", base).pathname)) {
+    const source = fs.readFileSync(file, "utf8");
+    assert(!/\b(?:class\s+(?:CropRegistry|CropService|FishingSession)|function\s+gen3(?:CanFish|FishingRules))\b/.test(source), file);
+    assert(!/\bstate\.crops\b|\bresult\.fishing\b/.test(source), file);
+  }
+});
+
 test("Presentation modules do not calculate battle outcomes or consume gameplay RNG", () => {
   for (const file of fs
     .readdirSync(new URL("presentation/", base))
@@ -49,7 +59,7 @@ test("Presentation modules do not calculate battle outcomes or consume gameplay 
       !/\b(damage|captureCheck|createMonster|Random)\s*\(/.test(source),
       file,
     );
-    assert(!/from\s+["'][^"']*packs\//.test(source), file);
+    assert(!/from\s+["'][^"']*(?:packs|game|ui)\//.test(source), file);
     assert(
       !/Math\.random\s*\(/.test(source),
       file + " presentation must be deterministic",
@@ -87,11 +97,12 @@ test("Every local ES module import resolves after refactors", () => {
   walk(new URL("../generated/", import.meta.url).pathname);
 });
 test("Every Emerald page and UI shell sends commands without mutating persisted state", () => {
-  const files = modules(new URL("packs/emerald/", base).pathname).filter(
+  const files = modules(new URL("ui/emerald/", base).pathname).filter(
     (file) =>
       file.endsWith("-interface.js") ||
       ["interface.js", "ui-shell.js"].includes(path.basename(file)),
   );
+  assert(files.length >= 20, "UI ownership scan must include the real page controllers");
   for (const file of files) {
     const source = fs.readFileSync(file, "utf8");
     assert(
@@ -112,6 +123,23 @@ test("Every Emerald page and UI shell sends commands without mutating persisted 
       ),
       file,
     );
+  }
+});
+
+test("Emerald content depends only on public author capabilities and content assets", () => {
+  const files = modules(new URL("packs/emerald/", base).pathname);
+  assert(files.length > 50);
+  for (const file of files) {
+    const source = fs.readFileSync(file, "utf8");
+    for (const match of source.matchAll(/from\s+["']([^"']+)["']/g)) {
+      const target = path.resolve(path.dirname(file), match[1]);
+      if (target.startsWith(base.pathname)) assert(
+        target.startsWith(new URL("packs/", base).pathname) ||
+        target.startsWith(new URL("engine/extensions/", base).pathname), file + " -> " + match[1]);
+    }
+    assert(!/\b(document|window|localStorage|setTimeout|requestAnimationFrame)\b/.test(
+      source.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "")), file);
+    assert(!/new\s+(?:[A-Za-z]+Registry|StoryEngine|PluginHost|AudioAdapter|SaveStore)\b/.test(source), file);
   }
 });
 // Examples are real extension consumers: they cannot reach application internals or browser globals.
@@ -166,7 +194,7 @@ test("Inventory quantities cannot be mutated as count dictionaries; UI cannot co
 
 // Product plugins may be removed without changing engine contract test support.
 test("Core tests and fixtures do not import installed plugins or authoring examples", () => {
-  for (const file of modules(new URL("../tests/", import.meta.url).pathname)) {
+  for (const file of modules(new URL(".", import.meta.url).pathname)) {
     const source = fs.readFileSync(file, "utf8");
     for (const match of source.matchAll(/from\s+["']([^"']+)["']/g)) {
       const target = path.resolve(path.dirname(file), match[1]);

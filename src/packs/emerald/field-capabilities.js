@@ -1,4 +1,4 @@
-import { inventoryQuantity } from "../../engine/inventory.js";
+import { inventoryQuantity } from "../../engine/extensions/field-content.js";
 /** Inventory and badge/move qualifications are pack policy, shared by live movement and save validation. */
 export const BIKE_ITEMS = Object.freeze({
   "mach-bike": "mach_bike",

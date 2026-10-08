@@ -152,7 +152,7 @@ test("Real bag page mounts a plugin form; typed submit saves plugin memory witho
     before = structuredClone(s.game.state.bag),
     slots = [];
   const { createBagInterface } = await import(
-    "../src/packs/emerald/bag-interface.js"
+    "../src/ui/emerald/bag-interface.js"
   );
   s.game.ui = { ...s.game.ui, extensions: a.ext };
   const ui = createBagInterface(s.game, {

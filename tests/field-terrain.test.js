@@ -19,7 +19,7 @@ import {
 } from "../src/engine/terrain.js";
 import { EMERALD_TERRAIN_RULES } from "../src/packs/emerald/terrain-rules.js";
 import { MOVEMENT_MODES } from "../src/packs/emerald/movement.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 
 const map = (row) => ({
   width: row.length,
@@ -377,13 +377,13 @@ test("Plugins register terrain policies without altering the executor and receiv
 
 test("Application commands select techniques; a paused cutscene stops current drift and queued steps resume afterward", async () => {
   const { EmeraldAdventure } = await import(
-    "../src/packs/emerald/adventure.js"
+    "../src/game/emerald/adventure.js"
   );
   const { BattleDirector } = await import(
     "../src/presentation/battle-director.js"
   );
   const { attachEmeraldExtensions } = await import(
-    "../src/packs/emerald/extension-ports.js"
+    "../src/game/emerald/commands/extension-ports.js"
   );
   const base = loadContentSync();
   const lab = {

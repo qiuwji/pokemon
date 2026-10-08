@@ -43,10 +43,10 @@ def resolve_cue(track_id, song, kind, section, folder, data, fades=None):
     cue['kind'] = kind
     if kind == 'music' and fades:
         for key, value in fades.items():
-            if key not in ('fadeInMs', 'fadeOutMs') or not isinstance(value, int) or not 0 <= value <= 10000:
+            if key not in ('fadeInMs', 'fadeOutMs', 'fadePreviousMs') or not isinstance(value, int) or not 0 <= value <= 10000:
                 raise ValueError('Invalid music fade policy')
             cue[key] = value
-    if kind == 'music':
+    if kind == 'music' and data['cue'].get('loop', False):
         cue.update({'loop': True,
                     'loopStart': data['cue']['loopStart'],
                     'loopEnd': data['cue']['loopEnd']})
@@ -77,7 +77,8 @@ def install(pack_file, build, project, check=False):
                 raise ValueError(f'Reference revision differs for {song}')
             if data.get('renderer', {}).get('revision') != spec['rendererRevision']:
                 raise ValueError(f'Renderer revision differs for {song}')
-            local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data, spec.get('musicFades'))
+            fades = {**(spec.get('musicFades') or {}), **(entry.get('musicFades') or {})}
+            local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data, fades)
             if workspace.sources:
                 cue['source'] = 'generated/' + asset
             audio = folder / data['assetName']
@@ -119,7 +120,9 @@ def install(pack_file, build, project, check=False):
         local = track['cueId'].split(':', 1)[1]
         lines.append(f'    api.presentation.audio({json.dumps(local)}, '
                      f'{json.dumps(track["cue"], ensure_ascii=False)});')
-    lines += ['  },', '};', '']
+    lines += ['  },', '};', 'export const audioTrackDurations = ' + json.dumps({
+        track['song']: track['durationSeconds'] for track in tracks if track['kind'] == 'music'
+    }) + ';', '']
     module = root / 'plugins' / f'{track_id}.js'
     changes[module] = ('\n'.join(lines)).encode()
     catalog_path = root / 'plugins/catalog.json'

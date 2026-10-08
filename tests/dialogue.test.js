@@ -11,7 +11,7 @@ import {
   TextEffectRegistry,
 } from "../src/presentation/text-effects.js";
 import { DialogueDOM } from "../src/adapters/dialogue-dom.js";
-import { createUIShell } from "../src/packs/emerald/ui-shell.js";
+import { createUIShell } from "../src/ui/emerald/ui-shell.js";
 import { layoutDocument } from "./helpers/layout-document.js";
 import { session, manifest } from "./helpers/session.js";
 function clockPort() {
@@ -57,6 +57,27 @@ function shellFixture(plugins = [], reducedMotion = () => false) {
   s.game.attachUI(ui);
   return { ...s, ui, doc, clock };
 }
+test("Deferred modal focus preserves an explicitly focused input instead of stealing focus for a button", () => {
+  const s = shellFixture();
+  s.ui.modal("命名", "", { type: "naming", close: false });
+  const input = s.doc.createElement("input"), button = s.doc.createElement("button");
+  s.ui.root.append(input, button); input.focus();
+  s.clock.step(16);
+  assert.equal(s.doc.activeElement, input);
+  s.ui.closeModal();
+});
+test("Pause cues fire once at the boundary, survive skip, and stop when their callback disposes the line", () => {
+  const doc = layoutDocument(), clock = clockPort(), events = [];
+  const view = new DialogueDOM({ document: doc, container: doc.getElementById("dialogue"), effects: createTextEffects(), ...clock });
+  const d = dialogueDescription({ name: "博士", lines: [{ runs: [{ text: "你" }, { pauseMs: 100 }, { text: "好" }, { pauseMs: 100 }] }], speed: 10 });
+  view.show(d.name, d.lines[0], { ...d, onPause: i => events.push(i) });
+  clock.step(9); assert.deepEqual(events, []);
+  clock.step(1); assert.deepEqual(events, [0]);
+  clock.step(10); assert.deepEqual(events, [0]);
+  view.skip(); view.update(); assert.deepEqual(events, [0, 1]);
+  view.show(d.name, d.lines[0], { ...d, onPause: () => view.hide() });
+  clock.step(10); assert.equal(clock.pending, 0); assert.equal(view.container.hidden, true);
+});
 const line = (runs, speed = 10, mode = "typewriter") => {
   const d = dialogueDescription({
     name: "博士",

@@ -5,7 +5,7 @@ export class ChoiceDOM {
     this.active = true;
     this.handle = null;
   }
-  mount(prompt, options, { default: selected, timeoutMs } = {}) {
+  mount(prompt, options, { default: selected, timeoutMs, onHighlight } = {}) {
     const text = this.document.createElement("p");
     text.textContent = prompt;
     const grid = this.document.createElement("div");
@@ -19,6 +19,21 @@ export class ChoiceDOM {
       if (option.disabled) button.title = option.disabledReason;
       button.onclick = () => {
         if (this.active && !button.disabled) this.onSelect(option.id);
+      };
+      button.onfocus = () => {
+        if (!this.active || button.disabled || !onHighlight) return;
+        try {
+          const pending = onHighlight(option.id);
+          if (!pending?.then) return;
+          const buttons = [...grid.querySelectorAll("button")];
+          buttons.forEach(b => { b.disabled = true; });
+          Promise.resolve(pending).then(() => {
+            if (this.active) {
+              buttons.forEach((b, i) => { b.disabled = !!options[i].disabled; });
+              button.focus();
+            }
+          }, error => { if (this.active) this.onError(error); });
+        } catch (error) { this.onError(error); }
       };
       grid.append(button);
       if (option.id === selected && !option.disabled)

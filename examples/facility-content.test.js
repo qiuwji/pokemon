@@ -7,7 +7,7 @@ import { loadPluginCatalog } from "../src/adapters/plugin-loader.js";
 test("JSON-only facility plugin loads through the catalog and runs all three authored templates", async () => {
   const url = new URL("../src/plugins/catalog.json", import.meta.url);
   const pack = JSON.parse(fs.readFileSync(new URL("../src/plugins/facility-content/content.json", import.meta.url)));
-  const plugins = await loadPluginCatalog({ url, parameters: new URLSearchParams("plugins=facility-content&disable-plugins=ai-control,emerald-audio"),
+  const plugins = await loadPluginCatalog({ url, parameters: new URLSearchParams("plugins=facility-content&disable-plugins=ai-control,emerald-audio,patrol-lab"),
     readJSON: location => JSON.parse(fs.readFileSync(location)) });
   assert.deepEqual(plugins.map(p => p.id), ["facility-content"]);
   assert.equal(createFacilityContent(pack).id, plugins[0].id);

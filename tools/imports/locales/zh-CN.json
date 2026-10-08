@@ -21,7 +21,54 @@
     "PetalburgCity_House1": "橙华市 · 民宅 1F",
     "PetalburgCity_House2": "橙华市 · 民宅",
     "PetalburgCity_Mart": "橙华市 · 友好商店",
-    "PetalburgCity_PokemonCenter_1F": "橙华市 · 宝可梦中心"
+    "PetalburgCity_PokemonCenter_1F": "橙华市 · 宝可梦中心",
+    "Route104": "104 号道路",
+    "PetalburgWoods": "橙华森林",
+    "Route104_MrBrineysHouse": "104 号道路 · 哈奇老人之家",
+    "Route104_PrettyPetalFlowerShop": "104 号道路 · 花店",
+    "RustboroCity": "卡那兹市",
+    "RustboroCity_Gym": "卡那兹道馆",
+    "RustboroCity_DevonCorp_1F": "得文制造股份有限公司 · 1F",
+    "RustboroCity_DevonCorp_2F": "得文制造股份有限公司 · 2F",
+    "RustboroCity_DevonCorp_3F": "得文制造股份有限公司 · 3F",
+    "RustboroCity_PokemonCenter_1F": "卡那兹市 · 宝可梦中心",
+    "RustboroCity_PokemonCenter_2F": "卡那兹市 · 宝可梦中心 2F",
+    "RustboroCity_Mart": "卡那兹市 · 友好商店",
+    "RustboroCity_PokemonSchool": "卡那兹市 · 宝可梦学校",
+    "RustboroCity_CuttersHouse": "卡那兹市 · 居合斩之家",
+    "RustboroCity_House1": "卡那兹市 · 民宅 1",
+    "RustboroCity_House2": "卡那兹市 · 民宅 2",
+    "RustboroCity_House3": "卡那兹市 · 民宅 3",
+    "RustboroCity_Flat1_1F": "卡那兹市 · 公寓 1栋 1F",
+    "RustboroCity_Flat1_2F": "卡那兹市 · 公寓 1栋 2F",
+    "RustboroCity_Flat2_1F": "卡那兹市 · 公寓 2栋 1F",
+    "RustboroCity_Flat2_2F": "卡那兹市 · 公寓 2栋 2F",
+    "RustboroCity_Flat2_3F": "卡那兹市 · 公寓 2栋 3F",
+    "Route116": "116 号道路",
+    "Route116_TunnelersRestHouse": "116 号道路 · 挖洞者之家",
+    "RusturfTunnel": "卡绿隧道",
+    "DewfordTown": "武斗镇",
+    "DewfordTown_Gym": "武斗道馆",
+    "DewfordTown_PokemonCenter_1F": "武斗镇 · 宝可梦中心",
+    "DewfordTown_PokemonCenter_2F": "武斗镇 · 宝可梦中心 2F",
+    "DewfordTown_House1": "武斗镇 · 民宅 1",
+    "DewfordTown_House2": "武斗镇 · 民宅 2",
+    "DewfordTown_Hall": "武斗镇 · 集会所",
+    "GraniteCave_1F": "石之洞窟 · 1F",
+    "GraniteCave_B1F": "石之洞窟 · B1F",
+    "GraniteCave_B2F": "石之洞窟 · B2F",
+    "GraniteCave_StevensRoom": "石之洞窟 · 大吾的房间",
+    "SlateportCity": "凯那市",
+    "SlateportCity_OceanicMuseum_1F": "海洋博物馆 · 1F",
+    "SlateportCity_OceanicMuseum_2F": "海洋博物馆 · 2F",
+    "SlateportCity_SternsShipyard_1F": "船厂 · 1F",
+    "SlateportCity_SternsShipyard_2F": "船厂 · 2F",
+    "SlateportCity_Harbor": "凯那市港口",
+    "SlateportCity_PokemonCenter_1F": "凯那市 · 宝可梦中心",
+    "SlateportCity_Mart": "凯那市 · 友好商店",
+    "SlateportCity_House": "凯那市 · 民宅",
+    "SlateportCity_PokemonFanClub": "凯那市 · 宝可梦爱好者俱乐部",
+    "SlateportCity_PokemonCenter_2F": "凯那市 · 宝可梦中心 2F"
   },
   "species": {
     "treecko": {
@@ -75,6 +122,46 @@
     "linoone": {
       "name": "直冲熊",
       "dex": 264
+    },
+    "magikarp": {
+      "name": "鲤鱼王",
+      "dex": 129
+    },
+    "carvanha": {
+      "name": "利牙鱼",
+      "dex": 318
+    },
+    "makuhita": {
+      "name": "幕下力士",
+      "dex": 296
+    },
+    "nosepass": {
+      "name": "朝北鼻",
+      "dex": 299
+    },
+    "geodude": {
+      "name": "小拳石",
+      "dex": 74
+    },
+    "machop": {
+      "name": "腕力",
+      "dex": 66
+    },
+    "meditite": {
+      "name": "玛沙那",
+      "dex": 307
+    },
+    "slugma": {
+      "name": "熔岩虫",
+      "dex": 218
+    },
+    "torkoal": {
+      "name": "煤炭龟",
+      "dex": 324
+    },
+    "zubat": {
+      "name": "超音蝠",
+      "dex": 41
     },
     "wurmple": {
       "name": "刺尾虫",

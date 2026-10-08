@@ -68,3 +68,36 @@ actors.test.js 12 项有针对性通过证据：身份/保存/版本、坏记录
 2026-10-03：伙伴跟随仅是插件扩展示例，用户要求暂不实现。现有持续 Actor、感知、导航和姿态保留；不为未开始的跟随插件提前增加专用队列、精灵绑定或交通规则。上文 C5 相关内容是后续插件可能的依赖，不属于当前必须交付的玩法。
 
 高度合同见 FIELD_ELEVATION.md：持续身份保存 current/previous 高度，行为位置/感知、目标 BFS、脚本及自主移动复用网格策略；目标可选 elevation。两端预约保留各自平面，原作多层桥面不再等同单一二维占用。完整桥面内容与形变并未因此完成，跟随插件仍延后。
+
+
+## 行为节奏与移动结果
+
+`npcBehaviors` 的定义可增加 `timing:{intervalMs,afterMove?}`。intervalMs 是16–60000的整数毫秒；afterMove 缺省为 interval，也可为 settled。未声明时保留原有随机等待。interval 在每次决定后安排下一次，当前移动没结束仍等待；settled 在成功移动完成后安排下一次决定，闲置或阻挡仍按 intervalMs 重试。每个可见角色每帧至多决定一次，长时钟间隔不补跑旧决定。宿主暂停会冻结自主移动与决定，剧情 pin 优先，场景释放后恢复正常节奏。插件不创建自己的帧循环或计时器。
+
+`core:motion` 是应用层发布的冻结移动事实，由引擎的 [MotionResults](../../../src/engine/motion-results.js) 产生。适用于玩家、静态NPC和持久Actor的网格步进（含脚本、强制移动与相邻地图连接）。
+
+| 字段 | 含义 |
+| --- | --- |
+| entity | player、静态 map:id 或持久Actor UID |
+| sequence / phase | 会话内步进序号；started 后对应一次 settled 或 cancelled；blocked 是独立尝试，无后续落步 |
+| from / to | 地图、格子、朝向与存在时的 elevation/previousElevation；阻挡时 to 可为候选格或未变化的位置，不代表提交 |
+| direction / mode | 实际步进方向与移动模式；脚本 keepFacing 时方向可不同于 to.dir |
+| startedAt / durationMs / at | 宿主毫秒时钟、名义动画时长及事实发布时间；暂停后的实际结束时间用 settled.at |
+| jump / scripted / forced | 运动属性，不触发第二次步数、遇敌或奖励 |
+| reason | phase=blocked时为BlockedReason，cancelled时为MotionCancelReason，成功阶段为null；冻结词表见[移动合同](../../architecture/MOVEMENT.md)，不能据原因绕过通行检查 |
+
+正常移动在动画时钟结束后发布 settled；替换、移除、朝向强制重置、场景释放与销毁关闭未完成动作。暂停期间不伪造自主落步。结果不是指令，不保存历史，也不登记跟随关系；需要路线记忆的插件自行维护有界业务数据。瞬移、warp、交通交接继续使用现有 world-visit/旅行合同，不伪装成普通步进。会话重建后序号重置，不将序号存为跨会话身份。
+
+## Actor 事务
+
+声明 `actors` 权限后，同一插件 action 可提交以下意图，复用已有 ActorApplication 的资格、碰撞、schema、移除清理与公开事实：
+
+- `{kind:"actors",operation:"spawn",template,position}`：position 与 core.actor.spawn 相同，包含 map/x/y/dir 和可选高度；结果 `{ok:true,actor}`。
+- `{kind:"actors",operation:"update",uid,position?,data?,pose?,hidden?}`：data 与公开命令一致，为最多8192字符的 JSON 字符串。
+- `{kind:"actors",operation:"remove",uid}`：删除成功结果为 true，缺失或无法执行导致事务失败。
+
+通用 `ctx.intent(value,onResult?)` 可在意图成功应用时同步消费冻结结果：将生成 UID 写入 ctx.store，或追加初始化意图。回调执行于提交期间，不能 await/dispatch；所有回调与原 action 共用128次写操作限额。追加意图按队列顺序执行，后续失败、回调异常、异步返回或数据校验失败都会恢复领域状态、插件记忆及RNG。callback 收到的结果仍是待整笔成功的结果，不能直接执行外部副作用。
+
+引擎事务只认识可选 beginEffects 端口的 commit/rollback。绿宝石装配层 [actor-transaction-effects](../../../src/game/emerald/commands/actor-transaction-effects.js) 保存受影响的NPC缓存、场景pin、外观lease和遇敌claim；失败恢复原对象与未完成动画，成功后才发布冻结的核心事件与保存。领域结构不进入通用 PluginRuntime。
+
+可执行代表例见 [actor.test.js](../../../examples/actor.test.js)。专项见 [behavior-timing](../../../tests/behavior-timing.test.js)、[movement-results](../../../tests/movement-results.test.js)、[actor-transactions](../../../tests/actor-transactions.test.js) 和 [event-batches](../../../tests/event-batches.test.js)。这些能力未实现伙伴物种绑定、跟随路线/间距、穿门交接或宝可梦素材。

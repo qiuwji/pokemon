@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { manifest, session } from "../tests/helpers/session.js";
-import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
+import { createEmeraldPresentation } from "../src/game/emerald/assembly/animations.js";
 test("a plugin reskins one move through the public presentation registrations", () => {
   const plugin = manifest("move-skin", (api) => {
     const spark = api.presentation.effect("spark", { draw: () => {} });
@@ -46,6 +46,6 @@ test("a plugin reskins one move through the public presentation registrations", 
   assert.equal(effect.kind, "move-skin:spark");
   assert.equal(effect.count, 3);
   assert.equal(effect.color, "#00d0ff", "the recipe's colour wins over the palette");
-  // Every other move keeps its pack recipe untouched.
-  assert.equal(registry.animation({ id: "tackle" }).tracks[0].effect, "contact");
+  // No unrelated move acquires a substitute effect.
+  assert.equal(registry.animation({ id: "tackle" }), null);
 });

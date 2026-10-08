@@ -35,7 +35,7 @@ npm run test:plugins
 npm run check:docs
 ```
 
-`npm test`仅运行核心合同（含插件宿主API），`npm run test:plugins`独立运行可选插件作者示例；`npm run test:all`显式运行两组。最新通过数量、输入指纹、日志及未验范围统一看[验证记录](docs/project/VALIDATION.md)，避免在多个入口维护过期数字。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及配置的引擎类型。`src/`是可编辑源码，`generated/`是派生数据和素材；开发服务、测试和工具直接读取两者，不生成dist。详见[目录合同](docs/development/SOURCE_LAYOUT.md)。ES模块与fetch需要HTTP，`npm run dev`直接打开源码页面。
+`npm test`仅运行核心合同（含插件宿主API），`npm run test:plugins`独立运行可选插件作者示例；`npm run test:all`显式运行两组。最新通过数量、输入指纹、日志及未验范围统一看[验证记录](docs/project/VALIDATION.md)，避免在多个入口维护过期数字。`npm run check`检查内容引用、图集、公开合同、全部JS语法、文档、ESLint及配置的引擎类型。`src/`是可编辑源码，`generated/`是派生数据和素材；开发服务、测试和工具直接读取两者，不生成dist。详见[目录合同](docs/development/SOURCE_LAYOUT.md)。默认分支推送自动检查并更新GitHub Pages，接线与首次启用见[发布说明](docs/development/GITHUB_PAGES.md)。ES模块与fetch需要HTTP，`npm run dev`直接打开源码页面。
 
 九份Skill各有可运行例、术语、报错与搜索兜底；新人从[文档导航](docs/README.md)和[作者指南](docs/development/AUTHORING.md)进入。当前结果以验证记录为准，代码通过不代表浏览器视觉和听音通过。
 

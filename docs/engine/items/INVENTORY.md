@@ -9,7 +9,7 @@
 | engine/inventory-registry.js | 校验、复制/冻结口袋政策、物品路由与显式默认口袋 |
 | engine/inventory.js | 槽位校验、容量计算、批量草稿、选槽移除、私有一次性计划及只读投影 |
 | engine/rules/gen3/inventory.js | 有来源的原作五口袋政策；通用引擎不认识口袋名或原作数字 |
-| packs/emerald/inventory.js | 从合并目录构造本作服务；默认政策属于内容包 |
+| game/emerald/assembly/inventory.js | 从合并目录构造本作服务；默认政策属于内容包 |
 | application/inventory-application.js | 持有库存政策，协调购买、道具、装备、查询；其他应用通过有限端口使用它 |
 | 页面/插件/网络 | 冻结查询、明确命令；不直接写容器或提交私有计划 |
 

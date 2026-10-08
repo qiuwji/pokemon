@@ -154,3 +154,29 @@ for (const kind of ["rule", "ability"]) {
     assert(calls > 0);
   });
 }
+
+
+test("Application state references survive staged plugin loading without exposing live state", () => {
+  const state = { garden: { kind: "garden:seed" } };
+  const host = new PluginHost({ base: {}, stateReferences(snapshot) {
+    assert(Object.isFrozen(snapshot.garden));
+    assert.notEqual(snapshot.garden, state.garden);
+    assert.throws(() => { snapshot.garden.kind = "changed"; }, TypeError);
+    return [snapshot.garden.kind];
+  } }).load([manifest("garden", (api) => {
+    api.content.register("resources", "seed", "assets/egg-front.png");
+  })]);
+  assert.deepEqual(host.catalog.dependencies(state), ["garden"]);
+  assert.equal(state.garden.kind, "garden:seed");
+  assert.deepEqual(new PluginHost({ base: {} }).catalog.dependencies(state), []);
+});
+
+test("Content reference providers reject asynchronous and malformed results", () => {
+  assert.throws(() => new PluginHost({ base: {}, stateReferences: [] }), /reference provider/);
+  for (const result of [null, "seed", [null], [""], ["x".repeat(129)]]) {
+    const host = new PluginHost({ base: {}, stateReferences: () => result });
+    assert.throws(() => host.catalog.dependencies({}), /content state references/);
+  }
+  const host = new PluginHost({ base: {}, stateReferences: async () => [] });
+  assert.throws(() => host.catalog.dependencies({}), /synchronous/);
+});

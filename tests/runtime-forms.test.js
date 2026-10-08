@@ -9,7 +9,7 @@ import {
   CreatureForms,
 } from "../src/engine/creatures/forms.js";
 import { GEN3_ABILITIES } from "../src/engine/rules/gen3/abilities.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 const base = loadContentSync();
 const forms = {
   boost: {

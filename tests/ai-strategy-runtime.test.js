@@ -3,7 +3,7 @@ import { createBag, fixtureInventory } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { Random, createMonster } from "../src/engine/model.js";
-import { createEmeraldPlugins } from "../src/packs/emerald/extensions.js";
+import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
 import { createTrainerEncounter } from "../src/engine/trainer-encounters.js";
 import { BattleStrategyRegistry } from "../src/engine/battle/strategy-registry.js";
 import { EncounterTableRegistry } from "../src/engine/encounter-tables.js";
@@ -290,7 +290,8 @@ test("core.battle.ai-view reports recorded decisions without replaying them", as
           information: "full",
           choice: { mode: "best", band: 0 },
         },
-        party: [{ species: "poochyena", level: 5, moves: ["tackle"] }],
+        // Keep the query under test in an ongoing battle; random critical KOs otherwise start a story transition.
+        party: [{ species: "poochyena", level: 20, moves: ["growl"] }],
       });
     },
     ["battle"],

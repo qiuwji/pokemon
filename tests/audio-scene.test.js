@@ -98,6 +98,38 @@ const player = (f, more = {}) =>
     fetchAsset: f.fetchAsset,
     ...more,
   });
+
+test("Completed non-looping title music stays ended across ticks, mute and visibility; selecting again restarts it", async () => {
+  const f = fakeAudio(), cues = musicCues();
+  cues.set("title", validateAudioCue({ kind: "music", source: "assets/title.wav", volume: .5, loop: false }));
+  const audio = player(f, { cues }); audio.enabled = true;
+  const voice = await audio.setMusic("title"); voice.source.onended(); await voice.finished;
+  assert.equal(audio.musicVoice, null); const count = f.nodes.length;
+  await audio.setMusic("title"); audio.enabled = false; audio.enabled = true;
+  audio.setSuspended(true); audio.setSuspended(false); await Promise.resolve();
+  assert.equal(f.nodes.length, count);
+  await audio.setMusic(null); assert(await audio.setMusic("title")); audio.dispose();
+});
+
+test("fanfare music holds retain the source position, allow sounds and release only the final lease", async () => {
+  const f = fakeAudio(), audio = player(f);
+  audio.enabled = true;
+  await audio.setMusic("town");
+  f.context.currentTime = 2;
+  const release = audio.holdMusic(), second = audio.holdMusic();
+  assert.equal(audio.musicVoice, null);
+  await audio.setMusic("town");
+  assert.equal(audio.musicVoice, null);
+  assert(await audio.play("hit"));
+  release(); release();
+  await Promise.resolve(); assert.equal(audio.musicVoice, null);
+  second();
+  await audio.musicRequest;
+  assert.equal(audio.musicVoice.offset, 2);
+  assert.equal(audio.musicVoice.cue.kind, "music");
+  const end = audio.holdMusic(); audio.dispose(); end();
+  await Promise.resolve(); assert.equal(audio.musicVoice, null);
+});
 test("Asset music switches, caches decoded buffers and resumes its sample position after mute/background pause", async () => {
   const f = fakeAudio(),
     audio = player(f);
@@ -399,7 +431,7 @@ test("Scene clock validates before taking control, rejects overlaps and releases
 });
 test("UI scene facade serializes typed payload through the shared command envelope", async () => {
   const { createEmeraldCommandFacade } = await import(
-    "../src/packs/emerald/command-facade.js"
+    "../src/game/emerald/commands/command-facade.js"
   );
   let received;
   const game = createEmeraldCommandFacade(
@@ -478,6 +510,18 @@ test('Music crossfade keeps the previous voice until decoding completes and reje
   pending.get('assets/battle.ogg')(response); const battle = await b;
   assert.equal(town.stopped, true); assert.equal(audio.musicVoice, battle);
   assert.equal(await audio.setMusic('battle'), battle);
+  audio.dispose();
+});
+
+test("an incoming cue can cut the previous music after decoding while ordinary crossfades remain available", async () => {
+  const f = fakeAudio(), cues = musicCues();
+  cues.set("battle", validateAudioCue({ ...cues.get("battle"), fadePreviousMs: 0, fadeInMs: 0 }));
+  const audio = player(f, { cues }); audio.enabled = true;
+  const town = await audio.setMusic("town");
+  await audio.setMusic("battle");
+  assert.equal(town.cleaned, true);
+  assert.equal(audio.musicVoice.id, "battle");
+  assert.throws(() => validateAudioCue({ ...cues.get("battle"), fadePreviousMs: -1 }), /fade/);
   audio.dispose();
 });
 

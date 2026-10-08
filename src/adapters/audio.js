@@ -1,3 +1,5 @@
+import { validateMusicTransition } from "../engine/extensions/music-transition-contracts.js";
+import { automateVolume, envelopeLevel } from "./audio-envelope.js";
 import { validateAudioCue } from "../engine/extensions/audio-contracts.js";
 /** Resource player: decoding, channels, sample loops and host lifecycle. No gameplay access. */
 export class AudioAdapter {
@@ -19,11 +21,15 @@ export class AudioAdapter {
     this.suspended = false;
     this.disposed = false;
     this.music = null;
+    this.completedMusic = null;
     this.musicVoice = null;
     this.musicOffset = 0;
     this.generation = 0;
     this.musicGeneration = 0;
     this.musicRequest = null;
+    this.musicTransition = null;
+    this.musicTailUntil = 0;
+    this.musicHolds = new Set();
   }
   get enabled() {
     return this._enabled;
@@ -87,10 +93,9 @@ export class AudioAdapter {
       throw new Error("Invalid audio channel volume");
     this.volumes[channel] = value;
     for (const voice of this.voices)
-      if (!voice.stopped) {
+      if (!voice.cleaned) {
         const at = this.context.currentTime;
-        voice.gain.gain.cancelScheduledValues(at);
-        voice.gain.gain.setValueAtTime(this.targetVolume(voice.cue), at);
+        automateVolume(voice.gain.gain, voice.envelope, this.targetVolume(voice.cue), at);
       }
   }
   async play(id) {
@@ -101,12 +106,15 @@ export class AudioAdapter {
     }
     return this.start(id, cue);
   }
-  setMusic(id) {
+  setMusic(id, transition = null) {
+    transition = validateMusicTransition(transition);
     if (id !== null && this.cues.get(id)?.kind !== "music") {
       this.onError(new Error(`Unknown music cue ${id}`));
       return Promise.resolve(null);
     }
-    if (id === this.music && (this.musicRequest || this.musicVoice?.id === id || !this.playable))
+    if (id !== this.music) this.completedMusic = null;
+    if (id !== null && id === this.music && id === this.completedMusic) return Promise.resolve(null);
+    if (id === this.music && (this.musicRequest || this.musicVoice?.id === id || !this.playable || this.musicHolds.size))
       return this.musicRequest || Promise.resolve(this.musicVoice);
     // Cancel an in-flight replacement when returning to the still-playing scene.
     if (id !== null && id === this.musicVoice?.id && !this.musicVoice.stopped) {
@@ -117,33 +125,35 @@ export class AudioAdapter {
     }
     this.musicGeneration++;
     if (id === null && this.musicVoice) {
-      this.stopVoice(this.musicVoice, this.musicVoice.cue.fadeOutMs ?? 250);
+      this.stopVoice(this.musicVoice, transition?.fadeOutMs ?? this.musicVoice.cue.fadeOutMs ?? 250, transition?.steps);
       this.musicVoice = null;
     }
     this.music = id;
+    this.musicTransition = transition;
     this.musicOffset = 0;
     this.musicRequest = null;
     return this.resumeMusic();
   }
   resumeMusic() {
-    if (!this.playable || !this.music) return Promise.resolve(null);
+    if (!this.playable || !this.music || this.music === this.completedMusic || this.musicHolds.size) return Promise.resolve(null);
     const id = this.music,
       token = ++this.musicGeneration;
     const request = this.start(id, this.cues.get(id), {
       musicToken: token,
       offset: this.musicOffset,
+      transition: this.musicTransition,
     })
       .then((voice) => {
         if (voice && token === this.musicGeneration) {
           const previous = this.musicVoice;
           this.musicVoice = voice;
-          if (previous && previous !== voice) {
+          if (previous && previous !== voice && !previous.stopped) {
             // Crossfade: the outgoing fade must last at least as long as the incoming
             // one, otherwise the summed level dips in the middle of the transition.
             const incomingFade = this.cues.get(id)?.fadeInMs ?? 0;
             this.stopVoice(
               previous,
-              Math.max(previous.cue.fadeOutMs ?? 250, incomingFade),
+              this.cues.get(id)?.fadePreviousMs ?? Math.max(previous.cue.fadeOutMs ?? 250, incomingFade),
             );
           }        }
         return voice;
@@ -154,7 +164,38 @@ export class AudioAdapter {
     this.musicRequest = request;
     return request;
   }
-  async start(id, cue, { musicToken = null, offset = 0 } = {}) {
+  /** Covering a scene can wait for this completion; mute/disposal also release the wait. */
+  holdMusic() {
+    const lease = {};
+    this.musicHolds.add(lease);
+    if (this.musicHolds.size === 1) {
+      this.musicGeneration++;
+      this.musicRequest = null;
+      const voice = this.musicVoice;
+      if (voice) {
+        this.musicOffset = voice.offset + Math.max(0, this.context.currentTime - voice.startedAt);
+        this.stopVoice(voice);
+      }
+      this.musicVoice = null;
+    }
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      this.musicHolds.delete(lease);
+      if (!this.musicHolds.size) {
+        this.musicTransition = { mode: "after-fade", fadeOutMs: 0, fadeInMs: 0 };
+        void this.resumeMusic().catch(this.onError);
+      }
+    };
+  }
+
+  fadeMusic(transition) {
+    const previous = this.musicVoice;
+    this.setMusic(null, transition);
+    return previous?.finished || Promise.resolve();
+  }
+  async start(id, cue, { musicToken = null, offset = 0, transition = null } = {}) {
     if (!this.playable) return null;
     const generation = this.generation;
     let voice, gain, source;
@@ -174,6 +215,15 @@ export class AudioAdapter {
         this.stopVoice(this.voices.values().next().value);
       gain = context.createGain();
       source = context.createBufferSource();
+      let startAt = context.currentTime;
+      if (musicToken !== null && transition?.mode === "after-fade") {
+        const previous = this.musicVoice;
+        if (previous && !previous.stopped) {
+          if (previous.startedAt > context.currentTime) this.stopVoice(previous);
+          else this.musicTailUntil = this.stopVoice(previous, transition.fadeOutMs ?? 0, transition.steps);
+        }
+        startAt = Math.max(startAt, this.musicTailUntil);
+      } else if (musicToken !== null) this.musicTailUntil = 0;
       voice = {
         id,
         cue,
@@ -181,7 +231,7 @@ export class AudioAdapter {
         source,
         stopped: false,
         cleaned: false,
-        startedAt: context.currentTime,
+        startedAt: startAt,
         offset,
       };
       voice.finished = new Promise((resolve) => { voice.finish = resolve; });
@@ -201,13 +251,11 @@ export class AudioAdapter {
       voice.offset = offset;
       source.connect(gain);
       gain.connect(context.destination);
-      const fade = (cue.fadeInMs ?? (cue.kind === "music" ? 200 : 0)) / 1000,
-        target = this.targetVolume(cue);
-      gain.gain.setValueAtTime(fade ? 0 : target, context.currentTime);
-      if (fade)
-        gain.gain.linearRampToValueAtTime(target, context.currentTime + fade);
+      const fade = (transition?.fadeInMs ?? cue.fadeInMs ?? (cue.kind === "music" ? 200 : 0)) / 1000;
+      voice.envelope = fade ? { start: startAt, end: startAt + fade, from: 0, to: 1, steps: transition?.steps } : null;
+      automateVolume(gain.gain, voice.envelope, this.targetVolume(cue), startAt);
       source.onended = () => this.cleanup(voice);
-      source.start(0, offset);
+      source.start(startAt, offset);
       return voice;
     } catch (error) {
       if (voice) this.stopVoice(voice);
@@ -221,6 +269,7 @@ export class AudioAdapter {
   }
   cleanup(voice) {
     if (voice.cleaned) return;
+    const completed = !voice.stopped && !voice.cue.loop;
     voice.cleaned = true;
     voice.finish?.();
     voice.stopped = true;
@@ -228,17 +277,21 @@ export class AudioAdapter {
     voice.source.onended = null;
     voice.source.disconnect();
     voice.gain.disconnect();
-    if (this.musicVoice === voice) this.musicVoice = null;
+    if (this.musicVoice === voice) {
+      if (completed) this.completedMusic = voice.id;
+      this.musicVoice = null;
+    }
   }
-  stopVoice(voice, fadeMs = 0) {
+  stopVoice(voice, fadeMs = 0, steps = undefined) {
     if (!voice || voice.cleaned) return;
     if (!Number.isFinite(fadeMs) || fadeMs < 0 || fadeMs > 10000)
       throw new Error("Invalid audio stop fade");
     const at = this.context.currentTime;
     voice.stopped = true;
     if (fadeMs) {
-      voice.gain.gain.cancelAndHoldAtTime(at);
-      voice.gain.gain.linearRampToValueAtTime(0, at + fadeMs / 1000);
+      voice.envelope = { start: at, end: at + fadeMs / 1000,
+        from: envelopeLevel(voice.envelope, at), to: 0, steps };
+      automateVolume(voice.gain.gain, voice.envelope, this.targetVolume(voice.cue), at);
       try {
         voice.source.stop(at + fadeMs / 1000);
       } catch {
@@ -253,6 +306,7 @@ export class AudioAdapter {
         this.cleanup(voice);
       }
     }
+    return at + fadeMs / 1000;
   }
   pausePlayback() {
     this.generation++;
@@ -272,6 +326,7 @@ export class AudioAdapter {
     else this.resumeMusic();
   }
   stopAll() {
+    this.musicTailUntil = 0;
     this.generation++;
     this.musicGeneration++;
     this.musicRequest = null;
