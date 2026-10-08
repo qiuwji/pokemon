@@ -12,4 +12,3 @@ export function ballReleaseParticles(position, age) {
       tileFrame: cycle, flipX: Math.floor(local / 2) % 6 === 3 };
   }).filter(Boolean);
 }
-

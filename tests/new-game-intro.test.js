@@ -147,4 +147,3 @@ test("Free naming accepts Chinese, guards IME Enter, rejects empty/overlong name
   host.querySelector('[data-naming-action="cancel"]').click(); assert.equal(cancelled.length, 1);
   view.dispose(); ok.click(); view.back(); assert.equal(names.length, 2); assert.equal(cancelled.length, 1);
 });
-
