@@ -74,6 +74,7 @@ import { MoveEffectRegistry } from "../../engine/move-effects.js";
 import { EvolutionService } from "../../engine/growth/evolution.js";
 import { AttachedRules } from "../../engine/rules/attachments.js";
 import { GEN3_ABILITIES } from "../../engine/rules/gen3/abilities.js";
+import { CENTER_RESOURCES } from "./center-presentation.js";
 import { GEN3_HELD_ITEMS } from "../../engine/rules/gen3/held-items.js";
 import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "./movement.js";
 import { ITEMS } from "./items.js";
@@ -81,7 +82,7 @@ import { ITEMS } from "./items.js";
 export function createEmeraldPlugins(db, plugins, onError) {
   db = emeraldDatabase(db);
   validateNativeCast(db, ITEMS);
-  const resources = db.resources;
+  const resources = { ...db.resources, ...CENTER_RESOURCES };
   const host = new PluginHost({
     permissions: EMERALD_PLUGIN_PERMISSIONS,
     publicEvents: EMERALD_PUBLIC_EVENTS,

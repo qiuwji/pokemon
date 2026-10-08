@@ -27,6 +27,23 @@ const registry = () => createEmeraldPresentation({ host: { audioCues: new Map(Ob
 const at = (player, frame) => player.sample(frame * 1000 / 60);
 const prepare = (event, r = registry()) => r.prepareSequence(event, view, emeraldBattleLayout(event));
 
+test("wild entry narration holds the settled battlefield without replaying the intro", async () => {
+  let now = 0;
+  const frames = [], timeline = new Timeline({ now: () => now, wait: async ms => {
+    frames.push(director.sample(now + ms / 2)); now += ms;
+  } });
+  const director = new BattleDirector(timeline, { registry: registry(), layout: emeraldBattleLayout });
+  const options = opening(false);
+  director.reset(view);
+  await director.play({ ...view, kind: "entry", trainers: options.trainers, ...options.entryPhases[0] });
+  const hold = frames.at(-1);
+  assert.equal(hold.background, undefined, "the narration cannot reopen the split background");
+  assert(hold.actors.every(a => a.x === 0), "actors cannot slide in again during narration");
+  assert.equal(hold.actors.find(a => a.seatId === "away:0").opacity, 1);
+  assert.equal(hold.actors.find(a => a.seatId === "home:0").opacity, 0);
+  assert.equal(hold.balls, undefined);
+});
+
 test("native party tray compacts six status icons, animates during challenge text and survives only until each side sends", async () => {
   const party = [{ hp: 8 }, { hp: 0, status: "poison" }, { egg: true, hp: 9 }, { hp: 6, status: "burn" }];
   const saved = JSON.stringify(party);

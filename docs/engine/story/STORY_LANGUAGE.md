@@ -73,7 +73,7 @@ api.story.register('gate', {
 | cameraTo / cameraFollow | cameraTo取actor或position:{map,x,y}，ms可选；cameraFollow回到玩家 |
 | teleport / scene | position:{map,x,y,dir?}为合法落点；scene可选kind转场及actors摆位，并可用coverMs/holdMs/revealMs（0–60000）控制遮黑/保持/淡入时长（如战败白屏保持）；真正需要传送时使用，不代替行走 |
 | wait | ms必填，有限且0–60000 |
-| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头/objects纯对象像素偏移回调，等待场景结束；不写规则 |
+| presentation | id已注册场景，payload可选对象；注册draw叠层/field纯镜头/objects纯对象像素偏移回调，等待场景结束；objects可返回有界frame图片索引(0–4095)，退出即清除，不写规则 |
 | weather | 按天气规格的命令字段，走WeatherApplication校验及提交；不是任意battle.weather赋值 |
 | heal / starter / shop | 无必需额外参数；分别调用现有治疗、选择伙伴和商店界面端口 |
 

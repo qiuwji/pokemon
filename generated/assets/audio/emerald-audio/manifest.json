@@ -2929,6 +2929,52 @@
         "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
       },
       "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
+    },
+    {
+      "song": "MUS_HEAL",
+      "kind": "sound",
+      "selection": "field-fanfare",
+      "title": "MUS_HEAL",
+      "config": "tracks/mus-heal.json",
+      "cueId": "emerald-audio:mus_heal",
+      "source": "generated/assets/audio/emerald-audio/sounds/mus_heal.wav",
+      "cue": {
+        "kind": "sound",
+        "source": "generated/assets/audio/emerald-audio/sounds/mus_heal.wav",
+        "volume": 0.6,
+        "fadeInMs": 0,
+        "fadeOutMs": 0,
+        "loop": false
+      },
+      "assetSha256": "d08614877165397edd4349650d82d70ba8073b8ede079f247049e1946549bd3a",
+      "frames": 87699,
+      "durationSeconds": 1.9886394557823128,
+      "midiLoopStartFrame": 0,
+      "midiLoopEndFrame": 0,
+      "renderConfig": {
+        "id": "mus-heal",
+        "title": "MUS_HEAL",
+        "song": "MUS_HEAL",
+        "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+        "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "midi": "sound/songs/midi/mus_heal.mid",
+        "voicegroup": "fanfare",
+        "sampleRate": 44100,
+        "songVolume": 90,
+        "reverb": 50,
+        "polyphony": 5,
+        "pcmMixRate": 13379,
+        "cueVolume": 0.6,
+        "oneShot": true,
+        "kind": "sound",
+        "selection": "field-fanfare"
+      },
+      "renderer": {
+        "repository": "https://github.com/huderlem/poryaaaa",
+        "revision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+        "binarySha256": "02f2a040cabe24f0c064b01b8aed1e8fee0c8a47dcd880f1dceb7be9b228045e"
+      },
+      "inputSet": "3001cfbdd6450e171c2c2932a81354a61c813fc14d385ef6ef093d5d651ecd48"
     }
   ],
   "sourceInputSets": {
@@ -4268,6 +4314,7 @@
     "mus-encounter-interviewer",
     "mus-encounter-may",
     "mus-follow-me",
+    "mus-heal",
     "mus-help",
     "mus-obtain-item",
     "se-ball",

@@ -101,7 +101,7 @@ export const RETURN_TO_CENTER = [
   { type: "face", actor: OLDALE_CENTER_NURSE, dir: "down" },
 ];
 
-export function healingScene(object) {
+export function healingScene(object, map) {
   // The Pokémon Centre nurse runs the full machine animation (balls in, palette blink, out);
   // other healers (e.g. mom) keep the simple beat.
   if (object.kind === "heal")
@@ -115,11 +115,14 @@ export function healingScene(object) {
       }),
       // Turn the nurse this interaction belongs to toward the machine, then back.
       { type: "face", actor: object.id, dir: "left" },
+      { type: "presentation", id: "emerald:nurse-left", payload: { map, id: object.id } },
       { type: "heal", variant: "center" },
       { type: "face", actor: object.id, dir: "down" },
+      { type: "presentation", id: "emerald:nurse-down", payload: { map, id: object.id } },
       dialog("emerald:dialogues.npc.heal.center.after", {
         speaker: object.name,
       }),
+      { type: "presentation", id: "emerald:nurse-bow", payload: { map, id: object.id } },
         ] },
         { id:"no", label:"否", commands:[] },
       ] },

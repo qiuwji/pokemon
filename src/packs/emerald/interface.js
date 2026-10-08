@@ -29,9 +29,10 @@ export function createEmeraldInterface(
     extensionAssets = {},
     dialogueClock = null,
     audioSettings = null,
+    playFieldSequence = null,
   } = {},
 ) {
-  const shell = createUIShell(game, { document: doc, sound, dialogueClock });
+  const shell = createUIShell(game, { document: doc, sound, dialogueClock, playFieldSequence });
   const { modal, root } = shell;
   const deps = {
     ...shell,

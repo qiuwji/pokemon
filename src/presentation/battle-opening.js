@@ -2,6 +2,7 @@ const clamp = t => Math.max(0, Math.min(1, t));
 const lerp = (a, b, t) => a + (b - a) * t;
 /** Pure cosmetic sampling over detached frame state. */
 export function sampleBattleOpening(result, { e, duration, t }, { intro, viewport, trainers, trainerPosition }) {
+  if (e.kind !== "entry" && e.kind !== "trainer-slide") return false;
   const { actors, layout } = result;
   if (e.kind === "trainer-slide") {
     result.trainers = (e.trainers || []).map(trainer => {

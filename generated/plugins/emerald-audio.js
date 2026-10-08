@@ -65,5 +65,6 @@ export const audioPlugin = {
     api.presentation.audio("se_ball_tray_enter", {"kind": "sound", "source": "generated/assets/audio/emerald-audio/sounds/se_ball_tray_enter.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("se_ball_tray_ball", {"kind": "sound", "source": "generated/assets/audio/emerald-audio/sounds/se_ball_tray_ball.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
     api.presentation.audio("se_ball_tray_exit", {"kind": "sound", "source": "generated/assets/audio/emerald-audio/sounds/se_ball_tray_exit.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
+    api.presentation.audio("mus_heal", {"kind": "sound", "source": "generated/assets/audio/emerald-audio/sounds/mus_heal.wav", "volume": 0.6, "fadeInMs": 0, "fadeOutMs": 0, "loop": false});
   },
 };

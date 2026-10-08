@@ -1,4 +1,5 @@
 import { pageLayout, itemIconURL } from "./ui/native-view.js";
+import { emeraldCenterSequence } from "./center-presentation.js";
 import { ControlDOM } from "../../adapters/control-dom.js";
 import { dialogueDescription } from "../../engine/dialogue.js";
 import { DialogueDOM } from "../../adapters/dialogue-dom.js";
@@ -12,6 +13,7 @@ export function createUIShell(
     document: doc = document,
     sound = () => {},
     dialogueClock = null,
+    playFieldSequence = null,
     textEffects = game.textEffects || createTextEffects(),
     reducedMotion = game.reducedMotion || (() => false),
   } = {},
@@ -134,107 +136,9 @@ export function createUIShell(
     });
   }
 
-  // Pokémon Centre heal, ported from FLDEFF_POKECENTER_HEAL (src/field_effect.c): the party's
-  // Poké Balls appear one by one in the machine (a 2x3 grid at the original field coords), then a
-  // 4-phase palette flash ripples through them three times, then a final uniform flash. Drawn over
-  // the field (viewport is the original 240x160 scaled into the 320x224 canvas).
-  const HEAL_FIELD = Object.freeze({
-    scale: 320 / 240,
-    offsetY: 16 / 3,
-    // Original anchor is (93,36); nudged right so the balls sit centred in our machine art.
-    baseX: 97,
-    baseY: 36,
-    colX: 6,
-    rowY: 4,
-    placeFrames: 25,
-    flashFrames: 8,
-    glow: Object.freeze([1, 0.75, 0.4, 0]),
-  });
   function showHealCenter(party) {
-    const balls = (party || []).filter((m) => !m.egg).slice(0, HEAL_SLOTS);
-    if (!balls.length) return Promise.resolve();
-    const host = doc.getElementById("screen") || doc.body,
-      canvas = doc.createElement("canvas");
-    canvas.width = 320;
-    canvas.height = 224;
-    canvas.className = "heal-effect";
-    host.append(canvas);
-    const ctx = canvas.getContext("2d");
-    if (ctx) ctx.imageSmoothingEnabled = false;
-    const { scale, offsetY, baseX, baseY, colX, rowY } = HEAL_FIELD,
-      ball = (index, glow) => {
-        const x = (baseX + (index % 2) * colX) * scale,
-          y = offsetY + (baseY + Math.floor(index / 2) * rowY) * scale;
-        ctx.save();
-        ctx.translate(Math.round(x), Math.round(y));
-        ctx.fillStyle = "#e85858";
-        ctx.fillRect(-4, -4, 8, 4);
-        ctx.fillStyle = "#f8f8f8";
-        ctx.fillRect(-4, 0, 8, 4);
-        ctx.fillStyle = "#283038";
-        ctx.fillRect(-4, -1, 8, 2);
-        ctx.fillRect(-4, -4, 1, 8);
-        ctx.fillRect(3, -4, 1, 8);
-        ctx.fillStyle = "#f8f8f8";
-        ctx.fillRect(-1, -1, 2, 2);
-        if (glow > 0) {
-          ctx.globalAlpha = glow;
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(-5, -5, 10, 10);
-          ctx.globalAlpha = 1;
-        }
-        ctx.restore();
-      };
-    let placed = 0,
-      phase = 0,
-      mode = null;
-    const render = () => {
-      ctx.clearRect(0, 0, 320, 224);
-      for (let i = 0; i < placed; i++) {
-        const glow = !mode
-          ? 0
-          : mode === "uniform"
-            ? HEAL_FIELD.glow[phase]
-            : HEAL_FIELD.glow[(phase + i) & 3];
-        ball(i, glow);
-      }
-    };
-    const wait = (frames) =>
-      new Promise((resolve) =>
-        setTimeout(resolve, reducedMotion() ? 0 : (frames * 1000) / 60),
-      );
-    return (async () => {
-      if (reducedMotion()) {
-        placed = balls.length;
-        render();
-        await wait(0);
-        canvas.remove();
-        return;
-      }
-      for (let i = 0; i < balls.length; i++) {
-        placed = i + 1;
-        render();
-        sound("emerald:confirm");
-        await wait(HEAL_FIELD.placeFrames);
-      }
-      await wait(32);
-      sound("emerald:heal");
-      mode = "ripple";
-      for (let cycle = 0; cycle < 3; cycle++)
-        for (let p = 0; p < 4; p++) {
-          phase = p;
-          render();
-          await wait(HEAL_FIELD.flashFrames);
-        }
-      mode = "uniform";
-      for (let p = 0; p < 4; p++) {
-        phase = p;
-        render();
-        await wait(HEAL_FIELD.flashFrames);
-      }
-      await wait(30);
-      canvas.remove();
-    })();
+    if (!playFieldSequence) throw new Error("Field sequence player unavailable");
+    return playFieldSequence(emeraldCenterSequence(party));
   }
 
   function updateWeather(weather) {

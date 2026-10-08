@@ -760,7 +760,7 @@ footer {
     animation: none;
   }
 }
-.heal-effect {
+.field-sequence {
   position: absolute;
   inset: 0;
   width: 100%;

@@ -1,0 +1,13 @@
+{
+  "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "inputs": {
+    "src/field_effect.c": "541730d53ecda2783ce0ce8e4afddf60818260e2f9d521cdf979f60731888ffb",
+    "src/data/object_events/object_event_anims.h": "4663646948caefc458e31684d6f3b89d55f50b34d8c8a6c7ca1724d139549b2a",
+    "src/data/object_events/object_event_pic_tables.h": "9d3f6afdfd3010fecfaf44a956de30a4f6d9697205b2e0ff78f5e285f47d6471",
+    "graphics/field_effects/palettes/pokeball_glow.pal": "31984299c0b4bf1d6d35d18647c6a498235d90dd8ad6a1e034e95cafb77ab7fb",
+    "graphics/field_effects/pics/pokeball_glow.png": "fc470e1181c2511483f7836888a59ab2831b9c7f76a874b791971610bb7da242",
+    "graphics/field_effects/palettes/general_0.pal": "bc6d32c43e71d26cb8dd97a72d99290f5802c4c8410ceb266e3e2408148ebaba",
+    "graphics/field_effects/pics/pokecenter_monitor/0.png": "989cd31ab8a1e91b3a0c2ca2ffbb0db790c80debbc9fa714486ed928f1bc9af5",
+    "graphics/field_effects/pics/pokecenter_monitor/1.png": "4dffd26f8327a664cfd74797ac820b2693dbca539c646036f546b54be7fc8cb1"
+  }
+}

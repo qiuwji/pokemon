@@ -9,7 +9,7 @@ export const COMMON_INTERACTIONS_EVENTS = [
     { type: "shop" },
   ]),
   ...["heal", "healMom"].map((kind) =>
-    talkEvent("healing." + kind, kind, (s, { object }) => healingScene(object)),
+    talkEvent("healing." + kind, kind, (s, { object }) => healingScene(object, s.position.map)),
   ),
   ...["talk", "rescue"].map((kind) =>
     talkEvent("talk." + kind, kind, (_s, { object }) => [

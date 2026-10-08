@@ -63,7 +63,7 @@ export const EMERALD_AUDIO_CUES = {
   },
   heal: {
     kind: "sound",
-    source: "generated/assets/audio/emerald-audio/sounds/se_exp.wav",
+    source: "generated/assets/audio/emerald-audio/sounds/mus_heal.wav",
     volume: 0.5,
     loop: false,
     maxVoices: 2,

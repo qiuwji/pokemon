@@ -98,6 +98,26 @@ const player = (f, more = {}) =>
     fetchAsset: f.fetchAsset,
     ...more,
   });
+
+test("fanfare music holds retain the source position, allow sounds and release only the final lease", async () => {
+  const f = fakeAudio(), audio = player(f);
+  audio.enabled = true;
+  await audio.setMusic("town");
+  f.context.currentTime = 2;
+  const release = audio.holdMusic(), second = audio.holdMusic();
+  assert.equal(audio.musicVoice, null);
+  await audio.setMusic("town");
+  assert.equal(audio.musicVoice, null);
+  assert(await audio.play("hit"));
+  release(); release();
+  await Promise.resolve(); assert.equal(audio.musicVoice, null);
+  second();
+  await audio.musicRequest;
+  assert.equal(audio.musicVoice.offset, 2);
+  assert.equal(audio.musicVoice.cue.kind, "music");
+  const end = audio.holdMusic(); audio.dispose(); end();
+  await Promise.resolve(); assert.equal(audio.musicVoice, null);
+});
 test("Asset music switches, caches decoded buffers and resumes its sample position after mute/background pause", async () => {
   const f = fakeAudio(),
     audio = player(f);

@@ -89,7 +89,8 @@ export class SceneDirector {
           new Set(values.map((v) => `${v.map}/${v.id}`)).size !== values.length ||
           values.some((v) => !v || typeof v.map !== "string" || !v.map ||
             typeof v.id !== "string" || !v.id ||
-            Object.keys(v).some((k) => !["map", "id", "x", "y"].includes(k)) ||
+            Object.keys(v).some((k) => !["map", "id", "x", "y", "frame"].includes(k)) ||
+            (v.frame !== undefined && (!Number.isInteger(v.frame) || v.frame < 0 || v.frame > 4095)) ||
             ["x", "y"].some((k) => !Number.isFinite(v[k]) || Math.abs(v[k]) > 64)))
         throw new Error(`Invalid object presentation transforms ${frame.id}`);
       return values;

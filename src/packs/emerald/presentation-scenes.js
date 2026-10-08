@@ -1,4 +1,5 @@
 import { OPENING_SCENES } from "./opening-scenes.js";
+import { CENTER_ACTOR_SCENES } from "./center-presentation.js";
 import { objectSchema } from "../../engine/extensions/values.js";
 const schema = objectSchema(
   {
@@ -122,6 +123,7 @@ export function createEmeraldSceneDefinitions(host) {
     ]),
   );
   for (const [id, definition] of OPENING_SCENES) result.set(id, definition);
+  for (const [id, definition] of Object.entries(CENTER_ACTOR_SCENES)) result.set(id, definition);
   for (const [id, definition] of host?.presentationScenes || [])
     result.set(id, definition);
   return result;

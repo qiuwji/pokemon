@@ -117,7 +117,7 @@ export class Renderer {
         foot,
         moving,
       );
-    let frame =
+    let frame = animation.frame !== undefined ? { index: animation.frame, flip: false } :
       sampleSpriteAnimation(
         def.animations,
         animation.pose,
@@ -345,6 +345,7 @@ export class Renderer {
             const visual = offsets.find((v) => v.map === id && v.id === n.id);
             return {
               ...n,
+              ...(visual?.frame !== undefined ? { frame: visual.frame } : {}),
               map: id,
               px: n.px + o.x * 16 + (move?.x || 0) + (visual?.x || 0),
               py: n.py + o.y * 16 + (move?.y || 0) + (visual?.y || 0),
@@ -469,6 +470,7 @@ export class Renderer {
               freezeAnimation: !!n.freezeAnimation,
               pose: n.pose,
               timeMs: n.animationTimeMs ?? now,
+              frame: n.frame,
             },
             x,
             y - lift,

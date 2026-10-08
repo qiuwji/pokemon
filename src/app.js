@@ -1,4 +1,5 @@
 import { EmeraldMapMusic } from "./packs/emerald/map-music.js";
+import { FrameSequenceDOM } from "./adapters/frame-sequence-dom.js";
 import { MapNameDOM } from "./adapters/map-name-dom.js";
 import { emeraldBattleCues } from "./packs/emerald/battle-audio.js";
 import { PixelDisplay } from "./adapters/pixel-display.js";
@@ -150,6 +151,7 @@ async function boot() {
         "emerald:ball.throw",
         "emerald:ball.shake",
         "emerald:ball.open",
+        "emerald:heal",
       ])
       .catch(console.error);
     const detachAudio = host.events.on("core:audio-request", ({ payload }) =>
@@ -254,8 +256,21 @@ async function boot() {
       onError: console.error,
     });
     game = createEmeraldCommandFacade(adventure, bus);
+    const fieldSequence = new FrameSequenceDOM({ document, host: $("screen"), surface: $("game"),
+      assets, timeline, reducedMotion,
+      clock: { now: timeline.now, request: fn => requestAnimationFrame(fn), cancel: id => cancelAnimationFrame(id) },
+      projection: () => game.cameraProjection({ width: $("game").width, height: $("game").height, raster: true }),
+    });
     const ui = createEmeraldInterface(game, {
       sound: (id) => audio.play(emeraldDoorSound(id, audio.cues)),
+      playFieldSequence: sequence => fieldSequence.play(sequence, { resources: db.resources, sounds: audio.cues,
+        onCue: async id => {
+          if (id !== "emerald:heal") { await audio.play(id); return; }
+          const release = audio.holdMusic();
+          try { await audio.play(id); await timeline.wait(160 * 1000 / 60); }
+          finally { release(); }
+        },
+      }),
       extensionAssets: assets,
       audioSettings: {
         enabled: () => audio.enabled,

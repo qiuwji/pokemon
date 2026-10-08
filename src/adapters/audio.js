@@ -28,6 +28,7 @@ export class AudioAdapter {
     this.musicRequest = null;
     this.musicTransition = null;
     this.musicTailUntil = 0;
+    this.musicHolds = new Set();
   }
   get enabled() {
     return this._enabled;
@@ -110,7 +111,7 @@ export class AudioAdapter {
       this.onError(new Error(`Unknown music cue ${id}`));
       return Promise.resolve(null);
     }
-    if (id === this.music && (this.musicRequest || this.musicVoice?.id === id || !this.playable))
+    if (id === this.music && (this.musicRequest || this.musicVoice?.id === id || !this.playable || this.musicHolds.size))
       return this.musicRequest || Promise.resolve(this.musicVoice);
     // Cancel an in-flight replacement when returning to the still-playing scene.
     if (id !== null && id === this.musicVoice?.id && !this.musicVoice.stopped) {
@@ -131,7 +132,7 @@ export class AudioAdapter {
     return this.resumeMusic();
   }
   resumeMusic() {
-    if (!this.playable || !this.music) return Promise.resolve(null);
+    if (!this.playable || !this.music || this.musicHolds.size) return Promise.resolve(null);
     const id = this.music,
       token = ++this.musicGeneration;
     const request = this.start(id, this.cues.get(id), {
@@ -161,6 +162,31 @@ export class AudioAdapter {
     return request;
   }
   /** Covering a scene can wait for this completion; mute/disposal also release the wait. */
+  holdMusic() {
+    const lease = {};
+    this.musicHolds.add(lease);
+    if (this.musicHolds.size === 1) {
+      this.musicGeneration++;
+      this.musicRequest = null;
+      const voice = this.musicVoice;
+      if (voice) {
+        this.musicOffset = voice.offset + Math.max(0, this.context.currentTime - voice.startedAt);
+        this.stopVoice(voice);
+      }
+      this.musicVoice = null;
+    }
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      this.musicHolds.delete(lease);
+      if (!this.musicHolds.size) {
+        this.musicTransition = { mode: "after-fade", fadeOutMs: 0, fadeInMs: 0 };
+        void this.resumeMusic().catch(this.onError);
+      }
+    };
+  }
+
   fadeMusic(transition) {
     const previous = this.musicVoice;
     this.setMusic(null, transition);

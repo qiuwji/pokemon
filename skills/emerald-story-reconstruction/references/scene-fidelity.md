@@ -77,3 +77,6 @@ Unknown story script/dialogue意味着局部引用拼错或依赖包未装配；
 区分重复访问三种所有者：普通地图对象按新访问重新装配，visit覆盖过图清理，持久Actor按自身存储恢复。不能用NPC渲染缓存保存长期摆位。重复的拦路/催促事件先核对原动作是否只是face，不把原地转向写成走一格。至少验证第二次触发和中间存读档后的入口；检查目标站位与输入锁一起恢复，不通过忽略所有碰撞或删除事件解决卡住。
 
 水面须追到当前地图的primary/secondary动画回调，不能仅凭behavior“是水”或General主图集下结论；104北侧斜纹池塘使用Rustboro windy_water二级动画。静态障碍须核对graphics_info.inanimate和sAnim_StayStill，CuttableTree四帧属于居合斩过程，不能用人物朝向映射。门资源验证需覆盖当前tileset、两个绘制pass及重导入后的完整链路；旧城镇门帧测试通过不证明新增图集门已恢复。
+# 有限帧演出与对象图片
+
+护士治疗使用内容编排的有限帧序列，不能在UI里手绘球或另起定时器。对象scene的objects可返回frame图片索引，受0–4095边界校验，场景结束即消失。原作AnimCmd索引须经过sPicTable映射；护士鞠躬9实际对应图片3。地图音乐短曲暂停归音频租约，内容给出短曲时长；失败必须释放租约。详情见[中心专项](../../../docs/project/CENTER_PRESENTATION.md)。

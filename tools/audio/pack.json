@@ -353,6 +353,11 @@
       "song": "SE_BALL_TRAY_EXIT",
       "config": "tracks/se-ball-tray-exit.json",
       "selection": "battle"
+    },
+    {
+      "song": "MUS_HEAL",
+      "config": "tracks/mus-heal.json",
+      "selection": "field-fanfare"
     }
   ],
   "musicFades": {
