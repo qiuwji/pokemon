@@ -12,8 +12,8 @@ import {
 import { World, DIRECTIONS } from "../../../engine/world.js";
 import { EMERALD_FIELD_ACTIONS } from "../../../packs/emerald/field-actions.js";
 import { FieldActionDirector } from "../../../presentation/field-action-director.js";
-import { FishingSession } from "../../../engine/fishing.js";
-import { gen3FishingRules } from "../../../engine/rules/gen3/fishing.js";
+import { FishingSession } from "../domain/fishing-session.js";
+import { gen3FishingRules } from "../../../packs/emerald/fishing.js";
 import { bindApplicationPorts } from "./ports.js";
 import { validateValue } from "../../../engine/extensions/values.js";
 
@@ -389,6 +389,7 @@ export class FieldActionApplication {
       return {
         ok: true,
         fishing: result,
+        outcome: result,
         ...(result === "caught" && table ? { encounter: table } : {}),
       };
     } finally {
@@ -471,7 +472,7 @@ export class FieldActionApplication {
           checkSelection: false,
           checkPermission: false,
         });
-        result = { ok: true, fishing: result.fishing };
+        result = { ok: true, fishing: result.fishing, outcome: result.fishing };
       }
       return result;
     } catch (error) {

@@ -6,8 +6,8 @@ import {
   FieldActionRegistry,
   FieldActionService,
 } from "../src/engine/field-actions.js";
-import { FishingSession } from "../src/engine/fishing.js";
-import { gen3FishingRules } from "../src/engine/rules/gen3/fishing.js";
+import { FishingSession } from "../src/game/emerald/domain/fishing-session.js";
+import { gen3FishingRules } from "../src/packs/emerald/fishing.js";
 import { FieldActionDirector } from "../src/presentation/field-action-director.js";
 import { Timeline, TransitionController } from "../src/engine/timeline.js";
 import { createEmeraldPlugins } from "../src/game/emerald/assembly/extensions.js";
@@ -589,11 +589,15 @@ test("The public fishing command accepts concurrent reel input, launches one enc
   s.game.ui.showFishing = () => {};
   s.game.ui.updateFishing = () => {};
   s.game.ui.closeFishing = () => closed++;
+  const facts = [];
+  s.host.events.on("core:field-action", (event) => facts.push(event.payload));
   const result = await s.bus.execute("core.field.action", {
     id: "fishing",
     input: JSON.stringify({ rod: "old" }),
   });
   assert.equal(result.fishing, "caught");
+  assert.equal(result.outcome, "caught");
+  assert.equal(facts.at(-1).outcome, "caught");
   assert.equal(encounters.length, 1);
   assert.equal(encounters[0].species, "zigzagoon");
   assert.equal(closed, 1);
@@ -613,6 +617,7 @@ test("Public fishing can cancel without generating a monster, and map requiremen
   s.game.ui.showFishing = () => s.game.reelFishing({ cancel: true });
   const result = await s.game.performFieldAction("fishing", { rod: "old" });
   assert.equal(result.fishing, "cancelled");
+  assert.equal(result.outcome, "cancelled");
   assert.notEqual(
     s.game.rng.seed,
     seed,

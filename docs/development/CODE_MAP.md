@@ -11,6 +11,7 @@ src/
 │   ├── maps/<地图>/       map.json属性、grid.json生成的网格
 │   └── stories/           按地区/流程拆分的对白、脚本、入口和投影
 ├── game/emerald/           宿主装配、应用用例、命令与服务生命周期
+│   └── domain/            作物生命周期、钓鱼会话等本作玩法服务
 ├── ui/emerald/             浏览器页面、视图与CSS
 ├── packs/emerald/          纯内容、原作业务政策、原生角色绑定
 │   └── story/             地区动态触发、剧情描述、公共演出
@@ -36,6 +37,7 @@ src/
 | 救博士追逐 | [route101.json](../../src/content/stories/route101.json)；step入口在story/regions/littleroot.js | 原作Route101/scripts.inc与[移动转换工具](../../tools/story/movement.py)；不要再向公共scenes.js追加地区长剧情 |
 | 人物身份/初始出现 | [native-cast.js](../../src/packs/emerald/native-cast.js)、[opening-objects.js](../../src/packs/emerald/opening-objects.js) | native-object-bindings.js绑定来源local ID；阶段摆位写bundle.projections，动画写commands |
 | 进图后人物站错/重复触发卡住 | [WorldApplication.prepareEntry](../../src/game/emerald/application/world-application.js)、剧情入口与requires | 普通地图NPC按新访问重建；持久Actor从Actor领域恢复；visit patch决定本次访问，不能靠NPC缓存充当进度 |
+| 种植、生长、浇水、收获与钓鱼 | [crop-growth.js](../../src/game/emerald/domain/crop-growth.js)、[fishing-session.js](../../src/game/emerald/domain/fishing-session.js) | 应用协调库存/遭遇/保存；原作政策在pack，engine不承载作物或钓鱼实现 |
 | 队伍选择与所选个体野外招式 | [party-menu-view.js](../../src/ui/emerald/party-menu-view.js)、[party-field-moves.js](../../src/packs/emerald/party-field-moves.js) | 原生布局/导航与规则描述分开；执行走movement.party-action，扩展关联搜partyMove |
 | 原作菜单/文字/图标位置 | [界面说明](EMERALD_UI.md)、对应*-interface.js及ui/*-view.js | 原C窗口/精灵坐标；tools/ui/export-theme.py导出原图块/palette，不把规则写进CSS或app |
 | 战斗动画/捕捉/音效时机 | pack的battle/sequences、opening-choreography、exit-choreography、move-choreography、controller-animation；公开frame-sequence-builder、通用timeline转场帧、color-offset-dom | [战斗专项](../project/BATTLE_PRESENTATION_PLAN.md)；内核编译有界帧，播放器读不可变数据；开战/退出政策留pack，动作/capture取样与播放生命周期分开，未覆盖招式无替代特效 |

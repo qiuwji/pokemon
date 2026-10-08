@@ -107,6 +107,8 @@ export class StoryApplication {
           readUI: () => this.ui,
           transitions: this.transitions,
           commitClock: (hour, minute) => this.commitStoryClock(hour, minute),
+          commitProfile: profile => configurePlayer(this.state, profile),
+          silenceMusic: () => { this.storyMusic = false; },
         }).screen,
         dialog: dialogue.dialog,
         starter: () => this.ui.starterPicker(),
@@ -256,7 +258,7 @@ export class StoryApplication {
           }
           if (
             c.type === "screen" &&
-            !["clock", "berry", "daycare"].includes(c.id)
+            !["clock", "berry", "daycare", "new-game"].includes(c.id)
           )
             throw new Error("Unknown story screen");
           if (c.type === "dialog")

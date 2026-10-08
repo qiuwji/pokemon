@@ -32,6 +32,8 @@ export class DialogueDOM {
     const track = compileDialogueLine(line, options);
     this.stop();
     this.player.start(track, this.now());
+    this.onPause = options?.onPause;
+    this.pauseIndex = 0;
     this.container.hidden = false;
     const title = this.doc.createElement("strong");
     title.textContent = line.name ?? name;
@@ -80,6 +82,13 @@ export class DialogueDOM {
     const now = this.now(),
       reducedMotion = this.reducedMotion(),
       frame = this.player.sample(now, { reducedMotion });
+    while (this.pauseIndex < this.player.track.pauses.length &&
+      (frame.complete || frame.elapsedMs >= this.player.track.pauses[this.pauseIndex].at)) {
+      const index = this.pauseIndex++;
+      const track = this.player.track;
+      this.onPause?.(index);
+      if (this.player.track !== track) return;
+    }
     this.nodes.forEach((n, index) => {
       n.style.visibility = index < frame.visible ? "visible" : "hidden";
       const glyph = this.player.track.glyphs[index];

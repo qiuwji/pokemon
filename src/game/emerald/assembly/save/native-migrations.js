@@ -1,5 +1,5 @@
 import { EMERALD_BERRY_MARKER_MIGRATIONS, EMERALD_BERRY_PLOTS, EMERALD_CROPS, EMERALD_CROP_POLICY, emeraldBerryYield } from "../../../../packs/emerald/berries.js";
-import { CropRegistry, CropService } from "../../../../engine/crop-growth.js";
+import { CropRegistry, CropService } from "../../domain/crop-growth.js";
 
 // The first imported Pinap definition used 180 minutes and a 2–3 yield.
 // Accept only a tree valid under that released definition; other damage remains invalid.

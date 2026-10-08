@@ -44,7 +44,7 @@ import {
   ActorTemplateRegistry,
 } from "../../../engine/actor-repository.js";
 import { NPCBehaviorRegistry } from "../../../engine/npc-behaviors.js";
-import { CropRegistry, CropService } from "../../../engine/crop-growth.js";
+import { CropRegistry, CropService } from "../domain/crop-growth.js";
 import {
   EMERALD_CROPS,
   EMERALD_CROP_POLICY,

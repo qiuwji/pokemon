@@ -1,6 +1,6 @@
 {
   "id": "emerald-audio",
-  "title": "绿宝石原声",
+  "title": "\u7eff\u5b9d\u77f3\u539f\u58f0",
   "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
   "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
   "defaultEnabled": true,
@@ -181,6 +181,46 @@
         "fadeInMs": 0,
         "fadePreviousMs": 0
       }
+    },
+    {
+      "song": "MUS_ROUTE122",
+      "config": "tracks/mus-route122.json",
+      "selection": "story",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0,
+        "fadeOutMs": 1067
+      }
+    },
+    {
+      "song": "MUS_INTRO",
+      "config": "tracks/mus-intro.json",
+      "selection": "launch",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0,
+        "fadeOutMs": 0
+      }
+    },
+    {
+      "song": "MUS_INTRO_BATTLE",
+      "config": "tracks/mus-intro-battle.json",
+      "selection": "launch",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0,
+        "fadeOutMs": 0
+      }
+    },
+    {
+      "song": "MUS_TITLE",
+      "config": "tracks/mus-title.json",
+      "selection": "launch",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0,
+        "fadeOutMs": 1067
+      }
     }
   ],
   "sounds": [
@@ -358,6 +398,11 @@
       "song": "MUS_HEAL",
       "config": "tracks/mus-heal.json",
       "selection": "field-fanfare"
+    },
+    {
+      "song": "SE_INTRO_BLAST",
+      "config": "tracks/se-intro-blast.json",
+      "selection": "launch"
     }
   ],
   "musicFades": {

@@ -1,4 +1,4 @@
-import { gen3CanFish } from "../../engine/extensions/field-content.js";
+import { gen3CanFish } from "./fishing.js";
 import { BIKE_ITEMS, ROD_ITEMS } from "./field-capabilities.js";
 import { GEN3_ELEVATION } from "../../engine/extensions/field-content.js";
 import { DIRECTIONS } from "../../engine/extensions/field-content.js";

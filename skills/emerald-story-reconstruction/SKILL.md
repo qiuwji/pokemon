@@ -103,3 +103,6 @@ test("bundle registers an NPC, shared dialogue and choice with durable reward", 
 | 持久游标和战斗关联 | `src/engine/story-session.js`，搜索 `battleResult`、`validateStoryResume` |
 
 接口变化同步规格、Skill 及可执行例；`npm run check:docs`检查链接/片段，例子实际运行一次。项目代码、资源、固定参考、文档和 Skill 一起交接。
+
+
+新游戏博士介绍在`src/packs/emerald/new-game-presentation.js`编译有界帧，`src/ui/emerald/new-game-interface.js`等待对白/起名，`story-screen-ports`在屏幕成功后统一提交身份；禁止在选择预览或DOM输入中直接写state。独立前动画使用原作anim_front.png，静态front.png不能满足第二帧；新增演出要检查每个帧引用落在实际图集内，并验证拒绝重选、失败锁释放与保存重入。起名按用户要求允许自由输入，不沿用七字符键盘限制。

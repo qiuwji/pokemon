@@ -39,6 +39,14 @@ test("Engine dependency direction is enforced: no DOM, Canvas, pack or presentat
     );
   }
 });
+test("Crop and fishing gameplay stay outside the reusable engine", () => {
+  for (const file of modules(new URL("engine/", base).pathname)) {
+    const source = fs.readFileSync(file, "utf8");
+    assert(!/\b(?:class\s+(?:CropRegistry|CropService|FishingSession)|function\s+gen3(?:CanFish|FishingRules))\b/.test(source), file);
+    assert(!/\bstate\.crops\b|\bresult\.fishing\b/.test(source), file);
+  }
+});
+
 test("Presentation modules do not calculate battle outcomes or consume gameplay RNG", () => {
   for (const file of fs
     .readdirSync(new URL("presentation/", base))

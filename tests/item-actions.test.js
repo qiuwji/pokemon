@@ -444,7 +444,7 @@ test("Plugin content composes a new key item with a registered field action and 
 });
 
 test("Gen III fishing distinguishes shore elevations, surfable water and bridge edges without consuming RNG", async () => {
-  const { gen3CanFish } = await import("../src/engine/rules/gen3/fishing.js");
+  const { gen3CanFish } = await import("../src/packs/emerald/fishing.js");
   const shore = {
     mode: "walk",
     underwater: false,

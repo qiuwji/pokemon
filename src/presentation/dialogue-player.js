@@ -7,8 +7,10 @@ export function compileDialogueLine(
 ) {
   let cursor = 0;
   const glyphs = [];
+  const pauses = [];
   for (const run of line.runs) {
     if (run.pauseMs !== undefined) {
+      pauses.push({ at: cursor, duration: run.pauseMs });
       cursor += run.pauseMs;
       continue;
     }
@@ -21,6 +23,7 @@ export function compileDialogueLine(
   return readOnly({
     text: line.text,
     glyphs,
+    pauses,
     duration: mode === "instant" ? 0 : cursor,
     instant: mode === "instant",
   });

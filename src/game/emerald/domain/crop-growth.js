@@ -1,10 +1,13 @@
-import { readOnly, callSync } from "./extensions/values.js";
+import { readOnly, callSync } from "../../../engine/extensions/values.js";
 const integer = (n) => Number.isSafeInteger(n) && n >= 0;
 const identifier = (n) =>
   typeof n === "string" &&
   !["__proto__", "constructor", "prototype"].includes(n) &&
   /^[a-zA-Z0-9_.:-]{1,128}$/.test(n);
 export const emptyCrops = () => ({ trees: {} });
+/** Emerald save references; the generic plugin catalog does not inspect crop state. */
+export const cropContentReferences = (state) =>
+  Object.entries(state.crops?.trees || {}).flatMap(([id, tree]) => [id, tree.kind]);
 /** Content describes stages; this service owns growth state, never inventory or map rendering. */
 export class CropRegistry {
   constructor(definitions = {}, { items = {} } = {}) {

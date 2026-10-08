@@ -19,6 +19,7 @@ export function createUIShell(
   } = {},
 ) {
   const navigation = {};
+  const interactionHolds = new Set();
   let textPace = 1;
   const requestFrame =
     doc.defaultView?.requestAnimationFrame?.bind(doc.defaultView) ||
@@ -250,6 +251,7 @@ export function createUIShell(
         index: 0,
         renderedIndex: -1,
         after,
+        onPause: options.onPause,
         resolve,
         reject,
       };
@@ -292,7 +294,7 @@ export function createUIShell(
         reject(error);
       };
       modal(name, `<div id="story-choice-content"></div>`, {
-        type: "story-choice",
+        type: policy.page || "story-choice",
         close: false,
         back: () => {
           if (cancel) complete(cancel);
@@ -336,6 +338,7 @@ export function createUIShell(
       {
         speed: dialog.speed,
         mode: dialog.mode,
+        onPause: dialog.onPause,
       },
     );
     dialog.renderedIndex = dialog.index;
@@ -404,13 +407,13 @@ export function createUIShell(
     if ($("modal-close"))
       $("modal-close").onclick = () => (back ? back() : closeModal());
     requestFrame(() => {
-      const buttons = [...root.querySelectorAll("button")].filter(
-        (button) =>
-          !button.disabled &&
-          button.id !== "modal-close" &&
-          (!button.getClientRects || button.getClientRects().length > 0),
+      const focusable = [...root.querySelectorAll("button,input,select,textarea")].filter(
+        (node) =>
+          !node.disabled && !node.hidden &&
+          node.id !== "modal-close" &&
+          (!node.getClientRects || node.getClientRects().length > 0),
       );
-      if (!buttons.includes(doc.activeElement)) buttons[0]?.focus();
+      if (!focusable.includes(doc.activeElement)) focusable[0]?.focus();
     });
   }
 
@@ -445,7 +448,7 @@ export function createUIShell(
     if (
       game.busy &&
       !dialog &&
-      !["story-choice", "fishing", "clock"].includes(modalType)
+      !["story-choice", "fishing", "clock", "new-game-gender", "new-game-confirm", "naming"].includes(modalType)
     )
       return;
     if (modalType === "learning" || modalType === "evolution") return;
@@ -460,10 +463,17 @@ export function createUIShell(
     if (game.battle) navigation.backBattle?.();
   }
   return {
+    holdInteraction() {
+      const lease = {};
+      interactionHolds.add(lease);
+      game.clearInput();
+      return () => { if (interactionHolds.delete(lease)) game.clearInput(); };
+    },
+    get saveBlocked() { return interactionHolds.size > 0; },
     controlView: () => controls.inspect(),
     controlActivate: (id) => controls.activate(id),
     controlConfirm: () =>
-      root.children.length ? controls.confirm() : game.interact(),
+      root.children.length ? controls.confirm() : interactionHolds.size ? false : game.interact(),
     ownModalResource,
     setTextPace: (value) => {
       if (![0.5, 1, 2].includes(value)) throw new Error("Invalid text pace");
@@ -507,9 +517,10 @@ export function createUIShell(
       return modalType;
     },
     get blocked() {
-      return !!dialog || !!root.children.length;
+      return interactionHolds.size > 0 || !!dialog || !!root.children.length;
     },
     confirm() {
+      if (interactionHolds.size && !root.children.length && !dialog) return;
       if (dialog) {
         nextDialogue();
         return;

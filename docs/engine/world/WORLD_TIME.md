@@ -41,7 +41,7 @@ world-time 的 14 个场景有针对性通过证据，另有时钟 UI 点击/显
 
 ## 树果时间业务
 
-`engine/crop-growth.js` 的 CropRegistry 校验内容引用，CropService 负责阶段图/剩余分钟/浇水阶段/产量/再生次数/停止生长。阶段名称、时长倍数、循环和离线过期政策从 pack 注入；产量公式独立，服务不接触背包、地图或渲染。替换阶段图可复用同一驱动。
+`game/emerald/domain/crop-growth.js` 的 CropRegistry 校验内容引用，CropService 负责阶段图/剩余分钟/浇水阶段/产量/再生次数/停止生长。阶段名称、时长倍数、循环和离线过期政策从 pack 注入；产量公式独立，服务不接触背包、地图或渲染。替换阶段图可复用同一驱动。
 
 `packs/emerald/berries.js` 使用上述只读 berry.c 规则：planted→sprouted→taller→flowering→ripe；前四阶段各能浇水一次；成熟保持四倍阶段时长，落果后回到 sprouted 并重置浇水；十次再生后消失，一批离线达到 71 倍阶段时长直接消失。产量使用原作 16 位随机数模余和四分之一四舍五入。应用层在 RNG 草稿上推进，成功后提交随机种子；全批树木推进失败不部分写入树状态。
 

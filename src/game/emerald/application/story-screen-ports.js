@@ -1,8 +1,15 @@
 /** A story-owned screen may commit only while its awaited UI lifetime is active. */
-export function createStoryScreenPorts({ readUI, commitClock, transitions }) {
+export function createStoryScreenPorts({ readUI, commitClock, commitProfile, silenceMusic, transitions }) {
   return {
     screen: async (command) => {
       const ui = readUI();
+      if (command.id === 'new-game') {
+        let active = true;
+        try {
+          const profile = await ui.showNewGameIntroduction({ stopMusic: () => { if (active) silenceMusic(); } });
+          return commitProfile(profile);
+        } finally { active = false; }
+      }
       if (command.id === 'berry') return ui.showBerryPlot(command.input?.plotId);
       if (command.id === 'daycare') return ui.showDaycare();
       if (command.id !== 'clock') throw new Error('Unknown story screen');

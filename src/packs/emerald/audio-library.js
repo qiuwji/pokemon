@@ -103,6 +103,9 @@ export const EMERALD_AUDIO_CUES = {
     loop: false,
     maxVoices: 1,
   },
+  "cry.lotad": { kind: "sound", source: "generated/assets/audio/cry-lotad.wav", volume: 0.4, loop: false, maxVoices: 1 },
+  "cry.groudon": { kind: "sound", source: "generated/assets/audio/cry-groudon.wav", volume: 0.4, loop: false, maxVoices: 1 },
+  "cry.kyogre": { kind: "sound", source: "generated/assets/audio/cry-kyogre.wav", volume: 0.48, loop: false, maxVoices: 1 },
 };
 export function createEmeraldAudio(host) {
   const result = new Map(
@@ -121,6 +124,10 @@ export function createEmeraldAudio(host) {
 export const ORIGINAL_SONG_CUES = Object.freeze({
   MUS_LITTLEROOT: "emerald-audio:mus_littleroot",
   MUS_ROUTE101: "emerald-audio:mus_route101",
+  MUS_ROUTE122: "emerald-audio:mus_route122",
+  MUS_INTRO: "emerald-audio:mus_intro",
+  MUS_INTRO_BATTLE: "emerald-audio:mus_intro_battle",
+  MUS_TITLE: "emerald-audio:mus_title",
   MUS_HELP: "emerald-audio:mus_help",
   MUS_OLDALE: "emerald-audio:mus_oldale",
   MUS_RUSTBORO: "emerald-audio:mus_rustboro",
@@ -163,6 +170,7 @@ export function emeraldMusic(
   { battle, map, battleSong, storyMusic, flags = {} },
   cues,
 ) {
+  if (!battle && storyMusic === false) return null;
   const id = battle
     ? battleSong || map.battleMusic || emeraldBattleSong(battle)
     : storyMusic ||

@@ -1,0 +1,42 @@
+✔ Pure dialogue sampling preserves grapheme clusters and exact leading/interior/trailing pause boundaries (1.671292ms)
+✔ Instant/reduced-motion/skip reveal all text and pauses; a new line starts clean and invalid clocks fail (0.20975ms)
+✔ Structured dialogue rejects invalid speed/shape/markup style/pauses before an effect callback runs (0.356791ms)
+✔ Text effects are registered pure samples, bounded, synchronous and centrally disabled for reduced motion (0.321667ms)
+✔ DOM player safely creates text, types without layout rewrites, shows confirmation only after complete and ignores cancelled callbacks (0.766875ms)
+✔ Shared shell uses first confirm to reveal, second to advance; final acknowledgement resolves once and clears animation (127.544083ms)
+✔ Timed shell advances only after actual display duration and reader announcement stays complete (71.355958ms)
+✔ Dialogue disposal and replacement reject the old wait, stop effects and prevent stale visual writes (79.723625ms)
+✔ Reduced motion displays immediately, suppresses text animation loop and still waits for acknowledgement (70.304833ms)
+✔ Registered plugin text samples receive frozen parameters and cannot submit core commands from a read-only callback (72.653ms)
+✔ Whole story preflight rejects bad dialogue/effect parameters before any reward and forwards speed through the real application (66.395125ms)
+✔ A text-effect failure during confirm rejects the active wait and unlocks without completion callbacks (59.950791ms)
+✔ A frame scene retains its last validated frame across dialogue and rejects overlapping playback (4.680375ms)
+✔ Disposal interrupts a pending clip without later paints, callbacks or an unhandled promise (0.208875ms)
+✔ Missing image frames fail explicitly and release the frame loop (0.633ms)
+✔ The reference opening map is present and centred on the truck interior (151.766375ms)
+✔ The truck map is the real reference map with its boxes, signs and door tiles (62.247708ms)
+✔ The truck opening plays the reference sound beats in order (77.642542ms)
+✔ The moving boxes read the original text (92.425625ms)
+✔ Stepping on the truck door leaves for Littleroot at the reference warp tile (89.560458ms)
+✔ Every prepared intro frame fits its installed image sheet, including Lotad's animated second frame (163.569667ms)
+✔ Birch stages preserve native waits, delayed palette steps, gender slide and black truck handoff (4.951167ms)
+✔ New-game map entry waits for naming, rejects the first name, commits once and resumes the source truck sequence (125.280375ms)
+✔ A failed post-Birch frame leaves the profile and truck incomplete, releases locks, and can retry the real entry (94.171792ms)
+✔ Naming uses seven characters, IME-safe confirmation, on-screen keys, deletion, page navigation and disposal (0.640584ms)
+✔ The intro resolves MUS_ROUTE122 and keeps the truck silent throughout FadeOutBGM(4) (57.752125ms)
+✔ Opening male: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (299.307625ms)
+✔ Opening female: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (233.980958ms)
+✔ Wall clock dial wraps midnight, accepts touch geometry and computes coherent hands (0.201125ms)
+✔ Object presentation transforms are bounded, frozen and neutral under reduced motion (0.27375ms)
+✔ Story clock confirmation expires with its screen and fanfare waits for the voice rather than a guessed delay (63.7735ms)
+✔ Opening male: entrance pose persists; exit coordinate intercepts its warp; movers use source sprites (72.062125ms)
+✔ Opening female: entrance pose persists; exit coordinate intercepts its warp; movers use source sprites (62.767208ms)
+✔ Scripted walking tolerates early fractional timer callbacks and NPC refresh ticks during the clock visit (57.147375ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 966.374417

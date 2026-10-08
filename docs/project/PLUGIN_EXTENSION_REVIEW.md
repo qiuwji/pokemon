@@ -117,7 +117,7 @@ Z/Mega只作为最终覆盖检查，规则包另行确定第六/第七世代行�
 
 | 能力 | 现状 | 真实缺口 |
 | --- | --- | --- |
-| 会话 | [FacilitySession](../../src/engine/facilities.js)已有注册状态、动作、一次性计划与结果；[FishingSession](../../src/engine/fishing.js)已有阶段、截止时间和注入时钟 | 设施按离散动作推进；钓鱼是内部专用服务，[应用层](../../src/game/emerald/application/field-action-application.js)仍用wait(16)循环。插件没有通用连续会话入口 |
+| 会话 | [FacilitySession](../../src/engine/facilities.js)已有注册状态、动作、一次性计划与结果；[FishingSession](../../src/game/emerald/domain/fishing-session.js)已有阶段、截止时间和注入时钟 | 设施按离散动作推进；钓鱼是内部专用服务，[应用层](../../src/game/emerald/application/field-action-application.js)仍用wait(16)循环。插件没有通用连续会话入口 |
 | 驱动/输入 | [app帧循环](../../src/app.js)、[FrameApplication](../../src/game/emerald/application/frame-application.js)、[BrowserInput](../../src/adapters/browser-input.js)持续方向 | 无公开会话逻辑钟、暂停政策、语义held/pressed/released、有序边沿和输入焦点所有权 |
 | 表现 | [VisualCanvas](../../src/adapters/visual-canvas.js)由宿主帧驱动；[ExtensionDOM](../../src/adapters/extension-dom.js)已有page/field/battle绘制层和注册draw | 不是缺Canvas；缺实时业务状态→帧数据→已有绘制层合同，当前挂载context不是动态会话状态 |
 | 世界结果 | [PluginRuntime.transaction](../../src/engine/extensions/plugin-runtime.js)、权限/intent、库存/奖励校验、世界计划及保存保护 | 无宿主持结果凭据的完成入口；运行态/租约需自己参与恢复；世界补丁/遭遇不能假装已是插件intent |

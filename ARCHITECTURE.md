@@ -10,6 +10,8 @@
 
 开场业务按地区bundle拆在content/stories：车内、未白镇、玩家家、邻居家、跑步鞋各自维护条件与命令；opening-objects只声明条件演员和原生local ID。性别/身份、时钟提交和声音等待分别由所属应用服务协调。FieldSession在已落地的门格先允许坐标剧情接管，再执行warp；NPC场景pin在控制期保持对象引用，FieldDirector按注入时钟等待移动截止点。原作门动画是visit视觉metatile，不改通行与传送；表盘是纯取样，UI只提交已确认的时间。具体合同见[剧情语言](docs/engine/story/STORY_LANGUAGE.md)，来源和验收边界见[开场切片](docs/regions/LITTLEROOT_OPENING.md)。
 
+作物生命周期与钓鱼会话归`game/emerald/domain`，树果与钓鱼政策归`packs/emerald`；应用层协调库存、遇敌与保存。engine只提供时间、野外行动事务、内容注册和通用存档依赖收集端口，不读取作物状态或解释钓鱼结果。注册种类、遭遇渠道与存档字段保持兼容。
+
 ## 层次与依赖方向
 
 ```text
@@ -47,6 +49,7 @@ src/
     adventure.js                 生命周期和忙碌聚合的薄门面
     assembly/                    规则/演出/保存/剧情服务的具体装配
     application/                 用例协调、有限依赖端口和状态所有者
+    domain/                      本作玩法服务：作物生命周期、钓鱼会话
     commands/                    校验命令的适配及事务接线
     presentation/                门/战斗转场/地图音乐的本作宿主接线
   ui/emerald/                    原作浏览器页面和共用交互基础设施

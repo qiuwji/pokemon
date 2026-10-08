@@ -6,7 +6,7 @@ import { Timeline, TransitionController } from '../src/engine/timeline.js';
 import { BattleDirector } from '../src/presentation/battle-director.js';
 import { GridMotion, SceneGraph } from '../src/engine/motion.js';
 import { PACK } from "../src/packs/emerald/pack.js";
-import { CropRegistry, CropService } from '../src/engine/crop-growth.js';
+import { CropRegistry, CropService } from '../src/game/emerald/domain/crop-growth.js';
 import { EMERALD_CROPS, EMERALD_CROP_POLICY, emeraldBerryYield } from '../src/packs/emerald/berries.js';
 
 const plot = 'emerald.route116.berry.1';

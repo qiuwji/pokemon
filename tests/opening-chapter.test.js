@@ -14,7 +14,7 @@ const run = (s, id) => s.game.runStory([{ type: 'script', id }]);
 for (const gender of ['male', 'female']) test(`Opening ${gender}: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes`, async () => {
   const s = session([], { fresh: true }), g = s.game;
   g.state.party = []; g.state.flags = {};
-  g.ui.choose = async (_n, _p, options) => options.find((o) => o.id === gender).id;
+  g.ui.showNewGameIntroduction = async () => ({ gender, name: gender === 'male' ? '小悠' : '小遥' });
   await g.flushStoryQueue(); await s.settle();
   assert.equal(g.state.playerGender, gender);
   assert.equal(g.state.flags.truckArrived, true);

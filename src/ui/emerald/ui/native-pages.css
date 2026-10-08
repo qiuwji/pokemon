@@ -4,6 +4,81 @@
 .screen canvas {
   image-rendering: pixelated;
 }
+.frame-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+[data-modal-page="launch-menu"] .modal { width: 100%; height: 100%; margin: 0; animation: none; background: #485088; }
+.launch-menu-native { position: relative; width: 100%; height: 100%; }
+.modal .launch-menu-window {
+  position: absolute; left: 3.333%; width: 93.333%; min-height: 0; margin: 0;
+  padding: 0; border-radius: 0; text-align: left; font-size: 3.333cqw;
+  background-color: #f8f8f8; color: #f8f8f8;
+  filter: brightness(0.5625); outline: 0; box-shadow: none; transform: none;
+}
+.modal .launch-menu-window[data-selected="true"] { filter: none; }
+.launch-menu-window::before { display: none; }
+.launch-menu-label { position: absolute; left: 0; top: 0.417cqw; color: #606060; text-shadow: 0.417cqw 0.417cqw #d0d0c8; }
+.launch-save-info { position: absolute; width: 48.077%; display: flex; justify-content: space-between; color: #2080f8; line-height: 6.667cqw; }
+[data-gender="female"] .launch-save-info { color: #f818a8; }
+.launch-save-value { max-width: 64%; white-space: nowrap; }
+[data-modal-page="launch-animation"], [data-modal-page="launch-animation"] .modal {
+  width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0;
+  background: transparent; border: 0; animation: none;
+}
+.modal .launch-animation-button { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; border: 0; padding: 0; }
+[data-launch-host] { width: 100%; height: 100%; }
+.frame-scene.launch-transition { z-index: 40; }
+/* Birch choice windows use the original (3,5) and (3,2) content tile origins. */
+:is([data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) .modal {
+  width: 100%; height: 100%; max-width: none; max-height: none; margin: 0;
+}
+:is([data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) #story-choice-content > p {
+  position: absolute; left: 0; bottom: 0; width: 100%; height: 30%; margin: 0;
+  background: #f8f8f8; white-space: pre-line; font-size: 3.333cqw; line-height: 6.667cqw;
+  padding: 0 3.333cqw;
+  border: 3.333cqw solid transparent;
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png")) 8 fill/3.333cqw;
+}
+:is([data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) .menu-grid {
+  position: absolute; left: 6.667%; top: 20%; width: 26.667%; height: 30%;
+  display: flex; flex-direction: column; gap: 0; padding: 0; background: #f8f8f8;
+  border: 3.333cqw solid transparent;
+  border-image: var(--native-window-image, url("../../../../generated/assets/ui/window.png")) 8 fill/3.333cqw;
+}
+[data-modal-page="new-game-confirm"] .menu-grid { top: 5%; width: 23.333%; }
+:is([data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) .menu-tile {
+  font-size: 3.333cqw; height: 6.667cqw; min-height: 0; line-height: 6.667cqw;
+  border: 0; padding: 0 0 0 3.333cqw; text-align: left; background: transparent;
+}
+:is([data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) .menu-tile:focus { outline: 0; }
+:is([data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) .menu-tile:focus::before {
+  content: "▶"; position: absolute; left: 0;
+}
+[data-modal-page="naming"] .modal { width: 100%; height: 100%; margin: 0; }
+[data-naming-host] { width: 100%; height: 100%; }
+:is([data-modal-page="naming"], [data-modal-page="new-game-gender"], [data-modal-page="new-game-confirm"]) .modal { animation: none; }
+.naming-native {
+  position: relative; width: 100%; height: 100%; color: #424242;
+  background: #fff url("../../../../generated/assets/ui/new-game-naming.png") left top/106.667% 100% no-repeat;
+}
+.naming-title { position: absolute; left: 30%; top: 20.625%; font-size: 3.333cqw; }
+.naming-icon { position: absolute; left: 20%; top: 13.125%; width: 6.667%; height: 20%; }
+.naming-input {
+  position: absolute; left: 26.667%; top: 30%; width: 56.667%; height: 10%;
+  color: #424242; border: 0.833cqw solid #8c9ca4; border-radius: 0; padding: 0 1.667cqw; outline: none;
+  font: inherit; font-size: 3.333cqw; line-height: 5cqw; background: #f8f8d0;
+}
+.naming-input::placeholder { color: #6b737b; opacity: 1; }
+.naming-input:focus { border-color: #526b7b; box-shadow: 0 0 0 0.417cqw #526b7b; }
+.naming-help { position: absolute; left: 10%; top: 48%; width: 80%; font-size: 3.333cqw; }
+.naming-free-actions { position: absolute; left: 6.667%; top: 62.5%; width: 86.667%; display: flex; }
+.modal .naming-free-actions button { position: relative; width: 50%; font-size: 3.333cqw; padding: 3.333cqw 0 3.333cqw 6.667cqw; }
+.modal .naming-free-actions button:focus::before { left: 1.667cqw; }
 .modal-backdrop[data-native-layout] .modal {
   position: relative;
 }

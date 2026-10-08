@@ -11,7 +11,7 @@ export class EmeraldMapMusic {
     const id = emeraldMusic(context, this.audio.cues), previous = this.scene;
     if (this.warp && context.map.id !== this.warp.target) return;
     this.scene = { id, map: context.map.id, battle: !!context.battle };
-    if (context.battle || context.storyMusic) return this.audio.setMusic(id);
+    if (context.battle || context.storyMusic !== null && context.storyMusic !== undefined) return this.audio.setMusic(id);
     if (previous?.id === id && !previous.battle && !this.warp) return this.audio.setMusic(id, { mode: "after-fade", fadeInMs: 0 });
     const immediate = !previous || previous.battle || !!this.warp;
     return this.audio.setMusic(id, immediate ? { mode: "after-fade", fadeOutMs: 0, fadeInMs: 0 } :
@@ -19,7 +19,7 @@ export class EmeraldMapMusic {
   }
   prepareWarp(map, context) {
     const id = emeraldMusic({ ...context, map }, this.audio.cues);
-    if (id === this.audio.music || context.storyMusic) return null;
+    if (id === this.audio.music || context.storyMusic !== null && context.storyMusic !== undefined) return null;
     const lease = { target: map.id };
     this.warp = lease;
     return {

@@ -1,5 +1,4 @@
-import { BEHAVIOR, isWater } from "../../terrain.js";
-import { GEN3_ELEVATION } from "./elevation.js";
+import { BEHAVIOR, isWater, GEN3_ELEVATION } from "../../engine/extensions/field-content.js";
 const fishable = new Set([
   BEHAVIOR.POND_WATER,
   BEHAVIOR.OCEAN_WATER,

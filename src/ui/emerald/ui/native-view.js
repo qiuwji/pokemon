@@ -55,6 +55,9 @@ const screens = new Set([
   "starter",
   "clock",
   "region-map",
+  "naming",
+  "launch-menu",
+  "launch-animation",
 ]);
 const overlays = new Set([
   "menu",
@@ -65,6 +68,8 @@ const overlays = new Set([
   "field-action",
   "fishing",
   "story-choice",
+  "new-game-gender",
+  "new-game-confirm",
 ]);
 export function pageLayout(type) {
   return screens.has(type) ? "screen" : overlays.has(type) ? "field" : "tools";

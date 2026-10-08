@@ -41,7 +41,7 @@ import {
 } from "../../../packs/emerald/field-mechanisms.js";
 import { NPCPoseRegistry } from "../../../engine/npc-poses.js";
 import { ActorTemplateRegistry } from "../../../engine/actor-repository.js";
-import { CropRegistry } from "../../../engine/crop-growth.js";
+import { CropRegistry, cropContentReferences } from "../domain/crop-growth.js";
 import { EMERALD_CROPS, EMERALD_BERRY_PLOTS, validateBerryPlots } from "../../../packs/emerald/berries.js";
 import { TimeTaskRegistry } from "../../../engine/world-schedule.js";
 import { CreatureFormRegistry } from "../../../engine/creatures/forms.js";
@@ -75,6 +75,8 @@ import { EvolutionService } from "../../../engine/growth/evolution.js";
 import { AttachedRules } from "../../../engine/rules/attachments.js";
 import { GEN3_ABILITIES } from "../../../engine/rules/gen3/abilities.js";
 import { CENTER_RESOURCES } from "../../../packs/emerald/center-presentation.js";
+import { LAUNCH_RESOURCES } from "../../../packs/emerald/title-presentation.js";
+import { NEW_GAME_RESOURCES } from "../../../packs/emerald/new-game-presentation.js";
 import { GEN3_HELD_ITEMS } from "../../../engine/rules/gen3/held-items.js";
 import { MOVEMENT_MODES, TRAVEL_DESTINATIONS } from "../../../packs/emerald/movement.js";
 import { ITEMS } from "../../../packs/emerald/items.js";
@@ -82,8 +84,9 @@ import { ITEMS } from "../../../packs/emerald/items.js";
 export function createEmeraldPlugins(db, plugins, onError) {
   db = emeraldDatabase(db);
   validateNativeCast(db, ITEMS);
-  const resources = { ...db.resources, ...CENTER_RESOURCES };
+  const resources = { ...db.resources, ...CENTER_RESOURCES, ...NEW_GAME_RESOURCES, ...LAUNCH_RESOURCES };
   const host = new PluginHost({
+    stateReferences: cropContentReferences,
     permissions: EMERALD_PLUGIN_PERMISSIONS,
     publicEvents: EMERALD_PUBLIC_EVENTS,
     base: {

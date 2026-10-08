@@ -40,6 +40,7 @@ export function session(plugins = [], { fresh = false } = {}) {
     extensions: { refresh() {} },
     say: async (name, lines, _after, options) => { dialogs.push({ name, lines, ...(options ? { options } : {}) }); },
     choose: async (_name, _prompt, options) => options[0].id,
+    showNewGameIntroduction: async () => ({ gender: "male", name: "小悠" }),
   });
   // Arrange an unlocked test scene, not an implementation of the original opening story.
   game.state.flags.rescued = true;

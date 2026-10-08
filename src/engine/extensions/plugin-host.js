@@ -41,6 +41,7 @@ export class PluginHost {
     permissions = [],
     publicEvents = [],
     onError = () => {},
+    stateReferences,
   }) {
     if (
       publicEvents.some(
@@ -53,7 +54,7 @@ export class PluginHost {
       throw new Error("Invalid public event declaration");
     this.publicEvents = Object.freeze([...publicEvents]);
     this.allowedPermissions = Object.freeze([...permissions]);
-    this.catalog = new ExtensionCatalog(base);
+    this.catalog = new ExtensionCatalog(base, { stateReferences });
     this.ui = new PluginUIRegistry();
     this.manifests = new Map();
     this.states = new Map();
@@ -124,6 +125,7 @@ export class PluginHost {
     // All declarations live in a temporary host; caller's catalogs remain unchanged on failure.
     const staged = new PluginHost({
       base: this.catalog.base,
+      stateReferences: this.catalog.stateReferences,
       permissions: this.allowedPermissions,
       publicEvents: this.publicEvents,
       onError: this.onError,

@@ -1,3 +1,4 @@
+import { ballReleaseParticles } from "./ball-release.js";
 import { partySummaryFrame } from "./party-summary.js";
 import { FrameSequenceBuilder } from "../../../engine/extensions/frame-sequence-builder.js";
 import { NATIVE_BATTLE_ASSETS } from "../../../../generated/packs/emerald/battle-animation-assets.js";
@@ -77,17 +78,6 @@ function throwFrame(trainer, age) {
   return trainer.rest || 0;
 }
 
-function openParticles(position, age) {
-  const asset = NATIVE_BATTLE_ASSETS.assets.ball_particles;
-  return Array.from({ length: 16 }, (_, i) => {
-    const local = age - i;
-    if (local < 0 || local >= 26) return null;
-    const radius = Math.max(0, local - 2) * 2, angle = i % 8 * 32, cycle = [0, 1, 2, 0, 2, 1][Math.floor(local / 2) % 6];
-    return { resource: asset.resource, width: 8, height: 8,
-      x: position.x + sin(angle, radius), y: position.y + 19 + sin(angle + 64, radius),
-      tileFrame: cycle, flipX: Math.floor(local / 2) % 6 === 3 };
-  }).filter(Boolean);
-}
 
 /** Trainer throw, ball sheet, palette release, cry, then healthbox. All data is compiled before play. */
 export function nativeOpeningSend({ event, layout }, { hasSound, soundFrames }) {
@@ -128,7 +118,7 @@ export function nativeOpeningSend({ event, layout }, { hasSound, soundFrames }) 
         sprites.push({ resource: NATIVE_BATTLE_ASSETS.assets.poke_ball.resource, width: 16, height: 16,
           ...point, tileFrame: age < 0 ? 0 : age < 5 ? 1 : 2 });
       }
-      if (age >= 0 && age < 43) sprites.push(...openParticles(p, age));
+      if (age >= 0 && age < 43) sprites.push(...ballReleaseParticles({ x: p.x, y: p.y + 19 }, age));
     }
     return { scenes: [{ hideTrainers: true, hideBall: true }], sprites, poses, statusBoxes };
   } });

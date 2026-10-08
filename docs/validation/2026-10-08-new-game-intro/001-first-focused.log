@@ -1,0 +1,75 @@
+✔ wild entry narration holds the settled battlefield without replaying the intro (21.11525ms)
+✔ native party tray compacts six status icons, animates during challenge text and survives only until each side sends (30.858084ms)
+✔ local intro opens the native curtain before the 120-frame slide and composes real foreground tiles (72.438083ms)
+✔ send-out separates trainer frames, slow rotating flight, ball sheet, emergence, cry and healthbox (6.205875ms)
+✔ doubles delay the second release and player healthbox without moving either monster's identity (12.81475ms)
+✔ staged entry is compiled once and already hides sprites during the covered scene swap (3.523083ms)
+✔ scene channels reject invalid bounds, conflicting clips, foreign seats and palette programs (0.5295ms)
+✔ native exit steps subtract colours, commits covered once and restores filters after failures (3.9875ms)
+✔ victory song selection waits for a presentation phase and respects original trainer categories (0.237959ms)
+✔ Pure dialogue sampling preserves grapheme clusters and exact leading/interior/trailing pause boundaries (1.998042ms)
+✔ Instant/reduced-motion/skip reveal all text and pauses; a new line starts clean and invalid clocks fail (0.205ms)
+✔ Structured dialogue rejects invalid speed/shape/markup style/pauses before an effect callback runs (0.347625ms)
+✔ Text effects are registered pure samples, bounded, synchronous and centrally disabled for reduced motion (0.312584ms)
+✔ DOM player safely creates text, types without layout rewrites, shows confirmation only after complete and ignores cancelled callbacks (1.30775ms)
+✔ Shared shell uses first confirm to reveal, second to advance; final acknowledgement resolves once and clears animation (160.421833ms)
+✔ Timed shell advances only after actual display duration and reader announcement stays complete (84.679208ms)
+✔ Dialogue disposal and replacement reject the old wait, stop effects and prevent stale visual writes (60.481041ms)
+✔ Reduced motion displays immediately, suppresses text animation loop and still waits for acknowledgement (55.392458ms)
+✔ Registered plugin text samples receive frozen parameters and cannot submit core commands from a read-only callback (57.178875ms)
+✔ Whole story preflight rejects bad dialogue/effect parameters before any reward and forwards speed through the real application (66.564167ms)
+✔ A text-effect failure during confirm rejects the active wait and unlocks without completion callbacks (64.502834ms)
+✔ Opening male: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (324.285292ms)
+✖ Opening female: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (61.594708ms)
+✔ Wall clock dial wraps midnight, accepts touch geometry and computes coherent hands (0.399916ms)
+✔ Object presentation transforms are bounded, frozen and neutral under reduced motion (0.274916ms)
+✔ Story clock confirmation expires with its screen and fanfare waits for the voice rather than a guessed delay (64.161041ms)
+✔ Opening male: entrance pose persists; exit coordinate intercepts its warp; movers use source sprites (77.037125ms)
+✔ Opening female: entrance pose persists; exit coordinate intercepts its warp; movers use source sprites (67.433ms)
+✔ Scripted walking tolerates early fractional timer callbacks and NPC refresh ticks during the clock visit (64.974416ms)
+✔ Space and Enter confirm battle choices directly; modal confirmation retains precedence (1.791458ms)
+✔ Battle menu arrows preserve the two-column layout and handle an incomplete final row (0.170334ms)
+✔ The battle stage resolver names defense and its settled decrease in the battle message (173.251542ms)
+✔ Normal-landscape transition selection follows opponent vs usable party levels (0.678333ms)
+✔ Default camera keeps the original 240x160 world viewport without changing grid rules (82.689042ms)
+✔ held input cannot move the player before a mapEnter story takes control (180.334583ms)
+✔ a map entry without a script does not lock held movement (78.357042ms)
+✔ The assembler preserves dynamic shell getters and existing application interface while all pages render against frozen state (39.328333ms)
+✔ Fishing remains controllable while the world is locked and displays bite feedback through the shared shell (29.025167ms)
+✔ Shared shell owns dialogue completion, return navigation and command confirmation without global document (60.943458ms)
+✔ Focus trap covers visible text/select/link controls and excludes hidden controls (23.9345ms)
+✔ Clock page submits setup through a command and renders live saved time (27.089917ms)
+✔ Loaded clock-before-TV state renders the real sidebar and continues through later opening tasks (16.63775ms)
+✔ Facility page renders frozen plugin data and submits entry/action through application commands (18.202417ms)
+✔ Settings navigation survives click bubbling and Travel opens its own modal instead of silently reopening settings (18.022708ms)
+✔ Start menu remembers focus, map viewing consumes no command, and native arrows select map cells (25.928083ms)
+✔ Fly map rejects unavailable cells and submits an eligible destination through the existing field command (21.6795ms)
+✔ Selecting a party member opens native actions before Summary and preserves the party/list plugin region (21.411792ms)
+✔ First field confirm and every menu confirm sound once; dialogue confirmation never doubles its cue (11.824166ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 47
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3465.285542
+
+✖ failing tests:
+
+test at tests/opening-chapter.test.js:14:42
+✖ Opening female: truck, exact door, clock cancellation/confirmation, room, TV, neighbor and shoes (61.594708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'male' !== 'female'
+  
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/opening-chapter.test.js:19:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'male',
+    expected: 'female',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

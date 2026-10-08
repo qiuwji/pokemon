@@ -21,6 +21,7 @@ export class AudioAdapter {
     this.suspended = false;
     this.disposed = false;
     this.music = null;
+    this.completedMusic = null;
     this.musicVoice = null;
     this.musicOffset = 0;
     this.generation = 0;
@@ -111,6 +112,8 @@ export class AudioAdapter {
       this.onError(new Error(`Unknown music cue ${id}`));
       return Promise.resolve(null);
     }
+    if (id !== this.music) this.completedMusic = null;
+    if (id !== null && id === this.music && id === this.completedMusic) return Promise.resolve(null);
     if (id === this.music && (this.musicRequest || this.musicVoice?.id === id || !this.playable || this.musicHolds.size))
       return this.musicRequest || Promise.resolve(this.musicVoice);
     // Cancel an in-flight replacement when returning to the still-playing scene.
@@ -132,7 +135,7 @@ export class AudioAdapter {
     return this.resumeMusic();
   }
   resumeMusic() {
-    if (!this.playable || !this.music || this.musicHolds.size) return Promise.resolve(null);
+    if (!this.playable || !this.music || this.music === this.completedMusic || this.musicHolds.size) return Promise.resolve(null);
     const id = this.music,
       token = ++this.musicGeneration;
     const request = this.start(id, this.cues.get(id), {
@@ -266,6 +269,7 @@ export class AudioAdapter {
   }
   cleanup(voice) {
     if (voice.cleaned) return;
+    const completed = !voice.stopped && !voice.cue.loop;
     voice.cleaned = true;
     voice.finish?.();
     voice.stopped = true;
@@ -273,7 +277,10 @@ export class AudioAdapter {
     voice.source.onended = null;
     voice.source.disconnect();
     voice.gain.disconnect();
-    if (this.musicVoice === voice) this.musicVoice = null;
+    if (this.musicVoice === voice) {
+      if (completed) this.completedMusic = voice.id;
+      this.musicVoice = null;
+    }
   }
   stopVoice(voice, fadeMs = 0, steps = undefined) {
     if (!voice || voice.cleaned) return;

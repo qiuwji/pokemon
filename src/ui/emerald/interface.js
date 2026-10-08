@@ -10,6 +10,9 @@ import { createCropInterface } from "./crop-interface.js";
 import { createTimeInterface } from "./time-interface.js";
 import { createPresentationInterface } from "./presentation-interface.js";
 import { createUIShell } from "./ui-shell.js";
+import { createNewGameInterface } from "./new-game-interface.js";
+import { createLaunchInterface } from "./launch-interface.js";
+import { FrameSceneDOM } from "../../adapters/frame-scene-dom.js";
 import { ExtensionDOM } from "../../adapters/extension-dom.js";
 import { createPartyInterface } from "./party-interface.js";
 import { createBagInterface } from "./bag-interface.js";
@@ -33,6 +36,9 @@ export function createEmeraldInterface(
     dialogueClock = null,
     audioSettings = null,
     playFieldSequence = null,
+    createFrameScene = options => new FrameSceneDOM(options),
+    setLaunchMusic,
+    titleFrames,
   } = {},
 ) {
   const shell = createUIShell(game, { document: doc, sound, dialogueClock, playFieldSequence });
@@ -40,6 +46,8 @@ export function createEmeraldInterface(
   const deps = {
     ...shell,
     document: doc,
+    frameScene: (options = {}) => createFrameScene({ document: doc, host: doc.getElementById("screen"), width: 240, height: 160,
+      assets: extensionAssets, resources: game.db.resources, timeline: game.timeline, clock: shell.frameClock, reducedMotion: shell.reducedMotion, ...options }),
     mountSprite: (canvas, clip) => {
       const player = new SpriteCanvas({
         canvas,
@@ -85,7 +93,9 @@ export function createEmeraldInterface(
     movementUI = createMovementInterface(game, deps),
     networkUI = createNetworkInterface(game, deps),
     presentationUI = createPresentationInterface(game, deps),
-    battleUI = createBattleInterface(game, deps);
+    battleUI = createBattleInterface(game, deps),
+    newGameUI = createNewGameInterface(deps),
+    launchUI = createLaunchInterface(game, { ...deps, showOptions: optionsUI.showOptions, setLaunchMusic, titleFrames });
   Object.assign(
     shell,
     optionsUI,
@@ -107,6 +117,8 @@ export function createEmeraldInterface(
     mapUI,
     networkUI,
     presentationUI,
+    newGameUI,
+    launchUI,
     {
       showMenu,
       demonstrateBattleAction: (...args) => battleUI.demonstrate(...args),
@@ -134,7 +146,7 @@ export function createEmeraldInterface(
     });
   let menuSelection = null;
   function showMenu() {
-    if (game.busy || game.battle || shell.dialog) return;
+    if (game.busy || game.battle || shell.dialog || shell.saveBlocked) return;
     if (game.facilityActive) {
       shell.showFacility();
       return;

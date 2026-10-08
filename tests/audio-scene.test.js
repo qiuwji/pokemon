@@ -99,6 +99,18 @@ const player = (f, more = {}) =>
     ...more,
   });
 
+test("Completed non-looping title music stays ended across ticks, mute and visibility; selecting again restarts it", async () => {
+  const f = fakeAudio(), cues = musicCues();
+  cues.set("title", validateAudioCue({ kind: "music", source: "assets/title.wav", volume: .5, loop: false }));
+  const audio = player(f, { cues }); audio.enabled = true;
+  const voice = await audio.setMusic("title"); voice.source.onended(); await voice.finished;
+  assert.equal(audio.musicVoice, null); const count = f.nodes.length;
+  await audio.setMusic("title"); audio.enabled = false; audio.enabled = true;
+  audio.setSuspended(true); audio.setSuspended(false); await Promise.resolve();
+  assert.equal(f.nodes.length, count);
+  await audio.setMusic(null); assert(await audio.setMusic("title")); audio.dispose();
+});
+
 test("fanfare music holds retain the source position, allow sounds and release only the final lease", async () => {
   const f = fakeAudio(), audio = player(f);
   audio.enabled = true;

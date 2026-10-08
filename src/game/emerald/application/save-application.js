@@ -8,7 +8,7 @@ import { emptyWeather } from "../../../engine/weather.js";
 import { emptyInventory } from "../../../engine/inventory.js";
 import { emptyFieldDevices } from "../../../engine/field-devices.js";
 import { emptyActors } from "../../../engine/actor-repository.js";
-import { emptyCrops } from "../../../engine/crop-growth.js";
+import { emptyCrops } from "../domain/crop-growth.js";
 import { emptyWorldClock } from "../../../engine/world-clock.js";
 import { emptyWorldSchedule } from "../../../engine/world-schedule.js";
 import { emptyWorldState } from "../../../engine/world-state.js";
@@ -133,6 +133,7 @@ export class SaveApplication {
         return result;
     }
     save(show = false) {
+        if (this.ui?.saveBlocked) return false;
         if (this.facilityActive) {
             if (show)
                 this.ui?.toast("请先完成或退出设施，再保存。");
@@ -144,7 +145,7 @@ export class SaveApplication {
                 this.ui?.toast(this.saveWarning);
             return false;
         }
-        if (this.battle ||
+        if (this.ui?.saveBlocked || this.battle ||
             this.busy ||
             this.ui?.dialog ||
             this.ui?.modalType === "starter" ||

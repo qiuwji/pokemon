@@ -121,3 +121,12 @@ MapNameDOM只管理提示生命周期，app按有效地图元数据调用。`ind
 ## 2026-10-08 两队专用入场与树果帧
 
 水舰队/火岩队训练家由pack身份表选择原作各自tilemap/palette，256项Q8.8正弦表和阶段时长由来源导入；总217帧，兼容取消与reducedMotion。Canvas混合色仍近似GBA效果，不宣称逐像素颜色保真。树果源图片是横排帧，修正export-theme切片并逐像素验证生长图；详见[本批范围](../regions/NATIVE_INTERACTIONS.md)。
+
+
+## 新游戏博士介绍（2026-10-09）
+
+正常新游戏的InsideOfTruck地图入口先执行new-game屏幕，再运行原作搬家车脚本。来源为main_menu.c的Task_NewGameBirchSpeech系列、pokeball.c的独立展示出球、pokemon.c的Lotad前动画及naming_screen.c。216帧等待、176帧渐显、80帧等待；性别预览16帧退场与16帧滑入；平台8帧延后、调色步进；命名前后16帧淡出入；48帧缩小并向下每帧0.75px，随后白化、黑屏交接。原作图集通过tools/ui/export-new-game.py生成，Lotad使用anim_front.png而不是静态front.png。
+
+用户明确要求起名不遵循原作键盘：采用直接自由输入，16字存档上限，支持系统输入法与Enter确认；正在输入法组词时不提交，空白/超长名字不提交，提供返回修改角色按钮。名字确认选择否/B返回性别与起名流程；输入稿仅在UI内存中，最终身份经story-screen-ports交给configurePlayer，屏幕失败不提交。FrameSceneDOM仅持有画布与FrameClipDirector，不读写存档或解释原C任务；正文pause事件由DialogueDOM消费预编译停顿位置，只触发一次，跳过文字也会触发，并且关闭后旧帧不会复活。
+
+未进行浏览器或听音验收；中文译文/断页、默认预设名字、GBA硬件混色和实际输入体验不以端口测试宣称精确等价。标题电影/标题页与原存档选择另一个切片处理。

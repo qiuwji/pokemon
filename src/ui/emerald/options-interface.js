@@ -10,7 +10,7 @@ export function createOptionsInterface({
   audioSettings,
 }) {
   let pace = 1,
-    frame = 1;
+    frame = 1, returnTo = showMenu, extras = true;
   const labels = ["慢", "中", "快"],
     multipliers = [2, 1, 0.5];
   function adjust(key, delta) {
@@ -27,16 +27,17 @@ export function createOptionsInterface({
         );
     } else if (key === "sound")
       audioSettings?.setEnabled(!audioSettings.enabled());
-    showOptions(key);
+    showOptions(key, returnTo, { extras });
   }
-  function showOptions(selected = "pace") {
+  function showOptions(selected = "pace", back = showMenu, policy = {}) {
+    returnTo = back; extras = policy.extras !== false;
     modal(
       "设置",
-      `<div class="native-window options-title">设置</div><div class="native-window options-list"><button class="native-row" data-option="pace"><span>文字速度</span><span>${labels.map((label, index) => `<span class="${pace === index ? "chosen" : ""}">${label}</span>`).join(" ")}</span></button><button class="native-row" data-option="sound" ${audioSettings ? "" : "disabled"}><span>声音</span><span>${audioSettings?.enabled() ? "开" : "关"}</span></button><button class="native-row" data-option="frame"><span>边框</span><span>类型 ${frame}</span></button><button class="native-row" data-open-extras>扩展功能</button><button class="native-row" data-options-cancel>取消</button></div>`,
+      `<div class="native-window options-title">设置</div><div class="native-window options-list"><button class="native-row" data-option="pace"><span>文字速度</span><span>${labels.map((label, index) => `<span class="${pace === index ? "chosen" : ""}">${label}</span>`).join(" ")}</span></button><button class="native-row" data-option="sound" ${audioSettings ? "" : "disabled"}><span>声音</span><span>${audioSettings?.enabled() ? "开" : "关"}</span></button><button class="native-row" data-option="frame"><span>边框</span><span>类型 ${frame}</span></button>${extras ? '<button class="native-row" data-open-extras>扩展功能</button>' : ""}<button class="native-row" data-options-cancel>取消</button></div>`,
       {
         type: "options",
         close: false,
-        back: showMenu,
+        back: returnTo,
         navigate: (dir) => {
           if (dir === "left" || dir === "right") {
             const key = doc.activeElement?.dataset?.option;
@@ -52,8 +53,8 @@ export function createOptionsInterface({
       .forEach(
         (button) => (button.onclick = () => adjust(button.dataset.option, 1)),
       );
-    root.querySelector("[data-open-extras]").onclick = showExtras;
-    root.querySelector("[data-options-cancel]").onclick = showMenu;
+    if (extras) root.querySelector("[data-open-extras]").onclick = showExtras;
+    root.querySelector("[data-options-cancel]").onclick = returnTo;
     root.querySelector(`[data-option="${selected}"]`)?.focus();
   }
   return { showOptions };

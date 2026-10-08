@@ -48,13 +48,14 @@ import { emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "./packs/emerald/ba
 import { emeraldReflectionSurface, emeraldReflectionVisible, emeraldReflectionResource, emeraldReflectionScale, emeraldReflectionColumns } from "./packs/emerald/field-reflections.js";
 import { EMERALD_BATTLE_BACKGROUNDS } from "./packs/emerald/battle-backgrounds.js";
 import { emeraldTypeColor } from "./packs/emerald/battle-palette.js";
+import { audioTrackDurations } from "../generated/plugins/emerald-audio.js";
 
 // Composition root: chooses a content pack, adapters and services; no gameplay rules.
 const $ = (id) => document.getElementById(id);
 async function boot() {
   let input,
     pluginManager,
-    game = null;
+    game = null, entered = false, launchMusic = false;
   try {
     const base = assertPackContent(
       await loadContent(new URL("./content/manifest.json", import.meta.url)),
@@ -210,7 +211,7 @@ async function boot() {
       cancel: clearTimeout.bind(window),
     });
     const adventure = new EmeraldAdventure({
-      playActive: () => !document.hidden,
+      playActive: () => entered && !document.hidden,
       db,
       catalog,
       plugins: host,
@@ -268,6 +269,8 @@ async function boot() {
         onCue: createEmeraldFieldCuePlayer(audio, timeline),
       }),
       extensionAssets: assets,
+      setLaunchMusic: id => { launchMusic = id; },
+      titleFrames: Math.ceil(audioTrackDurations.MUS_TITLE * 60),
       audioSettings: {
         enabled: () => audio.enabled,
         setEnabled: (value) => {
@@ -278,12 +281,28 @@ async function boot() {
       },
     });
     game.attachUI(ui);
+    const releaseBoot = ui.holdInteraction();
     // A rejected save silently starts a new adventure; keep the reason visible instead of a fleeting toast.
     if (adventure.saveWarning)
       $("save-status").textContent = adventure.saveWarning;
     game.attachSound((cue) => audio.play(cue));
-    const startupIssues = await startPlugins(plugins, bus);
-    if (startupIssues.length) ui.toast(startupIssues.join("；"));
+    async function launch() {
+      $("loading").hidden = true;
+      try {
+        await ui.showLaunch();
+        const startupIssues = await startPlugins(plugins, bus);
+        entered = true;
+        launchMusic = null;
+        releaseBoot();
+        if (startupIssues.length) ui.toast(startupIssues.join("；"));
+      } catch (error) {
+        console.error(error);
+        $("loading").hidden = false;
+        $("loading").innerHTML = '<p>开场未能完成。</p><button>重新开始开场</button>';
+        $("loading").querySelector("button").onclick = () => void launch();
+      }
+    }
+    void launch();
     if (parameters.get("control") === "1") void ui.connectControl();
     input = new BrowserInput({
       game,
@@ -293,12 +312,12 @@ async function boot() {
     });
     $("loading").hidden = true;
     $("save").onclick = () => game.save(true);
-    $("menu").onclick = () => ui.showMenu();
+    $("menu").onclick = () => { if (entered) ui.showMenu(); };
     $("help").onclick = () => {
-      if (!game.busy && !game.battle && !ui.dialog) ui.showHelp();
+      if (entered && !game.busy && !game.battle && !ui.dialog) ui.showHelp();
     };
     $("party-open").onclick = () => {
-      if (!game.busy && !game.battle && !ui.dialog) ui.showParty();
+      if (entered && !game.busy && !game.battle && !ui.dialog) ui.showParty();
     };
     $("sound").onclick = () => {
       audio.enabled = !audio.enabled;
@@ -364,13 +383,13 @@ async function boot() {
         } else {
           interactionLayer.clear();
           mapMusic.update({
-            battle: game.battleMusicContext(), storyMusic: game.storyMusic,
+            battle: game.battleMusicContext(), storyMusic: entered ? game.storyMusic : launchMusic,
             flags: game.state.flags, map: { ...game.world.map, id: game.state.position.map },
             mode: game.state.movement.mode,
           });
-        input.tick();
+        if (entered) input.tick();
         const visible = renderer.visibleMaps(game.state.position, now);
-        game.tick(now, visible);
+        if (entered) game.tick(now, visible);
         const battleFrame = director.sample(now);
         if (battleFrame) {
           renderer.battle(battleFrame);
@@ -402,6 +421,7 @@ async function boot() {
         detachAudio();
         document.removeEventListener("visibilitychange", audioVisibility);
         audio.dispose();
+        ui.disposeLaunch();
         ui.disposeDialogue();
         ui.disposeModalResources();
         ui.extensions?.dispose();

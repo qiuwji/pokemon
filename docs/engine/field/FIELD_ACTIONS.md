@@ -7,7 +7,7 @@
 - `engine/field-actions.js`：注册、输入 schema、只读资格/目标查询、计划签发、变化检测、一次提交与事实事件。没有徽章、招式、地图名称或渲染依赖。
 - `packs/emerald/field-actions.js`：原作资格及行动定义。地图元素用 `kind: cutTree / breakableRock`；潜水点用 `fieldLinks` 注册，不能把任意传送写进移动核心。
 - `application/field-action-application.js`：世界、移动、剧情、遭遇和表现端口的协调。操作预检先于演出；UI 只发请求。`adventure.js` 仅装配，显式端口表路由到唯一用例所有者。
-- `engine/fishing.js`：独立时钟/输入状态机；`rules/gen3/fishing.js` 提供原作等待、收竿窗口、鱼竿轮数与吸盘/黏着政策。浏览器和网络不决定咬钩结果。
+- `game/emerald/domain/fishing-session.js`：独立时钟/输入状态机；`packs/emerald/fishing.js` 提供原作等待、收竿窗口、鱼竿轮数与吸盘/黏着政策。浏览器和网络不决定咬钩结果。
 - `presentation/field-action-director.js`：准备、效果、遮盖提交和收尾。野外视觉复用 `PresentationRegistry`，插件通过已有 `api.presentation.effect` 注册绘制器，行动的 `cue` 引用其返回 ID。
 
 公开注册种类：`fieldActions`、`fieldLinks`。公开查询：`core.query` 返回 `fieldActions` 的资格、说明与输入参数。公开命令：

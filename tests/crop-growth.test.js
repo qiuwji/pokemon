@@ -2,7 +2,7 @@ import { loadContentSync } from "../tools/content-io.mjs";
 import { inventoryQuantity, setQuantity } from "./helpers/inventory-fixture.js";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { CropRegistry, CropService } from "../src/engine/crop-growth.js";
+import { CropRegistry, CropService } from "../src/game/emerald/domain/crop-growth.js";
 import {
   EMERALD_CROP_POLICY,
   EMERALD_CROPS,

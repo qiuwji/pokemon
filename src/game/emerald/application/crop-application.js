@@ -2,7 +2,7 @@ import {
   CropRegistry,
   CropService,
   emptyCrops,
-} from "../../../engine/crop-growth.js";
+} from "../domain/crop-growth.js";
 import { Random } from "../../../engine/model.js";
 import {
   EMERALD_CROP_POLICY,
