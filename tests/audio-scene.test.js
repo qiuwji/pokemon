@@ -481,6 +481,18 @@ test('Music crossfade keeps the previous voice until decoding completes and reje
   audio.dispose();
 });
 
+test("an incoming cue can cut the previous music after decoding while ordinary crossfades remain available", async () => {
+  const f = fakeAudio(), cues = musicCues();
+  cues.set("battle", validateAudioCue({ ...cues.get("battle"), fadePreviousMs: 0, fadeInMs: 0 }));
+  const audio = player(f, { cues }); audio.enabled = true;
+  const town = await audio.setMusic("town");
+  await audio.setMusic("battle");
+  assert.equal(town.cleaned, true);
+  assert.equal(audio.musicVoice.id, "battle");
+  assert.throws(() => validateAudioCue({ ...cues.get("battle"), fadePreviousMs: -1 }), /fade/);
+  audio.dispose();
+});
+
 test('Returning to the playing cue cancels a pending replacement without restarting; failed replacement can retry', async () => {
   let fail = false, resolve;
   const f = fakeAudio({fetchAsset: source => source.includes('battle') ? new Promise(r => { resolve = () => r({ok:!fail,status:404,arrayBuffer:async()=>new ArrayBuffer(8)}); }) : Promise.resolve({ok:true,arrayBuffer:async()=>new ArrayBuffer(8)})});

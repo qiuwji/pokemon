@@ -43,17 +43,29 @@
     {
       "song": "MUS_VS_WILD",
       "config": "tracks/vs_wild.json",
-      "selection": "battle-wild"
+      "selection": "battle-wild",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
     },
     {
       "song": "MUS_VS_TRAINER",
       "config": "tracks/vs_trainer.json",
-      "selection": "battle-trainer"
+      "selection": "battle-trainer",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
     },
     {
       "song": "MUS_VS_RIVAL",
       "config": "tracks/vs_rival.json",
-      "selection": "battle-rival"
+      "selection": "battle-rival",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
     },
     {
       "song": "MUS_ENCOUNTER_INTERVIEWER",
@@ -124,6 +136,51 @@
       "song": "MUS_SCHOOL",
       "config": "tracks/school.json",
       "selection": "map-music"
+    },
+    {
+      "song": "MUS_VICTORY_WILD",
+      "config": "tracks/mus_victory_wild.json",
+      "selection": "battle-victory",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
+    },
+    {
+      "song": "MUS_VICTORY_TRAINER",
+      "config": "tracks/mus_victory_trainer.json",
+      "selection": "battle-victory",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
+    },
+    {
+      "song": "MUS_VICTORY_GYM_LEADER",
+      "config": "tracks/mus_victory_gym_leader.json",
+      "selection": "battle-victory",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
+    },
+    {
+      "song": "MUS_VICTORY_LEAGUE",
+      "config": "tracks/mus_victory_league.json",
+      "selection": "battle-victory",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
+    },
+    {
+      "song": "MUS_VICTORY_AQUA_MAGMA",
+      "config": "tracks/mus_victory_aqua_magma.json",
+      "selection": "battle-victory",
+      "musicFades": {
+        "fadeInMs": 0,
+        "fadePreviousMs": 0
+      }
     }
   ],
   "sounds": [
@@ -221,6 +278,81 @@
       "song": "SE_PIN",
       "config": "tracks/se-pin.json",
       "selection": "story"
+    },
+    {
+      "song": "SE_M_DOUBLE_SLAP",
+      "config": "tracks/se-m-double-slap.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_COMET_PUNCH",
+      "config": "tracks/se-m-comet-punch.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_SCRATCH",
+      "config": "tracks/se-m-scratch.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_TAIL_WHIP",
+      "config": "tracks/se-m-tail-whip.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_EMBER",
+      "config": "tracks/se-m-ember.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_FLAME_WHEEL",
+      "config": "tracks/se-m-flame-wheel.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_BUBBLE",
+      "config": "tracks/se-m-bubble.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_M_CRABHAMMER",
+      "config": "tracks/se-m-crabhammer.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_EFFECTIVE",
+      "config": "tracks/se-effective.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_NOT_EFFECTIVE",
+      "config": "tracks/se-not-effective.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_SUPER_EFFECTIVE",
+      "config": "tracks/se-super-effective.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_FAINT",
+      "config": "tracks/se-faint.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_BALL_TRAY_ENTER",
+      "config": "tracks/se-ball-tray-enter.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_BALL_TRAY_BALL",
+      "config": "tracks/se-ball-tray-ball.json",
+      "selection": "battle"
+    },
+    {
+      "song": "SE_BALL_TRAY_EXIT",
+      "config": "tracks/se-ball-tray-exit.json",
+      "selection": "battle"
     }
   ],
   "musicFades": {

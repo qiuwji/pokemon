@@ -21,6 +21,7 @@ export class FieldSession {
     onMap = () => {},
     onWarp = () => {},
     onWarpStart = () => {},
+    prepareWarp = () => null,
     beforeWarp = () => false,
     doorWarp = null,
     prepareEntry,
@@ -51,6 +52,7 @@ export class FieldSession {
       onMotionError,
       onWarp,
       onWarpStart,
+      prepareWarp,
       beforeWarp,
       doorWarp,
       movement,
@@ -442,7 +444,7 @@ export class FieldSession {
         exit =
           this.doorWarp?.exit?.({ map, position: { ...this.position } }) || null;
         exit?.open?.();
-      });
+      }, { prepare: () => this.prepareWarp({ from: { ...this.position }, to: { ...warp } }) });
       if (!covered) {
         // A refused transition still has to give the player back.
         this.doorWarp?.arrive?.();

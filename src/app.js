@@ -1,3 +1,4 @@
+import { EmeraldMapMusic } from "./packs/emerald/map-music.js";
 import { MapNameDOM } from "./adapters/map-name-dom.js";
 import { emeraldBattleCues } from "./packs/emerald/battle-audio.js";
 import { PixelDisplay } from "./adapters/pixel-display.js";
@@ -13,7 +14,6 @@ import { emeraldFieldPriority } from "./packs/emerald/field-layers.js";
 import { TransitionPatterns } from "./presentation/transition-patterns.js";
 import {
   createEmeraldAudio,
-  emeraldMusic,
   emeraldBattleSound,
   emeraldDoorSound,
 } from "./packs/emerald/audio-library.js";
@@ -41,10 +41,6 @@ import {
   createEmeraldPresentation,
   emeraldBallResource,
 } from "./packs/emerald/animations.js";
-import {
-  ANIMATION_PROFILES,
-  emeraldMoveProfile,
-} from "./packs/emerald/animation-profiles.js";
 import { EMERALD_BATTLE_INTRO } from "./packs/emerald/battle-intro.js";
 import { emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "./packs/emerald/battle-presentation.js";
 import { emeraldReflectionSurface, emeraldReflectionVisible, emeraldReflectionResource, emeraldReflectionScale, emeraldReflectionColumns } from "./packs/emerald/field-reflections.js";
@@ -136,6 +132,7 @@ async function boot() {
         reducedMotion,
         presentation,
         battleBackgrounds: EMERALD_BATTLE_BACKGROUNDS,
+        battleChannelBits: 5,
       });
     const pixelDisplay = new PixelDisplay($("game"), (width, height) =>
       renderer.resizeSurface(width, height),
@@ -145,6 +142,7 @@ async function boot() {
       cues: createEmeraldAudio(host),
       onError: console.error,
     });
+    const mapMusic = new EmeraldMapMusic(audio);
     // Decode short input/capture cues before the first gesture; never block boot on audio.
     void audio
       .preload([
@@ -161,7 +159,6 @@ async function boot() {
     document.addEventListener("visibilitychange", audioVisibility);
     audioVisibility();
     const director = new BattleDirector(timeline, {
-      profiles: ANIMATION_PROFILES,
       registry: presentation,
       cuePlan: emeraldBattleCues,
       ballResource: emeraldBallResource,
@@ -169,7 +166,6 @@ async function boot() {
       intro: EMERALD_BATTLE_INTRO,
       layout: emeraldBattleLayout,
       viewport: EMERALD_BATTLE_VIEWPORT,
-      profileFor: emeraldMoveProfile,
       typeColors: emeraldTypeColor,
       onCue: (kind) => {
         const id = emeraldBattleSound(kind, audio.cues);
@@ -203,6 +199,7 @@ async function boot() {
     const overlay = new TransitionDOM($("transition"), {
       patterns,
       onError: console.error,
+      colorTargets: () => [...$("screen").children].filter(element => element.id !== "transition"),
     });
     const mapName = new MapNameDOM({
       element: $("scene-name"),
@@ -233,6 +230,9 @@ async function boot() {
                 minute: "2-digit",
               })
           : "尚未存档"),
+      prepareMapExit: to => mapMusic.prepareWarp({
+        ...game.world.maps[to.map], id: to.map,
+      }, { flags: game.state.flags, storyMusic: game.storyMusic }),
       onMap: (title, id) => {
         $("location").textContent = title;
         game?.ui?.updateWeather(game.weatherView(id));
@@ -352,17 +352,11 @@ async function boot() {
           }
         } else {
           interactionLayer.clear();
-          audio.setMusic(
-          emeraldMusic(
-            {
-              battle: game.battleMusicContext(),
-              storyMusic: game.storyMusic,
-              flags: game.state.flags,
-              map: { ...game.world.map, id: game.state.position.map },
-            },
-            audio.cues,
-          ),
-        );
+          mapMusic.update({
+            battle: game.battleMusicContext(), storyMusic: game.storyMusic,
+            flags: game.state.flags, map: { ...game.world.map, id: game.state.position.map },
+            mode: game.state.movement.mode,
+          });
         input.tick();
         const visible = renderer.visibleMaps(game.state.position, now);
         game.tick(now, visible);

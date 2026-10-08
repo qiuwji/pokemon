@@ -1,4 +1,5 @@
 import { validateSpriteClip } from "./sprite-clip-contracts.js";
+import { validateBattleSequenceDefinition } from "./frame-sequence-contracts.js";
 import { storyBundleExports } from "../story-catalog.js";
 import {
   validatePresentation,
@@ -31,6 +32,7 @@ export const PLUGIN_API_VERSION = 1;
 export const PLUGIN_CAPABILITIES = Object.freeze({
   interactions: 1,
   "presentation.frames": 1,
+  "presentation.battleSequences": 1,
 });
 /** Startup host: content + declarative interfaces + runtime ports. Trusted code, explicit API, no hot unload. */
 export class PluginHost {
@@ -65,6 +67,7 @@ export class PluginHost {
     this.spriteClips = new Map();
     this.moveAnimations = new Map();
     this.battleAnimations = new Map();
+    this.battleSequences = new Map();
     this.battleMessages = new Map();
     this.presentationScenes = new Map();
     this.audioCues = new Map();
@@ -391,6 +394,14 @@ export class PluginHost {
           battle: (id, definition) => {
             validateBattleAnimation(definition);
             return register(staged.battleAnimations, id, readOnly(definition));
+          },
+          sequence: (id, definition) => {
+            validateBattleSequenceDefinition(definition);
+            const { prepare, ...selector } = definition;
+            return register(staged.battleSequences, id, {
+              ...readOnly(selector),
+              prepare: context => evaluate(prepare, readOnly(context)),
+            });
           },
           move: (id, definition) => {
             if (typeof definition.moveId !== "string" || !definition.moveId)

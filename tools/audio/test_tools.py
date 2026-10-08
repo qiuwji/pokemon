@@ -98,13 +98,15 @@ class AudioBundleTools(unittest.TestCase):
     def test_music_fades_are_pack_policy_without_changing_sound_or_loop(self):
         bundler = module('bundle-audio')
         data = {'cue': {'loopStart': 2, 'loopEnd': 8, 'fadeInMs': 0, 'fadeOutMs': 0}}
-        fades = {'fadeInMs': 500, 'fadeOutMs': 250}
+        fades = {'fadeInMs': 500, 'fadeOutMs': 250, 'fadePreviousMs': 0}
         _, _, music = bundler.resolve_cue('bundle', 'MUS_TEST', 'music', 'music', None, data, fades)
         self.assertEqual(music['fadeInMs'], 500)
         self.assertEqual(music['loopStart'], 2)
+        self.assertEqual(music['fadePreviousMs'], 0)
         _, _, sound = bundler.resolve_cue('bundle', 'SE_TEST', 'sound', 'sounds', None, data, fades)
         self.assertEqual(sound['fadeInMs'], 0)
         self.assertFalse(sound['loop'])
+        self.assertNotIn('fadePreviousMs', sound)
         with self.assertRaisesRegex(ValueError, 'fade policy'):
             bundler.resolve_cue('bundle', 'MUS_TEST', 'music', 'music', None, data, {'fadeInMs': -1})
 

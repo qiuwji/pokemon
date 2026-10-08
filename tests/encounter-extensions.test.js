@@ -421,7 +421,7 @@ test("Plugin contact listeners can request battle at the stable boundary and a f
     true,
   );
 });
-test("Encounter win, escape and loss share release lifecycle without story rewards, dialogues or duplicate actors", async () => {
+test("Encounter results release once without story rewards or duplicate actors; loss shows the native whiteout pages", async () => {
   for (const result of ["win", "escaped", "loss"]) {
     const s = encounterFixture(),
       { actor } = await s.spawn(),
@@ -446,7 +446,11 @@ test("Encounter win, escape and loss share release lifecycle without story rewar
     assert.equal(s.api.query().encounters.length, 0);
     assert(!s.api.query().actors[actor.uid]);
     assert.deepEqual(s.game.state.story, story);
-    assert.equal(s.dialogs.length, 0);
+    assert.equal(s.dialogs.length, result === "loss" ? 1 : 0);
+    if (result === "loss") assert.deepEqual(s.dialogs[0].lines, [
+      `${s.game.state.playerName}已经没有可以战斗的宝可梦了！`,
+      `${s.game.state.playerName}眼前一片漆黑……`,
+    ]);
     assert.equal(s.game.state.party.length, 1);
     if (result === "loss") assert.equal(s.mon.hp, s.mon.stats.hp);
   }

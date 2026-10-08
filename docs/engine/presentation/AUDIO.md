@@ -74,3 +74,11 @@ AudioAdapter的播放句柄提供`finished` Promise，声部自然结束、停�
 合并音频包的 `tools/audio/pack.json.musicFades` 控制BGM：当前渐入1500ms、渐出1200ms；bundle-audio负责写进实际注册cue和资源manifest，不能只手改生成插件。音效保留即时播放。循环采样边界和WAV内容不变。
 
 AudioAdapter等新曲解码成功后才让旧曲渐出；失败保留旧声并允许重试，快速切场景只接受最新请求。回到仍在播放的原曲会取消待加载替换，不重新从头播放。禁音、后台暂停和释放继续清理全部声音。听感由用户在游戏内验收。
+
+## 地图原作切换政策
+
+`AudioAdapter.setMusic(id, options)`接收有界`{mode:"after-fade"|"crossfade",fadeOutMs?,fadeInMs?,steps?}`，等待淡出模式在音频时钟上安排新声部启动。原曲保持到新资源解码成功；快速请求取消尚未启动的中间曲，沿用已有淡出截止点。输出音量变化保留包络进度。`fadeMusic(options)`返回旧声部结束通知，静音/后台/释放同样结束等待。
+
+绿宝石地图政策由`map-music.js`覆盖全包默认1500/1200ms：同曲不断播；步行速度8淡出后直接开新曲，骑车4淡出后以4淡入；warp目的地室内2、其他4。m4a音量从64以4变化，每级间隔speed帧，共16级，按工程60fps映射为128/64/32帧。门、剧情换场和飞行在遮黑时等待旧曲结束再提交地图。初次进入地图无默认淡入；战斗与剧情显式选曲保留既有政策，未安装的冲浪/潜水曲不以替代旋律填补。
+
+来源：固定参考overworld.c的TransitionMapMusic/GetMapMusicFadeoutSpeed，sound.c的MapMusicMain，m4a.c的FadeOutBody；真实听音仍由用户验收。

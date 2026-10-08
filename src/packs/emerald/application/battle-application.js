@@ -1,4 +1,4 @@
-import { battleTrainer, emeraldBattleOpening, emeraldDemonstrationPrelude, emeraldDefeatDialogue } from "../battle-presentation.js";
+import { battleTrainer, emeraldBattleOpening, emeraldDemonstrationPrelude, emeraldDefeatDialogue, emeraldBattleResultPrelude } from "../battle-presentation.js";
 import { openingBattleTransition } from "../battle-transitions.js";
 import { BATTLE_RULES } from "../../../engine/battle-rules.js";
 import { GEN3_GLOBAL_HOOKS } from "../../../engine/rules/gen3/global-rules.js";
@@ -44,7 +44,10 @@ export const BATTLE_PORTS = Object.freeze([
 /** battle use cases. Dependencies are live, explicitly selected ports; no application facade is injected. */
 export class BattleApplication {
   musicContext() {
-    return this.combat.battle || this.combat.enteringBattle;
+    const b = this.combat.battle || this.combat.enteringBattle;
+    if (!b || !(this.victoryBattle === b || this.combat.pendingResult && b.trainer && b.result === "win")) return b;
+    return { script: b.script, trainer: b.trainer, trainerActor: this.trainerDefinitions[b.trainerId]?.actor,
+      presentationPhase: "victory" };
   }
   constructor(ports) {
     bindApplicationPorts(this, ports, BATTLE_PORTS);
@@ -57,7 +60,15 @@ export class BattleApplication {
         this.ui.drawBattleHUD(text);
         this.ui.announce(text);
       },
+      onPresented: (event) => {
+        const b = this.combat.battle;
+        if (b && !b.trainer && event.kind === "faint" &&
+            event.sides.find(s => s.id === event.combatants.find(c => c.seatId === event.targetSeat)?.sideId)?.allianceId !== event.homeAlliance &&
+            event.combatants.some(c => c.monster?.hp > 0 && event.sides.find(s => s.id === c.sideId)?.allianceId === event.homeAlliance))
+          this.victoryBattle = b;
+      },
       onChange: () => {
+        if (!this.combat.battle) this.victoryBattle = null;
         this.control.battleChanged(this.combat.battle);
         this.ui?.resetBattleMenu();
         this.ui?.drawBattleHUD();
@@ -83,7 +94,7 @@ export class BattleApplication {
             this.settlementCheckpoint = null;
             this.resultRecovery = null;
           },
-          presentation: plan.presentation,
+          presentation: [...emeraldBattleResultPrelude(this.state, b), ...plan.presentation || []],
           dialogue: (dialogue) => this.ui.say?.(dialogue.name, dialogue.lines),
           after: () => plan.after?.(),
         };

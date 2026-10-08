@@ -86,131 +86,26 @@ test("Animation declarations reject unknown effects and malformed timing, then s
     .seal();
   assert.throws(() => registry.effect("later", () => {}));
 });
-test("Per-move tracks select distinct visuals, fan out over seats and keep input snapshots unchanged", () => {
-  const registry = createEmeraldPresentation(),
-    layout = new Map([
-      ["a", { x: 20, y: 100, back: true }],
-      ["b", { x: 200, y: 30 }],
-      ["c", { x: 240, y: 80 }],
-    ]),
-    event = {
-      actorSeat: "a",
-      targetSeats: ["b", "c"],
-      move: { id: "flamethrower", type: "fire", successful: true },
-    };
-  const before = structuredClone(event),
-    effects = registry.sampleMove(event, layout, 0.5);
-  assert.equal(effects.length, 4);
-  assert.deepEqual(
-    new Set(effects.map((e) => e.kind)),
-    new Set(["flame", "beam"]),
-  );
-  assert.deepEqual(event, before);
-  assert.equal(
-    registry.animation({ id: "water_gun" }).tracks[0].effect,
-    "bubbles",
-  );
+test("Unregistered moves have no approximate built-in recipe", () => {
+  const registry = createEmeraldPresentation();
+  assert.equal(registry.moves.size, 0);
+  assert.equal(registry.animation({ id: "flamethrower" }), null);
+  assert.deepEqual(registry.sampleMove({ actorSeat: "a", move: { id: "flamethrower" } }, new Map([["a", {}]]), 0.5), []);
   assert.equal(Object.keys(EMERALD_TYPE_COLORS).length, 17);
 });
-test("Pack move recipes parameterize the reusable effects and remain drawable", () => {
-  const registry = createEmeraldPresentation(),
-    layout = new Map([
-      ["a", { x: 20, y: 100, back: true }],
-      ["b", { x: 200, y: 30 }],
-    ]),
-    sample = (id) =>
-      registry.sampleMove(
-        {
-          actorSeat: "a",
-          targetSeat: "b",
-          move: { id, type: "normal", successful: true },
-        },
-        layout,
-        0.5,
-      );
-  const tackle = registry.animation({ id: "tackle" }),
-    ember = registry.animation({ id: "ember" }),
-    water = registry.animation({ id: "water_gun" });
-  assert.equal(tackle.tracks[0].effect, "contact");
-  assert.equal(tackle.tracks[0].parameters.count, 14);
-  assert.equal(tackle.lunge, 26);
-  assert.equal(ember.tracks[0].effect, "flame");
-  assert.equal(ember.tracks[0].parameters.arc, 26);
-  assert.equal(water.tracks[0].effect, "bubbles");
-  assert.equal(water.tracks[0].parameters.color, "#78c8f8");
-  assert.equal(sample("tackle")[0].color, "#fff8d8");
-  assert.equal(sample("ember")[0].arc, 26);
-  const ctx = canvas();
-  for (const visual of [
-    ...sample("tackle"),
-    ...sample("ember"),
-    ...sample("water_gun"),
-  ])
-    assert(registry.draw(ctx, visual));
-});
-test("Every opening-slice move registers a well-formed recipe over installed effects", () => {
-  const registry = createEmeraldPresentation(),
-    opening = [
-      "tackle",
-      "pound",
-      "scratch",
-      "slash",
-      "cut",
-      "quick_attack",
-      "growl",
-      "leer",
-      "tail_whip",
-      "howl",
-      "harden",
-      "focus_energy",
-      "mud_slap",
-      "water_gun",
-      "bubble",
-      "ember",
-      "absorb",
-      "sand_attack",
-      "string_shot",
-      "poison_sting",
-      "peck",
-    ];
-  for (const id of opening) {
-    const definition = registry.moves.get(id);
-    assert(definition, `${id} should have a move recipe`);
-    assert(
-      definition.duration >= 1 && definition.duration <= 10000,
-      `${id} duration in range`,
-    );
-    assert(Number.isFinite(definition.lunge || 0), `${id} lunge is numeric`);
-    assert(definition.tracks.length >= 1, `${id} has at least one track`);
-    for (const t of definition.tracks)
-      assert(registry.effects.has(t.effect), `${id} references ${t.effect}`);
-  }
-});
-test("The registry injects the pack palette only where a recipe leaves the colour open", () => {
-  const palette = (type) => (type === "fire" ? "#f87828" : "#000000"),
-    layout = new Map([
-      ["a", { x: 20, y: 100, back: true }],
-      ["b", { x: 200, y: 30 }],
-    ]),
-    sample = (registry, id, type) =>
-      registry.sampleMove(
-        { actorSeat: "a", targetSeat: "b", move: { id, type, successful: true } },
-        layout,
-        0.5,
-      )[0],
-    withPalette = createEmeraldPresentation({ typeColors: palette });
-  assert.equal(
-    sample(withPalette, "tackle", "normal").color,
-    "#fff8d8",
-    "an explicit recipe colour survives the injected palette",
-  );
-  assert.equal(sample(withPalette, "razor_leaf", "fire").color, "#f87828");
-  assert.equal(sample(withPalette, "razor_leaf", "grass").color, "#000000");
-  assert.equal(
-    sample(createEmeraldPresentation(), "razor_leaf", "fire").color,
-    undefined,
-    "without a palette the primitive keeps its neutral fallback",
-  );
+test("Explicit external effect declarations fan out over seats and preserve supplied colours", () => {
+  const registry = new PresentationRegistry({ typeColors: () => "#f87828" }).effect("beam", () => {});
+  registry.move("authored", { duration: 500, tracks: [
+    { effect: "beam", start: 0, end: 1, anchor: "targets" },
+    { effect: "beam", start: 0, end: 1, anchor: "targets", parameters: { color: "#ffffff" } },
+  ] });
+  const layout = new Map([["a", { x: 20, y: 100, back: true }], ["b", { x: 200, y: 30 }], ["c", { x: 240, y: 80 }]]),
+    event = { actorSeat: "a", targetSeats: ["b", "c"], move: { id: "authored", type: "fire", successful: true } }, before = structuredClone(event);
+  const effects = registry.sampleMove(event, layout, 0.5);
+  assert.equal(effects.length, 4);
+  assert.equal(effects[0].color, "#f87828");
+  assert.equal(effects[2].color, "#ffffff");
+  assert.deepEqual(event, before);
 });
 test("All registered pixel effects draw without domain access and isolate a failing external drawing handler", () => {
   const errors = [],

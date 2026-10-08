@@ -1,0 +1,34 @@
+
+> emerald-web-engine@0.37.0 check
+> node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs && npm run check:lint && npm run check:engine-types
+
+Explicit pending source references: 59 maps, 264 scripts (see src/content/references.json)
+Content valid: 67 maps, 70 species, 92 moves, 311 items, 71 events.
+Explicitly unavailable move mechanics (0): 
+Story content valid: 330 scripts, 527 dialogues, 317 bindings.
+Runtime content valid: 354 moves, 58 learning methods, 311 items.
+
+> emerald-web-engine@0.37.0 check:contracts
+> tsc --noEmit --strict --allowJs --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+
+Module syntax valid: 427 files.
+
+> emerald-web-engine@0.37.0 check:docs
+> node tools/check-docs.mjs
+
+Documentation: 109 Markdown files, 1173 local links, 12 synchronized examples valid
+
+> emerald-web-engine@0.37.0 check:lint
+> eslint .
+
+
+/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/presentation/battle-opening.js
+  70:37  error  'actor' is not defined  no-undef
+  71:5   error  'actor' is not defined  no-undef
+  72:5   error  'actor' is not defined  no-undef
+  73:50  error  'pose' is not defined   no-undef
+  73:64  error  'pose' is not defined   no-undef
+  73:76  error  'pose' is not defined   no-undef
+
+✖ 6 problems (6 errors, 0 warnings)
+

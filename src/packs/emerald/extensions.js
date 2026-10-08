@@ -130,7 +130,7 @@ export function createEmeraldPlugins(db, plugins, onError) {
         if (d.presentation?.[field] && !Object.hasOwn(c[kind],d.presentation[field]))
           throw new Error(`Unknown movement presentation ${id}/${field}`);
     }
-    const visualRegistry = createEmeraldPresentation({ host });
+    const visualRegistry = createEmeraldPresentation({ host, resources: c.resources });
     for (const [id, d] of Object.entries(c.environmentLayers))
       if (!visualRegistry.effects.has(d.visual))
         throw new Error(`Unknown environment visual ${id}/${d.visual}`);

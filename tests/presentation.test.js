@@ -12,10 +12,6 @@ import {
   createEmeraldPresentation,
   emeraldBallResource,
 } from "../src/packs/emerald/animations.js";
-import {
-  ANIMATION_PROFILES,
-  emeraldMoveProfile,
-} from "../src/packs/emerald/animation-profiles.js";
 import { emeraldTypeColor } from "../src/packs/emerald/battle-palette.js";
 import { EMERALD_BATTLE_INTRO } from "../src/packs/emerald/battle-intro.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
@@ -485,7 +481,7 @@ test("Missed moves identify the failed hit so presentation does not draw an impa
     director = new BattleDirector(clock.timeline);
   director.reset(view());
   director.stage(move);
-  assert.equal(director.sample().effect.successful, false);
+  assert.equal(director.sample().effect, null);
 });
 
 test("Capture announces success or escape only after the complete animation, and holds the result before settling", async () => {
@@ -644,13 +640,11 @@ test("A switch recalls the outgoing Pokémon into a ball and throws the next one
   await clock.advance(3000);
   await job;
 });
-test("A move event lunges the actor and draws the pack recipe's effect through the director", async () => {
+test("A move event samples authored frame poses and source sprites through the director", async () => {
   const clock = manualClock(),
     registry = createEmeraldPresentation({ typeColors: emeraldTypeColor }),
     director = new BattleDirector(clock.timeline, {
       registry,
-      profiles: ANIMATION_PROFILES,
-      profileFor: emeraldMoveProfile,
     });
   director.reset(view());
   const job = director.play({
@@ -660,18 +654,18 @@ test("A move event lunges the actor and draws the pack recipe's effect through t
     move: { id: "tackle", type: "normal", successful: true, power: 40 },
     ...view(),
   });
-  await clock.advance(380);
+  await clock.advance(14 * 1000 / 60);
   const frame = director.sample();
   assert.notEqual(
     frame.actors.find((a) => a.seatId === "home:0").x,
     0,
-    "the acting seat lunges at the midpoint",
+    "the authored frame offsets the acting seat",
   );
   assert(
-    frame.effects.some((e) => e.kind === "contact" && e.color === "#fff8d8"),
-    "the tactic recipe's parameterised contact effect is sampled",
+    frame.sprites.some((sprite) => sprite.resource === "battle-anim-impact"),
+    "the source sprite is sampled",
   );
-  await clock.advance(380);
+  await clock.advance(500);
   await job;
   assert(!director.busy);
 });
@@ -679,7 +673,6 @@ test("Reduced motion suppresses a move's lunge and effects but keeps the event s
   const clock = manualClock(),
     director = new BattleDirector(clock.timeline, {
       registry: createEmeraldPresentation(),
-      profiles: ANIMATION_PROFILES,
       reducedMotion: () => true,
     });
   director.reset(view());

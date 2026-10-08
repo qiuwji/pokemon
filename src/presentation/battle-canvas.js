@@ -2,27 +2,35 @@ import { drawWeather } from "./environment-canvas.js";
 import { createDefaultPresentation } from "./default-presentation.js";
 const DEFAULT_REGISTRY = createDefaultPresentation();
 /** Canvas adapter for presentation poses; no access to domain state or content names. */
-export function drawBattle(ctx, assets, frame, backgrounds = {}) {
+export function drawBattle(ctx, assets, frame, backgrounds = {}, drawSprite = null) {
   const { view, actors, effect, ball } = frame;
   const width = frame.viewport?.width || 320, height = frame.viewport?.height || 224;
+  if (frame.clip) {
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, width, height);
+    ctx.save(); ctx.beginPath();
+    const { x, y, width: w, height: h } = frame.clip;
+    ctx.rect(x, y, w, h); ctx.clip();
+  }
   ctx.fillStyle = "#e8f9db";
   ctx.fillRect(0, 0, width, height);
   // BattleIntroSlide scrolls the board in; wrap the fixed-width backdrop to close the gap.
   const shift = Math.round(frame.background?.x || 0);
+  const wrap = (backgrounds[view.environment?.terrain] || backgrounds.default)?.width || width;
   const paint = (offsetX) =>
     drawBattleBackground(ctx, assets, view.environment, offsetX, backgrounds, { width, height: frame.viewport?.backgroundHeight || 170 });
   if (frame.background?.split) {
     for (const [y, direction] of [[0, 1], [height / 2, -1]]) {
       ctx.save(); ctx.beginPath(); ctx.rect(0, y, width, height / 2); ctx.clip();
-      paint(direction * shift); paint(direction * shift - width); paint(direction * shift + width);
+      paint(direction * shift); paint(direction * shift - wrap); paint(direction * shift + wrap);
       ctx.restore();
     }
   } else if (shift > 0) {
-    paint(shift - width);
+    paint(shift - wrap);
     paint(shift);
   } else if (shift < 0) {
     paint(shift);
-    paint(shift + width);
+    paint(shift + wrap);
   } else {
     paint(0);
   }
@@ -71,19 +79,25 @@ export function drawBattle(ctx, assets, frame, backgrounds = {}) {
       y = position.baseline + pose.y - size;
     ctx.save();
     ctx.globalAlpha = pose.opacity;
-    ctx.drawImage(
+    const visible = Math.max(0, 64 - (pose.cropBottom || 0));
+    if (visible > 0 && pose.tint && drawSprite) {
+      ctx.beginPath(); ctx.rect(Math.round(x), Math.round(y), Math.round(size), Math.round(size * visible / 64)); ctx.clip();
+      drawSprite(ctx, image, { width: 64, height: 64, x: x + size / 2, y: y + size / 2,
+        scaleX: pose.scale, scaleY: pose.scale, opacity: pose.opacity, tint: pose.tint });
+    } else if (visible > 0) ctx.drawImage(
       image,
       0,
       0,
       64,
-      64,
+      visible,
       Math.round(x),
       Math.round(y),
       Math.round(size),
-      Math.round(size),
+      Math.round(size * visible / 64),
     );
     ctx.restore();
   }
+  for (const sprite of frame.sprites || []) drawSprite?.(ctx, assets[sprite.resource], sprite);
   for (const visual of frame.effects || (effect ? [effect] : []))
     registry.draw(ctx, visual);
   const phase = ((frame.now || 0) / 1200) % 1;
@@ -116,6 +130,7 @@ export function drawBattle(ctx, assets, frame, backgrounds = {}) {
   });
   for (const item of frame.balls || (ball ? [ball] : []))
     drawBall(ctx, item, assets);
+  if (frame.clip) ctx.restore();
 }
 /**
  * Paints the terrain backdrop from a pack-provided table keyed by the environment key.
@@ -131,7 +146,7 @@ export function drawBattleBackground(ctx, assets, environment = {}, offsetX = 0,
   ctx.save();
   ctx.translate(Math.round(offsetX), 0);
   if (image) {
-    ctx.drawImage(image, 0, 0, size.width, size.height);
+    ctx.drawImage(image, 0, 0, descriptor.width || size.width, descriptor.height || size.height);
   } else if (descriptor.sky || descriptor.ground) {
     ctx.fillStyle = descriptor.sky || "#e8f9db";
     ctx.fillRect(0, 0, 320, 110);

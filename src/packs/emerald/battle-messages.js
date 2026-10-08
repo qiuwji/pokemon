@@ -20,18 +20,11 @@ export const BATTLE_MESSAGE_TEMPLATES = Object.freeze({
   "super-effective": () => "效果拔群！",
   "not-very-effective": () => "效果不太好…",
   "critical-hit": () => "击中了要害！",
-  // Reference sequences critical/effectiveness in battle scripts; here it is one settled line.
-  "move-result": ({ critical, type }) =>
-    `${critical ? "击中了要害！ " : ""}${
-      type === 0
-        ? "没有效果。"
-        : type > 1
-          ? "效果拔群！"
-          : type < 1
-            ? "效果不太好…"
-            : "攻击命中了！"
-    }`,
+  // Cosmetic HP events retain effectiveness metadata; narration follows as separate events.
+  "move-result": () => "",
   "fainted": ({ mon }) => `${mon}倒下了！`,
+  // Player-name substitution and the two whiteout pages belong to the result presentation.
+  "party-defeated": () => "",
   "status-inflicted": () => "陷入了异常状态！",
   "confused": () => "陷入了混乱！",
   "attracted": () => "陷入了着迷！",

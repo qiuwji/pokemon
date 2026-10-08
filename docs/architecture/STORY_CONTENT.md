@@ -39,7 +39,7 @@ src/packs/emerald/story.js             # 本作事件装配，不放地区实现
   story/regions/*.js                   # 尚需状态构建的现有序章切片
   story/common/*.js                    # 治疗、普通交互和战后桥接
   story/training.js                    # 项目训练场业务
-  animation-profiles.js                # 招式表现内容，另有所有者
+  battle/move-choreography.js          # 招式表现内容，另有所有者
 ```
 
 新地区优先在content/stories下编写bundle，并在同一manifest登记；增长后可以拆脚本、对白及来源文件，不要求每个小地区产生五个文件。插件通过api.story.registerBundle登记同样的数据，不在app.js逐地区导入。原作资料位于只读work/pokeemerald；来源记录放项目内容/文档，不写回参考。

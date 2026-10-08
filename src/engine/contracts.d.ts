@@ -944,6 +944,40 @@ export interface BattleAnimationDefinition {
   mode?: "replace" | "append";
   animation: MoveAnimation;
 }
+export interface BattleSequenceFrame {
+  poses?: readonly { seatId: string; x?: number; y?: number; scale?: number; opacity?: number; flash?: boolean; cropBottom?: number; tint?: SpriteTint }[];
+  sprites?: readonly { resource: string; width: number; height: number; x: number; y: number; tileFrame?: number;
+    scaleX?: number; scaleY?: number; flipX?: boolean; flipY?: boolean; alpha?: readonly [number, number] | null;
+    rotation?: number; opacity?: number; tint?: SpriteTint }[];
+  healthBars?: readonly { seatId: string; hp: number; fraction: number }[];
+  scenes?: readonly { backgroundX?: number; split?: boolean; hideTrainers?: boolean; hideBall?: boolean;
+    clip?: { x: number; y: number; width: number; height: number } }[];
+  statusBoxes?: readonly { seatId: string; x: number; y: number; opacity: number }[];
+}
+export interface SpriteTint { color: readonly [number, number, number]; amount: number }
+export interface BattleFrameSequence {
+  messageAt?: "start" | "end";
+  holdFinal?: boolean;
+  fps: number;
+  frames: readonly BattleSequenceFrame[];
+  cues: readonly { id: string; frame: number }[];
+}
+export interface BattleSequenceDefinition {
+  kind: string;
+  match?: Record<string, string | number | boolean | null>;
+  priority?: number;
+  prepare(context: Readonly<{
+    event: DeepReadonly<BattleEvent & { move?: { id: string; successful?: boolean; power?: number; type?: string } }>;
+    previous: DeepReadonly<BattleSnapshot> | null;
+    layout: Readonly<Record<string, Readonly<{ x: number; y: number; back?: boolean; [key: string]: Json | undefined }>>>;
+  }>): BattleFrameSequence | null;
+}
+export interface MusicTransitionOptions {
+  mode: "after-fade" | "crossfade";
+  fadeOutMs?: number;
+  fadeInMs?: number;
+  steps?: number;
+}
 export interface AudioCue {
   kind: "music" | "sound";
   volume: number;
@@ -953,6 +987,7 @@ export interface AudioCue {
   loopEnd?: number;
   fadeInMs?: number;
   fadeOutMs?: number;
+  fadePreviousMs?: number;
   maxVoices?: number;
 }
 /** Bounded decisions driven by the host clock, with scene control taking priority. */
@@ -1223,6 +1258,7 @@ export interface PluginAPI {
       definition: { draw: (context: unknown, frame: Readonly<Json>) => void },
     ): string;
     battle(id: string, definition: BattleAnimationDefinition): string;
+    sequence(id: string, definition: BattleSequenceDefinition): string;
     move(
       id: string,
       definition: { moveId: string; animation: MoveAnimation },

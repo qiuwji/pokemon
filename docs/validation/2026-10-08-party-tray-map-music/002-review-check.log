@@ -1,0 +1,26 @@
+✔ installed native entry and exit run through public commands, settle once, reveal the field and permit reentry (197.704083ms)
+✔ native entry preparation failure releases the staged battle and can retry the same public encounter (63.231375ms)
+✔ a real loss shows both whiteout pages in combat before blackout and releases the field continuation (70.534958ms)
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (23.831333ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (4.17675ms)
+✔ Composition root does not own story, inventory or damage rules (0.225583ms)
+✔ Every local ES module import resolves after refactors (34.120417ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.654417ms)
+✔ Example plugins depend only on public extension utilities (0.619583ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (13.088875ms)
+✔ Core tests and fixtures do not import installed plugins or authoring examples (23.676834ms)
+✔ local intro opens the native curtain before the 120-frame slide and composes real foreground tiles (55.458583ms)
+✔ send-out separates trainer frames, slow rotating flight, ball sheet, emergence, cry and healthbox (4.393584ms)
+✔ doubles delay the second release and player healthbox without moving either monster's identity (7.29375ms)
+✔ staged entry is compiled once and already hides sprites during the covered scene swap (1.456125ms)
+✔ scene channels reject invalid bounds, conflicting clips, foreign seats and palette programs (0.29825ms)
+✔ native exit steps subtract colours, commits covered once and restores filters after failures (0.869291ms)
+✔ victory song selection waits for a presentation phase and respects original trainer categories (0.285834ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 483.849458

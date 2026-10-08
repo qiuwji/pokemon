@@ -4,12 +4,17 @@ import {
   validateBattleAnimation,
 } from "../engine/extensions/visual-contracts.js";
 import { sampleAnimationTrack } from "./animation-timing.js";
+import { validateBattleSequenceDefinition, validateFrameSequence } from "../engine/extensions/frame-sequence-contracts.js";
+import { frameSequencePlayer } from "./frame-sequence.js";
 /** Startup registrations only. Samples contain detached data; drawing never owns domain state. */
 export class PresentationRegistry {
-  constructor({ onError = () => {}, typeColors = null } = {}) {
+  constructor({ onError = () => {}, typeColors = null, resources = null, sounds = null } = {}) {
     this.effects = new Map();
     this.moves = new Map();
     this.battleAnimations = new Map();
+    this.battleSequences = new Map();
+    this.resources = resources;
+    this.sounds = sounds;
     this.messages = new Map();
     this.sealed = false;
     this.onError = onError;
@@ -105,19 +110,40 @@ export class PresentationRegistry {
     this.sealed = true;
     return this;
   }
-  animation(move, profile) {
-    return (
-      this.moves.get(move?.id) || {
-        duration: 760,
-        lunge: profile === "contact" ? 20 : 0,
-        tracks: [{ effect: profile, anchor: "targets", start: 0, end: 1 }],
-      }
-    );
+  sequence(id, definition) {
+    if (this.sealed || typeof id !== "string" || !id || this.battleSequences.has(id))
+      throw new Error("Duplicate or invalid battle sequence");
+    validateBattleSequenceDefinition(definition);
+    for (const existing of this.battleSequences.values())
+      if (existing.kind === definition.kind && (existing.priority || 0) === (definition.priority || 0) &&
+          JSON.stringify(Object.entries(existing.match || {}).sort()) === JSON.stringify(Object.entries(definition.match || {}).sort()))
+        throw new Error("Duplicate battle sequence selector and priority");
+    const { prepare, ...selector } = definition;
+    this.battleSequences.set(id, Object.freeze({ ...readOnly(selector), prepare }));
+    return this;
   }
-  sampleMove(event, layout, t, profile = "contact") {
-    if (!layout.has(event.actorSeat)) return [];
+  prepareSequence(event, previous, layout) {
+    const field = key => key === "moveId" ? event.move?.id || event.moveId : key.split(".").reduce((value, part) => value?.[part], event);
+    const candidates = [...this.battleSequences.entries()].filter(([, definition]) => definition.kind === event.kind &&
+      Object.entries(definition.match || {}).every(([key, expected]) => field(key) === expected))
+      .sort(([a, x], [b, y]) => (y.priority || 0) - (x.priority || 0) ||
+        Object.keys(y.match || {}).length - Object.keys(x.match || {}).length || (a < b ? -1 : a > b ? 1 : 0));
+    if (!candidates.length) return null;
+    const optional = view => view && Object.fromEntries(Object.entries(view).filter(([, value]) => value !== undefined));
+    const context = readOnly({ event: optional(event), previous: optional(previous), layout: Object.fromEntries(layout) });
+    try {
+      const plan = callSync(candidates[0][1].prepare, [context]);
+      if (plan != null) return frameSequencePlayer(validateFrameSequence(plan, { event, previous, resources: this.resources, sounds: this.sounds }));
+    } catch (error) { this.onError(error); }
+    return null;
+  }
+  animation(move) {
+    return this.moves.get(move?.id) || null;
+  }
+  sampleMove(event, layout, t) {
+    if (!layout.has(event.actorSeat) || !this.animation(event.move)) return [];
     return this.sampleAnimation(
-      this.animation(event.move, profile),
+      this.animation(event.move),
       event,
       layout,
       t,

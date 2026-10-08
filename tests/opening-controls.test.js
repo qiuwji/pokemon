@@ -37,7 +37,7 @@ test('Normal-landscape transition selection follows opponent vs usable party lev
   assert.equal(openingBattleTransition({trainer:true,party,opponents}).kind,'emerald:angled-wipes');
   assert.equal(openingBattleTransition({trainer:false,party,opponents}).kind,'emerald:white-bars');
   for(const pattern of ['pokeballs-trail','angled-wipes','slice','white-bars']) {
-    assert.deepEqual(sampleOpeningTransition(pattern,0),{gray:0});
+    assert.deepEqual(sampleOpeningTransition(pattern,0),{gray:2/16});
     assert.deepEqual(sampleOpeningTransition(pattern,0.6),sampleOpeningTransition(pattern,0.6));
     const last=sampleOpeningTransition(pattern,1);
     if(last.mask) assert(last.mask.left.every((x,i)=>x===last.mask.right[i]));

@@ -1,8 +1,8 @@
 import { validateAudioCue } from "../../engine/extensions/audio-contracts.js";
 /**
  * UI and battle cues now carry the original sound identity rendered from the reference MIDI.
- * Attack and hit sounds stay absent on purpose: the original plays a per-move sound effect, so
- * a generic hit sample would be a substitute rather than a restoration.
+ * Authored frame choreography schedules installed per-move and effectiveness sounds.
+ * An unmapped move has no generic substitute sound.
  */
 export const EMERALD_AUDIO_CUES = {
   confirm: {
@@ -138,6 +138,8 @@ export const ORIGINAL_SONG_CUES = Object.freeze({
   MUS_VS_WILD: "emerald-audio:mus_vs_wild",
   MUS_VS_TRAINER: "emerald-audio:mus_vs_trainer",
   MUS_VS_RIVAL: "emerald-audio:mus_vs_rival",
+  ...Object.fromEntries(["WILD", "TRAINER", "GYM_LEADER", "LEAGUE", "AQUA_MAGMA"].map(kind =>
+    ["MUS_VICTORY_" + kind, "emerald-audio:mus_victory_" + kind.toLowerCase()])),
 });
 /**
  * Battle music follows the original GetBattleBGM policy: a rival script plays the rival
@@ -145,6 +147,14 @@ export const ORIGINAL_SONG_CUES = Object.freeze({
  */
 export function emeraldBattleSong(battle) {
   if (!battle) return null;
+  if (battle.presentationPhase === "victory") {
+    if (!battle.trainer) return "MUS_VICTORY_WILD";
+    const actor = battle.trainerActor || "";
+    if (/^(Aqua|Magma|Archie|Maxie|Matt|Shelly|Tabitha|Courtney)/.test(actor)) return "MUS_VICTORY_AQUA_MAGMA";
+    if (["Sidney", "Phoebe", "Glacia", "Drake", "Wallace"].includes(actor)) return "MUS_VICTORY_LEAGUE";
+    if (["Roxanne", "Brawly", "Wattson", "Flannery", "Norman", "Winona", "Tate", "Liza", "Juan"].includes(actor)) return "MUS_VICTORY_GYM_LEADER";
+    return "MUS_VICTORY_TRAINER";
+  }
   if (battle.script === "rival") return "MUS_VS_RIVAL";
   return battle.trainer ? "MUS_VS_TRAINER" : "MUS_VS_WILD";
 }
@@ -166,8 +176,8 @@ export function emeraldMusic(
 
 /**
  * Battle cues keep the original mapping where the reference has one: level up plays the
- * level fanfare and recovery plays the exp sound. Move and hurt stay unmapped until the
- * per-move sound effect table is imported; the original plays a different sound per move.
+ * level fanfare and recovery plays the exp sound. Move and hurt use their frame-plan cues;
+ * this event-level table adds no second attack or hit sound.
  */
 export const EMERALD_BATTLE_AUDIO = Object.freeze({
   move: null,

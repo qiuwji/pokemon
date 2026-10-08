@@ -45,6 +45,7 @@ description: 在现有绿宝石工程中制作或修改玩法插件、页面、�
 | 用户操作或领域写入 | `api.actions.register(id,{schema,run})` + `ctx.intent` | 同步事务，权限与意图合同由宿主校验 |
 | 插件持久记忆 | `ctx.store`、已注册 `ctx.states` | 不复制核心队伍/库存；状态按 UID 与生命周期管理 |
 | 页面与动画 | `api.ui` / `api.presentation` | 只展示已提交事实，不重算规则或取游戏 RNG |
+| 战斗精灵/姿态与声音编排 | `api.presentation.sequence` + FrameSequenceBuilder | prepare同步、深冻结，在只读守卫下编译一次；播放仅消费数据。scenes控制裁剪/背景，statusBoxes控制框位移，sprites支持旋转/tint；转场帧保持黑屏提交所有权，fadePreviousMs允许新曲直接替换旧曲。见[公开例](../../examples/battle-sequence.test.js)、[完整生产战斗例](../../examples/battle-entry-exit.test.js)与[演出合同](../../docs/engine/presentation/ANIMATION_CONTRACT.md) |
 | 持续小游戏 | `api.interactions.register` | 宿主驱动时钟、语义输入、帧数据与完成事务 |
 
 所有对象 schema 明确 `additionalProperties:false`，数值/字符串/数组给业务边界；这是项目的 [DataSchema 子集](../../src/engine/extensions/values.js)，不支持任意 JSON Schema 关键字。

@@ -60,6 +60,7 @@ export const WORLD_PORTS = Object.freeze([
   "motion",
   "movement",
   "onMap",
+  "prepareMapExit",
   "playStory",
   "plugins",
   "reducedMotion",
@@ -510,6 +511,7 @@ export class WorldApplication {
         void this.playStory(commands);
         return true;
       },
+      prepareWarp: ({ to }) => this.prepareMapExit(to),
       onWarpStart: ({ from }) => {
         this.ui?.sound?.(this.world.maps[from.map].indoor
           ? "emerald-audio:se_exit" : "emerald:door");

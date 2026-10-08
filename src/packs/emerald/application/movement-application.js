@@ -25,6 +25,7 @@ export const MOVEMENT_PORTS = Object.freeze([
   "catalog",
   "clearInput",
   "enter",
+  "prepareMapExit",
   "field",
   "stepField",
   "reducedMotion",
@@ -243,7 +244,7 @@ export class MovementApplication {
         const changed = this.travel.commit(result.plan);
         if (!changed.ok) throw new Error(changed.reason);
         this.movement.set("walk", this.world.map);
-      });
+      }, { prepare: () => this.prepareMapExit(result.plan.position) });
       return { ok: completed };
     } catch (error) {
       return { ok: false, reason: error.message };

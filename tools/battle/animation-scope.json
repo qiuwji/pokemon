@@ -1,0 +1,126 @@
+{
+  "moves": [
+    "pound",
+    "tackle",
+    "scratch",
+    "growl",
+    "tail_whip",
+    "ember",
+    "water_gun"
+  ],
+  "sounds": {
+    "emerald:cry.mudkip": "generated/assets/audio/cry-mudkip.wav",
+    "emerald:cry.treecko": "generated/assets/audio/cry-treecko.wav",
+    "emerald:cry.torchic": "generated/assets/audio/cry-torchic.wav"
+  },
+  "entryBackgrounds": {
+    "grass": "tall_grass",
+    "long_grass": "long_grass",
+    "pond": "pond_water",
+    "water": "water",
+    "cave": "cave",
+    "sand": "sand",
+    "mountain": "rock",
+    "indoor": "building",
+    "underwater": "underwater",
+    "plain": "building"
+  },
+  "assets": {
+    "impact": {
+      "image": "impact.png",
+      "palette": "impact.png",
+      "width": 32,
+      "height": 32
+    },
+    "scratch": {
+      "image": "scratch.png",
+      "palette": "impact.png",
+      "width": 32,
+      "height": 32
+    },
+    "noise_line": {
+      "image": "noise_line.png",
+      "palette": "impact.png",
+      "width": 32,
+      "height": 32
+    },
+    "small_ember": {
+      "image": "small_ember.png",
+      "palette": "small_ember.png",
+      "width": 32,
+      "height": 32
+    },
+    "small_bubbles": {
+      "image": "small_bubbles.png",
+      "palette": "small_bubbles.png",
+      "width": 16,
+      "height": 16
+    },
+    "water_impact": {
+      "image": "water_impact.png",
+      "palette": "water_impact.png",
+      "width": 32,
+      "height": 32
+    },
+    "ball_particles": {
+      "image": "particles.png",
+      "palette": "circle_impact.png",
+      "width": 8,
+      "height": 8
+    },
+    "poke_ball": {
+      "imagePath": "graphics/balls/poke.png",
+      "palettePath": "graphics/balls/poke.png",
+      "width": 16,
+      "height": 16,
+      "replaceFrame": {
+        "frame": 2,
+        "imagePath": "graphics/balls/open.png"
+      }
+    },
+    "party_bar": {
+      "imagePath": "graphics/battle_interface/ball_status_bar.png",
+      "palettePath": "graphics/battle_interface/ball_status_bar.png",
+      "width": 128,
+      "height": 8
+    },
+    "party_balls": {
+      "imagePath": "graphics/battle_interface/ball_display.png",
+      "palettePath": "graphics/battle_interface/ball_display.png",
+      "width": 8,
+      "height": 8
+    },
+    "party_bar_exit": {
+      "imagePath": "graphics/battle_interface/ball_status_bar.png",
+      "palettePath": "graphics/battle_interface/ball_status_bar.png",
+      "width": 192,
+      "height": 8,
+      "tileOrder": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        8,
+        9,
+        10,
+        11,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    }
+  }
+}

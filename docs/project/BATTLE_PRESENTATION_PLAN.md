@@ -1,113 +1,77 @@
-# 战斗画面复刻专项（调研与计划）
+# 战斗复刻专项
 
-## 2026-10-07当前进展
+2026-10-08用户要求：入场、作战、招式特效、结束转场与文本按绿宝石复刻，同时保持高内聚、低耦合；由内核提供能力，内容通过公开能力还原。用户明确否决原作指令解释器及旧招式降级路线。本页替代原先“逐指令导入 + 通用回退”的规划。
 
-已安装逐地形背景、训练家64×64前图/四帧后图、物种坐标偏移与原生240×160视口；入场可分阶段等待挑战对白并依次投球。败北对白/奖金提示留在战斗内确认，退出在黑屏提交点清空战斗，揭开野外。小光使用实际战斗/背包菜单选择与提交，而非直接隐藏菜单播动作。验证与边界见[STATUS](STATUS.md)和`tests/emerald-scene-fidelity.test.js`。尚未做浏览器视觉/听音验收；原作全部逐帧指令、血框滑入、其余特殊开场仍未完成。以下分析保留为原始规划基线，资源现状以本段和源码为准。
+固定只读参考为 `work/pokeemerald` 修订 `731ad5bfd6e6f265508d0efcca0ba42f9dcf5881`。本项目中文是自身本地化；尚未指定中文ROM作为逐字基准。游戏仍使用自研领域内核，不加载ROM。
 
+## 架构及所有权
 
-目标：让战斗画面与《Pokémon Emerald》原作一致，覆盖 **入场动画、换人、出场结算、对战台词、逐招式战斗动画、转场和战斗 UI**。这是长期专项，分期推进；规则保真仍由[战斗规则 Skill](../../skills/emerald-battle-rules/SKILL.md)与[机制矩阵](../engine/battle/MECHANISM_MATRIX.md)负责。本文是调研结论与排期，不是完成声明。
+```text
+领域结果快照
+    ↓
+公开 presentation.sequence 注册 → 内容 prepare（同步、冻结查询）
+    ↓
+FrameSequenceBuilder 编译姿态 / 资源精灵 / HP展示 / 声音时间点
+    ↓
+合同校验 → 不可变帧数据 → 注入时钟播放器
+    ↓
+BattleDirector 播放与清理 → Canvas / HUD / Audio 适配
+```
 
-**进度（已落地）**：
-- P1 图元参数化与配方：战斗图元（`ring/contact/projectile/flame/bubbles/status/sparkle/slash/bolt/leaves/beam/rocks`）改为通用参数化绘制（`color/color2/count/…/arc/…`），默认值等于旧行为；每招配方在 pack 用 `parameters` 声明观感。`TYPE_COLORS` 已从表现层移除，改由装配注入 `typeColors` 调色板端口（`battle-palette.js`），表现层零内容名。写了 `tackle/ember/water_gun` 及开局切片（`pound/scratch/slash/cut/quick_attack/growl/leer/tail_whip/howl/harden/focus_energy/mud_slap/bubble/absorb/sand_attack/string_shot/poison_sting/peck/rock_throw/…`）配方，并有开局覆盖回归测试。测试 `tests/pixel-effects.test.js`、`tests/visual-registry.test.js`、`tests/presentation.test.js`、`examples/move-animation.test.js`；定点触发见 `tools/scenarios/battle-moves.json`。
-- P2 首片：入场滑入 + 训练家战双方抛球 + 换人“收回→投球→放出”。**分层修正**：表现层不再含任何绿宝石内容——入场地形/球资源由 pack 的 [`battle-intro.js`](../../src/packs/emerald/battle-intro.js)、战斗背景由 [`battle-backgrounds.js`](../../src/packs/emerald/battle-backgrounds.js)、属性→动画 profile 由 [`animation-profiles.js`](../../src/packs/emerald/animation-profiles.js) 的 `emeraldMoveProfile` 提供，`app.js` 注入；`battle-canvas.js`/`battle-director.js` 只做通用绘制与查表。战斗台词改为可注册（`api.presentation.message`）。测试见 `tests/presentation.test.js`、`tests/battle-messages.test.js`。
-- P1 起步：新增内容目录 [`battle-messages.js`](../../src/packs/emerald/battle-messages.js)（对应 `battle_message.c` 分类）与 `BattleDirector.resolveMessage` 解析端口（app.js 装配）；领域事件可携带 `message:{id,params}`，已迁移入场、使用了招式、命中结果、未命中、没有效果、倒下、能力升降、捕捉成功、投球、逃脱/无法逃脱、异常/混乱/着迷、形态变化、天气变化等，`text` 保留兼容。测试见 `tests/battle-messages.test.js`（并逐条断言目录输出等于原显示文本）。
-- P3 起步：`animations.js` 为当前切片常见招式补充具名脚本（howl/harden/focus_energy/sand_attack/string_shot/poison_sting/peck），减少通用回退；真正的 `battle_anim_scripts.s` 导入管线仍未开始。
-- 仍未开始：抛球后的血框滑入、其余台词迁移、逐招式动画导入管线。
+- **内核合同与工具**：[frame-sequence-contracts.js](../../src/engine/extensions/frame-sequence-contracts.js)、[frame-sequence-builder.js](../../src/engine/extensions/frame-sequence-builder.js)、[frame-tracks.js](../../src/engine/extensions/frame-tracks.js)。只处理有界声明、纯编译和边界；不识别招式名、原作指令、C回调或寄存器。
+- **绿宝石内容**：[battle/sequences.js](../../src/packs/emerald/battle/sequences.js)统一装配；[move-choreography.js](../../src/packs/emerald/battle/move-choreography.js)拥有每招时间点；[move-tracks.js](../../src/packs/emerald/battle/move-tracks.js)拥有原素材帧与轨迹；[controller-animation.js](../../src/packs/emerald/battle/controller-animation.js)拥有HP/倒下政策。它们消费与外部作者相同的公开能力。
+- **播放**：[frame-sequence.js](../../src/presentation/frame-sequence.js)按帧取不可变数据；[BattleDirector](../../src/presentation/battle-director.js)仅协调快照、隐藏、声音与消息交接。既有入场、动作、捕捉取样分别归入 battle-opening/actions/capture，不再堆在导演方法里。
+- **绘制**：[frame-sprite-canvas.js](../../src/presentation/frame-sprite-canvas.js)处理图集、翻转、仿射比例与双系数混色；Canvas在逻辑分辨率绘制后统一放大。240×160及5位色量化由绿宝石装配提供，内核不写硬件特判。
 
-## 一、原作的战斗演出结构（只读参考 `work/pokeemerald`）
+编译回调不进入渲染循环。运行时没有原作脚本解释器、指令分发、跳转或原作任务槽。原作中的等待与轨迹转换成内容代码明确表达的时间点；数值保真仍需要对照来源。
 
-| 层 | 原作文件 | 规模 | 作用 |
-| --- | --- | --- | --- |
-| 入场演出 | `src/battle_intro.c` | 551 行 | 按环境选 `BattleIntroSlide1/2/3`；训练家/精灵滑入、投球、血框滑入 |
-| 转场 | `include/battle_transition.h`、`src/battle_transition.c`、`src/battle_setup.c` | 28 种 | 普通/洞窟/闪光/水面 × 强弱，选择表在 `battle_setup.c:116-127` |
-| 战斗台词 | `src/battle_message.c` | 3078 行，~959 个字符串 | `gBattleStringsTable` + `{B_MSG_*}` 占位符，`BattleStringExpandPlaceholders` |
-| 战斗流程 | `data/battle_scripts_1.s`、`src/battle_script_commands.c` | 4562 行 | 招式的消息/伤害/异常/动画按脚本命令次序播放 |
-| 招式动画 | `src/battle_anim.c` 与 `battle_anim_{type}.c`、`data/battle_anim_scripts.s` | 脚本 10763 行/356 个 `Move_*` | 每招式一段动画脚本，调用动画指令/粒子/位移 |
-| 战斗 UI | `src/battle_interface.c` | — | 血框、HP 条、异常图标、菜单、目标指示布局 |
+## 当前实现与证据
 
-原作的演出是**数据驱动**：消息与动画都挂在战斗脚本的时序上，不是散落在规则里。
+当前是**实现中**，不是全战斗1:1完成声明。已编排7招：拍击、撞击、抓、叫声、摇尾巴、火花、水枪。素材导出包含 impact/scratch/noise_line/small_ember/small_bubbles/water_impact，透明索引与图块帧排列保留。12个对应原作SE及效果音通过既有音频工具渲染并装入统一音频包。
 
-## 二、仓库现状
+原作总表审计覆盖354招及MOVE_NONE；[审计](../../generated/packs/emerald/battle-animation-audit.json)的 `choreography` 只表示新编排已接入，不能解释成逐帧或听音已验收。`selectedSourcePrograms` 是离线来源记录，运行时代码不导入它。[导出manifest](../../generated/packs/emerald/battle-animation-manifest.json)记录固定修订、来源/输出hash和音频时长输入。
 
-- 领域：`src/engine/battle.js` 的 `emit(text, kind, meta)` 把结果写成带中文文本的语义事件（全库 128 处 `emit`，kind 有 `entry/move/hurt/faint/switch/heal/ball/capture/level/text/end/learn/choice/vacancy/failed/stage/status/trait/form/weather/state/item/barrier/money/scheduled/wait/charge`）。
-- 时序：`src/engine/battle-session.js` 顺序把事件交给 `BattleDirector.play`；进入/退出走 `transitions.run`。
-- 演出：`src/presentation/battle-director.js`（392 行）拥有每 kind 的时长、姿态与取样；入场是线性滑入，招式是 `lunge` + 注册脚本取样。
-- 招式视觉：`src/packs/emerald/animations.js` 只有 **44 条**具名招式脚本 + 通用回退（contact/projectile/status）；`PresentationRegistry` 支持 `registry.move` 与 `api.presentation.battle` 注册语义事件演出。
-- 转场：`src/packs/emerald/battle-transitions.js` 已移植 4 种开场图案（`pokeballs-trail/angled-wipes/slice/white-bars`），其余 24 种未实现。
-- UI：`src/packs/emerald/battle-interface.js`（DOM 菜单/HP/状态/经验）、`src/presentation/battle-canvas.js`（Canvas 绘制精灵、招式特效、球）。
-- 资源：只有单张 `generated/assets/battle-bg.png` 和球 PNG（`generated/assets/ui/ball-*.png`）；**没有逐地形战斗背景、没有血框/状态图标素材**。
-- 音频：`src/packs/emerald/battle-audio.js` 按事件给具名 cue。
+血条使用来源中的48像素步进与低HP定点细分；伤害先闪烁再更新条。普通命中不再补写“攻击命中了”；会心和属性效果分别在HP之后出现，内容声明64帧等待。倒下演出等待64帧后下落/擦除，消息在隐藏后交接。HUD保留上一行有效文本，并在入场帧刷新时显示已放出的席位；整数HP和血条分数分别刷新。
 
-## 三、差距分析
+2026-10-08后续切片按用户明确的完整开战链推进：地图触发→遇敌转场→场景展开/双方入场→投球→精灵展开→血框滑入。普通本地单/双打的slide/send和战败训练家return已迁入[opening-choreography.js](../../src/packs/emerald/battle/opening-choreography.js)，使用公开scenes、sprites、poses和statusBoxes通道。源WIN0从80/81展开至48/113，再每帧展开3/4像素；双方及分割BG每帧移动2像素。真实入场前景读取anim_tiles/map及原palette，不再只画静态战斗板；BG3按原512像素屏块导出，不重复240像素裁片。投球采用明确的三段轨迹、训练家图集、闭/半开/全开球图、16个来源球粒子、展开及调色。先完成展开再播cry；血框从±115以5像素/帧滑入，双打第二球/玩家第二框分别延后26/20帧。
 
-### 1. 入场与换人动画
-- 原作按 `BATTLE_ENVIRONMENT_*` 分三种滑入（`BattleIntroSlide1/2/3`），训练家先滑入再抛球，野生精灵滑入，随后血框滑入；本仓库是统一线性 lerp（`battle-director.js:198-210`），没有环境区分、没有血框滑入、没有清晰的抛球子阶段。
-- 换人（`switch`）当前是缩放+释放特效，未对齐原作的“收回—投球—放出”节奏。
+地图转场末尾直接揭开已stage的第一帧，不再额外叠加220ms的战斗画面淡入。第一事件只编译一次，退出时stage/框姿态随导演reset清理。胜利训练家回场为2像素/帧，战内败北/奖金对白继续由原结算所有者交接；本地战败的两页whiteout对白覆盖普通结果与野外结果所有者。[退出编排](../../src/packs/emerald/battle/exit-choreography.js)提供逐级颜色扣减、黑屏提交和地图恢复帧，控制器不含硬件分支。五类胜利音乐已按固定MIDI/音色/音量装入原声包，播放完成通知决定wild胜利曲时机，trainer结果阶段才切胜利曲；不会因为规则已算出win就提前切歌。逐曲fadePreviousMs=0提供来源的直接切曲。
 
-### 2. 出场与结算
-- 当前有 `faint/level/learn/text/end` 事件，但经验条填充、升级/学招的消息顺序、胜利/战败收尾与 `battle-exit` 转场都只是近似；原作由 `battle_scripts_1.s` 精确排序。
+此次通用扩展只提供裁剪、图集旋转/调色、HUD位移、不可变转场帧、演出完成通知与旧曲退出时长。原作资源/帧数/颜色/物种及训练家政策全部在pack；不加入VM，也不增加默认降级演出。[关键帧检查](../../tests/battle-opening-sequences.test.js)覆盖窗口/图层/球图/cry/血框/双打、边界及失败清理；[生产例](../../examples/battle-entry-exit.test.js)通过真实公开命令完成胜利/失败/重入与战败，不伪造胜负。本批实际命令、结果和数量见[入场退出证据](../validation/2026-10-08-battle-entry-exit/manifest.json)。
 
-### 3. 对战台词
-- 原作把 959 条文本集中在 `battle_message.c`，用占位符（`{B_ATK_NAME_WITH_PREFIX}` 等）和脚本时序；本仓库把中文直接写死在 128 处 `emit` 调用里，**没有集中目录、没有占位符插值、难以对齐原文与排序**。
-- 效率/会心/未命中等必须严格贴合原脚本的出现时机（伤害前还是后）。
+用户随后提供截图，要求整理文本与UI框排列。血框按`InitBattlerHealthboxCoords`的主精灵中心转为左上坐标，名字/性别和等级各有独立区域；首次绘制和刷新共用同一标题生成。pack样式集中使用240像素宽度单位，固定HP条48像素、文本行距和按钮游标留白，移除菜单的重复外边框，并收拢队伍提示；不向内核加入这些具体布局。窗口皮肤及中文字体仍沿用现有素材，尚未人工验收，也不计为原生UI逐像素完成。
 
-### 4. 逐招式战斗动画
-- 原作 356 个 `Move_*` 脚本 + 分属性动画指令；本仓库 44 条，其他走通用回退。这是最大缺口。
+[专项测试](../../tests/battle-sequences.test.js)验证编译只执行一次、帧率独立、严格边界、已编排招式时序/镜像、叫声双打目标、无覆盖/未命中不替代、HP细分、倒下文本和启动失败清理。[公开作者例](../../examples/battle-sequence.test.js)通过真实注册/战斗命令运行，并验证准备回调不能派发战斗命令。系统结果、实际命令和数量见[本批证据](../validation/2026-10-08-battle-presentation/manifest.json)；历史失败和过期记录保留，最终状态以匹配当前输入的记录为准。
 
-### 5. 转场与 UI
-- 转场缺 24 种，且缺少按地图/环境的选择表（现只有强弱的四选一）。
-- 战斗背景只有一张通用图 + 6 组调色板回退；缺逐地形背景、血框、异常/目标图标等原作素材。
+## 已删除的路线
 
-## 四、合同/工具缺口（需先补框架或管线）
+旧内置招式表及 `legacy-move-animations.js` 已删除；属性到通用粒子/突进的自动选择也已撤掉。未编排招式没有默认替代特效，剩余347招是显式缺口。显式的外部 effect/move/battle 注册合同仍可使用；它们不会被自动用于补足原作覆盖。
 
-1. **战斗素材导入管线**：逐地形 `battle-bg-*`、血框（healthbox）、状态图标、训练家战斗图。参考 `tools/import.py` 的 `--check` 模式与所有权合并。
-2. **逐招式动画数据导入**：解析 `data/battle_anim_scripts.s` 的动画指令到仓库的纯数据轨迹/效果，或建立“动画指令 → 已注册效果”的映射表；代表例先在少量招式上验证。
-3. **战斗台词目录合同**：领域只发**稳定 messageId + 参数**（如 `atk`、`move`），由内容包提供本地化模板与占位符；渲染层插值。这样才能既对齐原文又保持中文可维护。
-4. **战斗脚本时序层**：`BattleDirector` 现在是“按事件 kind 播一个演出”，缺少原作的“脚本命令序列”。可在表现层引入一个受限的 `battleSequence`（纯数据步骤表），不改规则。
-5. **转场选择表**：按地图/环境/强弱选择 4 类图案，补其余图案的纯采样绘制器。
+演出选择按优先级、匹配具体程度和ID稳定排序，只准备选中的定义。错误报告并隔离，不继续选次优演出来掩盖问题。同选择器和优先级的冲突拒绝注册。
 
-## 五、分期计划
+## 尚未达到1:1的内容
 
-### P0 · 基准与素材盘点
-- 盘点当前单打/双打布局与 128 个 emit 的 messageId 草案。
-- 用导入工具导出逐地形战斗背景、血框、状态图标（`--check` 预演零差异后再落）。
-- 验收：内容/资源引用通过；浏览器截图仍由用户验收。
+| 范围 | 当前边界及后续验证 |
+| --- | --- |
+| 7招首片 | 帧/引用合同已验证，未与原机逐帧画面比对；叫声仍缺原作两段变调cry，SE缺声像/混音对照。不能把素材来源等同完整观感一致 |
+| 其余347招 | 未编排；按实际招式补资源、共享轨迹与内容调度，禁止回到通用降级表 |
+| 入场 | 普通本地单/双打已迁入新帧路径；尚缺物种各自的前/背精灵动作与两帧切图、闪光、虚弱/双打cry变调、完整特殊球粒子/颜色及特殊战斗入口。不得据通用动作完成而标记整段1:1 |
+| 换人/捕捉 | 仍需迁到公开帧能力并逐帧核对；此次仅开战投球，不把捕捉/中途换人计作覆盖 |
+| 画面与UI | 原血框/状态素材、精确窗口/扫描线、调色板变化、背景/精灵遮挡及全套经验条演出尚未完整实现；持久状态/天气图元也需核对来源 |
+| 结束/文本 | 普通胜利/whiteout对白、五类胜利曲和退出帧已接入；尚缺原BG/OBJ交替调色的半帧相位（当前合成表面统一调色）、硬件音频淡出对照、文本速度/停顿/控制符及特殊结果脚本 |
+| 转场 | 已有少量来源转场，尚非原作28种及完整选择政策 |
 
-### P1 · 战斗台词目录（高收益，先做）
-- 引入 `battleMessages` 内容种类：模板 + 占位符（mon/move/stat/status）。
-- 把 `battle.js`/`battle-*-*.js` 的硬编码中文改为 messageId + 参数；文本内容放内容包（对照 `battle_message.c`）。
-- 校正关键时序：命中/未命中、会心、效果拔群/不理想、异常、能力升降、倒下、逃脱、捕获。
-- 验收：`node --test` 断言每个事件返回正确 messageId 与插值；对照原文逐条核对（本项目本地化）。
+能力缺口先明确输入、输出、所有者和可验证边界，再补通用能力；内容随后使用该能力。比如背景平移/窗口遮罩/调色板变化应是通用视觉通道，原作哪个招式何时使用由pack声明，不给导演加入招式分支。
 
-### P2 · 入场/换人/结算演出
-- 按环境实现 `BattleIntroSlide1/2/3` 的滑入；训练家抛球、野生滑入、血框滑入。
-- 换人：收回→投球→放出；倒地：下落+叫声+消息；经验条填充、升级、学招、胜利/战败、`battle-exit`。
-- 复用 `api.presentation.battle` 注册替换/追加以免改导演分支。
-- 验收：固定时钟断言逐帧采样与时长；观感由用户验收。
+## 来源及持续验收
 
-### P3 · 逐招式战斗动画
-- 建立 `battle_anim_scripts.s` 指令→效果映射与导入工具；先覆盖当前切片的招式（初始精灵与野生常用招式）。
-- `MOVE_ANIMATIONS` 逐步被导入数据替换；未映射仍走通用回退。
-- 验收：招式采样帧与停止；命中/未命中分支。
+- 招式脚本：`data/battle_anim_scripts.s`；轨迹及任务：`src/battle_anim_*.c`；精灵模板：`src/data/battle_anim.h`。
+- 伤害/消息顺序：`data/battle_scripts_1.s` 的 `BattleScript_HitFromAtkAnimation`；倒下顺序：`BattleScript_FaintAttacker/Target`。
+- HP：`src/battle_interface.c` 的 `CalcNewBarValue`；倒下：`src/battle_controller_player.c` 与 `src/battle_controller_opponent.c`。
+- 入场/结束/转场：`src/battle_intro.c`、`src/pokeball.c`、`src/battle_setup.c`、`src/battle_transition.c`；文本：`src/battle_message.c`。
 
-### P4 · 转场与战斗 UI
-- 补 `battle_setup.c` 的选择表与其余图案；逐地形背景。
-- 沿用 `battle-interface.js`/`battle-canvas.js`，对齐血框、HP 条、状态/目标图标、2×2 菜单；不重写规则。
-- 验收：布局断言 + 用户浏览器验收。
+每个切片记录实际来源、分支、帧/声音/消息时间点及剩余差异；按公开入口验证规则不重复结算、失败清理、reducedMotion及资源引用。`tools/battle/export-animations.py --check`只读比较，核心测试不依赖参考目录；来源工具测试单独执行。用户既有禁止自动操作游戏要求继续生效，画面与听音由用户人工验收，离线帧/合同测试不能冒充这一验收。
 
-## 六、边界与验收原则
+相关合同：[演出合同](../engine/presentation/ANIMATION_CONTRACT.md) · [战斗架构](../architecture/BATTLE.md) · [测试指南](../development/TESTING.md) · [验证记录](../development/EVIDENCE.md)。
 
-- **规则/表现分离**：演出只消费已提交的语义事件，不重算命中/伤害/捕获，不用游戏 RNG。
-- **不伪造完成**：导入成功、单测通过只证明合同；像素/听感一致由用户浏览器验收（本项目禁止 Computer Use，由用户执行）。
-- 未映射招式保持通用回退，并明确标注，不宣称 356 招式已还原。
-- 增量交付：每期更新 STATUS/受影响的规格与证据，未变领域复用旧证据。
-
-## 七、建议的首个切片
-
-先做 **P1 台词目录 + P2 的野生/训练家单打入场**：这两块改动集中在表现层与内容包，可被 `node --test` 稳定验证，且是后续招式动画与结算对齐的公共基础。P3 的导入管线在 P1/P2 稳定后另立框架任务。
-
-## 相关文档
-
-- [战斗架构](../architecture/BATTLE.md) · [表现架构](../architecture/PRESENTATION.md) · [演出与纯取样合同](../engine/presentation/ANIMATION_CONTRACT.md) · [精灵帧片段](../engine/presentation/SPRITE_CLIPS.md)
-- [绿宝石 UI 实施](../development/EMERALD_UI.md) · [创作指南](../development/AUTHORING.md) · [测试指南](../development/TESTING.md)
-- 代码入口：[battle.js](../../src/engine/battle.js)、[battle-session.js](../../src/engine/battle-session.js)、[battle-director.js](../../src/presentation/battle-director.js)、[animations.js](../../src/packs/emerald/animations.js)、[battle-transitions.js](../../src/packs/emerald/battle-transitions.js)、[battle-interface.js](../../src/packs/emerald/battle-interface.js)
+2026-10-08功能收口：删除常驻队伍文字；训练家入场使用原作条/四状态六球图，65帧纯编排与挑战对白并行，原三种条音效按帧发出；双方投球分别滑出，末帧保持走公共播放器，野生入场无队伍条。地图音乐按用户澄清另做地图政策。证据见[功能收口批次](../validation/2026-10-08-battle-map-music-complete/manifest.json)。原机画面/声像/听音仍待人工，不改变其余347招未覆盖结论。

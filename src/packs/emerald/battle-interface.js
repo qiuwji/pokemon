@@ -30,11 +30,13 @@ export function createBattleInterface(
 ) {
   const root = doc.getElementById("battle-hud"),
     db = game.db;
+  if (root.style) root.style.containerType = "size";
   let demoSubmit = null;
   let selected = 0,
     page = "main",
     selectedMove = null,
     selectedAugment = null;
+  let narration = "";
   const buttons = () =>
     [...root.querySelectorAll(".battle-options button:not(:disabled)")].filter(
       (button) => !button.closest?.("[hidden]"),
@@ -52,18 +54,23 @@ export function createBattleInterface(
   const friendly = (frame, c) =>
     frame.view.sides.find((s) => s.id === c.sideId)?.allianceId ===
     frame.view.homeAlliance;
+  function headingHTML(m) {
+    const gender = m.gender === "male" ? "♂" : m.gender === "female" ? "♀" : "";
+    return `<span class="mon-name">${escapeHTML(db.species[m.species].name)}<span class="mon-gender">${gender}</span></span><span class="mon-level">Lv.${m.level}</span>`;
+  }
   function status(c, home, multi, index) {
     const m = c.monster,
       side = home ? "player" : "enemy";
-    const position = multi
-      ? `style="left:${home ? 55 : 2}%;top:${home ? 43 + index * 14 : 2 + index * 13}%"`
-      : "";
+    // Healthbox sprite centres in battle_interface.c, minus the 64×32 main sprite origin.
+    const x = multi ? home ? 127 + index * 12 : 12 - index * 12 : home ? 126 : 12,
+      y = multi ? home ? 60 + index * 25 : 3 + index * 25 : home ? 72 : 14,
+      position = `style="left:${x * 100 / 240}%;top:${y * 100 / 160}%"`;
     if (!m)
       return `<div class="battle-status ${side} ${multi ? "multi" : ""} empty" data-seat="${c.seatId}" ${position}>空位</div>`;
     const s = db.species[m.species],
       base = experienceAt(m.level, s.growth),
       next = experienceAt(m.level + 1, s.growth);
-    return `<div class="battle-status ${side} ${multi ? "multi" : ""}" data-seat="${c.seatId}" data-identity="${m.uid}:${m.level}" ${position}><div class="mon-heading">${escapeHTML(s.name)} <span>${m.gender === "male" ? "♂" : m.gender === "female" ? "♀" : ""} Lv.${m.level}</span></div>${hpTrack(m)}${home ? `<div class="hp-value"><span class="condition">${STATUS_NAMES[m.status] || ""}</span><span class="hp-number">${m.hp} / ${m.stats.hp}</span></div><div class="exp-track"><i style="width:${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%"></i></div>` : ""}</div>`;
+    return `<div class="battle-status ${side} ${multi ? "multi" : ""}" data-seat="${c.seatId}" data-identity="${m.uid}:${m.level}" ${position}><div class="mon-heading">${headingHTML(m)}</div>${hpTrack(m)}${home ? `<div class="hp-value"><span class="condition">${STATUS_NAMES[m.status] || ""}</span><span class="hp-number">${m.hp} / ${m.stats.hp}</span></div><div class="exp-track"><i style="width:${Math.max(0, Math.min(100, ((m.exp - base) / (next - base)) * 100))}%"></i></div>` : ""}</div>`;
   }
   function seatLabel(b, id) {
     const seat = b.roster.seat(id),
@@ -115,6 +122,7 @@ export function createBattleInterface(
     if (kind === "run") return act({ kind: "run" });
   }
   function draw(message = null) {
+    if (message) narration = message;
     for (const slot of ["battle.actions", "battle.moves", "battle.targets"])
       game.ui?.extensions?.unmountSlot(slot);
     const b = game.battle;
@@ -126,12 +134,11 @@ export function createBattleInterface(
     const frame = game.director.sample();
     if (!frame) return;
     const multi = frame.combatants.length > 2,
-      visible = c => frame.view.kind !== "entry" || frame.actors.some(a => a.seatId === c.seatId && a.opacity > 0),
-      home = frame.combatants.filter((c) => friendly(frame, c) && visible(c)),
-      away = frame.combatants.filter((c) => !friendly(frame, c) && visible(c));
+      home = frame.combatants.filter((c) => friendly(frame, c)),
+      away = frame.combatants.filter((c) => !friendly(frame, c));
     let options,
       prompt =
-        message || `${b.script === "wally" ? "小光" : b.player ? b.name(b.player) : "伙伴"}<br>要做什么？`;
+        escapeHTML(message || (b.script === "wally" ? "小光" : b.player ? b.name(b.player) : "伙伴")) + (message ? "" : "<br>要做什么？");
     if (game.busy) options = "";
     else if (!(b.player?.hp > 0) || b.replacements.get(b.commandSeat)) {
       prompt = b.replacements.get(b.commandSeat)
@@ -200,21 +207,11 @@ export function createBattleInterface(
     const plan = multi
       ? `<div class="battle-plan">${queued ? `已选择 ${queued} 个行动 · ` : ""}${escapeHTML(seatLabel(b, b.commandSeat))}${queued && !game.busy ? "<button data-cancel>重选</button>" : ""}</div>`
       : "";
-    const foeSide = frame.view.sides.filter(
-        (s) => s.allianceId !== b.homeAlliance,
-      ),
-      count = foeSide.reduce((n, s) => n + s.remaining, 0),
-      total = foeSide.reduce((n, s) => n + s.total, 0);
-    const team =
-      !multi && total > 1
-        ? `<div class="enemy-team" aria-label="对方队伍剩余 ${count} / ${total}">对方队伍 ${"●".repeat(count)}${"○".repeat(total - count)}</div>`
-        : "";
     root.innerHTML =
-      team +
       away.map((c, i) => status(c, false, multi, i)).join("") +
       home.map((c, i) => status(c, true, multi, i)).join("") +
       plan +
-      `<div class="battle-menu" data-battle-page="${page}">${game.busy ? `<div class="battle-log-text">${escapeHTML(message || "…")}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
+      `<div class="battle-menu" data-battle-page="${page}">${game.busy ? `<div class="battle-log-text">${escapeHTML(narration)}</div>` : `<div class="battle-message">${prompt}</div><div class="battle-options ${page === "targets" ? "target-options" : ""}"><div class="native-options">${options}</div></div>`}</div>`;
     root.querySelectorAll("[data-action]").forEach(
       (button) =>
         (button.onclick = () => {
@@ -265,6 +262,7 @@ export function createBattleInterface(
         },
       );
     if (selected >= buttons().length) selected = 0;
+    refresh(frame);
     buttons()[selected]?.classList.add("selected");
     if (page === "moves" && !game.busy) {
       const button = buttons()[selected],
@@ -283,22 +281,34 @@ export function createBattleInterface(
   }
   function refresh(frame) {
     if (!frame) return;
+    if (root.style) {
+      const clip = frame.clip;
+      root.style.clipPath = clip ? `inset(${clip.y * 100 / 160}% ${(240 - clip.x - clip.width) * 100 / 240}% ${(160 - clip.y - clip.height) * 100 / 160}% ${clip.x * 100 / 240}%)` : "";
+    }
     for (const c of frame.combatants) {
       const el = [...root.querySelectorAll("[data-seat]")].find(
           (e) => e.dataset.seat === c.seatId,
         ),
         m = c.monster;
       if (!el || !m) continue;
+      const box = frame.statusBoxes?.find(box => box.seatId === c.seatId);
+      el.hidden = box ? box.opacity === 0 : frame.view.kind === "entry" && !frame.actors.some(a => a.seatId === c.seatId && a.opacity > 0);
+      if (el.style) {
+        el.style.opacity = String(box?.opacity ?? 1);
+        // Positions are native pixels, rendered as viewport fractions without display-scale drift.
+        el.style.transform = box ? `translate(${(box.x || 0) * 100 / 240}cqw, ${(box.y || 0) * 100 / 160}cqh)` : "";
+      }
       const identity = `${m.uid}:${m.level}`;
       if (el.dataset.identity !== identity) {
         el.dataset.identity = identity;
         const heading = el.querySelector(".mon-heading");
         if (heading)
-          heading.innerHTML = `${escapeHTML(db.species[m.species].name)} <span>${m.gender === "male" ? "♂" : m.gender === "female" ? "♀" : ""} Lv.${m.level}</span>`;
+          heading.innerHTML = headingHTML(m);
       }
       const bar = el.querySelector(".hp-track i");
       if (bar) {
-        bar.style.width = `${(m.hp / m.stats.hp) * 100}%`;
+        const fraction = frame.healthBars?.find(bar => bar.seatId === c.seatId)?.fraction ?? m.hp / m.stats.hp;
+        bar.style.width = `${fraction * 100}%`;
         bar.style.background = hpColor(m);
       }
       const number = el.querySelector(".hp-number");
@@ -338,6 +348,7 @@ export function createBattleInterface(
       } finally { demoSubmit = null; }
     },
     reset() {
+      narration = "";
       page = "main";
       selected = 0;
       selectedMove = null;

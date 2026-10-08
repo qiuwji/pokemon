@@ -10,16 +10,9 @@ const PLATFORMS = Object.freeze([
 const palette = (sky, ground) => ({ sky, ground, platforms: PLATFORMS });
 
 export const EMERALD_BATTLE_BACKGROUNDS = Object.freeze({
-  default: Object.freeze({ resource: "battle-background-grass" }),
-  grass: Object.freeze({ resource: "battle-background-grass" }),
-  long_grass: Object.freeze({ resource: "battle-background-long_grass" }),
-  pond: Object.freeze({ resource: "battle-background-pond" }),
-  mountain: Object.freeze({ resource: "battle-background-mountain" }),
-  cave: Object.freeze({ resource: "battle-background-cave", ...palette("#706878", "#484050") }),
-  water: Object.freeze({ resource: "battle-background-water", ...palette("#b8e0f8", "#58a8c8") }),
-  underwater: Object.freeze({ resource: "battle-background-underwater", ...palette("#b8e0f8", "#58a8c8") }),
-  sand: Object.freeze({ resource: "battle-background-sand", ...palette("#f8e0b0", "#c8b078") }),
+  default: Object.freeze({ resource: "battle-anim-board_grass", width: 512, height: 112 }),
+  ...Object.fromEntries(["grass", "long_grass", "pond", "mountain", "cave", "water", "underwater", "sand", "indoor", "plain"].map(terrain =>
+    [terrain, Object.freeze({ resource: "battle-anim-board_" + terrain, width: 512, height: 112 })])),
   forest: Object.freeze({ resource: "battle-bg-forest", ...palette("#b8d898", "#588860") }),
   snow: Object.freeze({ resource: "battle-bg-snow", ...palette("#e8f8ff", "#b8d8e8") }),
-  indoor: Object.freeze({ resource: "battle-background-indoor", ...palette("#d8d8e0", "#8898a8") }),
 });

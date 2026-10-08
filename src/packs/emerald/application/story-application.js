@@ -43,6 +43,7 @@ export const STORY_PORTS = Object.freeze([
   "conditionQueries",
   "db",
   "enter",
+  "prepareMapExit",
   "fieldDirector",
   "itemDefinitions",
   "inventory",
@@ -125,7 +126,7 @@ export class StoryApplication {
           this.transitions.run("door", () => {
             if (!this.enter(c.position))
               throw new Error("Story destination cannot be entered");
-          }),
+          }, { prepare: () => this.prepareMapExit(c.position) }),
         scene: (c) =>
           this.transitions.run(
             c.kind || "door",
@@ -135,7 +136,7 @@ export class StoryApplication {
               this.camera.reset();
               this.fieldDirector.stage(c.actors);
             },
-            { coverMs: c.coverMs, holdMs: c.holdMs, revealMs: c.revealMs },
+            { coverMs: c.coverMs, holdMs: c.holdMs, revealMs: c.revealMs, prepare: () => this.prepareMapExit(c.position) },
           ),
         wait: (c) => this.timeline.wait(c.ms),
         // The original scripts play sound effects inline; only registered cues are reachable.

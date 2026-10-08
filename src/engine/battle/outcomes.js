@@ -95,7 +95,7 @@ export class BattleOutcomes {
           : livingAlliances[0] || null,
       );
       b.phase = "outcome";
-      if (result === "loss") b.emit("没有能够继续战斗的宝可梦了…", "end");
+      if (result === "loss") b.emit("", "end", { message: { id: "party-defeated", params: {} } });
     }
   }
   experience(defeated, alliance = this.battle.homeAlliance) {

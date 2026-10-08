@@ -1,4 +1,5 @@
 import { TransitionPatterns } from "./transition-patterns.js";
+import { ColorOffsetDOM } from "./color-offset-dom.js";
 /** Overlay covers Canvas, menus and HUD; drawing never commits scenes. */
 export class TransitionDOM {
   constructor(
@@ -14,9 +15,11 @@ export class TransitionDOM {
         menu: "blinds",
       },
       onError = () => {},
+      colorTargets = () => [],
     } = {},
   ) {
     Object.assign(this, { element, patterns, styles, onError });
+    this.color = new ColorOffsetDOM(doc, colorTargets);
     const canvas = doc.createElement("canvas");
     canvas.width = 320;
     canvas.height = 224;
@@ -28,6 +31,7 @@ export class TransitionDOM {
     this.ctx.imageSmoothingEnabled = false;
   }
   render(frame) {
+    this.color.render(frame.colorOffset);
     const opacity = Math.min(1, Math.max(0, frame.opacity));
     this.element.hidden = opacity <= 0;
     if (this.element.hidden) return;

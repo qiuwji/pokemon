@@ -7,6 +7,7 @@ export class BattleSession {
     transitions,
     createBattle = (options) => new Battle(options),
     onMessage = () => {},
+    onPresented = () => {},
     onChange = () => {},
     onResult = () => ({}),
     onFailure = () => {},
@@ -16,6 +17,7 @@ export class BattleSession {
       transitions,
       createBattle,
       onMessage,
+      onPresented,
       onChange,
       onResult,
       onFailure,
@@ -37,7 +39,7 @@ export class BattleSession {
       // Presentation can select entry audio before the covered scene swap.
       // The interactive battle is still published only at the transition midpoint.
       this.enteringBattle = preparedBattle;
-      let entry;
+      let entry, entries;
       const transition = options.presentation?.transition;
       await this.transitions.run(transition?.kind || "encounter", () => {
         this.battle = preparedBattle;
@@ -53,21 +55,31 @@ export class BattleSession {
             params: {},
           },
         };
-        this.director.stage({ ...entry, ...options.presentation?.entryPhases?.[0] });
+        entries = (options.presentation?.entryPhases || [{}]).map(phase => {
+          const event = { ...entry, ...phase };
+          if (phase.sendBack !== undefined)
+            event.sendSeats = entry.combatants.filter(c =>
+              (entry.sides.find(s => s.id === c.sideId)?.allianceId === entry.homeAlliance) === phase.sendBack,
+            ).map(c => c.seatId);
+          return event;
+        });
+        this.director.stage(entries[0]);
         this.onChange();
       }, transition);
-      const phases = options.presentation?.entryPhases || [{}];
-      for (const phase of phases) {
-        const event = { ...entry, ...phase };
-        if (phase.sendBack !== undefined)
-          event.sendSeats = entry.combatants.filter(c =>
-            (entry.sides.find(s => s.id === c.sideId)?.allianceId === entry.homeAlliance) === phase.sendBack,
-          ).map(c => c.seatId);
-        await this.director.play(event, { message: this.onMessage });
-        if (phase.dialogue) await options.presentation.dialogue?.(phase.dialogue);
+      for (const event of entries) {
+        const playback = this.director.play(event, { message: this.onMessage });
+        if (event.dialogueDuring && event.dialogue) {
+          const results = await Promise.allSettled([playback, options.presentation.dialogue?.(event.dialogue)]);
+          const failure = results.find(result => result.status === "rejected");
+          if (failure) throw failure.reason;
+        }
+        else {
+          await playback;
+          if (event.dialogue) await options.presentation.dialogue?.(event.dialogue);
+        }
+        this.onPresented(event);
       }
-      for (const event of this.battle.events)
-        await this.director.play(event, { message: this.onMessage });
+      if (this.battle.events.length) await this.present(this.battle.events);
       return true;
     } catch (error) {
       // Failed dialogue/presentation after the covered swap must not leave a partial battle.
@@ -84,7 +96,13 @@ export class BattleSession {
       this.onChange();
     }
   }
-  /** Always return control; owners recover uncommitted domain transactions. */
+  /** One presentation path for initial and automatic domain events. */
+  async present(events) {
+    for (const event of events) {
+      await this.director.play(event, { message: this.onMessage });
+      this.onPresented(event);
+    }
+  }
   async finish() {
     const battle = this.battle;
     let result, committed = false, cleared = false, failure;
@@ -92,6 +110,7 @@ export class BattleSession {
       result = this.pendingResult = this.onResult(battle);
       for (const event of result.presentation || []) {
         await this.director.play(event, { message: this.onMessage });
+        this.onPresented(event);
         if (event.dialogue) await result.dialogue?.(event.dialogue);
       }
       await this.transitions.run("battle-exit", () => {
@@ -123,15 +142,13 @@ export class BattleSession {
     try {
       // Calculate once, then present immutable snapshots in order.
       const events = this.battle.act(action);
-      for (const event of events)
-        await this.director.play(event, { message: this.onMessage });
+      if (events.length) await this.present(events);
       let automaticRounds = 0;
       while (!this.battle.ended && !this.battle.decisions.required().length) {
         if (++automaticRounds > 32)
           throw new Error("Automatic action limit exceeded");
         const automatic = this.battle.advance();
-        for (const event of automatic)
-          await this.director.play(event, { message: this.onMessage });
+        if (automatic.length) await this.present(automatic);
       }
       if (this.battle.ended) {
         await this.finish();

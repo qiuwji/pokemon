@@ -1,0 +1,30 @@
+✔ Pure tracks interpolate segment keyframes with shared named easing and stable boundaries (1.208958ms)
+✔ Reusable fragments keep local keyframe timing when placed in charge, release and impact intervals (0.458542ms)
+✔ Per-target hit and miss branches use committed facts and cannot mutate event or layout (0.243917ms)
+✔ Strict animation contracts reject unknown timing, channel shape, pose, async data and easing (0.156166ms)
+✔ Battle event registration picks specific selectors, rejects duplicates and seals against mutation (0.279042ms)
+✔ A form plugin controls injected-clock choreography while battle snapshots and reduced-motion facts remain intact (43.063ms)
+✔ Append choreography preserves default movement while adding a reusable effect (0.385209ms)
+✔ A per-move pose track drives visual offsets without adding a new director branch (0.16925ms)
+✔ Field-wide event tracks have a viewport anchor even when the semantic event has no acting seat (0.118292ms)
+✔ Battle messages resolve from stable ids and format placeholders (0.650917ms)
+✔ Plugins can register and override battle messages through the public API (77.798458ms)
+✔ A stage change carries a message id that matches its displayed text (48.126584ms)
+✔ Battle events carry a message id the host resolves through the catalog (48.293791ms)
+✔ Every migrated battle event resolves back to its displayed text (42.704167ms)
+✔ frame compilation runs once, freezes data, and samples identical frames regardless of display refresh rate (1.064583ms)
+✔ frame boundary rejects actions, unknown resources, out-of-snapshot HP and invalid audio (0.32625ms)
+✔ native choreography uses source sprites and distinct frame timings; uncovered moves have no substitute (79.305583ms)
+✔ native choreography mirrors opposing actors and Growl addresses both opposing seats (1.030959ms)
+✔ HP waits for blink, preserves fine bar steps, and fainting clips native rows without added particles (0.8695ms)
+✔ invalid and asynchronous content is isolated; selectors are deterministic and sealed (0.146041ms)
+✔ pixel blending uses independent coefficients, saturation, transparency and pack quantization (0.166875ms)
+✔ the canvas consumes registered frame sprites and clipped actor poses (1.183375ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 360.653542

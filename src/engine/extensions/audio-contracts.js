@@ -16,6 +16,7 @@ export function validateAudioCue(value) {
           "loopEnd",
           "fadeInMs",
           "fadeOutMs",
+          "fadePreviousMs",
           "maxVoices",
         ].includes(k),
     ) ||
@@ -41,12 +42,14 @@ export function validateAudioCue(value) {
       cue.loopEnd <= cue.loopStart)
   )
     throw new Error("Invalid audio loop region");
-  for (const key of ["fadeInMs", "fadeOutMs"])
+  for (const key of ["fadeInMs", "fadeOutMs", "fadePreviousMs"])
     if (
       cue[key] !== undefined &&
       (!Number.isFinite(cue[key]) || cue[key] < 0 || cue[key] > 10000)
     )
       throw new Error("Invalid audio fade");
+  if (cue.fadePreviousMs !== undefined && cue.kind !== "music")
+    throw new Error("Only music can replace a previous cue");
   if (
     cue.maxVoices !== undefined &&
     (!Number.isInteger(cue.maxVoices) ||

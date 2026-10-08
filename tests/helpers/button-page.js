@@ -19,6 +19,7 @@ export function buttonPage() {
       const dataset = Object.fromEntries([...m[0].matchAll(/data-([\w-]+)(?:="([^"]*)")?/g)]
         .map(a => [a[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase()), a[2] || '']));
       const node = { dataset, tagName: m[1].toUpperCase(), disabled: /\sdisabled(?:\s|>)/.test(m[0]),
+        querySelector() { return null; },
         focus() { document.activeElement = node; }, scrollIntoView() {} };
       return node;
     });

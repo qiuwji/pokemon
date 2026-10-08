@@ -43,7 +43,7 @@ def resolve_cue(track_id, song, kind, section, folder, data, fades=None):
     cue['kind'] = kind
     if kind == 'music' and fades:
         for key, value in fades.items():
-            if key not in ('fadeInMs', 'fadeOutMs') or not isinstance(value, int) or not 0 <= value <= 10000:
+            if key not in ('fadeInMs', 'fadeOutMs', 'fadePreviousMs') or not isinstance(value, int) or not 0 <= value <= 10000:
                 raise ValueError('Invalid music fade policy')
             cue[key] = value
     if kind == 'music':
@@ -77,7 +77,8 @@ def install(pack_file, build, project, check=False):
                 raise ValueError(f'Reference revision differs for {song}')
             if data.get('renderer', {}).get('revision') != spec['rendererRevision']:
                 raise ValueError(f'Renderer revision differs for {song}')
-            local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data, spec.get('musicFades'))
+            fades = {**(spec.get('musicFades') or {}), **(entry.get('musicFades') or {})}
+            local, asset, cue = resolve_cue(track_id, song, kind, section, folder, data, fades)
             if workspace.sources:
                 cue['source'] = 'generated/' + asset
             audio = folder / data['assetName']

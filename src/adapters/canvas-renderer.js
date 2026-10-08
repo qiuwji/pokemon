@@ -10,6 +10,7 @@ import {
   drawDaylight,
 } from "../presentation/environment-canvas.js";
 import { drawBattle } from "../presentation/battle-canvas.js";
+import { createFrameSpritePainter } from "../presentation/frame-sprite-canvas.js";
 import { drawFieldEmote } from "../presentation/field-canvas.js";
 import { drawFieldAction } from "../presentation/field-action-canvas.js";
 import { createDefaultPresentation } from "../presentation/default-presentation.js";
@@ -39,6 +40,8 @@ export class Renderer {
       reflectionColumns = null,
       presentation = createDefaultPresentation(),
       battleBackgrounds = {},
+      createSurface = () => canvas.ownerDocument.createElement("canvas"),
+      battleChannelBits = 8,
     } = {},
   ) {
     Object.assign(this, {
@@ -65,6 +68,9 @@ export class Renderer {
       presentation,
     });
     this.ctx = canvas.getContext("2d");
+    this.createSurface = createSurface;
+    this.battleSurface = null;
+    this.drawBattleSprite = createFrameSpritePainter(createSurface, { channelBits: battleChannelBits });
     this.ctx.imageSmoothingEnabled = false;
     this.graph = new SceneGraph(db.maps);
     this.motion = new GridMotion(this.graph);
@@ -551,10 +557,16 @@ export class Renderer {
     }
   }
   battle(frame) {
+    this.battleSurface ||= this.createSurface();
+    const surface = this.battleSurface, width = frame.viewport?.width || 320, height = frame.viewport?.height || 224;
+    if (surface.width !== width) surface.width = width;
+    if (surface.height !== height) surface.height = height;
+    const ctx = surface.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+    drawBattle(ctx, this.assets, frame, this.battleBackgrounds, this.drawBattleSprite);
     this.ctx.save();
     try {
-      this.ctx.scale(this.canvas.width / (frame.viewport?.width || 320), this.canvas.height / (frame.viewport?.height || 224));
-      drawBattle(this.ctx, this.assets, frame, this.battleBackgrounds);
+      this.ctx.drawImage(surface, 0, 0, this.canvas.width, this.canvas.height);
     } finally { this.ctx.restore(); }
   }
 }

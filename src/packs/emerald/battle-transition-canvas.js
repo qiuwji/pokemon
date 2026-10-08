@@ -8,7 +8,7 @@ export function emeraldTransitionPatterns(assets) {
     ctx.scale(frame.width / 240, frame.height / 160);
     ctx.fillStyle = '#000';
     if (visual.gray !== undefined) {
-      ctx.fillStyle = '#5a5a5a'; ctx.globalAlpha = visual.gray; ctx.fillRect(0, 0, 240, 160);
+      ctx.fillStyle = '#585858'; ctx.globalAlpha = visual.gray; ctx.fillRect(0, 0, 240, 160);
     } else if (visual.team) {
       ctx.globalAlpha = 1 - visual.base;
       ctx.fillRect(0,0,240,160);

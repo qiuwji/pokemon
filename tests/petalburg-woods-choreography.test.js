@@ -135,8 +135,12 @@ test("A committed victory with interrupted field dialogue resumes from the other
 test("An actual defeat leaves the rescue unfinished and permits a later successful challenge", async () => {
   const s = session(), g = s.game;
   g.state.party = [createMonster("mudkip", 1, s.db, g.rng)];
+  // Arrange a certain defeat: the weak partner cannot attack and the opponent cannot choose Growl.
+  g.state.party[0].hp = 1;
+  g.state.party[0].moves = [{ id: "growl", pp: 40, maxPP: 40 }];
   g.enter({ map: "PetalburgWoods", x: 27, y: 24, dir: "up" });
   await step(s, "up");
+  g.battle.enemy.moves = [{ id: "pound", pp: 35, maxPP: 35 }];
   for (let i = 0; g.battle && i < 30; i++) {
     assert(await g.turn({ kind: "move", index: 0 }));
     await s.settle();

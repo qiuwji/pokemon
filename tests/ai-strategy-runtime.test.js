@@ -290,7 +290,8 @@ test("core.battle.ai-view reports recorded decisions without replaying them", as
           information: "full",
           choice: { mode: "best", band: 0 },
         },
-        party: [{ species: "poochyena", level: 5, moves: ["tackle"] }],
+        // Keep the query under test in an ongoing battle; random critical KOs otherwise start a story transition.
+        party: [{ species: "poochyena", level: 20, moves: ["growl"] }],
       });
     },
     ["battle"],

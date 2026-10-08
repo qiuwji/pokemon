@@ -157,6 +157,23 @@ const plugin: PluginManifest = {
       },
     });
     const effect = api.presentation.effect("trail", { draw: () => {} });
+    api.presentation.sequence("native", {
+      kind: "move", match: { moveId: "pound" },
+      prepare({ event, layout }) {
+        const seatId = event.actorSeat || event.combatants[0].seatId;
+        // @ts-expect-error Preparation consumes a frozen rule snapshot.
+        event.combatants[0].monster.hp = 20;
+        // @ts-expect-error Content cannot move the actual battlefield layout.
+        layout[seatId].x = 100;
+        return { fps: 60, frames: [{ poses: [{ seatId, x: 4, tint: { color: [248, 176, 240], amount: 16 } }],
+          scenes: [{ hideTrainers: true, clip: { x: 0, y: 80, width: 240, height: 1 } }],
+          statusBoxes: [{ seatId, x: 115, y: 0, opacity: 1 }] }], cues: [] };
+      },
+    });
+    api.presentation.sequence("invalid-frame", { kind: "move", prepare: () => ({ fps: 60, cues: [], frames: [
+      // @ts-expect-error Frames cannot issue domain actions.
+      { action: { kind: "move", index: 0 } },
+    ] }) });
     api.presentation.move("water", {
       moveId: "water_gun",
       animation: {

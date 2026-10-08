@@ -123,14 +123,15 @@ export function openingBattleTransition({ trainer, trainerActor, party, opponent
     enemyLevel = opponents.find(m => !m.egg)?.level ?? 0,
     weaker = enemyLevel < playerLevel,
     pattern = (trainer && TEAM_BY_ACTOR[trainerActor]) || (trainer ? (weaker ? 'pokeballs-trail' : 'angled-wipes') : (weaker ? 'slice' : 'white-bars'));
-  return { kind: 'emerald:' + pattern, coverMs: (INTRO_FRAMES + LENGTH[pattern]) * 1000 / FPS, revealMs: 220 };
+  return { kind: 'emerald:' + pattern, coverMs: (INTRO_FRAMES + LENGTH[pattern]) * 1000 / FPS,
+    holdMs: 0, settleMs: 0, revealFrames: [{ opacity: 0 }] };
 }
 export function sampleOpeningTransition(pattern, progress) {
   if (!Object.hasOwn(LENGTH, pattern)) throw new Error('Unknown opening battle transition');
   const frame = Math.floor(clamp(progress) * (INTRO_FRAMES + LENGTH[pattern]));
   if (frame < INTRO_FRAMES) {
     const phase = frame % 16;
-    return { gray: (phase < 8 ? phase * 2 : (16 - phase) * 2) / 16 };
+    return { gray: (phase < 8 ? (phase + 1) * 2 : (15 - phase) * 2) / 16 };
   }
   const n = frame - INTRO_FRAMES;
   if (pattern === "aqua" || pattern === "magma") return { ...TEAM_WEAVE[Math.min(n,TEAM_WEAVE.length-1)], resource:"battle-transition-"+pattern };

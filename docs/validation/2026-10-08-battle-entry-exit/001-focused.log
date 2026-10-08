@@ -1,0 +1,76 @@
+✔ external choreography uses public capabilities in a real battle and cannot dispatch from preparation (150.929708ms)
+✔ frame compilation runs once, freezes data, and samples identical frames regardless of display refresh rate (1.365334ms)
+✔ frame boundary rejects actions, unknown resources, out-of-snapshot HP and invalid audio (0.456125ms)
+✔ native choreography uses source sprites and distinct frame timings; uncovered moves have no substitute (9.457792ms)
+✔ native choreography mirrors opposing actors and Growl addresses both opposing seats (3.210875ms)
+✔ HP waits for blink, preserves fine bar steps, and fainting clips native rows without added particles (1.625959ms)
+✔ invalid and asynchronous content is isolated; selectors are deterministic and sealed (0.152125ms)
+✔ faint narration follows visual hiding and a failed start releases the director (1.736042ms)
+✔ real damage emits health, critical and effectiveness in source order without a normal-hit announcement (115.838542ms)
+✖ pixel blending uses independent coefficients, saturation, transparency and pack quantization (0.297958ms)
+✔ the canvas consumes registered frame sprites and clipped actor poses (1.190417ms)
+✔ Battle defeat dialogue precedes blackout, and reveal already sees the field (1.228959ms)
+✔ Route 102 defeat and prize lines stay in combat, settlement pays exactly once (157.066875ms)
+✔ A failed defeat dialogue returns control without awarding a prize or marking victory (53.383542ms)
+✔ A failed challenge dialogue clears the staged battle and permits another encounter (49.617375ms)
+✔ Wally arrives on the original tile when Norman is approached facing up (57.399041ms)
+✔ Wally arrives on the original tile when Norman is approached facing down (53.016375ms)
+✔ Wally arrives on the original tile when Norman is approached facing left (53.210166ms)
+✔ Wally arrives on the original tile when Norman is approached facing right (50.486459ms)
+✔ Wally's real menus show both moves and the ball pocket, and only the borrowed ball is spent (93.491791ms)
+✔ Native intro holds trainer battle art during dialogue and sends each side separately (55.935833ms)
+✔ Reflection uses the native palette and full affine sprite bounds, mirrors lift, and leaves the actor asset intact (0.600458ms)
+✔ Water distortion follows the native affine holds, and ice keeps unit horizontal scale (0.332584ms)
+✔ Wally crosses the city boundary with continuous world coordinates, stride, and reservations (45.829542ms)
+✔ A blocked actor connection preserves the source pose and never publishes a destination actor (47.543625ms)
+✔ All five Poké Ball trail bands stay completely black after the balls leave the screen (1.60575ms)
+✔ A reflection appears at the adjacent water edge and never across a dry tile (0.088208ms)
+✔ Reflections ignore the previous origin from the first departure frame through landing (0.056125ms)
+✔ The native fractional water stretch changes actual actor pixel columns while standing still (46.685875ms)
+✔ Ignoring terrain is limited to explicit scene NPC paths, with normal player movement still guarded (46.160167ms)
+✔ Scene commit occurs at full coverage exactly once; duplicate transition is refused (2.686791ms)
+✔ Transition failures release the input lock (0.144333ms)
+✔ A covered transition can hold the black frame before swapping and revealing (0.503291ms)
+✔ HP interpolation is visual only; a zero-HP actor remains visible until faint finishes (1.765ms)
+✔ Capture shakes follow domain result; failed capture restores opponent and successful capture seals ball (1.28775ms)
+✔ Entry music can observe the prepared battle before the scene swap; failed entry clears it (0.887958ms)
+✔ Combat session rejects repeated actions while presenting the previous turn (0.785333ms)
+✔ A different tiny content pack reuses the field session without Emerald names or DOM (3.413125ms)
+✔ Story commands await dialogue before applying later rewards; unknown commands fail explicitly (0.894708ms)
+✔ Reduced motion removes shaking while preserving HP timing and blackout commit (0.499875ms)
+✔ Content contract rejects missing grid tiles, invalid learnsets and dimensions (37.170042ms)
+✔ Battle events expose semantic animation metadata and immutable health snapshots (11.507917ms)
+✔ Party commands reject invalid use and evolution never revives a fainted member (1.692625ms)
+✔ Pack application rejects out-of-context inventory commands and preserves compatible saves (61.472834ms)
+✔ Versioned storage accepts only the current save format without rewriting rejected source (0.284292ms)
+✔ Completed combat returns at dialogue boundary without waiting for the next user confirmation (31.650333ms)
+✔ Missed moves identify the failed hit so presentation does not draw an impact (2.500584ms)
+✔ Capture announces success or escape only after the complete animation, and holds the result before settling (0.861ms)
+✔ Capture cues follow visual phases exactly once and a four-check success displays three shakes (0.558459ms)
+✔ Battle entry scrolls the board per environment and settles; reduced motion skips it (0.700542ms)
+✔ A switch recalls the outgoing Pokémon into a ball and throws the next one (0.248583ms)
+✔ A move event samples authored frame poses and source sprites through the director (1.830584ms)
+✔ Reduced motion suppresses a move's lunge and effects but keeps the event snapshot intact (0.646167ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 52
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 980.489834
+
+✖ failing tests:
+
+test at tests/battle-sequences.test.js:155:1
+✖ pixel blending uses independent coefficients, saturation, transparency and pack quantization (0.297958ms)
+  TypeError: ctx.rotate is not a function
+      at paint (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/presentation/frame-sprite-canvas.js:18:9)
+      at file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/presentation/frame-sprite-canvas.js:45:42
+      at TestContext.<anonymous> (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/battle-sequences.test.js:162:3)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)

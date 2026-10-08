@@ -1,0 +1,18 @@
+{
+  "id": "se-m-crabhammer",
+  "title": "SE_M_CRABHAMMER",
+  "song": "SE_M_CRABHAMMER",
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "rendererRevision": "4000591de6c397b6c80adc07af17144e26b30dfd",
+  "midi": "sound/songs/midi/se_m_crabhammer.mid",
+  "voicegroup": "rs_sfx_2",
+  "sampleRate": 44100,
+  "songVolume": 127,
+  "reverb": 50,
+  "polyphony": 4,
+  "pcmMixRate": 13379,
+  "cueVolume": 0.6,
+  "oneShot": true,
+  "kind": "sound",
+  "selection": "battle"
+}

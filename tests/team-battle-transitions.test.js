@@ -21,7 +21,7 @@ test("Native Aqua and Magma identities override level-based trainer transitions;
 
 test("Team transitions retain source weave counters, one-second hold and accelerating circular closure", () => {
   for (const pattern of ["aqua", "magma"]) {
-    assert.deepEqual(at(pattern, 0), {gray:0});
+    assert.deepEqual(at(pattern, 0), {gray:2/16});
     assert.equal(at(pattern, 48).logo, 0);
     assert.equal(at(pattern, 49).logo, 0);
     assert.equal(at(pattern, 50).logo, 1/16);

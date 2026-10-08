@@ -5,9 +5,8 @@ import { session } from "./helpers/session.js";
 import { createMonster } from "../src/engine/model.js";
 import { TRAINERS } from "../src/packs/emerald/trainers.js";
 import { battleTrainer, emeraldBattleOpening, emeraldBattleLayout, EMERALD_BATTLE_VIEWPORT } from "../src/packs/emerald/battle-presentation.js";
-import { EMERALD_BATTLE_INTRO } from "../src/packs/emerald/battle-intro.js";
+import { createEmeraldPresentation } from "../src/packs/emerald/animations.js";
 import { BattleDirector } from "../src/presentation/battle-director.js";
-import { emeraldBattleCues } from "../src/packs/emerald/battle-audio.js";
 import { validateSave } from "../src/packs/emerald/save-contract.js";
 
 const textOf = lines => lines.map(line => typeof line === "string" ? line : line.runs.map(run => run.text).join("")).join("");
@@ -69,24 +68,24 @@ test("Trainer images use the original trainerPic rather than the overworld woman
 test("Source slide directions, defeat return position and staged ball release are sampled between endpoints", async () => {
   const s = session(); await s.game.startTrainerBattle("cindy");
   const view = s.game.battle.snapshot(), phases = emeraldBattleOpening(s.game.state,{trainer:true,trainerId:"cindy",trainerActor:"Woman2",trainerName:"大小姐 辛迪"},s.db,s.game.battle.enemy);
-  const director = new BattleDirector(s.game.timeline,{intro:EMERALD_BATTLE_INTRO,layout:emeraldBattleLayout,viewport:EMERALD_BATTLE_VIEWPORT});
+  const director = new BattleDirector(s.game.timeline,{registry:createEmeraldPresentation({host:s.host}),layout:emeraldBattleLayout,viewport:EMERALD_BATTLE_VIEWPORT});
   director.reset(view);
-  director.event={data:{...view,...phases.entryPhases[0],trainers:phases.trainers},previous:view,start:0,duration:2000};
-  const halfway=director.sample(1000);
-  assert.equal(halfway.trainers[0].x,200); assert.equal(halfway.trainers[1].x,56);
-  await director.play({...view,kind:"entry",introPhase:"slide",trainers:phases.trainers});
-  const event={...view,kind:"entry",...phases.entryPhases[1],sendSeats:[view.combatants[1].seatId]};
-  director.event={data:event,previous:view,start:0,duration:event.duration};
+  director.stage({...view,kind:"entry",...phases.entryPhases[0],trainers:phases.trainers});
+  director.event.start=0;
+  const halfway=director.sample(93*1000/60);
+  assert.equal(halfway.sprites[0].x,200); assert.equal(halfway.sprites[1].x,56);
+  const event={...view,kind:"entry",...phases.entryPhases.find(phase=>phase.introPhase==="send"&&!phase.sendBack),trainers:phases.trainers,sendSeats:[view.combatants[1].seatId]};
+  director.stage(event); director.event.start=0;
   const early=director.sample(5*1000/60), late=director.sample(25*1000/60);
-  assert.equal(early.balls[0].x,176); assert.equal(early.balls[0].y,emeraldBattleLayout(view).get(event.sendSeats[0]).y+24);
+  const ball=early.sprites.find(sprite=>sprite.resource==="battle-anim-poke_ball");
+  assert.equal(ball.x,176); assert.equal(ball.y,emeraldBattleLayout(view).get(event.sendSeats[0]).y+24);
   assert.equal(early.actors.find(a=>a.seatId===event.sendSeats[0]).opacity,0);
   assert(late.actors.find(a=>a.seatId===event.sendSeats[0]).scale>0);
-  assert.equal(emeraldBattleCues({...event,introPhase:"slide"},{duration:2000,reducedMotion:false}).length,0);
-  const cues=emeraldBattleCues(event,{duration:event.duration,reducedMotion:false});
-  assert.equal(cues[0].at,17*1000/60);
-  director.event={data:{...view,kind:"trainer-slide",trainers:[{...battleTrainer("Woman2",false,"cindy"),position:{x:208,y:40},slideOffset:96}]},previous:view,start:0,duration:800};
-  assert.equal(director.sample(400).trainers[0].x,256);
-  assert.equal(director.sample(800).trainers[0].x,208);
+  assert.equal(director.event.animation.cues.find(cue=>cue.id==="emerald:ball.open").at,19*1000/60);
+  director.stage({...view,kind:"trainer-slide",trainers:[{...battleTrainer("Woman2",false,"cindy"),slideOffset:96}]});
+  director.event.start=0;
+  assert.equal(director.sample(400).sprites[0].x,222);
+  assert.equal(director.sample(800).sprites[0].x,176);
 });
 
 test("Every Route104 source slot is accounted for, with later story NPCs conditional and collected items never resurrected", async () => {

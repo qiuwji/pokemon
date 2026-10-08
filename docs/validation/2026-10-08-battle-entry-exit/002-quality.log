@@ -1,0 +1,21 @@
+
+> emerald-web-engine@0.37.0 check
+> node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs && npm run check:lint && npm run check:engine-types
+
+Explicit pending source references: 59 maps, 264 scripts (see src/content/references.json)
+Content valid: 67 maps, 70 species, 92 moves, 311 items, 71 events.
+Explicitly unavailable move mechanics (0): 
+Story content valid: 330 scripts, 527 dialogues, 317 bindings.
+Runtime content valid: 354 moves, 58 learning methods, 311 items.
+
+> emerald-web-engine@0.37.0 check:contracts
+> tsc --noEmit --strict --allowJs --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+
+/Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/transition-frames.js:11
+      frame.colorOffset.some(n => !Number.isInteger(n) || n < -255 || n > 255))))) || data.at(-1).opacity !== endpoint)
+                                                                                   ^^
+
+SyntaxError: Unexpected token '||'
+    at checkSyntax (node:internal/main/check_syntax:72:5)
+
+Node.js v26.0.0

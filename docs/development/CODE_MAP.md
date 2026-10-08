@@ -37,9 +37,9 @@ src/
 | 进图后人物站错/重复触发卡住 | [WorldApplication.prepareEntry](../../src/packs/emerald/application/world-application.js)、剧情入口与requires | 普通地图NPC按新访问重建；持久Actor从Actor领域恢复；visit patch决定本次访问，不能靠NPC缓存充当进度 |
 | 队伍选择与所选个体野外招式 | [party-menu-view.js](../../src/packs/emerald/party-menu-view.js)、[party-field-moves.js](../../src/packs/emerald/party-field-moves.js) | 原生布局/导航与规则描述分开；执行走movement.party-action，扩展关联搜partyMove |
 | 原作菜单/文字/图标位置 | [界面说明](EMERALD_UI.md)、对应*-interface.js及ui/*-view.js | 原C窗口/精灵坐标；tools/ui/export-theme.py导出原图块/palette，不把规则写进CSS或app |
-| 战斗动画/捕捉/音效时机 | BattleDirector、timed-cues.js、pack的battle-audio.js | 快照和时钟只管演出；捕捉结果延后公布；声音不在每帧绘制里发射 |
+| 战斗动画/捕捉/音效时机 | pack的battle/sequences、opening-choreography、exit-choreography、move-choreography、controller-animation；公开frame-sequence-builder、通用timeline转场帧、color-offset-dom | [战斗专项](../project/BATTLE_PRESENTATION_PLAN.md)；内核编译有界帧，播放器读不可变数据；开战/退出政策留pack，动作/capture取样与播放生命周期分开，未覆盖招式无替代特效 |
 | 插件改已有UI | [UI合同](../engine/presentation/UI_CONTRACT.md)、对应*-interface.js | UIRegistry管注册，ExtensionDOM管区域仲裁，LayoutDOM管控件；native-ui-controls只把原控件转换为宿主句柄 |
-| 画面清晰度/尺寸 | [pixel-display.js](../../src/adapters/pixel-display.js)、canvas-renderer.js | PixelDisplay持有尺寸监听生命周期；规则格子仍是16px，战斗仍用320×224布局；不要改地图分辨率 |
+| 画面清晰度/尺寸 | [pixel-display.js](../../src/adapters/pixel-display.js)、canvas-renderer.js | PixelDisplay持有尺寸监听生命周期；规则格子仍是16px，绿宝石战斗逻辑视口240×160，通用默认320×224；不要改地图分辨率 |
 | 战斗规则或新招式 | [battle-rules Skill](../../skills/emerald-battle-rules/SKILL.md) | move-effects/operations、规则阶段；动画走presentation注册，不放进规则函数 |
 | JSON设施/比赛/游戏厅 | [设施作者指南](../../src/plugins/facility-content/README.md) | 配置已有模板；模板外规则读facility Skill，不能把设施业务塞进app.js |
 | 导入原作资源/音乐 | [导入索引](IMPORT_SCRIPTS.md)、[音乐指南](../../skills/emerald-story-reconstruction/references/music-import.md) | 统一入口tools/import.py；先--check；运行时用真实资源与音频cue |

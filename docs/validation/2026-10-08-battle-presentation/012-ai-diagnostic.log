@@ -1,0 +1,17 @@
+✔ Two-layer scoring combines trainer and creature contributions and records an explanation (39.650167ms)
+✔ Creature memory is keyed by UID and initialised once (24.871833ms)
+✔ observed projection never carries hidden opponent moves, ability or held item (44.058208ms)
+✔ Double-battle joint selection avoids duplicate bench switches (21.1215ms)
+✔ core.battle.ai-view reports recorded decisions without replaying them (54.69575ms)
+✔ A configured wild encounter runs a creature-only strategy and keeps unimplemented effects unknown (21.244791ms)
+✔ AI state is deterministic for equal seeds and fully reversible through checkpoint (39.479041ms)
+✔ A registered encounter table carries a wild creature ai through to the battle (18.65ms)
+✔ An encounter table with an unknown wild strategy is rejected at startup (13.902833ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 401.825167
