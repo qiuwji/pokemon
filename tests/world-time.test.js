@@ -320,7 +320,7 @@ test("Public time setup, scheduled plugin facts and save/load use the same domai
     ).ok,
   );
   s.tick(0);
-  s.setWall(100000 + MINUTE_MS);
+  s.setWall(100000 + MINUTE_MS / 60);
   s.tick(1000);
   assert.equal(events.length, 1);
   assert.equal(events[0].payload.definition, "schedule:visit");
@@ -328,7 +328,7 @@ test("Public time setup, scheduled plugin facts and save/load use the same domai
   s.game.save();
   assert(s.saved());
   const restored = adventure([plugin], s.saved());
-  restored.setWall(100000 + MINUTE_MS);
+  restored.setWall(100000 + MINUTE_MS / 60);
   restored.game.syncTime();
   assert.equal(restored.game.timeView().day, 1);
   assert.equal(restored.game.state.playSeconds, 1);
@@ -360,7 +360,7 @@ test("World clocks advance during dialogue but daily/task effects wait until the
   s.host.events.on("core:world-day", (e) => days.push(e));
   await s.bus.execute("core.time.start", { hour: 23, minute: 59 });
   s.game.ui.blocked = true;
-  s.setWall(100000 + 2 * DAY_MS);
+  s.setWall(100000 + 2 * DAY_MS / 60);
   s.tick(0);
   assert.equal(s.game.timeView().day, 2);
   assert.equal(days.length, 0);
@@ -419,7 +419,7 @@ test("Registered actor behavior observes saved world time and map environment th
   npc.next = 0;
   s.tick(0);
   assert.equal(npc.pose, "sleep");
-  s.setWall(100000 + 3600000);
+  s.setWall(100000 + 3600000 / 60);
   npc.next = 0;
   s.tick(1000);
   assert.equal(npc.pose, "cheer");
@@ -458,10 +458,30 @@ test("Host visibility excludes background frames from play duration while world 
   s.setWall(160000);
   s.tick(61000);
   s.tick(62000);
-  assert.equal(s.game.timeView().minute, 1);
+  assert.equal(s.game.timeView().hour, 13);
+  assert.equal(s.game.timeView().minute, 0);
   assert.equal(s.game.state.playSeconds, 1);
   active = true;
   s.tick(63000);
   s.tick(64000);
   assert.equal(s.game.state.playSeconds, 2);
+});
+
+test("injected world-clock rate accelerates local time across save reload without multiplying playtime or explicit advances", () => {
+  const s = setupClock({ rate: 60 });
+  s.clock.start(23, 30);
+  s.clock.samplePlay(0); s.clock.samplePlay(60000);
+  s.wall(160000);
+  assert.equal(s.clock.sync(), 60 * MINUTE_MS);
+  assert.equal(s.clock.view().hour, 0);
+  assert.equal(s.clock.view().minute, 30);
+  assert.equal(s.clock.view().playSeconds, 60);
+  const restored = new WorldClock({ state: structuredClone(s.clock.state), wallNow: s.now, rate: 60 });
+  s.wall(161000);
+  restored.sync({ resumed: true });
+  assert.equal(restored.view().minute, 31);
+  assert.equal(restored.sync(), 0, "reload interval cannot advance twice");
+  restored.advance(MINUTE_MS);
+  assert.equal(restored.view().minute, 32, "explicit advance uses game time");
+  for (const rate of [0, -1, 1.5, Infinity, 3601]) assert.throws(() => setupClock({ rate }), /policy/);
 });

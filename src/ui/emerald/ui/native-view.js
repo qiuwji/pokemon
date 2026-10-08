@@ -54,7 +54,7 @@ const screens = new Set([
   "trainer",
   "starter",
   "clock",
-  "flight",
+  "region-map",
 ]);
 const overlays = new Set([
   "menu",

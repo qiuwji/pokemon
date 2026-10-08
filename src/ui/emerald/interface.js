@@ -1,3 +1,6 @@
+import { emeraldStartMenu } from "../../packs/emerald/start-menu.js";
+import { listNavigation } from "./ui/native-view.js";
+import { createRegionMapInterface } from "./region-map-interface.js";
 import { createTrainerInterface } from "./trainer-interface.js";
 import { createOptionsInterface } from "./options-interface.js";
 import { SpriteCanvas } from "../../adapters/sprite-canvas.js";
@@ -50,6 +53,7 @@ export function createEmeraldInterface(
       return player;
     },
     showMenu: () => showMenu(),
+    showRegionMap: (...args) => shell.showRegionMap(...args),
     showParty: (...args) => shell.showParty(...args),
     showBag: (...args) => shell.showBag(...args),
     demonstrateBagItem: (...args) => bagUI.demonstrateBagItem(...args),
@@ -77,6 +81,7 @@ export function createEmeraldInterface(
     helpUI = createHelpInterface(game, deps),
     starterUI = createStarterInterface(game, deps),
     growthUI = createGrowthInterface(game, deps),
+    mapUI = createRegionMapInterface(game, deps),
     movementUI = createMovementInterface(game, deps),
     networkUI = createNetworkInterface(game, deps),
     presentationUI = createPresentationInterface(game, deps),
@@ -99,6 +104,7 @@ export function createEmeraldInterface(
     starterUI,
     growthUI,
     movementUI,
+    mapUI,
     networkUI,
     presentationUI,
     {
@@ -126,25 +132,31 @@ export function createEmeraldInterface(
       assets: extensionAssets,
       now: game.timeline.now,
     });
+  let menuSelection = null;
   function showMenu() {
     if (game.busy || game.battle || shell.dialog) return;
     if (game.facilityActive) {
       shell.showFacility();
       return;
     }
-    modal(
-      "冒险菜单",
-      `<div class="menu-grid start-menu">${game.state.flags.pokedex ? '<button class="menu-tile" data-page="dex">图鉴</button>' : ""}${game.state.party.length ? '<button class="menu-tile" data-page="party">宝可梦</button>' : ""}<button class="menu-tile" data-page="bag">背包</button><button class="menu-tile" data-page="trainer">${shell.escapeHTML(game.state.playerName)}</button><button class="menu-tile" data-page="save">记录</button><button class="menu-tile" data-page="settings">设置</button><button class="menu-tile" data-page="close">退出</button></div>`,
-      { type: "menu" },
-    );
+    const entries = emeraldStartMenu(game.state);
+    modal("冒险菜单", `<div class="start-menu">${entries.map(entry =>
+      `<button class="menu-tile" data-page="${entry.id}">${shell.escapeHTML(entry.label)}</button>`).join("")}</div>`, {
+      type: "menu", close: false,
+      navigate: direction => listNavigation(root, doc, ".start-menu button", direction),
+    });
     const actions = pageActions();
-    root
-      .querySelectorAll("button[data-page]")
-      .forEach((b) => (b.onclick = actions[b.dataset.page]));
+    root.querySelectorAll("button[data-page]").forEach(button => {
+      button.onfocus = () => { menuSelection = button.dataset.page; };
+      button.onclick = actions[button.dataset.page];
+    });
+    if (menuSelection) root.querySelector(`button[data-page="${menuSelection}"]`)?.focus();
   }
+
   function pageActions() {
     return {
       close: shell.closeModal,
+      map: () => shell.showRegionMap({ back: showMenu }),
       settings: optionsUI.showOptions,
       extensions: showExtras,
       trainer: trainerUI.showTrainer,
@@ -169,6 +181,7 @@ export function createEmeraldInterface(
   }
   function showExtras() {
     const labels = {
+      map: "地图",
       movement: "旅行与移动",
       clock: "时钟",
       box: "电脑盒子",

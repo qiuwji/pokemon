@@ -250,6 +250,8 @@ function travelSetup() {
 
 test("Flight validates visit, capability, indoor origin and live landing occupancy without moving the trainer", () => {
   const s = travelSetup();
+  assert.equal(s.service.list()[0].position.map, "town");
+  assert(Object.isFrozen(s.service.list()[0].position));
   s.context.visited = [];
   assert.equal(s.service.prepare("town").ok, false);
   s.context.visited = ["town"];

@@ -125,3 +125,7 @@ test("detail entry renders a clickable action with persistent memory", async () 
 | 布局与宿主位置 | [ui-registry](../../src/engine/extensions/ui-registry.js)；`UI_SLOTS` / `resolveLayout` |
 
 完整规则边界查 [作者指南](../../docs/development/AUTHORING.md)。设计或历史外部评审中的名字必须先找到当前注册、调用点和行为测试，才能当可用 API。
+
+## 地区地图复用
+
+[公开网格游标](../../src/engine/extensions/region-map.js)接收内容提供的width/height/cells，只负责有界选择；宿主showRegionMap提供destinations、markers和onSelect，不替代travel或野外能力的命令权限。原作区域投影留pack，DOM留UI；普通查看不得修改持久状态。入口、来源与尚未复刻的地图细节见[界面规格](../../docs/development/EMERALD_UI.md)。

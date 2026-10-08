@@ -72,7 +72,7 @@ export class TravelService {
   }
   list() {
     return [...this.destinations]
-      .map(([id, d]) => ({ id, name: d.name, ...this.check(id) }))
+      .map(([id, d]) => ({ id, name: d.name, position: d.position, ...this.check(id) }))
       .map(({ definition, ...entry }) => entry);
   }
   prepare(id) {

@@ -225,7 +225,7 @@ function gameFixture() {
     bus,
     ...compiled,
     tick(minutes) {
-      wall += minutes * 60000;
+      wall += minutes * 60000 / 60;
       frame += 1000;
       game.tick(frame, [game.state.position.map]);
     },

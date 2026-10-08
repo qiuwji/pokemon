@@ -48,16 +48,17 @@ export class WorldClock {
     state,
     wallNow,
     offline = "advance",
+    rate = 1,
     maxOfflineMs = 30 * DAY_MS,
   }) {
     validateWorldClock(state);
     if (
       typeof wallNow !== "function" ||
       !["advance", "pause", "cap"].includes(offline) ||
-      !integer(maxOfflineMs)
+      !integer(maxOfflineMs) || !Number.isInteger(rate) || rate < 1 || rate > 3600
     )
       throw new Error("Invalid world clock policy");
-    Object.assign(this, { state, wallNow, offline, maxOfflineMs });
+    Object.assign(this, { state, wallNow, offline, maxOfflineMs, rate });
     this.playAnchor = null;
   }
   wall() {
@@ -102,9 +103,10 @@ export class WorldClock {
         : resumed && this.offline === "cap"
           ? Math.min(now - last, this.maxOfflineMs)
           : now - last;
-    this.advance(elapsed);
+    const advanced = elapsed * this.rate;
+    this.advance(advanced);
     this.state.wallMs = now;
-    return elapsed;
+    return advanced;
   }
   advance(ms) {
     if (

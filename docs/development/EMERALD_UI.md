@@ -1,5 +1,13 @@
 # 原作界面与游戏外插件面板
 
+## 2026-10-08 · Start菜单与共享地区地图
+
+Start按start_menu.c的正常菜单次序及解锁条件生成，窗口按menu.c的(22,1)、7图块宽与16像素行距定位，保留上次选择。PokeNav解锁后直接打开地图；此前可从设置→扩展功能→地图查看，避免给原作Start增加一行。此处只实现地区地图入口，并不宣称完整PokeNav设备菜单、通信和缩放均已复刻。
+
+[公开游标](../../src/engine/extensions/region-map.js)只处理内容网格和有界选择；[原作区域数据](../../src/packs/emerald/region-map.js)负责地图投影/名称，UI负责原作素材、箭头导航与点击。普通查看不执行命令或保存；地图的destinations/markers/onSelect参数可复用选点及覆盖标记，不在地图组件写飞空或寻呼机规则。队伍飞空与扩展旅行都使用同一页面，落点由TravelService.list返回的只读position提供，实际能力/访问/占位仍在飞行命令执行时复查。退回后保持原页面。
+
+[导出器](../../tools/ui/export-region-map.py)读取固定region_map.c、28×15布局、区域定义和地图绑定，导出原游标及男女位置图，记录输入/输出hash；运行python3 tools/ui/export-region-map.py --check进行只读比较。小游标每20个原作帧换图。飞空底部提示与区域名窗口沿用来源位置；中文字体、地图进出转场/缩放、可飞城市图标闪烁、海上船/秘密基地/动态洞穴定位尚未完整实现。现有室内地图使用所属区域锚点，未保存原作escapeWarp室外细分坐标。未来增加寻呼机标记不意味着本次已实现寻呼机业务。实际画面和触控未验收。
+
 ## 2026-10-08 · 连续开战帧与退出
 
 用户截图中的等级越框、名字贴边与菜单排列已按统一逻辑单位修正：血框坐标由来源主精灵中心减去64×32原点，标题内名字/性别与等级分区，固定48像素HP条及底部文本/按钮行距。battle-interface共用标题生成，native-pages集中负责安全内边距、框体及游标留白，内核不识别具体UI布局。皮肤和中文字体仍沿用现有资源，需用户实玩核对，不能视作逐像素1:1验收。
@@ -22,7 +30,7 @@ Start的遮罩透明，但菜单窗口明确保留原作窗口图和填充；队
 
 - `src/ui/emerald/ui/emerald-theme.css`：外层画面、窗口、Start与六席队伍的基础样式。
 - `src/ui/emerald/ui/native-pages.css`：独立页面的240×160坐标、原作背景层与文字窗口；在基础主题之后加载。
-- `src/ui/emerald/ui/native-view.js` / `summary-view.js` / `flight-view.js`：纯显示数据和导航，不能写领域状态。
+- `src/ui/emerald/ui/native-view.js` / `summary-view.js` / `region-map-interface.js`：纯显示数据和导航，不能写领域状态。
 - `src/ui/emerald/ui-shell.js`：为modal标注data-modal-page和data-gender，不依靠内容猜页面类别。
 - `src/ui/emerald/interface.js`：装配页面；Start按进度显示原作纵向菜单，图鉴和队伍未解锁时不出现；设置页承载已支持的文字速度、声音和窗口边框，扩展功能承载工程入口。菜单项仍通过原页面工厂执行。
 - `src/adapters/plugin-manager-dom.js`：游戏外dialog。只写下次启动配置，不操作核心状态；BrowserInput在面板开启时屏蔽游戏按键/触控/道具快捷。
@@ -56,7 +64,7 @@ python3 tools/ui/export-theme.py
 | 训练家 | trainer-interface / trainer_card.c | 名字(24,41)、金钱(24,65)、图鉴(24,81)、时间(24,97)、肖像(153,40)、徽章y120 |
 | 商店 / 保存 | shop-interface、save-interface / shop.c、save.c | 商店保留地图透底；保存上方统计+底部提示+是/否；导入/导出/重开折叠为工程工具 |
 | 初始精灵 | starter-interface / starter_choose.c | 三球中心(60,64)/(120,88)/(180,64)，手指及三帧球；预览后二次确认 |
-| 时钟 / 飞空目的地 | time-interface、movement-interface / wallclock.c、region_map.c | 原作表盘+确认；已到访目的地叠到地区图，插件目的地保留列表回退 |
+| 时钟 / 飞空目的地 | time-interface、movement-interface / wallclock.c、region_map.c | 原作表盘+确认；普通地图与飞空共用地区图、游标和选点，权限由travel服务判定 |
 | 战斗 | battle-interface、BattleDirector / battle_interface.c、pokeball.c | 四方向2×2菜单；PP/属性右栏；投球、摇晃、释放按目标席位定位 |
 | 工程与插件页 | 对应*-interface、ExtensionDOM | 原作窗口/配色；仍为自研功能，不伪造原作页面 |
 
