@@ -1,4 +1,5 @@
 import { validateAudioCue } from "../../engine/extensions/audio-contracts.js";
+import { AUDIO_DELIVERY_SOURCES } from "../../../generated/packs/emerald/audio-delivery.js";
 /**
  * UI and battle cues now carry the original sound identity rendered from the reference MIDI.
  * Authored frame choreography schedules installed per-move and effectiveness sounds.
@@ -108,15 +109,19 @@ export const EMERALD_AUDIO_CUES = {
   "cry.kyogre": { kind: "sound", source: "generated/assets/audio/cry-kyogre.wav", volume: 0.48, loop: false, maxVoices: 1 },
 };
 export function createEmeraldAudio(host) {
+  const deliveryCue = (cue) => validateAudioCue({
+    ...cue,
+    source: AUDIO_DELIVERY_SOURCES[cue.source] ?? cue.source,
+  });
   const result = new Map(
     Object.entries(EMERALD_AUDIO_CUES).map(([id, cue]) => [
       "emerald:" + id,
-      validateAudioCue(cue),
+      deliveryCue(cue),
     ]),
   );
   for (const [id, cue] of host?.audioCues || []) {
     if (result.has(id)) throw new Error(`Duplicate audio cue ${id}`);
-    result.set(id, cue);
+    result.set(id, deliveryCue(cue));
   }
   return result;
 }

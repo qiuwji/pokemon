@@ -1,0 +1,36 @@
+
+> emerald-web-engine@0.37.0 check
+> node tools/check-content.mjs && npm run check:contracts && node tools/check-modules.mjs && npm run check:docs && npm run check:lint && npm run check:engine-types
+
+Explicit pending source references: 59 maps, 264 scripts (see src/content/references.json)
+Content valid: 67 maps, 68 species, 92 moves, 311 items, 71 events.
+Explicitly unavailable move mechanics (0): 
+Story content valid: 330 scripts, 527 dialogues, 317 bindings.
+Runtime content valid: 354 moves, 58 learning methods, 311 items.
+
+> emerald-web-engine@0.37.0 check:contracts
+> tsc --noEmit --strict --allowJs --target ES2022 --module NodeNext --moduleResolution NodeNext tests/contracts.typecheck.ts
+
+Module syntax valid: 467 files.
+
+> emerald-web-engine@0.37.0 check:docs
+> node tools/check-docs.mjs
+
+Documentation: 112 Markdown files, 1245 local links, 12 synchronized examples valid
+
+> emerald-web-engine@0.37.0 check:lint
+> eslint .
+
+
+> emerald-web-engine@0.37.0 check:engine-types
+> tsc -p tsconfig.engine.json
+
+
+> emerald-web-engine@0.37.0 postcheck
+> npm run check:evidence
+
+
+> emerald-web-engine@0.37.0 check:evidence
+> python3 tools/evidence.py verify --all
+
+{"current": "docs/validation/2026-10-09-audio-and-opening/manifest.json", "currentStatus": "running", "generated": 17, "historicalStale": 16, "legacyUnverifiable": 60, "problems": []}

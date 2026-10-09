@@ -34,7 +34,7 @@ python3 tools/audio/render-bgm.py --renderer /tmp/poryaaaa_render --output /tmp/
 
 如果输入不是约定参考修订，或MIDI无合法循环、渲染器报采样/音色错误、输出静音，则拒绝产物。配置在littleroot.json；新增曲目用独立配置的title/song/midi/voicegroup和来源参数，不改生成器中的地图分支。音频文件与cueLocalId从原作常量小写派生，例如MUS_LITTLEROOT→mus_littleroot.wav及mus_littleroot；cueVolume来自配置。当前CLI支持MIDI有循环曲目，完整SE/汇编/fanfare转写仍待另做能力。
 
-生成器读取MIDI tempo与循环标记，以PCM帧记录循环；输出引子与两遍曲身，循环第二遍保留已有尾音。记录全部sound来源文件哈希、渲染器修订及二进制哈希。发布文件为无损16bit/双声道WAV，未加淡出、归一化或替代音色。
+生成器读取MIDI tempo与循环标记，以PCM帧记录循环；输出引子与两遍曲身，循环第二遍保留已有尾音。记录全部sound来源文件哈希、渲染器修订及二进制哈希。源文件为无损16bit/双声道WAV，未加淡出、归一化或替代音色。
 
 根目录的具名试听资源为emerald-littleroot-bgm/mus_littleroot.wav。用户已确认游戏内可听；持续循环听音和固定原作对照另记。游戏用AudioBufferSourceNode.loop持续循环第二遍，不用计时器重播引子。普通preview.html音频控件播到文件末尾停止，与游戏持续循环行为不同。
 
@@ -77,3 +77,18 @@ generated/plugins/emerald-audio.js                               # 一个插件�
 普通战斗结束已装入五类原胜利曲（wild/trainer/gym_leader/league/aqua_magma）；逐曲`musicFades`覆盖全包默认渐变，battle/victory曲`fadeInMs:0,fadePreviousMs:0`用于直接切曲。`fadePreviousMs`控制新曲成功解码之后旧曲的退出时长，解码失败不打断旧曲。选曲由已经播放的faint或结果演出阶段决定，不按提前结算的ended标志。音频淡出、混音/声像和cry模式与原机对照仍待人工听音。
 
 地图切换由`src/packs/emerald/map-music.js`覆盖全包默认cue渐变，按来源区分步行、骑车及warp，无需重渲染地图WAV。SE_BALL_TRAY_ENTER/BALL/EXIT已按midi.cfg装入统一包，随公开帧序列发声；声像与原机听感仍待用户验收。
+
+## 网页交付压缩
+
+WAV继续作为无损来源保存在generated/assets/audio，供原作来源、PCM循环帧和重新导出使用。网页交付采用MP3 128 kbps，依赖带libmp3lame的FFmpeg：
+
+```sh
+python3 tools/audio/compress-audio.py
+python3 tools/audio/compress-audio.py --check
+```
+
+每次重新导入或合并WAV后执行导出，再运行--check。此工具只写派生MP3及[交付manifest](../../generated/packs/emerald/audio-delivery.json)、[运行时映射](../../generated/packs/emerald/audio-delivery.js)，不写WAV、原始音频包manifest或注册插件。全部编码/解码及来源完整性核对成功后才安装；文件写入失败回滚已有输出。--check不写盘，核对源/派生hash、资源集合、映射及实际解码时长，不能用过期MP3配合新WAV。
+
+createEmeraldAudio在本作装配时将已知WAV资源引用映射为MP3；插件自带其他资源不改。AudioAdapter仍按首次请求解码并共享缓存，选曲、音量、loopStart/loopEnd、渐变和静音恢复逻辑不变。循环点继续取源PCM秒数；MP3解码器可能保留末帧填充，校验禁止截短源区间或出现超过一帧的尾部填充，不让循环点随编码填充移动。当前75项离线实测最大尾部差为26个44.1kHz样本（约0.59ms）。有损编码的听感与循环接缝仍须实际听音验收。
+
+当前75个WAV合计448,496,786字节，MP3合计40,835,785字节，减少90.9%。[Pages打包器](../package-pages.py)保留MP3并排除整个generated/assets/audio下的WAV；缺少对应MP3时拒绝发布。仓库仍保留源文件，浏览器不请求它们，也不会预加载全部曲目。

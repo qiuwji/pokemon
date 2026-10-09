@@ -115,3 +115,5 @@ python3 tools/fixtures/generate.py --scenes E2ETestField
 门色从各地图原始layout中primary/secondary palette获取，分别追加到该地图图集；`door-anims.js`导出按tileset索引，避免新图集拿旧图集帧。重新导入不累计追加门帧。General主图集与Rustboro二级windy_water动画从同一配置读取；后者是104北侧斜纹池塘（8组×4图块，八帧，8帧更新和错开相位），不可只导入通用海水后声称所有池塘已动态。
 
 静态障碍从原作graphics_info的inanimate属性导入帧0映射，不将cuttable_tree的动作帧1–3当up/left人物朝向。专项测试同时覆盖图集后处理的真实标准入口、重复生产、全部动画门帧、静止树及截图池塘。
+
+网页音频交付在完成WAV导入/合并后运行[compress-audio.py](../../tools/audio/compress-audio.py)，生成MP3与资源映射，再用--check核对派生完整性。WAV继续保留为来源，但不进入Pages部署包；详见[音频工具](../../tools/audio/README.md)。

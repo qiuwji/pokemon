@@ -82,3 +82,9 @@ AudioAdapter等新曲解码成功后才让旧曲渐出；失败保留旧声并�
 绿宝石地图政策由`map-music.js`覆盖全包默认1500/1200ms：同曲不断播；步行速度8淡出后直接开新曲，骑车4淡出后以4淡入；warp目的地室内2、其他4。m4a音量从64以4变化，每级间隔speed帧，共16级，按工程60fps映射为128/64/32帧。门、剧情换场和飞行在遮黑时等待旧曲结束再提交地图。初次进入地图无默认淡入；战斗与剧情显式选曲保留既有政策，未安装的冲浪/潜水曲不以替代旋律填补。
 
 来源：固定参考overworld.c的TransitionMapMusic/GetMapMusicFadeoutSpeed，sound.c的MapMusicMain，m4a.c的FadeOutBody；真实听音仍由用户验收。
+
+## 压缩交付与来源分离
+
+音频来源和注册仍使用原WAV身份；createEmeraldAudio通过generated/packs/emerald/audio-delivery.js的派生映射构造实际MP3 cue。全部本作音乐、音效和叫声都在此装配入口解析，播放器不增加格式选择或本作分支。原loop/fade/音量字段保持不变，外部插件资源保留自己的路径。MP3按需解码并沿用原缓存，首屏仍只预解码既有少量短音效，不下载所有曲目。
+
+WAV及其来源hash留在仓库，Pages只发布MP3。工具、时长边界、派生完整性与实际体积见[音频导出](../../../tools/audio/README.md)。压缩是传输与部署体积优化，解码后的AudioBuffer仍是PCM。

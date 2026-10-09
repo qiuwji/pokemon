@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "generator": "tools/evidence.py",
+  "createdAt": "2026-10-09T13:14:38+08:00",
+  "scope": "ci-history",
+  "kind": "workflow",
+  "selectors": [
+    ".github/workflows/checks.yml",
+    "tools/evidence.py",
+    "tools/tests/test_evidence.py",
+    "tools/package-pages.py",
+    "tools/tests/test_pages_package.py",
+    "docs/development/GITHUB_PAGES.md",
+    "docs/project/STATUS.md",
+    "docs/project/CHANGELOG.md"
+  ],
+  "runs": [
+    {
+      "label": "tools",
+      "mode": "run",
+      "startedAt": "2026-10-09T13:14:38+08:00",
+      "finishedAt": "2026-10-09T13:14:41+08:00",
+      "baselineCommit": "3d473aec3f270e0457d447dbd2a3dbf783ef4fd3",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "tools.tests.test_evidence",
+        "tools.tests.test_pages_package"
+      ],
+      "exitCode": 0,
+      "log": "001-tools.log",
+      "logSha256": "cf6f902554e716facc9a5ac7a82206db92a42d91a0d675ab4ce0d0727f815cb5",
+      "inputs": {
+        ".github/workflows/checks.yml": "0fb9e9dd5e723f4927e2822d8339d8bff9a0734d99177e37676a4c7115dd1d10",
+        "docs/development/GITHUB_PAGES.md": "ee52dfbfeb0d27c6d2d4128877971fa047d4658af4ea2b5b0e621c95552d5dcb",
+        "docs/project/CHANGELOG.md": "d2b84d012ff93386fabf2ec960d1b8f0ca12db8dc2ce54c3d3d8c45450ff3713",
+        "docs/project/STATUS.md": "d158c1539141cd87db2e91e0d73549dd5e2cf5852519dc15061d2202242182b1",
+        "tools/evidence.py": "dba41fc3b289bbdb0d1c2e8dac522a75a2676eb06288e9304aa7b4923b878273",
+        "tools/package-pages.py": "32b9f911bc4e988ae35ba53046b5c0ff64eac1caefc43f19d108a9ee8ae6b914",
+        "tools/tests/test_evidence.py": "2a7c7cf555b9be5d3d320af3e945cd92b56e2dd31cab797d08ac93e95706fc9d",
+        "tools/tests/test_pages_package.py": "8879afe098520a4687482c74f1c004b9e08e1b3ce8deff1b949989f7c5dec078"
+      },
+      "inputDigest": "9f994fe279cf0228ba39d0807c45565076aa9967f3ac0ed86aff983d7714eb15",
+      "inputsChangedDuringRun": false,
+      "summaries": [
+        {
+          "format": "python-unittest",
+          "tests": 22,
+          "summary": "OK"
+        }
+      ]
+    },
+    {
+      "label": "history",
+      "mode": "run",
+      "startedAt": "2026-10-09T13:15:40+08:00",
+      "finishedAt": "2026-10-09T13:15:52+08:00",
+      "baselineCommit": "3d473aec3f270e0457d447dbd2a3dbf783ef4fd3",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path\nimport json,subprocess,sys,tempfile\nroot=Path.cwd()\nwith tempfile.TemporaryDirectory(prefix=\"emerald-ci-history-\") as temp:\n    checkout=Path(temp)/\"checkout\"\n    subprocess.run([\"git\",\"clone\",\"--quiet\",\"--depth\",\"1\",\"--branch\",\"main\",root.as_uri(),str(checkout)],check=True)\n    command=[sys.executable,\"tools/evidence.py\",\"verify\",\"--all\"]\n    shallow=subprocess.run(command,cwd=checkout,capture_output=True,text=True)\n    assert shallow.returncode!=0 and \"bad object\" in shallow.stderr, shallow.stdout+shallow.stderr\n    subprocess.run([\"git\",\"fetch\",\"--quiet\",\"--unshallow\",\"origin\"],cwd=checkout,check=True)\n    full=subprocess.run(command,cwd=checkout,capture_output=True,text=True)\n    assert full.returncode==0, full.stdout+full.stderr\n    print(json.dumps({\"shallowExit\":shallow.returncode,\"fullHistoryExit\":full.returncode,\"fullHistoryVerification\":json.loads(full.stdout)}))"
+      ],
+      "exitCode": 0,
+      "log": "002-history.log",
+      "logSha256": "eb4d7a9be7d82b347f903e20fb16dd8168818945320cd31b73e421e83905bcbe",
+      "inputs": {
+        ".github/workflows/checks.yml": "0fb9e9dd5e723f4927e2822d8339d8bff9a0734d99177e37676a4c7115dd1d10",
+        "docs/development/GITHUB_PAGES.md": "ee52dfbfeb0d27c6d2d4128877971fa047d4658af4ea2b5b0e621c95552d5dcb",
+        "docs/project/CHANGELOG.md": "d2b84d012ff93386fabf2ec960d1b8f0ca12db8dc2ce54c3d3d8c45450ff3713",
+        "docs/project/STATUS.md": "d158c1539141cd87db2e91e0d73549dd5e2cf5852519dc15061d2202242182b1",
+        "tools/evidence.py": "dba41fc3b289bbdb0d1c2e8dac522a75a2676eb06288e9304aa7b4923b878273",
+        "tools/package-pages.py": "32b9f911bc4e988ae35ba53046b5c0ff64eac1caefc43f19d108a9ee8ae6b914",
+        "tools/tests/test_evidence.py": "2a7c7cf555b9be5d3d320af3e945cd92b56e2dd31cab797d08ac93e95706fc9d",
+        "tools/tests/test_pages_package.py": "8879afe098520a4687482c74f1c004b9e08e1b3ce8deff1b949989f7c5dec078"
+      },
+      "inputDigest": "9f994fe279cf0228ba39d0807c45565076aa9967f3ac0ed86aff983d7714eb15",
+      "inputsChangedDuringRun": false,
+      "summaries": []
+    }
+  ],
+  "inputs": {
+    ".github/workflows/checks.yml": "0fb9e9dd5e723f4927e2822d8339d8bff9a0734d99177e37676a4c7115dd1d10",
+    "docs/development/GITHUB_PAGES.md": "ee52dfbfeb0d27c6d2d4128877971fa047d4658af4ea2b5b0e621c95552d5dcb",
+    "docs/project/CHANGELOG.md": "d2b84d012ff93386fabf2ec960d1b8f0ca12db8dc2ce54c3d3d8c45450ff3713",
+    "docs/project/STATUS.md": "d158c1539141cd87db2e91e0d73549dd5e2cf5852519dc15061d2202242182b1",
+    "tools/evidence.py": "dba41fc3b289bbdb0d1c2e8dac522a75a2676eb06288e9304aa7b4923b878273",
+    "tools/package-pages.py": "32b9f911bc4e988ae35ba53046b5c0ff64eac1caefc43f19d108a9ee8ae6b914",
+    "tools/tests/test_evidence.py": "2a7c7cf555b9be5d3d320af3e945cd92b56e2dd31cab797d08ac93e95706fc9d",
+    "tools/tests/test_pages_package.py": "8879afe098520a4687482c74f1c004b9e08e1b3ce8deff1b949989f7c5dec078"
+  },
+  "notes": [],
+  "manualVerification": "not recorded; check results do not establish visual/audio fidelity",
+  "inputDigest": "9f994fe279cf0228ba39d0807c45565076aa9967f3ac0ed86aff983d7714eb15",
+  "status": "recorded-checks-passed",
+  "updatedAt": "2026-10-09T13:15:52+08:00",
+  "changedFiles": {
+    "content": [
+      "src/content/manifest.json",
+      "src/content/species/dragonite.json",
+      "src/content/species/rayquaza.json"
+    ],
+    "docs": [
+      "docs/development/GITHUB_PAGES.md",
+      "docs/project/CHANGELOG.md",
+      "docs/project/STATUS.md",
+      "docs/validation/2026-10-09-ci-history/001-tools.log",
+      "docs/validation/2026-10-09-ci-history/002-history.log",
+      "docs/validation/2026-10-09-ci-history/manifest.json",
+      "docs/validation/current.json"
+    ],
+    "examples": [
+      "examples/test-crew.test.js"
+    ],
+    "generated": [
+      "generated/assets/dragonite-back.png",
+      "generated/assets/dragonite-front.png",
+      "generated/assets/dragonite-icon.png",
+      "generated/assets/rayquaza-back.png",
+      "generated/assets/rayquaza-front.png",
+      "generated/assets/rayquaza-icon.png"
+    ],
+    "other": [
+      ".github/workflows/checks.yml",
+      "src/plugins/catalog.json",
+      "src/plugins/test-crew/index.js"
+    ],
+    "tools": [
+      "tools/imports/locales/zh-CN.json"
+    ]
+  },
+  "boundaryReview": {
+    "basis": "whole working tree against HEAD; includes pre-existing work outside this batch",
+    "layersToExplain": [],
+    "contentOnlyExpectation": false,
+    "note": "Cross-layer edits require a stated capability or defect; file count alone does not prove a violation"
+  },
+  "reference": {
+    "path": "work/pokeemerald",
+    "revision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881"
+  }
+}

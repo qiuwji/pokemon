@@ -61,7 +61,10 @@ class NativeArt:
                 index, bank = (e, 0) if affine else (e & 1023, e >> 12)
                 tile = self.raw_tiles(im, index, 8, 8)
                 out = Image.new('RGBA', (8, 8))
-                out.putdata([(*colors[bank * 16 + v], 0 if transparent and v == 0 else 255) for v in tile.getdata()])
+                # Text BGs are exported as 4bpp: PNG bank bits are discarded by gbagfx.
+                # Only the tilemap selects the palette bank; affine BGs retain all 8 bits.
+                values = list(tile.getdata()) if affine else [v & 15 for v in tile.getdata()]
+                out.putdata([(*colors[bank * 16 + v], 0 if transparent and v == 0 else 255) for v in values])
                 if not affine and e & 1024: out = out.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
                 if not affine and e & 2048: out = out.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
                 result.paste(out, (x * 8, y * 8))

@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          fetch-depth: 0
           persist-credentials: false
       - name: Read-only original reference for documentation links
         uses: actions/checkout@v6
@@ -29,6 +30,12 @@ jobs:
           python-version: '3.11'
       - run: python -m pip install -r tools/requirements.txt
       - run: npm ci
+      - name: Audio delivery encoder for resource contracts
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
       - name: Quality and current-checkout evidence
         run: python tools/evidence.py run --scope "CI checkout" --kind workflow --out docs/validation/ci --input . --label quality --timeout 600 -- npm run check
       - name: Core contracts and coverage

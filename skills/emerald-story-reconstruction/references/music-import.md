@@ -151,3 +151,7 @@ const music = api.presentation.audio("littleroot", {
 完成后同步STATUS、资源来源/验收记录及音频规格。接口变动同步Skill与作者例；文档修改只跑check:docs，代码/工具/资源改动查相应专项，阶段收口再全量回归，复用未变领域证据。
 
 地图切换现在使用有界MusicTransition选项与fadeMusic完成通知；转场prepare租约在遮黑后等待ready、finally释放。目的地/骑车判断留在内容政策，播放层不认识地图；同曲不断播，不以全包交叉淡化替代原作切图。
+
+## 网页交付压缩
+
+重新导入/渲染/合并WAV后，运行tools/audio/compress-audio.py及其--check，更新派生MP3、交付manifest和本作资源映射。WAV继续拥有原作来源和PCM循环信息；压缩工具不得覆盖WAV、原音频包manifest或循环点。页面按需请求压缩资源，Pages排除WAV，缺少派生文件时拒绝发布。依赖、可重跑命令、写入回滚和时长检查见[音频生产工具](../../../tools/audio/README.md)。体积/解码检查不替代上面的实际听音判据。

@@ -252,7 +252,7 @@ test("Sound limits, channel volume, ended cleanup and synchronous host failure r
   audio.dispose();
   assert.equal(audio.voices.size, 0);
 });
-test("Real Emerald sample library has existing WAV resources and music is selected by explicit content IDs", async () => {
+test("Real Emerald sample library serves compressed MP3 resources and selects music by explicit content IDs", async () => {
   const fs = await import("node:fs");
   const { emeraldMusic, emeraldBattleSound } = await import(
     "../src/packs/emerald/audio-library.js"
@@ -263,8 +263,8 @@ test("Real Emerald sample library has existing WAV resources and music is select
     const data = fs.readFileSync(
       new URL("../" + cue.source, import.meta.url),
     );
-    assert.equal(data.toString("ascii", 0, 4), "RIFF");
-    assert.equal(data.toString("ascii", 8, 12), "WAVE");
+    assert.match(cue.source, /\.mp3$/);
+    assert.equal(data.toString("ascii", 0, 3), "ID3");
     assert.equal(cue.notes, undefined);
   }
   // The original plays a per-move sound effect, so no generic move/hurt cue is shipped.

@@ -1,0 +1,48 @@
+
+> emerald-web-engine@0.37.0 test:tools
+> python3 -m unittest discover -s tools/tests -q && python3 tools/audio/test_tools.py && python3 tools/story/test_reference.py
+
+127.0.0.1 - - [09/Oct/2026 13:50:42] code 404, message Not Found
+127.0.0.1 - - [09/Oct/2026 13:50:42] "GET /private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 13:50:42] code 404, message Not Found
+127.0.0.1 - - [09/Oct/2026 13:50:42] "GET /src/../private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 13:50:42] code 404, message Not Found
+127.0.0.1 - - [09/Oct/2026 13:50:42] "GET /src/%2e%2e/private.txt HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 13:50:42] code 404, message Not Found
+127.0.0.1 - - [09/Oct/2026 13:50:42] "GET /src/content/ HTTP/1.1" 404 -
+127.0.0.1 - - [09/Oct/2026 13:50:43] "GET /?control=1 HTTP/1.1" 302 -
+127.0.0.1 - - [09/Oct/2026 13:50:43] "GET /src/index.html?control=1 HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 13:50:43] "GET /generated/assets/example.bin HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 13:50:43] "GET /generated/assets/example.bin HTTP/1.1" 200 -
+----------------------------------------------------------------------
+Ran 71 tests in 18.239s
+
+OK
+{
+  "script": "example",
+  "check": false,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+{
+  "script": "example",
+  "check": true,
+  "files": [
+    "generated/assets/example.bin"
+  ],
+  "contentChanges": [],
+  "omissions": []
+}
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.036s
+
+OK
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 0.017s
+
+OK

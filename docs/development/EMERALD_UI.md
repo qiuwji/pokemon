@@ -130,3 +130,7 @@ MapNameDOM只管理提示生命周期，app按有效地图元数据调用。`ind
 用户明确要求起名不遵循原作键盘：采用直接自由输入，16字存档上限，支持系统输入法与Enter确认；正在输入法组词时不提交，空白/超长名字不提交，提供返回修改角色按钮。名字确认选择否/B返回性别与起名流程；输入稿仅在UI内存中，最终身份经story-screen-ports交给configurePlayer，屏幕失败不提交。FrameSceneDOM仅持有画布与FrameClipDirector，不读写存档或解释原C任务；正文pause事件由DialogueDOM消费预编译停顿位置，只触发一次，跳过文字也会触发，并且关闭后旧帧不会复活。
 
 未进行浏览器或听音验收；中文译文/断页、默认预设名字、GBA硬件混色和实际输入体验不以端口测试宣称精确等价。标题电影/标题页与原存档选择另一个切片处理。
+
+## 启动片头的调色板索引
+
+`tools/ui/native_art.py`导出text BG时按原作gbagfx的4bpp转换取PNG索引低四位，再由tilemap选择palette bank；透明色以本bank的局部索引0判断。affine BG保留完整8位索引。`tools/ui/export-launch.py`重新生成树叶和波纹资源及来源hash；`tools/tests/test_native_art.py`用独立夹具验证bank/翻转/透明和8bpp，四层树叶逐像素对照固定原图。截图黑区可离线合成复现并消除，不改变片头时间编排。

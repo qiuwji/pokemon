@@ -59,6 +59,22 @@ class PagesPackageTests(unittest.TestCase):
                 pages.package(root, output)
             self.assertFalse(output.exists())
 
+    def test_audio_sources_are_retained_locally_but_only_compressed_delivery_is_shipped(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root, output = Path(temp) / 'repo', Path(temp) / 'pages'
+            self.fixture(root)
+            audio = root / 'generated/assets/audio/music'
+            audio.mkdir(parents=True)
+            (audio / 'scene.wav').write_bytes(b'PCM source')
+            with self.assertRaisesRegex(ValueError, 'Missing compressed audio'):
+                pages.package(root, output)
+            self.assertFalse(output.exists())
+            (audio / 'scene.mp3').write_bytes(b'MP3 delivery')
+            pages.package(root, output)
+            self.assertEqual((audio / 'scene.wav').read_bytes(), b'PCM source')
+            self.assertFalse((output / 'generated/assets/audio/music/scene.wav').exists())
+            self.assertEqual((output / 'generated/assets/audio/music/scene.mp3').read_bytes(), b'MP3 delivery')
+
 
 if __name__ == '__main__':
     unittest.main()

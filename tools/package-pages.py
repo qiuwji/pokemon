@@ -28,9 +28,17 @@ def package(root, output):
                 raise ValueError(f'Unsupported runtime entry: {path.relative_to(root)}')
     if not (root / 'src/index.html').is_file():
         raise ValueError('Missing runtime entry page')
+    audio = root / 'generated/assets/audio'
+    for source in audio.rglob('*.wav'):
+        if not source.with_suffix('.mp3').is_file():
+            raise ValueError(f'Missing compressed audio: {source.relative_to(root)}')
+    def delivery_only(directory, names):
+        if Path(directory).is_relative_to(audio):
+            return [name for name in names if name.endswith('.wav')]
+        return []
     output.mkdir(parents=True, exist_ok=True)
     for tree in trees:
-        shutil.copytree(tree, output / tree.name)
+        shutil.copytree(tree, output / tree.name, ignore=delivery_only)
     (output / 'index.html').write_text(ENTRY, encoding='utf-8')
     (output / '.nojekyll').touch()
     return output
