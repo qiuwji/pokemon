@@ -18,7 +18,7 @@ export function manifest(id, setup, permissions = []) {
  * Test arrangement only: production catalog, services and commands; no browser renderer.
  * By default it arranges a mid-adventure session; pass { fresh: true } for a new-game state.
  */
-export function session(plugins = [], { fresh = false } = {}) {
+export function session(plugins = [], { fresh = false, storage = null } = {}) {
   const base = loadContentSync();
   const { db, catalog, host } = createEmeraldPlugins(base, plugins);
   let frame = 0;
@@ -30,7 +30,8 @@ export function session(plugins = [], { fresh = false } = {}) {
     transitions: new TransitionController(timeline),
     director: new BattleDirector(timeline),
     motion: new GridMotion(new SceneGraph(db.maps)),
-    storage: { getItem: id => saved.get(id) ?? null, setItem: (id, value) => saved.set(id, value) },
+    storage: storage || { getItem: id => saved.get(id) ?? null, setItem: (id, value) => saved.set(id, value),
+      removeItem: id => saved.delete(id), key: index => [...saved.keys()][index] ?? null, get length() { return saved.size; } },
     wallNow: () => 1000,
   });
   game.attachUI({

@@ -6,6 +6,7 @@ import { layoutDocument } from "./helpers/layout-document.js";
 import { createEmeraldCommandFacade } from "../src/game/emerald/commands/command-facade.js";
 import { createLaunchInterface } from "../src/ui/emerald/launch-interface.js";
 import { createLaunchMenuView } from "../src/ui/emerald/launch-menu-view.js";
+import { createSaveSlotView } from "../src/ui/emerald/save-slot-view.js";
 import { emeraldLaunchMenu } from "../src/packs/emerald/launch-menu.js";
 import { emeraldMovieClip, EMERALD_MOVIE_CHAPTERS } from "../src/packs/emerald/launch-movie.js";
 import { emeraldTitleClip } from "../src/packs/emerald/title-presentation.js";
@@ -129,4 +130,51 @@ test("Every title/movie frame references a real bounded sheet; arbitrary chunks 
     for (let i=0;i<part.frames;i+=240) check(emeraldMovieClip(part.id,i,240,{gender}));
     assert.deepEqual(emeraldMovieClip(part.id,16,1,{gender}).frames[0],emeraldMovieClip(part.id,0,17,{gender}).frames[16]);
   }
+});
+
+test("Startup selects an older independent slot through the command bus and preserves the newer envelope", async () => {
+  const s = fixture({ saved: true, reduced: true }), legacyRaw = s.game.saveStore.raw();
+  assert(s.game.reset()); s.game.state.playerName = "新冒险"; assert(s.game.save());
+  const newKey = s.game.saveStore.key, newRaw = s.game.saveStore.raw(), playing = s.ui.showLaunch();
+  await s.menu();
+  assert.deepEqual(s.root.querySelectorAll("button").map(b => b.getAttribute("data-launch-action")), ["continue", "new", "options", "slots"]);
+  for (let i = 0; i < 3; i++) s.policy.navigate("down"); s.press(); await turn();
+  assert.equal(s.policy.type, "launch-slots");
+  s.policy.navigate("up"); s.press(); await turn();
+  s.players.at(-1).complete(); assert.equal(await playing, "continue");
+  assert.equal(s.game.state.playerName, "小秋"); assert.equal(s.game.saveStore.raw(), legacyRaw);
+  assert.equal(s.saved.get(newKey), newRaw); assert.equal(s.holds, 0);
+});
+
+test("Cancelling the slot picker changes no saved data; New starts a third independent adventure", async () => {
+  const s = fixture({ saved: true, reduced: true }); assert(s.game.reset());
+  const before = new Map(s.saved), playing = s.ui.showLaunch(); await s.menu();
+  for (let i = 0; i < 3; i++) s.policy.navigate("down"); s.press(); await turn();
+  s.policy.back(); await turn(); assert.equal(s.policy.type, "launch-menu"); assert.deepEqual(s.saved, before);
+  s.policy.navigate("up"); s.policy.navigate("up"); s.press(); await turn();
+  s.players.at(-1).complete(); assert.equal(await playing, "new");
+  for (const [key, raw] of before) if (!key.endsWith(":slots")) assert.equal(s.saved.get(key), raw);
+  assert.equal(s.game.saveSlotView().slots.length, 3);
+});
+
+test("Slot-picker paging remains bounded, blocks invalid documents and releases selection callbacks", () => {
+  const s = session(), doc = documentPort(), root = doc.getElementById("root"), picked = [];
+  const slots = Array.from({ length: 5 }, (_, i) => ({ id: "save-" + i, number: i + 1, document: i === 0 ? null : s.game.exportDocument() }));
+  const view = createSaveSlotView({ document: doc, container: root, slots, selected: "save-4", species: s.db.species,
+    onSelect: slot => picked.push(slot.id), onBack: () => picked.push("back") });
+  assert.equal(root.querySelectorAll("[data-save-slot]").length, 1);
+  view.navigate("left"); assert.equal(doc.activeElement.getAttribute("data-save-slot"), "save-2");
+  for (let i = 0; i < 10; i++) view.navigate("up");
+  assert.equal(doc.activeElement.getAttribute("data-save-slot"), "save-0"); doc.activeElement.click(); assert.deepEqual(picked, []);
+  view.navigate("down"); const button = doc.activeElement; button.click(); assert.deepEqual(picked, ["save-1"]);
+  view.back(); view.dispose(); button.click(); assert.deepEqual(picked, ["save-1", "back"]);
+});
+
+test("Failed startup slot creation returns to the menu with old progress and input ownership intact", async () => {
+  const s = fixture({ saved: true, reduced: true }), before = new Map(s.saved), playing = s.ui.showLaunch();
+  const storage = s.game.applications.save.storage, set = storage.setItem;
+  storage.setItem = (key, raw) => { if (key.endsWith(":slots")) throw new Error("Quota"); set(key, raw); };
+  await s.menu(); s.policy.navigate("down"); s.press(); await turn(); s.players.at(-1).complete(); await turn();
+  assert.equal(s.policy.type, "launch-menu"); assert.deepEqual(s.saved, before); assert.equal(s.game.state.playerName, "小秋");
+  assert.equal(s.holds, 1); s.ui.disposeLaunch(); await assert.rejects(playing, /Launch disposed/); assert.equal(s.holds, 0);
 });

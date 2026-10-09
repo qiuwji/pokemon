@@ -119,6 +119,7 @@ export function createEmeraldCommandFacade(
       { document: JSON.stringify(document) },
     ],
     reset: () => ["save.reset", {}],
+    loadSaveSlot: (id, expectedRaw) => ["save.select", { id, expectedRaw }],
     startClock: (hour, minute) => ["time.start", { hour, minute }],
     advancePlayTime: () => ["session.play-time", {}],
   };
@@ -150,7 +151,7 @@ export function createEmeraldCommandFacade(
   ]);
   const failure = (name, error) => {
     if (error.code !== "busy") onError(error);
-    if (["loadDocument", "reset"].includes(name)) throw error;
+    if (["loadDocument", "reset", "loadSaveSlot"].includes(name)) throw error;
     return objectFailures.has(name)
       ? {
           ok: false,

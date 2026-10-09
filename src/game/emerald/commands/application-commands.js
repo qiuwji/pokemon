@@ -804,6 +804,9 @@ export function registerEmeraldCommands(game, bus) {
     network: false,
     plugin: false,
   });
+  register("save.select", objectSchema({ id, expectedRaw: { type: "string", minLength: 1, maxLength: 1048576 } }, ["id", "expectedRaw"]),
+    ({ id, expectedRaw }) => game.loadSaveSlot(id, expectedRaw),
+    { network: false, plugin: false, maxInputBytes: 2097152 });
   register(
     "session.play-time",
     empty,

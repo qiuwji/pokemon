@@ -136,3 +136,7 @@ MapNameDOM只管理提示生命周期，app按有效地图元数据调用。`ind
 `tools/ui/native_art.py`导出text BG时按原作gbagfx的4bpp转换取PNG索引低四位，再由tilemap选择palette bank；透明色以本bank的局部索引0判断。affine BG保留完整8位索引。`tools/ui/export-launch.py`重新生成树叶和波纹资源及来源hash；`tools/tests/test_native_art.py`用独立夹具验证bank/翻转/透明和8bpp，四层树叶逐像素对照固定原图。截图黑区可离线合成复现并消除，不改变片头时间编排。
 
 标题背景还须遵守`graphics_file_rules.mk`的Logo调色板`-num_colors 224`：`src/graphics.c`把16色裂空座/云层调色板接在后面，占bank14。导出器不能把完整256色Logo调色板直接拼接，否则bank14仍为空黑色。来源manifest记录两份原作配置，资源测试独立读取该规则并核对全部背景像素与标记mask。
+
+## 多档选择
+
+按用户指定扩展原作单档菜单：只有一个可用档时保持原排列，多档或当前档不可用时增加“选择存档”。`save-slot-view.js`每页两张原窗口风格卡片，左右翻页/上下选择/点击/返回；显示名字、游玩时间与徽章，坏档保留并禁用提交。页面只消费冻结预览，通过`core.save.select`加载；返回/翻页不保存。存档管理页在每次显示时读取当前SaveStore，不捕获已切换的旧实例；重新开始明确保留旧档。

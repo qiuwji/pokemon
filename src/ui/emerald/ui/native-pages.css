@@ -12,7 +12,15 @@
   z-index: 10;
   pointer-events: none;
 }
-[data-modal-page="launch-menu"] .modal { width: 100%; height: 100%; margin: 0; animation: none; background: #485088; }
+:is([data-modal-page="launch-menu"], [data-modal-page="launch-slots"]) .modal { width: 100%; height: 100%; margin: 0; animation: none; background: #485088; }
+.save-slot-page { position: relative; width: 100%; height: 100%; color: #fff; }
+.save-slot-heading { position: absolute; inset: 0 3.333% auto; margin: 0; font-size: 3.333cqw; }
+.modal .save-slot-card { position: absolute; left: 3.333%; width: 93.333%; height: 35%; margin: 0; padding: 3.333%; text-align: left; background-color: #f8f8f8; color: #606060; font-size: 3.333cqw; filter: brightness(0.5625); }
+.modal .save-slot-card[data-selected="true"] { filter: none; }
+.save-slot-card strong, .save-slot-card span { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.save-slot-card span { margin-top: 3.333cqw; color: #2080f8; }
+.save-slot-footer { position: absolute; bottom: 0; left: 3.333%; width: 93.333%; display: flex; justify-content: space-between; }
+.modal .save-slot-footer button { margin: 0; min-height: 0; padding: 0.833cqw 1.667cqw; font-size: 3.333cqw; }
 .launch-menu-native { position: relative; width: 100%; height: 100%; }
 .modal .launch-menu-window {
   position: absolute; left: 3.333%; width: 93.333%; min-height: 0; margin: 0;

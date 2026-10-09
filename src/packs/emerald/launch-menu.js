@@ -3,7 +3,7 @@ export { LAUNCH_MENU_BACKGROUND };
 const BADGES = ["badgeStone", "badgeKnuckle", "badgeDynamo", "badgeHeat", "badgeBalance", "badgeFeather", "badgeMind", "badgeRain"];
 const regional = new Set(HOENN_DEX);
 /** Original main_menu.c tile origins and conditional saved-game projection. */
-export function emeraldLaunchMenu(saveDocument, species) {
+export function emeraldLaunchMenu(saveDocument, species, { chooseSlot = false } = {}) {
   const state = saveDocument?.state;
   const entries = state ? [{ id: "continue", label: "继续游戏", top: 0, height: 64,
     summary: { name: state.playerName, gender: state.playerGender,
@@ -11,5 +11,6 @@ export function emeraldLaunchMenu(saveDocument, species) {
       dex: state.flags.pokedex ? new Set(state.caught.filter(id => regional.has(species[id]?.dex))).size : null,
       badges: BADGES.filter(id => state.flags[id]).length } }] : [];
   return [...entries, { id: "new", label: "新游戏", top: state ? 64 : 0, height: 32 },
-    { id: "options", label: "设置", top: state ? 96 : 32, height: 32 }];
+    { id: "options", label: "设置", top: state ? 96 : 32, height: 32 },
+    ...(chooseSlot ? [{ id: "slots", label: "选择存档", top: state ? 128 : 64, height: 32 }] : [])];
 }

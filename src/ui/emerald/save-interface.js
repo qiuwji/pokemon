@@ -4,10 +4,9 @@ export function createSaveInterface(
   game,
   { document: doc, modal, closeModal, showMenu, updateSide, toast, escapeHTML },
 ) {
-  const saveStore = game.saveStore;
   const $ = (id) => doc.getElementById(id);
   function showSave() {
-    const saved = saveStore.load();
+    const saved = game.saveStore.load();
     modal(
       "记录冒险",
       `<div class="native-window save-status"><strong>${escapeHTML(game.world.map.title)}</strong><div>名字 ${escapeHTML(game.state.playerName || "训练家")}</div><div>徽章 ${BADGE_KEYS.filter((key) => game.state.flags[key]).length}</div>${game.state.flags.pokedex ? `<div>图鉴 ${game.state.caught.length}</div>` : ""}<div>游玩时间 ${playTime(game.state.playSeconds)}</div></div><div class="native-window save-prompt">要记录冒险吗？</div><div class="native-window save-choice"><button id="save-now">是</button><button data-save-cancel>否</button></div><details class="save-tools"><summary>存档管理</summary><div class="native-window"><p>${saved ? "上次保存：" + new Date(saved.savedAt).toLocaleString("zh-CN") : "尚未保存"}</p><button id="continue-save" data-control="local" ${!saved ? "disabled" : ""}>读取存档</button><button id="export-save">导出存档</button><button id="import-save" data-control="local">导入存档</button><input id="save-file" type="file" accept="application/json,.json" hidden><button id="new-game" data-control="local">重新开始</button></div></details>`,
@@ -21,7 +20,7 @@ export function createSaveInterface(
       showSave();
     };
     $("continue-save").onclick = () => {
-      const d = saveStore.load();
+      const d = game.saveStore.load();
       if (!d) return;
       game.loadDocument(d);
       closeModal();
@@ -64,12 +63,17 @@ export function createSaveInterface(
     $("new-game").onclick = () => {
       modal(
         "重新开始冒险",
-        `<p>当前浏览器里的进度将被新的冒险覆盖。你可以先返回菜单导出存档。</p><div class="choice-actions"><button class="secondary-button" id="keep-game">继续当前冒险</button><button class="primary-button" id="reset-game" data-control="local">重新开始</button></div>`,
+        `<p>新冒险会创建独立存档，已有存档保留。可在开始界面选择继续旧档。</p><div class="choice-actions"><button class="secondary-button" id="keep-game">继续当前冒险</button><button class="primary-button" id="reset-game" data-control="local">开始新冒险</button></div>`,
         { back: showSave, type: "reset" },
       );
       $("keep-game").onclick = showSave;
       $("reset-game").onclick = () => {
-        game.reset();
+        try {
+          if (!game.reset()) return;
+        } catch {
+          toast("无法创建新存档，当前冒险和原存档已保留。请检查浏览器存储空间。");
+          return;
+        }
         closeModal();
         updateSide();
         game.save();

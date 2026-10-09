@@ -1,10 +1,10 @@
 import { emeraldLaunchMenu } from "../../packs/emerald/launch-menu.js";
 
-/** One original single-save menu; UI owns focus, caller owns load/reset. */
-export function createLaunchMenuView({ document: doc, container, saved, species, selected, onSelect }) {
+/** Native menu styling; slot ownership and loading remain application commands. */
+export function createLaunchMenuView({ document: doc, container, saved, species, selected, chooseSlot = false, onSelect }) {
   let active = true;
   const page = doc.createElement("div"); page.className = "launch-menu-native";
-  const buttons = emeraldLaunchMenu(saved, species).map(entry => {
+  const buttons = emeraldLaunchMenu(saved, species, { chooseSlot }).map(entry => {
     const button = doc.createElement("button"); button.className = "launch-menu-window native-window";
     button.setAttribute("data-launch-action", entry.id);
     button.style.top = `${entry.top / 160 * 100}%`;

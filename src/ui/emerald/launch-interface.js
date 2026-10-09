@@ -1,6 +1,7 @@
 import { emeraldTitleClip } from "../../packs/emerald/title-presentation.js";
 import { EMERALD_MOVIE_CHAPTERS, emeraldMovieClip } from "../../packs/emerald/launch-movie.js";
 import { createLaunchMenuView } from "./launch-menu-view.js";
+import { createSaveSlotView } from "./save-slot-view.js";
 
 /** Startup owns its temporary screens. Save/reset still pass through application commands. */
 export function createLaunchInterface(game, {
@@ -90,8 +91,10 @@ export function createLaunchInterface(game, {
   async function menu(selected) {
     scene?.dispose(); scene = null;
     const saved = game.saveStore.load(), raw = game.saveStore.raw();
+    let chooseSlot = false;
+    try { chooseSlot = game.saveSlotView().slots.length > (saved ? 1 : 0); } catch { /* The protected-save warning owns storage failures. */ }
     const result = await screen("绿宝石", "launch-menu", (host, finish) => {
-      const view = createLaunchMenuView({ document: doc, container: host, saved, species: game.db.species, selected, onSelect: finish });
+      const view = createLaunchMenuView({ document: doc, container: host, saved, species: game.db.species, selected, chooseSlot, onSelect: finish });
       return { ...view, back: () => finish("title") };
     });
     return { result, saved, raw };
@@ -121,11 +124,26 @@ export function createLaunchInterface(game, {
           const choice = await menu(selected);
           if (choice.result === "title") break;
           if (choice.result === "options") { await options(); selected = "options"; continue; }
+          if (choice.result === "slots") {
+            const view = game.saveSlotView();
+            const slot = await screen("选择存档", "launch-slots", (host, finish) => createSaveSlotView({
+              document: doc, container: host, slots: view.slots, selected: view.active, species: game.db.species,
+              onSelect: finish, onBack: () => finish(null),
+            }));
+            if (!slot) { selected = "slots"; continue; }
+            await fade("fade-black");
+            try { await game.loadSaveSlot(slot.id, slot.raw); }
+            catch (error) { game.ui.toast(error.code === "save_conflict" ? "存档已在另一页面更新，请重新选择。" : "存档读取失败，原进度已保留。"); continue; }
+            return "continue";
+          }
           // A second tab may have saved while this preview was open. Review the new preview first.
           if (game.saveStore.raw() !== choice.raw) { selected = choice.result; continue; }
           await fade("fade-black");
           if (choice.result === "continue") await game.loadDocument(choice.saved);
-          else if (!await game.reset()) throw new Error("New game unavailable");
+          else {
+            try { if (!await game.reset()) throw new Error("New game unavailable"); }
+            catch { game.ui.toast("无法创建新存档，原进度已保留。请检查浏览器存储空间。"); selected = "new"; continue; }
+          }
           return choice.result;
         }
       }

@@ -14,6 +14,8 @@ import { emptyWorldSchedule } from "../../../engine/world-schedule.js";
 import { emptyWorldState } from "../../../engine/world-state.js";
 import { Random } from "../../../engine/model.js";
 import { SaveStore } from "../../../engine/save-store.js";
+import { freeze } from "../../../engine/extensions/values.js";
+import { SaveSlotRepository } from "../assembly/save/slot-repository.js";
 import { PACK } from "../../../packs/emerald/pack.js";
 import { validateSave } from "../assembly/save-contract.js";
 import { emptyStoryProgress } from "../../../engine/story.js";
@@ -44,7 +46,7 @@ export class SaveApplication {
         bindApplicationPorts(this, ports, SAVE_PORTS);
         const validate = s => this.validState(s);
         this.contentResolver = createSaveContentResolver({ db: this.db, catalog: this.catalog, plugins: this.plugins, validate });
-        this.saveStore = new SaveStore(this.storage, PACK.id, validate, PACK.version, {
+        this.saveSlots = new SaveSlotRepository(this.storage, PACK.id, key => new SaveStore(this.storage, key, validate, PACK.version, {
             prepare: state => this.contentResolver.resolve(state),
             diagnose: (state) => {
                 const missing = (state?.contentDependencies || []).filter((id) => !this.plugins?.manifests.has(id));
@@ -52,8 +54,10 @@ export class SaveApplication {
                     ? { code: "missing_dependency", dependencies: missing }
                     : null;
             },
-        });
+        }));
+        this.saveStore = this.saveSlots.initialStore();
         const loaded = this.saveStore.load();
+        if (this.saveSlots.lastIssue) this.saveStore.lastIssue = this.saveSlots.lastIssue;
         this.saveProtected =
             this.saveStore.lastIssue !== null &&
                 ["missing_dependency", "invalid_state", "unsupported_version", "storage_unavailable"].includes(this.saveStore.lastIssue?.code);
@@ -238,11 +242,30 @@ export class SaveApplication {
     reset() {
         if (!this.canManageParty())
             return false;
-        this.saveStore.acceptCurrent();
+        const state = this.newState();
+        // Persist a new independent envelope before replacing the current session.
+        const { store, savedAt } = this.saveSlots.create(state);
+        this.saveStore = store;
         this.saveProtected = false;
         this.saveWarning = null;
         this.saveConflict = false;
-        this.state = this.newState();
+        this.state = state;
+        this.lastSave = savedAt;
+        this.bindField();
+        return true;
+    }
+    saveSlotView() {
+        return freeze(this.saveSlots.view());
+    }
+    loadSaveSlot(id, expectedRaw) {
+        if (!this.canManageParty()) throw new Error("请先结束当前行动。");
+        const { store, document } = this.saveSlots.open(id, expectedRaw);
+        this.saveStore = store;
+        this.state = document.state;
+        this.lastSave = document.savedAt;
+        this.saveProtected = false;
+        this.saveConflict = false;
+        this.saveWarning = this.contentWarning();
         this.bindField();
         return true;
     }

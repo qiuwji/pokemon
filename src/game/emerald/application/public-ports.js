@@ -201,6 +201,8 @@ export const APPLICATION_METHODS = Object.freeze({
   loadDocument: Object.freeze(["save", "loadDocument"]),
   exportDocument: Object.freeze(["save", "exportDocument"]),
   reset: Object.freeze(["save", "reset"]),
+  saveSlotView: Object.freeze(["save", "saveSlotView"]),
+  loadSaveSlot: Object.freeze(["save", "loadSaveSlot"]),
   tick: Object.freeze(["frame", "tick"]),
   inspect: Object.freeze(["inspection", "inspect"]),
   playPresentation: Object.freeze(["presentation", "playPresentation"]),
