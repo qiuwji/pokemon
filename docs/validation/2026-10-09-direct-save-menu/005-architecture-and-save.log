@@ -1,0 +1,55 @@
+✔ Engine dependency direction is enforced: no DOM, Canvas, pack or presentation imports (7.648792ms)
+✔ Crop and fishing gameplay stay outside the reusable engine (5.025167ms)
+✔ Presentation modules do not calculate battle outcomes or consume gameplay RNG (0.9205ms)
+✔ Composition root does not own story, inventory or damage rules (0.150792ms)
+✔ Every local ES module import resolves after refactors (16.978041ms)
+✔ Every Emerald page and UI shell sends commands without mutating persisted state (1.154334ms)
+✔ Emerald content depends only on public author capabilities and content assets (2.901541ms)
+✔ Example plugins depend only on public extension utilities (0.502ms)
+✔ Inventory quantities cannot be mutated as count dictionaries; UI cannot commit domain plans (10.373542ms)
+✔ Core tests and fixtures do not import installed plugins or authoring examples (7.916458ms)
+✔ Launch preserves the saved single slot, blocks auto-save/story, then Continue commits through the bus (117.065792ms)
+✔ No-save startup offers native New/Options, returns from Options, and resets only after black fade (61.191833ms)
+✔ Back returns to the title; disposing startup rejects its wait and releases all temporary input ownership (59.216375ms)
+✔ Continue projects original conditional regional dex, badge and time fields, with bounded navigation (42.819959ms)
+✔ Every title/movie frame references a real bounded sheet; arbitrary chunks retain the same source frame (418.891916ms)
+✔ Startup selects an older independent slot through the command bus and preserves the newer envelope (96.88475ms)
+✔ Browsing main-menu saves and returning from Options changes no saved data; New starts a third adventure (121.044292ms)
+✔ All save summaries belong to the main menu; navigation is bounded and invalid saves cannot load (40.532166ms)
+SaveConflict [Error]: Save changed in another session
+    at SaveSlotRepository.open (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/assembly/save/slot-repository.js:71:44)
+    at SaveApplication.loadSaveSlot (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/application/save-application.js:262:52)
+    at EmeraldAdventure.invoke (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/application/public-ports.js:232:64)
+    at register.network (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/commands/application-commands.js:808:35)
+    at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+    at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+    at Proxy.command (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/commands/command-facade.js:175:32)
+    at Object.showLaunch (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/ui/emerald/launch-interface.js:130:30) {
+  code: 'save_conflict'
+}
+✔ A save changed after its main-menu preview is rejected and the refreshed card requires a new selection (76.147708ms)
+Error: Quota
+    at storage.setItem (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/tests/launch-flow.test.js:204:71)
+    at SaveSlotRepository.create (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/assembly/save/slot-repository.js:60:20)
+    at SaveApplication.reset (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/application/save-application.js:247:51)
+    at EmeraldAdventure.invoke (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/application/public-ports.js:232:64)
+    at register.network (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/commands/application-commands.js:803:44)
+    at callSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/values.js:189:18)
+    at CommandBus.executeSync (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/engine/extensions/command-bus.js:74:20)
+    at Proxy.command (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/game/emerald/commands/command-facade.js:175:32)
+    at Object.showLaunch (file:///Users/qiuji/Documents/Codex/2026-10-01/new-chat/outputs/emerald-web/src/ui/emerald/launch-interface.js:139:35)
+✔ Failed startup slot creation returns to the menu with old progress and input ownership intact (68.378ms)
+✔ New-game command creates an independent slot; selecting legacy/new slots isolates all later saves (215.061917ms)
+✔ Quota failure while creating a slot preserves the active world, old envelope and catalogue (52.958792ms)
+✔ Slots retain same-slot conflict protection and reject a changed preview without switching (0.231834ms)
+✔ Read-only slot previews keep invalid saves and discover another tab's independent append (0.104291ms)
+✔ Invalid selected saves and failed catalogue activation cannot replace the current slot (0.102709ms)
+✔ Corrupt catalogue protects autosave and cannot be reset over existing slot data (94.600792ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1218.322

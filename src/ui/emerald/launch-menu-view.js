@@ -1,14 +1,22 @@
 import { emeraldLaunchMenu } from "../../packs/emerald/launch-menu.js";
 
 /** Native menu styling; slot ownership and loading remain application commands. */
-export function createLaunchMenuView({ document: doc, container, saved, species, selected, chooseSlot = false, onSelect }) {
+export function createLaunchMenuView({ document: doc, container, saved, slots, species, selected, onSelect }) {
   let active = true;
   const page = doc.createElement("div"); page.className = "launch-menu-native";
-  const buttons = emeraldLaunchMenu(saved, species, { chooseSlot }).map(entry => {
+  const slotById = new Map(slots?.map(slot => [slot.id, slot]));
+  const entries = emeraldLaunchMenu(saved, species, { saves: slots?.map(slot => ({
+    id: slot.id, number: slot.number, state: slot.document?.state,
+  })) });
+  const buttons = entries.map(entry => {
+    const slot = slotById.get(entry.saveId);
     const button = doc.createElement("button"); button.className = "launch-menu-window native-window";
-    button.setAttribute("data-launch-action", entry.id);
-    button.style.top = `${entry.top / 160 * 100}%`;
-    button.style.height = `${entry.height / 160 * 100}%`;
+    button.setAttribute("data-launch-action", slot ? "continue" : entry.id);
+    if (slot) {
+      button.setAttribute("data-save-slot", slot.id);
+      button.setAttribute("aria-disabled", String(!entry.summary));
+    }
+    button.style.height = `${entry.height / 240 * 100}cqw`;
     const title = doc.createElement("span"); title.className = "launch-menu-label"; title.textContent = entry.label;
     button.append(title);
     if (entry.summary) {
@@ -24,12 +32,19 @@ export function createLaunchMenuView({ document: doc, container, saved, species,
         row.append(key, text); button.append(row);
       }
     }
-    button.onfocus = () => { if (active) { for (const b of buttons) b.setAttribute("data-selected", String(b === button)); } };
-    button.onclick = () => { if (active) onSelect(entry.id); };
+    if (slot && !entry.summary) {
+      const warning = doc.createElement("span"); warning.className = "launch-save-warning";
+      warning.textContent = "无法读取，原存档已保留。"; button.append(warning);
+    }
+    button.onfocus = () => { if (active) {
+      for (const b of buttons) b.setAttribute("data-selected", String(b === button));
+      button.scrollIntoView?.({ block: "nearest", inline: "nearest", behavior: "instant" });
+    } };
+    button.onclick = () => { if (active && (!slot || entry.summary)) onSelect(entry.id, slot); };
     page.append(button); return button;
   });
   container.append(page);
-  const focus = buttons.find(b => b.getAttribute("data-launch-action") === selected) || buttons[0];
+  const focus = buttons[entries.findIndex(entry => entry.id === selected)] || buttons[0];
   focus.focus(); focus.onfocus();
   return { navigate: dir => {
     if (!active) return false;

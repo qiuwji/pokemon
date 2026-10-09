@@ -1,7 +1,6 @@
 import { emeraldTitleClip } from "../../packs/emerald/title-presentation.js";
 import { EMERALD_MOVIE_CHAPTERS, emeraldMovieClip } from "../../packs/emerald/launch-movie.js";
 import { createLaunchMenuView } from "./launch-menu-view.js";
-import { createSaveSlotView } from "./save-slot-view.js";
 
 /** Startup owns its temporary screens. Save/reset still pass through application commands. */
 export function createLaunchInterface(game, {
@@ -90,14 +89,16 @@ export function createLaunchInterface(game, {
   }
   async function menu(selected) {
     scene?.dispose(); scene = null;
-    const saved = game.saveStore.load(), raw = game.saveStore.raw();
-    let chooseSlot = false;
-    try { chooseSlot = game.saveSlotView().slots.length > (saved ? 1 : 0); } catch { /* The protected-save warning owns storage failures. */ }
-    const result = await screen("绿宝石", "launch-menu", (host, finish) => {
-      const view = createLaunchMenuView({ document: doc, container: host, saved, species: game.db.species, selected, chooseSlot, onSelect: finish });
-      return { ...view, back: () => finish("title") };
+    const raw = game.saveStore.raw();
+    let saved, slots, active;
+    try { ({ slots, active } = game.saveSlotView()); }
+    catch { saved = game.saveStore.load(); /* The protected-save warning owns storage failures. */ }
+    const choice = await screen("绿宝石", "launch-menu", (host, finish) => {
+      const view = createLaunchMenuView({ document: doc, container: host, saved, slots, species: game.db.species,
+        selected: selected ?? (active ? `continue:${active}` : undefined), onSelect: (id, slot) => finish({ id, slot }) });
+      return { ...view, back: () => finish({ id: "title" }) };
     });
-    return { result, saved, raw };
+    return { result: choice.id, slot: choice.slot, saved, raw };
   }
   async function options() {
     await new Promise((resolve, reject) => {
@@ -124,16 +125,10 @@ export function createLaunchInterface(game, {
           const choice = await menu(selected);
           if (choice.result === "title") break;
           if (choice.result === "options") { await options(); selected = "options"; continue; }
-          if (choice.result === "slots") {
-            const view = game.saveSlotView();
-            const slot = await screen("选择存档", "launch-slots", (host, finish) => createSaveSlotView({
-              document: doc, container: host, slots: view.slots, selected: view.active, species: game.db.species,
-              onSelect: finish, onBack: () => finish(null),
-            }));
-            if (!slot) { selected = "slots"; continue; }
+          if (choice.slot) {
             await fade("fade-black");
-            try { await game.loadSaveSlot(slot.id, slot.raw); }
-            catch (error) { game.ui.toast(error.code === "save_conflict" ? "存档已在另一页面更新，请重新选择。" : "存档读取失败，原进度已保留。"); continue; }
+            try { await game.loadSaveSlot(choice.slot.id, choice.slot.raw); }
+            catch (error) { game.ui.toast(error.code === "save_conflict" ? "存档已在另一页面更新，请重新选择。" : "存档读取失败，原进度已保留。"); selected = choice.result; continue; }
             return "continue";
           }
           // A second tab may have saved while this preview was open. Review the new preview first.

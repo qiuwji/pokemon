@@ -97,4 +97,4 @@ test("late invalid intent rolls back plugin memory and world money", async () =>
 
 接口或示例变化时同一任务更新Skill、规格和对应可执行示例，运行 `npm run check:docs` 检查链接/代码片段同步；它不证明游戏行为。代码边界、工具影响和测试写法统一见[作者指南](../../docs/development/AUTHORING.md)和[测试指南](../../docs/development/TESTING.md)。
 
-多存档验证使用`tests/save-slots.test.js`和`tests/launch-flow.test.js`：旧legacy原文字节保留、新游戏独立槽位、刷新选择、自动保存隔离、同槽位多页冲突、坏档/配额拒绝与分页取消分别验收。状态格式不变，不能把原作单档要求覆盖用户指定的网页版多档扩展，也不能宣称找回已覆盖且无备份的旧进度。
+多存档验证使用`tests/save-slots.test.js`和`tests/launch-flow.test.js`：旧legacy原文字节保留、新游戏独立槽位、刷新选择、自动保存隔离、同槽位多页冲突、坏档/配额拒绝、开始菜单直接点选、所有卡片可达、过期预览重选与设置返回分别验收。状态格式不变，不能把原作单档要求覆盖用户指定的网页版多档扩展，也不能宣称找回已覆盖且无备份的旧进度。
