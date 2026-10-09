@@ -12,11 +12,14 @@ parser.add_argument('--source', type=Path, default=ROOT / 'work/pokeemerald')
 parser.add_argument('--check', action='store_true')
 args = parser.parse_args()
 art = NativeArt(args.source, ROOT, 'launch')
-for path in ['src/intro.c', 'src/title_screen.c', 'src/main_menu.c', 'src/intro_credits_graphics.c', 'src/data/graphics/intro_scene.h']:
+for path in ['src/intro.c', 'src/title_screen.c', 'src/main_menu.c', 'src/intro_credits_graphics.c', 'src/data/graphics/intro_scene.h',
+             'src/graphics.c', 'graphics_file_rules.mk']:
     art.read(path)
 
 title = 'graphics/title_screen/'
-colors = art.palette(title + 'pokemon_logo.pal') + art.palette(title + 'rayquaza_and_clouds.pal')
+# graphics_file_rules.mk exports only 224 logo colours. graphics.c appends the
+# 16 Rayquaza/cloud colours at BG bank 14, rather than after the PNG's 256 slots.
+colors = art.palette(title + 'pokemon_logo.pal')[:224] + art.palette(title + 'rayquaza_and_clouds.pal')
 art.add('title-logo', art.tilemap(title + 'pokemon_logo.png', title + 'pokemon_logo.bin', colors, affine=True))
 logo = art.tilemap(title + 'pokemon_logo.png', title + 'pokemon_logo.bin', colors, affine=True)
 mask = art.indexed(title + 'logo_shine.png')
